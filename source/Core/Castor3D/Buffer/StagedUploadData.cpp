@@ -22,23 +22,23 @@ namespace c3d
 		, ashes::CommandBufferPtr commandBuffer )
 		: CommandBufferHolder{ c3d::move( commandBuffer ) }
 		, UploadData{ device, c3d::move( debugName ), CommandBufferHolder::getData().get() }
-		, m_buffers{ FrameBuffers{ device->createSemaphore( toUtf8( m_debugName ) ) }
-			, FrameBuffers{ device->createSemaphore( toUtf8( m_debugName ) ) } }
+		, m_buffers{ FrameBuffers{ device->createSemaphore( toUtf8( getName() ) ) }
+			, FrameBuffers{ device->createSemaphore( toUtf8( getName() ) ) } }
 		, m_cpuBuffers{ &m_buffers[0] }
 		, m_gpuBuffers{ &m_buffers[0] }
 		, m_timer{ makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", crg::TimerScope::eUpdate ) }
 	{
-		m_device.renderSystem.getEngine()->registerTimer( cuT( "Upload" ), *m_timer );
+		getDevice().renderSystem.getEngine()->registerTimer( cuT( "Upload" ), *m_timer );
 	}
 
 	StagedUploadData::~StagedUploadData()noexcept
 	{
-		m_device.renderSystem.getEngine()->unregisterTimer( cuT( "Upload" ), *m_timer );
+		getDevice().renderSystem.getEngine()->unregisterTimer( cuT( "Upload" ), *m_timer );
 		VkDeviceSize totalSize{};
 
-		for ( auto [buffer, mapped] : m_wholeBuffers )
+		for ( auto const & [buffer, mapped] : m_wholeBuffers )
 		{
-			buffer->unlock();
+			buffer->getBuffer().unlock();
 			totalSize += buffer->getSize();
 		}
 
@@ -46,19 +46,84 @@ namespace c3d
 		log::info << "  Staging Buffers total allocated size: " << totalSize << " bytes" << std::endl;
 	}
 
-	void StagedUploadData::doBegin()
+	void StagedUploadData::begin()
 	{
 		m_cpuBlock = makeRawUnique< crg::FramePassTimerBlock >( m_timer->start() );
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		doBegin();
+	}
+
+	UploadData::SemaphoreUsed StagedUploadData::end( ashes::Queue const & queue
+		, ashes::Fence const * fence
+		, Milliseconds timeout )
+	{
+		doEnd();
+		m_cpuBlock = {};
+		VkFence vkFence = fence ? *fence : VkFence{};
+		queue.submit( getCommandBuffer()
+			, ( m_gpuBuffers->used
+				? VkSemaphore{ VK_NULL_HANDLE }
+				: *m_gpuBuffers->semaphore )
+			, ( m_gpuBuffers->used
+				? VkPipelineStageFlagBits{}
+				: VK_PIPELINE_STAGE_TRANSFER_BIT )
+			, *m_gpuBuffers->semaphore
+			, vkFence );
+		UploadData::SemaphoreUsed result{ m_gpuBuffers->semaphore.get()
+			, &m_gpuBuffers->used
+			, m_gpuBuffers->currentSize
+			, m_gpuBuffers->buffersCount };
+
+		c3d::swap( m_cpuBuffers, m_gpuBuffers );
+		m_frameIndex = 1u - m_frameIndex;
+
+		if ( fence )
+		{
+			fence->wait( uint64_t( timeout.count() ) );
+			fence->reset();
+		}
+
+		auto it = m_gpuBuffers->pool.begin();
+
+		while ( it != m_gpuBuffers->pool.end() )
+		{
+			--it->lifetime;
+
+			if ( it->lifetime == 0u )
+			{
+				if ( auto wit = m_wholeBuffers.find( &it->buffer->getBuffer() );
+					wit != m_wholeBuffers.end() )
+				{
+					wit->first->getBuffer().unlock();
+					m_wholeBuffers.erase( wit );
+				}
+				else
+				{
+					log::error << "StagedUpload: Unexpected unmapped buffer" << std::endl;
+					CU_Failure( "StagedUpload: Unexpected unmapped buffer" );
+				}
+
+				log::debug << cuT( "Releasing staging buffer [" ) << makeString( it->buffer->getBuffer().getName() ) << cuT( "]" ) << std::endl;
+				it = m_gpuBuffers->pool.erase( it );
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		return result;
+	}
+
+	void StagedUploadData::cleanup()noexcept
+	{
+		doCleanup();
+		CommandBufferHolder::setData( {} );
 	}
 
 	void StagedUploadData::doPreprocess( Vector< BufferDataRange > *& pendingBuffers
 		, Vector< ImageDataRange > *& pendingImages )
 	{
-		auto const & engine = *m_device.renderSystem.getEngine();
-		m_commandBuffer->beginDebugBlock( { "Buffers Upload"
-			, makeFloatArray( engine.getNextRainbowColour() ) } );
-		m_timer->beginPass( *m_commandBuffer );
+		doBeginDebugBlock( "Buffers Upload", *m_timer );
 
 		for ( auto const & [range, offset] : m_cpuBuffers->bufferOffsets )
 		{
@@ -73,8 +138,8 @@ namespace c3d
 		m_cpuBuffers->buffers.clear();
 		m_cpuBuffers->bufferOffsets.clear();
 		m_cpuBuffers->imageOffsets.clear();
-		m_cpuBuffers->pendingBuffers = m_pendingBuffers;
-		m_cpuBuffers->pendingImages = m_pendingImages;
+		m_cpuBuffers->pendingBuffers = getPendingBuffers();
+		m_cpuBuffers->pendingImages = getPendingImages();
 		m_cpuBuffers->currentSize = 0u;
 
 		for ( auto const & pending : m_cpuBuffers->pendingBuffers )
@@ -82,30 +147,30 @@ namespace c3d
 			auto const & offset = m_cpuBuffers->bufferOffsets.try_emplace( &pending
 				, doGetBuffer( m_cpuBuffers->pool, pending.srcSize ) ).first->second;
 
-			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Chunk size should be aligned"
 					<< ": size = " << offset.getAllocSize()
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Chunk size should be aligned" );
 			}
 
-			if ( offset.getOffset() != ashes::getAlignedSize( offset.getOffset(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( offset.getOffset() != ashes::getAlignedSize( offset.getOffset(), getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Chunk offset should be aligned"
 					<< ": offset = " << offset.getOffset()
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Chunk offset should be aligned" );
 			}
 
 			auto & res = m_cpuBuffers->buffers.try_emplace( offset.buffer ).first->second;
 			res.offset = std::min( res.offset, offset.getOffset() );
 
-			if ( res.offset != ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( res.offset != ashes::getAlignedSize( res.offset, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Offset should be aligned"
 					<< ": offset = " << res.offset
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Offset should be aligned" );
 			}
 
@@ -113,11 +178,11 @@ namespace c3d
 				, std::min( offset.getOffset() + offset.getAllocSize()
 					, offset.buffer->getSize() ) );
 
-			if ( res.range != ashes::getAlignedSize( res.range, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( res.range != ashes::getAlignedSize( res.range, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Range should be aligned"
 					<< ": range = " << res.range
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Range should be aligned" );
 			}
 
@@ -126,7 +191,7 @@ namespace c3d
 
 			if ( inserted )
 			{
-				it->second = offset.buffer->lock( 0u, ashes::WholeSize, 0u );
+				it->second = offset.buffer->getBuffer().lock( 0u, ashes::WholeSize, 0u );
 			}
 
 			res.mapped = it->second;
@@ -137,30 +202,30 @@ namespace c3d
 			auto const & offset = m_cpuBuffers->imageOffsets.try_emplace( &pending
 				, doGetBuffer( m_cpuBuffers->pool, pending.srcSize ) ).first->second;
 
-			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Chunk size should be aligned"
 					<< ": size = " << offset.getAllocSize()
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Chunk size should be aligned" );
 			}
 
-			if ( offset.getOffset() != ashes::getAlignedSize( offset.getOffset(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( offset.getOffset() != ashes::getAlignedSize( offset.getOffset(), getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Chunk offset should be aligned"
 					<< ": offset = " << offset.getOffset()
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Chunk offset should be aligned" );
 			}
 
 			auto & res = m_cpuBuffers->buffers.try_emplace( offset.buffer ).first->second;
 			res.offset = std::min( res.offset, offset.getOffset() );
 
-			if ( res.offset != ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( res.offset != ashes::getAlignedSize( res.offset, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Offset should be aligned"
 					<< ": offset = " << res.offset
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Offset should be aligned" );
 			}
 
@@ -168,11 +233,11 @@ namespace c3d
 				, std::min( offset.getOffset() + offset.getAllocSize()
 					, offset.buffer->getSize() ) );
 
-			if ( res.range != ashes::getAlignedSize( res.range, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			if ( res.range != ashes::getAlignedSize( res.range, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
 			{
 				log::error << "StagedUploadBuffer: Range should be aligned"
 					<< ": range = " << res.range
-					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+					<< ", align = " << getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
 				CU_Failure( "Range should be aligned" );
 			}
 
@@ -181,7 +246,7 @@ namespace c3d
 
 			if ( inserted )
 			{
-				it->second = offset.buffer->lock( 0u, ashes::WholeSize, 0u );
+				it->second = offset.buffer->getBuffer().lock( 0u, ashes::WholeSize, 0u );
 			}
 
 			res.mapped = it->second;
@@ -251,100 +316,37 @@ namespace c3d
 		{
 			for ( auto const & [buffer, bounds] : m_gpuBuffers->buffers )
 			{
-				buffer->flush( bounds.offset, bounds.range - bounds.offset );
-				m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+				buffer->getBuffer().flush( bounds.offset, bounds.range - bounds.offset );
+				doMemoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, buffer->makeTransferSource() );
+					, buffer->getBuffer().makeTransferSource() );
 			}
 
 			for ( auto const & [upload, offset] : m_gpuBuffers->bufferOffsets )
 			{
 				auto const & srcBuffer = *offset.buffer;
 				doUploadBuffer( *upload
-					, &srcBuffer
+					, &srcBuffer.getBuffer()
 					, offset.getOffset() );
 			}
 
 			for ( auto const & [upload, offset] : m_gpuBuffers->imageOffsets )
 			{
 				doUploadImage( *upload
-					, *offset.buffer
+					, offset.buffer->getBuffer()
 					, offset.getOffset() );
 			}
 
 			for ( auto const & [buffer, bounds] : m_gpuBuffers->buffers )
 			{
-				m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				doMemoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 					, VK_PIPELINE_STAGE_HOST_BIT
-					, buffer->makeHostWrite() );
+					, buffer->getBuffer().makeHostWrite() );
 			}
 		}
 
-		m_timer->endPass( *m_commandBuffer );
-		m_commandBuffer->endDebugBlock();
+		doEndDebugBlock( *m_timer );
 		m_timer->notifyPassRender( m_frameIndex );
-	}
-
-	UploadData::SemaphoreUsed StagedUploadData::doEnd( ashes::Queue const & queue
-		, ashes::Fence const * fence
-		, Milliseconds timeout )
-	{
-		m_commandBuffer->end();
-		m_cpuBlock = {};
-		VkFence vkFence = fence ? *fence : VkFence{};
-		queue.submit( getCommandBuffer()
-			, ( m_gpuBuffers->used
-				? VkSemaphore{ VK_NULL_HANDLE }
-				: *m_gpuBuffers->semaphore )
-			, ( m_gpuBuffers->used
-				? VkPipelineStageFlagBits{}
-				: VK_PIPELINE_STAGE_TRANSFER_BIT )
-			, *m_gpuBuffers->semaphore
-			, vkFence );
-		UploadData::SemaphoreUsed result{ m_gpuBuffers->semaphore.get()
-			, &m_gpuBuffers->used
-			, m_gpuBuffers->currentSize
-			, m_gpuBuffers->buffersCount };
-
-		c3d::swap( m_cpuBuffers, m_gpuBuffers );
-		m_frameIndex = 1u - m_frameIndex;
-
-		if ( fence )
-		{
-			fence->wait( uint64_t( timeout.count() ) );
-			fence->reset();
-		}
-
-		auto it = m_gpuBuffers->pool.begin();
-
-		while ( it != m_gpuBuffers->pool.end() )
-		{
-			--it->lifetime;
-
-			if ( it->lifetime == 0u )
-			{
-				if ( auto wit = m_wholeBuffers.find( &it->buffer->getBuffer() );
-					wit != m_wholeBuffers.end() )
-				{
-					wit->first->unlock();
-					m_wholeBuffers.erase( wit );
-				}
-				else
-				{
-					log::error << "StagedUpload: Unexpected unmapped buffer" << std::endl;
-					CU_Failure( "StagedUpload: Unexpected unmapped buffer" );
-				}
-
-				log::debug << cuT( "Releasing staging buffer [" ) << makeString( it->buffer->getBuffer().getName() ) << cuT( "]" ) << std::endl;
-				it = m_gpuBuffers->pool.erase( it );
-			}
-			else
-			{
-				++it;
-			}
-		}
-
-		return result;
 	}
 
 	StagedUploadData::GpuBufferOffset StagedUploadData::doGetBuffer( BufferArray & pool
@@ -368,13 +370,14 @@ namespace c3d
 				maxCount *= 2u;
 			}
 
-			StagingBuffer buffer{ makeUnique< GpuPackedBaseBuffer >( m_device
-				, VkBufferUsageFlags{ VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT }
-				, VkMemoryPropertyFlags{ VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT }
-				, m_debugName + cuT( "Staging" ) + string::toString( pool.size() )
+			StagingBuffer buffer{ makeUnique< GpuPackedBaseBuffer >( getDevice()
+				, getDevice().renderSystem.getEngine()->getGraphResourceCache()
+				, BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
+				, MemoryPropertyFlags::eHostVisible | MemoryPropertyFlags::eHostCoherent
+				, getName() + cuT( "Staging" ) + string::toString( pool.size() )
 				, ashes::QueueShare{}
 				, GpuBufferPackedAllocator{ uint32_t( maxCount )
-				, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) } ) };
+				, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) } ) };
 			pool.emplace_back( c3d::move( buffer ) );
 			it = std::next( pool.begin()
 				, ptrdiff_t( pool.size() - 1u ) );

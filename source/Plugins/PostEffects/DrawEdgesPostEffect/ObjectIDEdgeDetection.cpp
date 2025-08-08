@@ -169,11 +169,10 @@ namespace draw_edges
 	//*********************************************************************************************
 
 	ObjectIDEdgeDetection::ObjectIDEdgeDetection( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, c3d::PassBuffer const & passBuffer
-		, crg::ImageViewId const & depthObj
+		, c3d::Texture const & depthObj
 		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
@@ -191,7 +190,8 @@ namespace draw_edges
 					| c3d::ImageUsageFlags::eTransferSrc
 					| c3d::ImageUsageFlags::eTransferDst ) }
 			, {} }
-		, m_pass{ m_graph.createPass( "ObjectIDDetection"
+	{
+		auto & pass = m_graph.createPass( "ObjectIDDetection"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -206,20 +206,14 @@ namespace draw_edges
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
-			} ) }
-	{
-		auto & modelBuffer = renderTarget.getScene()->getModelBuffer().getBuffer();
-		m_pass.addDependency( previousPass );
-		passBuffer.createPassBinding( m_pass, oied::eMaterials );
-		m_pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( oied::eModels )
-			, 0u
-			, uint32_t( modelBuffer.getSize() ) );
-		m_pass.addSampledView( depthObj, oied::eDepthObj );
+			} );
+		auto & modelBuffer = renderTarget.getScene()->getModelBuffer();
+		passBuffer.createPassBinding( pass, oied::eMaterials );
+		pass.addInputStorage( *modelBuffer.getLastAttach(), oied::eModels );
+		pass.addInputSampled( *depthObj.getSampledLastAttach(), oied::eDepthObj );
 		auto index = uint32_t( oied::eSpecifics );
-		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( m_pass, index );
-		m_pass.addOutputColourView( m_result.targetViewId
-			, c3d::transparentBlackClearColor );
+		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), c3d::transparentBlackClearColor ) );
 		m_result.create();
 	}
 
@@ -233,7 +227,7 @@ namespace draw_edges
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Object ID Edge Detection" )
 			, m_result
-			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.getSampledViewId() ).layout
 			, c3d::TextureFactors{}.invert( true ) );
 	}
 

@@ -34,7 +34,7 @@ namespace c3d
 			, bool needsRsm
 			, bool isStatic )
 		{
-			RenderNodesPassDesc result{ getExtent( shadowMap.getShadowPassResult( false )[SmTexture::eDepth].imageId )
+			RenderNodesPassDesc result{ shadowMap.getShadowPassResult( false ).getExtent()
 				, cameraUbo
 				, renderUbo
 				, culler };
@@ -43,31 +43,31 @@ namespace c3d
 			if ( !isStatic )
 			{
 				auto & smResult = shadowMap.getShadowPassResult( true );
-				result.implicitAction( smResult[SmTexture::eLinearDepth].sampledViewId
-					, crg::RecordContext::clearAttachment( smResult[SmTexture::eLinearDepth].sampledViewId
+				result.implicitAction( smResult.getSampledViewId( SmTexture::eLinearDepth )
+					, crg::RecordContext::clearAttachment( smResult.getSampledViewId( SmTexture::eLinearDepth )
 						, getClearValue( SmTexture::eLinearDepth ).color()
 						, ImageLayout::eShaderReadOnly ) );
 
 				if ( needsVsm )
 				{
-					result.implicitAction( smResult[SmTexture::eVariance].sampledViewId
-						, crg::RecordContext::clearAttachment( smResult[SmTexture::eVariance].sampledViewId
+					result.implicitAction( smResult.getSampledViewId( SmTexture::eVariance )
+						, crg::RecordContext::clearAttachment( smResult.getSampledViewId( SmTexture::eVariance )
 							, getClearValue( SmTexture::eVariance ).color()
 							, ImageLayout::eShaderReadOnly ) );
 				}
 
 				if ( needsRsm )
 				{
-					result.implicitAction( smResult[SmTexture::eNormal].sampledViewId
-						, crg::RecordContext::clearAttachment( smResult[SmTexture::eNormal].sampledViewId
+					result.implicitAction( smResult.getSampledViewId( SmTexture::eNormal )
+						, crg::RecordContext::clearAttachment( smResult.getSampledViewId( SmTexture::eNormal )
 							, getClearValue( SmTexture::eNormal ).color()
 							, ImageLayout::eShaderReadOnly ) );
-					result.implicitAction( smResult[SmTexture::ePosition].sampledViewId
-						, crg::RecordContext::clearAttachment( smResult[SmTexture::ePosition].sampledViewId
+					result.implicitAction( smResult.getSampledViewId( SmTexture::ePosition )
+						, crg::RecordContext::clearAttachment( smResult.getSampledViewId( SmTexture::ePosition )
 							, getClearValue( SmTexture::ePosition ).color()
 							, ImageLayout::eShaderReadOnly ) );
-					result.implicitAction( smResult[SmTexture::eFlux].sampledViewId
-						, crg::RecordContext::clearAttachment( smResult[SmTexture::eFlux].sampledViewId
+					result.implicitAction( smResult.getSampledViewId( SmTexture::eFlux )
+						, crg::RecordContext::clearAttachment( smResult.getSampledViewId( SmTexture::eFlux )
 							, getClearValue( SmTexture::eFlux ).color()
 							, ImageLayout::eShaderReadOnly ) );
 				}

@@ -19,35 +19,29 @@ namespace atmosphere_scattering
 	{
 	public:
 		CloudsVolumePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, CameraUbo const & cameraUbo
 			, CloudsUbo const & weatherUbo
-			, crg::ImageViewId const & transmittance
-			, crg::ImageViewId const & multiscatter
-			, crg::ImageViewId const & skyview
-			, crg::ImageViewId const & volume
-			, crg::ImageViewId const & perlinWorley
-			, crg::ImageViewId const & worley
-			, crg::ImageViewId const & curl
-			, crg::ImageViewId const & weather
-			, crg::ImageViewId const * depthObj
-			, crg::ImageViewId const & skyResult
-			, crg::ImageViewId const & sunResult
-			, crg::ImageViewId const & cloudsResult
+			, c3d::Texture const & transmittance
+			, c3d::Texture const & multiscatter
+			, c3d::Texture const & skyview
+			, c3d::Texture const & volume
+			, c3d::Texture const & perlinWorley
+			, c3d::Texture const & worley
+			, c3d::Texture const & curl
+			, c3d::Texture const & weather
+			, c3d::Texture const * depthObj
+			, c3d::Texture & skyResult
+			, c3d::Texture & sunResult
+			, c3d::Texture & cloudsResult
 			, uint32_t index );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::FramePass const & getLastPass()const
-		{
-			return *m_lastPass;
-		}
-
 	private:
+		c3d::Vector< crg::AttachmentPtr > m_attachs;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_lastPass;
 	};
 }
 

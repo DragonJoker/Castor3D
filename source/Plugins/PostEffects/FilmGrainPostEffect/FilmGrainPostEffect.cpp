@@ -155,7 +155,7 @@ namespace film_grain
 			, params }
 		, m_shader{ cuT( "FilmGrain" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
 		, m_noiseImages{ postfx::loadImages( *renderTarget.getEngine() ) }
 	{
 		m_config.pixelSize = c3d::Point2f{ m_renderTarget.getDisplaySize().getWidth()
@@ -226,8 +226,7 @@ namespace film_grain
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = m_noiseImages[0].getPixelFormat();
@@ -245,7 +244,7 @@ namespace film_grain
 			, getFormat( m_noiseImg )
 			, { c3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
 		auto extent = c3d::makeExtent2D( target.getExtent() );
-		m_pass = &m_graph.createPass( "FilmGrain"
+		auto & pass = m_graph.createPass( "FilmGrain"
 			, [this, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -293,21 +292,12 @@ namespace film_grain
 					, result->getTimer() );
 				return result;
 			} );
-		m_pass->addDependency( previousPass );
-		m_configUbo.createPassBinding( *m_pass
-			, "FilmCfg"
-			, postfx::FilmCfgUboIdx );
-		m_pass->addSampledView( m_noiseView
-			, postfx::NoiseTexIdx
-			, crg::SamplerDesc{ c3d::FilterMode::eLinear
-				, c3d::FilterMode::eLinear
-				, c3d::MipmapMode::eLinear
-				, c3d::WrapMode::eClampToEdge
-				, c3d::WrapMode::eClampToEdge
-				, c3d::WrapMode::eClampToEdge } );
-		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, postfx::SourceTexIdx );
-		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		m_configUbo.createPassBinding( pass, postfx::FilmCfgUboIdx );
+		pass.addInputSampledImage( m_noiseView, postfx::NoiseTexIdx
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eLinear
+				, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat } );
+		pass.addInputSampled( *source.getSampledLastAttach(), postfx::SourceTexIdx );
+		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 		return true;
 	}
 

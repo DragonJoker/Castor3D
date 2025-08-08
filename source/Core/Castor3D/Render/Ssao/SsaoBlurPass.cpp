@@ -54,9 +54,9 @@ namespace c3d
 			auto c3d_dummy = configuration.declMember< sdw::IVec2 >( "c3d_dummy" );
 			auto c3d_gaussian = configuration.declMember< sdw::Vec4 >( "c3d_gaussian", 2u );
 			configuration.end();
-			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", uint32_t( Idx::NmlImgIdx ), 0u, useNormalsBuffer );
-			auto c3d_mapInput = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapInput", uint32_t( Idx::InpImgIdx ), 0u );
-			auto c3d_mapBentInput = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapBentInput", uint32_t( Idx::BntImgIdx ), 0u );
+			auto c3d_mapNormal = writer.declCombinedImg< Img2DRgba >( "c3d_mapNormal", uint32_t( Idx::NmlImgIdx ), 0u, useNormalsBuffer );
+			auto c3d_mapInput = writer.declCombinedImg< Img2DRg >( "c3d_mapInput", uint32_t( Idx::InpImgIdx ), 0u );
+			auto c3d_mapBentInput = writer.declCombinedImg< Img2DRgba >( "c3d_mapBentInput", uint32_t( Idx::BntImgIdx ), 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
@@ -116,23 +116,21 @@ namespace c3d
 					, sdw::Float value
 					, sdw::Vec3 bent )
 				{
+					auto res = writer.declLocale( "result"
+						, vec3( 0.0_f ) );
 					auto temp = writer.declLocale( "temp"
-						, c3d_mapInput.fetch( tapLoc, 0_i ).rgb() );
+						, c3d_mapInput.fetch( tapLoc, 0_i ) );
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
 
 					if ( useNormalsBuffer )
 					{
-						temp = c3d_mapNormal.fetch( tapLoc, 0_i ).xyz();
-						temp = normalize( sdw::fma( temp, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
-					}
-					else
-					{
-						temp = vec3( 0.0_f );
+						res = c3d_mapNormal.fetch( tapLoc, 0_i ).xyz();
+						res = normalize( sdw::fma( res, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 
 					bent = vec3( 0.0_f );
-					writer.returnStmt( temp );
+					writer.returnStmt( res );
 				}
 				, sdw::InIVec2{ writer, "tapLoc" }
 				, sdw::OutFloat{ writer, "tapKey" }
@@ -429,7 +427,6 @@ namespace c3d
 	SsaoBlurPass::SsaoBlurPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, crg::FramePass const & previousPass
 		, String const & prefix
 		, Extent2D const & size
 		, SsaoConfig const & config
@@ -449,7 +446,7 @@ namespace c3d
 		, m_size{ size }
 		, m_result{ ssaoblr::doCreateTexture( m_device, *input.resources, makeString( m_graph.getName() ) + cuT( "SsaoBlur" ) + prefix, input.getFormat(), m_size, axis->y != 0 ) }
 		, m_bentResult{ ssaoblr::doCreateTexture( m_device, *input.resources, makeString( m_graph.getName() ) + cuT( "SsaoBentNormals" ) + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
-		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
 		, m_programs{ Program{ device, false, makeString( m_graph.getName() ) }
 			, Program{ device, true, makeString( m_graph.getName() ) } }
 	{
@@ -462,7 +459,7 @@ namespace c3d
 				, crg::RunnableGraph & runnable )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO " ) + prefix + cuT( " blur pass" ) );
-				auto bentResIt = pass.images.rbegin();
+				auto bentResIt = pass.targets.rbegin();
 				auto resIt = std::next( bentResIt );
 				auto result = makeRawUnique< RenderQuad >( pass
 					, context
@@ -473,23 +470,21 @@ namespace c3d
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, ssaoblr::getRuConfig( axis->y != 0
-						, *resIt
-						, *bentResIt )
+						, **resIt
+						, **bentResIt )
 					, m_config );
 				m_device.renderSystem.getEngine()->registerTimer( makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		m_lastPass = &pass;
-		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, uint32_t( ssaoblr::Idx::SsaoCfgUboIdx ) );
 		m_cameraUbo.createPassBinding( pass, uint32_t( ssaoblr::Idx::CameraUboIdx ) );
-		m_configurationUbo.createPassBinding( pass, "SsaoBlurCfg", uint32_t( ssaoblr::Idx::BlurCfgUboIdx ) );
-		pass.addSampledView( normals.sampledViewId, uint32_t( ssaoblr::Idx::NmlImgIdx ) );
-		pass.addSampledView( input.sampledViewId, uint32_t( ssaoblr::Idx::InpImgIdx ) );
-		pass.addSampledView( bentInput.sampledViewId, uint32_t( ssaoblr::Idx::BntImgIdx ) );
-		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
-		pass.addOutputColourView( m_bentResult.targetViewId, transparentBlackClearColor );
+		m_configurationUbo.createPassBinding( pass, uint32_t( ssaoblr::Idx::BlurCfgUboIdx ) );
+		pass.addInputSampled( *normals.getSampledLastAttach(), uint32_t( ssaoblr::Idx::NmlImgIdx ) );
+		pass.addInputSampled( *input.getSampledLastAttach(), uint32_t( ssaoblr::Idx::InpImgIdx ) );
+		pass.addInputSampled( *bentInput.getSampledLastAttach(), uint32_t( ssaoblr::Idx::BntImgIdx ) );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), opaqueWhiteClearColor ) );
+		m_bentResult.setLastAttach( pass.addOutputColourTarget( m_bentResult.getTargetViewId(), transparentBlackClearColor ) );
 		m_result.create();
 		m_bentResult.create();
 	}
@@ -559,14 +554,14 @@ namespace c3d
 		{
 			visitor.visit( cuT( "SSAO HBlurred AO" )
 				, getResult()
-				, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getResult().getSampledViewId() ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 		else
 		{
 			visitor.visit( cuT( "SSAO Blurred AO" )
 				, getResult()
-				, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getResult().getSampledViewId() ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
@@ -574,14 +569,14 @@ namespace c3d
 		{
 			visitor.visit( cuT( "HBlurred Bent Normals" )
 				, getBentResult()
-				, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getBentResult().getSampledViewId() ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 		else
 		{
 			visitor.visit( cuT( "Blurred Bent Normals" )
 				, getBentResult()
-				, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getBentResult().getSampledViewId() ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 

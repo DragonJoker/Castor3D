@@ -35,8 +35,7 @@ namespace c3d
 			eClustersAABB,
 		};
 
-		static ShaderPtr createShader( RenderDevice const & device
-			, ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -49,8 +48,7 @@ namespace c3d
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
-				, 0u
-				, &config );
+				, 0u );
 			C3D_ReducedLightsAABB( writer
 				, eReducedLightsAABB
 				, 0u );
@@ -156,38 +154,16 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, crg::cp::Config config
-				, ClustersConfig const & clustersConfig )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeClustersAABB" ), createShader( device, clustersConfig ) } }
+				, crg::cp::Config config )
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeClustersAABB" ), createShader( device ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{ framePass
 					, context
 					, graph
 					, crg::ru::Config{}
 					, config
-						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) )
-						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
+						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 			{
-			}
-
-		private:
-			void doPostRecord( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )const
-			{
-				for ( auto & attach : m_pass.buffers )
-				{
-					if ( !attach.isNoTransition()
-						&& attach.isStorageBuffer()
-						&& attach.isClearableBuffer() )
-					{
-						auto currentState = context.getAccessState( attach.buffer( index )
-							, attach.getBufferRange() );
-						context.memoryBarrier( commandBuffer
-							, attach.buffer( index ), attach.getBufferRange()
-							, currentState, ComputeShaderReadState );
-					}
-				}
 			}
 		};
 	}
@@ -202,8 +178,7 @@ namespace c3d
 			eClustersAABB,
 		};
 
-		static ShaderPtr createDebugDisplayShader( RenderDevice const & device
-			, FrustumClusters const & frustumClusters )
+		static ShaderPtr createDebugDisplayShader( RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -217,8 +192,7 @@ namespace c3d
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
-				, 0u
-				, &frustumClusters.getConfig() );
+				, 0u );
 			C3D_ClustersAABB( writer
 				, eClustersAABB
 				, 0u );
@@ -259,12 +233,13 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createComputeClustersAABBPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	void createComputeClustersAABBPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
+		, FrustumClusters const & clusters
 		, CameraUbo const & clustersCameraUbo
 		, RenderUbo const & renderUbo
-		, FrustumClusters const & clusters )
+		, BufferBase const & reducedLightsAABB
+		, BufferBase & clustersAABB )
 	{
 		auto & pass = graph.createPass( "ComputeClustersAABB"
 			, [&clusters, &device]( crg::FramePass const & framePass
@@ -279,19 +254,16 @@ namespace c3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z )
-						.enabled( &clusters.needsClustersUpdate() )
-					, clusters.getConfig() );
+						.enabled( &clusters.needsClustersUpdate() ) );
 				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
-			});
-		pass.addDependency( *previousPass );
+			} );
 		renderUbo.createPassBinding( pass, cptclsb::eRender );
 		clustersCameraUbo.createPassBinding( pass, cptclsb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptclsb::eClusters );
-		createInputStoragePassBinding( pass, uint32_t( cptclsb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), cuT( "C3D_ClustersAABB" ), clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
-		return pass;
+		pass.addInputStorage( *reducedLightsAABB.getLastAttach(), uint32_t( cptclsb::eReducedLightsAABB ) );
+		clustersAABB.setLastAttach( pass.addClearableOutputStorageBuffer( clustersAABB.bufferViewId, uint32_t( cptclsb::eClustersAABB ) ) );
 	}
 
 	void createDisplayClustersAABBProgram( RenderDevice const & device
@@ -300,9 +272,10 @@ namespace c3d
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, ashes::WriteDescriptorSetArray & writes )
+		, ashes::WriteDescriptorSetArray & writes
+		, BufferBase const & clustersAABB )
 	{
-		ProgramModule programModule{ "ClustersAABB", dspclsb::createDebugDisplayShader( device, clusters ) };
+		ProgramModule programModule{ "ClustersAABB", dspclsb::createDebugDisplayShader( device ) };
 		program = makeProgramStates( device, programModule );
 
 		bindings.push_back( VkDescriptorSetLayoutBinding{ dspclsb::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
@@ -317,9 +290,8 @@ namespace c3d
 		auto & clustersUbo = clusters.getClustersUbo();
 		writes.emplace_back( dspclsb::eClusters, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersUbo.getUbo().getBuffer().getBuffer(), clustersUbo.getUbo().getByteOffset(), clustersUbo.getUbo().getByteRange() } } );
-		auto & aabbBuffer = clusters.getClustersAABBBuffer();
 		writes.emplace_back( dspclsb::eClustersAABB, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ aabbBuffer, 0u, aabbBuffer.getSize() } } );
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersAABB.getBuffer(), 0u, clustersAABB.getSize() } } );
 	}
 
 	//*********************************************************************************************

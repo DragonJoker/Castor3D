@@ -677,6 +677,11 @@ namespace c3d
 	{
 	}
 
+	RenderSystem::~RenderSystem()noexcept
+	{
+		m_randomStorage->destroy();
+	}
+
 	ashes::InstancePtr RenderSystem::createInstance( Engine const & engine
 		, AshPluginDescription const & desc
 		, Extensions & instanceExtensions )
@@ -1043,16 +1048,15 @@ namespace c3d
 	bool RenderSystem::doCreateRandomStorage( RenderDevice const & device )
 	{
 		m_randomStorage = makeBuffer< Point4f >( device
+			, getEngine()->getGraphResourceCache()
 			, RandomDataCount
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
+			, MemoryPropertyFlags::eHostVisible
 			, cuT( "C3D_RandomStorage" ) );
 		auto rddevice = getEngine()->createRandomEngine();
 		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
-		if ( auto buffer = m_randomStorage->lock( 0u
-			, RandomDataCount
-			, 0u ) )
+		if ( auto buffer = m_randomStorage->lock() )
 		{
 			for ( auto i = 0u; i < RandomDataCount; ++i )
 			{
@@ -1063,8 +1067,8 @@ namespace c3d
 				++buffer;
 			}
 
-			m_randomStorage->getBuffer().flush( 0u, RandomDataCount );
-			m_randomStorage->getBuffer().unlock();
+			m_randomStorage->flush();
+			m_randomStorage->unlock();
 		}
 
 		return true;

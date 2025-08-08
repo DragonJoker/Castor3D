@@ -1,7 +1,9 @@
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/RsmGIPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -344,21 +346,21 @@ namespace c3d
 	//*********************************************************************************************
 
 	RsmGIPass::RsmGIPass( crg::FrameGraph & graph
-		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, LightType lightType
 		, ShadowBuffer const & shadowBuffer
 		, Extent3D const & size
 		, CameraUbo const & cameraUbo
-		, crg::ImageViewId const & depthObj
-		, crg::ImageViewId const & nmlOcc
+		, Texture const & depthObj
+		, Texture const & nmlOcc
 		, ShadowMapResult const & smResult
-		, TextureArray const & output )
+		, Texture & gi
+		, Texture & nml )
 		: Named{ c3d::getName( lightType ) + "Rsm" }
 		, m_rsmConfigUbo{ device }
-		, m_rsmSamplesSsbo{ device.bufferPool->getBuffer< Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+		, m_rsmSamplesSsbo{ device.bufferPool->getBuffer< Point4f >( BufferUsageFlags::eStorageBuffer
 			, MaxRsmRange
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
+			, MemoryPropertyFlags::eHostVisible ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rsmgi::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsmgi::getPixelProgram( lightType ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -378,7 +380,11 @@ namespace c3d
 			point[3] = float( xi2 );
 		}
 
-		m_rsmSamplesSsbo.markDirty( VertexUniformReadState );
+		{
+			InstantDirectUploadData uploader{ *device.transferQueue
+				, device, cuT( "RSMSamplesUpload" ), *device.transferCommandPool };
+			m_rsmSamplesSsbo.upload( uploader, VertexUniformReadState );
+		}
 
 		auto & pass = graph.createPass( getName()
 			, [this, &device, size]( crg::FramePass const & framePass
@@ -395,34 +401,18 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		pass.addUniformBuffer( { m_rsmConfigUbo.getUbo().getBuffer(), "RsmConfig" }
-			, rsmgi::RsmCfgUboIdx
-			, m_rsmConfigUbo.getUbo().getByteOffset()
-			, m_rsmConfigUbo.getUbo().getByteRange() );
-		pass.addInputStorageBuffer( { m_rsmSamplesSsbo.getBuffer(), "RsmSample" }
-			, rsmgi::RsmSamplesIdx
-			, m_rsmSamplesSsbo.getOffset()
-			, m_rsmSamplesSsbo.getSize() );
-		cameraUbo.createPassBinding( pass
-			, rsmgi::CameraUboIdx );
-		shadowBuffer.createPassBinding( pass
-			, rsmgi::ShadowsIdx );
-		pass.addSampledView( depthObj
-			, rsmgi::DepthObjMapIdx );
-		pass.addSampledView( nmlOcc
-			, rsmgi::NmlOccMapIdx );
-		pass.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, rsmgi::RsmNormalsIdx );
-		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, rsmgi::RsmPositionIdx );
-		pass.addSampledView( smResult[SmTexture::eFlux].sampledViewId
-			, rsmgi::RsmFluxIdx );
-		pass.addOutputColourView( output[0].targetViewId
-			, transparentBlackClearColor );
-		pass.addOutputColourView( output[1].targetViewId
-			, transparentBlackClearColor );
-		m_pass = &pass;
+		m_rsmConfigUbo.createPassBinding( pass, rsmgi::RsmCfgUboIdx );
+		pass.addInputStorageBuffer( m_rsmSamplesSsbo.getBuffer().bufferViewId, rsmgi::RsmSamplesIdx );
+		cameraUbo.createPassBinding( pass, rsmgi::CameraUboIdx );
+		shadowBuffer.createPassBinding( pass, rsmgi::ShadowsIdx );
+		pass.addInputSampledImage( depthObj.getSampledViewId(), rsmgi::DepthObjMapIdx );
+		pass.addInputSampledImage( nmlOcc.getSampledViewId(), rsmgi::NmlOccMapIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eNormal ), rsmgi::RsmNormalsIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::ePosition ), rsmgi::RsmPositionIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eFlux ), rsmgi::RsmFluxIdx );
+
+		gi.setLastAttach( pass.addOutputColourTarget( gi.getTargetViewId(), transparentBlackClearColor ) );
+		nml.setLastAttach( pass.addOutputColourTarget( nml.getTargetViewId(), transparentBlackClearColor ) );
 	}
 
 	void RsmGIPass::accept( ConfigurationVisitorBase & visitor )const

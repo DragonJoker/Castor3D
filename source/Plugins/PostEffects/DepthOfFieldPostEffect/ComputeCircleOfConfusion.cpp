@@ -136,14 +136,13 @@ namespace dof
 
 	//*********************************************************************************************
 
-	crg::FramePassArray createComputeCircleOfConfusionPass( c3d::RenderDevice const & device
+	void createComputeCircleOfConfusionPass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, DepthOfFieldUbo const & configurationUbo
 		, c3d::Texture const & depth
-		, crg::ImageViewIdArray const & colour
-		, c3d::Texture const & nearCoC
-		, c3d::Texture const & farCoC
+		, c3d::Texture const & colour
+		, c3d::Texture & nearCoC
+		, c3d::Texture & farCoC
 		, bool const * enabled
 		, uint32_t const * passIndex )
 	{
@@ -165,15 +164,11 @@ namespace dof
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-
-		pass.addSampledView( depth.sampledViewId, 0u );
-		pass.addSampledView( colour, 1u );
+		pass.addInputSampled( *depth.getSampledLastAttach(), 0u );
+		pass.addInputSampled( *colour.getSampledLastAttach(), 1u );
 		configurationUbo.createPassBinding( pass, 2u );
 
-		pass.addOutputColourView( nearCoC.targetViewId );
-		pass.addOutputColourView( farCoC.targetViewId );
-
-		return { &pass };
+		nearCoC.setLastAttach( pass.addOutputColourTarget( nearCoC.getTargetViewId() ) );
+		farCoC.setLastAttach( pass.addOutputColourTarget( farCoC.getTargetViewId() ) );
 	}
 }

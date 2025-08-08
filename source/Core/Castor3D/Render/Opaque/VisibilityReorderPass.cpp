@@ -67,17 +67,15 @@ namespace c3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static crg::FramePass const & createPass( String const & name
+		static void createPass( String const & name
 			, crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::RunnablePass::IsEnabledCallback isEnabled
-			, crg::ImageViewId const & data
-			, ashes::Buffer< uint32_t > const & materialsCounts
+			, Texture const & data
+			, Buffer & materialsCounts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto renderSize = getExtent( data );
+			auto renderSize = data.getExtent();
 			auto & pass = graph.createPass( toUtf8( name ) + "/MaterialsCount"
 				, [&stages, &device, enable = c3d::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -96,20 +94,8 @@ namespace c3d
 						, result->getTimer() );
 					return result;
 				} );
-			pass.addDependencies( previousPasses );
-
-			if ( previousPass )
-			{
-				pass.addDependency( *previousPass );
-			}
-
-			pass.addInputStorageView( data, Bindings::eData );
-			pass.addClearableOutputStorageBuffer( { materialsCounts, "MaterialsCount" }
-				, uint32_t( Bindings::eMaterialsCounts )
-				, 0u
-				, uint32_t( materialsCounts.getBuffer().getSize() ) );
-			previousPass = &pass;
-			return pass;
+			pass.addInputStorage( *data.getLastAttach(), Bindings::eData );
+			materialsCounts.setLastAttach( pass.addClearableOutputStorageBuffer( materialsCounts.bufferViewId, uint32_t( Bindings::eMaterialsCounts ) ) );
 		}
 	}
 
@@ -167,15 +153,13 @@ namespace c3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static crg::FramePass const & createPass( String const & name
+		static void createPass( String const & name
 			, crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::RunnablePass::IsEnabledCallback isEnabled
-			, ashes::Buffer< uint32_t > const & materialsCounts
-			, ashes::Buffer< Point3ui > const & indirectCounts
-			, ashes::Buffer< uint32_t > const & starts
+			, Buffer const & materialsCounts
+			, Buffer & indirectCounts
+			, Buffer & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto & pass = graph.createPass( toUtf8( name ) + "/MaterialsStart"
@@ -195,27 +179,9 @@ namespace c3d
 						, result->getTimer() );
 					return result;
 				} );
-			pass.addDependencies( previousPasses );
-
-			if ( previousPass )
-			{
-				pass.addDependency( *previousPass );
-			}
-
-			pass.addInputStorageBuffer( { materialsCounts, "MaterialsCounts" }
-				, uint32_t( Bindings::eMaterialsCounts )
-				, 0u
-				, uint32_t( materialsCounts.getBuffer().getSize() ) );
-			pass.addClearableOutputStorageBuffer( { indirectCounts, "IndirectCounts" }
-				, uint32_t( Bindings::eIndirectCounts )
-				, 0u
-				, uint32_t( indirectCounts.getBuffer().getSize() ) );
-			pass.addClearableOutputStorageBuffer( { starts, "MaterialsStart" }
-				, uint32_t( Bindings::eMaterialsStarts )
-				, 0u
-				, uint32_t( starts.getBuffer().getSize() ) );
-			previousPass = &pass;
-			return pass;
+			pass.addInputStorage( *materialsCounts.getLastAttach(), uint32_t( Bindings::eMaterialsCounts ) );
+			indirectCounts.setLastAttach( pass.addClearableOutputStorageBuffer( indirectCounts.bufferViewId, uint32_t( Bindings::eIndirectCounts ) ) );
+			starts.setLastAttach( pass.addClearableOutputStorageBuffer( starts.bufferViewId, uint32_t( Bindings::eMaterialsStarts ) ) );
 		}
 	}
 
@@ -277,19 +243,17 @@ namespace c3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static crg::FramePass const & createPass( String const & name
+		static void createPass( String const & name
 			, crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::RunnablePass::IsEnabledCallback isEnabled
-			, crg::ImageViewId const & data
-			, ashes::Buffer< uint32_t > const & materialsCounts
-			, ashes::Buffer< uint32_t > const & materialsStarts
-			, ashes::Buffer< Point2ui > const & pixels
+			, Texture const & data
+			, Buffer & materialsCounts
+			, Buffer const & materialsStarts
+			, Buffer & pixels
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto renderSize = getExtent( data );
+			auto renderSize = data.getExtent();
 			auto & pass = graph.createPass( toUtf8( name ) + "/PixelsXY"
 				, [&stages, &device, enable = c3d::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -308,41 +272,22 @@ namespace c3d
 						, result->getTimer() );
 					return result;
 				} );
-			pass.addDependencies( previousPasses );
-
-			if ( previousPass )
-			{
-				pass.addDependency( *previousPass );
-			}
-
-			pass.addInputStorageView( data, Bindings::eData );
-			pass.addInputStorageBuffer( { materialsStarts, "MaterialsStart" }
-				, uint32_t( Bindings::eMaterialsStarts )
-				, 0u
-				, uint32_t( materialsStarts.getBuffer().getSize() ) );
-			pass.addClearableOutputStorageBuffer( { materialsCounts, "MaterialsCounts" }
-				, uint32_t( Bindings::eMaterialsCounts )
-				, 0u
-				, uint32_t( materialsCounts.getBuffer().getSize() ) );
-			pass.addClearableOutputStorageBuffer( { pixels, "PixelsXY" }
-				, uint32_t( Bindings::ePixelsXY )
-				, 0u
-				, uint32_t( pixels.getBuffer().getSize() ) );
-			previousPass = &pass;
-			return pass;
+			pass.addInputStorage( *data.getLastAttach(), Bindings::eData );
+			pass.addInputStorage( *materialsStarts.getLastAttach(), uint32_t( Bindings::eMaterialsStarts ) );
+			materialsCounts.setLastAttach( pass.addClearableOutputStorageBuffer( materialsCounts.bufferViewId, uint32_t( Bindings::eMaterialsCounts ) ) );
+			pixels.setLastAttach( pass.addClearableOutputStorageBuffer( pixels.bufferViewId, uint32_t( Bindings::ePixelsXY ) ) );
 		}
 	}
 
 	//*********************************************************************************************
 
 	VisibilityReorderPass::VisibilityReorderPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
-		, crg::ImageViewId const & data
-		, ashes::Buffer< uint32_t > const & materialsCounts
-		, ashes::Buffer< Point3ui > const & indirectCounts
-		, ashes::Buffer< uint32_t > const & materialsStarts
-		, ashes::Buffer< Point2ui > const & pixels
+		, Texture const & data
+		, Buffer & materialsCounts
+		, Buffer & indirectCounts
+		, Buffer & materialsStarts
+		, Buffer & pixels
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: Named{ cuT( "VisibilityReorder" ) }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
@@ -358,30 +303,23 @@ namespace c3d
 			, pixelxy::getProgram( device ) }
 		, m_pixelsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computePixelsShader ) } }
 	{
-		crg::FramePass const * previousPass{};
-		m_lastPass = &matcount::createPass( getName() + cuT( "/Counts" )
+		matcount::createPass( getName() + cuT( "/Counts" )
 			, graph
-			, previousPasses
-			, previousPass
 			, device
 			, isEnabled
 			, data
 			, materialsCounts
 			, m_countsStages );
-		m_lastPass = &matstart::createPass( getName() + cuT( "/Starts" )
+		matstart::createPass( getName() + cuT( "/Starts" )
 			, graph
-			, previousPasses
-			, previousPass
 			, device
 			, isEnabled
 			, materialsCounts
 			, indirectCounts
 			, materialsStarts
 			, m_startsStages );
-		m_lastPass = &pixelxy::createPass( getName() + cuT( "/Pixels" )
+		pixelxy::createPass( getName() + cuT( "/Pixels" )
 			, graph
-			, previousPasses
-			, previousPass
 			, device
 			, c3d::move( isEnabled )
 			, data

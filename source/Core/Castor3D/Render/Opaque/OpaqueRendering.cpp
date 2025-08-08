@@ -15,6 +15,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Render/Opaque/VisibilityReorderPass.hpp"
@@ -37,92 +38,118 @@ namespace c3d
 	OpaqueRendering::OpaqueRendering( RenderTechnique & parent
 		, RenderDevice const & device
 		, PrepassRendering const & previous
-		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress )
 		: OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
 		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeBuffer< uint32_t >( m_device
-				, getEngine()->getMaxPassTypeCount()
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			? makeBufferBase( m_device, parent.getResources()
+				, getEngine()->getMaxPassTypeCount() * sizeof( uint32_t )
+				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eIndirectBuffer
+				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/MaterialsCounts1" ) )
 			: nullptr ) }
 		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeBuffer< Point3ui >( m_device
-				, getEngine()->getMaxPassTypeCount()
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			? makeBufferBase( m_device, parent.getResources()
+				, getEngine()->getMaxPassTypeCount() * sizeof( Point3ui )
+				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eIndirectBuffer
+				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/MaterialsCounts2" ) )
 			: nullptr ) }
 		, m_materialsStarts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeBuffer< uint32_t >( m_device
-				, getEngine()->getMaxPassTypeCount()
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			? makeBufferBase( m_device, parent.getResources()
+				, getEngine()->getMaxPassTypeCount() * sizeof( uint32_t )
+				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
+				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/MaterialsStarts" ) )
 			: nullptr ) }
 		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeBuffer< Point2ui >( m_device
-				, getOwner()->getTargetExtent().width * getOwner()->getTargetExtent().height
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			? makeBufferBase( m_device, parent.getResources()
+				, getOwner()->getTargetExtent().width * getOwner()->getTargetExtent().height * sizeof( Point2ui )
+				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
+				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/PixelsXY" ) )
 			: nullptr ) }
 		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
 		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
 		, m_visibilityOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
-		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeUnique< VisibilityReorderPass >( m_graph
-				, crg::FramePassArray{ &previous.getLastPass() }
-				, m_device
-				, previous.getVisibility().sampledViewId
-				, * m_materialsCounts
-				, * m_materialsIndirectCounts
-				, *m_materialsStarts
-				, *m_pixelsXY
-				, crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled() || doIsVisibilityOpaquePassEnabled(); } })
-			: nullptr ) }
-		, m_ssao{ doCreateSsaoPass( progress, previous.getLastPass(), previousPasses ) }
-		, m_visibilityResolveDesc{ ( previous.hasVisibility()
-			? &doCreateVisibilityResolve( progress, previous, { &m_ssao->getLastPass() }, false )
-			: nullptr ) }
-		, m_opaquePassDesc{ ( m_visibilityResolveDesc
-			? m_visibilityResolveDesc
-			: &doCreateOpaquePass( progress, previous.getLastPass(), previousPasses, false ) ) }
-		, m_subsurfaceScattering{ makeUnique< SubsurfaceScatteringPass >( m_graph
-			, *m_opaquePassDesc
+	{
+		m_ssao = doCreateSsaoPass( progress );
+
+		if ( previous.hasVisibility() )
+		{
+			if ( VisibilityResolvePass::useCompute() )
+			{
+				m_visibilityReorder = makeUnique< VisibilityReorderPass >( m_graph
+					, m_device
+					, previous.getVisibility()
+					, *m_materialsCounts
+					, *m_materialsIndirectCounts
+					, *m_materialsStarts
+					, *m_pixelsXY
+					, crg::RunnablePass::IsEnabledCallback{ [this](){ return doIsOpaquePassEnabled() || doIsVisibilityOpaquePassEnabled(); } } );
+			}
+			doCreateVisibilityResolve( progress, previous, false );
+		}
+		else
+		{
+			doCreateOpaquePass( progress, false );
+		}
+
+		m_subsurfaceScattering = makeUnique< SubsurfaceScatteringPass >( m_graph
 			, m_device
 			, progress
 			, *getOwner()->getRenderTarget().getScene()
 			, getOwner()->getCameraUbo()
 			, getOwner()->getDepthObj()
 			, getOwner()->getDiffuse()
-			, m_deferredOpaquePassEnabled ) }
-		, m_deferredVisibilityResolveDesc{ ( m_visibilityResolveDesc
-			? &doCreateVisibilityResolve( progress, previous, { &m_subsurfaceScattering->getLastPass() }, true )
-			: nullptr ) }
-		, m_deferredOpaquePassDesc{ ( m_deferredVisibilityResolveDesc
-			? m_deferredVisibilityResolveDesc
-			: &doCreateOpaquePass( progress, m_subsurfaceScattering->getLastPass(), previousPasses, true ) ) }
-		, m_visibilityOpaquePassDesc{ ( m_deferredVisibilityResolveDesc
-			? &doCreateVisibilityOpaquePass( progress, *m_deferredVisibilityResolveDesc, previousPasses )
-			: nullptr ) }
-	{
-		m_graph.addGroupOutput( getOwner()->getTargetResult().front() );
-		m_graph.addGroupOutput( getOwner()->getTargetResult().back() );
+			, m_deferredOpaquePassEnabled );
+
+		if ( previous.hasVisibility() )
+		{
+			doCreateVisibilityResolve( progress, previous, true );
+			doCreateVisibilityOpaquePass( progress );
+		}
+		else
+		{
+			doCreateOpaquePass( progress, true );
+		}
+
+		m_graph.addGroupOutput( getOwner()->getTargetResult().getTargetViewId() );
 	}
 
-	SsaoPassUPtr OpaqueRendering::doCreateSsaoPass( ProgressBar * progress
-		, crg::FramePass const & lastPass
-		, crg::FramePassArray previousPasses )const
+	OpaqueRendering::~OpaqueRendering()noexcept
 	{
-		previousPasses.push_back( &lastPass );
+		if ( m_pixelsXY )
+		{
+			m_pixelsXY->destroy();
+			m_pixelsXY.reset();
+		}
+
+		if ( m_materialsStarts )
+		{
+			m_materialsStarts->destroy();
+			m_materialsStarts.reset();
+		}
+
+		if ( m_materialsIndirectCounts )
+		{
+			m_materialsIndirectCounts->destroy();
+			m_materialsIndirectCounts.reset();
+		}
+
+		if ( m_materialsCounts )
+		{
+			m_materialsCounts->destroy();
+			m_materialsCounts.reset();
+		}
+	}
+
+	SsaoPassUPtr OpaqueRendering::doCreateSsaoPass( ProgressBar * progress )const
+	{
 		return makeUnique< SsaoPass >( m_graph
 			, m_device
 			, progress
-			, previousPasses
 			, makeSize( getOwner()->getTargetExtent() )
 			, getOwner()->getSsaoConfig()
 			, getOwner()->getDepthObj()
@@ -220,13 +247,6 @@ namespace c3d
 		return getOwner()->getEngine();
 	}
 
-	crg::FramePass const & OpaqueRendering::getLastPass()const noexcept
-	{
-		return m_visibilityOpaquePassDesc
-			? *m_visibilityOpaquePassDesc
-			: *m_deferredOpaquePassDesc;
-	}
-
 	Texture const & OpaqueRendering::getSsaoResult()const noexcept
 	{
 		return m_ssao->getResult();
@@ -244,9 +264,8 @@ namespace c3d
 			|| m_visibilityOpaquePassEnabled();
 	}
 
-	crg::FramePass & OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
+	void OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
 		, PrepassRendering const & previous
-		, crg::FramePassArray const & previousPasses
 		, bool isDeferredLighting )
 	{
 		if ( isDeferredLighting )
@@ -258,10 +277,10 @@ namespace c3d
 			stepProgressBarLocal( progress, cuT( "Creating visibility resolve pass" ) );
 		}
 
-		auto targetResult = getOwner()->getTargetResult();
-		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredVisibilityResolve" } : MbString{ "VisibilityResolve" }
-			, [this, targetResult, targetDepth, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
+		auto & targetResult = getOwner()->getTargetResult();
+		auto & targetDepth = getOwner()->getTargetDepth();
+		auto & pass = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredVisibilityResolve" } : MbString{ "VisibilityResolve" }
+			, [this, &targetResult, &targetDepth, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -289,9 +308,11 @@ namespace c3d
 					.indirect( getOwner()->getIndirectLighting() )
 					.clustersConfig( getOwner()->getClustersConfig() )
 					.outputScattering();
-				auto resultIt = framePass.images.begin();
-				auto diffuseIt = std::next( resultIt );
-				renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
+				if ( !isDeferredLighting )
+				{
+					auto diffuse = framePass.outputs.find( 1u )->second;
+					renderPassDesc.implicitAction( diffuse->view(), crg::RecordContext::clearAttachment( *diffuse ) );
+				}
 
 				auto res = makeRawUnique< VisibilityResolvePass >( getOwner()
 					, framePass
@@ -321,88 +342,69 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependencies( previousPasses );
 		uint32_t index = 0u;
-		result.addInputStorageView( previous.getVisibility().targetViewId
-			, index );
+		pass.addInputStorage( *previous.getVisibility().getLastAttach(), index );
 		++index;
 
 		if ( isDeferredLighting )
 		{
-			result.addInputStorageView( getOwner()->getSssDiffuse().targetViewId
-				, index );
+			pass.addInputStorage( *getSssDiffuse().getLastAttach(), index );
 			++index;
 		}
 		else
 		{
-			result.addClearableOutputStorageView( getOwner()->getDiffuse().targetViewId
-				, index );
+			auto & diffuse = getOwner()->getDiffuse();
+			diffuse.setLastAttach( pass.addClearableOutputStorageImage( diffuse.getTargetViewId(), index ) );
 			++index;
+		}
+
+		pass.addImplicit( *getOwner()->getDiffusionProfiles().getLastAttach(), ImageLayout::eShaderReadOnly );
+
+		if ( auto frustumClusters = getOwner()->getRenderTarget().getFrustumClusters();
+			frustumClusters && getOwner()->getClustersConfig()->enabled )
+		{
+			pass.addImplicit( *frustumClusters->getReducedLightsAABBBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterGridBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterGridBuffer().getLastAttach(), AccessState{} );
 		}
 
 		if ( m_ssao )
-		{
-			result.addDependency( m_ssao->getLastPass() );
-			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, ImageLayout::eShaderReadOnly );
-		}
+			pass.addImplicit( *m_ssao->getResult().getLastAttach(), ImageLayout::eShaderReadOnly );
 
+		auto & targetScattering = getOwner()->getScattering();
 		if ( VisibilityResolvePass::useCompute() )
 		{
-			result.addDependency( m_visibilityReorder->getLastPass() );
-			result.addInputStorageBuffer( { m_materialsCounts->getBuffer(), "MaterialsCounts" }
-				, index
-				, 0u
-				, uint32_t( m_materialsCounts->getBuffer().getSize() ) );
+			pass.addInputStorage( *m_materialsCounts->getLastAttach(), index );
 			++index;
-			result.addInputStorageBuffer( { m_materialsStarts->getBuffer(), "MaterialsStarts" }
-				, index
-				, 0u
-				, uint32_t( m_materialsStarts->getBuffer().getSize() ) );
+			pass.addInputStorage( *m_materialsStarts->getLastAttach(), index );
 			++index;
-			result.addInputStorageBuffer( { m_pixelsXY->getBuffer(), "PixelsXY" }
-				, index
-				, 0u
-				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
+			pass.addInputStorage( *m_pixelsXY->getLastAttach(), index );
 			++index;
-			result.addInOutStorageView( targetResult, index );
+			targetResult.setLastAttach( pass.addInOutStorage( *targetResult.getLastAttach(), index ) );
 			++index;
-
-			if ( isDeferredLighting )
-			{
-				result.addInOutStorageView( getOwner()->getScattering().targetViewId, index );
-			}
-			else
-			{
-				result.addClearableOutputStorageView( getOwner()->getScattering().targetViewId, index );
-			}
+			targetScattering.setLastAttach( isDeferredLighting
+				? pass.addInOutStorage( *targetScattering.getLastAttach(), index )
+				: pass.addClearableOutputStorageImage( targetScattering.getTargetViewId(), index ) );
 		}
 		else
 		{
-			result.addInOutColourView( targetResult );
-
-			if ( isDeferredLighting )
-			{
-				result.addInOutColourView( getOwner()->getScattering().targetViewId );
-			}
-			else
-			{
-				result.addOutputColourView( getOwner()->getScattering().targetViewId );
-			}
+			targetResult.setLastAttach( pass.addInOutColourTarget( *targetResult.getLastAttach() ) );
+			targetScattering.setLastAttach( isDeferredLighting
+				? pass.addInOutColourTarget( *targetScattering.getLastAttach() )
+				: pass.addOutputColourTarget( targetScattering.getTargetViewId() ) );
 		}
-
-		return result;
 	}
 
-	crg::FramePass & OpaqueRendering::doCreateVisibilityOpaquePass( ProgressBar * progress
-		, crg::FramePass const & lastPass
-		, crg::FramePassArray const & previousPasses )
+	void OpaqueRendering::doCreateVisibilityOpaquePass( ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating visibility opaque pass" ) );
-		auto targetResult = getOwner()->getTargetResult();
-		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "PostVisibilityNodesPass"
-			, [this, targetResult, targetDepth, progress]( crg::FramePass const & framePass
+		auto & targetResult = getOwner()->getTargetResult();
+		auto & targetScattering = getOwner()->getScattering();
+		auto & targetDepth = getOwner()->getTargetDepth();
+		auto & pass = m_graph.createPass( "PostVisibilityNodesPass"
+			, [this, &targetResult, &targetDepth, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -438,26 +440,26 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( lastPass );
-		result.addDependencies( previousPasses );
 
-		if ( m_ssao )
+		pass.addInputDepthStencilTarget( *targetDepth.getLastAttach() );
+		targetResult.setLastAttach( pass.addInOutColourTarget( *targetResult.getLastAttach() ) );
+		targetScattering.setLastAttach( pass.addInOutColourTarget( *targetScattering.getLastAttach() ) );
+
+		if ( auto frustumClusters = getOwner()->getRenderTarget().getFrustumClusters();
+			frustumClusters && getOwner()->getClustersConfig()->enabled )
 		{
-			result.addDependency( m_ssao->getLastPass() );
-			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, ImageLayout::eShaderReadOnly );
+			pass.addImplicit( *frustumClusters->getReducedLightsAABBBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterGridBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterGridBuffer().getLastAttach(), AccessState{} );
 		}
 
-		result.addInOutDepthStencilView( targetDepth );
-		result.addInOutColourView( targetResult );
-		result.addInOutColourView( getOwner()->getScattering().targetViewId );
-
-		return result;
+		if ( m_ssao )
+			pass.addImplicit( *m_ssao->getResult().getLastAttach(), ImageLayout::eShaderReadOnly );
 	}
 
-	crg::FramePass & OpaqueRendering::doCreateOpaquePass( ProgressBar * progress
-		, crg::FramePass const & lastPass
-		, crg::FramePassArray const & previousPasses
+	void OpaqueRendering::doCreateOpaquePass( ProgressBar * progress
 		, bool isDeferredLighting )
 	{
 		if ( isDeferredLighting )
@@ -469,10 +471,11 @@ namespace c3d
 			stepProgressBarLocal( progress, cuT( "Creating opaque pass" ) );
 		}
 
-		auto targetResult = getOwner()->getTargetResult();
-		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredNodesPass" } : MbString{ "NodesPass" }
-			, [this, targetResult, targetDepth, progress, isDeferredLighting]( crg::FramePass const & framePass
+		auto & targetResult = getOwner()->getTargetResult();
+		auto & targetScattering = getOwner()->getScattering();
+		auto & targetDepth = getOwner()->getTargetDepth();
+		auto & pass = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredNodesPass" } : MbString{ "NodesPass" }
+			, [this, &targetResult, &targetDepth, progress, isDeferredLighting]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -503,8 +506,8 @@ namespace c3d
 
 				if ( !isDeferredLighting )
 				{
-					auto diffuseIt = framePass.images.rbegin();
-					renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
+					auto diffuse = *framePass.targets.rbegin();
+					renderPassDesc.implicitAction( diffuse->view(), crg::RecordContext::clearAttachment( *diffuse ) );
 				}
 
 				auto res = makeRawUnique< ForwardRenderTechniquePass >( getOwner()
@@ -532,35 +535,37 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( lastPass );
-		result.addDependencies( previousPasses );
+		pass.addImplicit( *getOwner()->getDiffusionProfiles().getLastAttach(), ImageLayout::eShaderReadOnly );
 
 		if ( m_ssao )
+			pass.addImplicit( *m_ssao->getResult().getLastAttach(), ImageLayout::eShaderReadOnly );
+
+		if ( auto frustumClusters = getOwner()->getRenderTarget().getFrustumClusters();
+			frustumClusters && getOwner()->getClustersConfig()->enabled )
 		{
-			result.addDependency( m_ssao->getLastPass() );
-			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, ImageLayout::eShaderReadOnly );
+			pass.addImplicit( *frustumClusters->getReducedLightsAABBBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterGridBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterGridBuffer().getLastAttach(), AccessState{} );
 		}
 
 		if ( isDeferredLighting )
-		{
-			result.addInputStorageView( getOwner()->getSssDiffuse().targetViewId, 0u );
-		}
+			pass.addInputStorage( *getSssDiffuse().getLastAttach(), 0u );
+		pass.addInputDepthStencilTarget( *targetDepth.getLastAttach() );
 
-		result.addInOutDepthStencilView( targetDepth );
-		result.addInOutColourView( targetResult );
+		targetResult.setLastAttach( pass.addInOutColourTarget( *targetResult.getLastAttach() ) );
 
 		if ( isDeferredLighting )
 		{
-			result.addInOutColourView( getOwner()->getScattering().targetViewId );
+			targetScattering.setLastAttach( pass.addInOutColourTarget( *targetScattering.getLastAttach() ) );
 		}
 		else
 		{
-			result.addOutputColourView( getOwner()->getScattering().targetViewId );
-			result.addOutputColourView( getOwner()->getDiffuse().targetViewId );
+			auto & diffuse = getOwner()->getDiffuse();
+			targetScattering.setLastAttach( pass.addOutputColourTarget( getOwner()->getScattering().getTargetViewId() ) );
+			diffuse.setLastAttach( pass.addOutputColourTarget( diffuse.getTargetViewId() ) );
 		}
-
-		return result;
 	}
 
 	bool OpaqueRendering::doIsOpaquePassEnabled()const

@@ -28,11 +28,10 @@ namespace ocean_fft
 
 	namespace
 	{
-		crg::FramePass const & createGenerateMipmapsPass( c3d::String const & name
+		void createGenerateMipmapsPass( c3d::String const & name
 			, c3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
-			, crg::ImageViewId imageView )
+			, c3d::Texture & imageView )
 		{
 			auto & result = graph.createPass( "GenMips" + c3d::toUtf8( name )
 				, [&device]( crg::FramePass const & framePass
@@ -50,48 +49,17 @@ namespace ocean_fft
 							, res->getTimer() );
 						return res;
 				} );
-			result.addDependency( *previousPass );
-			result.addTransferInOutView( imageView );
-			return result;
+			imageView.setLastAttach( result.addInOutTransfer( *imageView.getLastAttach() ) );
 		}
 
-		crg::FramePass const & createGenerateSpecMipmapsPass( c3d::String const & name
+		void createCopyAndGenerateMipmapsPass( c3d::String const & name
 			, c3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
-			, crg::ImageViewId imageView )
-		{
-			auto & result = graph.createPass( "GenMips" + c3d::toUtf8( name )
-				, [&device]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
-				{
-						auto res = c3d::makeRawUnique< GenerateMipmapsPass >( framePass
-							, context
-							, graph
-							, device
-							, crg::ru::Config{}
-							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-							, res->getTimer() );
-						return res;
-				} );
-			result.addDependency( *previousPass );
-			result.addTransferInOutView( imageView
-				, crg::Attachment::Flag::NoTransition );
-			return result;
-		}
-
-		crg::FramePass const & createCopyAndGenerateMipmapsPass( c3d::String const & name
-			, c3d::RenderDevice const & device
-			, crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
-			, ashes::BufferBase const & srcBuffer
-			, crg::ImageViewId dstImageView )
+			, c3d::Buffer const & srcBuffer
+			, c3d::Texture & dstImageView )
 		{
 			auto mbName = c3d::toUtf8( name );
-			auto data = *dstImageView.data;
+			auto data = *dstImageView.getTargetViewId().data;
 			data.name = data.image.data->name + "_L0";
 			data.info.subresourceRange.levelCount = 1u;
 			auto viewId = graph.createView( data );
@@ -113,9 +81,8 @@ namespace ocean_fft
 						, res->getTimer() );
 					return res;
 				} );
-			copy.addDependency( previousPass );
-			copy.addInputStorageBuffer( { srcBuffer, mbName + "FFTResult" }, 0u, 0u, ashes::WholeSize );
-			copy.addTransferOutputView( dstImageView );
+			copy.addInputTransfer( *srcBuffer.getLastAttach() );
+			dstImageView.setLastAttach( copy.addOutputTransferImage( dstImageView.getTargetViewId() ) );
 
 			auto & result = graph.createPass( "GenMips" + mbName
 				, [&device]( crg::FramePass const & framePass
@@ -133,9 +100,7 @@ namespace ocean_fft
 							, res->getTimer() );
 						return res;
 				} );
-			result.addDependency( copy );
-			result.addTransferInOutView( dstImageView );
-			return result;
+			dstImageView.setLastAttach( result.addInOutTransfer( *dstImageView.getLastAttach() ) );
 		}
 
 		c3d::Texture createTexture( c3d::RenderDevice const & device
@@ -179,11 +144,10 @@ namespace ocean_fft
 	c3d::String const OceanFFT::Name{ cuT( "OceanFFT" ) };
 
 	OceanFFT::OceanFFT( c3d::RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
-			, OceanUbo const & ubo
-			, OceanFFTConfig const & config )
+		, crg::ResourcesCache & resources
+		, crg::FramePassGroup & graph
+		, OceanUbo const & ubo
+		, OceanFFTConfig const & config )
 		: m_device{ device }
 		, m_group{ graph }
 		, m_config{ config }
@@ -191,54 +155,32 @@ namespace ocean_fft
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
 		, m_displacementDownsample{ m_config.displacementDownsample }
 		, m_fftConfig{ device, m_heightMapSamples }
-		, m_heightSeeds{ c3d::makeBuffer< cfloat >( device
+		, m_heightSeeds{ c3d::makeBuffer< cfloat >( device, resources
 			, m_heightMapSamples.width * m_heightMapSamples.height
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+			, c3d::MemoryPropertyFlags::eHostVisible
 			, Name + cuT( "HeightSeeds" ) ) }
-		, m_heightDistribution{ c3d::makeBuffer< cfloat >( device
+		, m_heightDistribution{ c3d::makeBuffer< cfloat >( device, resources
 			, m_heightMapSamples.width * m_heightMapSamples.height
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+			, c3d::MemoryPropertyFlags::eDeviceLocal
 			, Name + cuT( "HeightDistribution" ) ) }
-		, m_generateHeightDistribution{ &createGenerateDistributionPass( Name
-			, cuT( "Height" )
-			, device
-			, m_group
-			, previousPasses
-			, m_heightMapSamples
-			, false
-			, ubo
-			, m_heightSeeds->getBuffer()
-			, m_heightDistribution->getBuffer() ) }
 		, m_height{ Name
 			, cuT( "Height" )
 			, m_group
-			, { m_generateHeightDistribution }
 			, ubo
 			, m_heightMapSamples
 			, m_fftConfig
 			, *m_heightDistribution
 			, FFTMode::eC2R }
-		, m_displacementDistribution{ c3d::makeBuffer< cfloat >( device
+		, m_displacementDistribution{ c3d::makeBuffer< cfloat >( device, resources
 			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+			, c3d::MemoryPropertyFlags::eDeviceLocal
 			, Name + cuT( "NormalsDistribution" ) ) }
-		, m_generateDisplacementDistribution{ &createDownsampleDistributionPass( Name
-			, cuT( "Displacement" )
-			, device
-			, m_group
-			, { m_generateHeightDistribution }
-			, m_heightMapSamples
-			, m_displacementDownsample
-			, ubo
-			, m_heightDistribution->getBuffer()
-			, m_displacementDistribution->getBuffer() ) }
 		, m_displacement{ Name
 			, cuT( "Displacement" )
 			, m_group
-			, { m_generateDisplacementDistribution }
 			, ubo
 			, { m_heightMapSamples.width >> m_displacementDownsample, m_heightMapSamples.height >> m_displacementDownsample }
 			, m_fftConfig
@@ -268,51 +210,19 @@ namespace ocean_fft
 				, cuT( "OceanFFTGradientJacobian1" )
 				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
 				, c3d::MipmapMode::eLinear ) }
-		, m_bakeHeightGradient{ &createBakeHeightGradientPass( m_fftConfig.device
-			, m_group
-			, { &m_height.getLastPass(), &m_displacement.getLastPass() }
-			, m_heightMapSamples
-			, m_config.size
-			, m_displacementDownsample
-			, ubo
-			, m_height.getResult()
-			, m_displacement.getResult()
-			, m_heightDisplacement
-			, m_gradientJacobian ) }
-		, m_generateHeightDispMips{ &createGenerateSpecMipmapsPass( cuT( "HeightDisplacement" )
-			, device
-			, m_group
-			, m_bakeHeightGradient
-			, m_heightDisplacement.front().sampledViewId ) }
-		, m_generateGradJacobMips{ &createGenerateMipmapsPass( cuT( "GradientJacobian" )
-			, device
-			, m_group
-			, m_bakeHeightGradient
-			, m_gradientJacobian.front().sampledViewId ) }
-		, m_normalSeeds{ c3d::makeBuffer< cfloat >( device
+		, m_normalSeeds{ c3d::makeBuffer< cfloat >( device, resources
 			, m_heightMapSamples.width * m_heightMapSamples.height
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+			, c3d::MemoryPropertyFlags::eHostVisible
 			, Name + cuT( "NormalsSeeds" ) ) }
-		, m_normalDistribution{ c3d::makeBuffer< cfloat >( device
+		, m_normalDistribution{ c3d::makeBuffer< cfloat >( device, resources
 			, m_heightMapSamples.width * m_heightMapSamples.height
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+			, c3d::MemoryPropertyFlags::eHostVisible
 			, Name + cuT( "NormalsDistribution" ) ) }
-		, m_generateNormalDistribution{ &createGenerateDistributionPass( Name
-			, cuT( "Normals" )
-			, device
-			, m_group
-			, previousPasses
-			, m_heightMapSamples
-			, true
-			, ubo
-			, m_normalSeeds->getBuffer()
-			, m_normalDistribution->getBuffer() ) }
 		, m_normal{ Name
 			, cuT( "Normals" )
 			, m_group
-			, { m_generateNormalDistribution }
 			, ubo
 			, m_heightMapSamples
 			, m_fftConfig
@@ -324,21 +234,34 @@ namespace ocean_fft
 			, cuT( "OceanFFTNormals" )
 			, c3d::PixelFormat::eR32G32_SFLOAT
 			, c3d::MipmapMode::eLinear ) }
-		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( cuT( "Normals" )
-			, device
-			, m_group
-			, m_normal.getLastPass()
-			, m_normal.getResult()
-			, m_normals.sampledViewId ) }
 	{
+		createGenerateDistributionPass( Name, cuT( "Height" ), device, m_group
+			, m_heightMapSamples, false
+			, ubo, *m_heightSeeds, *m_heightDistribution );
+		createDownsampleDistributionPass( Name, cuT( "Displacement" ), device, m_group
+			, m_heightMapSamples, m_displacementDownsample
+			, ubo, *m_heightDistribution, *m_displacementDistribution );
+		createBakeHeightGradientPass( m_fftConfig.device, m_group
+			, m_heightMapSamples, m_config.size, m_displacementDownsample
+			, ubo, m_height.getResult(), m_displacement.getResult(), m_heightDisplacement, m_gradientJacobian );
+		createGenerateSpecMipmapsPass( cuT( "HeightDisplacement" ), device, m_group
+			, m_heightDisplacement.front() );
+		createGenerateMipmapsPass( cuT( "GradientJacobian" ), device, m_group
+			, m_gradientJacobian.front() );
+		createGenerateDistributionPass( Name, cuT( "Normals" ), device, m_group
+			, m_heightMapSamples, true
+			, ubo, *m_normalSeeds, *m_normalDistribution );
+		createCopyAndGenerateMipmapsPass( cuT( "Normals" ), device, m_group
+			, m_normal.getResult(), m_normals );
+
 		generateDistributionSeeds( *m_heightSeeds );
 		generateDistributionSeeds( *m_normalSeeds );
 
-		m_group.addGroupOutput( m_gradientJacobian.front().sampledViewId );
-		m_group.addGroupOutput( m_gradientJacobian.back().sampledViewId );
-		m_group.addGroupOutput( m_heightDisplacement.back().sampledViewId );
-		m_group.addGroupOutput( m_heightDisplacement.back().sampledViewId );
-		m_group.addGroupOutput( m_normals.sampledViewId );
+		m_group.addGroupOutput( m_gradientJacobian.front().getWholeViewId() );
+		m_group.addGroupOutput( m_gradientJacobian.back().getWholeViewId() );
+		m_group.addGroupOutput( m_heightDisplacement.back().getWholeViewId() );
+		m_group.addGroupOutput( m_heightDisplacement.back().getWholeViewId() );
+		m_group.addGroupOutput( m_normals.getWholeViewId() );
 	}
 
 	OceanFFT::~OceanFFT()
@@ -354,6 +277,11 @@ namespace ocean_fft
 		}
 
 		m_normals.destroy();
+		m_heightSeeds->destroy();
+		m_heightDistribution->destroy();
+		m_displacementDistribution->destroy();
+		m_normalSeeds->destroy();
+		m_normalDistribution->destroy();
 	}
 
 	void OceanFFT::accept( c3d::ConfigurationVisitorBase & visitor )
@@ -368,12 +296,7 @@ namespace ocean_fft
 		visitor.visit( cuT( "LOD 0 Distance" ), m_config.lod0Distance );
 	}
 
-	crg::FramePassArray OceanFFT::getLastPasses()
-	{
-		return { m_generateHeightDispMips, m_generateGradJacobMips, m_generateNormalsMips };
-	}
-
-	void OceanFFT::generateDistributionSeeds( ashes::Buffer< cfloat > & distribBuffer )
+	void OceanFFT::generateDistributionSeeds( c3d::BufferT< cfloat > & distribBuffer )
 	{
 		auto Nx = int32_t( m_heightMapSamples.width );
 		auto Nz = int32_t( m_heightMapSamples.height );
@@ -390,12 +313,10 @@ namespace ocean_fft
 		{
 			auto queueData = m_device.graphicsData();
 			c3d::InstantDirectUploadData uploader{ *queueData->queue
-				, m_device
-				, cuT( "OceanFFTDistributionSeeds" )
-				, *queueData->commandPool};
+				, m_device, cuT( "OceanFFTDistributionSeedsUpload" ), *queueData->commandPool};
 			uploader->pushUpload( distribution.data()
 				, distribution.size() * sizeof( cfloat )
-				, distribBuffer.getBuffer()
+				, *distribBuffer.buffer
 				, 0u
 				, c3d::ComputeShaderReadState );
 		}

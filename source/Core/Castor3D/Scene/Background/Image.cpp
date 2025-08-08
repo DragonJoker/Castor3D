@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
-#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -76,7 +75,7 @@ namespace c3d
 	{
 		m_texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, bgimage::doGetImageCreate( PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, MemoryPropertyFlags::eDeviceLocal
 			, cuT( "ImageBackground_Dummy" ) );
 	}
 
@@ -113,7 +112,7 @@ namespace c3d
 				, ( ImageUsageFlags::eTransferSrc | ImageUsageFlags::eTransferDst ) };
 			m_2dTexture = makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 				, c3d::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, MemoryPropertyFlags::eDeviceLocal
 				, cuT( "SkyboxBackground2D" ) );
 			m_2dTexture->setSource( folder, relative );
 
@@ -184,10 +183,10 @@ namespace c3d
 	}
 
 	void ImageBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		pass.addSampledView( m_textureId.wholeViewId
+		pass.addInputSampledImage( m_textureId.getWholeViewId()
 			, index
 			, crg::SamplerDesc{ FilterMode::eLinear
 				, FilterMode::eLinear
@@ -206,10 +205,10 @@ namespace c3d
 	}
 
 	void ImageBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		bindTexture( m_textureId.wholeView
+		bindTexture( m_textureId.getSampledView()
 			, *m_textureId.sampler
 			, descriptorWrites
 			, index );
@@ -224,9 +223,7 @@ namespace c3d
 			auto & image = m_2dTexture->getImage();
 			auto & texture = m_2dTexture->getTexture();
 			InstantDirectUploadData upload{ *queueData.queue
-				, device
-				, image.getName()
-				, *queueData.commandPool };
+				, device, image.getName() + cuT( "/Upload" ), *queueData.commandPool };
 			upload->pushUpload( image.getPxBuffer().getConstPtr()
 				, image.getPxBuffer().getSize()
 				, texture
@@ -255,7 +252,7 @@ namespace c3d
 			m_texture = makeUnique< TextureLayout >( device.renderSystem
 				, cuT( "ImageBackgroundCube" )
 				, *m_textureId.image
-				, m_textureId.wholeViewId );
+				, m_textureId.getWholeViewId() );
 		}
 
 		auto xOffset = ( dim - extent.width ) / 2u;

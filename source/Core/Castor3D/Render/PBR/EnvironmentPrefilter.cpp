@@ -100,7 +100,57 @@ namespace c3d
 			auto colour()const { return this->template getMember< "value" >(); }
 		};
 
-		template< typename SourceImageT >
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in )
+		{
+			return vec3( in );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in )
+		{
+			return vec3( in, 0.0_f );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in )
+		{
+			return in;
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in )
+		{
+			return in.xyz();
+		}
+
+		template< ast::type::ImageFormat FormatT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, Extent2D const & size
 			, uint32_t mipLevel
@@ -117,7 +167,7 @@ namespace c3d
 				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 
-				auto c3d_mapEnvironment = writer.declCombinedImg< SourceImageT >( "c3d_mapEnvironment", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declCombinedImg< FormatT, ImgCube >( "c3d_mapEnvironment", 1u, 0u );
 
 				auto c3d_roughness = writer.declConstant< sdw::Float >( "c3d_roughness"
 					, writer.cast< sdw::Float >( float( mipLevel ) / float( MaxIblReflectionLod ) ) );
@@ -176,7 +226,7 @@ namespace c3d
 										, 0.0_f
 										, 0.5_f * log2( omegaS / omegaP ) ) );
 
-								prefilteredColor += c3d_mapEnvironment.lod( L, lod ).rgb() * NdotL;
+								prefilteredColor += makeVec3( writer, c3d_mapEnvironment.lod( L, lod ) ) * NdotL;
 								totalWeight += NdotL;
 							}
 							sdwFI
@@ -282,7 +332,7 @@ namespace c3d
 			auto name = toUtf8( m_prefix + cuT( "EnvironmentPrefilterL" ) + string::toString( face ) + cuT( "M" ) + string::toString( mipLevel ) );
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
-			auto data = *dstTexture.wholeViewId.data;
+			auto data = *dstTexture.getWholeViewId().data;
 			data.name = name;
 			data.info.viewType = ImageViewType::e2D;
 			data.info.subresourceRange.baseArrayLayer = face;
@@ -303,13 +353,54 @@ namespace c3d
 				, c3d::move( createInfo ) );
 		}
 
-		createPipelines( size
-			, ( srcView.getFormat() == VK_FORMAT_B10G11R11_UFLOAT_PACK32
-				? envpref::doCreateProgram< sdw::CombinedImageCubeR11fG11fB10f >( m_device, originalSize, mipLevel, isCharlie )
-				: envpref::doCreateProgram< sdw::CombinedImageCubeRgba32 >( m_device, originalSize, mipLevel, isCharlie ) )
-			, srcView
-			, renderPass
-			, {} );
+		ast::type::ImageFormat format = getImageFormat( convert( srcView.getFormat() ) );
+		ashes::PipelineShaderStageCreateInfoArray program;
+		switch ( format )
+		{
+		case ast::type::ImageFormat::eRgba32f: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba32f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba16f: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba16f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg32f: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg32f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg16f: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg16f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR32f: program = envpref::doCreateProgram< ast::type::ImageFormat::eR32f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR16f: program = envpref::doCreateProgram< ast::type::ImageFormat::eR16f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR11fG11fB10f: program = envpref::doCreateProgram< ast::type::ImageFormat::eR11fG11fB10f >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba32i: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba32i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba16i: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba16i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba8i: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba8i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg32i: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg32i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg16i: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg16i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg8i: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg8i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR32i: program = envpref::doCreateProgram< ast::type::ImageFormat::eR32i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR16i: program = envpref::doCreateProgram< ast::type::ImageFormat::eR16i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR8i: program = envpref::doCreateProgram< ast::type::ImageFormat::eR8i >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba32u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba32u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba16u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba16u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba8u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba8u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg32u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg32u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg16u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg16u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg8u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg8u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR32u: program = envpref::doCreateProgram< ast::type::ImageFormat::eR32u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR16u: program = envpref::doCreateProgram< ast::type::ImageFormat::eR16u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR8u: program = envpref::doCreateProgram< ast::type::ImageFormat::eR8u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgb10A2u: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgb10A2u >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba16Snorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba16Snorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba8Snorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba8Snorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg16Snorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg16Snorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg8Snorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg8Snorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR16Snorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eR16Snorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR8Snorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eR8Snorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba16Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba16Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgba8Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgba8Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg16Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg16Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRg8Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRg8Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR16Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eR16Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eR8Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eR8Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		case ast::type::ImageFormat::eRgb10A2Unorm: program = envpref::doCreateProgram< ast::type::ImageFormat::eRgb10A2Unorm >( m_device, originalSize, mipLevel, isCharlie ); break;
+		default:
+			CU_Failure( "Unsupported ImageFormat" );
+			break;
+		}
+		createPipelines( size, move( program ), srcView, renderPass, {} );
 	}
 
 	void EnvironmentPrefilter::MipRenderCube::registerFrames()

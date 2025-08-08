@@ -13,18 +13,14 @@ namespace smaa
 	{
 	public:
 		LumaEdgeDetection( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewIdArray const & colourView
-			, crg::ImageViewId const * predication
+			, c3d::Texture const & colourView
+			, c3d::Texture const * predication
 			, SmaaConfig const & config
 			, bool const * enabled
 			, uint32_t const * passIndex );
-
-	private:
-		crg::ImageViewId m_predicationView;
 	};
 }
 

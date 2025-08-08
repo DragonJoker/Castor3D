@@ -15,7 +15,7 @@ namespace c3d
 	template< typename ResT >
 	inline ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, ResT & resource
-		, VkMemoryPropertyFlags flags
+		, MemoryPropertyFlags flags
 		, String const & name )
 	{
 		return setupMemory( device
@@ -27,7 +27,7 @@ namespace c3d
 	template< typename ResT >
 	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
 		, ResT & resource
-		, VkMemoryPropertyFlags flags
+		, MemoryPropertyFlags flags
 		, String const & name )
 	{
 		return setupMemory( *device, resource, flags, name );

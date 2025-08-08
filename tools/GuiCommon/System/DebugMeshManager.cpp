@@ -212,7 +212,7 @@ namespace GuiCommon
 		, m_obbSelectedSubmeshColour{ 1.0f, 1.0f, 0.0f, 1.0f }
 		, m_obbSubmeshColour{ 0.0f, 0.0f, 1.0f, 1.0f }
 		, m_obbBoneColour{ 0.0f, 0.0f, 0.5f, 1.0f }
-		, m_meshConfigBuffer{ m_device.bufferPool->getBuffer< DebugMeshConfig >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, 1000u, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
+		, m_meshConfigBuffer{ m_device.bufferPool->getBuffer< DebugMeshConfig >( c3d::BufferUsageFlags::eStorageBuffer, 1000u, c3d::MemoryPropertyFlags::eHostVisible ) }
 	{
 		c3d::ProgramModule cubeModule{ cuT( "BoundingBox" )
 			, dbgmsh::createDisplayCubeProgram( m_device ) };
@@ -258,19 +258,13 @@ namespace GuiCommon
 			if ( !m_pointLightVertexBuffer )
 			{
 				auto vertices = dbgmsh::generateLinesFromTriangles( c3d::PointLight::generateVertices() );
-				m_pointLightVertexBuffer = m_device.bufferPool->getBuffer< c3d::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				m_pointLightVertexBuffer = m_device.bufferPool->getBuffer< c3d::Point4f >( c3d::BufferUsageFlags::eVertexBuffer | c3d::BufferUsageFlags::eTransferDst
 					, vertices.size()
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+					, c3d::MemoryPropertyFlags::eHostVisible );
 				auto queue = m_device.graphicsData();
 				c3d::InstantDirectUploadData uploader{ *queue->queue
-					, m_device
-					, cuT( "PointLight" )
-					, *queue->commandPool };
-				uploader->pushUpload( vertices.data()->constPtr()
-					, vertices.size() * sizeof( c3d::Point4f )
-					, m_pointLightVertexBuffer.getBuffer().getBuffer()
-					, m_pointLightVertexBuffer.getOffset()
-					, c3d::VertexAttributeInputState );
+					, m_device, cuT( "PointLightVBUpload" ), *queue->commandPool };
+				m_pointLightVertexBuffer.upload( uploader, c3d::VertexAttributeInputState );
 			}
 		}
 		else if ( light.getLightType() == c3d::LightType::eSpot )
@@ -281,19 +275,13 @@ namespace GuiCommon
 			if ( res )
 			{
 				auto vertices = dbgmsh::generateLinesFromTriangles( c3d::SpotLight::generateVertices( it->first ) );
-				it->second = m_device.bufferPool->getBuffer< c3d::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				it->second = m_device.bufferPool->getBuffer< c3d::Point4f >( c3d::BufferUsageFlags::eVertexBuffer | c3d::BufferUsageFlags::eTransferDst
 					, vertices.size()
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+					, c3d::MemoryPropertyFlags::eHostVisible );
 				auto queue = m_device.graphicsData();
 				c3d::InstantDirectUploadData uploader{ *queue->queue
-					, m_device
-					, cuT( "SpotLight_" ) + c3d::string::toString( it->first )
-					, *queue->commandPool };
-				uploader->pushUpload( vertices.data()->constPtr()
-					, vertices.size() * sizeof( c3d::Point4f )
-					, it->second.getBuffer().getBuffer()
-					, it->second.getOffset()
-					, c3d::VertexAttributeInputState );
+					, m_device, cuT( "SpotLight_" ) + c3d::string::toString( it->first ) + cuT( "/Upload" ), *queue->commandPool };
+				it->second.upload( uploader, c3d::VertexAttributeInputState );
 			}
 		}
 
@@ -421,19 +409,13 @@ namespace GuiCommon
 				if ( res )
 				{
 					auto vertices = dbgmsh::generateLinesFromTriangles( c3d::SpotLight::generateVertices( it->first ) );
-					it->second = m_device.bufferPool->getBuffer< c3d::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					it->second = m_device.bufferPool->getBuffer< c3d::Point4f >( c3d::BufferUsageFlags::eVertexBuffer | c3d::BufferUsageFlags::eTransferDst
 						, vertices.size()
-						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+						, c3d::MemoryPropertyFlags::eHostVisible );
 					auto queue = m_device.graphicsData();
 					c3d::InstantDirectUploadData uploader{ *queue->queue
-						, m_device
-						, cuT( "SpotLight_" ) + c3d::string::toString( it->first )
-						, *queue->commandPool };
-					uploader->pushUpload( vertices.data()->constPtr()
-						, vertices.size() * sizeof( c3d::Point4f )
-						, it->second.getBuffer().getBuffer()
-						, it->second.getOffset()
-						, c3d::VertexAttributeInputState );
+						, m_device, cuT( "SpotLight_" ) + c3d::string::toString( it->first ) + cuT( "/Upload" ), *queue->commandPool };
+					it->second.upload( uploader, c3d::VertexAttributeInputState );
 				}
 
 				buffer = &it->second;

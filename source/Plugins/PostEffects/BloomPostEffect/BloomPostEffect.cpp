@@ -36,7 +36,7 @@ namespace Bloom
 		, m_blurKernelSize{ postfx::BaseKernelSize }
 		, m_blurPassesCount{ postfx::BaseFilterCount }
 	{
-		setParameters( params );
+		PostEffect::setParameters( params );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -71,12 +71,22 @@ namespace Bloom
 			m_combinePass->accept( visitor );
 		}
 
-		for ( auto & view : m_blurViews )
+		for ( auto & layerViews : m_blurXImg )
 		{
-			visitor.visit( cuT( "PostFX: HDRB - Blur " ) + c3d::string::toString( view.data->info.subresourceRange.baseMipLevel )
-				, view
-				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
-				, c3d::TextureFactors{}.invert( true ) );
+			for ( auto & mipViews : layerViews.mipViews )
+				visitor.visit( cuT( "PostFX: HDRB - BlurX " ) + c3d::string::toString( getSubresourceRange( mipViews.sampledViewId ).baseMipLevel )
+					, mipViews.sampledViewId
+					, m_renderTarget.getGraph().getFinalLayoutState( mipViews.sampledViewId ).layout
+					, c3d::TextureFactors{}.invert( true ) );
+		}
+
+		for ( auto & layerViews : m_blurYImg )
+		{
+			for ( auto & mipViews : layerViews.mipViews )
+				visitor.visit( cuT( "PostFX: HDRB - BlurY " ) + c3d::string::toString( getSubresourceRange( mipViews.sampledViewId ).baseMipLevel )
+					, mipViews.sampledViewId
+					, m_renderTarget.getGraph().getFinalLayoutState( mipViews.sampledViewId ).layout
+					, c3d::TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( cuT( "Kernel Size" )
@@ -103,81 +113,71 @@ namespace Bloom
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		c3d::Extent2D size{ c3d::makeExtent2D( target.getExtent() ) };
 
 #if !Bloom_DebugHiPass
-		m_blurImg = m_graph.createImage( crg::ImageData{ "Blur"
-			, c3d::ImageCreateFlags::eNone
-			, c3d::ImageType::e2D
-			, target.getFormat()
-			, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
-			, ( c3d::ImageUsageFlags::eColorAttachment
-				| c3d::ImageUsageFlags::eSampled
-				| c3d::ImageUsageFlags::eTransferSrc )
-			, m_blurPassesCount } );
-
-		for ( uint32_t i = 0u; i < m_blurPassesCount; ++i )
-		{
-			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + c3d::string::toMbString( i )
-				, m_blurImg
-				, c3d::ImageViewCreateFlags::eNone
-				, c3d::ImageViewType::e2D
-				, getFormat( m_blurImg )
-				, { c3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
-		}
+		m_blurXImg = { device
+			, m_renderTarget.getResources()
+			, cuT( "BloomXBlurred" )
+			, { c3d::ImageCreateFlags::eNone
+				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, m_blurPassesCount
+				, target.getFormat()
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eTransferSrc ) }
+			, {} };
+		m_blurYImg = { device
+			, m_renderTarget.getResources()
+			, cuT( "BloomYBlurred" )
+			, { c3d::ImageCreateFlags::eNone
+				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, m_blurPassesCount
+				, target.getFormat()
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eTransferSrc ) }
+			, {} };
 #endif
 
 		m_hiPass = c3d::makeRawUnique< HiPass >( m_graph
-			, previousPass
 			, device
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+			, source
 			, size
 			, m_blurPassesCount
 			, &isEnabled()
 			, &m_passIndex );
 #if !Bloom_DebugHiPass
 		m_blurXPass = c3d::makeRawUnique< BlurPass >( m_graph
-			, m_hiPass->getPass()
 			, device
 			, m_hiPass->getResult()
-			, m_blurViews
+			, m_blurXImg
 			, size
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, false
 			, &isEnabled() );
 		m_blurYPass = c3d::makeRawUnique< BlurPass >( m_graph
-			, m_blurXPass->getPasses()
 			, device
-			, m_blurViews
-			, m_hiPass->getResult()
+			, m_blurXPass->getResult()
+			, m_blurYImg
 			, size
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, true
 			, &isEnabled() );
 		m_combinePass = c3d::makeRawUnique< CombinePass >( m_graph
-			, m_blurYPass->getPasses()
 			, device
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, m_hiPass->getResult()
-			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
+			, source
+			, m_blurYPass->getResult()
+			, target
 			, size
 			, m_blurPassesCount
 			, &isEnabled()
 			, & m_passIndex );
 #endif
 
-#if Bloom_DebugHiPass
-		m_pass = &m_hiPass->getPass();
-		return &m_hiPass->getResult();
-#else
-		m_pass = &m_combinePass->getPass();
 		return true;
-#endif
 	}
 
 	void PostEffect::doCleanup( c3d::RenderDevice const & device )

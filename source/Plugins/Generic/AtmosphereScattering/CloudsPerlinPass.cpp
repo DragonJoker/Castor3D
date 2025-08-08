@@ -423,14 +423,13 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	CloudsPerlinPass::CloudsPerlinPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
-		, crg::ImageViewId const & resultView
+		, c3d::Texture & result
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/PerlinWorleyPass" ), perwor::getProgram( device, getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/PerlinWorleyPass" ), perwor::getProgram( device, result.getExtent().width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & computePass = graph.createPass( "Clouds/PerlinWorleyPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -450,9 +449,7 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		computePass.addDependencies( previousPasses );
-		computePass.addOutputStorageView( resultView
-			, perwor::eOutput );
+		result.setLastAttach( computePass.addOutputStorageImage( result.getSampledViewId(), perwor::eOutput ) );
 		auto & mipsPass = graph.createPass( "Clouds/PerlinWorleyMipsGenPass"
 			, [&device, &enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -469,9 +466,7 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		mipsPass.addDependency( computePass );
-		mipsPass.addTransferInOutView( resultView );
-		m_lastPass = &mipsPass;
+		result.setLastAttach( mipsPass.addInOutTransfer( *result.getLastAttach() ) );
 	}
 
 	void CloudsPerlinPass::accept( c3d::ConfigurationVisitorBase & visitor )

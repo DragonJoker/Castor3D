@@ -20,7 +20,6 @@ namespace c3d
 	SsaoPass::SsaoPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, crg::FramePassArray const & previousPasses
 		, Size const & size
 		, SsaoConfig & ssaoConfig
 		, Texture const & depthObj
@@ -32,7 +31,6 @@ namespace c3d
 		, m_size{ makeExtent2D( size ) }
 		, m_linearisePass{ makeUnique< LineariseDepthPass >( *depthObj.resources
 			, m_group
-			, previousPasses
 			, m_device
 			, progress
 			, cuT( "Ssao" )
@@ -43,7 +41,6 @@ namespace c3d
 		, m_rawAoPass{ makeUnique< SsaoRawAOPass >( m_group
 			, m_device
 			, progress
-			, m_linearisePass->getLastPass()
 			, m_size
 			, m_ssaoConfig
 			, m_ssaoConfigUbo
@@ -55,7 +52,6 @@ namespace c3d
 		, m_horizontalBlur{ makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
-			, m_rawAoPass->getLastPass()
 			, cuT( "Horizontal" )
 			, m_size
 			, m_ssaoConfig
@@ -69,7 +65,6 @@ namespace c3d
 		, m_verticalBlur{ makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
-			, m_horizontalBlur->getLastPass()
 			, cuT( "Vertical" )
 			, m_size
 			, m_ssaoConfig
@@ -80,9 +75,6 @@ namespace c3d
 			, m_horizontalBlur->getBentResult()
 			, normal
 			, m_passIndex ) }
-		, m_lastPass{ &m_verticalBlur->getLastPass() }
-#else
-		, m_lastPass{ &m_rawAoPass->getLastPass() }
 #endif
 	{
 	}

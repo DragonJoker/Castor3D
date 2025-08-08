@@ -585,11 +585,11 @@ namespace c3d
 			}
 		}
 
-		bufferPool = makeUnique< GpuBufferPool >( *this, cuT( "GlobalBufferPool" ) );
-		geometryPools = makeUnique< ObjectBufferPool >( *this, cuT( "ModelBuffersPool" ) );
-		vertexPools = makeUnique< VertexBufferPool >( *this, cuT( "VertexBuffersPool" ) );
-		indexPools = makeUnique< IndexBufferPool >( *this, cuT( "IndexBuffersPool" ) );
-		uboPool = makeUnique< UniformBufferPool >( *this, cuT( "UniformBufferPool" ) );
+		bufferPool = makeUnique< GpuBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "GlobalBufferPool" ) );
+		geometryPools = makeUnique< ObjectBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "ModelBuffersPool" ) );
+		vertexPools = makeUnique< VertexBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "VertexBuffersPool" ) );
+		indexPools = makeUnique< IndexBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "IndexBuffersPool" ) );
+		uboPool = makeUnique< UniformBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "UniformBufferPool" ) );
 
 		if ( renderSystem.getEngine()->getUpscalingConfig().enabled )
 			upscaling = makeUnique< UpscalingWrapper >( *this );
@@ -597,17 +597,16 @@ namespace c3d
 
 	RenderDevice::~RenderDevice()noexcept
 	{
-		{
-			auto lock = makeUniqueLock( m_mutex );
-			m_contexts.clear();
-		}
 		upscaling.reset();
-		uboPool.reset();
 		uboPool.reset();
 		indexPools.reset();
 		vertexPools.reset();
 		geometryPools.reset();
 		bufferPool.reset();
+		{
+			auto lock = makeUniqueLock( m_mutex );
+			m_contexts.clear();
+		}
 		queueFamilies.clear();
 		device.reset();
 	}

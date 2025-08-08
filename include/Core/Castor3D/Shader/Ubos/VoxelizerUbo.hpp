@@ -139,7 +139,7 @@ namespace c3d
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			m_ubo.createPassBinding( pass, "VoxelCfg", binding );
+			m_ubo.createPassBinding( pass, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

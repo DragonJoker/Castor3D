@@ -63,35 +63,31 @@ namespace c3d
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			auto voxelsBuffer = pass.buffers.front();
-			auto voxelsUbo = pass.buffers.back();
-			auto firstBounce = pass.images.front();
-			auto secondBounce = pass.images.back();
+			auto voxelsBuffer = pass.inouts.begin();
+			auto voxelsUbo = pass.uniforms.begin();
+			auto firstBounce = pass.sampled.begin();
+			auto secondBounce = pass.outputs.begin();
 			ashes::WriteDescriptorSetArray writes;
-			auto write = graph.getBufferWrite( voxelsBuffer );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+
+			auto write = graph.getDescriptorWrite( *voxelsBuffer->second, voxelsBuffer->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
-			write = graph.getBufferWrite( voxelsUbo );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+
+			write = graph.getDescriptorWrite( *voxelsUbo->second, voxelsUbo->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
-			writes.push_back( ashes::WriteDescriptorSet{ firstBounce.binding
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, { VkDescriptorImageInfo{ graph.createSampler( firstBounce.getSamplerDesc() )
-					, graph.createImageView( firstBounce.view() )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-			writes.push_back( ashes::WriteDescriptorSet{ secondBounce.binding
-				, 0u
-				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, { VkDescriptorImageInfo{ VK_NULL_HANDLE
-					, graph.createImageView( secondBounce.view() )
-					, VK_IMAGE_LAYOUT_GENERAL } } } );
+
+			write = graph.getDescriptorWrite( *firstBounce->second.attach, firstBounce->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
+			writes.back().imageInfo = write.imageInfo;
+
+			write = graph.getDescriptorWrite( *secondBounce->second, secondBounce->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
+			writes.back().imageInfo = write.imageInfo;
 
 			auto descriptorSet = pool.createDescriptorSet( "VoxelSecondaryBounce" );
 			descriptorSet->setBindings( writes );
@@ -201,8 +197,8 @@ namespace c3d
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, c3d::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, crg::ru::Config{ 1u, false }.implicitAction( pass.images.back().view()
-				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }
+			, crg::ru::Config{ 1u, false }.implicitAction( pass.outputs.begin()->second->view()
+				, crg::RecordContext::clearAttachment( pass.outputs.begin()->second->view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "VoxelSecondaryBounce" ), vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
 		, m_descriptorSetLayout{ vxlscnd::createDescriptorLayout( device ) }
@@ -224,7 +220,7 @@ namespace c3d
 	{
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.images.back().view( index );
+		auto view = m_pass.outputs.begin()->second->view( index );
 		auto layoutState = getLayoutState( view );
 		auto image = m_graph.createImage( view.data->image );
 		auto color = convert( transparentBlackClearColor );

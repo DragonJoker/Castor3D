@@ -70,116 +70,45 @@ namespace light_streaks
 			return writer.getBuilder().releaseShader();
 		}
 
-		static c3d::Vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
+		void createSubpass( crg::FramePassGroup & graph
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & srcImages
-			, crg::ImageViewIdArray const & dstImages
+			, c3d::Texture const & srcView, uint32_t srcIndex
+			, c3d::Texture & dstView, uint32_t dstIndex
 			, c3d::Extent2D dimensions
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, KawaseUbo const & kawaseUbo
-			, bool const * enabled
-			, crg::FramePassArray & lastPasses )
+			, uint32_t index
+			, bool const * enabled )
 		{
-			c3d::Vector< KawasePass::Subpass > result;
-			assert( srcImages.size() == dstImages.size() + 1u
-				&& dstImages.size() == PostEffect::Count );
-			uint32_t index = 0u;
-
-			for ( auto i = 0u; i < PostEffect::Count; ++i )
-			{
-				auto * source = &srcImages[i + 1u];
-				auto * destination = &dstImages[i];
-				auto previousPass = previousPasses[i];
-				result.emplace_back( graph
-					, *previousPass
-					, device
-					, *source
-					, *destination
-					, dimensions
-					, stages
-					, kawaseUbo
-					, index
-					, enabled );
-				previousPass = &result.back().pass;
-				++index;
-
-				for ( auto j = 1u; j < 3u; ++j )
+			auto & pass = graph.createPass( "Kawase" + c3d::string::toMbString( index )
+				, [&device, &stages, dimensions, enabled]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & graph )
 				{
-					c3d::swap( source, destination );
-					result.emplace_back( graph
-						, *previousPass
-						, device
-						, *source
-						, *destination
-						, dimensions
-						, stages
-						, kawaseUbo
-						, index
-						, enabled );
-					previousPass = &result.back().pass;
-					++index;
-				}
-
-				lastPasses.push_back( previousPass );
-			}
-
-			return result;
+					auto result = crg::RenderQuadBuilder{}
+						.renderPosition( {} )
+						.renderSize( dimensions )
+						.texcoordConfig( crg::Texcoord{} )
+						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
+						.enabled( enabled )
+						.build( framePass, context, graph );
+					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+						, result->getTimer() );
+					return result;
+				} );
+			kawaseUbo.createPassBinding( pass, kawase::KawaseUboIdx, index );
+			pass.addInputSampled( *srcView.getSampledLastAttach( srcIndex ), kawase::DifImgIdx
+				, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest } );
+			dstView.setLastAttach( dstIndex, pass.addOutputColourTarget( dstView.getTargetViewId( dstIndex ) ) );
 		}
 	}
 
 	//*********************************************************************************************
 
-	KawasePass::Subpass::Subpass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
-		, c3d::RenderDevice const & device
-		, crg::ImageViewId const & srcView
-		, crg::ImageViewId const & dstView
-		, c3d::Extent2D dimensions
-		, ashes::PipelineShaderStageCreateInfoArray const & stages
-		, KawaseUbo const & kawaseUbo
-		, uint32_t index
-		, bool const * enabled )
-		: pass{ graph.createPass( "Kawase" + c3d::string::toMbString( index )
-			, [&device, &stages, dimensions, enabled]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( dimensions )
-					.texcoordConfig( crg::Texcoord{} )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
-					.enabled( enabled )
-					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} ) }
-	{
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		pass.addDependency( previousPass );
-		kawaseUbo.createPassBinding( pass
-			, kawase::KawaseUboIdx
-			, index );
-		pass.addSampledView( srcView
-			, kawase::DifImgIdx
-			, linearSampler );
-		pass.addOutputColourView( dstView );
-	}
-
-	//*********************************************************************************************
-
 	KawasePass::KawasePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & hiViews
-		, crg::ImageViewIdArray const & kawaseViews
+		, c3d::Texture & hiViews
+		, c3d::Texture & kawaseViews
 		, KawaseUbo & kawaseUbo
 		, c3d::Extent2D dimensions
 		, bool const * enabled )
@@ -187,20 +116,39 @@ namespace light_streaks
 		, m_kawaseUbo{ kawaseUbo }
 		, m_shader{ cuT( "LightStreaksKawasePass" ), kawase::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_subpasses{ kawase::doCreateSubpasses( graph
-			, previousPasses
-			, m_device
-			, hiViews
-			, kawaseViews
-			, dimensions
-			, m_stages
-			, m_kawaseUbo
-			, enabled
-			, m_lastPasses ) }
 	{
+		assert( hiViews.size() == kawaseViews.size() + 1u
+			&& kawaseViews.size() == PostEffect::Count );
+		uint32_t index = 0u;
+
+		for ( auto targetIndex = 0u; targetIndex < PostEffect::Count; ++targetIndex )
+		{
+			auto sourceIndex = targetIndex + 1u;
+			auto destinationIndex = targetIndex;
+			auto * source = &hiViews;
+			auto * destination = &kawaseViews;
+			kawase::createSubpass( graph, device
+				, *source, sourceIndex
+				, *destination, destinationIndex
+				, dimensions, m_stages, kawaseUbo
+				, index, enabled );
+			++index;
+
+			for ( auto j = 1u; j < 3u; ++j )
+			{
+				c3d::swap( source, destination );
+				c3d::swap( sourceIndex, destinationIndex );
+				kawase::createSubpass( graph, device
+					, *source, sourceIndex
+					, *destination, destinationIndex
+					, dimensions, m_stages, kawaseUbo
+					, index, enabled );
+				++index;
+			}
+		}
 	}
 
-	void KawasePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void KawasePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

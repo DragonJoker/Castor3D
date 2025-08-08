@@ -156,17 +156,14 @@ namespace atmosphere_scattering
 	AtmosphereBackground::CameraPasses::CameraPasses( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
 		, AtmosphereBackground & background
-		, crg::FramePass const & transmittancePass
-		, crg::FramePass const & multiscatterPass
-		, crg::FramePass const & weatherPass
-		, crg::ImageViewId const & transmittance
-		, crg::ImageViewId const & multiscatter
-		, crg::ImageViewId const & worley
-		, crg::ImageViewId const & perlinWorley
-		, crg::ImageViewId const & curl
-		, crg::ImageViewId const & weather
-		, crg::ImageViewIdArray const & colour
-		, crg::ImageViewId const * depthObj
+		, c3d::Texture const & transmittance
+		, c3d::Texture const & multiscatter
+		, c3d::Texture const & worley
+		, c3d::Texture const & perlinWorley
+		, c3d::Texture const & curl
+		, c3d::Texture const & weather
+		, c3d::Texture & colour
+		, c3d::Texture const * depthObj
 		, c3d::RenderUbo const & renderUbo
 		, c3d::SceneUbo const & sceneUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
@@ -231,52 +228,48 @@ namespace atmosphere_scattering
 				, .mipFilter = c3d::MipmapMode::eNearest } } }
 		, cameraUbo{ device, camAtmoChanged }
 		, skyViewPass{ c3d::makeRawUnique< AtmosphereSkyViewPass >( graph
-			, crg::FramePassArray{ &transmittancePass }
 			, device
 			, cameraUbo
 			, atmosphereUbo
 			, transmittance
-			, skyView.targetViewId
+			, skyView
 			, index
 			, camAtmoChanged ) }
 		, volumePass{ c3d::makeRawUnique< AtmosphereVolumePass >( graph
-			, crg::FramePassArray{ &transmittancePass }
 			, device
 			, cameraUbo
 			, atmosphereUbo
 			, transmittance
-			, volume.targetViewId
+			, volume
 			, index
 			, camAtmoChanged ) }
 		, volumetricCloudsPass{ c3d::makeRawUnique< CloudsVolumePass >( graph
-			, crg::FramePassArray{ &transmittancePass , &weatherPass, &skyViewPass->getLastPass(), &multiscatterPass }
 			, device
 			, atmosphereUbo
 			, cameraUbo
 			, cloudsUbo
 			, transmittance
 			, multiscatter
-			, skyView.sampledViewId
-			, volume.sampledViewId
+			, skyView
+			, volume
 			, perlinWorley
 			, worley
 			, curl
 			, weather
 			, depthObj
-			, skyColour.targetViewId
-			, sunColour.targetViewId
-			, cloudsColour.targetViewId
+			, skyColour
+			, sunColour
+			, cloudsColour
 			, index ) }
 		, cloudsResolvePass{ c3d::makeRawUnique< CloudsResolvePass >( graph
-			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
 			, device
 			, cameraUbo
 			, atmosphereUbo
 			, cloudsUbo
-			, skyColour.sampledViewId
-			, sunColour.sampledViewId
-			, cloudsColour.sampledViewId
-			, cloudsResult.targetViewId
+			, skyColour
+			, sunColour
+			, cloudsColour
+			, cloudsResult
 			, index ) }
 	{
 		skyView.create();
@@ -286,7 +279,7 @@ namespace atmosphere_scattering
 		cloudsColour.create();
 		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
-			, [&background, &backgroundPass, &device, size, colour, forceVisible]( crg::FramePass const & framePass
+			, [&background, &backgroundPass, &device, size, forceVisible]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -296,22 +289,16 @@ namespace atmosphere_scattering
 					, device
 					, background
 					, size
-					, colour
 					, forceVisible );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
-		pass.addDependency( cloudsResolvePass->getLastPass() );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear };
-		renderUbo.createPassBinding( pass
-			, AtmosphereBackgroundPass::eRenderConfig );
-		sceneUbo.createPassBinding( pass
-			, AtmosphereBackgroundPass::eScene );
-		pass.addSampledView( cloudsResult.sampledViewId
-			, AtmosphereBackgroundPass::eClouds
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
+		renderUbo.createPassBinding( pass, AtmosphereBackgroundPass::eRenderConfig );
+		sceneUbo.createPassBinding( pass, AtmosphereBackgroundPass::eScene );
+		pass.addInputSampled( *cloudsResult.getSampledLastAttach(), AtmosphereBackgroundPass::eClouds
 			, linearSampler );
 		lastPass = &pass;
 	}
@@ -329,7 +316,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::CameraPasses::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Atmosphere SkyView" )
-			, skyView.sampledViewId
+			, skyView.getSampledViewId()
 			, c3d::ImageLayout::eShaderReadOnly
 			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Sky Colour" )
@@ -529,30 +516,34 @@ namespace atmosphere_scattering
 			, c3d::ImageLayout::eShaderReadOnly
 			, c3d::TextureFactors{}.invert( true ) );
 
-		for ( uint32_t index = 0u; index < m_worley.subViewsId.size(); ++index )
+		uint32_t index{};
+		for ( auto & layerViews : m_worley )
 		{
 			visitor.visit( cuT( "Worley Noise Slice " ) + c3d::string::toString( index )
-				, m_worley.sampledViewId
+				, layerViews.sampledViewId
 				, c3d::ImageLayout::eShaderReadOnly
 				, c3d::TextureFactors::tex3DSlice( index ).invert( true ) );
+			++index;
 		}
 
-		for ( uint32_t index = 0u; index < m_perlinWorley.subViewsId.size(); ++index )
+		index = {};
+		for ( auto & layerViews : m_perlinWorley )
 		{
 			visitor.visit( cuT( "Perlin Worley Noise Slice " )+ c3d::string::toString( index )
-				, m_perlinWorley.sampledViewId
+				, layerViews.sampledViewId
 				, c3d::ImageLayout::eShaderReadOnly
 				, c3d::TextureFactors::tex3DSlice( index ).invert( true ) );
+			++index;
 		}
 	}
 
-	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
+	void AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
 		, c3d::ProgressBar * progress
 		, c3d::Extent2D const & size
-		, crg::ImageViewIdArray const & colour
-		, crg::ImageViewIdArray const & depth
-		, crg::ImageViewId const * depthObj
+		, c3d::Texture & colour
+		, c3d::Texture * depth
+		, c3d::Texture const * depthObj
 		, c3d::UniformBufferOffsetT< c3d::ModelBufferConfiguration > const & modelUbo
 		, c3d::CameraUbo const & cameraUbo
 		, c3d::RenderUbo const & renderUbo
@@ -565,60 +556,49 @@ namespace atmosphere_scattering
 		if ( !m_transmittancePass )
 		{
 			m_worleyPass = c3d::makeRawUnique< CloudsWorleyPass >( graph
-				, crg::FramePassArray{}
 				, device
-				, m_worley.sampledViewId
+				, m_worley
 				, m_generateWorley );
 			m_perlinWorleyPass = c3d::makeRawUnique< CloudsPerlinPass >( graph
-				, crg::FramePassArray{}
 				, device
-				, m_perlinWorley.sampledViewId
+				, m_perlinWorley
 				, m_generatePerlinWorley );
 			m_curlPass = c3d::makeRawUnique< CloudsCurlPass >( graph
-				, crg::FramePassArray{}
 				, device
-				, m_curl.targetViewId
+				, m_curl
 				, m_generateCurl );
 			m_weatherPass = c3d::makeRawUnique< CloudsWeatherPass >( graph
-				, crg::FramePassArray{ &m_worleyPass->getLastPass()
-					, &m_perlinWorleyPass->getLastPass()
-					, &m_curlPass->getLastPass() }
 				, device
 				, *m_weatherUbo
-				, m_weather.targetViewId
+				, m_weather
 				, m_weatherChanged );
 			m_transmittancePass = c3d::makeRawUnique< AtmosphereTransmittancePass >( graph
-				, crg::FramePassArray{}
 				, device
 				, *m_atmosphereUbo
-				, m_transmittance.targetViewId
+				, m_transmittance
 				, m_atmosphereChanged );
 			m_multiScatteringPass = c3d::makeRawUnique< AtmosphereMultiScatteringPass >( graph
-				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
 				, device
 				, *m_atmosphereUbo
-				, m_transmittance.sampledViewId
-				, m_multiScatter.targetViewId
+				, m_transmittance
+				, m_multiScatter
 				, m_atmosphereChanged );
 		}
 
-		auto it = findCameraPass( colour );
+		auto it = findCameraPass( &colour );
 
 		if ( it == m_cameraPasses.end() )
 		{
-			it = m_cameraPasses.emplace( colour.front().data->image.data
+			it = m_cameraPasses.emplace( &colour
 				, c3d::makeRawUnique< CameraPasses >( graph
 					, device
 					, *this
-					, m_transmittancePass->getLastPass()
-					, m_multiScatteringPass->getLastPass()
-					, m_weatherPass->getLastPass()
-					, m_transmittance.sampledViewId
-					, m_multiScatter.sampledViewId
-					, m_worley.sampledViewId
-					, m_perlinWorley.sampledViewId
-					, m_curl.sampledViewId
-					, m_weather.sampledViewId
+					, m_transmittance
+					, m_multiScatter
+					, m_worley
+					, m_perlinWorley
+					, m_curl
+					, m_weather
 					, colour
 					, depthObj
 					, renderUbo
@@ -632,36 +612,22 @@ namespace atmosphere_scattering
 					, forceVisible
 					, backgroundPass ) ).first;
 			auto & pass = *it->second->lastPass;
-			pass.addDependency( m_multiScatteringPass->getLastPass() );
-			pass.addDependency( m_weatherPass->getLastPass() );
-			pass.addImplicitDepthStencilView( depth
-				, c3d::ImageLayout::eDepthStencilAttachment );
 
-			if ( !depth.empty() )
+			if ( depth )
 			{
 				if ( clearDepth )
-				{
-					pass.addOutputDepthStencilView( depth
-						, c3d::defaultClearDepthStencil );
-				}
+					depth->setLastAttach( pass.addOutputDepthStencilTarget( depth->getTargetViewId()
+						, c3d::defaultClearDepthStencil ) );
 				else
-				{
-					pass.addInOutDepthStencilView( depth );
-				}
+					depth->setLastAttach( pass.addInOutDepthStencilTarget( *depth->getLastAttach() ) );
 			}
 
 			if ( clearColour )
-			{
-				pass.addOutputColourView( colour
-					, c3d::transparentBlackClearColor );
-			}
+				colour.setLastAttach( pass.addOutputColourTarget( colour.getTargetViewId()
+					, c3d::transparentBlackClearColor ) );
 			else
-			{
-				pass.addInOutColourView( colour );
-			}
+				colour.setLastAttach( pass.addInOutColourTarget( *colour.getLastAttach() ) );
 		}
-
-		return *it->second->lastPass;
 	}
 
 	bool AtmosphereBackground::write( c3d::String const & tabs
@@ -804,7 +770,7 @@ namespace atmosphere_scattering
 		m_texture = c3d::makeUnique< c3d::TextureLayout >( device.renderSystem
 			, cuT( "AtmosphereBackground/Dummy" )
 			, *m_textureId.image
-			, m_textureId.wholeViewId );
+			, m_textureId.getWholeViewId() );
 		m_hdr = true;
 		m_srgb = false;
 		m_timer.getElapsed();
@@ -866,7 +832,7 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageViewIdArray const & targetImage
+		, c3d::Texture * targetImage
 		, uint32_t & index )const
 	{
 		auto it = findCameraPass( targetImage );
@@ -881,19 +847,19 @@ namespace atmosphere_scattering
 				, index++ );
 			crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear
 				, c3d::FilterMode::eLinear };
-			pass.addSampledView( m_transmittance.wholeViewId
+			pass.addInputSampled( *m_transmittance.getSampledLastAttach()
 				, index++
 				, linearClampSampler );
-			pass.addSampledView( m_multiScatter.wholeViewId
+			pass.addInputSampled( *m_multiScatter.getSampledLastAttach()
 				, index++
 				, linearClampSampler );
-			pass.addSampledView( it->second->skyView.wholeViewId
+			pass.addInputSampled( *it->second->skyView.getSampledLastAttach()
 				, index++
 				, linearClampSampler );
-			pass.addSampledView( it->second->volume.wholeViewId
+			pass.addInputSampled( *it->second->volume.getSampledLastAttach()
 				, index++
 				, linearClampSampler );
-			pass.addSampledView( it->second->cloudsResult.wholeViewId
+			pass.addInputSampled( *it->second->cloudsResult.getSampledLastAttach()
 				, index++
 				, linearClampSampler );
 		}
@@ -930,7 +896,7 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, c3d::Texture * targetImage
 		, uint32_t & index )const
 	{
 		auto it = findCameraPass( targetImage );
@@ -940,23 +906,23 @@ namespace atmosphere_scattering
 			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( m_cloudsUbo->getDescriptorWrite( index++ ) );
-			c3d::bindTexture( m_transmittance.sampledView
+			c3d::bindTexture( m_transmittance.getSampledView()
 				, *m_transmittance.sampler
 				, descriptorWrites
 				, index );
-			c3d::bindTexture( m_multiScatter.sampledView
+			c3d::bindTexture( m_multiScatter.getSampledView()
 				, *m_multiScatter.sampler
 				, descriptorWrites
 				, index );
-			c3d::bindTexture( it->second->skyView.sampledView
+			c3d::bindTexture( it->second->skyView.getSampledView()
 				, *it->second->skyView.sampler
 				, descriptorWrites
 				, index );
-			c3d::bindTexture( it->second->volume.sampledView
+			c3d::bindTexture( it->second->volume.getSampledView()
 				, *it->second->volume.sampler
 				, descriptorWrites
 				, index );
-			c3d::bindTexture( it->second->cloudsResult.sampledView
+			c3d::bindTexture( it->second->cloudsResult.getSampledView()
 				, *it->second->volume.sampler
 				, descriptorWrites
 				, index );

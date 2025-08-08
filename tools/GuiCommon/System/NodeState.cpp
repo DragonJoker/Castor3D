@@ -55,6 +55,12 @@ namespace GuiCommon
 
 	void NodeState::start()
 	{
+		if ( m_updateEvent )
+		{
+			m_updateEvent->skip();
+			m_updateEvent = {};
+		}
+
 		m_timer.getElapsed();
 		m_running = true;
 		doUpdate();
@@ -62,6 +68,12 @@ namespace GuiCommon
 
 	void NodeState::stop()
 	{
+		if ( m_updateEvent )
+		{
+			m_updateEvent->skip();
+			m_updateEvent = {};
+		}
+
 		m_running = false;
 	}
 
@@ -138,7 +150,7 @@ namespace GuiCommon
 
 	void NodeState::doUpdate()
 	{
-		m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
+		m_updateEvent = m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				c3d::Point3f translate;
@@ -155,9 +167,7 @@ namespace GuiCommon
 				}
 
 				if ( m_running )
-				{
 					doUpdate();
-				}
 			} ) );
 	}
 

@@ -191,13 +191,12 @@ namespace draw_edges
 	//*********************************************************************************************
 
 	DepthNormalEdgeDetection::DepthNormalEdgeDetection( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, c3d::PassBuffer const & passBuffer
-		, crg::ImageViewId const & depthObj
-		, crg::ImageViewId const & nmlOcc
-		, ashes::Buffer< int32_t > const & depthRange
+		, c3d::Texture const & depthObj
+		, c3d::Texture const & nmlOcc
+		, c3d::BufferBase const & depthRange
 		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
@@ -214,7 +213,8 @@ namespace draw_edges
 			, {} }
 		, m_shader{ cuT( "DNEdgesDetection" ), dned::getProgram( device, m_extent ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_pass{ m_graph.createPass( "EdgesDetection"
+	{
+		auto & pass = m_graph.createPass( "EdgesDetection"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -235,22 +235,17 @@ namespace draw_edges
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
-			} ) }
-	{
-		auto & modelBuffer = renderTarget.getScene()->getModelBuffer().getBuffer();
-		m_pass.addDependencies( previousPasses );
-		passBuffer.createPassBinding( m_pass, eMaterials );
-		m_pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( eModels )
-			, 0u
-			, uint32_t( modelBuffer.getSize() ) );
-		m_pass.addSampledView( depthObj, eDepthObj );
-		m_pass.addSampledView( nmlOcc, eNmlOcc );
-		m_pass.addInputStorageBuffer( { depthRange.getBuffer(), "DepthRange" }, eDepthRange, 0u, depthRange.getBuffer().getSize() );
+			} );
+		auto & modelBuffer = renderTarget.getScene()->getModelBuffer();
+		passBuffer.createPassBinding( pass, eMaterials );
+		pass.addInputStorage( *modelBuffer.getLastAttach(), eModels );
+		pass.addInputSampled( *depthObj.getSampledLastAttach(), eDepthObj );
+		pass.addInputSampled( *nmlOcc.getSampledLastAttach(), eNmlOcc );
+		pass.addInputStorage( *depthRange.getLastAttach(), eDepthRange );
 		auto index = uint32_t( eSpecifics );
-		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( m_pass, index );
-		m_pass.addOutputColourView( m_result.targetViewId
-			, c3d::transparentBlackClearColor );
+		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId()
+			, c3d::transparentBlackClearColor ) );
 		m_result.create();
 	}
 
@@ -264,7 +259,7 @@ namespace draw_edges
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Depth Normal Edge Detection Result" )
 			, m_result
-			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.getSampledViewId() ).layout
 			, c3d::TextureFactors{}.invert( true ) );
 	}
 }

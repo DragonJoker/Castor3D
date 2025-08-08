@@ -252,9 +252,7 @@ namespace c3d
 			{
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
-					, device
-					, cuT( "BillboardBase" )
-					, *queueData->commandPool };
+					, device, cuT( "BillboardBaseVBUpload" ), *queueData->commandPool };
 				uploader->pushUpload( &vertices
 					, sizeof( Quad )
 					, vb.getBuffer(), vb.getOffset()
@@ -444,7 +442,7 @@ namespace c3d
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		layouts.emplace_back( *m_quadLayout );
-		buffers.emplace_back( m_bufferOffsets.getBuffer( SubmeshData::ePositions ) );
+		buffers.emplace_back( m_bufferOffsets.getBuffer( SubmeshData::ePositions ).getBuffer() );
 		offsets.emplace_back( 0u );
 
 		layouts.emplace_back( *m_vertexLayout );
@@ -495,15 +493,13 @@ namespace c3d
 				device.bufferPool->putBuffer( m_vertexBuffer );
 			}
 
-			m_vertexBuffer = device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			m_vertexBuffer = device.bufferPool->getBuffer< uint8_t >( BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eStorageBuffer
 				, uint32_t( m_arrayPositions.size() ) * m_vertexStride
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				, MemoryPropertyFlags::eDeviceLocal );
 
 			auto * buffer = reinterpret_cast< Point4f * >( m_vertexBuffer.getData().data() );
 			auto up = billboard::convert( m_arrayPositions );
-			std::copy( up.begin()
-				, up.end()
-				, buffer );
+			std::copy( up.begin(), up.end(), buffer );
 
 			m_vertexBuffer.markDirty( VertexAttributeInputState );
 		}

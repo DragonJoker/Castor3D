@@ -91,7 +91,7 @@ namespace c3d
 
 	LpvGridConfigUbo::LpvGridConfigUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
 	{
 	}
 	

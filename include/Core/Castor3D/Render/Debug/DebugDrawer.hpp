@@ -41,10 +41,9 @@ namespace c3d
 		 *\param[in]	passIndex	L'index de la passe, pour sélectionner le shader approprié.
 		 */
 		C3D_API DebugDrawer( crg::FramePassGroup & graph
-			, crg::FramePass const * previous
 			, RenderDevice const & device
 			, RenderTarget & parent
-			, crg::ImageViewIdArray colour
+			, Texture & colour
 			, Texture const & depth
 			, uint32_t const * passIndex );
 		/**
@@ -101,11 +100,6 @@ namespace c3d
 			, VkDeviceSize instanceCount
 			, ashes::PipelineShaderStageCreateInfoArray const & shader
 			, bool enableDepthTest );
-
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_lastPass;
-		}
 
 	private:
 		struct Object
@@ -192,7 +186,6 @@ namespace c3d
 		};
 
 	private:
-		crg::FramePass const * m_lastPass{};
 		FramePass * m_framePass{};
 	};
 }

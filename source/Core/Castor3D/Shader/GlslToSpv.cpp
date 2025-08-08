@@ -5,6 +5,7 @@ See LICENSE file in root folder.
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include "Castor3D/Config.hpp"
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/RequiredVersion.hpp"
 
 #if C3D_HasGlslang
@@ -217,6 +218,16 @@ namespace c3d
 		char const * const str = source.c_str();
 		glshader.setStrings( &str, 1 );
 
+		glslang::SpvOptions spvOptions{};
+		if ( device.renderSystem.getEngine()->getShaderDebugLevel() == 2u )
+		{
+			spvOptions.generateDebugInfo = true;
+			spvOptions.emitNonSemanticShaderDebugInfo = true;
+			spvOptions.emitNonSemanticShaderDebugSource = true;
+			glshader.setDebugInfo( true );
+			messages = EShMessages( messages | EShMsgDebugInfo );
+		}
+
 		if ( !glshader.parse( &resources, 100, false, messages ) )
 		{
 			log::error << glshader.getInfoLog() << std::endl;
@@ -237,7 +248,7 @@ namespace c3d
 		}
 
 		ashes::UInt32Array spirv;
-		glslang::GlslangToSpv( *glprogram.getIntermediate( glstage ), spirv );
+		glslang::GlslangToSpv( *glprogram.getIntermediate( glstage ), spirv, &spvOptions );
 
 		return spirv;
 	}

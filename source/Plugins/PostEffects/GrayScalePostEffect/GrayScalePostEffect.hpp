@@ -34,20 +34,13 @@ namespace grayscale
 		 */
 		void setParameters( c3d::Parameters parameters )override;
 
-		crg::FramePass const & getPass()const override
-		{
-			CU_Require( m_pass );
-			return *m_pass;
-		}
-
 	private:
 		/**
 		*\copydoc		c3d::PostEffect::doInitialise
 		*/
 		bool doInitialise( c3d::RenderDevice const & device
 			, c3d::Texture const & source
-			, c3d::Texture const & target
-			, crg::FramePass const & previousPass )override;
+			, c3d::Texture & target )override;
 		/**
 		*\copydoc		c3d::PostEffect::doCleanup
 		*/
@@ -70,7 +63,6 @@ namespace grayscale
 		c3d::ChangeTracked< c3d::Point3f > m_factors{ c3d::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass * m_pass{};
 	};
 }
 

@@ -8,6 +8,7 @@
 #include <Castor3D/Model/Mesh/MeshGenerator.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 #include <Castor3D/Shader/Shaders/GlslCullData.hpp>

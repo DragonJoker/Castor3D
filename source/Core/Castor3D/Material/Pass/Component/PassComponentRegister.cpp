@@ -877,8 +877,8 @@ namespace c3d
 		m_bufferOrder.clear();
 		m_bufferShaders.clear();
 		m_fillMaterial.clear();
-		using NamedChunk = Pair< String, MemChunk >;
-		using IdNamedChunk = Pair< PassComponentID, Pair< String, MemChunk > >;
+		using NamedChunk = Pair< String, DataChunk >;
+		using IdNamedChunk = Pair< PassComponentID, Pair< String, DataChunk > >;
 		using Chunks = Map< PassComponentID, NamedChunk >;
 		Chunks chunks;
 
@@ -969,7 +969,7 @@ namespace c3d
 		// Fill holes with padding
 		while ( oit != ordered.end() )
 		{
-			Pair< PassComponentID, Pair< String, MemChunk > > chunk{};
+			Pair< PassComponentID, Pair< String, DataChunk > > chunk{};
 			chunk.first = passcompreg::InvalidId;
 			chunk.second.second.askedSize = 4u;
 			chunk.second.second.offset = offset;
@@ -1027,7 +1027,7 @@ namespace c3d
 		// Fill holes with padding
 		while ( ( offset % alignment ) != 0u )
 		{
-			Pair< PassComponentID, Pair< String, MemChunk > > chunk{};
+			Pair< PassComponentID, Pair< String, DataChunk > > chunk{};
 			chunk.first = passcompreg::InvalidId;
 			chunk.second.second.askedSize = 4u;
 			chunk.second.second.size = 4u;

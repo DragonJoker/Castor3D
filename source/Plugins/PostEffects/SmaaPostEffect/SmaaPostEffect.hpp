@@ -37,20 +37,13 @@ namespace smaa
 		 */
 		void setParameters( c3d::Parameters parameters )override;
 
-		crg::FramePass const & getPass()const override
-		{
-			CU_Require( m_pass );
-			return *m_pass;
-		}
-
 	private:
 		/**
 		*\copydoc		c3d::PostEffect::doInitialise
 		*/
 		bool doInitialise( c3d::RenderDevice const & device
 			, c3d::Texture const & source
-			, c3d::Texture const & target
-			, crg::FramePass const & previousPass )override;
+			, c3d::Texture & target )override;
 		/**
 		*\copydoc		c3d::PostEffect::doCleanup
 		*/
@@ -64,8 +57,8 @@ namespace smaa
 		 */
 		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs )override;
 
-		crg::ImageViewId const * doGetPredicationTexture();
-		crg::ImageViewId const * doGetVelocityView();
+		c3d::Texture const * doGetPredicationTexture();
+		c3d::Texture const * doGetVelocityView();
 
 	public:
 		static c3d::String Type;
@@ -82,8 +75,6 @@ namespace smaa
 		c3d::RawUniquePtr< BlendingWeightCalculation > m_blendingWeightCalculation;
 		c3d::RawUniquePtr< NeighbourhoodBlending > m_neighbourhoodBlending;
 		c3d::RawUniquePtr< Reproject > m_reproject;
-
-		crg::FramePass const * m_pass{};
 
 		uint32_t m_subsamplePassIndex{};
 	};

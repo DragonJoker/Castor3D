@@ -418,7 +418,7 @@ namespace c3d
 			*	Getters.
 			*/
 			/**@{*/
-			MemChunk const & getMaterialChunk()const
+			DataChunk const & getMaterialChunk()const
 			{
 				return m_chunk;
 			}
@@ -427,13 +427,13 @@ namespace c3d
 		private:
 			friend PassComponentRegister;
 
-			void setMaterialChunk( MemChunk v )
+			void setMaterialChunk( DataChunk v )
 			{
 				m_chunk = c3d::move( v );
 			}
 
 		private:
-			MemChunk m_chunk{};
+			DataChunk m_chunk{};
 		};
 	}
 

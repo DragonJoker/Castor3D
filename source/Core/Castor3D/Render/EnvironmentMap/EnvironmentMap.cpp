@@ -129,7 +129,7 @@ namespace c3d
 			, ashes::Image *& image )
 		{
 			Vector< ashes::ImageView > result;
-			VkImageViewCreateInfo createInfo{ convert( envMap.wholeViewId.data->info ) };
+			VkImageViewCreateInfo createInfo{ convert( envMap.getWholeViewId().data->info ) };
 			createInfo.image = *envMap.image;
 			createInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
 			createInfo.subresourceRange.layerCount = 6u;

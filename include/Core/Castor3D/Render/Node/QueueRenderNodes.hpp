@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Render/Buffer.hpp"
 #include "Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -57,17 +58,17 @@ namespace c3d
 		C3D_API void registerPipelineId( uint32_t pipelineId );
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
-			, ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer )const;
+			, BufferBase const & posBuffer
+			, BufferBase const * idxBuffer )const;
 		C3D_API uint32_t getPipelineNodesIndex( Submesh const & submesh
 			, Pass const & pass
-			, ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer
+			, BufferBase const & posBuffer
+			, BufferBase const * idxBuffer
 			, bool isFrontCulled )const;
 		C3D_API uint32_t getPipelineNodesIndex( BillboardBase const & billboard
 			, Pass const & pass
-			, ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer
+			, BufferBase const & posBuffer
+			, BufferBase const * idxBuffer
 			, bool isFrontCulled )const;
 
 		auto & getNodesIds()const noexcept
@@ -147,10 +148,10 @@ namespace c3d
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 			, VkDrawIndirectCommand * origIndirectNIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
 			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -160,10 +161,10 @@ namespace c3d
 		uint32_t doParseInstantiatedSubmeshesIndirect( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 			, VkDrawIndirectCommand * origIndirectNIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
 			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -176,13 +177,13 @@ namespace c3d
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 			, VkDrawIndirectCommand * origIndirectNIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
+			, BufferT< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
 			, VkDrawMeshTasksIndirectCommandEXT * origIndirectMshBuffer
 			, VkDrawMeshTasksIndirectCommandEXT *& indirectMshBuffer
 			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -191,13 +192,13 @@ namespace c3d
 		uint32_t doParseInstantiatedSubmeshesMeshletsEXT( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 			, VkDrawIndirectCommand * origIndirectNIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
+			, BufferT< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
 			, VkDrawMeshTasksIndirectCommandEXT * origIndirectMshBuffer
 			, VkDrawMeshTasksIndirectCommandEXT *& indirectMshBuffer
 			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -210,13 +211,13 @@ namespace c3d
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 			, VkDrawIndirectCommand * origIndirectNIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
+			, BufferT< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
 			, VkDrawMeshTasksIndirectCommandNV * origIndirectMshBuffer
 			, VkDrawMeshTasksIndirectCommandNV *& indirectMshBuffer
 			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -225,13 +226,13 @@ namespace c3d
 		uint32_t doParseInstantiatedSubmeshesMeshletsNV( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 			, VkDrawIndirectCommand * origIndirectNIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
+			, BufferT< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
 			, VkDrawMeshTasksIndirectCommandNV * origIndirectMshBuffer
 			, VkDrawMeshTasksIndirectCommandNV *& indirectMshBuffer
 			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -251,7 +252,7 @@ namespace c3d
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount
-			, ashes::Buffer< VkDrawIndirectCommand > const & billboardCommands
+			, BufferT< VkDrawIndirectCommand > const & billboardCommands
 			, VkDrawIndirectCommand * origIndirectBuffer
 			, VkDrawIndirectCommand *& indirectBuffer
 			, BuffersNodesViewT< BillboardRenderNode > const & buffersNodes
@@ -265,21 +266,21 @@ namespace c3d
 		bool m_hasNodes{};
 
 #if VK_NV_mesh_shader
-		using IndexedMeshDrawCommandsBufferNV = ashes::BufferPtr< VkDrawMeshTasksIndirectCommandNV >;
+		using IndexedMeshDrawCommandsBufferNV = BufferUPtrT< VkDrawMeshTasksIndirectCommandNV >;
 		IndexedMeshDrawCommandsBufferNV m_submeshMeshletIndirectCommandsNV;
 #endif
 #if VK_EXT_mesh_shader
-		using IndexedMeshDrawCommandsBufferEXT = ashes::BufferPtr< VkDrawMeshTasksIndirectCommandEXT >;
+		using IndexedMeshDrawCommandsBufferEXT = BufferUPtrT< VkDrawMeshTasksIndirectCommandEXT >;
 		IndexedMeshDrawCommandsBufferEXT m_submeshMeshletIndirectCommandsEXT;
 #endif
-		using IndexedDrawCommandsBuffer = ashes::BufferPtr< VkDrawIndexedIndirectCommand >;
+		using IndexedDrawCommandsBuffer = BufferUPtrT< VkDrawIndexedIndirectCommand >;
 		IndexedDrawCommandsBuffer m_submeshIdxIndirectCommands;
 
-		using DrawCommandsBuffer = ashes::BufferPtr< VkDrawIndirectCommand >;
+		using DrawCommandsBuffer = BufferUPtrT< VkDrawIndirectCommand >;
 		DrawCommandsBuffer m_submeshNIdxIndirectCommands;
 		DrawCommandsBuffer m_billboardIndirectCommands;
 
-		using PipelineNodesBuffer = ashes::BufferPtr< PipelineNodes >;
+		using PipelineNodesBuffer = BufferUPtrT< PipelineNodes >;
 		PipelineNodesBuffer m_pipelinesNodes;
 
 		SceneCullerSubmeshSignalConnection m_onSubmeshChanged;

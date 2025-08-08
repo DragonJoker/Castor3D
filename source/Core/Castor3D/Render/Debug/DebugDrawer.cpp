@@ -254,9 +254,7 @@ namespace c3d
 				, Point2ui{ 3u, 7u } };
 			auto queue = m_device.graphicsData();
 			InstantDirectUploadData uploader{ *queue->queue
-				, m_device
-				, cuT( "RenderCube" )
-				, *queue->commandPool };
+				, m_device, c3d::makeString( framePass.getGroupName() ) + cuT( "/Upload" ), *queue->commandPool };
 			uploader->pushUpload( vertexData.data()->constPtr()
 				, vertexData.size() * sizeof( Point4f )
 				, m_aabb.vertices.getBuffer( SubmeshData::ePositions )
@@ -282,9 +280,9 @@ namespace c3d
 		, ashes::PipelineShaderStageCreateInfoArray const & shader
 		, bool enableDepthTest )
 	{
-		VkBuffer vertexBuffer = m_aabb.vertices.getBuffer( SubmeshData::ePositions );
+		VkBuffer vertexBuffer = m_aabb.vertices.getBuffer( SubmeshData::ePositions ).getBuffer();
 		VkDeviceSize vertexOffset = m_aabb.vertices.getOffset( SubmeshData::ePositions );
-		VkBuffer indexBuffer = m_aabb.indices.getBuffer( SubmeshData::eIndex );
+		VkBuffer indexBuffer = m_aabb.indices.getBuffer( SubmeshData::eIndex ).getBuffer();
 		VkDeviceSize indexOffset = m_aabb.indices.getOffset( SubmeshData::eIndex );
 
 		addDrawable( { { vertexBuffer }, { vertexOffset }, 8u }
@@ -405,10 +403,9 @@ namespace c3d
 	//*********************************************************************************************
 
 	DebugDrawer::DebugDrawer( crg::FramePassGroup & graph
-		, crg::FramePass const * previous
 		, RenderDevice const & device
 		, RenderTarget & parent
-		, crg::ImageViewIdArray colour
+		, Texture & colour
 		, Texture const & depth
 		, uint32_t const * passIndex )
 		: OwnedBy< RenderTarget >{ parent }
@@ -430,10 +427,8 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *previous );
-		pass.addInOutColourView( std::move( colour ) );
-		pass.addInputDepthStencilView( depth.targetViewId );
-		m_lastPass = &pass;
+		colour.setLastAttach( pass.addInOutColourTarget( *colour.getLastAttach() ) );
+		pass.addInputDepthStencilTarget( *depth.getLastAttach() );
 	}
 
 	void DebugDrawer::addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings

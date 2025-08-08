@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/Buffer.hpp"
 
 #include <ashespp/Core/WindowHandle.hpp>
 
@@ -46,6 +47,7 @@ namespace c3d
 		: public OwnedBy< Engine >
 	{
 	public:
+		C3D_API ~RenderSystem()noexcept;
 		/**
 		*\~english
 		*	Constructor.
@@ -422,7 +424,7 @@ namespace c3d
 			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
 
-		ashes::Buffer< Point4f > const & getRandomStorage()const noexcept
+		BufferT< Point4f > const & getRandomStorage()const noexcept
 		{
 			return *m_randomStorage;
 		}
@@ -442,7 +444,7 @@ namespace c3d
 		VkPhysicalDeviceFeatures m_features{};
 		RenderDeviceUPtr m_device{};
 		Stack< SceneRPtr > m_stackScenes{};
-		ashes::BufferPtr< Point4f > m_randomStorage{};
+		BufferUPtrT< Point4f > m_randomStorage{};
 		Mutex m_allocMutex;
 		HashMap< std::thread::id, RawUniquePtr< ast::ShaderAllocator > > m_shaderCompileAllocator{};
 	};

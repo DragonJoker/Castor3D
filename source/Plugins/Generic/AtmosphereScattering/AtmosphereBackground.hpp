@@ -62,13 +62,13 @@ namespace atmosphere_scattering
 		/**
 		*\copydoc	c3d::SceneBackground::createBackgroundPass
 		*/
-		crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
+		void createBackgroundPass( crg::FramePassGroup & graph
 			, c3d::RenderDevice const & device
 			, c3d::ProgressBar * progress
 			, c3d::Extent2D const & size
-			, crg::ImageViewIdArray const & colour
-			, crg::ImageViewIdArray const & depth
-			, crg::ImageViewId const * depthObj
+			, c3d::Texture & colour
+			, c3d::Texture * depth
+			, c3d::Texture const * depthObj
 			, c3d::UniformBufferOffsetT< c3d::ModelBufferConfiguration > const & modelUbo
 			, c3d::CameraUbo const & cameraUbo
 			, c3d::RenderUbo const & renderUbo
@@ -207,7 +207,7 @@ namespace atmosphere_scattering
 		*\copydoc	c3d::SceneBackground::doAddPassBindings
 		*/
 		void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageViewIdArray const & targetImage
+			, c3d::Texture * targetImage
 			, uint32_t & index )const override;
 		/**
 		*\copydoc	c3d::SceneBackground::doAddBindings
@@ -219,19 +219,16 @@ namespace atmosphere_scattering
 		*\copydoc	c3d::SceneBackground::doAddDescriptors
 		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
+			, c3d::Texture * targetImage
 			, uint32_t & index )const override;
 
-		auto findCameraPass( crg::ImageViewIdArray const & images )const
+		auto findCameraPass( c3d::Texture const * image )const
 		{
-			for ( auto image : images )
-			{
-				auto it = m_cameraPasses.find( image.data->image.data );
+			auto it = m_cameraPasses.find( image );
 
-				if ( it != m_cameraPasses.end() )
-				{
-					return it;
-				}
+			if ( it != m_cameraPasses.end() )
+			{
+				return it;
 			}
 
 			return m_cameraPasses.end();
@@ -243,17 +240,14 @@ namespace atmosphere_scattering
 			CameraPasses( crg::FramePassGroup & graph
 				, c3d::RenderDevice const & device
 				, AtmosphereBackground & background
-				, crg::FramePass const & transmittancePass
-				, crg::FramePass const & multiscatterPass
-				, crg::FramePass const & weatherPass
-				, crg::ImageViewId const & transmittance
-				, crg::ImageViewId const & multiscatter
-				, crg::ImageViewId const & worley
-				, crg::ImageViewId const & perlinWorley
-				, crg::ImageViewId const & curl
-				, crg::ImageViewId const & weather
-				, crg::ImageViewIdArray const & colour
-				, crg::ImageViewId const * depthObj
+				, c3d::Texture const & transmittance
+				, c3d::Texture const & multiscatter
+				, c3d::Texture const & worley
+				, c3d::Texture const & perlinWorley
+				, c3d::Texture const & curl
+				, c3d::Texture const & weather
+				, c3d::Texture & colour
+				, c3d::Texture const * depthObj
 				, c3d::RenderUbo const & renderUbo
 				, c3d::SceneUbo const & sceneUbo
 				, AtmosphereScatteringUbo const & atmosphereUbo
@@ -328,7 +322,7 @@ namespace atmosphere_scattering
 		c3d::RawUniquePtr< AtmosphereScatteringUbo > m_atmosphereUbo;
 		c3d::RawUniquePtr< AtmosphereTransmittancePass > m_transmittancePass;
 		c3d::RawUniquePtr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
-		c3d::Map< crg::ImageData const *, c3d::RawUniquePtr< CameraPasses > > m_cameraPasses;
+		c3d::Map< c3d::Texture const *, c3d::RawUniquePtr< CameraPasses > > m_cameraPasses;
 		mutable c3d::PreciseTimer m_timer;
 		mutable float m_time{};
 	};

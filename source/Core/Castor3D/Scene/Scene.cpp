@@ -1650,13 +1650,13 @@ namespace c3d
 		return getEngine()->getTextureUnitCache().getDescriptorSet();
 	}
 
-	ashes::Buffer< ModelBufferConfiguration > const & Scene::getModelBuffer()const
+	BufferBase const & Scene::getModelBuffer()const
 	{
 		CU_Require( m_renderNodes );
 		return m_renderNodes->getModelBuffer();
 	}
 
-	ashes::Buffer< BillboardUboConfiguration > const & Scene::getBillboardsBuffer()const
+	BufferBase const & Scene::getBillboardsBuffer()const
 	{
 		CU_Require( m_renderNodes );
 		return m_renderNodes->getBillboardsBuffer();

@@ -37,8 +37,8 @@ namespace c3d
 		, m_image{ makeRawUnique< ashes::Image >( *m_device
 			, *dstTexture.image
 			, ashes::ImageCreateInfo{ convert( dstTexture.imageId.data->info ) } ) }
-		, m_view{ convert( dstTexture.targetViewId.data->info )
-			, dstTexture.targetView
+		, m_view{ convert( dstTexture.getTargetViewId().data->info )
+			, dstTexture.getTargetView()
 			, m_image.get() }
 		, m_commands{ m_device, *m_device.graphicsData(), cuT( "BrdfPrefilter" ) }
 	{
@@ -53,10 +53,8 @@ namespace c3d
 			, TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
 			, TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } } } };
 		{
-			InstantDirectUploadData uploader{ *queueData->queue
-				, m_device
-				, cuT( "BrdfPrefilter" )
-				, *queueData->commandPool };
+			InstantDirectUploadData uploader{ *m_device.transferQueue
+				, m_device, cuT( "BrdfPrefilterVBUpload" ), *queueData->commandPool };
 			uploader->pushUpload( &data, sizeof( TexturedQuad )
 				, vb.getBuffer(), vb.getOffset()
 				, VertexAttributeInputState );
@@ -168,7 +166,7 @@ namespace c3d
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u
-			, m_vertexBuffer.getBuffer( SubmeshData::ePositions )
+			, m_vertexBuffer.getBuffer( SubmeshData::ePositions ).getBuffer()
 			, m_vertexBuffer.getOffset( SubmeshData::ePositions ) );
 		cmd.draw( 6u );
 		cmd.endRenderPass();

@@ -280,13 +280,13 @@ namespace c3d
 		void doGpuUpdate( GpuUpdater & updater )const override;
 		void doUpload( UploadData & uploader )override;
 		void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const override;
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const override;
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const override;
 		bool doInitialiseTexture( RenderDevice const & device );
 		void doInitialiseLayerTexture( RenderDevice const & device );

@@ -117,6 +117,7 @@ namespace GuiCommon
 
 		//! Le listener qui recevra les évènements de déplacement / rotation.
 		c3d::FrameListener & m_listener;
+		c3d::CpuFrameEvent * m_updateEvent{};
 		//! Le noeud de scène affecté par les évènements.
 		c3d::SceneNodeRPtr const m_node;
 		//! La position originelle du noeud.

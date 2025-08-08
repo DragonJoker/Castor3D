@@ -8,18 +8,19 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePass const & createComputeLightsAABBPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	C3D_API void createComputeLightsAABBPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
+		, FrustumClusters const & clusters
 		, CameraUbo const & clustersCameraUbo
-		, FrustumClusters const & clusters );
+		, BufferBase & allLightsAABBB );
 	C3D_API void createDisplayLightsAABBProgram( RenderDevice const & device
 		, FrustumClusters const & clusters
 		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, ashes::WriteDescriptorSetArray & writes );
+		, ashes::WriteDescriptorSetArray & writes
+		, BufferBase const & allLightsAABBB );
 }
 
 #endif

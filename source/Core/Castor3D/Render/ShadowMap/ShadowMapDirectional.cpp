@@ -207,12 +207,8 @@ namespace c3d
 		stepProgressBarLocal( progress, cuT( "Creating ShadowMapDirectional" ) );
 	}
 
-	crg::FramePassArray ShadowMapDirectional::doCreatePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
-		, uint32_t index
-		, bool vsm
-		, bool rsm
-		, bool isStatic
+	void ShadowMapDirectional::doCreatePass( crg::FramePassGroup & graph
+		, uint32_t index, bool vsm, bool rsm, bool isStatic
 		, Passes & passes )
 	{
 		Engine const & engine = *m_scene.getEngine();
@@ -223,19 +219,11 @@ namespace c3d
 		Viewport viewport{ engine };
 		viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0, 5120.0 );
 		viewport.update();
-		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
-		auto & depth = smResult[SmTexture::eDepth];
-		auto & linear = smResult[SmTexture::eLinearDepth];
-		auto & variance = smResult[SmTexture::eVariance];
-		auto & normal = smResult[SmTexture::eNormal];
-		auto & position = smResult[SmTexture::ePosition];
-		auto & flux = smResult[SmTexture::eFlux];
+		ShadowMapResult & smResult = getShadowPassResult( isStatic );
 
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
-		crg::FramePass const * previousPass{};
 		auto cascadeCount = m_scene.getDirectionalShadowCascades();
-		crg::FramePassArray resultPasses;
 
 		for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 		{
@@ -282,57 +270,58 @@ namespace c3d
 					return res;
 				} );
 
-			if ( !isStatic )
-			{
-				pass.addDependency( *previousPasses[cascade] );
-			}
-
-			if ( previousPass )
-			{
-				pass.addDependency( *previousPass );
-			}
-
-			previousPass = &pass;
-
 			if ( cascadeCount == 1u )
 			{
 				if ( isStatic )
 				{
-					pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ).depthStencil() );
-					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eLinearDepth ).color() );
+					smResult.setLastAttach( SmTexture::eDepth
+						, pass.addOutputDepthTarget( smResult.getTargetViewId( SmTexture::eDepth ), getClearValue( SmTexture::eDepth ).depthStencil() ) );
+					smResult.setLastAttach( SmTexture::eLinearDepth
+						, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eLinearDepth ), getClearValue( SmTexture::eLinearDepth ).color() ) );
 
 					if ( vsm )
 					{
-						pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ).color() );
+						smResult.setLastAttach( SmTexture::eVariance
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eVariance ), getClearValue( SmTexture::eVariance ).color() ) );
 					}
 
 					if ( rsm )
 					{
-						pass.addOutputColourView( normal.targetViewId, getClearValue( SmTexture::eNormal ).color() );
-						pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ).color() );
-						pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ).color() );
+						smResult.setLastAttach( SmTexture::eNormal
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eNormal ), getClearValue( SmTexture::eNormal ).color() ) );
+						smResult.setLastAttach( SmTexture::ePosition
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::ePosition ), getClearValue( SmTexture::ePosition ).color() ) );
+						smResult.setLastAttach( SmTexture::eFlux
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eFlux ), getClearValue( SmTexture::eFlux ).color() ) );
 					}
 				}
 				else
 				{
-					pass.addInOutDepthView( depth.targetViewId );
-					pass.addInOutColourView( linear.targetViewId );
+					smResult.setLastAttach( SmTexture::eDepth
+						, pass.addInOutDepthTarget( *smResult.getLastAttach( SmTexture::eDepth ) ) );
+					smResult.setLastAttach( SmTexture::eLinearDepth
+						, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eLinearDepth) ) );
 
 					if ( vsm )
 					{
-						pass.addInOutColourView( variance.targetViewId );
+						smResult.setLastAttach( SmTexture::eVariance
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eVariance ) ) );
 					}
 
 					if ( rsm )
 					{
-						pass.addInOutColourView( normal.targetViewId );
-						pass.addInOutColourView( position.targetViewId );
-						pass.addInOutColourView( flux.targetViewId );
+						smResult.setLastAttach( SmTexture::eNormal
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eNormal ) ) );
+						smResult.setLastAttach( SmTexture::ePosition
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::ePosition ) ) );
+						smResult.setLastAttach( SmTexture::eFlux
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eFlux ) ) );
 					}
 				}
+
 				if ( isStatic )
 				{
-					ShadowMapResult const & nstSmResult = getShadowPassResult( false );
+					ShadowMapResult & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = graph.createPass( "CopyToNonStatic"
 						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
@@ -341,7 +330,7 @@ namespace c3d
 							auto result = makeRawUnique< crg::ImageCopy >( framePass
 								, context
 								, runnableGraph
-								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
+								, getShadowPassResult( isStatic ).getExtent()
 								, ImageLayout::eShaderReadOnly
 								, crg::ru::Config{}
 								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
@@ -350,85 +339,95 @@ namespace c3d
 								, result->getTimer() );
 							return result;
 						} );
-					pass.addDependency( pass );
-					copyPass.addTransferInputView( depth.targetViewId );
-					copyPass.addTransferOutputView( nstSmResult[SmTexture::eDepth].targetViewId );
-					copyPass.addTransferInputView( linear.targetViewId );
-					copyPass.addTransferOutputView( nstSmResult[SmTexture::eLinearDepth].targetViewId );
+					copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eDepth ) );
+					nstSmResult.setLastAttach( SmTexture::eDepth
+						, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eDepth ) ) );
+					copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eLinearDepth ) );
+					nstSmResult.setLastAttach( SmTexture::eLinearDepth
+						, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eLinearDepth ) ) );
 
 					if ( vsm )
 					{
-						copyPass.addTransferInputView( variance.targetViewId );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::eVariance].targetViewId );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eVariance ) );
+						nstSmResult.setLastAttach( SmTexture::eVariance
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eVariance ) ) );
 					}
 
 					if ( rsm )
 					{
-						copyPass.addTransferInputView( normal.targetViewId );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::eNormal].targetViewId );
-						copyPass.addTransferInputView( position.targetViewId );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::ePosition].targetViewId );
-						copyPass.addTransferInputView( flux.targetViewId );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::eFlux].targetViewId );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eNormal ) );
+						nstSmResult.setLastAttach( SmTexture::eNormal
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eNormal ) ) );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::ePosition ) );
+						nstSmResult.setLastAttach( SmTexture::ePosition
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::ePosition ) ) );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eFlux ) );
+						nstSmResult.setLastAttach( SmTexture::eFlux
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eFlux ) ) );
 					}
-
-					resultPasses.push_back( &copyPass );
 				}
 				else if ( vsm )
 				{
 					passes.blurs.push_back( makeUnique< GaussianBlur >( group
-						, *previousPass
 						, m_device
 						, cuT( "ShadowMapDirectional" )
-						, variance.wholeViewId
+						, *smResult.getLastAttach( SmTexture::eVariance )
 						, 5u ) );
-					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
-				}
-				else
-				{
-					resultPasses.push_back( &pass );
+					smResult.setLastAttach( SmTexture::eVariance, &passes.blurs.back()->getResultAttach() );
 				}
 			}
 			else
 			{
 				if ( isStatic )
 				{
-					pass.addOutputDepthView( depth.subViewsId[cascade], getClearValue( SmTexture::eDepth ).depthStencil() );
-					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eLinearDepth ).color() );
+					smResult.setLastAttach( SmTexture::eDepth, cascade
+						, pass.addOutputDepthTarget( smResult.getTargetViewId( SmTexture::eDepth, cascade ), getClearValue( SmTexture::eDepth ).depthStencil() ) );
+					smResult.setLastAttach( SmTexture::eLinearDepth, cascade
+						, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eLinearDepth, cascade ), getClearValue( SmTexture::eLinearDepth ).color() ) );
 
 					if ( vsm )
 					{
-						pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ).color() );
+						smResult.setLastAttach( SmTexture::eVariance, cascade
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eVariance, cascade ), getClearValue( SmTexture::eVariance ).color() ) );
 					}
 
 					if ( rsm )
 					{
-						pass.addOutputColourView( normal.subViewsId[cascade], getClearValue( SmTexture::eNormal ).color() );
-						pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ).color() );
-						pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ).color() );
+						smResult.setLastAttach( SmTexture::eNormal, cascade
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eNormal, cascade ), getClearValue( SmTexture::eNormal ).color() ) );
+						smResult.setLastAttach( SmTexture::ePosition, cascade
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::ePosition, cascade ), getClearValue( SmTexture::ePosition ).color() ) );
+						smResult.setLastAttach( SmTexture::eFlux, cascade
+							, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eFlux, cascade ), getClearValue( SmTexture::eFlux ).color() ) );
 					}
 				}
 				else
 				{
-					pass.addInOutDepthView( depth.subViewsId[cascade] );
-					pass.addInOutColourView( linear.subViewsId[cascade] );
+					smResult.setLastAttach( SmTexture::eDepth, cascade
+						, pass.addInOutDepthTarget( *smResult.getLastAttach( SmTexture::eDepth, cascade ) ) );
+					smResult.setLastAttach( SmTexture::eLinearDepth, cascade
+						, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eLinearDepth, cascade ) ) );
 
 					if ( vsm )
 					{
-						pass.addInOutColourView( variance.subViewsId[cascade] );
+						smResult.setLastAttach( SmTexture::eVariance, cascade
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eVariance, cascade ) ) );
 					}
 
 					if ( rsm )
 					{
-						pass.addInOutColourView( normal.subViewsId[cascade] );
-						pass.addInOutColourView( position.subViewsId[cascade] );
-						pass.addInOutColourView( flux.subViewsId[cascade] );
+						smResult.setLastAttach( SmTexture::eNormal, cascade
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eNormal, cascade ) ) );
+						smResult.setLastAttach( SmTexture::ePosition, cascade
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::ePosition, cascade ) ) );
+						smResult.setLastAttach( SmTexture::eFlux, cascade
+							, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eFlux, cascade ) ) );
 					}
 				}
 
 				if ( isStatic )
 				{
-					ShadowMapResult const & nstSmResult = getShadowPassResult( false );
+					ShadowMapResult & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = group.createPass( "CopyToNonStatic"
 						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
@@ -437,7 +436,7 @@ namespace c3d
 							auto result = makeRawUnique< crg::ImageCopy >( framePass
 								, context
 								, runnableGraph
-								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
+								, getShadowPassResult( isStatic ).getExtent()
 								, ImageLayout::eShaderReadOnly
 								, crg::ru::Config{}
 								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
@@ -446,51 +445,46 @@ namespace c3d
 								, result->getTimer() );
 							return result;
 						} );
-					copyPass.addDependency( *previousPass );
-					copyPass.addTransferInputView( depth.subViewsId[cascade] );
-					copyPass.addTransferOutputView( nstSmResult[SmTexture::eDepth].subViewsId[cascade] );
-					copyPass.addTransferInputView( linear.subViewsId[cascade] );
-					copyPass.addTransferOutputView( nstSmResult[SmTexture::eLinearDepth].subViewsId[cascade] );
+					copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eDepth, cascade ) );
+					nstSmResult.setLastAttach( SmTexture::eDepth, cascade
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eDepth, cascade ) ) );
+					copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eLinearDepth, cascade ) );
+					nstSmResult.setLastAttach( SmTexture::eLinearDepth, cascade
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eLinearDepth, cascade ) ) );
 
 					if ( vsm )
 					{
-						copyPass.addTransferInputView( variance.subViewsId[cascade] );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::eVariance].subViewsId[cascade] );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eVariance, cascade ) );
+						nstSmResult.setLastAttach( SmTexture::eVariance, cascade
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eVariance, cascade ) ) );
 					}
 
 					if ( rsm )
 					{
-						copyPass.addTransferInputView( normal.subViewsId[cascade] );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::eNormal].subViewsId[cascade] );
-						copyPass.addTransferInputView( position.subViewsId[cascade] );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::ePosition].subViewsId[cascade] );
-						copyPass.addTransferInputView( flux.subViewsId[cascade] );
-						copyPass.addTransferOutputView( nstSmResult[SmTexture::eFlux].subViewsId[cascade] );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eNormal, cascade ) );
+						nstSmResult.setLastAttach( SmTexture::eNormal, cascade
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eNormal, cascade ) ) );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::ePosition, cascade ) );
+						nstSmResult.setLastAttach( SmTexture::ePosition, cascade
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::ePosition, cascade ) ) );
+						copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eFlux, cascade ) );
+						nstSmResult.setLastAttach( SmTexture::eFlux, cascade
+							, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eFlux, cascade ) ) );
 					}
-
-					previousPass = &copyPass;
-					resultPasses.push_back( previousPass );
 				}
 				else if ( vsm )
 				{
 					passes.blurs.push_back( makeUnique< GaussianBlur >( group
-						, *previousPass
 						, m_device
 						, cuT( "ShadowMapDirectional" )
-						, variance.subViewsId[cascade]
+						, *smResult.getLastAttach( SmTexture::eVariance, cascade )
 						, m_blurIntermediateView
 						, 5u
 						, crg::ImageCopy::IsEnabledCallback( [this, cascade]() { return doEnableBlur( cascade ); } ) ) );
-					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
-				}
-				else
-				{
-					resultPasses.push_back( &pass );
+					smResult.setLastAttach( SmTexture::eVariance, cascade, &passes.blurs.back()->getResultAttach() );
 				}
 			}
 		}
-
-		return resultPasses;
 	}
 
 	bool ShadowMapDirectional::doIsUpToDate( uint32_t index

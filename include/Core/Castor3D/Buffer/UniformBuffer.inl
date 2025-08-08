@@ -4,21 +4,20 @@ namespace c3d
 {
 	template< typename DataT >
 	inline UniformBufferT< DataT >::UniformBufferT( RenderSystem const & renderSystem
-		, VkDeviceSize count
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
+		, crg::ResourcesCache & resources
+		, DeviceSize count
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags flags
 		, String debugName
 		, ashes::QueueShare sharingMode )
-		: UniformBufferBase
-		{
-			renderSystem,
-			count,
-			sizeof( DataT ),
-			usage,
-			flags,
-			c3d::move( debugName ),
-			c3d::move( sharingMode ),
-		}
+		: UniformBufferBase{ renderSystem
+			, resources
+			, count
+			, sizeof( DataT )
+			, usage
+			, flags
+			, c3d::move( debugName )
+			, c3d::move( sharingMode ) }
 		, m_data( size_t( count ), DataT{} )
 	{
 	}
@@ -92,11 +91,11 @@ namespace c3d
 	}
 
 	template< typename DataT >
-	inline void UniformBufferT< DataT >::upload( VkDeviceSize offset
-		, VkDeviceSize range )const
+	inline void UniformBufferT< DataT >::upload( DeviceSize offset
+		, DeviceSize range )const
 	{
 		assert( range + offset <= m_data.size() );
-		auto size = getBuffer().getAlignedSize();
+		auto size = getAlignedSize();
 
 		if ( auto buffer = getBuffer().getBuffer().lock( offset * size
 			, range * size

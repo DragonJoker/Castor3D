@@ -8,10 +8,12 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePassArray createMergeSortLightsPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	C3D_API void createMergeSortLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters );
+		, FrustumClusters & clusters
+		, ClustersLightSortAttachs const & inputSortAttachs
+		, ClustersLightSortAttachs & outputSortAttachs
+		, BufferBase & mergePathPartitions );
 }
 
 #endif

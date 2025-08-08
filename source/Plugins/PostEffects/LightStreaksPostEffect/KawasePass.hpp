@@ -18,46 +18,22 @@ namespace light_streaks
 	{
 	public:
 		KawasePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & hiViews
-			, crg::ImageViewIdArray const & kawaseViews
+			, c3d::Texture & hiViews
+			, c3d::Texture & kawaseViews
 			, KawaseUbo & kawaseUbo
 			, c3d::Extent2D dimensions
 			, bool const * enabled );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
-
-		crg::FramePassArray const & getLastPasses()const
-		{
-			return m_lastPasses;
-		}
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	public:
 		static constexpr uint32_t MaxCoefficients{ 64u };
-
-		struct Subpass
-		{
-			Subpass( crg::FramePassGroup & graph
-				, crg::FramePass const & previousPass
-				, c3d::RenderDevice const & device
-				, crg::ImageViewId const & srcView
-				, crg::ImageViewId const & dstView
-				, c3d::Extent2D dimensions
-				, ashes::PipelineShaderStageCreateInfoArray const & stages
-				, KawaseUbo const & kawaseUbo
-				, uint32_t index
-				, bool const * enabled );
-
-			crg::FramePass & pass;
-		};
 
 	private:
 		c3d::RenderDevice const & m_device;
 		KawaseUbo & m_kawaseUbo;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePassArray m_lastPasses;
-		c3d::Vector< Subpass > m_subpasses;
 	};
 }
 

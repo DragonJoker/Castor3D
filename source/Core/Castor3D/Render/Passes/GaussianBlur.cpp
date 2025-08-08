@@ -137,33 +137,6 @@ namespace c3d
 			return result;
 		}
 
-		static crg::ImageViewData createMipView( crg::ImageViewId const & source
-			, uint32_t layer
-			, uint32_t level )
-		{
-			auto result = *source.data;
-			result.info.subresourceRange.baseArrayLayer = layer;
-			result.info.subresourceRange.baseMipLevel = level;
-			result.info.subresourceRange.layerCount = 1u;
-			result.info.subresourceRange.levelCount = 1u;
-
-			if ( result.info.viewType == ImageViewType::e1DArray )
-			{
-				result.info.viewType = ImageViewType::e1D;
-			}
-			else if ( result.info.viewType == ImageViewType::e2DArray
-				|| result.info.viewType == ImageViewType::eCubeArray
-				|| result.info.viewType == ImageViewType::e3D )
-			{
-				result.info.viewType = ImageViewType::e2D;
-			}
-
-			result.name = source.data->name;
-			result.name += "L" + string::toMbString( layer );
-			result.name += "M" + string::toMbString( level );
-			return result;
-		}
-
 		static crg::ImageViewId createIntermediate( crg::FramePassGroup const & graph
 			, String const & prefix
 			, PixelFormat format
@@ -189,27 +162,6 @@ namespace c3d
 				, format
 				, { getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
 		}
-
-		static crg::ImageViewIdArray createViews( crg::FramePassGroup const & graph
-			, crg::ImageViewId input )
-		{
-			crg::ImageViewIdArray result;
-
-			auto subresourceRange = input.data->info.subresourceRange;
-
-			for ( auto layerIdx = 0u; layerIdx < subresourceRange.layerCount; ++layerIdx )
-			{
-				auto layer = subresourceRange.baseArrayLayer + layerIdx;
-
-				for ( auto levelIdx = subresourceRange.baseMipLevel; levelIdx < subresourceRange.levelCount; ++levelIdx )
-				{
-					auto level = subresourceRange.baseMipLevel + levelIdx;
-					result.push_back( graph.createView( createMipView( input, layer, level ) ) );
-				}
-			}
-
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -225,22 +177,20 @@ namespace c3d
 	}
 
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, String const & prefix
-		, crg::ImageViewIdArray const & views
+		, crg::Attachment const & attach
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, m_sources{ views }
+		, m_source{ attach }
 		, m_device{ device }
-		, m_lastPass{ &previousPass }
 		, m_prefix{ prefix }
-		, m_size{ makeExtent2D( getExtent( m_sources[0] ) ) }
-		, m_format{ getFormat( m_sources[0] ) }
+		, m_size{ makeExtent2D( getExtent( m_source.view() ) ) }
+		, m_format{ getFormat( m_source.view() ) }
 		, m_intermediateView{ intermediateView }
-		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
 		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
 		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( *device.renderSystem.getEngine(), isDepthFormat( m_format ), false ) }
 		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( *device.renderSystem.getEngine(), isDepthFormat( m_format ), true ) }
@@ -256,115 +206,83 @@ namespace c3d
 			, sizeof( float ) * std::min( size_t( MaxCoefficients ), m_kernel.size() ) );
 		data.textureSize[0] = float( m_size.width );
 		data.textureSize[1] = float( m_size.height );
-
-		for ( auto const & input : m_sources )
 		{
-			{
-				auto name = input.data->name + "BlurX";
-				auto & passX = graph.createPass( name
-					, [this, &input, isEnabled]( crg::FramePass const & framePass
-						, crg::GraphContext & context
-						, crg::RunnableGraph & runnable )
-					{
-						auto extent = getExtent( input );
-						auto result = crg::RenderQuadBuilder{}
-							.renderPosition( {} )
-							.renderSize( { extent.width, extent.height } )
-							.texcoordConfig( {} )
-							.isEnabled( isEnabled )
-							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
-							.build( framePass, context, runnable );
-						m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-							, result->getTimer() );
-						return result;
-					} );
-				passX.addDependency( *m_lastPass );
-				m_lastPass = &passX;
-				m_blurUbo.createPassBinding( passX, "BlurCfgX", passgauss::GaussCfgIdx );
-				passX.addSampledView( input, passgauss::DifImgIdx );
-				passX.addOutputColourView( m_intermediateView );
-			}
-			{
-				auto name = input.data->name + "BlurY";
-				auto & passY = graph.createPass( name
-					, [this, &input, isEnabled]( crg::FramePass const & framePass
-						, crg::GraphContext & context
-						, crg::RunnableGraph & runnable )
-					{
-						auto extent = getExtent( input );
-						auto result = crg::RenderQuadBuilder{}
-							.renderPosition( {} )
-							.renderSize( { extent.width, extent.height } )
-							.texcoordConfig( {} )
-							.isEnabled( isEnabled )
-							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
-							.build( framePass, context, runnable );
-						m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-							, result->getTimer() );
-						return result;
-					} );
-				passY.addDependency( *m_lastPass );
-				m_lastPass = &passY;
-				m_blurUbo.createPassBinding( passY, "BlurCfgY", passgauss::GaussCfgIdx );
-				passY.addSampledView( m_intermediateView, passgauss::DifImgIdx );
-				passY.addOutputColourView( input );
-			}
+			auto name = m_source.view( 0 ).data->name + "BlurX";
+			auto & passX = graph.createPass( name
+				, [this, isEnabled]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnable )
+				{
+				auto result = crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( { m_size.width, m_size.height } )
+					.texcoordConfig( {} )
+					.isEnabled( isEnabled )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
+					.build( framePass, context, runnable );
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					, result->getTimer() );
+				return result;
+				} );
+			m_blurUbo.createPassBinding( passX, passgauss::GaussCfgIdx );
+			passX.addInputSampled( m_source, passgauss::DifImgIdx );
+			m_lastAttach = passX.addOutputColourTarget( m_intermediateView );
+		}
+		{
+			auto name = m_source.view( 0 ).data->name + "BlurY";
+			auto & passY = graph.createPass( name
+				, [this, isEnabled]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnable )
+				{
+				auto result = crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( { m_size.width, m_size.height } )
+					.texcoordConfig( {} )
+					.isEnabled( isEnabled )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
+					.build( framePass, context, runnable );
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					, result->getTimer() );
+				return result;
+				} );
+			m_blurUbo.createPassBinding( passY, passgauss::GaussCfgIdx );
+			passY.addInputSampled( *m_lastAttach, passgauss::DifImgIdx );
+			m_lastAttach = passY.addOutputColourTarget( m_source.view() );
 		}
 	}
 
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, String const & prefix
-		, crg::ImageViewIdArray const & views
+		, crg::Attachment const & attach
 		, uint32_t kernelSize
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
-			, previousPass
 			, device
 			, prefix
-			, views
-			, passgauss::createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
+			, attach
+			, passgauss::createIntermediate( graph, prefix, getFormat( attach.view() ), getExtent( attach.view() ), getMipLevels( attach.view() ) )
 			, kernelSize
 			, isEnabled }
 	{
 	}
 
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, String const & prefix
-		, crg::ImageViewId const & view
+		, c3d::Texture & texture
 		, uint32_t kernelSize
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
-			, previousPass
 			, device
 			, prefix
-			, passgauss::createViews( graph, view )
-			, passgauss::createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
+			, *texture.getLastAttach()
+			, passgauss::createIntermediate( graph, prefix, texture.getFormat(), texture.getExtent(), texture.getMipLevels() )
 			, kernelSize
 			, isEnabled }
 	{
-	}
-
-	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
-		, RenderDevice const & device
-		, String const & prefix
-		, crg::ImageViewId const & view
-		, crg::ImageViewId const & intermediateView
-		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
-		: GaussianBlur{ graph
-			, previousPass
-			, device
-			, prefix
-			, passgauss::createViews( graph, view )
-			, intermediateView
-			, kernelSize
-			, isEnabled }
-	{
+		texture.setLastAttach( &getResultAttach() );
 	}
 
 	void GaussianBlur::accept( ConfigurationVisitorBase & visitor )const

@@ -19,7 +19,7 @@ namespace c3d
 			: public IndexMapping::ComponentData
 		{
 			explicit ComponentData( Submesh & submesh
-				, VkBufferUsageFlags bufferUsageFlags )
+				, BufferUsageFlags bufferUsageFlags )
 				: IndexMapping::ComponentData{ submesh, bufferUsageFlags }
 			{
 			}
@@ -219,7 +219,7 @@ namespace c3d
 		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
 		C3D_API explicit TriFaceMapping( Submesh & submesh
-			, VkBufferUsageFlags bufferUsageFlags = {} );
+			, BufferUsageFlags bufferUsageFlags = {} );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points.

@@ -300,8 +300,8 @@ namespace ocean_fft
 		, c3d::RenderDevice const & device
 		, VkFFTConfig const & config
 		, c3d::Extent2D const & extent
-		, ashes::BufferBase const & input
-		, c3d::Array< ashes::BufferBasePtr, 2u > const & output
+		, c3d::BufferBase const & input
+		, c3d::Array< c3d::BufferUPtr, 2u > const & output
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
@@ -316,9 +316,9 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_extent{ extent }
 		, m_inBufferSize{ input.getSize() }
-		, m_vkInput{ input }
+		, m_vkInput{ *input.buffer }
 		, m_outBufferSize{ output[0]->getSize() }
-		, m_vkOutput{ *output[0], *output[1] }
+		, m_vkOutput{ *output[0]->buffer, *output[1]->buffer }
 		, m_app{ procfft::createApp( config
 			, device
 			, m_extent
@@ -362,14 +362,13 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	crg::FramePass const & createProcessFFTPass( c3d::String const & name
+	void createProcessFFTPass( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::Extent2D const & extent
 		, VkFFTConfig const & config
-		, ashes::BufferBase const & input
-		, c3d::Array< ashes::BufferBasePtr, 2u > const & output )
+		, c3d::BufferBase const & input
+		, c3d::Array< c3d::BufferUPtr, 2u > const & output )
 	{
 		auto mbName = c3d::toUtf8( name );
 		auto & result = graph.createPass( "Process" + mbName
@@ -390,16 +389,8 @@ namespace ocean_fft
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( previousPass );
-		result.addInputStorageBuffer( { input, mbName + "Frequency" }
-			, ProcessFFTPass::eInput
-			, 0u
-			, input.getSize() );
-		result.addOutputStorageBuffer( { *output.front(), mbName + "FFTResult" }
-			, ProcessFFTPass::eOutput
-			, 0u
-			, output.front()->getSize() );
-		return result;
+		result.addInputStorage( *input.getLastAttach(), ProcessFFTPass::eInput );
+		output.front()->setLastAttach( result.addOutputStorageBuffer( output.front()->bufferViewId, ProcessFFTPass::eOutput ) );
 	}
 
 	//************************************************************************************************

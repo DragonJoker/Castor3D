@@ -34,10 +34,9 @@ namespace ocean_fft
 			/**
 			 *\copydoc	c3d::shader::SubmeshRenderShader::record
 			 */
-			crg::FramePassArray record( c3d::RenderDevice const & device
+			void record( c3d::RenderDevice const & device
 				, crg::ResourcesCache & resources
-				, crg::FramePassGroup & graph
-				, crg::FramePassArray previousPasses )override;
+				, crg::FramePassGroup & graph )override;
 			/**
 			 *\copydoc	c3d::shader::SubmeshRenderShader::registerDependencies
 			 */

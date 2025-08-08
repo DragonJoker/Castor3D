@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Overlay/FontTexture.hpp"
 
+#include "Castor3D/Render/Buffer.hpp"
+
 #include <CastorUtils/Math/MathModule.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
@@ -113,14 +115,14 @@ namespace c3d
 
 		OverlayPipelineData( OverlayPipelineData const & ) = delete;
 		OverlayPipelineData & operator=( OverlayPipelineData const & ) = delete;
-		OverlayPipelineData( OverlayPipelineData && )noexcept = default;
-		OverlayPipelineData & operator=( OverlayPipelineData && )noexcept = default;
-		OverlayPipelineData()noexcept = default;
-		~OverlayPipelineData()noexcept = default;
+		C3D_API OverlayPipelineData( OverlayPipelineData && )noexcept;
+		C3D_API OverlayPipelineData & operator=( OverlayPipelineData && )noexcept;
+		C3D_API OverlayPipelineData()noexcept;
+		C3D_API ~OverlayPipelineData()noexcept;
 
-		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer
+		OverlayPipelineData( BufferUPtrT< uint32_t > iDsBuffer
 			, ArrayView< uint32_t > ids
-			, ashes::BufferPtr< VkDrawIndirectCommand > indirectBuffer
+			, BufferUPtrT< VkDrawIndirectCommand > indirectBuffer
 			, ArrayView< VkDrawIndirectCommand > indirect
 			, DescriptorSetsPtr descs
 			, uint32_t c )
@@ -133,9 +135,10 @@ namespace c3d
 		{
 		}
 
-		ashes::BufferPtr< uint32_t > overlaysIDsBuffer{};
+
+		BufferUPtrT< uint32_t > overlaysIDsBuffer{};
 		ArrayView< uint32_t > overlaysIDs{};
-		ashes::BufferPtr< VkDrawIndirectCommand > indirectCommandsBuffer{};
+		BufferUPtrT< VkDrawIndirectCommand > indirectCommandsBuffer{};
 		ArrayView< VkDrawIndirectCommand > indirectCommands{};
 		DescriptorSetsPtr descriptorSets{};
 		uint32_t count{};

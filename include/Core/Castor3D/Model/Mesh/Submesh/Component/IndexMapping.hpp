@@ -75,7 +75,7 @@ namespace c3d
 			: public SubmeshComponentData
 		{
 			ComponentData( Submesh & submesh
-				, VkBufferUsageFlags bufferUsageFlags )
+				, BufferUsageFlags bufferUsageFlags )
 				: SubmeshComponentData{ submesh }
 				, m_bufferUsageFlags{ bufferUsageFlags }
 			{
@@ -96,7 +96,7 @@ namespace c3d
 			/**
 			 *\copydoc		SubmeshComponentData::getUsageFlags
 			 */
-			VkBufferUsageFlags getUsageFlags()const noexcept override
+			BufferUsageFlags getUsageFlags()const noexcept override
 			{
 				return m_bufferUsageFlags;
 			}
@@ -108,7 +108,7 @@ namespace c3d
 			}
 
 		private:
-			VkBufferUsageFlags m_bufferUsageFlags;
+			BufferUsageFlags m_bufferUsageFlags;
 		};
 	};
 }

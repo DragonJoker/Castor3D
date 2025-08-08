@@ -120,20 +120,20 @@ namespace c3d
 
 		struct BufferNodes
 		{
-			explicit BufferNodes( ashes::BufferBase const * posBuffer = {}
-				, ashes::BufferBase const * idxBuffer = {} )
+			explicit BufferNodes( BufferBase const * posBuffer = {}
+				, BufferBase const * idxBuffer = {} )
 				: posBuffer{ posBuffer }
 				, idxBuffer{ idxBuffer }
 			{
 			}
 
-			ashes::BufferBase const * posBuffer{};
-			ashes::BufferBase const * idxBuffer{};
+			BufferBase const * posBuffer{};
+			BufferBase const * idxBuffer{};
 			NodesView nodes{};
 		};
 
-		auto emplace( ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer )
+		auto emplace( BufferBase const & posBuffer
+			, BufferBase const * idxBuffer )
 		{
 			auto it = std::find_if( begin()
 				, end()
@@ -163,8 +163,8 @@ namespace c3d
 			return it;
 		}
 
-		RenderedNode * emplace( ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer
+		RenderedNode * emplace( BufferBase const & posBuffer
+			, BufferBase const * idxBuffer
 			, RenderedNode node )
 		{
 			auto it = emplace( posBuffer, idxBuffer );
@@ -263,8 +263,8 @@ namespace c3d
 		}
 
 		void emplace( PipelineAndID const & pipeline
-			, ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer
+			, BufferBase const & posBuffer
+			, BufferBase const * idxBuffer
 			, CulledNode const & culled
 			, NodeCommand command
 			, bool isFrontCulled )

@@ -49,17 +49,29 @@ namespace c3d
 		C3D_API Texture( Texture && rhs )noexcept;
 		C3D_API Texture & operator=( Texture && rhs )noexcept;
 
-		C3D_API Texture() = default;
+		C3D_API Texture()noexcept = default;
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, String const & name
 			, TextureCreateInfo const & imageInfo
 			, TextureSamplerInfo const & samplerInfo
 			, bool createSubviews = true );
+		C3D_API Texture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, crg::ImageViewId view );
+		C3D_API Texture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, crg::ImageViewId wholeView
+			, crg::ImageViewId targetView
+			, crg::ImageViewId sampledView );
 		C3D_API ~Texture()noexcept;
 
 		C3D_API void create();
 		C3D_API void destroy()noexcept;
+		C3D_API crg::Attachment const * mergeLayerAttachments( crg::FramePassGroup & graph )const;
+		C3D_API crg::Attachment const * getSampledLastAttach( uint32_t layerIndex, uint32_t mipLevel )const;
+		C3D_API crg::Attachment const * getSampledLastAttach( uint32_t layerIndex )const;
+		C3D_API crg::Attachment const * getSampledLastAttach()const;
 
 		operator bool()const noexcept
 		{
@@ -119,6 +131,21 @@ namespace c3d
 			, uint32_t dstQueueFamily
 			, bool target = false )const;
 
+		auto begin()const noexcept
+		{
+			return m_layers.begin();
+		}
+
+		auto end()const noexcept
+		{
+			return m_layers.end();
+		}
+
+		auto size()const noexcept
+		{
+			return m_layers.size();
+		}
+
 		uint32_t getMipLevels()const noexcept
 		{
 			return crg::getMipLevels( imageId );
@@ -134,19 +161,167 @@ namespace c3d
 			return crg::getExtent( imageId );
 		}
 
+		crg::ImageViewId const & getTargetViewId( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].targetViewId;
+		}
+
+		crg::ImageViewId const & getTargetViewId( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].targetViewId;
+		}
+
+		crg::ImageViewId const & getTargetViewId()const noexcept
+		{
+			return m_targetViewId;
+		}
+
+		crg::ImageViewId const & getWholeViewId( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].targetViewId;
+		}
+
+		crg::ImageViewId const & getWholeViewId( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].wholeViewId;
+		}
+
+		crg::ImageViewId const & getWholeViewId()const noexcept
+		{
+			return m_wholeViewId;
+		}
+
+		crg::ImageViewId const & getSampledViewId( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].sampledViewId;
+		}
+
+		crg::ImageViewId const & getSampledViewId( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].sampledViewId;
+		}
+
+		crg::ImageViewId const & getSampledViewId()const noexcept
+		{
+			return m_sampledViewId;
+		}
+
+		VkImageView getTargetView( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].targetView;
+		}
+
+		VkImageView getTargetView( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].targetView;
+		}
+
+		VkImageView getTargetView()const noexcept
+		{
+			return m_targetView;
+		}
+
+		VkImageView getWholeView( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].targetView;
+		}
+
+		VkImageView getWholeView( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].wholeView;
+		}
+
+		VkImageView getWholeView()const noexcept
+		{
+			return m_wholeView;
+		}
+
+		VkImageView getSampledView( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].sampledView;
+		}
+
+		VkImageView getSampledView( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].sampledView;
+		}
+
+		VkImageView getSampledView()const noexcept
+		{
+			return m_sampledView;
+		}
+
+		crg::Attachment const * getLastAttach( uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_layers[layerIndex].mipViews[mipLevel].attach;
+		}
+
+		crg::Attachment const * getLastAttach( uint32_t layerIndex )const noexcept
+		{
+			return m_layers[layerIndex].attach;
+		}
+
+		crg::Attachment const * getLastAttach()const noexcept
+		{
+			return m_attach;
+		}
+
+		crg::Attachment const * setLastAttach( uint32_t layerIndex, uint32_t mipLevel, crg::Attachment const * attach )noexcept
+		{
+			m_layers[layerIndex].mipViews[mipLevel].attach = attach;
+			return attach;
+		}
+
+		crg::Attachment const * setLastAttach( uint32_t layerIndex, crg::Attachment const * attach )noexcept
+		{
+			m_layers[layerIndex].attach = attach;
+			return attach;
+		}
+
+		crg::Attachment const * setLastAttach( crg::Attachment const * attach )noexcept
+		{
+			m_attach = attach;
+			return m_attach;
+		}
+
 		crg::ResourcesCache * resources{};
 		RenderDevice const * device{};
 		crg::ImageId imageId{};
 		ashes::ImagePtr image{};
-		crg::ImageViewId wholeViewId{};
-		crg::ImageViewId targetViewId{};
-		crg::ImageViewId sampledViewId{};
-		VkImageView wholeView{};
-		VkImageView targetView{};
-		VkImageView sampledView{};
-		crg::ImageViewIdArray subViewsId{};
-		Vector< VkImageView > subViews{};
 		ashes::Sampler const * sampler{};
+
+	private:
+		struct MipView
+		{
+			crg::ImageViewId targetViewId{}; // View respecting aspect flags
+			crg::ImageViewId sampledViewId{}; // View with only depth aspect (if original aspect flags are not color)
+			VkImageView targetView{};
+			VkImageView sampledView{};
+			crg::Attachment const * attach{};
+		};
+
+		struct LayerViews
+		{
+			crg::ImageViewId wholeViewId{}; // View with mip levels, respecting aspect flags
+			crg::ImageViewId targetViewId{}; // View without mip levels, respecting aspect flags
+			crg::ImageViewId sampledViewId{}; // View with mip levels, with only depth aspect (if original aspect flags are not color)
+			VkImageView wholeView{};
+			VkImageView targetView{};
+			VkImageView sampledView{};
+			crg::Attachment const * attach{};
+			Vector< MipView > mipViews{};
+		};
+
+		crg::ImageViewId m_wholeViewId{}; // View with array layers and mip levels, respecting aspect flags
+		crg::ImageViewId m_targetViewId{}; // View with array layer but without mip levels, respecting aspect flags
+		crg::ImageViewId m_sampledViewId{}; // View with array layers and mip levels, with only depth aspect (if original aspect flags are not color)
+		VkImageView m_wholeView{};
+		VkImageView m_targetView{};
+		VkImageView m_sampledView{};
+		crg::Attachment const * m_attach{};
+		Vector< LayerViews > m_layers{};
+		bool m_ownImage{};
+		mutable c3d::HashMap< size_t, crg::AttachmentPtr > m_cache;
 	};
 
 	struct IntermediateView
@@ -169,7 +344,7 @@ namespace c3d
 			, ImageLayout layout
 			, TextureFactors factors = {} )noexcept
 			: IntermediateView{ c3d::move( name )
-				, texture.sampledViewId
+				, texture.getSampledViewId()
 				, layout
 				, c3d::move( factors ) }
 		{

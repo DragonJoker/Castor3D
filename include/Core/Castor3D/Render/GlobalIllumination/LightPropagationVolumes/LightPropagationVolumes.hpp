@@ -35,7 +35,7 @@ namespace c3d
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
-			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResult & lpvResult
 			, LpvGridConfigUbo & lpvGridConfigUbo
 			, bool geometryVolumes );
 
@@ -49,15 +49,15 @@ namespace c3d
 		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 
 	private:
-		crg::FramePass & doCreateClearPass();
-		crg::FramePass & doCreateDownsamplePass();
-		crg::FramePass & doCreatePropagationPass( crg::FramePassArray const & previousPasses
-			, String const & name
+		void doCreateClearPass();
+		void doCreateDownsamplePass();
+		crg::FramePass & doCreatePropagationPass( String const & name
 			, LightVolumePassResult const & injection
-			, LightVolumePassResult const & lpvResult
-			, LightVolumePassResult const & propagation
+			, LightVolumePassResult & lpvResult
+			, LightVolumePassResult & propagation
 			, uint32_t index );
-		Vector< crg::FramePass * > doCreatePropagationPasses();
+		void doCreatePropagationPasses();
+		void doUpdatePropagationPasses();
 
 	private:
 		Scene const & m_scene;
@@ -65,7 +65,7 @@ namespace c3d
 		ShadowMapResult const & m_sourceSmResult;
 		RawUniquePtr< ShadowMapResult > m_downsampledSmResult;
 		ShadowMapResult const * m_usedSmResult;
-		LightVolumePassResult const & m_lpvResult;
+		LightVolumePassResult & m_lpvResult;
 		Point4f m_gridsSize;
 		LpvGridConfigUbo & m_lpvGridConfigUbo;
 		bool m_geometryVolumes{ false };
@@ -78,80 +78,73 @@ namespace c3d
 		struct LightLpv
 		{
 			LightLpv( crg::FramePassGroup & graph
-				, crg::FramePassArray const & previousPasses
 				, RenderDevice const & device
 				, String const & name
 				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, LightVolumePassResult const & injection
-				, Texture const * geometry );
+				, LightVolumePassResult & injection
+				, Texture * geometry );
 			bool update( CpuUpdater & updater
 				, float lpvCellSize );
 
 			LightCache const & lightCache;
 			Vector< LpvLightConfigUbo > lpvLightConfigUbos;
-			crg::FramePass const * lastPass{};
-			crg::FramePassArray previousPasses{};
 			Vector< LightInjectionPass * > lightInjectionPasses;
-			crg::FramePassArray lightInjectionPassDescs;
 			Vector< GeometryInjectionPass * > geometryInjectionPasses;
-			crg::FramePassArray geometryInjectionPassDescs;
 
 		private:
-			crg::FramePass const & doCreateInjectionPass( crg::FramePassGroup & graph
+			void doCreateInjectionPass( crg::FramePassGroup & graph
 				, RenderDevice const & device
 				, String const & name
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, LightVolumePassResult const & injection );
-			crg::FramePass const & doCreateInjectionPass( crg::FramePassGroup & graph
+				, LightVolumePassResult & injection );
+			void doCreateInjectionPass( crg::FramePassGroup & graph
 				, RenderDevice const & device
 				, String const & name
 				, Vector< crg::ImageViewId > const & arrayViews
 				, CubeMapFace face
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, LightVolumePassResult const & injection );
-			crg::FramePassArray doCreateInjectionPasses( crg::FramePassGroup & graph
+				, LightVolumePassResult & injection );
+			void doCreateInjectionPasses( crg::FramePassGroup & graph
 				, RenderDevice const & device
 				, String const & name
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, LightVolumePassResult const & injection );
-			crg::FramePass const & doCreateGeometryPass( crg::FramePassGroup & graph
+				, LightVolumePassResult & injection );
+			void doCreateGeometryPass( crg::FramePassGroup & graph
 				, RenderDevice const & device
 				, String const & name
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, Texture const & geometry );
-			crg::FramePass const & doCreateGeometryPass( crg::FramePassGroup & graph
+				, Texture & geometry );
+			void doCreateGeometryPass( crg::FramePassGroup & graph
 				, RenderDevice const & device
 				, String const & name
 				, Vector< crg::ImageViewId > const & arrayViews
 				, CubeMapFace face
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, Texture const & geometry );
-			crg::FramePassArray doCreateGeometryPasses( crg::FramePassGroup & graph
+				, Texture & geometry );
+			void doCreateGeometryPasses( crg::FramePassGroup & graph
 				, RenderDevice const & device
 				, String const & name
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
-				, Texture const & geometry );
+				, Texture & geometry );
 		};
 		using LightLpvPtr = RawUniquePtr< LightLpv >;
 
-		crg::FramePass & m_clearPass;
-		crg::FramePass * m_downsamplePass;
 		HashMap< LightInstance *, LightLpvPtr > m_lightLpvs;
-		Vector< crg::FramePass * > m_lightPropagationPassesDesc;
 		Vector< LightPropagationPass * > m_lightPropagationPasses;
+		crg::FramePass * m_lightPropagationFirstPass{};
 
 		BoundingBox m_aabb;
 		Point3f m_cameraPos;
@@ -170,7 +163,7 @@ namespace c3d
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
-			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResult & lpvResult
 			, LpvGridConfigUbo & lpvGridConfigUbo )
 			: LightPropagationVolumesBase{ resources
 				, scene

@@ -168,10 +168,6 @@ namespace c3d
 		C3D_API ashes::VkClearValueArray const & getClearValues()const;
 		C3D_API ashes::Sampler const & getSampler( SmTexture texture
 			, uint32_t index = 0u )const;
-		C3D_API virtual crg::ImageViewId getView( SmTexture texture
-			, uint32_t index = 0u )const;
-		C3D_API virtual crg::ImageViewIdArray getViews( SmTexture texture
-			, uint32_t index = 0u )const;
 
 		ShadowMapResult const & getShadowPassResult( bool isStatic )const noexcept
 		{
@@ -203,20 +199,12 @@ namespace c3d
 		C3D_API bool doEnableBlur( uint32_t index )const;
 
 	private:
-		crg::FramePassArray doCreatePasses( crg::FrameGraph & graph
-			, crg::FramePassArray const & previousPasses
-			, uint32_t index
-			, bool vsm
-			, bool rsm
-			, bool isStatic
+		void doCreatePasses( crg::FrameGraph & graph
+			, uint32_t index, bool vsm, bool rsm, bool isStatic
 			, Passes & passes );
 
-		C3D_API virtual crg::FramePassArray doCreatePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, uint32_t index
-			, bool vsm
-			, bool rsm
-			, bool isStatic
+		C3D_API virtual void doCreatePass( crg::FramePassGroup & graph
+			, uint32_t index, bool vsm, bool rsm, bool isStatic
 			, Passes & passes ) = 0;
 		C3D_API virtual bool doIsUpToDate( uint32_t index
 			, Passes const & passes )const = 0;

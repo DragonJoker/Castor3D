@@ -19,25 +19,19 @@ namespace smaa
 	{
 	public:
 		BlendingWeightCalculation( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewId const & edgeDetectionView
-			, crg::ImageViewId const & stencilView
+			, c3d::Texture const & edgeDetectionView
+			, c3d::Texture const & stencilView
 			, SmaaConfig const & config
 			, bool const * enabled );
 		~BlendingWeightCalculation();
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::ImageViewId const & getResult()const
+		c3d::Texture const & getResult()const
 		{
-			return m_result.sampledViewId;
-		}
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
+			return m_result;
 		}
 
 	private:
@@ -50,7 +44,6 @@ namespace smaa
 		c3d::Texture m_result;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass & m_pass;
 	};
 }
 

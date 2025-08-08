@@ -104,7 +104,7 @@ namespace c3d
 					, graph
 					, crg::ru::Config{}
 					, crg::cp::Config{}
-						.isEnabled( IsEnabledCallback( [&clusters]() { return clusters.getConfig().parseDepthBuffer && clusters.getCamera().getScene()->getLightCache().hasClusteredLights(); } ) )
+						.isEnabled( IsEnabledCallback( [&clusters]() { return clusters.getCamera().getScene()->getLightCache().hasClusteredLights(); } ) )
 						.groupCountX( divRoundUp( clusters.getDimensions()->x * clusters.getDimensions()->y * clusters.getDimensions()->z, NumThreads ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 			{
@@ -114,10 +114,12 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createFindUniqueClustersPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+	void createFindUniqueClustersPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters )
+		, FrustumClusters & clusters
+		, BufferBase const & clusterFlags
+		, BufferBase & uniqueClusters
+		, BufferBase & clustersIndirect )
 	{
 		auto & pass = graph.createPass( "FindUniqueClusters"
 			, [&clusters, &device]( crg::FramePass const & framePass
@@ -133,11 +135,9 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( previousPass );
-		createInputStoragePassBinding( pass, uint32_t( fndunq::eClustersFlags ), cuT( "C3D_ClustersFlags" ), clusters.getClusterFlagsBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( fndunq::eUniqueClusters ), cuT( "C3D_UniqueClusters" ), clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( fndunq::eClustersIndirect ), cuT( "C3D_ClustersIndirect" ), clusters.getClustersIndirectBuffer(), 0u, ashes::WholeSize );
-		return pass;
+		pass.addInputStorage( *clusterFlags.getLastAttach(), uint32_t( fndunq::eClustersFlags ) );
+		uniqueClusters.setLastAttach( pass.addClearableOutputStorageBuffer( uniqueClusters.bufferViewId, uint32_t( fndunq::eUniqueClusters ) ) );
+		clustersIndirect.setLastAttach( pass.addClearableOutputStorageBuffer( clustersIndirect.bufferViewId, uint32_t( fndunq::eClustersIndirect ) ) );
 	}
 
 	//*********************************************************************************************

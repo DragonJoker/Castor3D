@@ -34,9 +34,11 @@ namespace c3d
 		 *\param[in]	wantedState	L'accès souhaité après l'upload.
 		 */
 		C3D_API ShaderBuffer( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, VkDeviceSize size
 			, String const & name
 			, AccessState wantedState = FragmentShaderReadState );
+		C3D_API ~ShaderBuffer()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the buffer.
@@ -141,7 +143,7 @@ namespace c3d
 			return m_device;
 		}
 
-		ashes::BufferBase const & getBuffer()const noexcept
+		Buffer const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -185,7 +187,7 @@ namespace c3d
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
 		AccessState m_wantedState;
-		ashes::BufferBasePtr m_buffer;
+		BufferUPtr m_buffer;
 		ByteArray m_ownData;
 		uint8_t * m_rawData;
 		uint8_t * m_data;

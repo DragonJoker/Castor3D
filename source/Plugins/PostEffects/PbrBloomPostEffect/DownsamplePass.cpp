@@ -30,7 +30,7 @@ namespace PbrBloom
 			auto constants = writer.declPushConstantsBuffer<>( "constants" );
 			auto srcTexelSize = constants.declMember< sdw::Vec2 >( "srcTexelSize" );
 			constants.end();
-			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
+			auto c3d_mapColor = writer.declCombinedImg< Img2DRgba >( "c3d_mapColor", 0u, 0u );
 
 			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
@@ -111,71 +111,24 @@ namespace PbrBloom
 	//*********************************************************************************************
 
 	DownsamplePass::DownsamplePass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & sceneView
-		, crg::ImageId const & resultImg
+		, c3d::Texture const & sceneView
+		, c3d::Vector< c3d::Texture > & resultImg
 		, uint32_t passesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_graph{ graph }
 		, m_shader{ cuT( "PbrBloomDownsample" ), down::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_resultViews{ doCreateResultViews( graph, resultImg, passesCount ) }
-		, m_passes{ doCreatePasses( graph, previousPass, device, sceneView, passesCount, enabled, passIndex ) }
-	{
-	}
-
-
-	void DownsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )
-	{
-		visitor.visit( m_shader );
-
-		for ( auto & view : m_resultViews )
-		{
-			visitor.visit( cuT( "PostFX: PBRB - Down " ) + c3d::string::toString( view.data->info.subresourceRange.baseMipLevel )
-				, view
-				, m_graph.getFinalLayoutState( view ).layout
-				, c3d::TextureFactors{}.invert( true ) );
-		}
-	}
-
-	crg::ImageViewIdArray DownsamplePass::doCreateResultViews( crg::FramePassGroup & graph
-		, crg::ImageId const & resultImg
-		, uint32_t passesCount )
-	{
-		crg::ImageViewIdArray result;
-
-		for ( uint32_t i = 0u; i < passesCount; ++i )
-		{
-			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + c3d::string::toMbString( i )
-				, resultImg
-				, c3d::ImageViewCreateFlags::eNone
-				, c3d::ImageViewType::e2D
-				, getFormat( resultImg )
-				, { c3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
-		}
-
-		return result;
-	}
-
-	c3d::Vector< crg::FramePass * > DownsamplePass::doCreatePasses( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
-		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & sceneView
-		, uint32_t passesCount
-		, bool const * enabled
-		, uint32_t const * passIndex )
 	{
 		c3d::Vector< crg::FramePass * > result;
-		auto prev = &previousPass;
-		auto src = sceneView;
+		auto src = sceneView.getLastAttach();
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			auto srcExtent = c3d::makeExtent2D( getMipExtent( src.front() ) );
-			auto dstExtent = c3d::makeExtent2D( getMipExtent( m_resultViews[i] ) );
-			auto count = uint32_t( src.size() );
+			auto srcExtent = c3d::makeExtent2D( getMipExtent( src->view() ) );
+			auto dstExtent = c3d::makeExtent2D( getMipExtent( resultImg[i].getSampledViewId() ) );
+			auto count = src->getViewCount();
 			auto & pass = graph.createPass( "Downsample" + c3d::string::toMbString( i )
 				, [this, &device, passIndex, enabled, count, srcExtent, dstExtent, i]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -215,25 +168,15 @@ namespace PbrBloom
 						, result->getTimer() );
 					return result;
 				} );
-
-			pass.addDependency( *prev );
-			pass.addSampledView( src
-				, 0u
-				, crg::SamplerDesc{ c3d::FilterMode::eLinear
-					, c3d::FilterMode::eLinear
-					, c3d::MipmapMode::eNearest
-					, c3d::WrapMode::eClampToEdge
-					, c3d::WrapMode::eClampToEdge
-					, c3d::WrapMode::eClampToEdge
-					, 0.0f
-					, float( i == 0u ? i : i - 1u )
-					, float( i == 0u ? i + 1u : i ) } );
-			pass.addOutputColourView( m_resultViews[i] );
-			result.push_back( &pass );
-			prev = &pass;
-			src = { m_resultViews[i] };
+			pass.addInputSampled( *src, 0u
+				, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest } );
+			src = resultImg[i].setLastAttach( pass.addOutputColourTarget( resultImg[i].getTargetViewId() ) );
 		}
+	}
 
-		return result;
+
+	void DownsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	{
+		visitor.visit( m_shader );
 	}
 }

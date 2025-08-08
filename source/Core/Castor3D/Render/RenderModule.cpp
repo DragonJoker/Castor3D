@@ -225,22 +225,22 @@ namespace c3d
 	ashes::ImageView makeTargetImageView( Texture const & texture )
 	{
 		return makeImageView( *texture.image
-			, texture.targetView
-			, texture.targetViewId );
+			, texture.getTargetView()
+			, texture.getTargetViewId() );
 	}
 
 	ashes::ImageView makeSampledImageView( Texture const & texture )
 	{
 		return makeImageView( *texture.image
-			, texture.sampledView
-			, texture.sampledViewId );
+			, texture.getSampledView()
+			, texture.getSampledViewId() );
 	}
 
 	ashes::ImageView makeWholeImageView( Texture const & texture )
 	{
 		return makeImageView( *texture.image
-			, texture.wholeView
-			, texture.wholeViewId );
+			, texture.getWholeView()
+			, texture.getWholeViewId() );
 	}
 
 	//*********************************************************************************************
@@ -297,25 +297,6 @@ namespace c3d
 			, dstQueueFamily
 			, image
 			, convert( range ) );
-	}
-
-	void memoryBarrier( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, ashes::BufferBase const & buffer
-		, crg::BufferSubresourceRange const & range
-		, AccessState after
-		, AccessState before )
-	{
-		buffer.makeMemoryTransitionBarrier( getAccessFlags( before.access )
-			, getPipelineStageFlags( before.pipelineStage )
-			, VK_QUEUE_FAMILY_IGNORED
-			, VK_QUEUE_FAMILY_IGNORED );
-		context.memoryBarrier( commandBuffer
-			, buffer
-			, range
-			, after.access
-			, after.pipelineStage
-			, before );
 	}
 
 	//*************************************************************************************************
@@ -375,7 +356,7 @@ namespace c3d
 		}
 
 		{
-			auto path = graphsDir / cuT( "Transitions" );
+			auto path = graphsDir;
 
 			if ( !File::directoryExists( path ) )
 			{
@@ -394,37 +375,6 @@ namespace c3d
 			}
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
-
-				for ( auto const & [str, strm] : streams )
-				{
-					if ( !str.empty() )
-					{
-						std::ofstream file{ path / ( name + cuT( "_" ) + makeString( str ) + cuT( ".dot" ) ) };
-						file << strm.str();
-					}
-				}
-			}
-		}
-		{
-			auto path = graphsDir / cuT( "Passes" );
-
-			if ( !File::directoryExists( path ) )
-			{
-				File::directoryCreate( path );
-			}
-
-			{
-				auto streams = crg::dot::displayPasses( graph, { true, true, true, false } );
-				std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
-				file << streams.find( MbString{} )->second.str();
-			}
-			{
-				auto streams = crg::dot::displayPasses( graph, { true, true, false, false } );
-				std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
-				file << streams.find( MbString{} )->second.str();
-			}
-			{
-				auto streams = crg::dot::displayPasses( graph, { true, true, true, true } );
 
 				for ( auto const & [str, strm] : streams )
 				{
@@ -522,6 +472,17 @@ namespace c3d
 		return result;
 	}
 
+	ashes::WriteDescriptorSet makeDescriptorWrite( BufferBase const & storageBuffer
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto & range = getSubresourceRange( storageBuffer.bufferViewId );
+		return makeDescriptorWrite( *storageBuffer.buffer
+			, dstBinding
+			, range.offset, range.size
+			, dstArrayElement );
+	}
+
 	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
 		, ashes::BufferView const & view
 		, uint32_t dstBinding
@@ -530,7 +491,7 @@ namespace c3d
 		auto result = ashes::WriteDescriptorSet{ dstBinding
 			, dstArrayElement
 			, 1u
-			, ( ( buffer.getUsage() & VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+			, ( ( buffer.getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
 				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
 				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ), };
 		result.bufferInfo.push_back( { buffer

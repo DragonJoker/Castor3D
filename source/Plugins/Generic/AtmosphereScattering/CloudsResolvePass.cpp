@@ -177,49 +177,40 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	CloudsResolvePass::CloudsResolvePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
-		, crg::ImageViewId const & sky
-		, crg::ImageViewId const & sun
-		, crg::ImageViewId const & clouds
-		, crg::ImageViewId const & resultView
+		, c3d::Texture const & sky
+		, c3d::Texture const & sun
+		, c3d::Texture const & clouds
+		, c3d::Texture & result
 		, uint32_t index )
 		: c3d::Named{ cuT( "Clouds/ResolvePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), cloudsres::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
+		, m_shader{ getName(), cloudsres::getProgram( *device.renderSystem.getEngine(), result.getExtent() ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = crg::RenderQuadBuilder{}
+				auto runPass = crg::RenderQuadBuilder{}
 					.renderSize( { renderSize.width, renderSize.height } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( framePass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
+					, runPass->getTimer() );
+				return runPass;
 			} );
-		pass.addDependencies( previousPasses );
-		cameraUbo.createPassBinding( pass
-			, cloudsres::eCamera );
-		atmosphereUbo.createPassBinding( pass
-			, cloudsres::eAtmosphere );
-		cloudsUbo.createPassBinding( pass
-			, cloudsres::eClouds );
-		pass.addSampledView( sky
-			, cloudsres::eMapSky );
-		pass.addSampledView( sun
-			, cloudsres::eMapSun );
-		pass.addSampledView( clouds
-			, cloudsres::eMapClouds );
-		pass.addOutputColourView( resultView );
-		m_lastPass = &pass;
+		cameraUbo.createPassBinding( pass, cloudsres::eCamera );
+		atmosphereUbo.createPassBinding( pass, cloudsres::eAtmosphere );
+		cloudsUbo.createPassBinding( pass, cloudsres::eClouds );
+		pass.addInputSampled( *sky.getSampledLastAttach(), cloudsres::eMapSky );
+		pass.addInputSampled( *sun.getSampledLastAttach(), cloudsres::eMapSun );
+		pass.addInputSampled( *clouds.getSampledLastAttach(), cloudsres::eMapClouds );
+		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 
 	void CloudsResolvePass::accept( c3d::ConfigurationVisitorBase & visitor )

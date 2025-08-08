@@ -55,8 +55,8 @@ namespace c3d
 			, Texture const & sceneImage
 			, Texture const & depthObjImage
 			, Texture const & normalsImage
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, Texture & targetImage
+			, Texture & targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**

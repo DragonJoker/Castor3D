@@ -209,24 +209,22 @@ namespace smaa
 	//*********************************************************************************************
 
 	NeighbourhoodBlending::NeighbourhoodBlending( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewIdArray const & sourceView
-		, crg::ImageViewId const & blendView
-		, crg::ImageViewId const * velocityView
+		, c3d::Texture const & sourceView
+		, c3d::Texture const & blendView
+		, c3d::Texture const * velocityView
 		, SmaaConfig const & config
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_device{ device }
 		, m_graph{ graph }
-		, m_blendView{ blendView }
-		, m_velocityView{ velocityView }
 		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
 		, m_shader{ cuT( "SmaaNeighbourhood" ), neighblend::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
+	{
+		auto & pass = m_graph.createPass( "NeighbourhoodBlending"
 			, [this, &device, &config, enabled, passIndex]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & frameGraph )
@@ -242,10 +240,9 @@ namespace smaa
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
-			} ) }
-	{
-		auto & source = sourceView.front();
-		auto & target = sourceView.back();
+			} );
+		auto source = sourceView.getLastAttach()->view( 0 );
+		auto target = sourceView.getLastAttach()->view( 1 );
 		crg::ImageViewIdArray inputs;
 		crg::ImageViewIdArray addInputs;
 
@@ -256,28 +253,13 @@ namespace smaa
 		}
 
 		inputs.insert( inputs.end(), addInputs.begin(), addInputs.end() );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		m_pass.addDependency( previousPass );
-		ubo.createPassBinding( m_pass
-			, SmaaUboIdx );
-		m_pass.addSampledView( inputs
-			, neighblend::ColorTexIdx
-			, linearSampler );
-		m_pass.addSampledView( m_blendView
-			, neighblend::BlendTexIdx
-			, linearSampler );
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
+		ubo.createPassBinding( pass, SmaaUboIdx );
+		pass.addInputSampledImage( inputs, neighblend::ColorTexIdx, linearSampler );
+		pass.addInputSampled( *blendView.getSampledLastAttach(), neighblend::BlendTexIdx, linearSampler );
 
-		if ( m_velocityView )
-		{
-			m_pass.addSampledView( *m_velocityView
-				, neighblend::VelocityTexIdx
-				, linearSampler );
-		}
+		if ( velocityView )
+			pass.addInputSampled( *velocityView->getSampledLastAttach(), neighblend::VelocityTexIdx, linearSampler );
 
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
@@ -294,10 +276,10 @@ namespace smaa
 				, c3d::TextureSamplerInfo{} );
 			auto & image = m_images.back();
 			image.create();
-			m_imageViews.push_back( image.wholeViewId );
+			m_imageViews.push_back( image.getTargetViewId() );
 		}
 
-		m_pass.addOutputColourView( m_imageViews
+		m_result = pass.addOutputColourTarget( m_imageViews
 			, c3d::transparentBlackClearColor );
 	}
 
@@ -317,7 +299,7 @@ namespace smaa
 		{
 			visitor.visit( cuT( "SMAA NeighbourhoodBlending " ) + c3d::string::toString( i )
 				, m_images[i]
-				, m_graph.getFinalLayoutState( m_images[i].wholeViewId ).layout
+				, m_graph.getFinalLayoutState( m_images[i].getWholeViewId() ).layout
 				, c3d::TextureFactors{}.invert( true ) );
 		}
 	}

@@ -76,8 +76,7 @@ namespace c3d
 		if ( m_output.buffer )
 		{
 			context.memoryBarrier( commandBuffer
-				, m_output.buffer->getBuffer()
-				, { m_output.chunk.offset, m_output.chunk.size }
+				, m_output.getBuffer().bufferViewId
 				, HostWriteState, ComputeShaderWriteState );
 		}
 
@@ -108,15 +107,13 @@ namespace c3d
 		if ( m_output.buffer )
 		{
 			context.memoryBarrier( commandBuffer
-				, m_output.buffer->getBuffer()
-				, { m_output.chunk.offset, m_output.chunk.size }
+				, m_output.getBuffer().bufferViewId
 				, ComputeShaderWriteState, MeshShaderReadState );
 		}
 
 		auto & meshletsChunk = m_sourceOffsets.getBufferChunk( SubmeshData::eMeshlets );
 		context.memoryBarrier( commandBuffer
-			, meshletsChunk.buffer->getBuffer()
-			, { meshletsChunk.chunk.offset, meshletsChunk.chunk.size }
+			, meshletsChunk.buffer->getBuffer().bufferViewId
 			, ComputeShaderReadState, MeshShaderReadState );
 
 		for ( auto & buffer : m_finalOffsets.buffers )
@@ -124,8 +121,7 @@ namespace c3d
 			if ( buffer.buffer )
 			{
 				context.memoryBarrier( commandBuffer
-					, buffer.buffer->getBuffer()
-					, { buffer.chunk.offset, buffer.chunk.size }
+					, buffer.getBuffer().bufferViewId
 					, ComputeShaderReadState, VertexAttributeInputState );
 			}
 		}

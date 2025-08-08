@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
+
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -77,7 +79,8 @@ namespace c3d
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API bool hasNodes( LightingModelID lightingModelId )const;
 
-		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
+		void createVertexTransformPass( crg::FramePassGroup & graph );
+		crg::Attachment const & getVertexTransform()const;
 
 		bool hasNodes()const noexcept
 		{
@@ -85,12 +88,12 @@ namespace c3d
 				|| !m_billboardNodes.empty();
 		}
 
-		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const noexcept
+		BufferBase const & getModelBuffer()const noexcept
 		{
 			return *m_modelsData;
 		}
 
-		ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const noexcept
+		BufferBase const & getBillboardsBuffer()const noexcept
 		{
 			return *m_billboardsData;
 		}
@@ -110,8 +113,8 @@ namespace c3d
 		Mutex m_nodesMutex;
 		NodesPtrMapT< SubmeshRenderNode > m_submeshNodes;
 		NodesPtrMapT< BillboardRenderNode > m_billboardNodes;
-		ashes::BufferPtr< ModelBufferConfiguration > m_modelsData;
-		ashes::BufferPtr< BillboardUboConfiguration > m_billboardsData;
+		BufferUPtrT< ModelBufferConfiguration > m_modelsData;
+		BufferUPtrT< BillboardUboConfiguration > m_billboardsData;
 		ArrayView< ModelBufferConfiguration > m_modelsBuffer;
 		ArrayView< BillboardUboConfiguration > m_billboardsBuffer;
 		FramePassTimerUPtr m_timerRenderNodes;

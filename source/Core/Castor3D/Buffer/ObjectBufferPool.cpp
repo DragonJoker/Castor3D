@@ -101,16 +101,13 @@ namespace c3d
 	//*********************************************************************************************
 
 	VertexBufferPool::VertexBufferPool( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
+		, m_resources{ resources }
 		, m_debugName{ c3d::move( debugName ) }
 	{
-	}
-
-	void VertexBufferPool::cleanup()
-	{
-		m_buffers.clear();
 	}
 
 	AllocationStats VertexBufferPool::getAllocationStats()const noexcept
@@ -180,16 +177,13 @@ namespace c3d
 	//*********************************************************************************************
 
 	IndexBufferPool::IndexBufferPool( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
+		, m_resources{ resources }
 		, m_debugName{ c3d::move( debugName ) }
 	{
-	}
-
-	void IndexBufferPool::cleanup()
-	{
-		m_buffers.clear();
 	}
 
 	AllocationStats IndexBufferPool::getAllocationStats()const noexcept
@@ -238,9 +232,11 @@ namespace c3d
 	//*********************************************************************************************
 
 	ObjectBufferPool::ObjectBufferPool( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
+		, m_resources{ resources }
 		, m_debugName{ c3d::move( debugName ) }
 	{
 	}
@@ -289,7 +285,7 @@ namespace c3d
 	}
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
-		, ashes::BufferBase const * indexBuffer
+		, BufferBase const * indexBuffer
 		, SubmeshComponentCombine const & components )
 	{
 		auto result = doGetBuffer( vertexCount, 0u, 0u, components, true );
@@ -303,7 +299,7 @@ namespace c3d
 		return result;
 	}
 
-	ObjectBufferPool::ModelBuffers const & ObjectBufferPool::getBuffers( ashes::BufferBase const & buffer )
+	ObjectBufferPool::ModelBuffers const & ObjectBufferPool::getBuffers( BufferBase const & buffer )
 	{
 		ObjectBufferPool::ModelBuffers const * result{};
 
@@ -333,7 +329,7 @@ namespace c3d
 		return *result;
 	}
 
-	ashes::BufferBase const & ObjectBufferPool::getIndexBuffer( ashes::BufferBase const & buffer )
+	BufferBase const & ObjectBufferPool::getIndexBuffer( BufferBase const & buffer )
 	{
 		auto it = m_indexBuffers.find( &buffer );
 
@@ -412,9 +408,10 @@ namespace c3d
 					if ( indexCount )
 					{
 						modelBuffers.buffers[index] = details::createBaseBuffer< uint32_t >( m_device
+							, m_resources
 							, indexCount
-							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+							, BufferUsageFlags::eIndexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 					}
@@ -424,9 +421,10 @@ namespace c3d
 					if ( meshletCount )
 					{
 						modelBuffers.buffers[index] = details::createBaseBuffer< Meshlet >( m_device
+							, m_resources
 							, meshletCount
-							, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+							, BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 					}
@@ -437,25 +435,28 @@ namespace c3d
 					{
 					case SubmeshData::eSkin:
 						modelBuffers.buffers[index] = details::createBaseBuffer< VertexBoneData >( m_device
+							, m_resources
 							, vertexCount
-							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 						break;
 					case SubmeshData::ePassMasks:
 						modelBuffers.buffers[index] = details::createBaseBuffer< Point4ui >( m_device
+							, m_resources
 							, vertexCount
-							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 						break;
 					default:
 						modelBuffers.buffers[index] = details::createBaseBuffer< Point4f >( m_device
+							, m_resources
 							, vertexCount
-							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 						break;

@@ -76,12 +76,10 @@ namespace c3d
 				, bottomLevel );
 			C3D_Clusters( writer
 				, eClusters
-				, 0u
-				, &config );
-			C3D_LightIndicesEx( writer
+				, 0u );
+			C3D_LightIndices( writer
 				, eLightIndices
-				, 0u
-				, bottomLevel && config.sortLights );
+				, 0u );
 			C3D_LightBVH( writer
 				, eLightBVH
 				, 0u );
@@ -103,7 +101,7 @@ namespace c3d
 					auto mod32GroupIndex = writer.declLocale( "mod32GroupIndex"
 						, groupIndex % 32_u );
 
-					if ( config.enableBVHWarpOptimisation )
+					if ( device.renderSystem.getGpuInformations().isNVIDIA() )
 					{
 						auto reduceIndex = writer.declLocale( "reduceIndex"
 							, 32_u >> 1_u );
@@ -201,8 +199,8 @@ namespace c3d
 							{
 								auto lightIndex = writer.declLocale( "lightIndex"
 									, ( lightType == LightType::ePoint
-										? ( config.sortLights ? c3d_lightIndices[leafIndex] : leafIndex )
-										: c3d_clustersData.pointLightCount() + ( config.sortLights ? c3d_lightIndices[leafIndex] : leafIndex ) ) );
+										? c3d_lightIndices[leafIndex]
+										: c3d_clustersData.pointLightCount() + c3d_lightIndices[leafIndex] ) );
 								auto aabb = writer.declLocale( "aabb"
 									, c3d_allLightsAABB[lightIndex] );
 
@@ -289,7 +287,7 @@ namespace c3d
 						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
 						, IsComputePassCallback( [](){ return true; } ) }
-					, crg::ru::Config{ 6u, true /* resettable */ } }
+					, crg::ru::Config{ 2u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
 				, m_lightType{ lightType }
@@ -342,7 +340,7 @@ namespace c3d
 						, context
 						, graph
 						, crg::pp::Config{}
-							.programCreator( { 6u, [this, &device, &config, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel, lightType ); } } )
+							.programCreator( { 2u, [this, &device, &config, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel, lightType ); } } )
 							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
 						, 6u }
@@ -391,31 +389,17 @@ namespace c3d
 			{
 				u32 result = {};
 
-				if ( m_clusters.getConfig().enableBVHWarpOptimisation )
-				{
-					result += 3u;
-				}
-
-				if ( m_clusters.getConfig().sortLights )
-				{
-					auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
-
-					if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
-						numChunks > 1u )
-					{
-						result += ( ( numChunks - 1u ) % 2u );
-					}
-
-					result += 1u;
-				}
+				auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
+				if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+					numChunks > 1u )
+					result += ( ( numChunks - 1u ) % 2u );
 
 				return result;
 			}
 
 			bool doIsEnabled()const
 			{
-				return m_clusters.getConfig().useLightsBVH
-					&& m_lightCache.getLightsCount( m_lightType ) > 0u
+				return m_lightCache.getLightsCount( m_lightType ) > 0u
 					&& ( ( m_bottom.cpConfig.isEnabled ? ( *m_bottom.cpConfig.isEnabled )() : false )
 						|| ( m_top.cpConfig.isEnabled ? ( *m_top.cpConfig.isEnabled )() : false ) );
 			}
@@ -455,19 +439,14 @@ namespace c3d
 				, uint32_t passIndex
 				, int idx )const
 			{
-				for ( auto & attach : m_pass.buffers )
+				for ( auto & [binding, attach] : m_pass.outputs )
 				{
-					if ( !attach.isNoTransition()
-						&& attach.isStorageBuffer()
-						&& attach.isClearableBuffer() )
-					{
-						auto currentState = context.getAccessState( attach.buffer( passIndex )
-							, attach.getBufferRange() );
-						context.memoryBarrier( commandBuffer
-							, attach.buffer( passIndex ), attach.getBufferRange()
-							, currentState, ( ( idx == 2 ) ? ComputeShaderReadState: ComputeShaderReadWriteState )
-							, true );
-					}
+					auto currentState = context.getAccessState( attach->buffer( passIndex ) );
+					context.memoryBarrier( commandBuffer
+						, attach->buffer( passIndex )
+						, currentState
+						, ( ( idx == 2 ) ? ComputeShaderReadState : ComputeShaderReadWriteState )
+						, true );
 				}
 			}
 
@@ -585,62 +564,62 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePassArray createBuildLightsBVHPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	void createBuildLightsBVHPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters )
+		, FrustumClusters & clusters
+		, BufferBase const & allLightsAABB
+		, ClustersLightSortAttachs const & outputSortAttachs
+		, BufferBase const & mergePathPartitions
+		, BufferBase & pointLightBVH
+		, BufferBase & spotLightBVH )
 	{
-		// Point lights
-		auto & point = graph.createPass( "BuildLightsBVH/Point"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = makeRawUnique< lgtbvh::FramePass >( framePass
-					, context
-					, graph
-					, device
-					, clusters
-					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		point.addDependency( *previousPasses.front() );
-		clusters.getClustersUbo().createPassBinding( point, lgtbvh::eClusters );
-		createInputStoragePassBinding( point, uint32_t( lgtbvh::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( point, uint32_t( lgtbvh::eLightIndices ), cuT( "C3D_PointLightIndices" )
-			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer()
-				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer() }
-			, 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_PointLightBVH" ), clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
-
-		// Spot lights
-		auto & spot = graph.createPass( "BuildLightsBVH/Spot"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = makeRawUnique< lgtbvh::FramePass >( framePass
-					, context
-					, graph
-					, device
-					, clusters
-					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		spot.addDependency( *previousPasses.back() );
-		clusters.getClustersUbo().createPassBinding( spot, lgtbvh::eClusters );
-		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eLightIndices ), cuT( "C3D_SpotLightIndices" )
-			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer()
-				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer() }
-			, 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_SpotLightBVH" ), clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
-
-		return { &point, &spot };
+		{
+			// Point lights
+			auto & point = graph.createPass( "BuildLightsBVH/Point"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runGraph )
+				{
+					auto runPass = makeRawUnique< lgtbvh::FramePass >( framePass
+						, context
+						, runGraph
+						, device
+						, clusters
+						, LightType::ePoint );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			clusters.getClustersUbo().createPassBinding( point, lgtbvh::eClusters );
+			point.addImplicit( *mergePathPartitions.getLastAttach(), AccessState{} );
+			point.addImplicit( *outputSortAttachs.pointLightMortonCodes, AccessState{} );
+			point.addInputStorage( *allLightsAABB.getLastAttach(), uint32_t( lgtbvh::eAllLightsAABB ) );
+			point.addInputStorage( *outputSortAttachs.pointLightIndices, uint32_t( lgtbvh::eLightIndices ) );
+			pointLightBVH.setLastAttach( point.addClearableOutputStorageBuffer( pointLightBVH.bufferViewId, uint32_t( lgtbvh::eLightBVH ) ) );
+		}
+		{
+			// Spot lights
+			auto & spot = graph.createPass( "BuildLightsBVH/Spot"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runGraph )
+				{
+					auto runPass = makeRawUnique< lgtbvh::FramePass >( framePass
+						, context
+						, runGraph
+						, device
+						, clusters
+						, LightType::eSpot );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			clusters.getClustersUbo().createPassBinding( spot, lgtbvh::eClusters );
+			spot.addImplicit( *outputSortAttachs.spotLightMortonCodes, AccessState{} );
+			spot.addInputStorage( *allLightsAABB.getLastAttach(), uint32_t( lgtbvh::eAllLightsAABB ) );
+			spot.addInputStorage( *outputSortAttachs.spotLightIndices, uint32_t( lgtbvh::eLightIndices ) );
+			spotLightBVH.setLastAttach( spot.addClearableOutputStorageBuffer( spotLightBVH.bufferViewId, uint32_t( lgtbvh::eLightBVH ) ) );
+		}
 	}
 
 	void createDisplayPointLightsBVHProgram( RenderDevice const & device
@@ -649,7 +628,8 @@ namespace c3d
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, ashes::WriteDescriptorSetArray & writes )
+		, ashes::WriteDescriptorSetArray & writes
+		, BufferBase const & pointLightBVH )
 	{
 		ProgramModule programModule{ "PointLightsBVH", dspbvh::createDebugDisplayShader( device ) };
 		program = makeProgramStates( device, programModule );
@@ -662,9 +642,8 @@ namespace c3d
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
 		writes.emplace_back( dspbvh::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
-		auto const & bvhBuffer = clusters.getPointLightBVHBuffer();
 		writes.emplace_back( dspbvh::eLightBVH, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ bvhBuffer, 0u, bvhBuffer.getSize() } } );
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ pointLightBVH.getBuffer(), 0u, pointLightBVH.getSize() } } );
 	}
 
 	void createDisplaySpotLightsBVHProgram( RenderDevice const & device
@@ -673,7 +652,8 @@ namespace c3d
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, ashes::WriteDescriptorSetArray & writes )
+		, ashes::WriteDescriptorSetArray & writes
+		, BufferBase const & spotLightBVH )
 	{
 		ProgramModule programModule{ "SpotLightsBVH", dspbvh::createDebugDisplayShader( device ) };
 		program = makeProgramStates( device, programModule );
@@ -686,9 +666,8 @@ namespace c3d
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
 		writes.emplace_back( dspbvh::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
-		auto const & bvhBuffer = clusters.getSpotLightBVHBuffer();
 		writes.emplace_back( dspbvh::eLightBVH, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ bvhBuffer, 0u, bvhBuffer.getSize() } } );
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ spotLightBVH.getBuffer(), 0u, spotLightBVH.getSize() } } );
 	}
 
 	//*********************************************************************************************

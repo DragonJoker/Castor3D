@@ -73,7 +73,7 @@ namespace c3d
 			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
 
 			// Outputs
-			auto outColour = writer.declOutput< sdw::Vec3 >( "outColour", sdw::EntryPoint::eFragment, 0u );
+			auto outColour = writer.declOutput< sdw::Vec2 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 			auto outBentNormal = writer.declOutput< sdw::Vec4 >( "outBentNormal", sdw::EntryPoint::eFragment, 1u );
 
 #define visibility outColour.r()
@@ -554,12 +554,11 @@ namespace c3d
 	SsaoRawAOPass::SsaoRawAOPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, crg::FramePass const & previousPass
 		, Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, CameraUbo const & cameraUbo
-		, crg::ImageViewIdArray const & linearisedDepthBufferViews
+		, Texture const & linearisedDepthBuffer
 		, Texture const & normals
 		, uint32_t const & passIndex )
 		: m_device{ device }
@@ -571,7 +570,7 @@ namespace c3d
 		, m_result{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
 			, makeString( m_graph.getName() + "SsaoRawAOResult" )
-			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+			, device.selectSmallestFormatRGSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
@@ -591,13 +590,11 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto depthIt = framePass.images.begin();
-				auto normalIt = std::next( depthIt );
-				auto resultIt = std::next( normalIt );
+				auto resultIt = framePass.targets.begin();
 				auto bentIt = std::next( resultIt );
 				crg::ru::Config ruConfig{ 2u, false };
-				ruConfig.implicitAction( resultIt->view(), crg::RecordContext::clearAttachment( *resultIt ) );
-				ruConfig.implicitAction( bentIt->view(), crg::RecordContext::clearAttachment( *bentIt ) );
+				ruConfig.implicitAction( ( *resultIt )->view(), crg::RecordContext::clearAttachment( **resultIt ) );
+				ruConfig.implicitAction( ( *bentIt )->view(), crg::RecordContext::clearAttachment( **bentIt ) );
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO raw AO pass" ) );
 				auto result = makeRawUnique< RenderQuad >( framePass
 					, context
@@ -613,14 +610,12 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		m_lastPass = &pass;
-		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, ssaoraw::SsaoCfgUboIdx );
 		m_cameraUbo.createPassBinding( pass, ssaoraw::CameraUboIdx );
-		pass.addSampledView( pass.mergeViews( linearisedDepthBufferViews ), ssaoraw::DepthMapIdx );
-		pass.addSampledView( normals.sampledViewId, ssaoraw::NormalMapIdx );
-		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
-		pass.addOutputColourView( m_bentNormals.targetViewId, transparentBlackClearColor );
+		pass.addInputSampled( *linearisedDepthBuffer.getSampledLastAttach(), ssaoraw::DepthMapIdx );
+		pass.addInputSampled( *normals.getSampledLastAttach(), ssaoraw::NormalMapIdx );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), opaqueWhiteClearColor ) );
+		m_bentNormals.setLastAttach( pass.addOutputColourTarget( m_bentNormals.getTargetViewId(), transparentBlackClearColor ) );
 		m_result.create();
 		m_bentNormals.create();
 	}
@@ -635,11 +630,11 @@ namespace c3d
 	{
 		visitor.visit( cuT( "SSAO Raw AO" )
 			, getResult()
-			, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
+			, m_graph.getFinalLayoutState( getResult().getSampledViewId() ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "SSAO Bent Normals" )
 			, getBentResult()
-			, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
+			, m_graph.getFinalLayoutState( getBentResult().getSampledViewId() ).layout
 			, TextureFactors{}.invert( true ) );
 
 		auto index = m_ssaoConfig.useNormalsBuffer

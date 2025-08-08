@@ -93,15 +93,14 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	AtmosphereTransmittancePass::AtmosphereTransmittancePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
-		, crg::ImageViewId const & resultView
+		, c3d::Texture & result
 		, bool const & enabled )
-		: m_shader{ cuT( "TransmittancePass" ), transmittance::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
+		: m_shader{ cuT( "TransmittancePass" ), transmittance::getProgram( *device.renderSystem.getEngine(), result.getExtent() ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & pass = graph.createPass( "TransmittancePass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -116,11 +115,9 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
 		atmosphereUbo.createPassBinding( pass
 			, transmittance::eAtmosphere );
-		pass.addOutputColourView( resultView );
-		m_lastPass = &pass;
+		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 
 	void AtmosphereTransmittancePass::accept( c3d::ConfigurationVisitorBase & visitor )

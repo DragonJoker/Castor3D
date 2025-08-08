@@ -47,7 +47,7 @@ namespace c3d
 				auto matrixUbo = sdw::UniformBuffer{ writer, "Matrix", 0u, 0u };
 				auto mtxViewProjection = matrixUbo.declMember< sdw::Mat4 >( "mtxViewProjection" );
 				matrixUbo.end();
-				auto mapColour = writer.declCombinedImg< FImg2DRgba32 >( "mapColour", 1u, 0u );
+				auto mapColour = writer.declCombinedImg< Img2DRgba >( "mapColour", 1u, 0u );
 
 				auto sampleSphericalMap = [&writer]( sdw::Vec3 const & v )
 				{

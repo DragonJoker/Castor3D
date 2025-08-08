@@ -60,12 +60,12 @@ namespace c3d
 			, ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
 		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
-		, m_morphingWeights{ m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+		, m_morphingWeights{ m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( BufferUsageFlags::eStorageBuffer
 			, MaxMorphingDataCount
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
-		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			, MemoryPropertyFlags::eDeviceLocal ) }
+		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( BufferUsageFlags::eStorageBuffer
 			, MaxSkinningDataCount
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+			, MemoryPropertyFlags::eDeviceLocal ) }
 	{
 #if C3D_DebugTimers
 		m_timerAnimations = makeUnique< crg::FramePassTimer >( m_device.makeContext(), getScene()->getName() + "/Animations", crg::TimerScope::eUpdate );
@@ -96,12 +96,12 @@ namespace c3d
 	{
 		if ( !m_morphingWeights )
 		{
-			m_morphingWeights = m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			m_morphingWeights = m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( BufferUsageFlags::eStorageBuffer
 				, MaxMorphingDataCount
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, MemoryPropertyFlags::eDeviceLocal );
+			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( BufferUsageFlags::eStorageBuffer
 				, MaxSkinningDataCount
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				, MemoryPropertyFlags::eDeviceLocal );
 			cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 		}
 	}
@@ -144,7 +144,7 @@ namespace c3d
 				if ( auto max = entry.skeleton.fillBuffer( &skinningTransformsBuffer[id - 1u] );
 					max > 0 )
 				{
-					m_skinningTransformsData.buffer->markDirty( m_skinningTransformsData.getOffset() + ( id - 1u ) * sizeof( SkinningTransformsConfiguration )
+					m_skinningTransformsData.getPool().markDirty( m_skinningTransformsData.getOffset() + ( id - 1u ) * sizeof( SkinningTransformsConfiguration )
 						, sizeof( Matrix4x4f ) * max
 						, VertexUniformReadState );
 				}
@@ -161,17 +161,17 @@ namespace c3d
 				if ( auto max = entry.mesh.fillBuffer( entry.submesh, &morphingBuffer[id - 1u] ) )
 				{
 					auto offset = m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration );
-					m_morphingWeights.buffer->markDirty( offset
+					m_morphingWeights.getPool().markDirty( offset
 						, sizeof( Point4ui ) + sizeof( float ) * max
 						, VertexUniformReadState );
 					offset += sizeof( float ) * MaxMorphTargets * 4u;
-					m_morphingWeights.buffer->markDirty( offset
+					m_morphingWeights.getPool().markDirty( offset
 						, sizeof( uint32_t ) * max
 						, VertexUniformReadState );
 				}
 				else
 				{
-					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
+					m_morphingWeights.getPool().markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
 						, sizeof( Point4ui )
 						, VertexUniformReadState );
 				}

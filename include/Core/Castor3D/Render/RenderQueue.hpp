@@ -220,7 +220,6 @@ namespace c3d
 		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
-
 		SceneCuller & m_culler;
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };

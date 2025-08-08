@@ -41,14 +41,8 @@ namespace c3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API explicit VertexBufferPool( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, String debugName );
-		/**
-		 *\~english
-		 *\brief		Cleans up all GPU buffers.
-		 *\~french
-		 *\brief		Nettoie tous les tampons GPU.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\return		The allocation statistics.
@@ -87,6 +81,7 @@ namespace c3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		String m_debugName;
 		Vector < Pair< size_t, BufferArray > > m_buffers;
 	};
@@ -118,14 +113,8 @@ namespace c3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API explicit IndexBufferPool( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, String debugName );
-		/**
-		 *\~english
-		 *\brief		Cleans up all GPU buffers.
-		 *\~french
-		 *\brief		Nettoie tous les tampons GPU.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\return		The allocation statistics.
@@ -161,6 +150,7 @@ namespace c3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		String m_debugName;
 		BufferArray m_buffers;
 	};
@@ -192,6 +182,7 @@ namespace c3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API explicit ObjectBufferPool( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, String debugName );
 		/**
 		 *\~english
@@ -242,7 +233,7 @@ namespace c3d
 		 *\return		Le tampon GPU.
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
-			, ashes::BufferBase const * indexBuffer
+			, BufferBase const * indexBuffer
 			, SubmeshComponentCombine const & components );
 		/**
 		 *\~english
@@ -252,7 +243,7 @@ namespace c3d
 		 *\param[in]	buffer	Le buffer de positions.
 		 *\return		Les buffers de modèle liés au buffer de positions donné.
 		 */
-		C3D_API ModelBuffers const & getBuffers( ashes::BufferBase const & buffer );
+		C3D_API ModelBuffers const & getBuffers( BufferBase const & buffer );
 		/**
 		 *\~english
 		 *\param[in]	buffer	The positions buffer.
@@ -261,7 +252,7 @@ namespace c3d
 		 *\param[in]	buffer	Le buffer de positions.
 		 *\return		Le buffer d'indices lié buffer de positions donné.
 		 */
-		C3D_API ashes::BufferBase const & getIndexBuffer( ashes::BufferBase const & buffer );
+		C3D_API BufferBase const & getIndexBuffer( BufferBase const & buffer );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -285,9 +276,10 @@ namespace c3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		String m_debugName;
 		HashMap< size_t, BufferArray > m_buffers;
-		HashMap< ashes::BufferBase const * , ashes::BufferBase const * > m_indexBuffers;
+		HashMap< BufferBase const * , BufferBase const * > m_indexBuffers;
 	};
 }
 

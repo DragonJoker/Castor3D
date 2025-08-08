@@ -117,22 +117,22 @@ namespace c3d
 	SceneRenderNodes::SceneRenderNodes( Scene & scene )
 		: OwnedBy< Scene >{ scene }
 		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
-		, m_modelsData{ makeBuffer< ModelBufferConfiguration >( m_device
+		, m_modelsData{ makeBuffer< ModelBufferConfiguration >( m_device, scene.getResources()
 			, MaxObjectNodesCount
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, getOwner()->getName() + cuT( "RenderNodesData" ) ) }
-		, m_billboardsData{ makeBuffer< BillboardUboConfiguration >( m_device
+		, m_billboardsData{ makeBuffer< BillboardUboConfiguration >( m_device, scene.getResources()
 			, MaxObjectNodesCount
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, getOwner()->getName() + cuT( "BillboardsDimensions" ) ) }
-		, m_modelsBuffer{ makeArrayView( m_modelsData->lock( 0u, ashes::WholeSize, 0u )
-			, m_modelsData->getCount() ) }
-		, m_billboardsBuffer{ makeArrayView( m_billboardsData->lock( 0u, ashes::WholeSize, 0u )
-			, m_billboardsData->getCount() ) }
 		, m_vertexTransform{ makeUnique< VertexTransforming >( scene, m_device ) }
 	{
+		m_modelsData->create();
+		m_billboardsData->create();
+		m_modelsBuffer = makeArrayView( m_modelsData->lock(), m_modelsData->getCount() );
+		m_billboardsBuffer = makeArrayView( m_billboardsData->lock(), m_billboardsData->getCount() );
 #if C3D_DebugTimers
 		m_timerRenderNodes = makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes", crg::TimerScope::eUpdate );
 		getOwner()->getEngine()->registerTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
@@ -145,6 +145,10 @@ namespace c3d
 		getOwner()->getEngine()->unregisterTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
 		m_timerRenderNodes.reset();
 #endif
+		m_billboardsData->buffer->unlock();
+		m_modelsData->buffer->unlock();
+		m_modelsData->destroy();
+		m_billboardsData->destroy();
 	}
 
 	void SceneRenderNodes::registerCuller( SceneCuller & culler )
@@ -586,11 +590,15 @@ namespace c3d
 			return;
 		}
 
-		m_modelsData->flush( 0u, m_nodesData.size() );
+		m_modelsData->buffer->flush( 0u
+			, ashes::getAlignedSize( m_nodesData.size() * sizeof( ModelBufferConfiguration )
+				, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) );
 
 		if ( !m_billboardNodes.empty() )
 		{
-			m_billboardsData->flush( 0u, m_nodesData.size() );
+			m_billboardsData->buffer->flush( 0u
+				, ashes::getAlignedSize( m_nodesData.size() * sizeof( BillboardUboConfiguration )
+					, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) );
 		}
 	}
 
@@ -602,9 +610,14 @@ namespace c3d
 			: it->second > 0u;
 	}
 
-	crg::FramePass const & SceneRenderNodes::createVertexTransformPass( crg::FramePassGroup & graph )
+	void SceneRenderNodes::createVertexTransformPass( crg::FramePassGroup & graph )
 	{
-		return m_vertexTransform->createPass( graph );
+		m_vertexTransform->createPass( graph );
+	}
+
+	crg::Attachment const & SceneRenderNodes::getVertexTransform()const
+	{
+		return m_vertexTransform->getResultAttach();
 	}
 
 	//*************************************************************************************************

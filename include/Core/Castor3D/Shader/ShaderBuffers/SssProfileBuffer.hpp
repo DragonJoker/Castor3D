@@ -170,6 +170,16 @@ namespace c3d
 		{
 			return m_diffusionProfiles;
 		}
+		/**
+		 *\~english
+		 *\return		The image containing precomputed diffusion profiles.
+		 *\~french
+		 *\brief		L'image contenant les profils de diffusion précalculés.
+		 */
+		Texture & getDiffusionProfilesImage()noexcept
+		{
+			return m_diffusionProfiles;
+		}
 
 	private:
 		ShaderBuffer m_buffer;

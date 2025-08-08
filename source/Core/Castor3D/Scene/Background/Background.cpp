@@ -60,24 +60,24 @@ namespace c3d
 		using Programs = Array< Shaders, SceneBackground::PassCount >;
 
 		class BackgroundPass
-			: public DataHolderT< ashes::VertexBufferPtr< Point3f > >
-			, public DataHolderT< ashes::BufferPtr< uint16_t > >
+			: public DataHolderT< BufferUPtrT< Point3f > >
+			, public DataHolderT< BufferUPtrT< uint16_t > >
 			, public DataHolderT< Programs >
 			, public BackgroundPassBase
 			, public crg::RenderMesh
 		{
-			using VertexBufferHolder = DataHolderT< ashes::VertexBufferPtr< Point3f > >;
-			using IndexBufferHolder = DataHolderT< ashes::BufferPtr< u16 > >;
+			using VertexBufferHolder = DataHolderT< BufferUPtrT< Point3f > >;
+			using IndexBufferHolder = DataHolderT< BufferUPtrT< u16 > >;
 
 			crg::rm::Config buildConfig( RenderDevice const & device
 				, Extent2D const & size
-				, crg::ImageViewIdArray const & depth
+				, Texture const * depth
 				, bool forceVisible )
 			{
 				crg::rm::Config result;
 				result.vertexBuffer( doCreateVertexBuffer( device ) )
 					.indexBuffer( doCreateIndexBuffer( device ) )
-					.depthStencilState( ( depth.empty()
+					.depthStencilState( ( depth
 						? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL }
 						: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } ) )
 					.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
@@ -100,7 +100,7 @@ namespace c3d
 				, RenderDevice const & device
 				, SceneBackground & background
 				, Extent2D const & size
-				, crg::ImageViewIdArray const & depth
+				, Texture const * depth
 				, bool forceVisible )
 				: BackgroundPassBase{ pass
 					, device
@@ -114,6 +114,14 @@ namespace c3d
 			{
 			}
 
+			~BackgroundPass()noexcept
+			{
+				if ( auto & buffer = IndexBufferHolder::getData() )
+					buffer->destroy();
+				if ( auto & buffer = VertexBufferHolder::getData() )
+					buffer->destroy();
+			}
+
 		private:
 			void doResetPipeline( uint32_t index )override
 			{
@@ -122,7 +130,7 @@ namespace c3d
 
 			crg::IndexBuffer doCreateIndexBuffer( RenderDevice const & device )
 			{
-				if ( !DataHolderT< ashes::BufferPtr< uint16_t > >::getData() )
+				if ( !IndexBufferHolder::getData() )
 				{
 					Vector< uint16_t > indexData
 					{
@@ -139,28 +147,26 @@ namespace c3d
 						// Left
 						20, 21, 22, 22, 21, 23,
 					};
-					DataHolderT< ashes::BufferPtr< uint16_t > >::setData( makeBuffer< uint16_t >( device
+					IndexBufferHolder::setData( makeBuffer< uint16_t >( device
+						, m_background->getScene().getResources()
 						, uint32_t( indexData.size() )
-						, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+						, BufferUsageFlags::eIndexBuffer | BufferUsageFlags::eTransferDst
+						, MemoryPropertyFlags::eHostVisible
 						, cuT( "BackgroundIndexBuffer" ) ) );
-					auto & indexBuffer = *DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
+					auto const & indexBuffer = *IndexBufferHolder::getData();
 					{
 						auto data = m_device.graphicsData();
 						InstantDirectUploadData uploader{ *data->queue
-							, device
-							, cuT( "BackgroundIndexBuffer" )
-							, *data->commandPool };
+							, device, cuT( "BackgroundIBUpload" ), *data->commandPool };
 						uploader->pushUpload( indexData.data()
 							, VkDeviceSize( sizeof( uint16_t ) * indexData.size() )
-							, indexBuffer.getBuffer(), 0u
+							, *indexBuffer.buffer, 0u
 							, VertexIndexInputState );
 					}
 				}
 
-				auto & indexBuffer = *DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
-				return crg::IndexBuffer{ crg::Buffer{ indexBuffer.getBuffer(), "Index" }
-					, indexBuffer.getBuffer().getStorage() };
+				auto const & indexBuffer = *IndexBufferHolder::getData();
+				return crg::IndexBuffer{ indexBuffer.bufferViewId };
 			}
 
 			crg::VertexBuffer doCreateVertexBuffer( RenderDevice const & device )
@@ -183,28 +189,26 @@ namespace c3d
 						// Left
 						Point3f{ -1.0, -1.0, -1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 },
 					};
-					VertexBufferHolder::setData( makeVertexBuffer< Point3f >( m_device
+					VertexBufferHolder::setData( makeVertexBuffer< Point3f >( device
+						, m_background->getScene().getResources()
 						, 24u
-						, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+						, BufferUsageFlags::eTransferDst
+						, MemoryPropertyFlags::eHostVisible
 						, cuT( "Background" )) );
 					auto & vertexBuffer = *VertexBufferHolder::getData();
 					{
 						auto data = m_device.graphicsData();
 						InstantDirectUploadData uploader{ *data->queue
-							, device
-							, cuT( "BackgroundVertexBuffer" )
-							, *data->commandPool };
+							, device, cuT( "BackgroundVBUpload" ), *data->commandPool };
 						uploader->pushUpload( vertexData.data()
 							, vertexData.size() * sizeof( Point3f )
-							, vertexBuffer.getBuffer(), 0u
+							, *vertexBuffer.buffer, 0u
 							, VertexAttributeInputState );
 					}
 				}
 
 				auto & vertexBuffer = *VertexBufferHolder::getData();
-				return crg::VertexBuffer{ crg::Buffer{ vertexBuffer.getBuffer(), "Vertex" }
-					, vertexBuffer.getBuffer().getStorage()
+				return crg::VertexBuffer{ vertexBuffer.bufferViewId
 					, { 1u, VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } }
 					, { 1u, VkVertexInputBindingDescription{ 0u, sizeof( Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } } };
 			}
@@ -314,9 +318,7 @@ namespace c3d
 			{
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
-					, device
-					, name
-					, *queueData->commandPool };
+					, device, name + cuT( "Upload" ), *queueData->commandPool };
 				upload( uploader );
 			}
 			auto sampler = getEngine()->tryFindSampler( name );
@@ -416,13 +418,13 @@ namespace c3d
 		}
 	}
 
-	crg::FramePass & SceneBackground::createBackgroundPass( crg::FramePassGroup & graph
+	void SceneBackground::createBackgroundPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Extent2D const & size
-		, crg::ImageViewIdArray const & colour
-		, crg::ImageViewIdArray const & depth
-		, crg::ImageViewId const * depthObj
+		, Texture & colour
+		, Texture * depth
+		, Texture const * depthObj
 		, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 		, CameraUbo const & cameraUbo
 		, RenderUbo const & renderUbo
@@ -435,15 +437,15 @@ namespace c3d
 		if ( hasIbl() )
 		{
 			auto & ibl = getIbl();
-			graph.addInput( ibl.getIrradianceTexture().sampledViewId
+			graph.addInput( ibl.getIrradianceTexture().getSampledViewId()
 				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-			graph.addInput( ibl.getPrefilteredEnvironmentTexture().sampledViewId
+			graph.addInput( ibl.getPrefilteredEnvironmentTexture().getSampledViewId()
 				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-			graph.addInput( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
+			graph.addInput( ibl.getPrefilteredEnvironmentSheenTexture().getSampledViewId()
 				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		}
 
-		graph.addInput( m_textureId.sampledViewId
+		graph.addInput( m_textureId.getSampledViewId()
 			, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 		auto & result = graph.createPass( "Background"
@@ -468,53 +470,42 @@ namespace c3d
 		cameraUbo.createPassBinding( result
 			, uint32_t( back::Bindings::eMatrix ) );
 		modelUbo.createPassBinding( result
-			, "Model"
 			, uint32_t( back::Bindings::eModel ) );
 		renderUbo.createPassBinding( result
 			, uint32_t( back::Bindings::eRenderConfig ) );
 		sceneUbo.createPassBinding( result
 			, uint32_t( back::Bindings::eScene ) );
-		result.addSampledView( m_textureId.sampledViewId
+		result.addInputSampledImage( m_textureId.getSampledViewId()
 			, uint32_t( back::Bindings::eSkybox )
 			, crg::SamplerDesc{ FilterMode::eLinear
 				, FilterMode::eLinear } );
 
 		if ( hasIbl() )
 		{
-			result.addSampledView( getIbl().getIrradianceTexture().sampledViewId
+			result.addInputSampledImage( getIbl().getIrradianceTexture().getSampledViewId()
 				, uint32_t( back::Bindings::eIrradiance )
 				, crg::SamplerDesc{ FilterMode::eLinear
 					, FilterMode::eLinear } );
 		}
 
-		if ( !depth.empty() )
+		if ( depth )
 		{
 			if ( clearDepth )
-			{
-				result.addOutputDepthStencilView( depth
-					, defaultClearDepthStencil );
-			}
+				depth->setLastAttach( result.addOutputDepthStencilTarget( depth->getTargetViewId()
+					, defaultClearDepthStencil ) );
 			else
-			{
-				result.addInOutDepthStencilView( depth );
-			}
+				depth->setLastAttach( result.addInOutDepthStencilTarget( *depth->getLastAttach() ) );
 		}
 
 		if ( clearColour )
-		{
-			result.addOutputColourView( colour
-				, transparentBlackClearColor );
-		}
+			colour.setLastAttach( result.addOutputColourTarget( colour.getTargetViewId()
+				, transparentBlackClearColor ) );
 		else
-		{
-			result.addInOutColourView( colour );
-		}
-
-		return result;
+			colour.setLastAttach( result.addInOutColourTarget( *colour.getLastAttach() ) );
 	}
 
 	void SceneBackground::addPassBindings( crg::FramePass & pass
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
 		doAddPassBindings( pass, targetImage, index );
@@ -522,19 +513,19 @@ namespace c3d
 		if ( hasIbl() )
 		{
 			auto & ibl = getIbl();
-			pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
+			pass.addInputSampledImage( ibl.getIrradianceTexture().getSampledViewId()
 				, index
 				, crg::SamplerDesc{ FilterMode::eLinear
 					, FilterMode::eLinear
 					, MipmapMode::eLinear } );
 			++index;
-			pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
+			pass.addInputSampledImage( ibl.getPrefilteredEnvironmentTexture().getSampledViewId()
 				, index
 				, crg::SamplerDesc{ FilterMode::eLinear
 					, FilterMode::eLinear
 					, MipmapMode::eLinear } );
 			++index;
-			pass.addSampledView( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
+			pass.addInputSampledImage( ibl.getPrefilteredEnvironmentSheenTexture().getSampledViewId()
 				, index
 				, crg::SamplerDesc{ FilterMode::eLinear
 					, FilterMode::eLinear
@@ -567,7 +558,7 @@ namespace c3d
 	}
 
 	void SceneBackground::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
 		doAddDescriptors( descriptorWrites, targetImage, index );
@@ -575,15 +566,15 @@ namespace c3d
 		if ( hasIbl() )
 		{
 			auto & ibl = getIbl();
-			bindTexture( ibl.getIrradianceTexture().wholeView
+			bindTexture( ibl.getIrradianceTexture().getSampledView()
 				, ibl.getIrradianceSampler()
 				, descriptorWrites
 				, index );
-			bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
+			bindTexture( ibl.getPrefilteredEnvironmentTexture().getSampledView()
 				, ibl.getPrefilteredEnvironmentSampler()
 				, descriptorWrites
 				, index );
-			bindTexture( ibl.getPrefilteredEnvironmentSheenTexture().wholeView
+			bindTexture( ibl.getPrefilteredEnvironmentSheenTexture().getSampledView()
 				, ibl.getPrefilteredEnvironmentSheenSampler()
 				, descriptorWrites
 				, index );

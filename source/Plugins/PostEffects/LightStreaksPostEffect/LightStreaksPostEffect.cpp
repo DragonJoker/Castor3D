@@ -59,19 +59,19 @@ namespace light_streaks
 		m_kawasePass->accept( visitor );
 		m_combinePass->accept( visitor );
 
-		for ( auto & view : m_hiImage.subViewsId )
+		for ( auto & layerViews : m_hiImage )
 		{
-			visitor.visit( cuT( "PostFX: LS - Hi " ) + c3d::string::toString( view.data->info.subresourceRange.baseArrayLayer )
-				, view
-				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
+			visitor.visit( cuT( "PostFX: LS - Hi " ) + c3d::string::toString( getSubresourceRange( layerViews.sampledViewId ).baseArrayLayer )
+				, layerViews.sampledViewId
+				, m_renderTarget.getGraph().getFinalLayoutState( layerViews.sampledViewId ).layout
 				, c3d::TextureFactors{}.invert( true ) );
 		}
 
-		for ( auto & view : m_kawaseImage.subViewsId )
+		for ( auto & layerViews : m_kawaseImage )
 		{
-			visitor.visit( cuT( "PostFX: LS - Kawase " ) + c3d::string::toString( view.data->info.subresourceRange.baseArrayLayer )
-				, view
-				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
+			visitor.visit( cuT( "PostFX: LS - Kawase " ) + c3d::string::toString( getSubresourceRange( layerViews.sampledViewId ).baseArrayLayer )
+				, layerViews.sampledViewId
+				, m_renderTarget.getGraph().getFinalLayoutState( layerViews.sampledViewId ).layout
 				, c3d::TextureFactors{}.invert( true ) );
 		}
 
@@ -87,8 +87,7 @@ namespace light_streaks
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto extent = c3d::getSafeBandedExtent3D( m_renderTarget.getDisplaySize() );
 
@@ -143,31 +142,27 @@ namespace light_streaks
 		}
 
 		m_hiPass = c3d::makeRawUnique< HiPass >( m_graph
-			, previousPass
 			, device
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, m_hiImage.subViewsId
+			, source
+			, m_hiImage
 			, size
 			, &isEnabled()
 			, &m_passIndex );
 		m_kawasePass = c3d::makeRawUnique< KawasePass >( m_graph
-			, m_hiPass->getLastPasses()
 			, device
-			, m_hiImage.subViewsId
-			, m_kawaseImage.subViewsId
+			, m_hiImage
+			, m_kawaseImage
 			, m_kawaseUbo
 			, size
 			, &isEnabled() );
 		m_combinePass = c3d::makeRawUnique< CombinePass >( m_graph
-			, m_kawasePass->getLastPasses()
 			, device
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, m_kawaseImage.subViewsId
-			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
+			, m_kawaseImage
+			, source
+			, target
 			, c3d::makeExtent2D( extent )
 			, &isEnabled()
 			, &m_passIndex );
-		m_pass = &m_combinePass->getPass();
 		m_hiImage.create();
 		m_kawaseImage.create();
 		return true;

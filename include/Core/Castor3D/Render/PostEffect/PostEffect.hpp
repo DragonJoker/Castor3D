@@ -85,20 +85,17 @@ namespace c3d
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	source			The source texture.
 		 *\param[in]	target			The target texture.
-		 *\param[in]	previousPass	The previous frame pass.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	source			La texture source.
 		 *\param[in]	target			La texture cible.
-		 *\param[in]	previousPass	La frame pass précédente.
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, Texture const & source
-			, Texture const & target
-			, crg::FramePass const & previousPass );
+			, Texture & target );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -157,7 +154,6 @@ namespace c3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		C3D_API virtual crg::FramePass const & getPass()const = 0;
 		C3D_API virtual void setParameters( Parameters parameters ) = 0;
 
 		bool isAfterToneMapping()const noexcept
@@ -180,23 +176,20 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	device			The GPU device.
-		 *\param[in]	source			The initial source image.
-		 *\param[in]	target			The initial target image.
-		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	source	The initial source image.
+		 *\param[in]	target	The initial target image.
 		 *\return		\p false on failure.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	device			Le device GPU.
-		 *\param[in]	source			L'image source initiale.
-		 *\param[in]	target			L'image cible initiale.
-		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	source	L'image source initiale.
+		 *\param[in]	target	L'image cible initiale.
 		 *\return		\p false en cas d'échec.
 		 */
 		C3D_API virtual bool doInitialise( RenderDevice const & device
 			, Texture const & source
-			, Texture const & target
-			, crg::FramePass const & previousPass ) = 0;
+			, Texture & target ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.

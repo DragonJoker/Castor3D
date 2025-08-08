@@ -20,7 +20,7 @@ namespace c3d
 	VkDeviceSize GpuBufferPackedAllocator::allocate( size_t size )
 	{
 		CU_Require( hasAvailable( size ) );
-		MemChunk chunk{ 0u, size, size };
+		MemChunk chunk{ 0u, size, size, crg::BufferViewId{} };
 		size = size_t( ashes::getAlignedSize( size, m_alignSize ) );
 		chunk.size = size;
 

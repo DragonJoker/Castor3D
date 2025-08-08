@@ -58,16 +58,17 @@ namespace c3d
 				, false };
 		}
 
-		static ashes::BufferPtr< Voxel > createSsbo( RenderDevice const & device
+		static BufferUPtrT< Voxel > createSsbo( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, String const & name
 			, uint32_t voxelGridSize )
 		{
-			return makeBuffer< Voxel >( device
+			return makeBuffer< Voxel >( device, resources
 				, voxelGridSize * voxelGridSize * voxelGridSize
-				, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-					| VK_BUFFER_USAGE_TRANSFER_DST_BIT )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, ( BufferUsageFlags::eStorageBuffer
+					| BufferUsageFlags::eTransferSrc
+					| BufferUsageFlags::eTransferDst )
+				, MemoryPropertyFlags::eDeviceLocal
 				, name );
 		}
 
@@ -94,12 +95,12 @@ namespace c3d
 			void doRecordInto( VkCommandBuffer commandBuffer
 				, uint32_t index )const
 			{
-				for ( auto & attach : m_pass.buffers )
+				for ( auto & [_, attach] : m_pass.outputs )
 				{
 					m_context.vkCmdFillBuffer( commandBuffer
-						, attach.buffer( index )
-						, attach.getBufferRange().offset
-						, attach.getBufferRange().size
+						, m_graph.createBuffer( attach->buffer( index ).data->buffer )
+						, attach->getBufferRange().offset
+						, attach->getBufferRange().size
 						, 0u );
 				}
 			}
@@ -115,8 +116,7 @@ namespace c3d
 		, Scene & scene
 		, Camera & camera
 		, VoxelizerUbo & voxelizerUbo
-		, VctConfig const & voxelConfig
-		, crg::FramePassArray const & previousPasses )
+		, VctConfig const & voxelConfig )
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
@@ -129,33 +129,31 @@ namespace c3d
 		, m_renderUbo{ makeRawUnique< RenderUbo >( device ) }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneFirstBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneSecondaryBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_staticsVoxels{ vxlsr::createSsbo( device, cuT( "VoxelizedStaticSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
-		, m_dynamicsVoxels{ vxlsr::createSsbo( device, cuT( "VoxelizedSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
+		, m_staticsVoxels{ vxlsr::createSsbo( device, resources, cuT( "VoxelizedStaticSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
+		, m_dynamicsVoxels{ vxlsr::createSsbo( device, resources, cuT( "VoxelizedSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_clearStatics{ doCreateClearStaticsPass( previousPasses, progress ) }
-		, m_staticsVoxelizePassDesc{ doCreateVoxelizePass( { &m_clearStatics }, progress, *m_staticsVoxels, *m_staticsCuller, true ) }
-		, m_mergeStaticsDesc{ doCreateMergeStaticsPass( m_staticsVoxelizePassDesc, progress ) }
-		, m_dynamicsVoxelizePassDesc{ doCreateVoxelizePass( { &m_mergeStaticsDesc }, progress, *m_dynamicsVoxels, *m_dynamicsCuller, false ) }
-		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_dynamicsVoxelizePassDesc, progress ) }
-		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc
-			, cuT( "FirstBounceMip" )
-			, m_firstBounce.wholeViewId
-			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableFirstBounceMipGen(); } )
-			, progress ) }
-		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen, progress ) }
-		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc
-			, cuT( "SecondaryBounceMip" )
-			, m_secondaryBounce.wholeViewId
-			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableSecondaryBounceMipGen(); } )
-			, progress ) }
-		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
+		doCreateClearStaticsPass( progress );
+		doCreateVoxelizePass( progress, *m_staticsVoxels, *m_staticsCuller, true );
+		doCreateMergeStaticsPass( progress );
+		doCreateVoxelizePass( progress, *m_dynamicsVoxels, *m_dynamicsCuller, false );
+		doCreateVoxelToTexture( progress );
+		doCreateVoxelMipGen( cuT( "FirstBounceMip" )
+			, m_firstBounce
+			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableFirstBounceMipGen(); } )
+			, progress );
+		doCreateVoxelSecondaryBounce( progress );
+		doCreateVoxelMipGen( cuT( "SecondaryBounceMip" )
+			, m_secondaryBounce
+			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableSecondaryBounceMipGen(); } )
+			, progress );
+		m_runnable = m_graph.compile( m_device.makeContext() );
 		m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
-		m_graph.addOutput( m_firstBounce.wholeViewId
+		m_graph.addOutput( m_firstBounce.getWholeViewId()
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-		m_graph.addOutput( m_secondaryBounce.wholeViewId
+		m_graph.addOutput( m_secondaryBounce.getWholeViewId()
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		auto runnable = m_runnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
@@ -173,7 +171,9 @@ namespace c3d
 		m_runnable.reset();
 		m_firstBounce.destroy();
 		m_secondaryBounce.destroy();
+		m_dynamicsVoxels->destroy();
 		m_dynamicsVoxels.reset();
+		m_staticsVoxels->destroy();
 		m_staticsVoxels.reset();
 	}
 
@@ -271,9 +271,8 @@ namespace c3d
 		return result;
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelizePass( crg::FramePassArray const & previousPasses
-		, ProgressBar * progress
-		, ashes::Buffer< Voxel > const & outVoxels
+	void Voxelizer::doCreateVoxelizePass( ProgressBar * progress
+		, BufferT< Voxel > & outVoxels
 		, SceneCuller & culler
 		, bool isStatic )
 	{
@@ -285,45 +284,24 @@ namespace c3d
 		}
 
 		stepProgressBarLocal( progress, cuT( "Creating voxelize pass" ) );
-		auto & result = m_graph.createPass( name
+		auto & oass = m_graph.createPass( name
 			, [this, progress, isStatic, &outVoxels, &culler]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising voxelize pass" ) );
-				auto res = makeRawUnique< VoxelizePass >( framePass
-					, context
-					, runnableGraph
-					, m_device
-					, m_cameraUbo
-					, *m_renderUbo
-					, m_scene.getUbo()
-					, m_camera
-					, culler
-					, m_voxelizerUbo
-					, outVoxels
-					, m_voxelConfig
-					, isStatic );
-
+				auto res = makeRawUnique< VoxelizePass >( framePass, context, runnableGraph, m_device
+					, m_cameraUbo, *m_renderUbo, m_scene.getUbo()
+					, m_camera, culler, m_voxelizerUbo, outVoxels
+					, m_voxelConfig, isStatic );
 				if ( isStatic )
-				{
 					m_staticsVoxelizePass = res.get();
-				}
 				else
-				{
 					m_dynamicsVoxelizePass = res.get();
-				}
-
 				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
-
-		if ( !previousPasses.empty() )
-		{
-			result.addDependencies( previousPasses );
-		}
-
 		MbString bufName = "Voxels";
 
 		if ( isStatic )
@@ -331,15 +309,10 @@ namespace c3d
 			bufName = "Static" + bufName;
 		}
 
-		result.addInOutStorageBuffer( { outVoxels.getBuffer(), bufName }
-			, 0u
-			, 0u
-			, outVoxels.getBuffer().getSize() );
-		return result;
+		outVoxels.setLastAttach( oass.addInOutStorage( *outVoxels.getLastAttach(), 0u ) );
 	}
 
-	crg::FramePass & Voxelizer::doCreateClearStaticsPass( crg::FramePassArray const & previousPasses
-		, ProgressBar * progress )
+	void Voxelizer::doCreateClearStaticsPass( ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating clear static pass" ) );
 		auto & result = m_graph.createPass( "StaticsClearPass"
@@ -356,16 +329,10 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependencies( previousPasses );
-		result.addOutputStorageBuffer( { m_staticsVoxels->getBuffer(), "StaticsVoxels" }
-			, 0u
-			, 0u
-			, m_staticsVoxels->getBuffer().getSize() );
-		return result;
+		m_staticsVoxels->setLastAttach( result.addOutputStorageBuffer( m_staticsVoxels->bufferViewId, 0u ) );
 	}
 
-	crg::FramePass & Voxelizer::doCreateMergeStaticsPass( crg::FramePass const & previousPass
-		, ProgressBar * progress )
+	void Voxelizer::doCreateMergeStaticsPass( ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating copy static to dynamic pass" ) );
 		auto & result = m_graph.createPass( "StaticsCopyPass"
@@ -378,7 +345,7 @@ namespace c3d
 					, context
 					, runnableGraph
 					, 0u
-					, m_staticsVoxels->getBuffer().getSize()
+					, m_staticsVoxels->getSize()
 					, crg::ru::Config{}
 					, crg::BufferCopy::GetPassIndexCallback( []() { return 0u; } )
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
@@ -386,20 +353,11 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( previousPass );
-		result.addInputStorageBuffer( { m_staticsVoxels->getBuffer(), "StaticsVoxels" }
-			, 0u
-			, 0u
-			, m_staticsVoxels->getBuffer().getSize() );
-		result.addOutputStorageBuffer( { m_dynamicsVoxels->getBuffer(), "Voxels" }
-			, 0u
-			, 0u
-			, m_dynamicsVoxels->getBuffer().getSize() );
-		return result;
+		result.addInputTransfer( *m_staticsVoxels->getLastAttach() );
+		m_dynamicsVoxels->setLastAttach( result.addOutputTransferBuffer( m_dynamicsVoxels->bufferViewId ) );
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelToTexture( crg::FramePass const & previousPass
-		, ProgressBar * progress )
+	void Voxelizer::doCreateVoxelToTexture( ProgressBar * progress )
 	{
 		m_firstBounce.create();
 		stepProgressBarLocal( progress, cuT( "Creating voxel buffer to texture pass" ) );
@@ -420,19 +378,12 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( previousPass );
-		result.addInputStorageBuffer( { m_dynamicsVoxels->getBuffer(), "Voxels" }
-			, 0u
-			, 0u
-			, m_dynamicsVoxels->getBuffer().getSize() );
-		result.addOutputStorageView( m_firstBounce.wholeViewId
-			, 1u );
-		return result;
+		result.addInputStorage( *m_dynamicsVoxels->getLastAttach(), 0u );
+		m_firstBounce.setLastAttach( result.addOutputStorageImage( m_firstBounce.getWholeViewId(), 1u ) );
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelMipGen( crg::FramePass const & previousPass
-		, String const & name
-		, crg::ImageViewId const & view
+	void Voxelizer::doCreateVoxelMipGen( String const & name
+		, Texture & view
 		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, ProgressBar * progress )
 	{
@@ -454,13 +405,10 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( previousPass );
-		result.addTransferInOutView( view );
-		return result;
+		view.setLastAttach( result.addInOutTransfer( *view.getLastAttach() ) );
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
-		, ProgressBar * progress )
+	void Voxelizer::doCreateVoxelSecondaryBounce( ProgressBar * progress )
 	{
 		m_secondaryBounce.create();
 		stepProgressBarLocal( progress, cuT( "Creating voxel secondary bounce pass" ) );
@@ -481,18 +429,10 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( previousPass );
-		result.addInOutStorageBuffer( { m_dynamicsVoxels->getBuffer(), "Voxels" }
-			, 0u
-			, 0u
-			, m_dynamicsVoxels->getBuffer().getSize() );
-		m_voxelizerUbo.createPassBinding( result
-			, 1u );
-		result.addSampledView( m_firstBounce.wholeViewId
-			, 2u );
-		result.addOutputStorageView( m_secondaryBounce.wholeViewId
-			, 3u );
-		return result;
+		m_dynamicsVoxels->setLastAttach( result.addInOutStorage( *m_dynamicsVoxels->getLastAttach(), 0u ) );
+		m_voxelizerUbo.createPassBinding( result, 1u );
+		result.addInputSampled( *m_firstBounce.getSampledLastAttach(), 2u );
+		m_secondaryBounce.setLastAttach( result.addOutputStorageImage( m_secondaryBounce.getWholeViewId(), 3u ) );
 	}
 
 	bool Voxelizer::doEnableClearStatic()const

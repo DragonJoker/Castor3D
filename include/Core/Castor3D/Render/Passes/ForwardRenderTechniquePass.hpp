@@ -60,8 +60,8 @@ namespace c3d
 			, RenderDevice const & device
 			, String const & typeName
 			, String const & groupName
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, Texture & targetImage
+			, Texture & targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc
 			, Texture const * mippedColour = nullptr

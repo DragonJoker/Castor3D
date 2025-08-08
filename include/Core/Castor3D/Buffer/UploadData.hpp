@@ -18,8 +18,8 @@ namespace c3d
 		{
 			ashes::Semaphore const * semaphore;
 			bool * used;
-			VkDeviceSize uploadSize;
-			VkDeviceSize buffersCount;
+			DeviceSize uploadSize;
+			DeviceSize buffersCount;
 		};
 
 		UploadData( UploadData const & ) = delete;
@@ -28,28 +28,34 @@ namespace c3d
 		UploadData & operator=( UploadData && )noexcept = delete;
 		C3D_API virtual ~UploadData()noexcept = default;
 
-		C3D_API void begin();
+		C3D_API virtual void begin() = 0;
 		C3D_API void pushUpload( void const * srcData
-			, VkDeviceSize srcSize
-			, ashes::BufferBase const & dstBuffer
-			, VkDeviceSize dstOffset
+			, DeviceSize srcSize
+			, BufferBase const & dstBuffer
+			, DeviceSize dstOffset
 			, AccessState const & dstAccessState );
 		C3D_API void pushUpload( void const * srcData
-			, VkDeviceSize srcSize
+			, DeviceSize srcSize
+			, ashes::BufferBase const & dstBuffer
+			, DeviceSize dstOffset
+			, AccessState const & dstAccessState );
+		C3D_API void pushUpload( void const * srcData
+			, DeviceSize srcSize
 			, ashes::Image const & dstImage
 			, ImageMemoryLayout dstLayout
 			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags );
 		C3D_API void process();
-		C3D_API SemaphoreUsed end( ashes::Queue const & queue
+		C3D_API virtual SemaphoreUsed end( ashes::Queue const & queue
 			, ashes::Fence const * fence = nullptr
-			, Milliseconds timeout = Milliseconds{ ashes::MaxTimeout } );
+			, Milliseconds timeout = Milliseconds{ ashes::MaxTimeout } ) = 0;
+		C3D_API virtual void cleanup()noexcept = 0;
 
 		void pushUpload( void const * srcData
-			, VkDeviceSize srcSize
+			, DeviceSize srcSize
 			, ashes::BufferBase const & dstBuffer
-			, VkDeviceSize dstOffset
+			, DeviceSize dstOffset
 			, AccessFlags dstAccessFlags
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -62,7 +68,7 @@ namespace c3d
 
 		void pushUpload( ByteArray const & srcData
 			, ashes::BufferBase const & dstBuffer
-			, VkDeviceSize dstOffset
+			, DeviceSize dstOffset
 			, AccessFlags dstAccessFlags
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -92,7 +98,7 @@ namespace c3d
 
 		void pushUpload( ByteArrayView const & srcData
 			, ashes::BufferBase const & dstBuffer
-			, VkDeviceSize dstOffset
+			, DeviceSize dstOffset
 			, AccessFlags dstAccessFlags
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -139,16 +145,16 @@ namespace c3d
 		struct BufferDataRange
 		{
 			void const * srcData{};
-			VkDeviceSize srcSize{};
+			DeviceSize srcSize{};
 			ashes::BufferBase const * dstBuffer{};
-			VkDeviceSize dstOffset{};
+			DeviceSize dstOffset{};
 			AccessState dstAccessState{};
 		};
 
 		struct ImageDataRange
 		{
 			void const * srcData{};
-			VkDeviceSize srcSize{};
+			DeviceSize srcSize{};
 			ashes::Image const * dstImage{};
 			ImageMemoryLayout dstLayout{};
 			ImageSubresourceRange dstRange{};
@@ -160,36 +166,38 @@ namespace c3d
 			, String debugName
 			, ashes::CommandBuffer const * commandBuffer );
 
+		C3D_API void doBegin()const;
+		C3D_API void doEnd()const;
+		C3D_API void doBeginDebugBlock( MbStringView name, FramePassTimer & timer )const;
+		C3D_API void doEndDebugBlock( FramePassTimer & timer )const;
+		C3D_API void doCleanup()noexcept;
 		C3D_API bool doCopyData( void const * srcData
-			, VkDeviceSize size
+			, DeviceSize size
 			, ashes::BufferBase const & dstBuffer
-			, VkDeviceSize dstOffset )const;
+			, DeviceSize dstOffset )const;
 		C3D_API void doUploadBuffer( BufferDataRange const & data
 			, ashes::BufferBase const * srcBuffer
-			, VkDeviceSize srcOffset )const;
+			, DeviceSize srcOffset )const;
 		C3D_API void doUploadImage( ImageDataRange & data
 			, ashes::BufferBase const & srcBuffer
-			, VkDeviceSize srcOffset )const;
+			, DeviceSize srcOffset )const;
+		C3D_API void doMemoryBarrier( VkPipelineStageFlags after
+			, VkPipelineStageFlags before
+			, VkBufferMemoryBarrier const & transitionBarrier )const;
 
-		RenderDevice const & m_device;
-		String m_debugName;
-		ashes::CommandBuffer const * m_commandBuffer;
-		Vector< BufferDataRange > m_pendingBuffers;
-		Vector< ImageDataRange > m_pendingImages;
+		Vector< BufferDataRange > const & getPendingBuffers()const noexcept
+		{
+			return m_pendingBuffers;
+		}
+
+		Vector< ImageDataRange > const & getPendingImages()const noexcept
+		{
+			return m_pendingImages;
+		}
 
 	private:
-		virtual VkDeviceSize doUpload( BufferDataRange & data ) = 0;
-		virtual VkDeviceSize doUpload( ImageDataRange & data ) = 0;
-		virtual void doBegin()
-		{
-		}
-
-		virtual SemaphoreUsed doEnd( ashes::Queue const & queue
-			, ashes::Fence const * fence
-			, Milliseconds timeout )
-		{
-			return {};
-		}
+		virtual DeviceSize doUpload( BufferDataRange & data ) = 0;
+		virtual DeviceSize doUpload( ImageDataRange & data ) = 0;
 
 		virtual void doPreprocess( Vector< BufferDataRange > *& pendingBuffers
 			, Vector< ImageDataRange > *& pendingImages )
@@ -201,6 +209,13 @@ namespace c3d
 		virtual void doPostprocess()
 		{
 		}
+
+	private:
+		RenderDevice const & m_device;
+		String m_debugName;
+		ashes::CommandBuffer const * m_commandBuffer;
+		Vector< BufferDataRange > m_pendingBuffers;
+		Vector< ImageDataRange > m_pendingImages;
 	};
 
 	C3D_API OutputStream & operator<<( OutputStream & stream, ImageSubresourceRange const & rhs );

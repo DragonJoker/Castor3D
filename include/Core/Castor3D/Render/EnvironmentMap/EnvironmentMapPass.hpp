@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include "Castor3D/Render/Texture.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
@@ -106,25 +107,11 @@ namespace c3d
 		 *\param[in]	node	Le noeud.
 		 */
 		C3D_API void attachTo( SceneNode & node );
-		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		*/
-		/**@{*/
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_transparentPassDesc;
-		}
-		/**@}*/
 
 	private:
-		crg::FramePass & doCreateOpaquePass( crg::FramePass const * previousPass );
-		crg::FramePass & doCreateTransparentPass( crg::FramePass const * previousPass );
-		void doCreateGenMipmapsPass( crg::FramePass const * previousPass );
+		void doCreateOpaquePass();
+		void doCreateTransparentPass();
+		void doCreateGenMipmapsPass();
 
 	private:
 		RenderDevice const & m_device;
@@ -139,13 +126,11 @@ namespace c3d
 		CameraUbo m_cameraUbo;
 		RenderUbo m_renderUbo;
 		SceneUbo const * m_sceneUbo{};
-		crg::ImageViewId m_colourRenderView;
-		crg::ImageViewId m_colourResultView;
-		crg::ImageViewId m_depthView;
+		Texture m_colourRender;
+		Texture m_colourResult;
+		Texture m_depth;
 		BackgroundRendererUPtr m_backgroundRenderer;
-		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniqueNodesPass * m_opaquePass{};
-		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniqueNodesPass * m_transparentPass{};
 		crg::RunnableGraphPtr m_runnable;
 	};

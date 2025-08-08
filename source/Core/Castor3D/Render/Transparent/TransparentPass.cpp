@@ -59,8 +59,8 @@ namespace c3d
 		, Texture const & sceneImage
 		, Texture const & depthObjImage
 		, Texture const & normalsImage
-		, crg::ImageViewIdArray targetImage
-		, crg::ImageViewIdArray targetDepth
+		, Texture & targetImage
+		, Texture & targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
@@ -69,8 +69,8 @@ namespace c3d
 			, graph
 			, device
 			, Type
-			, c3d::move( targetImage )
-			, c3d::move( targetDepth )
+			, &targetImage
+			, &targetDepth
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_sceneImage{ sceneImage }
@@ -179,13 +179,13 @@ namespace c3d
 
 		if ( hasSsao() )
 		{
-			bindTexture( m_ssao->wholeView
+			bindTexture( m_ssao->getSampledView()
 				, *m_ssao->sampler
 				, descriptorWrites
 				, index );
 		}
 
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
@@ -195,15 +195,15 @@ namespace c3d
 		doAddGIDescriptor( descriptorWrites, index );
 		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), descriptorWrites, index );
 
-		bindTexture( m_sceneImage.wholeView
+		bindTexture( m_sceneImage.getSampledView()
 			, *m_sceneImage.sampler
 			, descriptorWrites
 			, index );
-		bindTexture( m_depthObjImage.wholeView
+		bindTexture( m_depthObjImage.getSampledView()
 			, *m_depthObjImage.sampler
 			, descriptorWrites
 			, index );
-		bindTexture( m_normalsImage.wholeView
+		bindTexture( m_normalsImage.getSampledView()
 			, *m_normalsImage.sampler
 			, descriptorWrites
 			, index );

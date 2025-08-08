@@ -60,8 +60,8 @@ namespace c3d
 		, String const & categoryName
 		, String const & typeName
 		, String const & fullName
-		, crg::ImageViewIdArray targetImage
-		, crg::ImageViewIdArray targetDepth
+		, Texture * targetImage
+		, Texture * targetDepth
 		, NodesPassDesc const & desc )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, Named{ makeString( fullName ) }
@@ -69,8 +69,8 @@ namespace c3d
 		, m_renderSystem{ m_device.renderSystem }
 		, m_cameraUbo{ desc.m_cameraUbo }
 		, m_renderUbo{ desc.m_renderUbo }
-		, m_targetImage{ c3d::move( targetImage ) }
-		, m_targetDepth{ c3d::move( targetDepth ) }
+		, m_targetImage{ targetImage }
+		, m_targetDepth{ targetDepth }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
@@ -318,18 +318,18 @@ namespace c3d
 			{
 				auto const & result = shadowMapRef.get().getShadowPassResult( false );
 				bindTexture( graph
-					, result[SmTexture::eLinearDepth].sampledViewId
-					, *result[SmTexture::eVariance].sampler
+					, result.getSampledViewId( SmTexture::eLinearDepth )
+					, result.getSampler( SmTexture::eVariance )
 					, descriptorWrites
 					, index );
 				bindTexture( graph
-					, result[SmTexture::eLinearDepth].sampledViewId
-					, *result[SmTexture::eLinearDepth].sampler // Compare sampler
+					, result.getSampledViewId( SmTexture::eLinearDepth )
+					, result.getSampler( SmTexture::eLinearDepth ) // Compare sampler
 					, descriptorWrites
 					, index );
 				bindTexture( graph
-					, result[SmTexture::eVariance].sampledViewId
-					, *result[SmTexture::eVariance].sampler
+					, result.getSampledViewId( SmTexture::eVariance )
+					, result.getSampler( SmTexture::eVariance )
 					, descriptorWrites
 					, index );
 			}
@@ -362,18 +362,18 @@ namespace c3d
 				{
 					auto const & result = shadowMapRef.get().getShadowPassResult( false );
 					bindTexture( graph
-						, result[SmTexture::eLinearDepth].sampledViewId
-						, *result[SmTexture::eVariance].sampler
+						, result.getSampledViewId( SmTexture::eLinearDepth )
+						, result.getSampler( SmTexture::eVariance )
 						, descriptorWrites
 						, index );
 					bindTexture( graph
-						, result[SmTexture::eLinearDepth].sampledViewId
-						, *result[SmTexture::eLinearDepth].sampler // Compare sampler
+						, result.getSampledViewId( SmTexture::eLinearDepth )
+						, result.getSampler( SmTexture::eLinearDepth ) // Compare sampler
 						, descriptorWrites
 						, index );
 					bindTexture( graph
-						, result[SmTexture::eVariance].sampledViewId
-						, *result[SmTexture::eVariance].sampler
+						, result.getSampledViewId( SmTexture::eVariance )
+						, result.getSampler( SmTexture::eVariance )
 						, descriptorWrites
 						, index );
 					hasShadows = true;
@@ -394,7 +394,7 @@ namespace c3d
 
 	void NodesPass::addBackgroundDescriptor( SceneBackground const & background
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )
 	{
 		background.addDescriptors( descriptorWrites
@@ -416,11 +416,11 @@ namespace c3d
 			CU_Require( indirectLighting.vctSecondaryBounce );
 			indirectLighting.vctConfigUbo->addDescriptorWrite( descriptorWrites
 				, index );
-			bindTexture( indirectLighting.vctFirstBounce->wholeView
+			bindTexture( indirectLighting.vctFirstBounce->getSampledView()
 				, *indirectLighting.vctFirstBounce->sampler
 				, descriptorWrites
 				, index );
-			bindTexture( indirectLighting.vctSecondaryBounce->wholeView
+			bindTexture( indirectLighting.vctSecondaryBounce->getSampledView()
 				, *indirectLighting.vctSecondaryBounce->sampler
 				, descriptorWrites
 				, index );
@@ -434,7 +434,7 @@ namespace c3d
 
 			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
 			{
-				bindTexture( indirectLighting.rsmResult->wholeView
+				bindTexture( indirectLighting.rsmResult->getSampledView()
 					, *indirectLighting.rsmResult->sampler
 					, descriptorWrites
 					, index );
@@ -451,16 +451,16 @@ namespace c3d
 				indirectLighting.lpvConfigUbo->addDescriptorWrite( descriptorWrites
 					, index );
 				auto const & lpv = *indirectLighting.lpvResult;
-				bindTexture( lpv[LpvTexture::eR].wholeView
-					, *lpv[LpvTexture::eR].sampler
+				bindTexture( lpv.getSampledView( LpvTexture::eR )
+					, lpv.getSampler( LpvTexture::eR )
 					, descriptorWrites
 					, index );
-				bindTexture( lpv[LpvTexture::eG].wholeView
-					, *lpv[LpvTexture::eG].sampler
+				bindTexture( lpv.getSampledView( LpvTexture::eG )
+					, lpv.getSampler( LpvTexture::eG )
 					, descriptorWrites
 					, index );
-				bindTexture( lpv[LpvTexture::eB].wholeView
-					, *lpv[LpvTexture::eB].sampler
+				bindTexture( lpv.getSampledView( LpvTexture::eB )
+					, lpv.getSampler( LpvTexture::eB )
 					, descriptorWrites
 					, index );
 			}
@@ -479,16 +479,16 @@ namespace c3d
 				for ( auto const & plpv : *indirectLighting.llpvResult )
 				{
 					auto const & lpv = *plpv;
-					bindTexture( lpv[LpvTexture::eR].wholeView
-						, *lpv[LpvTexture::eR].sampler
+					bindTexture( lpv.getSampledView( LpvTexture::eR )
+						, lpv.getSampler( LpvTexture::eR )
 						, descriptorWrites
 						, index );
-					bindTexture( lpv[LpvTexture::eG].wholeView
-						, *lpv[LpvTexture::eG].sampler
+					bindTexture( lpv.getSampledView( LpvTexture::eG )
+						, lpv.getSampler( LpvTexture::eG )
 						, descriptorWrites
 						, index );
-					bindTexture( lpv[LpvTexture::eB].wholeView
-						, *lpv[LpvTexture::eB].sampler
+					bindTexture( lpv.getSampledView( LpvTexture::eB )
+						, lpv.getSampler( LpvTexture::eB )
 						, descriptorWrites
 						, index );
 				}
@@ -508,11 +508,11 @@ namespace c3d
 		, uint32_t & index )
 	{
 		frustumClusters.getClustersUbo().addDescriptorWrite( descriptorWrites, index );
-		bindBuffer( frustumClusters.getReducedLightsAABBBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getPointLightClusterIndexBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getPointLightClusterGridBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getSpotLightClusterIndexBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getSpotLightClusterGridBuffer(), descriptorWrites, index );
+		bindBuffer( *frustumClusters.getReducedLightsAABBBuffer().buffer, descriptorWrites, index );
+		bindBuffer( *frustumClusters.getPointLightClusterIndexBuffer().buffer, descriptorWrites, index );
+		bindBuffer( *frustumClusters.getPointLightClusterGridBuffer().buffer, descriptorWrites, index );
+		bindBuffer( *frustumClusters.getSpotLightClusterIndexBuffer().buffer, descriptorWrites, index );
+		bindBuffer( *frustumClusters.getSpotLightClusterGridBuffer().buffer, descriptorWrites, index );
 	}
 
 	bool NodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const noexcept

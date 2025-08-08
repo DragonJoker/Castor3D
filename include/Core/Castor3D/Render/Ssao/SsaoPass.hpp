@@ -27,7 +27,6 @@ namespace c3d
 		 *\param[in]	graph			The render graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The progress bar.
-		 *\param[in]	previousPasses	The previous frame passes.
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	depthObj		The depth buffer.
@@ -38,7 +37,6 @@ namespace c3d
 		 *\param[in]	graph			Le render graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression
-		 *\param[in]	previousPasses	Les frame passes précédentes.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	depthObj		Le depth buffer.
@@ -48,7 +46,6 @@ namespace c3d
 		C3D_API SsaoPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, crg::FramePassArray const & previousPasses
 			, Size const & size
 			, SsaoConfig & ssaoConfig
 			, Texture const & depthObj
@@ -84,11 +81,6 @@ namespace c3d
 		{
 			return m_ssaoConfig;
 		}
-
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_lastPass;
-		}
 		/**@}*/
 
 	private:
@@ -102,7 +94,6 @@ namespace c3d
 		SsaoRawAOPassUPtr m_rawAoPass;
 		SsaoBlurPassUPtr m_horizontalBlur;
 		SsaoBlurPassUPtr m_verticalBlur;
-		crg::FramePass const * m_lastPass{};
 	};
 }
 

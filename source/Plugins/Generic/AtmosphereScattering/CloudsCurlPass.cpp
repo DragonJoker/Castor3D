@@ -107,14 +107,13 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	CloudsCurlPass::CloudsCurlPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
-		, crg::ImageViewId const & resultView
+		, c3d::Texture & result
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/CurlPass" ), curl::getProgram( device, getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/CurlPass" ), curl::getProgram( device, result.getExtent().width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & computePass = graph.createPass( "Clouds/CurlPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -133,10 +132,7 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		computePass.addDependencies( previousPasses );
-		computePass.addOutputStorageView( resultView
-			, curl::eOutput );
-		m_lastPass = &computePass;
+		result.setLastAttach( computePass.addOutputStorageImage( result.getTargetViewId(), curl::eOutput ) );
 	}
 
 	void CloudsCurlPass::accept( c3d::ConfigurationVisitorBase & visitor )

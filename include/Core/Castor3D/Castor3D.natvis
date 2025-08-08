@@ -675,22 +675,46 @@
 		</Expand>
 	</Type>
 
-	<Type Name="Texture">
-		<DisplayString >{imageId} [{*sampler}]</DisplayString>
+	<Type Name="Texture::MipView">
+		<DisplayString >{targetViewId}</DisplayString>
 		<Expand>
-			<Item Name="resources">resources</Item>
-			<Item Name="device">device</Item>
-			<Item Name="imageId">imageId</Item>
-			<Item Name="image">image</Item>
+			<Item Name="targetViewId">targetViewId</Item>
+			<Item Name="sampledViewId">sampledViewId</Item>
+			<Item Name="targetView">targetView</Item>
+			<Item Name="sampledView">sampledView</Item>
+			<Item Name="attach">attach</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="Texture::LayerViews">
+		<DisplayString >{wholeViewId}</DisplayString>
+		<Expand>
 			<Item Name="wholeViewId">wholeViewId</Item>
 			<Item Name="targetViewId">targetViewId</Item>
 			<Item Name="sampledViewId">sampledViewId</Item>
 			<Item Name="wholeView">wholeView</Item>
 			<Item Name="targetView">targetView</Item>
 			<Item Name="sampledView">sampledView</Item>
-			<Item Name="subViewsId">subViewsId</Item>
-			<Item Name="subViews">subViews</Item>
+			<Item Name="attach">attach</Item>
+			<Item Name="mipViews">mipViews</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="Texture">
+		<DisplayString >{imageId} [{*sampler}]</DisplayString>
+		<Expand>
+			<Item Name="resources">resources</Item>
+			<Item Name="device">device</Item>
+			<Item Name="imageId">imageId</Item>
+			<Item Condition="m_ownImage" Name="image">image</Item>
 			<Item Name="sampler">sampler</Item>
+			<Item Name="wholeViewId">m_wholeViewId</Item>
+			<Item Name="targetViewId">m_targetViewId</Item>
+			<Item Name="sampledViewId">m_sampledViewId</Item>
+			<Item Name="wholeView">m_wholeView</Item>
+			<Item Name="targetView">m_targetView</Item>
+			<Item Name="sampledView">m_sampledView</Item>
+			<Item Name="layers">m_layers</Item>
 		</Expand>
 	</Type>
 

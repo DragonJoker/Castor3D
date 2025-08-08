@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBufferOffset_HPP___
 #define ___C3D_UniformBufferOffset_HPP___
 
+#include "GpuBuffer.hpp"
 #include "PoolUniformBuffer.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -19,9 +20,10 @@ namespace c3d
 		PoolUniformBuffer * buffer{ nullptr };
 
 	public:
-		VkMemoryPropertyFlags flags{ 0u };
+		MemoryPropertyFlags flags{ 0u };
 		uint32_t offset{ 0u };
 		uint32_t range{ 0u };
+		crg::AttachmentPtr attach{};
 
 		UniformBufferOffsetT()noexcept = default;
 		UniformBufferOffsetT( UniformBufferOffsetT const & ) = delete;
@@ -32,6 +34,7 @@ namespace c3d
 			, flags{ rhs.flags }
 			, offset{ rhs.offset }
 			, range{ rhs.range }
+			, attach{ std::move( rhs.attach ) }
 		{
 			rhs.buffer = {};
 			rhs.flags = {};
@@ -45,6 +48,7 @@ namespace c3d
 			flags = rhs.flags;
 			offset = rhs.offset;
 			range = rhs.range;
+			attach = std::move( rhs.attach );
 
 			rhs.buffer = {};
 			rhs.flags = {};
@@ -75,18 +79,14 @@ namespace c3d
 				&& buffer->hasBuffer();
 		}
 
-		VkDeviceSize getByteOffset()const
+		DeviceSize getByteOffset()const
 		{
-			auto const & uniformBuffer = buffer->getBuffer();
-			auto size = uniformBuffer.getAlignedSize();
-			return offset * size;
+			return offset * buffer->getAlignedSize();
 		}
 
-		VkDeviceSize getByteRange()const
+		DeviceSize getByteRange()const
 		{
-			auto const & uniformBuffer = buffer->getBuffer();
-			auto size = uniformBuffer.getAlignedSize();
-			return range * size;
+			return range * buffer->getAlignedSize();
 		}
 
 		DataT const & getData()const
@@ -109,38 +109,34 @@ namespace c3d
 			return *buffer;
 		}
 
-		ashes::UniformBuffer const & getBuffer()const
+		Buffer const & getBuffer()const
 		{
 			return buffer->getBuffer();
 		}
 
-		ashes::UniformBuffer & getBuffer()
+		Buffer & getBuffer()
 		{
 			return buffer->getBuffer();
 		}
 
-		uint32_t getAlignedSize()const
+		uint32_t getDataAlignedSize()const
 		{
 			return buffer->getAlignedSize( sizeof( DataT ) );
 		}
 
 		void createPassBinding( crg::FramePass & pass
-			, MbString const & name
 			, uint32_t binding )const
 		{
-			pass.addUniformBuffer( { getBuffer(), name }
-				, binding
-				, getByteOffset()
-				, getByteRange() );
+			pass.addInputUniform( *attach, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
 			auto & uniformBuffer = buffer->getBuffer();
-			auto size = uniformBuffer.getAlignedSize();
+			auto size = buffer->getAlignedSize();
 			descriptorSet.createBinding( layoutBinding
-				, uniformBuffer.getBuffer()
+				, *uniformBuffer.buffer
 				, uint32_t( offset * size )
 				, uint32_t( range * size ) );
 		}
@@ -149,12 +145,12 @@ namespace c3d
 			, uint32_t dstArrayElement = 0u )const
 		{
 			auto & uniformBuffer = buffer->getBuffer();
-			auto size = uniformBuffer.getAlignedSize();
+			auto size = buffer->getAlignedSize();
 			auto result = ashes::WriteDescriptorSet{ dstBinding
 				, dstArrayElement
 				, 1u
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-			result.bufferInfo.push_back( VkDescriptorBufferInfo{ uniformBuffer.getBuffer()
+			result.bufferInfo.push_back( VkDescriptorBufferInfo{ *uniformBuffer.buffer
 				, size * offset
 				, size * range } );
 			return result;

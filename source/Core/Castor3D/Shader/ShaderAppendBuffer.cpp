@@ -15,17 +15,24 @@ namespace c3d
 	//*********************************************************************************************
 
 	ShaderAppendBuffer::ShaderAppendBuffer( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, VkDeviceSize size
 		, String const & name )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + sizeof( uint32_t )
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
-		, m_buffer{ makeBufferBase( m_device
+		, m_buffer{ makeBufferBase( m_device, resources
 			, m_size
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, BufferUsageFlags::eStorageBuffer
+			, MemoryPropertyFlags::eDeviceLocal
 			, name ) }
 	{
+		m_buffer->create();
+	}
+
+	ShaderAppendBuffer::~ShaderAppendBuffer()noexcept
+	{
+		m_buffer->destroy();
 	}
 
 	VkDescriptorSetLayoutBinding ShaderAppendBuffer::createLayoutBinding( uint32_t index
@@ -39,10 +46,7 @@ namespace c3d
 	void ShaderAppendBuffer::createPassBinding( crg::FramePass & pass
 		, uint32_t binding )const
 	{
-		pass.addInputStorageBuffer( { *m_buffer, m_buffer->getName() }
-			, binding
-			, 0u
-			, uint32_t( m_size ) );
+		pass.addInputStorage( *m_buffer->getLastAttach(), binding );
 	}
 
 	ashes::WriteDescriptorSet ShaderAppendBuffer::getBinding( uint32_t binding )const
@@ -51,7 +55,7 @@ namespace c3d
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer
+		result.bufferInfo.push_back( VkDescriptorBufferInfo{ m_buffer->getBuffer()
 			, 0u
 			, m_size } );
 		return result;
@@ -61,8 +65,7 @@ namespace c3d
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		descriptorSet.createBinding( binding
-			, *m_buffer
-			, 0u
-			, uint32_t( m_size ) );
+			, *m_buffer->buffer
+			, 0u, uint32_t( m_size ) );
 	}
 }

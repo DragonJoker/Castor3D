@@ -188,7 +188,7 @@ namespace c3d
 		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
 		C3D_API explicit LineMapping( Submesh & submesh
-			, VkBufferUsageFlags bufferUsageFlags = {} );
+			, BufferUsageFlags bufferUsageFlags = {} );
 		/**
 		 *\copydoc		c3d::IndexMapping::getCount
 		 */

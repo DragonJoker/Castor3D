@@ -1,6 +1,8 @@
 #include "Castor3D/Buffer/UniformBufferBase.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Render/Buffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -14,15 +16,17 @@ CU_ImplementSmartPtr( c3d, UniformBufferBase )
 
 namespace c3d
 {
+	//*********************************************************************************************
+
 	namespace bufferunf
 	{
 		inline void doCopyBuffer( ashes::BufferBase const & src
 			, ashes::BufferBase const & dst
 			, ashes::BufferBase const * ubo
 			, ashes::CommandBuffer const & commandBuffer
-			, VkDeviceSize elemAlignedSize
-			, VkDeviceSize count
-			, VkDeviceSize offset
+			, DeviceSize elemAlignedSize
+			, DeviceSize count
+			, DeviceSize offset
 			, PipelineStageFlags flags )
 		{
 			auto srcSrcStage = src.getCompatibleStageFlags();
@@ -72,9 +76,9 @@ namespace c3d
 			, ashes::BufferBase const & dst
 			, ashes::BufferBase const * ubo
 			, ashes::CommandBuffer const & commandBuffer
-			, VkDeviceSize elemAlignedSize
-			, VkDeviceSize count
-			, VkDeviceSize offset
+			, DeviceSize elemAlignedSize
+			, DeviceSize count
+			, DeviceSize offset
 			, PipelineStageFlags flags
 			, FramePassTimer & timer )
 		{
@@ -96,9 +100,9 @@ namespace c3d
 			, ashes::BufferBase const & dst
 			, ashes::BufferBase const * ubo
 			, ashes::CommandBuffer const & commandBuffer
-			, VkDeviceSize elemAlignedSize
-			, VkDeviceSize count
-			, VkDeviceSize offset
+			, DeviceSize elemAlignedSize
+			, DeviceSize count
+			, DeviceSize offset
 			, PipelineStageFlags flags )
 		{
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -114,14 +118,19 @@ namespace c3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	UniformBufferBase::UniformBufferBase( RenderSystem const & renderSystem
-		, VkDeviceSize elemCount
-		, VkDeviceSize elemSize
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
+		, crg::ResourcesCache & resources
+		, DeviceSize elemCount
+		, DeviceSize elemSize
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags flags
 		, String debugName
 		, ashes::QueueShare sharingMode )
-		: m_usage{ usage }
+		: m_device{ renderSystem.getRenderDevice() }
+		, m_resources{ resources }
+		, m_usage{ usage }
 		, m_flags{ flags }
 		, m_elemCount{ uint32_t( elemCount ) }
 		, m_elemSize{ uint32_t( elemSize ) }
@@ -133,32 +142,39 @@ namespace c3d
 			m_available.insert( i );
 		}
 
-		initialise( renderSystem.getRenderDevice() );
+		initialise();
 	}
 
-	uint32_t UniformBufferBase::initialise( RenderDevice const & device
-		, ashes::QueueShare sharingMode )
+	UniformBufferBase::~UniformBufferBase()noexcept
+	{
+		cleanup();
+	}
+
+	uint32_t UniformBufferBase::initialise( ashes::QueueShare sharingMode )
 	{
 		m_sharingMode = c3d::move( sharingMode );
-		return initialise( device );
+		return initialise();
 	}
 
-	uint32_t UniformBufferBase::initialise( RenderDevice const & device )
+	uint32_t UniformBufferBase::initialise()
 	{
+		auto elemAlignedSize = getAlignedSize( m_elemSize );
 		m_buffer.reset();
-		m_buffer = ashes::makeUniformBuffer( *device.device
-			, toUtf8( m_debugName + cuT( "Ubo" ) )
-			, m_elemCount
-			, m_elemSize
-			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, m_sharingMode );
-		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + cuT( "Ubo" ) ) );
-		m_transferFence = device.device->createFence( toUtf8( m_debugName + cuT( "Transfer" ) ) );
+		m_buffer = makeBufferBase( m_device
+			, m_resources
+			, m_elemCount * elemAlignedSize
+			, m_usage | BufferUsageFlags::eTransferDst
+			, MemoryPropertyFlags::eDeviceLocal
+			, m_debugName + cuT( "Ubo" ) );
+		m_transferFence = m_device->createFence( toUtf8( m_debugName + cuT( "Transfer" ) ) );
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
 	void UniformBufferBase::cleanup()noexcept
 	{
+		if ( m_buffer )
+			m_buffer->destroy();
+
 		m_buffer.reset();
 	}
 
@@ -178,6 +194,12 @@ namespace c3d
 	void UniformBufferBase::deallocate( uint32_t offset )
 	{
 		m_available.insert( offset );
+	}
+
+	uint32_t UniformBufferBase::getAlignedSize( uint32_t size )const
+	{
+		return uint32_t( ashes::getAlignedSize( m_elemSize
+			, m_device->getProperties().limits.minUniformBufferOffsetAlignment ) );
 	}
 
 	void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
@@ -209,7 +231,7 @@ namespace c3d
 		, uint32_t offset
 		, PipelineStageFlags flags )const
 	{
-		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
+		auto elemAlignedSize = getAlignedSize( m_elemSize );
 		auto src = reinterpret_cast< const uint8_t * >( data );
 		CU_Require( ( size % m_elemSize ) == 0 );
 		auto count = size / m_elemSize;
@@ -274,7 +296,7 @@ namespace c3d
 		, PipelineStageFlags flags
 		, FramePassTimer & timer )const
 	{
-		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
+		auto elemAlignedSize = getAlignedSize( m_elemSize );
 		auto src = reinterpret_cast< const uint8_t * >( data );
 		CU_Require( ( size % m_elemSize ) == 0 );
 		auto count = size / m_elemSize;
@@ -319,7 +341,7 @@ namespace c3d
 	{
 		CU_Require( size >= size_t( m_elemCount ) * m_elemSize
 			&& "Need a large enough buffer" );
-		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
+		auto elemAlignedSize = getAlignedSize( m_elemSize );
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferDownload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		bufferunf::copyBuffer( getBuffer().getBuffer()
@@ -351,4 +373,6 @@ namespace c3d
 			stagingBuffer.unlock();
 		}
 	}
+
+	//*********************************************************************************************
 }

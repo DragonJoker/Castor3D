@@ -56,7 +56,7 @@ namespace c3d
 		m_texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, cuT( "ColourBackground_Colour" )
 			, *m_textureId.image
-			, m_textureId.wholeViewId );
+			, m_textureId.getWholeViewId() );
 		m_buffer = PxBufferBase::create( makeSize( m_textureId.getExtent() )
 			, PixelFormat::eR32G32B32A32_SFLOAT );
 	}
@@ -138,10 +138,10 @@ namespace c3d
 	}
 
 	void ColourBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		pass.addSampledView( m_textureId.wholeViewId
+		pass.addInputSampledImage( m_textureId.getWholeViewId()
 			, index
 			, crg::SamplerDesc{ FilterMode::eLinear
 				, FilterMode::eLinear
@@ -160,10 +160,10 @@ namespace c3d
 	}
 
 	void ColourBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		bindTexture( m_textureId.wholeView
+		bindTexture( m_textureId.getSampledView()
 			, *m_textureId.sampler
 			, descriptorWrites
 			, index );

@@ -42,7 +42,6 @@ namespace atmosphere_scattering
 			, c3d::RenderDevice const & device
 			, AtmosphereBackground & background
 			, c3d::Extent2D const & size
-			, crg::ImageViewIdArray const & colour
 			, bool forceVisible );
 
 	private:

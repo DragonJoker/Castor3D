@@ -48,7 +48,7 @@ namespace light_streaks
 	{
 		for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
 		{
-			m_ubo.push_back( device.uboPool->getBuffer< Configuration >( 0u ) );
+			m_ubo.push_back( device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) );
 		}
 	}
 

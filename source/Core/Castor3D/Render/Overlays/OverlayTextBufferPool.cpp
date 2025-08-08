@@ -20,16 +20,17 @@ namespace c3d
 	{
 		template< typename DataT >
 		OverlayTextBuffer::DataBufferT< DataT > makeDataBuffer( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, uint32_t count
 			, String const & name )
 		{
 			auto buffer = makeBuffer< DataT >( device
+				, resources
 				, count
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, BufferUsageFlags::eStorageBuffer
+				, MemoryPropertyFlags::eHostVisible
 				, name );
-			auto data = makeArrayView( buffer->lock( 0u, ashes::WholeSize, 0u )
-				, buffer->getCount() );
+			auto data = makeArrayView( buffer->lock(), buffer->getCount() );
 			return { c3d::move( buffer ), data };
 		}
 	}
@@ -43,15 +44,28 @@ namespace c3d
 		, device{ device }
 		, name{ debugName }
 		, charsBuffer{ txtbufpool::makeDataBuffer< TextChar >( device
+			, engine.getGraphResourceCache()
 			, MaxCharsPerBuffer
 			, name + cuT( "-CharsData" ) ) }
 		, wordsBuffer{ txtbufpool::makeDataBuffer< TextWord >( device
+			, engine.getGraphResourceCache()
 			, MaxWordsPerBuffer
 			, name + cuT( "-WordsData" ) ) }
 		, linesBuffer{ txtbufpool::makeDataBuffer< TextLine >( device
+			, engine.getGraphResourceCache()
 			, MaxLinesPerBuffer
 			, name + cuT( "-LinesData" ) ) }
 	{
+	}
+
+	OverlayTextBuffer::~OverlayTextBuffer()noexcept
+	{
+		linesBuffer.buffer->unlock();
+		linesBuffer.buffer->destroy();
+		wordsBuffer.buffer->unlock();
+		wordsBuffer.buffer->destroy();
+		charsBuffer.buffer->unlock();
+		charsBuffer.buffer->destroy();
 	}
 
 	OverlayTextBufferIndex OverlayTextBuffer::fill( uint32_t overlayIndex
@@ -100,15 +114,15 @@ namespace c3d
 		, ashes::DescriptorSet & descriptorSet )const
 	{
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eChars ) )
-			, *charsBuffer.buffer
+			, *charsBuffer.buffer->buffer
 			, 0u
 			, uint32_t( charsBuffer.buffer->getCount() ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eWords ) )
-			, *wordsBuffer.buffer
+			, *wordsBuffer.buffer->buffer
 			, 0u
 			, uint32_t( wordsBuffer.buffer->getCount() ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eLines ) )
-			, *linesBuffer.buffer
+			, *linesBuffer.buffer->buffer
 			, 0u
 			, uint32_t( linesBuffer.buffer->getCount() ) );
 	}

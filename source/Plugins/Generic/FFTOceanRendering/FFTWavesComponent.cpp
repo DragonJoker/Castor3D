@@ -387,10 +387,9 @@ namespace ocean_fft
 		return true;
 	}
 
-	crg::FramePassArray FFTWavesComponent::RenderData::record( RenderDevice const & device
+	void FFTWavesComponent::RenderData::record( RenderDevice const & device
 		, crg::ResourcesCache & resources
-		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses )
+		, crg::FramePassGroup & graph )
 	{
 		if ( !m_ubo )
 		{
@@ -402,27 +401,24 @@ namespace ocean_fft
 			m_oceanFFT = c3d::makeRawUnique< OceanFFT >( device
 				, resources
 				, graph.createPassGroup( c3d::toUtf8( m_component.getOwner()->getParent().getName() ) + "/FFTWaves" )
-				, c3d::move( previousPasses )
 				, *m_ubo
 				, m_component.getFftConfig() );
-			graph.addInput( m_oceanFFT->getHeightDisplacement().sampledViewId
+			graph.addInput( m_oceanFFT->getHeightDisplacement().getWholeViewId()
 				, { ImageLayout::eShaderReadOnly, VertexShaderReadState } );
-			graph.addInput( m_oceanFFT->getGradientJacobian().sampledViewId
+			graph.addInput( m_oceanFFT->getGradientJacobian().getWholeViewId()
 				, { ImageLayout::eShaderReadOnly, VertexShaderReadState } );
-			graph.addInput( m_oceanFFT->getNormals().sampledViewId
+			graph.addInput( m_oceanFFT->getNormals().getWholeViewId()
 				, { ImageLayout::eShaderReadOnly, VertexShaderReadState } );
 		}
-
-		return m_oceanFFT->getLastPasses();
 	}
 
 	void FFTWavesComponent::RenderData::registerDependencies( crg::FramePass & pass )const
 	{
-		pass.addImplicitColourView( m_oceanFFT->getHeightDisplacement().sampledViewId
+		pass.addImplicit( *m_oceanFFT->getHeightDisplacement().getLastAttach()
 			, ImageLayout::eShaderReadOnly );
-		pass.addImplicitColourView( m_oceanFFT->getGradientJacobian().sampledViewId
+		pass.addImplicit( *m_oceanFFT->getGradientJacobian().getLastAttach()
 			, ImageLayout::eShaderReadOnly );
-		pass.addImplicitColourView( m_oceanFFT->getNormals().sampledViewId
+		pass.addImplicit( *m_oceanFFT->getNormals().getLastAttach()
 			, ImageLayout::eShaderReadOnly );
 	}
 
@@ -469,9 +465,9 @@ namespace ocean_fft
 		, uint32_t & index )const
 	{
 		m_ubo->addDescriptorWrite( descriptorWrites, index );
-		bindTexture( m_oceanFFT->getHeightDisplacement().sampledView, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_oceanFFT->getGradientJacobian().sampledView, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
+		bindTexture( m_oceanFFT->getHeightDisplacement().getSampledView(), *m_linearWrapSampler, descriptorWrites, index );
+		bindTexture( m_oceanFFT->getGradientJacobian().getSampledView(), *m_linearWrapSampler, descriptorWrites, index );
+		bindTexture( m_oceanFFT->getNormals().getSampledView(), *m_linearWrapSampler, descriptorWrites, index );
 	}
 
 	void FFTWavesComponent::RenderData::accept( c3d::ConfigurationVisitorBase & vis )

@@ -4,16 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_PoolUniformBuffer_H___
 #define ___C3D_PoolUniformBuffer_H___
 
-#include "BufferModule.hpp"
-
-#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
-#include <CastorUtils/Design/Signal.hpp>
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
-
-#include <set>
+#include <map>
 
 namespace c3d
 {
@@ -37,8 +33,9 @@ namespace c3d
 		 *\param[in]	sharingMode		Le mode de partage.
 		 */
 		C3D_API PoolUniformBuffer( RenderSystem const & renderSystem
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags flags
+			, crg::ResourcesCache & resources
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags flags
 			, String debugName
 			, ashes::QueueShare sharingMode = {} );
 		/**
@@ -58,21 +55,21 @@ namespace c3d
 		 *\brief		Nettoie le tampon GPU.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( RenderDevice const & device )noexcept;
+		C3D_API void cleanup()noexcept;
 		/**
 		 *\~english
 		 *\brief		Makes current local modifications available in VRAM.
 		 *\~french
 		 *\brief		Rend disponible en VRAM les modifications locales.
 		 */
-		C3D_API void flush();
+		C3D_API void flush()const;
 		/**
 		 *\~english
 		 *\return		The remaining memory.
 		 *\~french
 		 *\return		La mémoire restante.
 		 */
-		C3D_API VkDeviceSize getAvailable()const noexcept;
+		C3D_API DeviceSize getAvailable()const noexcept;
 		/**
 		 *\~english
 		 *\return		The allocation statistics.
@@ -88,7 +85,7 @@ namespace c3d
 		 *\param		size	La taille voulue.
 		 *\return		\p true s'il y a assez de mémoire restante pour un nouvel élément.
 		 */
-		C3D_API bool hasAvailable( VkDeviceSize size )const noexcept;
+		C3D_API bool hasAvailable( DeviceSize size )const noexcept;
 		/**
 		 *\~english
 		 *\return		\p true if at least one element has been allocated.
@@ -106,7 +103,7 @@ namespace c3d
 		 *\param		size	La taille voulue.
 		 *\return		L'offset de la zone mémoire.
 		 */
-		C3D_API MemChunk allocate( VkDeviceSize size );
+		C3D_API MemChunk allocate( DeviceSize size );
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -115,7 +112,7 @@ namespace c3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	offset	L'offset de la zone mémoire.
 		 */
-		C3D_API void deallocate( VkDeviceSize offset )noexcept;
+		C3D_API void deallocate( DeviceSize offset )noexcept;
 		/**
 		*\~english
 		*\return
@@ -129,7 +126,7 @@ namespace c3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT const & getData( VkDeviceSize offset )const noexcept
+		DataT const & getData( DeviceSize offset )const noexcept
 		{
 			using DataCPtr = DataT const *;
 			return *reinterpret_cast< DataCPtr >( m_data.data() + offset );
@@ -147,7 +144,7 @@ namespace c3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT & getData( VkDeviceSize offset )noexcept
+		DataT & getData( DeviceSize offset )noexcept
 		{
 			using DataPtr = DataT *;
 			return *reinterpret_cast< DataPtr >( m_data.data() + offset );
@@ -196,7 +193,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::UniformBuffer const & getBuffer()const noexcept
+		Buffer const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -208,7 +205,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::UniformBuffer & getBuffer()noexcept
+		Buffer & getBuffer()noexcept
 		{
 			return *m_buffer;
 		}
@@ -222,7 +219,7 @@ namespace c3d
 		*/
 		uint32_t getElementSize()const noexcept
 		{
-			return uint32_t( getBuffer().getElementSize() );
+			return m_elemSize;
 		}
 		/**
 		*\~english
@@ -242,7 +239,7 @@ namespace c3d
 		*/
 		uint32_t getAlignedSize( uint32_t size )const noexcept
 		{
-			return uint32_t( getBuffer().getAlignedSize( size ) );
+			return uint32_t( ashes::getAlignedSize( size, m_elemSize ) );
 		}
 		/**
 		*\~english
@@ -259,22 +256,26 @@ namespace c3d
 
 	private:
 		RenderSystem const & m_renderSystem;
-		VkBufferUsageFlags m_usage;
-		VkMemoryPropertyFlags m_flags;
+		crg::ResourcesCache & m_resources;
+		BufferUsageFlags m_usage;
+		MemoryPropertyFlags m_flags;
 		ashes::QueueShare m_sharingMode;
 		Map< MemChunk, String > m_allocated;
-		ashes::UniformBufferPtr m_buffer;
+		BufferUPtr m_buffer;
 		String m_debugName;
 		ByteArrayView m_data;
+		uint32_t m_elemSize;
 	};
 
 	inline PoolUniformBufferUPtr makePoolUniformBuffer( RenderSystem const & renderSystem
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
+		, crg::ResourcesCache & resources
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags flags
 		, String name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return makeUnique< PoolUniformBuffer >( renderSystem
+			, resources
 			, usage
 			, flags
 			, c3d::move( name )

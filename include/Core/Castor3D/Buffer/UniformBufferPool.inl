@@ -1,10 +1,12 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <RenderGraph/Attachment.hpp>
+
 namespace c3d
 {
 	template< typename DataT >
-	UniformBufferOffsetT< DataT > UniformBufferPool::getBuffer( VkMemoryPropertyFlags flags )
+	UniformBufferOffsetT< DataT > UniformBufferPool::getBuffer( MemoryPropertyFlags flags )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		UniformBufferOffsetT< DataT > result;
@@ -22,9 +24,10 @@ namespace c3d
 		}
 
 		result.setPool( *itB->buffer );
-		auto chunk = itB->buffer->allocate( sizeof( DataT ) );
+		MemChunk chunk = itB->buffer->allocate( sizeof( DataT ) );
 		result.offset = uint32_t( chunk.offset );
 		result.range = uint32_t( chunk.size );
+		result.attach = makeRawUnique< crg::Attachment >( crg::Attachment::createDefault( chunk.bufferViewId ) );
 		result.flags = flags;
 		return result;
 	}

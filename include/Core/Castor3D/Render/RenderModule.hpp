@@ -16,6 +16,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <RenderGraph/Attachment.hpp>
+#include <RenderGraph/BufferData.hpp>
+#include <RenderGraph/BufferViewData.hpp>
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
 
@@ -114,24 +116,6 @@ namespace c3d
 
 		Array< Quad, 6u > faces;
 	};
-	/**
-	*\~english
-	*\brief
-	*	RenderGraph's image view binding.
-	*\~french
-	*\brief
-	*	Binding d'une image RenderGraph.
-	*/
-	struct Texture;
-	/**
-	*\~english
-	*\brief
-	*	Holds minimal data for an intermediate view.
-	*\~french
-	*\brief
-	*	Contient les données minimales pour une vue intermédiaire.
-	*/
-	struct IntermediateView;
 	/**
 	*\~english
 	*\brief
@@ -506,6 +490,52 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	RenderGraph's buffer view binding base class.
+	*\~french
+	*\brief
+	*	Classe de base d'un binding d'un buffer RenderGraph.
+	*/
+	struct BufferBase;
+	/**
+	*\~english
+	*\brief
+	*	Child class of c3d::BufferBase, for untyped buffers.
+	*\~french
+	*\brief
+	*	Classe fille de c3d::BufferBase, pour les buffers non typés.
+	*/
+	struct Buffer;
+	/**
+	*\~english
+	*\brief
+	*	Child class of c3d::BufferBase, for typed buffers.
+	*\~french
+	*\brief
+	*	Classe fille de c3d::BufferBase, pour les buffers typés.
+	*/
+	template< typename DataT >
+	struct BufferT;
+	/**
+	*\~english
+	*\brief
+	*	RenderGraph's image view binding.
+	*\~french
+	*\brief
+	*	Binding d'une image RenderGraph.
+	*/
+	struct Texture;
+	/**
+	*\~english
+	*\brief
+	*	Holds minimal data for an intermediate view.
+	*\~french
+	*\brief
+	*	Contient les données minimales pour une vue intermédiaire.
+	*/
+	struct IntermediateView;
+	/**
+	*\~english
+	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief
@@ -798,6 +828,7 @@ namespace c3d
 
 	using RenderQueueArray = Vector< ReferenceWrapper< RenderQueue > >;
 	using TextureArray = Vector< Texture >;
+	using TexturePtrArray = Vector< Texture * >;
 
 	using ShadowMapRefIds = Pair< ReferenceWrapper< ShadowMap >, UInt32Array >;
 	using ShadowMapRefArray = Vector< ShadowMapRefIds >;
@@ -880,8 +911,7 @@ namespace c3d
 		using Creator = Function< crg::FramePassArray( RenderDevice const &
 			, RenderTechnique &
 			, TechniquePasses &
-			, crg::ResourcesCache &
-			, crg::FramePassArray ) >;
+			, crg::ResourcesCache & ) >;
 
 		RenderPassRegisterInfo( String pname
 			, Creator pcreate
@@ -926,7 +956,7 @@ namespace c3d
 		Matrix4x4f bgMtxView{};
 		Matrix4x4f bgMtxProj{};
 		bool isSafeBanded{ true };
-		crg::ImageViewIdArray targetImage{};
+		Texture * targetImage{};
 		Size renderSize{};
 
 		struct DirtyObjects
@@ -1025,6 +1055,7 @@ namespace c3d
 	CU_DeclareSmartPtr( c3d, RenderWindow, C3D_API );
 	CU_DeclareSmartPtr( c3d, Viewport, C3D_API );
 	CU_DeclareSmartPtr( c3d, Texture, C3D_API );
+	CU_DeclareSmartPtr( c3d, Buffer, C3D_API );
 
 	CU_DeclareVector( IntermediateView, IntermediateView );
 	/** @endcond */
@@ -1069,8 +1100,7 @@ namespace c3d
 		, uint32_t dstQueueFamily );
 	C3D_API void memoryBarrier( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, ashes::BufferBase const & buffer
-		, crg::BufferSubresourceRange const & range
+		, BufferBase const & buffer
 		, AccessState after
 		, AccessState before );
 	C3D_API ashes::Image makeImage( ashes::Device const & device
@@ -1305,6 +1335,29 @@ namespace c3d
 		, uint32_t dstBinding
 		, VkDeviceSize byteOffset
 		, VkDeviceSize byteRange
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage buffer.
+	*\param[in] storageBuffer
+	*	The storage buffer.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un storage buffer.
+	*\param[in] storageBuffer
+	*	Le storage buffer.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( BufferBase const & storageBuffer
+		, uint32_t dstBinding
 		, uint32_t dstArrayElement = 0u );
 	/**
 	*\~english

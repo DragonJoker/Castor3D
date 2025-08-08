@@ -44,7 +44,7 @@ namespace fxaa
 	FxaaUbo::FxaaUbo( c3d::RenderDevice const & device
 		, c3d::Size const & size )
 		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
 	{
 		auto & data = m_ubo.getData();
 		data.pixelSize = c3d::Point2f{ 1.0f / float( size.getWidth() )

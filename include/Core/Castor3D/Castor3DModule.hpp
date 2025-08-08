@@ -51,8 +51,11 @@ namespace c3d
 	using crg::AccessFlags;
 	using crg::AttachmentLoadOp;
 	using crg::AttachmentStoreOp;
+	using crg::DeviceSize;
 	using crg::BlendFactor;
 	using crg::BlendOp;
+	using crg::BufferCreateFlags;
+	using crg::BufferUsageFlags;
 	using crg::ColorComponentFlags;
 	using crg::FilterMode;
 	using crg::ImageAspectFlags;
@@ -63,12 +66,16 @@ namespace c3d
 	using crg::ImageUsageFlags;
 	using crg::ImageViewCreateFlags;
 	using crg::ImageViewType;
+	using crg::MemoryPropertyFlags;
 	using crg::MipmapMode;
 	using crg::PipelineStageFlags;
 	using crg::SampleCount;
 	using crg::WrapMode;
 
 	using crg::AccessState;
+	using crg::BufferCreateInfo;
+	using crg::BufferSubresourceRange;
+	using crg::BufferViewCreateInfo;
 	using crg::ClearColorValue;
 	using crg::ClearDepthStencilValue;
 	using crg::ClearValue;
@@ -82,6 +89,7 @@ namespace c3d
 	using crg::Offset3D;
 	using crg::PipelineState;
 	using crg::Rect2D;
+	using crg::Rect3D;
 	using crg::SemaphoreWait;
 	using crg::SemaphoreWaitArray;
 

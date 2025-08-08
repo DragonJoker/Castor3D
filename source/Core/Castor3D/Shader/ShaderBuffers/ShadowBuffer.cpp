@@ -10,7 +10,7 @@ namespace c3d
 {
 	ShadowBuffer::ShadowBuffer( RenderDevice const & device )
 		: m_device{ device }
-		, m_buffer{ m_device.uboPool->getBuffer< AllShadowData >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
+		, m_buffer{ m_device.uboPool->getBuffer< AllShadowData >( MemoryPropertyFlags::eHostVisible ) }
 	{
 	}
 
@@ -29,7 +29,7 @@ namespace c3d
 
 	void ShadowBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, "C3D_Shadows", binding );
+		return m_buffer.createPassBinding( pass, binding );
 	}
 
 	ashes::WriteDescriptorSet ShadowBuffer::getBinding( uint32_t binding )const

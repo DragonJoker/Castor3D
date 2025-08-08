@@ -36,13 +36,27 @@ namespace c3d
 
 	RenderUbo::RenderUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal ) }
 	{
 	}
 
 	RenderUbo::~RenderUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
+	}
+
+	void RenderUbo::cpuUpdate( RenderUbo const & parent
+		, Size const & renderSize )
+	{
+		auto & parentData = parent.m_ubo.getData();
+		auto & data = m_ubo.getData();
+		data.renderSize->x = renderSize.getWidth();
+		data.renderSize->y = renderSize.getHeight();
+		data.invRenderSize->x = 1.0f / float( renderSize.getWidth() );
+		data.invRenderSize->y = 1.0f / float( renderSize.getHeight() );
+		data.exposure = parentData.exposure;
+		data.gamma = parentData.gamma;
+		data.debugIndex = parentData.debugIndex;
 	}
 
 	void RenderUbo::cpuUpdate( HdrConfig const & config

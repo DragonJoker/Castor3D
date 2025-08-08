@@ -47,25 +47,22 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = graph.getBufferWrite( pass.buffers[DownsampleDistributionPass::eConfig] );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+			auto write = graph.getDescriptorWrite( *pass.uniforms.begin()->second
+				, DownsampleDistributionPass::eConfig );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[DownsampleDistributionPass::eInput] );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+			write = graph.getDescriptorWrite( *pass.inputs.begin()->second
+				, DownsampleDistributionPass::eInput );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[DownsampleDistributionPass::eOutput] );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+			write = graph.getDescriptorWrite( *pass.outputs.begin()->second
+				, DownsampleDistributionPass::eOutput );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
 			auto descriptorSet = pool.createDescriptorSet( DownsampleDistributionPass::Name );
@@ -217,19 +214,18 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	crg::FramePass const & createDownsampleDistributionPass( c3d::String const & prefix
+	void createDownsampleDistributionPass( c3d::String const & prefix
 		, c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
 		, c3d::Extent2D const & extent
 		, uint32_t downsample
 		, OceanUbo const & ubo
-		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output )
+		, c3d::BufferBase const & input
+		, c3d::BufferBase & output )
 	{
 		auto mbName = c3d::toUtf8( name );
-		auto & result = graph.createPass( "GenerateDistribution" + mbName
+		auto & pass = graph.createPass( "GenerateDistribution" + mbName
 			, [&device, downsample, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -245,18 +241,9 @@ namespace ocean_fft
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependencies( previousPasses );
-		ubo.createPassBinding( result
-			, DownsampleDistributionPass::eConfig );
-		result.addInputStorageBuffer( { input, mbName + "Seed" }
-			, DownsampleDistributionPass::eInput
-			, 0u
-			, input.getSize() );
-		result.addOutputStorageBuffer( { output, mbName + "Distribution" }
-			, DownsampleDistributionPass::eOutput
-			, 0u
-			, output.getSize() );
-		return result;
+		ubo.createPassBinding( pass, DownsampleDistributionPass::eConfig );
+		pass.addInputStorage( *input.getLastAttach(), DownsampleDistributionPass::eInput );
+		output.setLastAttach( pass.addOutputStorageBuffer( output.bufferViewId, DownsampleDistributionPass::eOutput ) );
 	}
 
 	//************************************************************************************************

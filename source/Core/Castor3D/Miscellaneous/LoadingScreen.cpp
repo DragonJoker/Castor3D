@@ -261,20 +261,19 @@ namespace c3d
 		, m_renderUbo{ m_device }
 		, m_sceneUbo{ &scene->getUbo() }
 		, m_backgroundRenderer{ makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
-			, nullptr
 			, m_device
 			, nullptr
 			, *m_scene->getBackground()
 			, m_renderUbo
 			, *m_sceneUbo
-			, m_colour.targetViewId
+			, m_colour
 			, true /*clearColour*/ ) }
-		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
-		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
-		, m_overlayPassDesc{ &doCreateOverlayPass( m_transparentPassDesc ) }
-		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
-		, m_runnable{ loadscreen::createRunnableGraph( *m_graph, m_device ) }
 	{
+		doCreateOpaquePass();
+		doCreateTransparentPass();
+		doCreateOverlayPass();
+		doCreateWindowPass();
+		m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
 		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
 	}
 
@@ -399,18 +398,17 @@ namespace c3d
 				m_colour = loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat );
 				m_colour.create();
 				m_backgroundRenderer = makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
-					, nullptr
 					, m_device
 					, nullptr
 					, *m_scene->getBackground()
 					, m_renderUbo
 					, *m_sceneUbo
-					, m_colour.targetViewId
+					, m_colour
 					, true /*clearColour*/ );
-				m_opaquePassDesc = &doCreateOpaquePass( &m_backgroundRenderer->getPass() );
-				m_transparentPassDesc = &doCreateTransparentPass( m_opaquePassDesc );
-				m_overlayPassDesc = &doCreateOverlayPass( m_transparentPassDesc );
-				m_windowPassDesc = &doCreateWindowPass( m_overlayPassDesc );
+				doCreateOpaquePass();
+				doCreateTransparentPass();
+				doCreateOverlayPass();
+				doCreateWindowPass();
 				m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
 			}
 
@@ -425,22 +423,22 @@ namespace c3d
 		return result;
 	}
 
-	crg::FramePass & LoadingScreen::doCreateOpaquePass( crg::FramePass const * previousPass )
+	void LoadingScreen::doCreateOpaquePass()
 	{
-		auto & result = m_graph->getDefaultGroup().createPass( "Opaque"
-			, [this]( crg::FramePass const & pass
+		auto & pass = m_graph->getDefaultGroup().createPass( "Opaque"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = makeRawUnique< ForwardRenderTechniquePass >( nullptr
-					, pass
+					, framePass
 					, context
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, cuT( "LoadingScreen" )
-					, crg::ImageViewIdArray{ m_colour.targetViewId }
-					, crg::ImageViewIdArray{ m_depth.targetViewId }
+					, m_colour
+					, m_depth
 					, RenderNodesPassDesc{ makeExtent3D( m_renderSize ), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
@@ -448,29 +446,27 @@ namespace c3d
 				m_opaquePass = result.get();
 				return result;
 			} );
-		result.addDependency( *previousPass );
-		result.addOutputDepthView( m_depth.targetViewId
-			, defaultClearDepthStencil );
-		result.addInOutColourView( m_colour.targetViewId );
-		return result;
+		m_depth.setLastAttach( pass.addOutputDepthTarget( m_depth.getTargetViewId()
+			, defaultClearDepthStencil ) );
+		m_colour.setLastAttach( pass.addInOutColourTarget( *m_colour.getLastAttach() ) );
 	}
 
-	crg::FramePass & LoadingScreen::doCreateTransparentPass( crg::FramePass const * previousPass )
+	void LoadingScreen::doCreateTransparentPass()
 	{
-		auto & result = m_graph->getDefaultGroup().createPass( "Transparent"
-			, [this]( crg::FramePass const & pass
+		auto & pass = m_graph->getDefaultGroup().createPass( "Transparent"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = makeRawUnique< ForwardRenderTechniquePass >( nullptr
-					, pass
+					, framePass
 					, context
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, cuT( "LoadingScreen" )
-					, crg::ImageViewIdArray{ m_colour.targetViewId }
-					, crg::ImageViewIdArray{ m_depth.targetViewId }
+					, m_colour
+					, m_depth
 					, RenderNodesPassDesc{ makeExtent3D( m_renderSize ), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
@@ -478,20 +474,18 @@ namespace c3d
 				m_transparentPass = result.get();
 				return result;
 			} );
-		result.addDependency( *previousPass );
-		result.addInputDepthView( m_depth.targetViewId );
-		result.addInOutColourView( m_colour.targetViewId );
-		return result;
+		pass.addInputDepthTarget( *m_depth.getLastAttach() );
+		m_colour.setLastAttach( pass.addInOutColourTarget( *m_colour.getLastAttach() ) );
 	}
 
-	crg::FramePass & LoadingScreen::doCreateOverlayPass( crg::FramePass const * previousPass )
+	void LoadingScreen::doCreateOverlayPass()
 	{
-		auto & result = m_graph->getDefaultGroup().createPass( "Overlay"
-			, [this]( crg::FramePass const & pass
+		auto & pass = m_graph->getDefaultGroup().createPass( "Overlay"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = makeRawUnique< OverlayPass >( pass
+				auto result = makeRawUnique< OverlayPass >( framePass
 					, context
 					, graph
 					, m_device
@@ -502,19 +496,17 @@ namespace c3d
 				m_overlayPass = result.get();
 				return result;
 			} );
-		result.addDependency( *previousPass );
-		result.addInOutColourView( m_colour.targetViewId );
-		return result;
+		m_colour.setLastAttach( pass.addInOutColourTarget( *m_colour.getLastAttach() ) );
 	}
 
-	crg::FramePass & LoadingScreen::doCreateWindowPass( crg::FramePass const * previousPass )
+	void LoadingScreen::doCreateWindowPass()
 	{
-		auto & result = m_graph->getDefaultGroup().createPass( "Window"
-			, [this]( crg::FramePass const & pass
+		auto & pass = m_graph->getDefaultGroup().createPass( "Window"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = makeRawUnique< WindowPass >( pass
+				auto result = makeRawUnique< WindowPass >( framePass
 					, context
 					, graph
 					, m_device
@@ -523,8 +515,6 @@ namespace c3d
 				m_windowPass = result.get();
 				return result;
 			} );
-		result.addDependency( *previousPass );
-		result.addSampledView( m_colour.sampledViewId, 0u );
-		return result;
+		pass.addInputSampled( *m_colour.getLastAttach(), 0u );
 	}
 }

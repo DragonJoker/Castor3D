@@ -1,10 +1,13 @@
 #include "Castor3D/Buffer/UploadData.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+
+#include <RenderGraph/FramePassTimer.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -58,9 +61,14 @@ namespace c3d
 	{
 	}
 
-	void UploadData::begin()
+	void UploadData::pushUpload( void const * srcData
+		, VkDeviceSize srcSize
+		, BufferBase const & dstBuffer
+		, VkDeviceSize dstOffset
+		, AccessState const & dstAccessState )
 	{
-		doBegin();
+		pushUpload( srcData, srcSize
+			, dstBuffer.getBuffer(), dstOffset, dstAccessState );
 	}
 
 	void UploadData::pushUpload( void const * srcData
@@ -207,11 +215,45 @@ namespace c3d
 		m_pendingImages.clear();
 	}
 
-	UploadData::SemaphoreUsed UploadData::end( ashes::Queue const & queue
-		, ashes::Fence const * fence
-		, Milliseconds timeout )
+	void UploadData::cleanup()noexcept
 	{
-		return doEnd( queue, fence, timeout );
+	}
+
+	void UploadData::doBegin()const
+	{
+		if ( m_commandBuffer )
+			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+	}
+
+	void UploadData::doEnd()const
+	{
+		if ( m_commandBuffer )
+			m_commandBuffer->end();
+	}
+
+	void UploadData::doBeginDebugBlock( MbStringView name, FramePassTimer & timer )const
+	{
+		if ( m_commandBuffer )
+		{
+			auto const & engine = *getDevice().renderSystem.getEngine();
+			m_commandBuffer->beginDebugBlock( { std::string{ name }
+				, makeFloatArray( engine.getNextRainbowColour() ) } );
+			timer.beginPass( *m_commandBuffer );
+		}
+	}
+
+	void UploadData::doEndDebugBlock( FramePassTimer & timer )const
+	{
+		if ( m_commandBuffer )
+		{
+			timer.endPass( *m_commandBuffer );
+			m_commandBuffer->endDebugBlock();
+		}
+	}
+
+	void UploadData::doCleanup()noexcept
+	{
+		m_commandBuffer = {};
 	}
 
 	bool UploadData::doCopyData( void const * data
@@ -306,7 +348,8 @@ namespace c3d
 		auto dstCurFlags = crg::getPipelineStageFlags( dstBuffer.getCompatibleStageFlags() );
 		auto dstTrsFlags = srcBuffer ? PipelineStageFlags::eTransfer : PipelineStageFlags::eHost;
 
-		if ( dstCurFlags != dstTrsFlags )
+		if ( m_commandBuffer
+			&& dstCurFlags != dstTrsFlags )
 		{
 			m_commandBuffer->memoryBarrier( getPipelineStageFlags( dstCurFlags )
 				, getPipelineStageFlags( dstTrsFlags )
@@ -340,11 +383,14 @@ namespace c3d
 				CU_Failure( "Trying to copy more than there is in src buffer" );
 			}
 
-			m_commandBuffer->copyBuffer( *srcBuffer
-				, dstBuffer
-				, data.srcSize
-				, srcOffset
-				, data.dstOffset );
+			if ( m_commandBuffer )
+			{
+				m_commandBuffer->copyBuffer( *srcBuffer
+					, dstBuffer
+					, data.srcSize
+					, srcOffset
+					, data.dstOffset );
+			}
 		}
 		else
 		{
@@ -360,7 +406,8 @@ namespace c3d
 				, data.dstOffset );
 		}
 
-		if ( dstTrsFlags != data.dstAccessState.pipelineStage )
+		if ( m_commandBuffer
+			&& dstTrsFlags != data.dstAccessState.pipelineStage )
 		{
 			m_commandBuffer->memoryBarrier( getPipelineStageFlags( dstTrsFlags )
 				, getPipelineStageFlags( data.dstAccessState.pipelineStage )
@@ -420,16 +467,27 @@ namespace c3d
 			data.dstRange.layerCount = 1u;
 		}
 
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, dstImage.makeTransition( VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, convert( data.dstRange ) ) );
-		m_commandBuffer->copyToImage( copies, srcBuffer, dstImage );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, getPipelineStageFlags( data.dstPipelineFlags )
-			, dstImage.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, convert( data.dstImageLayout )
-				, convert( data.dstRange ) ) );
+		if ( m_commandBuffer )
+		{
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, dstImage.makeTransition( VK_IMAGE_LAYOUT_UNDEFINED
+					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, convert( data.dstRange ) ) );
+			m_commandBuffer->copyToImage( copies, srcBuffer, dstImage );
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, getPipelineStageFlags( data.dstPipelineFlags )
+				, dstImage.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, convert( data.dstImageLayout )
+					, convert( data.dstRange ) ) );
+		}
+	}
+
+	void UploadData::doMemoryBarrier( VkPipelineStageFlags after
+		, VkPipelineStageFlags before
+		, VkBufferMemoryBarrier const & transitionBarrier )const
+	{
+		if ( m_commandBuffer )
+			m_commandBuffer->memoryBarrier( after, before, transitionBarrier );
 	}
 }

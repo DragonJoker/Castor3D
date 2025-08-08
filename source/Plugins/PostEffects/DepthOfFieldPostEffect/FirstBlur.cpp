@@ -111,13 +111,12 @@ namespace dof
 
 	//*********************************************************************************************
 
-	crg::FramePassArray createFirstBlurPass( c3d::RenderDevice const & device
+	void createFirstBlurPass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, DepthOfFieldUbo const & configurationUbo
-		, crg::ImageViewIdArray const & colour
+		, c3d::Texture const & colour
 		, c3d::Texture const & cocResult
-		, c3d::Texture const & blurResult
+		, c3d::Texture & blurResult
 		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, uint32_t const * passIndex )
 	{
@@ -139,14 +138,10 @@ namespace dof
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-
-		pass.addSampledView( colour, 0u );
-		pass.addSampledView( cocResult.sampledViewId, 1u );
+		pass.addInputSampled( *colour.getSampledLastAttach(), 0u );
+		pass.addInputSampled( *cocResult.getSampledLastAttach(), 1u );
 		configurationUbo.createPassBinding( pass, 2u );
 
-		pass.addOutputColourView( blurResult.targetViewId );
-
-		return { &pass };
+		blurResult.setLastAttach( pass.addOutputColourTarget( blurResult.getTargetViewId() ) );
 	}
 }

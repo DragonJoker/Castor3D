@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "PassesModule.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Render/Buffer.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -329,8 +330,8 @@ namespace c3d
 		Vector< ashes::WriteDescriptorSetArray > m_passes;
 		Vector< ashes::DescriptorSetPtr > m_descriptorSets;
 		Vector< bool > m_invertY;
-		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
-		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_uvInvVertexBuffer;
+		BufferUPtrT< TexturedQuad::Vertex > m_vertexBuffer;
+		BufferUPtrT< TexturedQuad::Vertex > m_uvInvVertexBuffer;
 	};
 
 	template< typename ConfigT, typename BuilderT >

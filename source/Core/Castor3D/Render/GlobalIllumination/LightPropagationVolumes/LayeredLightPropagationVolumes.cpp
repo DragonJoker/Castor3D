@@ -53,12 +53,12 @@ namespace c3d
 			{
 				auto clearValue = convert( transparentBlackClearColor );
 
-				for ( auto & attach : m_pass.images )
+				for ( auto & [_, attach] : m_pass.outputs )
 				{
-					auto view = attach.view( index );
+					auto view = attach->view( index );
 					auto image = m_graph.createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
-					assert( attach.isTransferOutputView() );
+					assert( attach->isTransferOutputView() );
 					m_context.vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
@@ -132,42 +132,24 @@ namespace c3d
 	//*********************************************************************************************
 
 	LayeredLightPropagationVolumesBase::LightLpv::LightLpv( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, String const & name
 		, LightCache const & plightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
-		, Vector< LightVolumePassResult > const & injection
-		, TextureArray const * geometry )
+		, Vector< LightVolumePassResult > & injection
+		, TextureArray * geometry )
 		: lightCache{ plightCache }
-		, lastLightPass{ &previousPass }
-		, lastGeomPass{ &previousPass }
 	{
 		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			lpvLightConfigUbos.emplace_back( device );
-			lightInjectionPassesDesc.emplace_back( &doCreateInjectionPass( graph
-				, device
-				, name
-				, lightType
-				, smResult
-				, lpvGridConfigUbos
-				, injection
-				, cascade ) );
-
+			doCreateInjectionPass( graph, device, name, lightType
+				, smResult, lpvGridConfigUbos, injection, cascade );
 			if ( geometry )
-			{
-				geometryInjectionPassesDesc.emplace_back( &doCreateGeometryPass( graph
-					, device
-					, name
-					, lightType
-					, smResult
-					, lpvGridConfigUbos
-					, *geometry
-					, cascade ) );
-			}
+				doCreateGeometryPass( graph, device, name, lightType
+					, smResult, lpvGridConfigUbos, *geometry, cascade );
 		}
 	}
 
@@ -194,96 +176,69 @@ namespace c3d
 		return changed;
 	}
 
-	crg::FramePass & LayeredLightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FramePassGroup & graph
+	void LayeredLightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, String const & name
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
-		, Vector< LightVolumePassResult > const & injection
+		, Vector< LightVolumePassResult > & injection
 		, uint32_t cascade )
 	{
-		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
-		auto & result = graph.createPass( toUtf8( name ) + "LightInjection" + string::toMbString( cascade )
+		auto rsmSize = smResult.getExtent().width;
+		auto & pass = graph.createPass( toUtf8( name ) + "LightInjection" + string::toMbString( cascade )
 			, [this, &device, lightType, rsmSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = makeRawUnique< LightInjectionPass >( framePass
-					, context
-					, runnableGraph
-					, device
-					, lightType
-					, lightCache.getScene()->getLpvGridSize()
-					, rsmSize );
+				auto res = makeRawUnique< LightInjectionPass >( framePass, context, runnableGraph
+					, device, lightType, lightCache.getScene()->getLpvGridSize(), rsmSize );
 				lightInjectionPasses.emplace_back( res.get() );
 				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( *lastLightPass );
-		lightCache.createPassBinding( result
-			, LightInjectionPass::LightsIdx );
-		result.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, LightInjectionPass::RsmNormalsIdx );
-		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, LightInjectionPass::RsmPositionIdx );
-		result.addSampledView( smResult[SmTexture::eFlux].sampledViewId
-			, LightInjectionPass::RsmFluxIdx );
-		lpvGridConfigUbos[cascade].createPassBinding( result
-			, LightInjectionPass::LpvGridUboIdx );
-		lpvLightConfigUbos[cascade].createPassBinding( result
-			, LightInjectionPass::LpvLightUboIdx );
+		lightCache.createPassBinding( pass, LightInjectionPass::LightsIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eNormal ), LightInjectionPass::RsmNormalsIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::ePosition ), LightInjectionPass::RsmPositionIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eFlux ), LightInjectionPass::RsmFluxIdx );
+		lpvGridConfigUbos[cascade].createPassBinding( pass, LightInjectionPass::LpvGridUboIdx );
+		lpvLightConfigUbos[cascade].createPassBinding( pass, LightInjectionPass::LpvLightUboIdx );
 
-		result.addInOutColourView( injection[cascade][LpvTexture::eR].targetViewId );
-		result.addInOutColourView( injection[cascade][LpvTexture::eG].targetViewId );
-		result.addInOutColourView( injection[cascade][LpvTexture::eB].targetViewId );
-		lastLightPass = &result;
-		return result;
+		injection[cascade].setLastAttach( LpvTexture::eR, pass.addInOutColourTarget( *injection[cascade].getLastAttach( LpvTexture::eR ) ) );
+		injection[cascade].setLastAttach( LpvTexture::eG, pass.addInOutColourTarget( *injection[cascade].getLastAttach( LpvTexture::eG ) ) );
+		injection[cascade].setLastAttach( LpvTexture::eB, pass.addInOutColourTarget( *injection[cascade].getLastAttach( LpvTexture::eB ) ) );
 	}
 
-	crg::FramePass & LayeredLightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FramePassGroup & graph
+	void LayeredLightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, String const & name
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
-		, TextureArray const & geometry
+		, TextureArray & geometry
 		, uint32_t cascade )
 	{
-		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
-		auto & result = graph.createPass( toUtf8( name ) + "GeomInjection" + string::toMbString( cascade )
+		auto rsmSize = smResult.getExtent().width;
+		auto & pass = graph.createPass( toUtf8( name ) + "GeomInjection" + string::toMbString( cascade )
 			, [this, &device, lightType, rsmSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = makeRawUnique< GeometryInjectionPass >( framePass
-					, context
-					, runnableGraph
-					, device
-					, lightType
-					, lightCache.getScene()->getLpvGridSize()
-					, rsmSize );
+				auto res = makeRawUnique< GeometryInjectionPass >( framePass, context, runnableGraph
+					, device, lightType, lightCache.getScene()->getLpvGridSize(), rsmSize );
 				geometryInjectionPasses.emplace_back( res.get() );
 				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( *lastGeomPass );
-		lightCache.createPassBinding( result
-			, GeometryInjectionPass::LightsIdx );
-		result.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, GeometryInjectionPass::RsmNormalsIdx );
-		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, GeometryInjectionPass::RsmPositionIdx );
-		lpvGridConfigUbos[cascade].createPassBinding( result
-			, GeometryInjectionPass::LpvGridUboIdx );
-		lpvLightConfigUbos[cascade].createPassBinding( result
-			, GeometryInjectionPass::LpvLightUboIdx );
+		lightCache.createPassBinding( pass, GeometryInjectionPass::LightsIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eNormal ), GeometryInjectionPass::RsmNormalsIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::ePosition ), GeometryInjectionPass::RsmPositionIdx );
+		lpvGridConfigUbos[cascade].createPassBinding( pass, GeometryInjectionPass::LpvGridUboIdx );
+		lpvLightConfigUbos[cascade].createPassBinding( pass, GeometryInjectionPass::LpvLightUboIdx );
 
-		result.addInOutColourView( geometry[cascade].targetViewId );
-		lastGeomPass = &result;
-		return result;
+		geometry[cascade].setLastAttach( pass.addInOutColourTarget( *geometry[cascade].getLastAttach() ) );
 	}
 
 	//*********************************************************************************************
@@ -305,7 +260,7 @@ namespace c3d
 			, cuT( "LPV" )
 			, ( ( lightType == LightType::ePoint ) ? ImageCreateFlags::eCubeCompatible : ImageCreateFlags::eNone )
 			, Size{ 512u, 512u }
-			, smResult[SmTexture::eDepth].imageId.data->info.arrayLayers }
+			, smResult.getArrayLayers() }
 		, m_lpvResult{ lpvResult }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
@@ -314,9 +269,11 @@ namespace c3d
 		, m_injection{ llpvpropvol::createInjection( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
 		, m_geometry{ llpvpropvol::createGeometry( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount, m_geometryVolumes ) }
 		, m_propagate{ llpvpropvol::createPropagation( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
-		, m_clearInjectionPass{ doCreateClearInjectionPass() }
-		, m_downsamplePass{ doCreateDownsamplePass() }
+		, m_lightPropagationFirstPasses{ LpvMaxCascadesCount, nullptr }
 	{
+		doCreateClearPass();
+		doCreateDownsamplePass();
+
 		for ( auto const & value : m_injection )
 		{
 			value.create();
@@ -335,22 +292,22 @@ namespace c3d
 			}
 		}
 
-		m_graph.addInput( m_sourceSmResult[SmTexture::eNormal].targetViewId
+		m_graph.addInput( m_sourceSmResult.getTargetViewId( SmTexture::eNormal )
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-		m_graph.addInput( m_sourceSmResult[SmTexture::ePosition].targetViewId
+		m_graph.addInput( m_sourceSmResult.getTargetViewId( SmTexture::ePosition )
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-		m_graph.addInput( m_sourceSmResult[SmTexture::eFlux].targetViewId
+		m_graph.addInput( m_sourceSmResult.getTargetViewId( SmTexture::eFlux )
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
 			auto const & result = *lpvResult[cascade];
-			m_graph.addOutput( result[LpvTexture::eR].targetViewId
+			m_graph.addOutput( result.getTargetViewId( LpvTexture::eR )
 				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-			m_graph.addOutput( result[LpvTexture::eG].targetViewId
+			m_graph.addOutput( result.getTargetViewId( LpvTexture::eG )
 				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
-			m_graph.addOutput( result[LpvTexture::eB].targetViewId
+			m_graph.addOutput( result.getTargetViewId( LpvTexture::eB )
 				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		}
 	}
@@ -364,7 +321,7 @@ namespace c3d
 					: GlobalIlluminationType::eLayeredLpv ) ) )
 		{
 			m_aabb = m_scene.getBoundingBox();
-			m_lightPropagationPassesDesc = doCreatePropagationPasses();
+			doCreatePropagationPasses();
 			m_runnable = m_graph.compile( m_device.makeContext() );
 			m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() ) + cuT( "/Graph" )
 				, m_runnable->getTimer() );
@@ -382,6 +339,8 @@ namespace c3d
 
 	void LayeredLightPropagationVolumesBase::cleanup()noexcept
 	{
+		if ( m_recordEvent )
+			m_recordEvent->skip();
 		m_initialised = false;
 		m_lightPropagationPasses = {};
 		m_lightLpvs.clear();
@@ -389,32 +348,30 @@ namespace c3d
 
 	void LayeredLightPropagationVolumesBase::registerLight( LightInstance * light )
 	{
-		auto it = m_lightLpvs.find( light );
-
-		if ( it == m_lightLpvs.end() )
+		if ( auto [it, res] = m_lightLpvs.try_emplace( light );
+			res )
 		{
 			auto & group = m_graph.createPassGroup( toUtf8( light->getName() ) );
-			it = m_lightLpvs.try_emplace( light
-				, group
-				, m_downsamplePass
+			it->second = makeRawUnique< LightLpv >( group
 				, m_device
-				, this->getName() + light->getName()
+				, getName() + light->getName()
 				, light->getScene()->getLightCache()
 				, m_lightType
 				, m_downsampledSmResult
 				, m_lpvGridConfigUbos
 				, m_injection
-				, ( m_geometryVolumes ? &m_geometry : nullptr ) ).first;
+				, ( m_geometryVolumes ? &m_geometry : nullptr ) );
 
-			for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
+			if ( !m_lightPropagationFirstPasses.empty() )
 			{
-				auto index = cascade * LpvMaxPropagationSteps;
-				m_lightPropagationPassesDesc[index]->addDependency( *it->second.lightInjectionPassesDesc[cascade] );
-
-				if ( m_geometryVolumes )
+				for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 				{
-					m_lightPropagationPassesDesc[index + 1u]->addDependency( *it->second.geometryInjectionPassesDesc[cascade] );
+					m_lightPropagationFirstPasses[cascade]->addImplicit( *m_injection[cascade].getLastAttach( LpvTexture::eR ), ImageLayout::eShaderReadOnly );
+					m_lightPropagationFirstPasses[cascade]->addImplicit( *m_injection[cascade].getLastAttach( LpvTexture::eG ), ImageLayout::eShaderReadOnly );
+					m_lightPropagationFirstPasses[cascade]->addImplicit( *m_injection[cascade].getLastAttach( LpvTexture::eB ), ImageLayout::eShaderReadOnly );
 				}
+
+				m_lightPropagationFirstPasses.clear();
 			}
 
 			if ( m_runnable )
@@ -428,10 +385,7 @@ namespace c3d
 				printGraph( *m_runnable );
 
 				if ( m_recordEvent )
-				{
 					m_recordEvent->skip();
-				}
-
 				m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [this]( RenderDevice const &
 						, QueueData const & )
@@ -463,10 +417,10 @@ namespace c3d
 			|| m_cameraPos != camPos
 			|| m_cameraDir != camDir;
 
-		for ( auto & [light, lpv] : m_lightLpvs )
+		for ( auto const & [light, lpv] : m_lightLpvs )
 		{
 			updater.light = light;
-			changed = lpv.update( updater
+			changed = lpv->update( updater
 				, { m_lpvGridConfigUbo.getUbo().getData().allMinVolumeCorners[0]->w
 					, m_lpvGridConfigUbo.getUbo().getData().allMinVolumeCorners[1]->w
 					, m_lpvGridConfigUbo.getUbo().getData().allMinVolumeCorners[2]->w } )
@@ -524,22 +478,18 @@ namespace c3d
 		{
 			for ( auto const & [light, lpv] : m_lightLpvs )
 			{
-				for ( auto & lightInjectionPass : lpv.lightInjectionPasses )
+				for ( auto & lightInjectionPass : lpv->lightInjectionPasses )
 				{
 					if ( lightInjectionPass )
-					{
 						lightInjectionPass->accept( visitor );
-					}
 				}
 
 				if ( m_geometryVolumes )
 				{
-					for ( auto & geometryInjectionPass : lpv.geometryInjectionPasses )
+					for ( auto & geometryInjectionPass : lpv->geometryInjectionPasses )
 					{
 						if ( geometryInjectionPass )
-						{
 							geometryInjectionPass->accept( visitor );
-						}
 					}
 				}
 			}
@@ -547,9 +497,7 @@ namespace c3d
 			for ( auto & pass : m_lightPropagationPasses )
 			{
 				if ( pass )
-				{
 					pass->accept( visitor );
-				}
 			}
 
 			uint32_t layer = 0u;
@@ -560,8 +508,8 @@ namespace c3d
 				{
 					auto tex = LpvTexture( i );
 					visitor.visit( cuT( "Layered LPV Injection" ) + string::toString( layer ) + cuT( " " ) + getTexName( tex )
-						, injection[tex]
-						, m_graph.getFinalLayoutState( injection[tex].wholeViewId ).layout
+						, injection.getTexture( tex )
+						, m_graph.getFinalLayoutState( injection.getWholeViewId( tex ) ).layout
 						, TextureFactors::tex3D( &m_gridsSizes[i] ) );
 				}
 
@@ -576,7 +524,7 @@ namespace c3d
 				{
 					visitor.visit( cuT( "Layered LPV Geometry" ) + string::toString( layer )
 						, geometry
-						, m_graph.getFinalLayoutState( geometry.wholeViewId ).layout
+						, m_graph.getFinalLayoutState( geometry.getWholeViewId() ).layout
 						, TextureFactors::tex3D( &m_gridsSizes[layer] ) );
 					++layer;
 				}
@@ -594,8 +542,8 @@ namespace c3d
 					{
 						auto tex = LpvTexture( i );
 						visitor.visit( cuT( "Layered LPV Propagation" ) + string::toString( level ) + cuT( "_" ) + string::toString( layer ) + cuT( " " ) + getTexName( tex )
-							, propagate[tex]
-							, m_graph.getFinalLayoutState( propagate[tex].wholeViewId ).layout
+							, propagate.getTexture( tex )
+							, m_graph.getFinalLayoutState( propagate.getWholeViewId( tex ) ).layout
 							, TextureFactors::tex3D( &m_gridsSizes[i] ) );
 					}
 
@@ -607,7 +555,7 @@ namespace c3d
 		}
 	}
 
-	crg::FramePass & LayeredLightPropagationVolumesBase::doCreateClearInjectionPass()
+	void LayeredLightPropagationVolumesBase::doCreateClearPass()
 	{
 		auto & result = m_graph.createPass( "LLpvClearInjection"
 			, []( crg::FramePass const & pass
@@ -621,27 +569,20 @@ namespace c3d
 
 		for ( auto const & injection : m_injection )
 		{
-			for ( auto const & texture : injection )
-			{
-				result.addTransferOutputView( texture->wholeViewId );
-			}
+			for ( auto & texture : injection )
+				texture->setLastAttach( result.addOutputTransferImage( texture->getTargetViewId() ) );
 		}
 
 		if ( m_geometryVolumes )
 		{
-			for ( auto const & texture : m_geometry )
-			{
-				result.addTransferOutputView( texture.wholeViewId );
-			}
+			for ( auto & texture : m_geometry )
+				texture.setLastAttach( result.addOutputTransferImage( texture.getTargetViewId() ) );
 		}
-
-		return result;
 	}
 
-	crg::FramePass & LayeredLightPropagationVolumesBase::doCreateDownsamplePass()
+	void LayeredLightPropagationVolumesBase::doCreateDownsamplePass()
 	{
-		crg::FramePass * lastPass{ &m_clearInjectionPass };
-		auto extent = m_sourceSmResult[SmTexture::eNormal].getExtent();
+		auto extent = m_sourceSmResult.getExtent();
 
 		for ( auto i = uint32_t( SmTexture::eNormal ); i < uint32_t( SmTexture::eCount ); ++i )
 		{
@@ -651,29 +592,20 @@ namespace c3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					return makeRawUnique< crg::ImageBlit >( framePass
-						, context
-						, graph
-						, Offset3D{}
-						, extent
-						, Offset3D{}
-						, Extent3D{ 512u, 512u, 1u }
+					return makeRawUnique< crg::ImageBlit >( framePass, context, graph
+						, Rect3D{ Offset3D{}, extent }
+						, Rect3D{ Offset3D{}, Extent3D{ 512u, 512u, 1u } }
 						, FilterMode::eLinear );
 				} );
-			pass.addDependency( *lastPass );
-			pass.addTransferInputView( m_sourceSmResult[smTexture].wholeViewId );
-			pass.addTransferOutputView( m_downsampledSmResult[smTexture].wholeViewId );
-			lastPass = &pass;
+			pass.addInputTransferImage( m_sourceSmResult.getSampledViewId( smTexture ) );
+			m_downsampledSmResult.setLastAttach( smTexture, pass.addOutputTransferImage( m_downsampledSmResult.getWholeViewId( smTexture ) ) );
 		}
-
-		return *lastPass;
 	}
 
-	crg::FramePass & LayeredLightPropagationVolumesBase::doCreatePropagationPass( crg::FramePassArray const & previousPasses
-		, String const & name
+	crg::FramePass & LayeredLightPropagationVolumesBase::doCreatePropagationPass( String const & name
 		, LightVolumePassResult const & injection
-		, LightVolumePassResult const & lpvResult
-		, LightVolumePassResult const & propagation
+		, LightVolumePassResult & lpvResult
+		, LightVolumePassResult & propagation
 		, uint32_t cascade
 		, uint32_t index )
 	{
@@ -682,132 +614,89 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = makeRawUnique< LightPropagationPass >( framePass
-					, context
-					, runnableGraph
-					, m_device
-					, m_geometryVolumes && index > 0u
-					, m_scene.getLpvGridSize()
+				auto res = makeRawUnique< LightPropagationPass >( framePass, context, runnableGraph
+					, m_device, m_geometryVolumes && index > 0u, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
 				m_lightPropagationPasses.emplace_back( res.get() );
 				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
-
-		for ( auto & previousPass : previousPasses )
-		{
-			result.addDependency( *previousPass );
-		}
-
-		m_lpvGridConfigUbos[cascade].createPassBinding( result
-			, LightPropagationPass::LpvGridUboIdx );
-		result.addSampledView( injection[LpvTexture::eR].sampledViewId
-			, LightPropagationPass::RLpvGridIdx
-			, crg::SamplerDesc{ FilterMode::eLinear
-				, FilterMode::eLinear
-				, MipmapMode::eLinear } );
-		result.addSampledView( injection[LpvTexture::eG].sampledViewId
-			, LightPropagationPass::GLpvGridIdx
-			, crg::SamplerDesc{ FilterMode::eLinear
-				, FilterMode::eLinear
-				, MipmapMode::eLinear } );
-		result.addSampledView( injection[LpvTexture::eB].sampledViewId
-			, LightPropagationPass::BLpvGridIdx
-			, crg::SamplerDesc{ FilterMode::eLinear
-				, FilterMode::eLinear
-				, MipmapMode::eLinear } );
+		m_lpvGridConfigUbos[cascade].createPassBinding( result, LightPropagationPass::LpvGridUboIdx );
+		result.addInputSampled( *injection.getSampledLastAttach( LpvTexture::eR ), LightPropagationPass::RLpvGridIdx
+			, crg::SamplerDesc{ FilterMode::eLinear, FilterMode::eLinear, MipmapMode::eLinear } );
+		result.addInputSampled( *injection.getSampledLastAttach( LpvTexture::eG ), LightPropagationPass::GLpvGridIdx
+			, crg::SamplerDesc{ FilterMode::eLinear, FilterMode::eLinear, MipmapMode::eLinear } );
+		result.addInputSampled( *injection.getSampledLastAttach( LpvTexture::eB ), LightPropagationPass::BLpvGridIdx
+			, crg::SamplerDesc{ FilterMode::eLinear, FilterMode::eLinear, MipmapMode::eLinear } );
 
 		if ( index > 0u && m_geometryVolumes )
 		{
-			result.addSampledView( m_geometry[cascade].sampledViewId
-				, LightPropagationPass::GpGridIdx
-				, crg::SamplerDesc{ FilterMode::eLinear
-					, FilterMode::eLinear
-					, MipmapMode::eLinear } );
+			result.addInputSampled( *m_geometry[cascade].getSampledLastAttach(), LightPropagationPass::GpGridIdx
+				, crg::SamplerDesc{ FilterMode::eLinear, FilterMode::eLinear, MipmapMode::eLinear } );
 		}
 
 		if ( index == 0u )
 		{
-			result.addOutputColourView( lpvResult[LpvTexture::eR].targetViewId );
-			result.addOutputColourView( lpvResult[LpvTexture::eG].targetViewId );
-			result.addOutputColourView( lpvResult[LpvTexture::eB].targetViewId );
+			lpvResult.setLastAttach( LpvTexture::eR, result.addOutputColourTarget( lpvResult.getTargetViewId( LpvTexture::eR ) ) );
+			lpvResult.setLastAttach( LpvTexture::eG, result.addOutputColourTarget( lpvResult.getTargetViewId( LpvTexture::eG ) ) );
+			lpvResult.setLastAttach( LpvTexture::eB, result.addOutputColourTarget( lpvResult.getTargetViewId( LpvTexture::eB ) ) );
 		}
 		else
 		{
-			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId );
-			result.addInOutColourView( lpvResult[LpvTexture::eG].targetViewId );
-			result.addInOutColourView( lpvResult[LpvTexture::eB].targetViewId );
+			lpvResult.setLastAttach( LpvTexture::eR, result.addInOutColourTarget( *lpvResult.getLastAttach( LpvTexture::eR ) ) );
+			lpvResult.setLastAttach( LpvTexture::eG, result.addInOutColourTarget( *lpvResult.getLastAttach( LpvTexture::eG ) ) );
+			lpvResult.setLastAttach( LpvTexture::eB, result.addInOutColourTarget( *lpvResult.getLastAttach( LpvTexture::eB ) ) );
 		}
 
 		if ( index <= 1u )
 		{
-			result.addOutputColourView( propagation[LpvTexture::eR].targetViewId );
-			result.addOutputColourView( propagation[LpvTexture::eG].targetViewId );
-			result.addOutputColourView( propagation[LpvTexture::eB].targetViewId );
+			propagation.setLastAttach( LpvTexture::eR, result.addOutputColourTarget( propagation.getTargetViewId( LpvTexture::eR ) ) );
+			propagation.setLastAttach( LpvTexture::eG, result.addOutputColourTarget( propagation.getTargetViewId( LpvTexture::eG ) ) );
+			propagation.setLastAttach( LpvTexture::eB, result.addOutputColourTarget( propagation.getTargetViewId( LpvTexture::eB ) ) );
 		}
 		else
 		{
-			result.addInOutColourView( propagation[LpvTexture::eR].targetViewId );
-			result.addInOutColourView( propagation[LpvTexture::eG].targetViewId );
-			result.addInOutColourView( propagation[LpvTexture::eB].targetViewId );
+			propagation.setLastAttach( LpvTexture::eR, result.addInOutColourTarget( *propagation.getLastAttach( LpvTexture::eR ) ) );
+			propagation.setLastAttach( LpvTexture::eG, result.addInOutColourTarget( *propagation.getLastAttach( LpvTexture::eG ) ) );
+			propagation.setLastAttach( LpvTexture::eB, result.addInOutColourTarget( *propagation.getLastAttach( LpvTexture::eB ) ) );
 		}
 
 		return result;
 	}
 
-	Vector< crg::FramePass * > LayeredLightPropagationVolumesBase::doCreatePropagationPasses()
+	void LayeredLightPropagationVolumesBase::doCreatePropagationPasses()
 	{
-		Vector< crg::FramePass * > result;
-		crg::FramePassArray previousPasses;
-
 		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			auto & propagate = m_propagate[cascade];
-			auto const & lpvResult = *m_lpvResult[cascade];
 			auto const & injection = m_injection[cascade];
+			auto & lpvResult = *m_lpvResult[cascade];
 			uint32_t propIndex = 0u;
-			result.emplace_back( &doCreatePropagationPass( previousPasses
-				, cuT( "Propagation" ) + string::toString( cascade ) + cuT( "NoOccNoBlend" )
-				, injection
+			auto const * input = &injection;
+			auto * output = &propagate[propIndex];
+			m_lightPropagationFirstPasses[cascade] = &doCreatePropagationPass( cuT( "Propagation" ) + string::toString( cascade ) + cuT( "NoOccNoBlend" )
+				, *input
 				, lpvResult
-				, propagate[propIndex]
+				, *output
 				, cascade
-				, 0u ) );
-			auto previous = result.back();
-			previousPasses.clear();
-
-			if ( m_geometryVolumes )
-			{
-				for ( auto const & [light, lpv] : m_lightLpvs )
-				{
-					previousPasses.emplace_back( lpv.geometryInjectionPassesDesc[cascade] );
-				}
-			}
+				, 0u );
 
 			for ( uint32_t i = 1u; i < LpvMaxPropagationSteps; ++i )
 			{
-				auto const & input = propagate[propIndex];
+				input = &propagate[propIndex];
 				propIndex = 1u - propIndex;
-				auto const & output = propagate[propIndex];
+				output = &propagate[propIndex];
 				String name = ( m_geometryVolumes
 					? String{ cuT( "OccBlend" ) }
 					: String{ cuT( "NoOccBlend" ) } );
-				previousPasses.emplace_back( previous );
-				result.emplace_back( &doCreatePropagationPass( previousPasses
-					, cuT( "Propagation" ) + string::toString( cascade ) + name + string::toString( i )
-					, input
+				doCreatePropagationPass( cuT( "Propagation" ) + string::toString( cascade ) + name + string::toString( i )
+					, *input
 					, lpvResult
-					, output
+					, *output
 					, cascade
-					, i ) );
-				previousPasses.clear();
-				previous = result.back();
+					, i );
 			}
-
-			previousPasses.emplace_back( result.back() );
 		}
-
-		return result;
 	}
 }

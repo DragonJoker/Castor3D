@@ -13,6 +13,8 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	//*********************************************************************************************
+
 	namespace ovrlprep
 	{
 		static Point4f getParentRect( Overlay const & overlay
@@ -61,6 +63,22 @@ namespace c3d
 			return result;
 		}
 	}
+
+	//*********************************************************************************************
+
+	OverlayPipelineData::OverlayPipelineData( OverlayPipelineData && )noexcept = default;
+	OverlayPipelineData & OverlayPipelineData::operator=( OverlayPipelineData && )noexcept = default;
+	OverlayPipelineData::OverlayPipelineData()noexcept = default;
+
+	OverlayPipelineData::~OverlayPipelineData()noexcept
+	{
+		if ( overlaysIDsBuffer )
+			overlaysIDsBuffer->destroy();
+		if ( indirectCommandsBuffer )
+			indirectCommandsBuffer->destroy();
+	}
+
+	//*********************************************************************************************
 
 	OverlayPreparer::OverlayPreparer( OverlayRenderer & renderer
 		, RenderDevice const & device
@@ -183,8 +201,7 @@ namespace c3d
 							? overlay.getTextOverlay()->getCharCount()
 							: 1u;
 						counts.overlays++;
-						auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
-							, m_renderPass
+						auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_renderPass
 							, overlay
 							, *pass
 							, false );
@@ -211,8 +228,7 @@ namespace c3d
 						{
 							counts.quads += 8u;
 							counts.overlays++;
-							auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
-								, m_renderPass
+							auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_renderPass
 								, overlay
 								, *pass
 								, true );
@@ -418,4 +434,6 @@ namespace c3d
 		data.textLineOffset = textBuffer.line;
 		data.textTopOffset = textBuffer.top;
 	}
+
+	//*********************************************************************************************
 }

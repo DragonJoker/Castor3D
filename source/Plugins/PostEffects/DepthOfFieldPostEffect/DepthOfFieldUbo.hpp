@@ -89,7 +89,7 @@ namespace dof
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			m_ubo.createPassBinding( pass, "DoFCfg", binding );
+			m_ubo.createPassBinding( pass, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

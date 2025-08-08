@@ -316,8 +316,7 @@ namespace c3d::shader
 		C3D_ClustersEx( writer
 			, binding++
 			, set
-			, m_enabled
-			, config );
+			, m_enabled );
 		C3D_ReducedLightsAABBEx( writer
 			, binding++
 			, set

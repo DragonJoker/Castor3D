@@ -109,7 +109,7 @@ namespace c3d
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ImageCreateInfo info
-			, VkMemoryPropertyFlags memoryProperties
+			, MemoryPropertyFlags memoryProperties
 			, String const & debugName
 			, bool isStatic = false );
 		/**
@@ -362,7 +362,7 @@ namespace c3d
 		bool m_initialised{ false };
 		bool m_static{ false };
 		ImageCreateInfo m_info;
-		VkMemoryPropertyFlags m_properties;
+		MemoryPropertyFlags m_properties;
 		Image m_image;
 		ImageMipView m_defaultView;
 		ArrayImageView< ImageMipView > m_arrayView;
@@ -374,14 +374,14 @@ namespace c3d
 
 	inline ashes::ImagePtr makeImage( RenderDevice const & device
 		, ImageCreateInfo createInfo
-		, VkMemoryPropertyFlags flags
+		, MemoryPropertyFlags flags
 		, String const & name )
 	{
 		auto mbName = toUtf8( name );
 		auto result = device->createImage( mbName + "Map", ashes::ImageCreateInfo{ convert( createInfo ) } );
 		auto requirements = result->getMemoryRequirements();
 		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
-			, flags );
+			, getMemoryPropertyFlags( flags ) );
 		auto memory = device->allocateMemory( mbName + "MapMem"
 			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
 		result->bindMemory( c3d::move( memory ) );

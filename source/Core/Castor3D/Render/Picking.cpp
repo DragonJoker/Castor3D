@@ -100,7 +100,7 @@ namespace c3d
 
 	uint32_t const Picking::UboBindingPoint = 7u;
 
-	Picking::Picking( crg::ResourcesCache const & resources
+	Picking::Picking( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Size const & size
@@ -151,12 +151,13 @@ namespace c3d
 		, m_pickDisplayRegions{ rendpick::createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
 		, m_pickBuffer{ makeBuffer< Point4ui >( m_device
+			, resources
 			, PickingAreaWidth * PickingAreaWidth
-			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, ( BufferUsageFlags::eTransferDst
+				| BufferUsageFlags::eTransferSrc )
+			, MemoryPropertyFlags::eHostVisible
 			, cuT( "PickingBuffer" ) ) }
-		, m_pickData{ makeArrayView( m_pickBuffer->lock( 0u, ashes::WholeSize, 0u ), PickingAreaWidth * PickingAreaWidth ) }
+		, m_pickData{ makeArrayView( m_pickBuffer->lock(), PickingAreaWidth * PickingAreaWidth ) }
 		, m_buffer{ PickingAreaWidth * PickingAreaWidth }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
@@ -178,6 +179,7 @@ namespace c3d
 			, m_runnable->getTimer() );
 		m_commandBuffer.reset();
 		m_pickBuffer->unlock();
+		m_pickBuffer->destroy();
 		m_pickBuffer.reset();
 		m_colourTexture.reset();
 	}
@@ -242,13 +244,13 @@ namespace c3d
 				m_pickingPass = res.get();
 				return res;
 			} );
-		result.addOutputDepthView( m_depthImageView
+		result.addOutputDepthTarget( m_depthImageView
 			, defaultClearDepthStencil );
 #if C3D_DebugPicking
-		result.addOutputColourView( m_colourImageView
+		result.addOutputColourTarget( m_colourImageView
 			, ClearColorValue{ 0u, 0u, 0u, 0u } );
 #else
-		result.addOutputColourView( m_colourImageView
+		result.addOutputColourTarget( m_colourImageView
 			, ClearColorValue{ 0u, 0u, 0u, 0u } );
 #endif
 		return result;
@@ -270,16 +272,16 @@ namespace c3d
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock( { "PickingPass Copy"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		auto pipelineStageFlags = m_pickBuffer->getBuffer().getCompatibleStageFlags();
+		auto pipelineStageFlags = m_pickBuffer->buffer->getCompatibleStageFlags();
 		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_pickBuffer->getBuffer().makeTransferDestination() );
+			, m_pickBuffer->buffer->makeTransferDestination() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_colourView.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
-			, m_pickBuffer->getBuffer() );
+			, *m_pickBuffer->buffer );
 
 #	if C3D_DebugPickingTransfer
 
@@ -312,7 +314,7 @@ namespace c3d
 
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_pickBuffer->getBuffer().makeHostRead() );
+			, m_pickBuffer->buffer->makeHostRead() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, m_colourView.makeColourAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );

@@ -59,7 +59,7 @@ namespace c3d
 		if ( !m_lightBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			m_lightBuffer = makeUnique< LightBuffer >( device, MaxLightsCount );
+			m_lightBuffer = makeUnique< LightBuffer >( device, getScene()->getResources(), MaxLightsCount );
 			Vector< Light * > pending;
 			c3d::swap( pending, m_pendingLights );
 

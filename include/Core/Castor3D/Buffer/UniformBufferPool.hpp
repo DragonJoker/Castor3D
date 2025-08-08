@@ -39,6 +39,7 @@ namespace c3d
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
 		C3D_API UniformBufferPool( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, String debugName );
 		/**
 		 *\~english
@@ -46,7 +47,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
-		C3D_API void cleanup();
+		C3D_API ~UniformBufferPool()noexcept;
 		/**
 		 *\~english
 		 *\return		The allocation statistics.
@@ -81,7 +82,7 @@ namespace c3d
 		 *\return		Le tampon d'uniformes.
 		 */
 		template< typename DataT >
-		UniformBufferOffsetT< DataT > getBuffer( VkMemoryPropertyFlags flags );
+		UniformBufferOffsetT< DataT > getBuffer( MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -102,12 +103,13 @@ namespace c3d
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( BufferArray & array
-			, VkDeviceSize alignedSize )const;
-		C3D_API BufferArray::iterator doCreatePoolBuffer( VkMemoryPropertyFlags flags
+			, DeviceSize alignedSize )const;
+		C3D_API BufferArray::iterator doCreatePoolBuffer( MemoryPropertyFlags flags
 			, UniformBufferPool::BufferArray & buffers );
 
 	private:
 		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		uint32_t m_maxUboSize{ 0u };
 		uint32_t m_currentUboIndex{ 0u };
 		Map< uint32_t, BufferArray > m_buffers;

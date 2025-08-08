@@ -37,20 +37,13 @@ namespace fxaa
 		 */
 		void setParameters( c3d::Parameters parameters )override;
 
-		crg::FramePass const & getPass()const override
-		{
-			CU_Require( m_pass );
-			return *m_pass;
-		}
-
 	private:
 		/**
 		*\copydoc		c3d::PostEffect::doInitialise
 		*/
 		bool doInitialise( c3d::RenderDevice const & device
 			, c3d::Texture const & source
-			, c3d::Texture const & target
-			, crg::FramePass const & previousPass )override;
+			, c3d::Texture & target )override;
 		/**
 		*\copydoc		c3d::PostEffect::doCleanup
 		*/
@@ -75,7 +68,6 @@ namespace fxaa
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		FxaaUbo m_fxaaUbo;
-		crg::FramePass * m_pass{};
 	};
 }
 

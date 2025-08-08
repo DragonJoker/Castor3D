@@ -33,18 +33,17 @@ See LICENSE file in root folder
 namespace ocean_fft
 {
 	template< typename GeneratePassT >
-	crg::FramePass const & createGenerateFrequencyPassT( c3d::String const & prefix
+	void createGenerateFrequencyPassT( c3d::String const & prefix
 		, c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
 		, c3d::Extent2D const & extent
 		, OceanUbo const & ubo
-		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output )
+		, c3d::BufferBase const & input
+		, c3d::BufferBase & output )
 	{
 		auto mbName = c3d::toUtf8( name );
-		auto & result = graph.createPass( "GenerateFrequency" + mbName
+		auto & pass = graph.createPass( "GenerateFrequency" + mbName
 			, [&device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -59,18 +58,9 @@ namespace ocean_fft
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependencies( previousPasses );
-		ubo.createPassBinding( result
-			, GeneratePassT::eConfig );
-		result.addInputStorageBuffer( { input, mbName + "Distribution" }
-			, GeneratePassT::eInput
-			, 0u
-			, input.getSize() );
-		result.addOutputStorageBuffer( { output, mbName + "Frequency" }
-			, GeneratePassT::eOutput
-			, 0u
-			, output.getSize() );
-		return result;
+		ubo.createPassBinding( pass, GeneratePassT::eConfig );
+		pass.addInputStorage( *input.getLastAttach(), GeneratePassT::eInput );
+		output.setLastAttach( pass.addOutputStorageBuffer( output.bufferViewId, GeneratePassT::eOutput ) );
 	}
 
 	template< typename DistributionPassT, typename FrequencyPassT >
@@ -79,64 +69,53 @@ namespace ocean_fft
 		GenerateFFTPassT( c3d::String const & prefix
 			, c3d::String const & name
 			, crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, c3d::Extent2D dimensions
 			, VkFFTConfig const & pfftConfig
-			, ashes::Buffer< cfloat > const & distribution
+			, c3d::BufferT< cfloat > const & distribution
 			, FFTMode mode )
 			: fftConfig{ pfftConfig }
 			, frequency{ c3d::makeBuffer< cfloat >( fftConfig.device
+					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
 					, dimensions.width * dimensions.height
-					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Frequency" ) ) }
 			, result{ c3d::makeBufferBase( pfftConfig.device
+					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
-					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Result0" ) )
 				, c3d::makeBufferBase( pfftConfig.device
+					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
-					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
+					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Result1" ) ) }
-			, generateFrequency{ &createGenerateFrequencyPassT< FrequencyPassT >( prefix
-				, name
-				, fftConfig.device
-				, graph
-				, previousPasses
-				, dimensions
-				, ubo
-				, distribution.getBuffer()
-				, frequency->getBuffer() ) }
-			, processFFT( &createProcessFFTPass( name
-				, fftConfig.device
-				, graph
-				, *generateFrequency
-				, dimensions
-				, fftConfig
-				, frequency->getBuffer()
-				, result ) )
 		{
+			createGenerateFrequencyPassT< FrequencyPassT >( prefix, name, fftConfig.device, graph, dimensions
+				, ubo, distribution, *frequency );
+			createProcessFFTPass( name, fftConfig.device, graph, dimensions, fftConfig
+				, *frequency, result );
 		}
 
-		ashes::BufferBase const & getResult()
+		~GenerateFFTPassT()noexcept
+		{
+			result[0]->destroy();
+			result[1]->destroy();
+			frequency->destroy();
+		}
+
+		c3d::Buffer const & getResult()
 		{
 			return *result[0];
 		}
 
-		crg::FramePass const & getLastPass()
-		{
-			return *processFFT;
-		}
-
 	private:
 		VkFFTConfig const & fftConfig;
-		ashes::BufferPtr< cfloat > frequency;
-		c3d::Array< ashes::BufferBasePtr, 2u > result;
-		crg::FramePass const * generateFrequency{};
-		crg::FramePass const * processFFT{};
+		c3d::BufferUPtrT< cfloat > frequency;
+		c3d::Array< c3d::BufferUPtr, 2u > result;
 	};
 
 	class OceanFFT
@@ -148,7 +127,6 @@ namespace ocean_fft
 		OceanFFT( c3d::RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, OceanFFTConfig const & config );
 		~OceanFFT();
@@ -177,13 +155,11 @@ namespace ocean_fft
 			return m_gradientJacobian.front();
 		}
 
-		crg::FramePassArray getLastPasses();
-
 	public:
 		static c3d::String const Name;
 
 	private:
-		void generateDistributionSeeds( ashes::Buffer< cfloat > & distribBuffer );
+		void generateDistributionSeeds( c3d::BufferT< cfloat > & distribBuffer );
 
 	private:
 		c3d::RenderDevice const & m_device;
@@ -194,24 +170,17 @@ namespace ocean_fft
 		c3d::Extent2D m_heightMapSamples{ 2u, 2u };
 		uint32_t m_displacementDownsample{ 1u };
 		VkFFTConfig m_fftConfig;
-		ashes::BufferPtr< cfloat > m_heightSeeds;
-		ashes::BufferPtr< cfloat > m_heightDistribution;
-		crg::FramePass const * m_generateHeightDistribution{};
+		c3d::BufferUPtrT< cfloat > m_heightSeeds;
+		c3d::BufferUPtrT< cfloat > m_heightDistribution;
 		GenerateFFTPassT< GenerateDistributionPass, GenerateHeightmapPass > m_height;
-		ashes::BufferPtr< cfloat > m_displacementDistribution;
-		crg::FramePass const * m_generateDisplacementDistribution{};
+		c3d::BufferUPtrT< cfloat > m_displacementDistribution;
 		GenerateFFTPassT< GenerateDistributionPass, GenerateDisplacementPass > m_displacement;
 		c3d::Array< c3d::Texture, 2u > m_heightDisplacement;
 		c3d::Array< c3d::Texture, 2u > m_gradientJacobian;
-		crg::FramePass const * m_bakeHeightGradient{};
-		crg::FramePass const * m_generateHeightDispMips{};
-		crg::FramePass const * m_generateGradJacobMips{};
-		ashes::BufferPtr< cfloat > m_normalSeeds;
-		ashes::BufferPtr< cfloat > m_normalDistribution;
-		crg::FramePass const * m_generateNormalDistribution{};
+		c3d::BufferUPtrT< cfloat > m_normalSeeds;
+		c3d::BufferUPtrT< cfloat > m_normalDistribution;
 		GenerateFFTPassT< GenerateDistributionPass, GenerateNormalPass > m_normal;
 		c3d::Texture m_normals;
-		crg::FramePass const * m_generateNormalsMips{};
 	};
 }
 

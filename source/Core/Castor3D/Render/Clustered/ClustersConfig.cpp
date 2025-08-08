@@ -64,142 +64,6 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserClustersUseBVH, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->useLightsBVH );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersSortLights, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->sortLights );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersLimitClusters, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->limitClustersToLightsAABB );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersParseDepth, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->parseDepthBuffer );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersSpotCone, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->useSpotBoundingCone );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersSpotTightAABB, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->useSpotTightBoundingBox );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersReduceWarpOptimisation, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->enableReduceWarpOptimisation );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserClustersBVHWarpOptimisation, ClustersContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( !blockContext->clustersConfig )
-			{
-				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->clustersConfig->enableBVHWarpOptimisation );
-			}
-		}
-		CU_EndAttribute()
-
 		static CU_ImplementAttributeParserBlock( parserClustersSplitScheme, ClustersContext )
 		{
 			if ( params.empty() )
@@ -217,7 +81,7 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserClustersBias, ClustersContext )
+		static CU_ImplementAttributeParserBlock( parserClustersMinDistance, ClustersContext )
 		{
 			if ( params.empty() )
 			{
@@ -250,15 +114,8 @@ namespace c3d
 	}
 
 	ClustersConfig::ClustersConfig()
-		: useLightsBVH{ dirty, true }
-		, sortLights{ dirty, true }
-		, parseDepthBuffer{ dirty, false }
-		, limitClustersToLightsAABB{ dirty, true }
-		, useSpotBoundingCone{ dirty, true }
-		, useSpotTightBoundingBox{ dirty, true }
-		, enableReduceWarpOptimisation{ dirty, false }
-		, enableBVHWarpOptimisation{ dirty, true }
-		, enablePostAssignSort{ dirty, false }
+		: enableReduceWarpOptimisation{ dirty, false }
+		, enableWaveIntrinsics{ dirty, false }
 		, lockClustersFrustum{ dirty, false }
 		, debugDisplay{ dirty, ClusterDebugDisplay::eNone }
 		, splitScheme{ dirty, ClusterSplitScheme::eExponentialLinearHybrid }
@@ -279,15 +136,8 @@ namespace c3d
 				, cuT( "Lights BVH" ) };
 
 			visitor.visit( cuT( "Clusters" ) );
-			visitor.visit( cuT( "Use BVH" ), useLightsBVH );
-			visitor.visit( cuT( "Sort Lights" ), sortLights );
-			visitor.visit( cuT( "Use Depth Buffer" ), parseDepthBuffer );
-			visitor.visit( cuT( "Limit Clusters To Lights AABB" ), limitClustersToLightsAABB );
-			visitor.visit( cuT( "Use Spot Bounding Cone" ), useSpotBoundingCone );
-			visitor.visit( cuT( "Use Spot Tight Bounding Box" ), useSpotTightBoundingBox );
 			visitor.visit( cuT( "Enable Reduce Warp Optimisation" ), enableReduceWarpOptimisation );
-			visitor.visit( cuT( "Enable BVH Warp Optimisation" ), enableBVHWarpOptimisation );
-			visitor.visit( cuT( "Enable Post Assignment Sort" ), enablePostAssignSort );
+			visitor.visit( cuT( "Enable Wave Intrinsics" ), enableWaveIntrinsics );
 			visitor.visit( cuT( "Split Scheme" )
 				, splitScheme
 				, splitSchemeNames
@@ -311,31 +161,15 @@ namespace c3d
 
 		targetContext.addPushParser( cuT( "clusters" ), CSCNSection::eClusters, clscfg::parserRenderTargetClusters );
 		clustersContext.addParser( cuT( "enabled" ), clscfg::parserClustersEnabled, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "use_lights_bvh" ), clscfg::parserClustersUseBVH, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "sort_lights" ), clscfg::parserClustersSortLights, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "limit_clusters_to_lights_aabb" ), clscfg::parserClustersLimitClusters, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "parse_depth_buffer" ), clscfg::parserClustersParseDepth, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
-		clustersContext.addParser( cuT( "use_spot_bounding_cone" ), clscfg::parserClustersSpotCone, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "use_spot_tight_aabb" ), clscfg::parserClustersSpotTightAABB, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "enable_reduce_warp_optimisation" ), clscfg::parserClustersReduceWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		clustersContext.addParser( cuT( "enable_bvh_warp_optimisation" ), clscfg::parserClustersBVHWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		clustersContext.addParser( cuT( "split_scheme" ), clscfg::parserClustersSplitScheme, { makeParameter< ParameterType::eCheckedText, ClusterSplitScheme >() } );
-		clustersContext.addParser( cuT( "bias" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
-		clustersContext.addParser( cuT( "min_distance" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
+		clustersContext.addParser( cuT( "min_distance" ), clscfg::parserClustersMinDistance, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
 		clustersContext.addPopParser( cuT( "}" ), clscfg::parserClustersEnd );
 	}
 
 	bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs )
 	{
 		return lhs.enabled == rhs.enabled
-			&& lhs.useLightsBVH == rhs.useLightsBVH
-			&& lhs.sortLights == rhs.sortLights
-			&& lhs.parseDepthBuffer == rhs.parseDepthBuffer
-			&& lhs.limitClustersToLightsAABB == rhs.limitClustersToLightsAABB
-			&& lhs.useSpotBoundingCone == rhs.useSpotBoundingCone
-			&& lhs.useSpotTightBoundingBox == rhs.useSpotTightBoundingBox
 			&& lhs.enableReduceWarpOptimisation == rhs.enableReduceWarpOptimisation
-			&& lhs.enableBVHWarpOptimisation == rhs.enableBVHWarpOptimisation
 			&& lhs.splitScheme == rhs.splitScheme
 			&& lhs.minDistance == rhs.minDistance;
 	}

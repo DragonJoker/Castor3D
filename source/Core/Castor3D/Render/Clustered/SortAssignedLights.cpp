@@ -47,8 +47,7 @@ namespace c3d
 
 			C3D_Clusters( writer
 				, BindingPoints::eClusters
-				, 0u
-				, &config );
+				, 0u );
 			C3D_LightClusterIndex( writer
 				, BindingPoints::eClusterIndex
 				, 0u );
@@ -110,65 +109,66 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createSortAssignedLightsPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	void createSortAssignedLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters const & clusters )
+		, FrustumClusters const & clusters
+		, BufferBase & pointLightClusterIndex
+		, BufferBase & spotLightClusterIndex
+		, BufferBase & pointLightClusterGrid
+		, BufferBase & spotLightClusterGrid )
 	{
-		// Point lights
-		auto & point = graph.createPass( "SortAssigned/Point"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = makeRawUnique< sort::FramePass >( framePass
-					, context
-					, graph
-					, device
-					, crg::cp::Config{}
-						.groupCountX( clusters.getDimensions()->x )
-						.groupCountY( clusters.getDimensions()->y )
-						.groupCountZ( clusters.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::ePoint ).empty(); } ) )
-					, clusters
-					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		point.addDependency( *previousPasses.front() );
-		clusters.getClustersUbo().createPassBinding( point, uint32_t( sort::BindingPoints::eClusters ) );
-		createInOutStoragePassBinding( point, uint32_t( sort::BindingPoints::eClusterIndex ), cuT( "C3D_PointLightClusterIndex" ), clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( sort::BindingPoints::eClusterGrid ), cuT( "C3D_PointLightClusterGrid" ), clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
-
-		// Spot lights
-		auto & spot = graph.createPass( "SortAssigned/Spot"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = makeRawUnique< sort::FramePass >( framePass
-					, context
-					, graph
-					, device
-					, crg::cp::Config{}
-						.groupCountX( clusters.getDimensions()->x )
-						.groupCountY( clusters.getDimensions()->y )
-						.groupCountZ( clusters.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::eSpot ).empty(); } ) )
-					, clusters
-					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		spot.addDependency( point );
-		spot.addDependency( *previousPasses.back() );
-		clusters.getClustersUbo().createPassBinding( spot, uint32_t( sort::BindingPoints::eClusters ) );
-		createInOutStoragePassBinding( spot, uint32_t( sort::BindingPoints::eClusterIndex ), cuT( "C3D_SpotLightClusterIndex" ), clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( sort::BindingPoints::eClusterGrid ), cuT( "C3D_SpotLightClusterGrid" ), clusters.getSpotLightClusterGridBuffer(), 0u, ashes::WholeSize );
-
-		return spot;
+		{
+			// Point lights
+			auto & point = graph.createPass( "SortAssigned/Point"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runGraph )
+				{
+					auto runPass = makeRawUnique< sort::FramePass >( framePass
+						, context
+						, runGraph
+						, device
+						, crg::cp::Config{}
+							.groupCountX( clusters.getDimensions()->x )
+							.groupCountY( clusters.getDimensions()->y )
+							.groupCountZ( clusters.getDimensions()->z )
+							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::ePoint ).empty(); } ) )
+						, clusters
+						, LightType::ePoint );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			clusters.getClustersUbo().createPassBinding( point, uint32_t( sort::BindingPoints::eClusters ) );
+			pointLightClusterIndex.setLastAttach( point.addInOutStorage( *pointLightClusterIndex.getLastAttach(), uint32_t( sort::BindingPoints::eClusterIndex ) ) );
+			pointLightClusterGrid.setLastAttach( point.addInOutStorage( *pointLightClusterGrid.getLastAttach(), uint32_t( sort::BindingPoints::eClusterGrid ) ) );
+		}
+		{
+			// Spot lights
+			auto & spot = graph.createPass( "SortAssigned/Spot"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runGraph )
+				{
+					auto runPass = makeRawUnique< sort::FramePass >( framePass
+						, context
+						, runGraph
+						, device
+						, crg::cp::Config{}
+							.groupCountX( clusters.getDimensions()->x )
+							.groupCountY( clusters.getDimensions()->y )
+							.groupCountZ( clusters.getDimensions()->z )
+							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::eSpot ).empty(); } ) )
+						, clusters
+						, LightType::eSpot );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			clusters.getClustersUbo().createPassBinding( spot, uint32_t( sort::BindingPoints::eClusters ) );
+			spotLightClusterIndex.setLastAttach( spot.addInOutStorage( *spotLightClusterIndex.getLastAttach(), uint32_t( sort::BindingPoints::eClusterIndex ) ) );
+			spotLightClusterGrid.setLastAttach( spot.addInOutStorage( *spotLightClusterGrid.getLastAttach(), uint32_t( sort::BindingPoints::eClusterGrid ) ) );
+		}
 	}
 
 	//*********************************************************************************************

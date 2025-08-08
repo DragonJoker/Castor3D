@@ -27,8 +27,10 @@ namespace c3d
 	//*********************************************************************************************
 
 	LightBuffer::LightBuffer( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, uint32_t count )
 		: m_buffer{ device
+			, resources
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( Point4f )
 			, cuT( "C3D_LightBuffer" ) }
 		, m_lightSizes{ DirectionalLightInstance::LightDataComponents

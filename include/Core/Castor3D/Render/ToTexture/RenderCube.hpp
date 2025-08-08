@@ -7,7 +7,8 @@ See LICENSE file in root folder
 
 #include "RenderToTextureModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -188,11 +189,11 @@ namespace c3d
 		{
 			ashes::GraphicsPipelinePtr pipeline;
 			ashes::DescriptorSetPtr descriptorSet;
+			UniformBufferOffsetT< Matrix4x4f > matrixUbo;
 		};
 
 		ashes::CommandBufferPtr m_commandBuffer;
-		UniformBufferUPtrT< Matrix4x4f > m_matrixUbo;
-		ashes::VertexBufferPtr< Point4f > m_vertexBuffer;
+		GpuBufferOffsetT< Point4f > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;

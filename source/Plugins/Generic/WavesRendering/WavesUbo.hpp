@@ -120,7 +120,7 @@ namespace waves
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			m_ubo.createPassBinding( pass, "WavesCfg", binding );
+			m_ubo.createPassBinding( pass, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

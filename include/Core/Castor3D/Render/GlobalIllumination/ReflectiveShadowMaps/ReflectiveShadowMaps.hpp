@@ -21,17 +21,17 @@ namespace c3d
 		: public Named
 	{
 	public:
-		C3D_API ReflectiveShadowMaps( crg::ResourceHandler & handler
+		C3D_API ReflectiveShadowMaps( crg::ResourcesCache & resources
 			, Scene const & scene
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, ShadowBuffer const & shadowBuffer
-			, crg::ImageViewId const & depthObj
-			, crg::ImageViewId const & nmlOcc
+			, Texture const & depthObj
+			, Texture const & nmlOcc
 			, ShadowMapResult const & directionalSmResult
 			, ShadowMapResult const & pointSmResult
 			, ShadowMapResult const & spotSmResult
-			, Texture const & result );
+			, Texture & result );
 		C3D_API ~ReflectiveShadowMaps()noexcept;
 
 	public:
@@ -51,41 +51,38 @@ namespace c3d
 		RenderDevice const & m_device;
 		CameraUbo const & m_cameraUbo;
 		ShadowBuffer const & m_shadowBuffer;
-		crg::ImageViewId const & m_depthObj;
-		crg::ImageViewId const & m_nmlOcc;
+		Texture const & m_depthObj;
+		Texture const & m_nmlOcc;
 		ShadowMapResult const & m_directionalSmResult;
 		ShadowMapResult const & m_pointSmResult;
 		ShadowMapResult const & m_spotSmResult;
 		crg::FrameGraph m_graph;
 		bool m_initialised{ false };
 		TextureArray m_intermediate;
-		Texture const & m_result;
+		Texture & m_result;
 		struct LightRsm
 		{
 			LightRsm( crg::FrameGraph & graph
-				, crg::FramePassArray previousPasses
 				, RenderDevice const & device
 				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowBuffer const & shadowBuffer
 				, CameraUbo const & cameraUbo
-				, crg::ImageViewId const & depthObj
-				, crg::ImageViewId const & nmlOcc
+				, Texture const & depthObj
+				, Texture const & nmlOcc
 				, ShadowMapResult const & smResult
-				, TextureArray const & intermediate
-				, Texture const & result );
+				, TextureArray & intermediate
+				, Texture & result );
 			void update( CpuUpdater & updater );
 
 			LightCache const & lightCache;
 			RsmGIPassUPtr giPass;
 			RsmInterpolatePassUPtr interpolatePass;
-			crg::FramePass const * lastPass{};
 		};
 		using LightRsmPtr = std::unique_ptr< LightRsm >;
 
-		crg::FramePass const & m_clearPass;
-		crg::FramePass const * m_lastPass;
 		std::unordered_map< LightInstance *, LightRsmPtr > m_lightRsms;
+		GpuFrameEvent * m_recordEvent{};
 		crg::RunnableGraphPtr m_runnable;
 	};
 }

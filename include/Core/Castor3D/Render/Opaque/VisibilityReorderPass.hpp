@@ -22,20 +22,14 @@ namespace c3d
 	{
 	public:
 		VisibilityReorderPass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
-			, crg::ImageViewId const & data
-			, ashes::Buffer< uint32_t > const & materialsCounts
-			, ashes::Buffer< Point3ui > const & indirectCounts
-			, ashes::Buffer< uint32_t > const & materialsStarts
-			, ashes::Buffer< Point2ui > const & pixels
+			, Texture const & data
+			, Buffer & materialsCounts
+			, Buffer & indirectCounts
+			, Buffer & materialsStarts
+			, Buffer & pixels
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		void accept( ConfigurationVisitorBase & visitor )const;
-
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_lastPass;
-		}
 
 	private:
 		ShaderModule m_computeCountsShader;
@@ -44,7 +38,6 @@ namespace c3d
 		ashes::PipelineShaderStageCreateInfoArray m_startsStages;
 		ShaderModule m_computePixelsShader;
 		ashes::PipelineShaderStageCreateInfoArray m_pixelsStages;
-		crg::FramePass const * m_lastPass;
 	};
 }
 

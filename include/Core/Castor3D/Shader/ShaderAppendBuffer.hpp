@@ -31,8 +31,10 @@ namespace c3d
 		 *\param[in]	name		Le nom du tampon shader.
 		 */
 		C3D_API ShaderAppendBuffer( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, VkDeviceSize size
 			, String const & name );
+		C3D_API ~ShaderAppendBuffer()noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
@@ -97,7 +99,7 @@ namespace c3d
 			return m_device;
 		}
 
-		ashes::BufferBase const & getBuffer()const noexcept
+		Buffer const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -106,7 +108,7 @@ namespace c3d
 	private:
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
-		ashes::BufferBasePtr m_buffer;
+		BufferUPtr m_buffer;
 	};
 }
 

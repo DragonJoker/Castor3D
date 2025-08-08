@@ -80,7 +80,7 @@ namespace ocean_fft
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			m_ubo.createPassBinding( pass, "FFTWaterCfg", binding );
+			m_ubo.createPassBinding( pass, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

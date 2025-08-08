@@ -145,9 +145,9 @@ namespace c3d
 		if ( auto size = m_targetDataCount * vertexCount * MaxMorphTargets;
 			!m_buffer || size > m_buffer.getCount() )
 		{
-			m_buffer = device.bufferPool->getBuffer< Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			m_buffer = device.bufferPool->getBuffer< Point4f >( BufferUsageFlags::eStorageBuffer
 				, size
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				, MemoryPropertyFlags::eDeviceLocal );
 		}
 
 		return true;
@@ -257,7 +257,7 @@ namespace c3d
 			++index;
 		}
 
-		m_buffer.markDirty( VertexShaderReadState );
+		m_buffer.upload( uploader, VertexShaderReadState );
 	}
 
 	//*********************************************************************************************

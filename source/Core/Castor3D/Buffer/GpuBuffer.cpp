@@ -1,10 +1,11 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
-#include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/Buffer.hpp"
+#include "Castor3D/Buffer/GpuBufferBuddyAllocator.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 
-#include <CastorUtils/Miscellaneous/Hash.hpp>
+#include <RenderGraph/ResourceHandler.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 
@@ -15,9 +16,9 @@ namespace c3d
 {
 	//*********************************************************************************************
 	
-	Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
-		, VkDeviceSize size
-		, VkDeviceSize align )
+	Pair< DeviceSize, DeviceSize > adaptRange( DeviceSize offset
+		, DeviceSize size
+		, DeviceSize align )
 	{
 		auto newOffset = ashes::getAlignedSize( offset, align );
 
@@ -81,26 +82,32 @@ namespace c3d
 	//*********************************************************************************************
 
 	GpuBufferBase::GpuBufferBase( RenderSystem const & renderSystem
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags memoryFlags
+		, crg::ResourcesCache & resources
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags memoryFlags
 		, String const & debugName
 		, ashes::QueueShare sharingMode
-		, VkDeviceSize allocatedSize )
+		, DeviceSize allocatedSize )
 		: m_renderSystem{ renderSystem }
+		, m_resources{ resources }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
 		, m_sharingMode{ c3d::move( sharingMode ) }
 		, m_allocatedSize{ allocatedSize }
-		, m_buffer{ makeBuffer< uint8_t >( renderSystem.getRenderDevice()
+		, m_buffer{ makeBufferBase( renderSystem.getRenderDevice(), m_resources
 			, uint32_t( m_allocatedSize )
-			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, m_usage | BufferUsageFlags::eTransferDst
 			, m_memoryFlags
-			, debugName
-			, m_sharingMode ) }
+			, debugName ) }
 		, m_ownData( size_t( m_allocatedSize ) )
 		, m_data{ makeArrayView( m_ownData.begin()
 			, m_ownData.end() ) }
 	{
+	}
+
+	GpuBufferBase::~GpuBufferBase()noexcept
+	{
+		m_buffer->destroy();
 	}
 
 	void GpuBufferBase::upload( UploadData & uploader )
@@ -113,30 +120,27 @@ namespace c3d
 			for ( auto const & range : ranges )
 			{
 				upload( uploader
-					, range.offset
-					, range.size
+					, range.offset, range.size
 					, range.dstAccessState );
 			}
 		}
 	}
 
 	void GpuBufferBase::upload( UploadData & staging
-		, VkDeviceSize offset
-		, VkDeviceSize size
+		, DeviceSize offset
+		, DeviceSize size
 		, AccessState dstAccessState )
 	{
 		auto [o, s] = adaptRange( offset
 			, size
 			, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
-		staging.pushUpload( m_ownData.data() + o
-			, s
-			, getBuffer().getBuffer()
-			, o
+		staging.pushUpload( m_ownData.data() + o, s
+			, *getBuffer().buffer, o
 			, dstAccessState );
 	}
 
-	void GpuBufferBase::markDirty( VkDeviceSize offset
-		, VkDeviceSize size
+	void GpuBufferBase::markDirty( DeviceSize offset
+		, DeviceSize size
 		, AccessState dstAccessState )
 	{
 		auto hash = std::hash< int32_t >{}( int32_t( dstAccessState.access ) );
@@ -153,6 +157,11 @@ namespace c3d
 		{
 			ranges.emplace_back( offset, size, std::move( dstAccessState ) );
 		}
+	}
+
+	crg::BufferViewId GpuBufferBase::getSubView( DeviceSize offset, DeviceSize size )const
+	{
+		return m_buffer->getSubView( offset, size );
 	}
 
 	//*********************************************************************************************

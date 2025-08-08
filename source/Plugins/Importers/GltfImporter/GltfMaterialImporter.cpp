@@ -133,6 +133,8 @@ namespace c3d_gltf
 				return cuT( "ktx2" );
 			case fastgltf::MimeType::DDS:
 				return cuT( "dds" );
+			case fastgltf::MimeType::WEBP:
+				return cuT( "webp" );
 			default:
 				switch ( defaultMimeType )
 				{
@@ -146,6 +148,8 @@ namespace c3d_gltf
 					return cuT( "ktx2" );
 				case fastgltf::MimeType::DDS:
 					return cuT( "dds" );
+				case fastgltf::MimeType::WEBP:
+					return cuT( "webp" );
 				default:
 					return cuT( "png" );
 				}

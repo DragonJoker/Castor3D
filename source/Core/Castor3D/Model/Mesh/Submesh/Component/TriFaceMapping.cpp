@@ -143,7 +143,7 @@ namespace c3d
 	String const TriFaceMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "triangles" );
 
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
-		, VkBufferUsageFlags bufferUsageFlags )
+		, BufferUsageFlags bufferUsageFlags )
 		: IndexMapping{ submesh, TypeName
 			, makeRawUnique< ComponentData >( submesh, bufferUsageFlags ) }
 	{

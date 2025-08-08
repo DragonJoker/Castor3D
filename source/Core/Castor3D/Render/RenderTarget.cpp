@@ -715,9 +715,22 @@ namespace c3d
 		, m_cameraUbo{ m_device }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, m_device ) }
 	{
-		m_graph.addInput( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledViewId
+		m_hdrSource = makeRawUnique< crg::Attachment >( crg::Attachment::createDefault( m_hdrObjects.front().getTargetViewId() ) );
+		m_hdrSource->imageAttach.views.push_back( m_hdrObjects.back().getTargetViewId() );
+		m_hdrObjects.front().setLastAttach( m_hdrSource.get() );
+		m_hdrTarget = makeRawUnique< crg::Attachment >( crg::Attachment::createDefault( m_hdrObjects.back().getTargetViewId() ) );
+		m_hdrTarget->imageAttach.views.push_back( m_hdrObjects.front().getTargetViewId() );
+		m_hdrObjects.back().setLastAttach( m_hdrTarget.get() );
+		m_srgbSource = makeRawUnique< crg::Attachment >( crg::Attachment::createDefault( m_srgbObjects.front().getTargetViewId() ) );
+		m_srgbSource->imageAttach.views.push_back( m_srgbObjects.back().getTargetViewId() );
+		m_srgbObjects.front().setLastAttach( m_srgbSource.get() );
+		m_srgbTarget = makeRawUnique< crg::Attachment >( crg::Attachment::createDefault( m_srgbObjects.back().getTargetViewId() ) );
+		m_srgbTarget->imageAttach.views.push_back( m_srgbObjects.front().getTargetViewId() );
+		m_srgbObjects.front().setLastAttach( m_srgbTarget.get() );
+
+		m_graph.addInput( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledViewId()
 			, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
-		m_graph.addOutput( m_combined.wholeViewId
+		m_graph.addOutput( m_combined.getWholeViewId()
 			, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 		for ( auto const & entry : engine.getPostEffectFactory().listRegisteredTypes() )
@@ -951,7 +964,7 @@ namespace c3d
 
 		if ( m_toneMapping )
 		{
-			m_toneMapping->update( updater, lastTarget->sampledViewId );
+			m_toneMapping->update( updater, *lastTarget );
 		}
 		else
 		{
@@ -983,7 +996,11 @@ namespace c3d
 		updater.camera = &camera;
 
 		m_renderTechnique->update( updater );
+
+		// Beware that overlays render target is using display size.
+		updater.renderSize = m_displaySize;
 		m_overlayPass->update( updater );
+		updater.renderSize = m_renderSize;
 
 		for ( auto const & effect : m_hdrPostEffects )
 		{
@@ -1066,7 +1083,7 @@ namespace c3d
 		if ( myScene != &scene )
 		{
 			m_scene = &scene;
-			m_graph.addInput( m_scene->getEnvironmentMap().getColourId().wholeViewId
+			m_graph.addInput( m_scene->getEnvironmentMap().getColourId().getWholeViewId()
 				, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			m_culler.reset();
 		}
@@ -1091,7 +1108,7 @@ namespace c3d
 						else
 						{
 							m_toneMapping->initialise( m_toneMappingName
-								, m_hdrObjects.back().sampledViewId );
+								, m_hdrObjects.back() );
 						}
 					} ) );
 			}
@@ -1204,9 +1221,9 @@ namespace c3d
 		m_signalFinished.clear();
 	}
 
-	crg::FramePass const & RenderTarget::createVertexTransformPass( crg::FramePassGroup & graph )const
+	void RenderTarget::createVertexTransformPass( crg::FramePassGroup & graph )const
 	{
-		return getScene()->getRenderNodes().createVertexTransformPass( graph );
+		getScene()->getRenderNodes().createVertexTransformPass( graph );
 	}
 
 	void RenderTarget::addParsers( AttributeParsers & result )
@@ -1236,11 +1253,10 @@ namespace c3d
 
 		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
 		{
-			m_frustumClusters = makeUnique< FrustumClusters >( device, *getCamera(), m_clustersConfig );
+			m_frustumClusters = makeUnique< FrustumClusters >( device, getScene()->getResources(), *getCamera(), m_clustersConfig );
 		}
 
 		doInitCombineProgram();
-		crg::FramePassArray passes;
 
 		stepProgressBarGlobalStartLocal( progress
 			, cuT( "Initialising: Meshes" )
@@ -1250,12 +1266,10 @@ namespace c3d
 		for ( auto const & [name, mesh] : getScene()->getMeshCache() )
 		{
 			stepProgressBarLocal( progress, name );
-			passes = mesh->record( m_resources
-				, group
-				, passes );
+			mesh->record( m_resources, group );
 		}
 
-		auto result = doInitialiseTechnique( device, progress, c3d::move( passes ) );
+		auto result = doInitialiseTechnique( device, progress );
 
 		if ( !result )
 		{
@@ -1263,16 +1277,11 @@ namespace c3d
 			return;
 		}
 
-		auto * previousPass = &m_renderTechnique->getLastPass();
 		if ( getEngine()->getUpscalingConfig().enabled )
-		{
-			previousPass = &doCreateUpscalingPass( m_graph.createPassGroup( "Upscaling" )
-				, { previousPass } );
-		}
+			doCreateUpscalingPass( m_graph.createPassGroup( "Upscaling" ) );
 
 		auto hdrSource = &m_hdrObjects.front();
 		auto hdrTarget = &m_hdrObjects.back();
-
 		if ( !m_hdrPostEffects.empty() )
 		{
 			stepProgressBarGlobalStartLocal( progress
@@ -1286,36 +1295,30 @@ namespace c3d
 					stepProgressBarLocal( progress, effect->getName() );
 					result = effect->initialise( device
 						, *hdrSource
-						, *hdrTarget
-						, *previousPass );
+						, *hdrTarget );
 					c3d::swap( hdrSource, hdrTarget );
-					previousPass = &effect->getPass();
 				}
 			}
 		}
 
 		if ( result )
 		{
-			m_hdrLastPass = previousPass;
 			stepProgressBarGlobalStartLocal( progress
 				, cuT( "Creating: Tone Mapping" )
 				, uint32_t( m_hdrPostEffects.size() ) );
 			m_toneMapping = makeUnique< ToneMapping >( *getEngine()
 				, m_graph.getDefaultGroup()
-				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
-				, m_srgbObjects.front().wholeViewId
-				, *m_hdrLastPass
+				, *hdrSource
+				, m_srgbObjects.front()
 				, m_renderUbo
 				, *m_colourGradingUbo
 				, progress );
 			m_toneMapping->initialise( m_toneMappingName
-				, m_hdrObjects.back().sampledViewId );
-			previousPass = &m_toneMapping->getPass();
+				, m_hdrObjects.back() );
 		}
 
 		auto srgbSource = &m_srgbObjects.front();
 		auto srgbTarget = &m_srgbObjects.back();
-
 		if ( !m_srgbPostEffects.empty() )
 		{
 			stepProgressBarGlobalStartLocal( progress
@@ -1329,10 +1332,8 @@ namespace c3d
 					stepProgressBarLocal( progress, effect->getName() );
 					result = effect->initialise( device
 						, *srgbSource
-						, *srgbTarget
-						, *previousPass );
+						, *srgbTarget );
 					c3d::swap( srgbSource, srgbTarget );
-					previousPass = &effect->getPass();
 				}
 			}
 		}
@@ -1345,16 +1346,13 @@ namespace c3d
 		{
 			m_combinePassSource = srgbSource;
 			m_debugDrawer = makeUnique< DebugDrawer >( m_graph.getDefaultGroup()
-				, previousPass
 				, device
 				, *this
-				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId }
+				, *srgbSource
 				, m_renderTechnique->getDepth()
 				, &m_combinePassIndex );
-			previousPass = &m_debugDrawer->getLastPass();
 			m_combinePass = &doCreateCombinePass( progress
-				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId } );
-			m_combinePass->addDependency( *previousPass );
+				, *m_combinePassSource );
 
 			stepProgressBarGlobalStartLocal( progress
 				, cuT( "Compiling render graph" )
@@ -1422,13 +1420,13 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addOutputColourView( m_overlays.targetViewId );
-		group.addGroupOutput( m_overlays.targetViewId );
+		m_overlays.setLastAttach( pass.addOutputColourTarget( m_overlays.getTargetViewId() ) );
+		group.addGroupOutput( m_overlays.getTargetViewId() );
 		return pass;
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress
-		, crg::ImageViewIdArray source )
+		, Texture const & source )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating combine pass" ) );
 		auto & pass = m_graph.createPass( "Other/Combine"
@@ -1448,20 +1446,15 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( m_overlayPassDesc );
-		pass.addSampledView( c3d::move( source )
-			, uint32_t( rendtgt::CombineIdx::Scene ) );
-		pass.addSampledView( m_overlays.sampledViewId
-			, uint32_t( rendtgt::CombineIdx::Overlays ) );
-		m_renderUbo.createPassBinding( pass
-			, uint32_t( rendtgt::CombineIdx::Render ) );
-		pass.addOutputColourView( m_combined.targetViewId );
+		pass.addInputSampled( *source.getSampledLastAttach(), uint32_t( rendtgt::CombineIdx::Scene ) );
+		pass.addInputSampled( *m_overlays.getSampledLastAttach(), uint32_t( rendtgt::CombineIdx::Overlays ) );
+		m_renderUbo.createPassBinding( pass, uint32_t( rendtgt::CombineIdx::Render ) );
+		pass.addOutputColourTarget( m_combined.getTargetViewId() );
 		return pass;
 	}
 
 	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device
-		, ProgressBar * progress
-		, crg::FramePassArray previousPasses )
+		, ProgressBar * progress )
 	{
 		if ( !m_renderTechnique )
 		{
@@ -1474,7 +1467,6 @@ namespace c3d
 					, *this
 					, device
 					, m_hdrObjectsDownSampled ? *m_hdrObjectsDownSampled : m_hdrObjects.front()
-					, c3d::move( previousPasses )
 					, progress
 					, C3D_UseVisibilityBuffer != 0
 					, C3D_UseWeightedBlendedRendering != 0 );
@@ -1655,8 +1647,7 @@ namespace c3d
 		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
 	}
 
-	crg::FramePass const & RenderTarget::doCreateUpscalingPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses )
+	crg::FramePass const & RenderTarget::doCreateUpscalingPass( crg::FramePassGroup & graph )
 	{
 		auto & pass = graph.createPass( "Upscaling"
 			, [this]( crg::FramePass const & framePass
@@ -1674,11 +1665,10 @@ namespace c3d
 				m_upscalingPass = result.get();
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		pass.addImplicitColourView( m_hdrObjects.front().targetViewId, ImageLayout::eGeneral );
-		pass.addImplicitColourView( m_hdrObjectsDownSampled->sampledViewId, ImageLayout::eColorAttachment );
-		pass.addImplicitColourView( m_velocity.sampledViewId, ImageLayout::eColorAttachment );
-		pass.addImplicitColourView( m_renderTechnique->getDepth().sampledViewId, ImageLayout::eDepthStencilAttachment );
+		pass.addImplicit( *m_hdrObjects.front().getLastAttach(), ImageLayout::eGeneral );
+		pass.addImplicit( *m_hdrObjectsDownSampled->getLastAttach(), ImageLayout::eColorAttachment );
+		pass.addImplicit( *m_velocity.getLastAttach(), ImageLayout::eColorAttachment );
+		pass.addImplicit( *m_renderTechnique->getDepth().getLastAttach(), ImageLayout::eDepthStencilAttachment );
 		return pass;
 	}
 

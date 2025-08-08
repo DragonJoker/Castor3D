@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/DirectUploadData.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -67,7 +67,7 @@ namespace c3d
 			return result;
 		}
 
-		static UniformBufferUPtrT< Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device )
+		static UniformBufferOffsetT< Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device, uint32_t face )
 		{
 			static Matrix4x4f const projection = device.renderSystem.getPerspective( 90.0_degrees, 1.0f, 0.1f, 10.0f );
 
@@ -84,26 +84,12 @@ namespace c3d
 				};
 				return result;
 			}();
-			auto result = makeUniformBuffer< Matrix4x4f >( device.renderSystem
-				, 6u
-				, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, cuT( "RenderCubeMatrix" ) );
-
-			for ( uint32_t i = 0u; i < 6u; ++i )
-			{
-				result->getData( i ) = projection * views[i];
-			}
-
-			result->initialise( device );
-			result->upload( 0u, 6u );
+			auto result = device.uboPool->getBuffer< Matrix4x4f >( MemoryPropertyFlags::eHostVisible );
+				result.getData() = projection * views[face];
 			return result;
 		}
 
-		static ashes::VertexBufferPtr< Point4f > doCreateVertexBuffer( RenderDevice const & device
-			, ashes::Queue const & queue
-			, ashes::CommandPool const & commandPool )
+		static GpuBufferOffsetT< Point4f > doCreateVertexBuffer( RenderDevice const & device )
 		{
 			Vector< Point4f > vertexData
 			{
@@ -114,22 +100,18 @@ namespace c3d
 				Point4f{ -1, +1, -1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ +1, +1, -1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ -1, +1, -1, +1 }, Point4f{ -1, +1, +1, +1 },// Top
 				Point4f{ -1, -1, -1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ -1, -1, +1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ +1, -1, +1, +1 }, Point4f{ -1, -1, +1, +1 },// Bottom
 			};
-			auto result = makeVertexBuffer< Point4f >( device
+			auto result = device.bufferPool->getBuffer< Point4f >( BufferUsageFlags::eTransferDst | BufferUsageFlags::eVertexBuffer
 				, uint32_t( vertexData.size() )
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, cuT( "RenderCube" ) );
+				, MemoryPropertyFlags::eHostVisible );
+			for ( uint32_t i = 0u; i < vertexData.size(); ++i )
+				result.getData()[i] = vertexData[i];
+
 			{
-				InstantDirectUploadData uploader{ queue
-					, device
-					, cuT( "RenderCube" )
-					, commandPool };
-				uploader->pushUpload( vertexData.data()
-					, result->getSize()
-					, result->getBuffer()
-					, 0u
-					, VertexAttributeInputState );
+				InstantDirectUploadData uploader{ *device.transferQueue
+					, device, cuT( "RenderCubeVBUpload" ), *device.transferCommandPool };
+				result.upload( uploader, VertexAttributeInputState );
 			}
+
 			return result;
 		}
 
@@ -186,10 +168,7 @@ namespace c3d
 	{
 		auto queueData = m_device.graphicsData();
 		m_sampler->initialise( m_device );
-		m_matrixUbo = rendcube::doCreateMatrixUbo( m_device );
-		m_vertexBuffer = rendcube::doCreateVertexBuffer( m_device
-			, *queueData->queue
-			, *queueData->commandPool );
+		m_vertexBuffer = rendcube::doCreateVertexBuffer( m_device );
 		auto vertexLayout = rendcube::doCreateVertexLayout();
 
 		// Initialise the descriptor set.
@@ -212,6 +191,7 @@ namespace c3d
 
 		for ( auto & facePipeline : m_faces )
 		{
+			facePipeline.matrixUbo = rendcube::doCreateMatrixUbo( m_device, face );
 			facePipeline.pipeline = m_device->createPipeline( "RenderCubeFace" + string::toMbString( face )
 				, ashes::GraphicsPipelineCreateInfo
 				{
@@ -230,10 +210,8 @@ namespace c3d
 					renderPass,
 				} );
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + string::toMbString( face ) );
-			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
-				, m_matrixUbo->getBuffer()
-				, face
-				, 1u );
+			facePipeline.matrixUbo.createSizedBinding( *facePipeline.descriptorSet
+				, m_descriptorLayout->getBinding( 0u ) );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
 				, view
 				, m_sampler->getSampler() );
@@ -251,14 +229,13 @@ namespace c3d
 		{
 			facePipeline.descriptorSet.reset();
 			facePipeline.pipeline.reset();
+			m_device.uboPool->putBuffer( facePipeline.matrixUbo );
 		}
 
 		m_descriptorPool.reset();
 		m_pipelineLayout.reset();
 		m_descriptorLayout.reset();
-		m_matrixUbo->cleanup();
-		m_matrixUbo.reset();
-		m_vertexBuffer.reset();
+		m_device.bufferPool->putBuffer( m_vertexBuffer );
 	}
 
 	void RenderCube::prepareFrame( ashes::RenderPass const & renderPass
@@ -284,7 +261,7 @@ namespace c3d
 		auto & facePipeline = m_faces[face];
 		commandBuffer.bindPipeline( *facePipeline.pipeline );
 		commandBuffer.bindDescriptorSet( *facePipeline.descriptorSet, *m_pipelineLayout );
-		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer.getBuffer().getBuffer(), m_vertexBuffer.getOffset() );
 		doRegisterFrame( commandBuffer, face );
 		commandBuffer.draw( 36u );
 	}

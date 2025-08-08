@@ -372,9 +372,9 @@ namespace c3d
 			, getScene()->getObjectRootNode()
 			, makeRawUnique< ashes::PipelineVertexInputStateCreateInfo >( 0u, bindings, attributes )
 			, stride
-			, device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			, device.bufferPool->getBuffer< uint8_t >( BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eStorageBuffer
 				, size
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) );
+				, MemoryPropertyFlags::eDeviceLocal ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material );

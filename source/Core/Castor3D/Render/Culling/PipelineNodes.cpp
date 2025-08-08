@@ -3,8 +3,8 @@
 namespace c3d
 {
 	void registerPipelineNodes( PipelineBaseHash hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, Vector< PipelineBuffer > & nodesIds )
 	{
 		auto it = std::find_if( nodesIds.begin()
@@ -23,8 +23,8 @@ namespace c3d
 	}
 
 	uint32_t getPipelineNodeIndex( PipelineBaseHash hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, Vector< PipelineBuffer > const & cont )
 	{
 		auto it = std::find_if( cont.begin()
@@ -42,8 +42,8 @@ namespace c3d
 	}
 
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, Vector< PipelineBuffer > const & cont
 		, PipelineNodes * nodes
 		, VkDeviceSize maxNodesCount )

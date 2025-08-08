@@ -20,10 +20,9 @@ namespace c3d
 		 *\param[in]	device					The GPU device.
 		 *\param[in]	progress				The progress bar.
 		 *\param[in]	enabled					The pass' enabled status.
-		 *\param[in]	transparentPassDesc		The transparent nodes render pass.
 		 *\param[in]	depthObj				The scene depth and objects image.
 		 *\param[in]	transparentPassResult	The Weighted Blended OIT result.
-		 *\param[in]	targetColourView		The target colour buffer.
+		 *\param[in]	targetColour			The target colour buffer.
 		 *\param[in]	size					The render dimensions.
 		 *\param[in]	sceneUbo				The scene UBO.
 		 *\param[in]	renderUbo				The render configuration UBO.
@@ -34,10 +33,9 @@ namespace c3d
 		 *\param[in]	device					Le device GPU.
 		 *\param[in]	progress				La barre de progression.
 		 *\param[in]	enabled					L'état d'activation de la passe.
-		 *\param[in]	transparentPassDesc		La passe de rendu des noeuds transparents.
 		 *\param[in]	depthObj				L'image de profondeur et d'objets de la scène.
 		 *\param[in]	transparentPassResult	Le résultat du Weighted Blended OIT.
-		 *\param[in]	targetColourView		Le tampon de couleurs cible.
+		 *\param[in]	targetColour			Le tampon de couleurs cible.
 		 *\param[in]	size					Les dimensions du rendu.
 		 *\param[in]	sceneUbo				L'UBO de scène.
 		 *\param[in]	renderUbo				L'UBO de configuration du rendu.
@@ -47,10 +45,9 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, bool & enabled
-			, crg::FramePass const & transparentPassDesc
 			, Texture const & depthObj
 			, TransparentPassResult const & transparentPassResult
-			, crg::ImageViewIdArray const & targetColourView
+			, Texture & targetColour
 			, Size const & size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
@@ -69,22 +66,7 @@ namespace c3d
 		*/
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
-
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return m_finalCombinePassDesc;
-		}
 		/**@}*/
-
-	private:
-		crg::FramePass & doCreateFinalCombine( crg::FramePassGroup & graph
-			, crg::FramePass const & transparentPassDesc
-			, crg::ImageViewId const & depthObj
-			, crg::ImageViewIdArray const & targetColourView
-			, CameraUbo const & cameraUbo
-			, SceneUbo const & sceneUbo
-			, RenderUbo const & renderUbo
-			, ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;
@@ -94,7 +76,6 @@ namespace c3d
 		Size m_size;
 		ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass & m_finalCombinePassDesc;
 	};
 }
 

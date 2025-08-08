@@ -51,9 +51,8 @@ namespace c3d
 		 */
 		C3D_API ToneMapping( Engine & engine
 			, crg::FramePassGroup & graph
-			, crg::ImageViewIdArray const & source
-			, crg::ImageViewId const & target
-			, crg::FramePass const & previousPass
+			, Texture const & source
+			, Texture & target
 			, RenderUbo const & renderUbo
 			, ColourGradingUbo & colourGradingUbo
 			, ProgressBar * progress );
@@ -68,7 +67,7 @@ namespace c3d
 		 *\param[in]	source	L'image source initiale.
 		 */
 		C3D_API void initialise( String const & name
-			, crg::ImageViewId const & source );
+			, Texture const & source );
 		/**
 		 *\~english
 		 *\param[in, out]	updater	The update data.
@@ -78,7 +77,7 @@ namespace c3d
 		 *\param[in]		source	L'image source actuelle.
 		 */
 		C3D_API void update( CpuUpdater & updater
-			, crg::ImageViewId const & source );
+			, Texture const & source );
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
@@ -117,11 +116,6 @@ namespace c3d
 		/**@{*/
 		C3D_API String const & getFullName()const;
 
-		crg::FramePass const & getPass()const noexcept
-		{
-			return *m_pass;
-		}
-
 		String const & getName()const noexcept
 		{
 			return m_name;
@@ -129,22 +123,16 @@ namespace c3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreatePass( crg::FramePassGroup & graph
-			, crg::ImageViewIdArray const & source
-			, crg::ImageViewId const & target
-			, crg::FramePass const & previousPass
-			, ProgressBar * progress );
 		void doCreate( String const & name );
-		void doUpdatePassIndex( crg::ImageViewId const & source );
+		void doUpdatePassIndex( Texture const & source );
 
 	protected:
 		String m_name{ cuT( "linear" ) };
 		RenderUbo const & m_renderUbo;
 		ColourGradingUbo & m_colourGradingUbo;
 		ProgramModule m_shader{ cuT( "ToneMapping" ) };
-		crg::ImageViewId m_source;
+		Texture const & m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
-		crg::FramePass * m_pass{};
 		crg::RenderQuad * m_quad{};
 		uint32_t m_passIndex{};
 	};

@@ -456,13 +456,13 @@ namespace atmosphere_scattering
 	}
 
 	sdw::RetVec3 AtmosphereModel::getSunRadiance( sdw::Vec3 const & psunDir
-		, sdw::CombinedImage2DRgba32 const & ptransmittanceMap )
+		, sdw::CombinedImage2DRgba16 const & ptransmittanceMap )
 	{
 		if ( !m_getSunRadiance )
 		{
 			m_getSunRadiance = writer.implementFunction< sdw::Vec3 >( "atm_getSunRadiance"
 				, [&]( sdw::Vec3 const & sunDir
-					, sdw::CombinedImage2DRgba32 const & transmittanceMap )
+					, sdw::CombinedImage2DRgba16 const & transmittanceMap )
 				{
 					auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
 						, dot( sunDir, normalize( getCameraPosition() ) ) );
@@ -472,7 +472,7 @@ namespace atmosphere_scattering
 					writer.returnStmt( transmittanceMap.lod( uv, 0.0_f ).rgb() );
 				}
 				, sdw::InVec3{ writer, "sunDir" }
-				, sdw::InCombinedImage2DRgba32{ writer, "transmittanceMap" } );
+				, sdw::InCombinedImage2DRgba16{ writer, "transmittanceMap" } );
 		}
 
 		return m_getSunRadiance( psunDir, ptransmittanceMap );

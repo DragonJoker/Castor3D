@@ -19,7 +19,7 @@ namespace atmosphere_scattering
 	AtmosphereScatteringUbo::AtmosphereScatteringUbo( c3d::RenderDevice const & device
 		, bool & dirty )
 		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
 		, m_dirty{ dirty }
 		, m_config{ m_dirty }
 		, m_sunDirection{ m_dirty }

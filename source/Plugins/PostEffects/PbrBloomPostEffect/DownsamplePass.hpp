@@ -12,40 +12,19 @@ namespace PbrBloom
 	{
 	public:
 		DownsamplePass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & sceneView
-			, crg::ImageId const & resultImg
+			, c3d::Texture const & sceneView
+			, c3d::Vector< c3d::Texture > & resultImg
 			, uint32_t passesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::FramePass const & getPass()const
-		{
-			return *m_passes.back();
-		}
-
-	private:
-		crg::ImageViewIdArray doCreateResultViews( crg::FramePassGroup & graph
-			, crg::ImageId const & resultImg
-			, uint32_t passesCount );
-		c3d::Vector< crg::FramePass * > doCreatePasses( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
-			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & sceneView
-			, uint32_t passesCount
-			, bool const * enabled
-			, uint32_t const * passIndex );
-
 	private:
 		crg::FramePassGroup & m_graph;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageViewId m_resultView;
-		crg::ImageViewIdArray m_resultViews;
 		c3d::Vector< crg::RenderQuad * > m_quads;
-		c3d::Vector< crg::FramePass * > m_passes;
 	};
 }
 

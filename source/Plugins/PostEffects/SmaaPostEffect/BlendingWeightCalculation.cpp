@@ -855,12 +855,11 @@ namespace smaa
 	//*********************************************************************************************
 
 	BlendingWeightCalculation::BlendingWeightCalculation( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewId const & edgeDetectionView
-		, crg::ImageViewId const & stencilView
+		, c3d::Texture const & edgeDetectionView
+		, c3d::Texture const & stencilView
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: m_device{ device }
@@ -893,7 +892,8 @@ namespace smaa
 			, {} }
 		, m_shader{ cuT( "SmaaBlendingWeight" ), bwcalc::getProgram( device ) }
 		, m_stages{ makeProgramStates( m_device, m_shader ) }
-		, m_pass{ m_graph.createPass( "BlendingWeight"
+	{
+		auto & pass = m_graph.createPass( "BlendingWeight"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -914,32 +914,19 @@ namespace smaa
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
-			} ) }
-	{
+			} );
 		m_graph.addInput( m_areaView
-			, crg::makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
+			, makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
 		m_graph.addInput( m_searchView
-			, crg::makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		m_pass.addDependency( previousPass );
-		ubo.createPassBinding( m_pass
+			, makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
+		ubo.createPassBinding( pass
 			, SmaaUboIdx );
-		m_pass.addSampledView( m_areaView
-			, bwcalc::AreaTexIdx
-			, linearSampler );
-		m_pass.addSampledView( m_searchView
-			, bwcalc::SearchTexIdx );
-		m_pass.addSampledView( edgeDetectionView
-			, bwcalc::EdgesTexIdx
-			, linearSampler );
-		m_pass.addInputStencilView( stencilView );
-		m_pass.addOutputColourView( m_result.targetViewId
-			, c3d::transparentBlackClearColor );
+		pass.addInputSampledImage( m_areaView, bwcalc::AreaTexIdx, linearSampler );
+		pass.addInputSampledImage( m_searchView, bwcalc::SearchTexIdx );
+		pass.addInputSampled( *edgeDetectionView.getSampledLastAttach(), bwcalc::EdgesTexIdx, linearSampler );
+		pass.addInputStencilTarget( *stencilView.getLastAttach() );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), c3d::transparentBlackClearColor ) );
 		m_result.create();
 	}
 
@@ -957,7 +944,7 @@ namespace smaa
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA BlendingWeight Result" )
 			, m_result
-			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.getSampledViewId() ).layout
 			, c3d::TextureFactors{}.invert( true ) );
 	}
 

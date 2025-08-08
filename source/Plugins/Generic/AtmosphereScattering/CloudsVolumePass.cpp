@@ -239,29 +239,28 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	CloudsVolumePass::CloudsVolumePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CameraUbo const & cameraUbo
 		, CloudsUbo const & cloudsUbo
-		, crg::ImageViewId const & transmittance
-		, crg::ImageViewId const & multiscatter
-		, crg::ImageViewId const & skyview
-		, crg::ImageViewId const & volume
-		, crg::ImageViewId const & perlinWorley
-		, crg::ImageViewId const & worley
-		, crg::ImageViewId const & curl
-		, crg::ImageViewId const & weather
-		, crg::ImageViewId const * depthObj
-		, crg::ImageViewId const & skyResult
-		, crg::ImageViewId const & sunResult
-		, crg::ImageViewId const & cloudsResult
+		, c3d::Texture const & transmittance
+		, c3d::Texture const & multiscatter
+		, c3d::Texture const & skyview
+		, c3d::Texture const & volume
+		, c3d::Texture const & perlinWorley
+		, c3d::Texture const & worley
+		, c3d::Texture const & curl
+		, c3d::Texture const & weather
+		, c3d::Texture const * depthObj
+		, c3d::Texture & skyResult
+		, c3d::Texture & sunResult
+		, c3d::Texture & cloudsResult
 		, uint32_t index )
 		: c3d::Named{ cuT( "Clouds/VolumePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ), depthObj != nullptr ) }
+		, m_shader{ getName(), volclouds::getProgram( *device.renderSystem.getEngine(), skyResult.getExtent(), transmittance.getExtent(), depthObj != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto renderSize = getExtent( skyResult );
+		auto renderSize = skyResult.getExtent();
 		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -292,76 +291,38 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		atmosphereUbo.createPassBinding( pass
-			, volclouds::eAtmosphere );
-		cloudsUbo.createPassBinding( pass
-			, volclouds::eClouds );
-		cameraUbo.createPassBinding( pass
-			, volclouds::eCamera );
-		crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear };
-		crg::SamplerDesc linearRepeatSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eRepeat
-			, c3d::WrapMode::eRepeat
-			, c3d::WrapMode::eRepeat };
-		crg::SamplerDesc mipLinearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eLinear
-			, c3d::WrapMode::eRepeat
-			, c3d::WrapMode::eRepeat
-			, c3d::WrapMode::eRepeat };
-		pass.addSampledView( transmittance
-			, volclouds::eTransmittance
-			, linearClampSampler );
-		pass.addSampledView( multiscatter
-			, volclouds::eMultiScatter
-			, linearClampSampler );
-		pass.addSampledView( skyview
-			, volclouds::eSkyView
-			, linearClampSampler );
-		pass.addSampledView( volume
-			, volclouds::eVolume
-			, linearClampSampler );
-		pass.addSampledView( perlinWorley
-			, volclouds::ePerlinWorley
-			, mipLinearSampler );
-		pass.addSampledView( worley
-			, volclouds::eWorley
-			, mipLinearSampler );
-		pass.addSampledView( curl
-			, volclouds::eCurl
-			, linearRepeatSampler );
-		pass.addSampledView( weather
-			, volclouds::eWeatherMap
-			, linearRepeatSampler );
+		atmosphereUbo.createPassBinding( pass, volclouds::eAtmosphere );
+		cloudsUbo.createPassBinding( pass, volclouds::eClouds );
+		cameraUbo.createPassBinding( pass, volclouds::eCamera );
+		crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
+		crg::SamplerDesc linearRepeatSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
+		crg::SamplerDesc mipLinearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eLinear
+			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
+		pass.addInputSampled( *transmittance.getSampledLastAttach(), volclouds::eTransmittance, linearClampSampler );
+		pass.addInputSampled( *multiscatter.getSampledLastAttach(), volclouds::eMultiScatter, linearClampSampler );
+		pass.addInputSampled( *skyview.getSampledLastAttach(), volclouds::eSkyView, linearClampSampler );
+		pass.addInputSampled( *volume.getSampledLastAttach(), volclouds::eVolume, linearClampSampler );
+		pass.addInputSampled( *perlinWorley.getSampledLastAttach(), volclouds::ePerlinWorley, mipLinearSampler );
+		pass.addInputSampled( *worley.getSampledLastAttach(), volclouds::eWorley, mipLinearSampler );
+		pass.addInputSampled( *curl.getSampledLastAttach(), volclouds::eCurl, linearRepeatSampler );
+		pass.addInputSampled( *weather.getSampledLastAttach(), volclouds::eWeatherMap, linearRepeatSampler );
 
 		if ( depthObj )
-		{
-			pass.addSampledView( *depthObj
-				, volclouds::eDepthMap
-				, linearClampSampler );
-		}
+			pass.addInputSampled( *depthObj->getSampledLastAttach(), volclouds::eDepthMap, linearClampSampler );
 
 		if constexpr ( volclouds::useCompute )
 		{
-			pass.addOutputStorageView( skyResult
-				, volclouds::eOutSky );
-			pass.addOutputStorageView( sunResult
-				, volclouds::eOutSun );
-			pass.addOutputStorageView( cloudsResult
-				, volclouds::eOutClouds );
+			skyResult.setLastAttach( pass.addOutputStorageImage( skyResult.getTargetViewId(), volclouds::eOutSky ) );
+			sunResult.setLastAttach( pass.addOutputStorageImage( sunResult.getTargetViewId(), volclouds::eOutSun ) );
+			cloudsResult.setLastAttach( pass.addOutputStorageImage( cloudsResult.getTargetViewId(), volclouds::eOutClouds ) );
 		}
 		else
 		{
-			pass.addOutputColourView( skyResult );
-			pass.addOutputColourView( sunResult );
-			pass.addOutputColourView( cloudsResult );
+			skyResult.setLastAttach( pass.addOutputColourTarget( skyResult.getTargetViewId() ) );
+			sunResult.setLastAttach( pass.addOutputColourTarget( sunResult.getTargetViewId() ) );
+			cloudsResult.setLastAttach( pass.addOutputColourTarget( cloudsResult.getTargetViewId() ) );
 		}
-
-		m_lastPass = &pass;
 	}
 
 	void CloudsVolumePass::accept( c3d::ConfigurationVisitorBase & visitor )

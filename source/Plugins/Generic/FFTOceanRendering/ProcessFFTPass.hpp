@@ -39,8 +39,8 @@ namespace ocean_fft
 			, c3d::RenderDevice const & device
 			, VkFFTConfig const & config
 			, c3d::Extent2D const & extent
-			, ashes::BufferBase const & input
-			, c3d::Array< ashes::BufferBasePtr, 2u > const & output
+			, c3d::BufferBase const & input
+			, c3d::Array< c3d::BufferUPtr, 2u > const & output
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		~ProcessFFTPass()override;
 		/**
@@ -68,14 +68,13 @@ namespace ocean_fft
 		VkFFTApplication m_app{};
 	};
 
-	crg::FramePass const & createProcessFFTPass( c3d::String const & name
+	void createProcessFFTPass( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::Extent2D const & extent
 		, VkFFTConfig const & config
-		, ashes::BufferBase const & input
-		, c3d::Array< ashes::BufferBasePtr, 2u > const & output );
+		, c3d::BufferBase const & input
+		, c3d::Array< c3d::BufferUPtr, 2u > const & output );
 }
 
 #endif

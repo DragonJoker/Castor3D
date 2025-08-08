@@ -13,11 +13,10 @@ namespace smaa
 	{
 	public:
 		DepthEdgeDetection( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewId const & depthObj
+			, c3d::Texture const & depthObj
 			, SmaaConfig const & config
 			, bool const * enabled );
 	};

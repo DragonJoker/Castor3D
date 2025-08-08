@@ -27,11 +27,12 @@ namespace c3d
 		C3D_API FrustumClusters( FrustumClusters && )noexcept = delete;
 		C3D_API FrustumClusters & operator=( FrustumClusters const & ) = delete;
 		C3D_API FrustumClusters & operator=( FrustumClusters && )noexcept = delete;
-		C3D_API ~FrustumClusters()noexcept = default;
 
 		C3D_API FrustumClusters( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, Camera const & camera
 			, ClustersConfig const & config );
+		C3D_API ~FrustumClusters()noexcept;
 		/**
 		 *\~english
 		 *\brief			CPU side update.
@@ -56,11 +57,9 @@ namespace c3d
 		 *\~french
 		 *\brief		Enregistre les passes liées aux clusters.
 		 */
-		C3D_API crg::FramePass const & createFramePasses( crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
+		C3D_API void createFramePasses( crg::FramePassGroup & graph
 			, RenderTechnique & technique
-			, RenderUbo const & renderUbo
-			, RenderNodesPass *& nodesPass );
+			, RenderUbo const & renderUbo );
 		/**
 		 *\~english
 		 *\brief		Creates the programs used to display clusters debug data.
@@ -118,182 +117,29 @@ namespace c3d
 			return m_clustersUbo;
 		}
 
-		auto & getClustersAABBBuffer()const noexcept
+		BufferBase const & getPointLightClusterGridBuffer()const noexcept
 		{
-			CU_Require( m_aabbBuffer );
-			return *m_aabbBuffer;
+			return m_pointBuffers.clusterGrid;
 		}
 
-		auto & getPointLightClusterGridBuffer()const noexcept
+		BufferBase const & getSpotLightClusterGridBuffer()const noexcept
 		{
-			CU_Require( m_pointBuffers.clusterGrid );
-			return *m_pointBuffers.clusterGrid;
+			return m_spotBuffers.clusterGrid;
 		}
 
-		auto & getSpotLightClusterGridBuffer()const noexcept
+		BufferBase const & getPointLightClusterIndexBuffer()const noexcept
 		{
-			CU_Require( m_spotBuffers.clusterGrid );
-			return *m_spotBuffers.clusterGrid;
+			return m_pointBuffers.clusterIndex;
 		}
 
-		auto & getPointLightClusterIndexBuffer()const noexcept
+		BufferBase const & getSpotLightClusterIndexBuffer()const noexcept
 		{
-			CU_Require( m_pointBuffers.clusterIndex );
-			return *m_pointBuffers.clusterIndex;
+			return m_spotBuffers.clusterIndex;
 		}
 
-		auto & getSpotLightClusterIndexBuffer()const noexcept
+		BufferBase const & getReducedLightsAABBBuffer()const noexcept
 		{
-			CU_Require( m_spotBuffers.clusterIndex );
-			return *m_spotBuffers.clusterIndex;
-		}
-
-		auto & getAllLightsAABBBuffer()const noexcept
-		{
-			return m_allLightsAABBBuffer->getBuffer();
-		}
-
-		auto & getReducedLightsAABBBuffer()const noexcept
-		{
-			return m_reducedLightsAABBBuffer->getBuffer();
-		}
-
-		auto & getPointLightBVHBuffer()const noexcept
-		{
-			return m_pointBuffers.bvh->getBuffer();
-		}
-
-		auto & getSpotLightBVHBuffer()const noexcept
-		{
-			return m_spotBuffers.bvh->getBuffer();
-		}
-
-		ashes::BufferBase & getPointLightIndicesBuffer( uint32_t index )const noexcept
-		{
-			return m_pointBuffers.indices[index]->getBuffer();
-		}
-
-		ashes::BufferBase & getSpotLightIndicesBuffer( uint32_t index )const noexcept
-		{
-			return m_spotBuffers.indices[index]->getBuffer();
-		}
-
-		ashes::BufferBase & getPointLightMortonCodesBuffer( uint32_t index )const noexcept
-		{
-			return m_pointBuffers.mortonCodes[index]->getBuffer();
-		}
-
-		ashes::BufferBase & getSpotLightMortonCodesBuffer( uint32_t index )const noexcept
-		{
-			return m_spotBuffers.mortonCodes[index]->getBuffer();
-		}
-
-		ashes::BufferBase & getInputPointLightIndicesBuffer()const noexcept
-		{
-			return getPointLightIndicesBuffer( m_pointLightMortonIndicesInput );
-		}
-
-		ashes::BufferBase & getInputSpotLightIndicesBuffer()const noexcept
-		{
-			return getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput );
-		}
-
-		Vector< ashes::BufferBase const * > getOutputPointLightIndicesBuffers()const noexcept
-		{
-			return { &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput )
-				, &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput ) };
-		}
-
-		Vector< ashes::BufferBase const * > getOutputSpotLightIndicesBuffers()const noexcept
-		{
-			return { &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput )
-				, &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput ) };
-		}
-
-		Vector< ashes::BufferBase const * > getInputPointLightIndicesBuffers()const noexcept
-		{
-			return { &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput )
-				, &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput ) };
-		}
-
-		Vector< ashes::BufferBase const * > getInputSpotLightIndicesBuffers()const noexcept
-		{
-			return { &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput )
-				, &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput ) };
-		}
-
-		ashes::BufferBase & getOutputPointLightIndicesBuffer()const noexcept
-		{
-			return getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput );
-		}
-
-		ashes::BufferBase & getOutputSpotLightIndicesBuffer()const noexcept
-		{
-			return getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput );
-		}
-
-		ashes::BufferBase & getInputPointLightMortonCodesBuffer()const noexcept
-		{
-			return getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput );
-		}
-
-		ashes::BufferBase & getInputSpotLightMortonCodesBuffer()const noexcept
-		{
-			return getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput );
-		}
-
-		Vector< ashes::BufferBase const * > getOutputPointLightMortonCodesBuffers()const noexcept
-		{
-			return { &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput )
-				, &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput ) };
-		}
-
-		Vector< ashes::BufferBase const * > getOutputSpotLightMortonCodesBuffers()const noexcept
-		{
-			return { &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput )
-				, &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput ) };
-		}
-
-		Vector< ashes::BufferBase const * > getInputPointLightMortonCodesBuffers()const noexcept
-		{
-			return { &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput )
-				, &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput ) };
-		}
-
-		Vector< ashes::BufferBase const * > getInputSpotLightMortonCodesBuffers()const noexcept
-		{
-			return { &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput )
-				, &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput ) };
-		}
-
-		ashes::BufferBase & getOutputPointLightMortonCodesBuffer()const noexcept
-		{
-			return getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput );
-		}
-
-		ashes::BufferBase & getOutputSpotLightMortonCodesBuffer()const noexcept
-		{
-			return getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput );
-		}
-
-		ashes::BufferBase & getMergePathPartitionsBuffer()const noexcept
-		{
-			return m_mergePathPartitionsBuffer->getBuffer();
-		}
-
-		ashes::BufferBase & getClusterFlagsBuffer()const noexcept
-		{
-			return *m_clusterFlags;
-		}
-
-		ashes::BufferBase & getUniqueClustersBuffer()const noexcept
-		{
-			return *m_uniqueClusters;
-		}
-
-		ashes::BufferBase & getClustersIndirectBuffer()const noexcept
-		{
-			return m_clustersIndirect->getBuffer();
+			return m_reducedLightsAABBBuffer;
 		}
 
 		auto & getCamera()const noexcept
@@ -312,6 +158,8 @@ namespace c3d
 		}
 
 		OnClustersBuffersChanged onClusterBuffersChanged;
+		static constexpr uint32_t MortonIndicesInput{ 1u };
+		static constexpr uint32_t MortonIndicesOutput{ 0u };
 
 	private:
 		struct AABB
@@ -323,15 +171,22 @@ namespace c3d
 		struct Buffers
 		{
 			Buffers( RenderDevice const & device
+				, crg::ResourcesCache & resources
 				, String const & name );
+			~Buffers()noexcept;
 
 			// Fixed size buffers, related to lights
-			Array< ashes::BufferPtr< u32 >, 2u > mortonCodes;
-			Array< ashes::BufferPtr< u32 >, 2u > indices;
-			ashes::BufferPtr< AABB > bvh;
+			Array< BufferT< u32 >, 2u > mortonCodes;
+			Array< BufferT< u32 >, 2u > indices;
+			BufferT< AABB > bvh;
 			// Variable size buffers, related to frustum dimensions
-			ashes::BufferBasePtr clusterGrid;
-			ashes::BufferBasePtr clusterIndex;
+			BufferT< Point2ui > clusterGrid;
+			BufferT< u32 > clusterIndex;
+			//
+			crg::BufferViewIdArray inputIndices;
+			crg::BufferViewIdArray outputIndices;
+			crg::BufferViewIdArray inputMortonCodes;
+			crg::BufferViewIdArray outputMortonCodes;
 		};
 
 	private:
@@ -344,28 +199,27 @@ namespace c3d
 		bool m_clustersDirty{ true };
 		bool m_lightsDirty{ true };
 		int32_t m_first{ 5 };
-		uint32_t m_pointLightMortonIndicesInput{ 1u };
-		uint32_t m_spotLightMortonIndicesInput{ 1u };
-		GroupChangeTracked< Point3ui > m_dimensions;
+		Point3ui m_dimensions;
 		GroupChangeTracked< Point2ui > m_clusterSize;
 		GroupChangeTracked< Matrix4x4f > m_cameraProjection;
 		GroupChangeTracked< Matrix4x4f > m_cameraView;
 		ClustersUbo m_clustersUbo;
 		CameraUbo m_clustersCameraUbo;
-		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
+		BufferT< VkDispatchIndirectCommand > m_clustersIndirect;
+		BufferT< s32 > m_mergePathPartitions;
 
 		// Fixed size buffers, related to lights
-		ashes::BufferPtr< AABB > m_allLightsAABBBuffer;
-		ashes::BufferPtr< AABB > m_reducedLightsAABBBuffer;
-		ashes::BufferPtr< s32 > m_mergePathPartitionsBuffer;
+		BufferT< AABB > m_allLightsAABBBuffer;
+		BufferT< AABB > m_reducedLightsAABBBuffer;
 		// Light type specific buffers
 		Buffers m_pointBuffers;
 		Buffers m_spotBuffers;
+		Array< ClustersLightSortAttachs, 2u > m_sortAttachs;
 
 		// Variable size buffers, related to frustum dimensions
-		ashes::BufferBasePtr m_aabbBuffer;
-		ashes::BufferBasePtr m_clusterFlags;
-		ashes::BufferBasePtr m_uniqueClusters;
+		BufferT< AABB > m_aabbBuffer;
+		Buffer m_clusterFlagsBuffer;
+		Buffer m_uniqueClusters;
 		Vector< ashes::BufferBasePtr > m_toDelete;
 
 		ashes::PipelineShaderStageCreateInfoArray m_displayClustersAABBProgram;

@@ -28,7 +28,7 @@ namespace c3d
 
 		struct GpuBufferOffset
 		{
-			ashes::BufferBase * buffer{};
+			BufferBase * buffer{};
 			MemChunk chunk{};
 
 			VkDeviceSize getAskedSize()const
@@ -53,21 +53,23 @@ namespace c3d
 			, ashes::CommandBufferPtr commandBuffer );
 		C3D_API ~StagedUploadData()noexcept override;
 
+		C3D_API void begin()override;
+		C3D_API SemaphoreUsed end( ashes::Queue const & queue
+			, ashes::Fence const * fence
+			, Milliseconds timeout )override;
+		C3D_API void cleanup()noexcept override;
+
 		uint32_t getFrameIndex()const noexcept
 		{
 			return m_frameIndex;
 		}
 
 	private:
-		void doBegin()override;
 		void doPreprocess( Vector< BufferDataRange > *& pendingBuffers
 			, Vector< ImageDataRange > *& pendingImages )override;
 		VkDeviceSize doUpload( BufferDataRange & data )override;
 		VkDeviceSize doUpload( ImageDataRange & data )override;
 		void doPostprocess()override;
-		SemaphoreUsed doEnd( ashes::Queue const & queue
-			, ashes::Fence const * fence
-			, Milliseconds timeout )override;
 
 		struct StagingBuffer
 		{
@@ -92,7 +94,7 @@ namespace c3d
 			VkDeviceSize offset{ ~0ULL };
 			VkDeviceSize range{ 0ULL };
 		};
-		using BuffersRanges = HashMap< ashes::BufferBase const *, BufferRange >;
+		using BuffersRanges = HashMap< BufferBase const *, BufferRange >;
 
 		struct FrameBuffers
 		{
@@ -118,22 +120,53 @@ namespace c3d
 
 			~FrameBuffers()noexcept
 			{
-				for ( auto const & [buffer, bounds] : buffers )
-				{
-					buffer->unlock();
-				}
-
-				buffers.clear();
-				semaphore = {};
+				destroy();
 			}
 
 			FrameBuffers( FrameBuffers const & ) = delete;
 			FrameBuffers( FrameBuffers && )noexcept = default;
 			FrameBuffers & operator=( FrameBuffers const & ) = delete;
-			FrameBuffers & operator=( FrameBuffers && )noexcept = default;
+			FrameBuffers & operator=( FrameBuffers && rhs )noexcept
+			{
+				destroy();
+
+				pool = move( rhs.pool );
+				bufferOffsets = move( rhs.bufferOffsets );
+				imageOffsets = move( rhs.imageOffsets );
+				buffers = move( rhs.buffers );
+				semaphore = move( rhs.semaphore );
+				pendingBuffers = move( rhs.pendingBuffers );
+				pendingImages = move( rhs.pendingImages );
+				used = rhs.used;
+				currentSize = rhs.currentSize;
+				buffersCount = rhs.buffersCount;
+
+				rhs.used = {};
+				rhs.currentSize = {};
+				rhs.buffersCount = {};
+
+				return *this;
+			}
+
+		private:
+			void destroy()noexcept
+			{
+				buffers.clear();
+				bufferOffsets.clear();
+				imageOffsets.clear();
+				pendingBuffers.clear();
+				pendingImages.clear();
+				semaphore = {};
+				used = {};
+				currentSize = {};
+				buffersCount = {};
+
+				for ( auto & buffer : pool )
+					buffer.buffer->getBuffer().destroy();
+			}
 		};
 
-		HashMap< ashes::BufferBase const *, byte * > m_wholeBuffers;
+		HashMap< BufferBase const *, byte * > m_wholeBuffers;
 		Array< FrameBuffers, 2u > m_buffers;
 		FrameBuffers * m_cpuBuffers{};
 		FrameBuffers * m_gpuBuffers{};

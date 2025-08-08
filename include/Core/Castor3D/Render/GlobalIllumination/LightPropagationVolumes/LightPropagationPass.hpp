@@ -84,7 +84,7 @@ namespace c3d
 		/**
 		 *\copydoc		RenderTechniquePass::accept
 		 */
-		C3D_API void accept( ConfigurationVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 
 	protected:
 		C3D_API void doSubInitialise( uint32_t index );
@@ -114,9 +114,9 @@ namespace c3d
 
 		private:
 			crg::PipelineHolder m_holder;
-			uint32_t m_gridSize;
-			BlendMode m_blendMode;
-			VkRenderPass m_renderPass;
+			uint32_t m_gridSize{};
+			BlendMode m_blendMode{};
+			VkRenderPass m_renderPass{};
 		};
 
 	private:

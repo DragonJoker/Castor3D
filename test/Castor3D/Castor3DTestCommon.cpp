@@ -73,6 +73,17 @@ namespace Testing
 			return result;
 		}
 
+		void printAllocs( c3d::Vector< c3d::Pair< c3d::DataChunk, c3d::String > > const & allocs
+			, c3d::String const & step )
+		{
+			c3d::log::debug << "Allocations - " << step << std::endl;
+
+			for ( auto const & [chunk, stack] : allocs )
+			{
+				c3d::log::debug << stack << std::endl << std::endl;
+			}
+		}
+
 		void printAllocs( c3d::Vector< c3d::Pair< c3d::MemChunk, c3d::String > > const & allocs
 			, c3d::String const & step )
 		{

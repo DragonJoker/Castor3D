@@ -22,7 +22,7 @@ namespace c3d
 			GpuPackedBaseBuffer * buffer{};
 			MemChunk chunk{};
 
-			ashes::BufferBase const & getBuffer()const
+			Buffer const & getBuffer()const
 			{
 				return buffer->getBuffer();
 			}
@@ -62,67 +62,7 @@ namespace c3d
 			void reset()
 			{
 				buffer = nullptr;
-				chunk.offset = 0u;
-				chunk.askedSize = 0u;
-				chunk.size = 0u;
-			}
-
-			void createUniformPassBinding( crg::FramePass & pass
-				, uint32_t binding
-				, String const & name )const
-			{
-				c3d::createUniformPassBinding( pass
-					, binding
-					, name
-					, getBuffer()
-					, getOffset()
-					, getAskedSize() );
-			}
-
-			void createInputStoragePassBinding( crg::FramePass & pass
-				, uint32_t binding
-				, String const & name )const
-			{
-				c3d::createInputStoragePassBinding( pass
-					, binding
-					, name
-					, getBuffer()
-					, getOffset()
-					, getAskedSize() );
-			}
-
-			void createInOutStoragePassBinding( crg::FramePass & pass
-				, uint32_t binding
-				, String const & name )const
-			{
-				c3d::createInOutStoragePassBinding( pass
-					, binding
-					, name
-					, getBuffer()
-					, getOffset()
-					, getAskedSize() );
-			}
-
-			void createOutputStoragePassBinding( crg::FramePass & pass
-				, uint32_t binding
-				, String const & name )const
-			{
-				c3d::createOutputStoragePassBinding( pass
-					, binding
-					, name
-					, getBuffer()
-					, getOffset()
-					, getAskedSize() );
-			}
-
-			ashes::WriteDescriptorSet getUniformBinding( uint32_t binding )const
-			{
-				auto result = ashes::WriteDescriptorSet{ binding
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-				result.bufferInfo.push_back( VkDescriptorBufferInfo{ getBuffer(), getOffset(), getAskedSize() } );
-				return result;
+				chunk = {};
 			}
 
 			ashes::WriteDescriptorSet getStorageBinding( uint32_t binding )const
@@ -131,7 +71,7 @@ namespace c3d
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				result.bufferInfo.push_back( VkDescriptorBufferInfo{ getBuffer(), getOffset(), getAskedSize() } );
+				result.bufferInfo.push_back( VkDescriptorBufferInfo{ *getBuffer().buffer, getOffset(), getAskedSize() } );
 				return result;
 			}
 		};
@@ -175,7 +115,7 @@ namespace c3d
 			}
 		}
 
-		ashes::BufferBase const & getBuffer( SubmeshData data )const
+		Buffer const & getBuffer( SubmeshData data )const
 		{
 			return getBufferChunk( data ).getBuffer();
 		}
@@ -223,52 +163,6 @@ namespace c3d
 		{
 			buffers[uint32_t( data )].chunk.askedSize = size;
 			buffers[uint32_t( data )].chunk.size = size;
-		}
-
-		void createUniformPassBinding( SubmeshData data
-			, crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			getBufferChunk( data ).createUniformPassBinding( pass
-				, binding
-				, name );
-		}
-
-		void createInputStoragePassBinding( SubmeshData data
-			, crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			getBufferChunk( data ).createInputStoragePassBinding( pass
-				, binding
-				, name );
-		}
-
-		void createInOutStoragePassBinding( SubmeshData data
-			, crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			getBufferChunk( data ).createInOutStoragePassBinding( pass
-				, binding
-				, name );
-		}
-
-		void createOutputStoragePassBinding( SubmeshData data
-			, crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			getBufferChunk( data ).createOutputStoragePassBinding( pass
-				, binding
-				, name );
-		}
-
-		ashes::WriteDescriptorSet getUniformBinding( SubmeshData data
-			, uint32_t binding )const
-		{
-			return getBufferChunk( data ).getUniformBinding( binding );
 		}
 
 		ashes::WriteDescriptorSet getStorageBinding( SubmeshData data

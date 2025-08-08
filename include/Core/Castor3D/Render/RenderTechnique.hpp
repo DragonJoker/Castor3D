@@ -66,8 +66,7 @@ namespace c3d
 		C3D_API RenderTechnique( String const & name
 			, RenderTarget & renderTarget
 			, RenderDevice const & device
-			, Texture const & colour
-			, crg::FramePassArray previousPasses
+			, Texture & colour
 			, ProgressBar * progress
 			, bool visbuffer
 			, bool weightedBlended );
@@ -139,12 +138,14 @@ namespace c3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API crg::FramePass const & getLastPass()const;
 		C3D_API SsaoConfig const & getSsaoConfig()const;
 		C3D_API ClustersConfig const * getClustersConfig()const;
 		C3D_API SsaoConfig & getSsaoConfig();
+		C3D_API Texture & getVelocity()const;
 		C3D_API Texture const & getSsaoResult()const;
 		C3D_API Texture const & getSssDiffuse()const;
+		C3D_API Texture const & getDiffusionProfiles()const;
+		C3D_API crg::Attachment const & getVertexTransform()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
 		C3D_API crg::ResourcesCache & getResources()const;
 		C3D_API bool isOpaqueEnabled()const;
@@ -161,20 +162,15 @@ namespace c3d
 
 		crg::ImageViewIdArray getSampledResult()const noexcept
 		{
-			return { m_colour->sampledViewId };
+			return { m_colour->getSampledViewId() };
 		}
 
-		crg::ImageViewIdArray getTargetResult()const noexcept
+		Texture & getTargetResult()noexcept
 		{
-			return { m_colour->targetViewId };
+			return *m_colour;
 		}
 
-		crg::ImageViewIdArray getTargetDepth()const noexcept
-		{
-			return { m_depth.targetViewId };
-		}
-
-		Texture const & getDepth()const noexcept
+		Texture & getTargetDepth()noexcept
 		{
 			return m_depth;
 		}
@@ -182,6 +178,11 @@ namespace c3d
 		Texture const & getResult()const noexcept
 		{
 			return *m_colour;
+		}
+
+		Texture const & getDepth()const noexcept
+		{
+			return m_depth;
 		}
 
 		Extent3D const & getTargetExtent()const noexcept
@@ -199,6 +200,16 @@ namespace c3d
 			return m_normal;
 		}
 
+		Texture & getNormal()noexcept
+		{
+			return m_normal;
+		}
+
+		Texture & getScattering()noexcept
+		{
+			return m_scattering;
+		}
+
 		Texture const & getScattering()const noexcept
 		{
 			return m_scattering;
@@ -209,19 +220,24 @@ namespace c3d
 			return m_diffuse;
 		}
 
-		Texture const & getDepthObj()const noexcept
+		Texture & getDiffuse()noexcept
 		{
-			return m_prepass.getDepthObj();
+			return m_diffuse;
 		}
 
-		ashes::Buffer< int32_t > const & getDepthRange()const noexcept
+		Texture const & getDepthObj()const noexcept
 		{
-			return m_prepass.getDepthRange();
+			return m_prepass->getDepthObj();
+		}
+
+		BufferBase const & getDepthRange()const noexcept
+		{
+			return m_prepass->getDepthRange();
 		}
 
 		void setNeedsDepthRange( bool v )noexcept
 		{
-			m_prepass.setNeedsDepthRange( v );
+			m_prepass->setNeedsDepthRange( v );
 		}
 
 		ShadowMapResult const & getDirectionalShadowPassResult()const noexcept
@@ -259,54 +275,34 @@ namespace c3d
 			return false;
 		}
 
-		ashes::Buffer< uint32_t > const & getMaterialsCounts()const noexcept
+		Buffer const & getMaterialsCounts()const noexcept
 		{
-			return m_opaque.getMaterialsCounts();
+			return m_opaque->getMaterialsCounts();
 		}
 
-		ashes::Buffer< Point3ui > const & getMaterialsIndirectCounts()const noexcept
+		Buffer const & getMaterialsIndirectCounts()const noexcept
 		{
-			return m_opaque.getMaterialsIndirectCounts();
+			return m_opaque->getMaterialsIndirectCounts();
 		}
 
-		ashes::Buffer< uint32_t > const & getMaterialsStarts()const noexcept
+		Buffer const & getMaterialsStarts()const noexcept
 		{
-			return m_opaque.getMaterialsStarts();
+			return m_opaque->getMaterialsStarts();
 		}
 
-		ashes::Buffer< Point2ui > const & getPixelXY()const noexcept
+		Buffer const & getPixelXY()const noexcept
 		{
-			return m_opaque.getPixelXY();
+			return m_opaque->getPixelXY();
 		}
 
 		bool hasVisibility()const noexcept
 		{
-			return m_prepass.hasVisibility();
+			return m_prepass->hasVisibility();
 		}
 
 		Texture const & getVisibilityResult()const noexcept
 		{
-			return m_prepass.getVisibility();
-		}
-
-		crg::FramePass const & getGetLastDepthPass()const noexcept
-		{
-			return *m_lastDepthPass;
-		}
-
-		crg::FramePass const & getDepthRangePass()const noexcept
-		{
-			return *m_depthRangePass;
-		}
-
-		crg::FramePass const & getGetLastOpaquePass()const noexcept
-		{
-			return *m_lastOpaquePass;
-		}
-
-		crg::FramePass const & getGetLastTransparentPass()const noexcept
-		{
-			return *m_lastTransparentPass;
+			return m_prepass->getVisibility();
 		}
 
 		crg::FramePassGroup & getGraph()noexcept
@@ -335,9 +331,7 @@ namespace c3d
 		using ShadowMapArray = Vector< ShadowMapUPtr >;
 
 	private:
-		crg::FramePassArray doCreateRenderPasses( TechniquePassEvent event
-			, crg::FramePass const * previousPass
-			, crg::FramePassArray previousPasses = {} );
+		crg::FramePassArray doCreateRenderPasses( TechniquePassEvent event );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
 		void doInitialiseRsm();
 		void doInitialiseLpv();
@@ -361,7 +355,7 @@ namespace c3d
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
 		Size m_rawSize;
-		Texture const * m_colour;
+		Texture * m_colour;
 		Texture m_depth;
 		Texture m_normal;
 		Texture m_scattering;
@@ -380,17 +374,10 @@ namespace c3d
 		LightVolumePassResultArray m_llpvResult;
 		IndirectLightingData m_indirectLighting;
 		TechniquePasses m_renderPasses;
-		PrepassRendering m_prepass;
-		crg::FramePass const * m_lastDepthPass{};
-		crg::FramePass const * m_depthRangePass{};
-		RenderNodesPass * m_clustersFlagsPass{};
-		crg::FramePass const * m_clustersLastPass{};
+		RawUniquePtr< PrepassRendering > m_prepass;
 		BackgroundRendererUPtr m_background{};
-		crg::FramePass const * m_computeDiffusionProfiles{};
-		OpaqueRendering m_opaque;
-		crg::FramePass const * m_lastOpaquePass{};
-		TransparentRendering m_transparent;
-		crg::FramePass const * m_lastTransparentPass{};
+		RawUniquePtr< OpaqueRendering > m_opaque;
+		RawUniquePtr< TransparentRendering > m_transparent;
 		crg::FrameGraph m_clearLpvGraph;
 		crg::RunnableGraphPtr m_clearLpvRunnable;
 		ShadowMapLightTypeArray m_allShadowMaps;

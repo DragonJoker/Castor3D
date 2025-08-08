@@ -8,10 +8,14 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePassArray createBucketSortLightsPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	C3D_API ClustersLightSortAttachs createBucketSortLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters );
+		, FrustumClusters & clusters
+		, ClustersLightSortAttachs const & sortAttachs
+		, crg::BufferViewIdArray const & inputPointLightMortonCodes
+		, crg::BufferViewIdArray const & inputSpotLightMortonCodes
+		, crg::BufferViewIdArray const & inputPointLightIndices
+		, crg::BufferViewIdArray const & inputSpotLightIndices );
 }
 
 #endif

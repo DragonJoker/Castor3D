@@ -21,6 +21,7 @@ namespace c3d
 	//*********************************************************************************************
 
 	ShaderBuffer::ShaderBuffer( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, VkDeviceSize size
 		, String const & name
 		, AccessState wantedState )
@@ -28,10 +29,10 @@ namespace c3d
 		, m_size{ ashes::getAlignedSize( size + shdbuf::HeaderSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
 		, m_wantedState{ c3d::move( wantedState ) }
-		, m_buffer{ makeBufferBase( m_device
+		, m_buffer{ makeBufferBase( m_device, resources
 			, m_size
-			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
+			, MemoryPropertyFlags::eDeviceLocal
 			, name ) }
 		, m_ownData( size_t( m_size ), byte{} )
 		, m_rawData( m_ownData.data() )
@@ -40,13 +41,19 @@ namespace c3d
 			, reinterpret_cast< uint32_t * >( m_data ) ) }
 	{
 		CU_Require( m_rawData );
+		m_buffer->create();
+	}
+
+	ShaderBuffer::~ShaderBuffer()noexcept
+	{
+		m_buffer->destroy();
 	}
 
 	void ShaderBuffer::upload( UploadData & uploader )const
 	{
 		uploader.pushUpload( m_rawData
 			, m_size
-			, *m_buffer
+			, *m_buffer->buffer
 			, 0u
 			, m_wantedState.access
 			, m_wantedState.pipelineStage );
@@ -58,7 +65,7 @@ namespace c3d
 	{
 		uploader.pushUpload( m_rawData
 			, size
-			, *m_buffer
+			, *m_buffer->buffer
 			, offset
 			, m_wantedState.access
 			, m_wantedState.pipelineStage );
@@ -75,10 +82,7 @@ namespace c3d
 	void ShaderBuffer::createPassBinding( crg::FramePass & pass
 		, uint32_t binding )const
 	{
-		pass.addInputStorageBuffer( { *m_buffer, m_buffer->getName() }
-			, binding
-			, 0u
-			, uint32_t( m_size ) );
+		pass.addInputStorage( *m_buffer->getLastAttach(), binding );
 	}
 
 	ashes::WriteDescriptorSet ShaderBuffer::getSingleBinding( uint32_t binding
@@ -89,7 +93,7 @@ namespace c3d
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer
+		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer->buffer
 			, offset + sizeof( uint32_t ) * 4u
 			, size } );
 		return result;
@@ -101,7 +105,7 @@ namespace c3d
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer
+		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer->buffer
 			, 0u
 			, m_size } );
 		return result;
@@ -111,7 +115,7 @@ namespace c3d
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		descriptorSet.createBinding( binding
-			, *m_buffer
+			, *m_buffer->buffer
 			, 0u
 			, uint32_t( m_size ) );
 	}

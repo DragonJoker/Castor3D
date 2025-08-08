@@ -47,21 +47,24 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = graph.getBufferWrite( pass.buffers[GenerateHeightmapPass::eConfig] );
+			auto configBuffer = pass.uniforms.find( GenerateHeightmapPass::eConfig );
+			auto write = graph.getDescriptorWrite( *configBuffer->second, configBuffer->first );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[GenerateHeightmapPass::eInput] );
+			auto inputBuffer = pass.inputs.find( GenerateHeightmapPass::eInput );
+			write = graph.getDescriptorWrite( *inputBuffer->second, inputBuffer->first );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[GenerateHeightmapPass::eOutput] );
+			auto outputBuffer = pass.outputs.find( GenerateHeightmapPass::eOutput );
+			write = graph.getDescriptorWrite( *outputBuffer->second, outputBuffer->first );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount

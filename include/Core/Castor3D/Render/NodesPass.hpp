@@ -110,8 +110,8 @@ namespace c3d
 			, String const & categoryName
 			, String const & typeName
 			, String const & fullName
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, Texture * targetImage
+			, Texture * targetDepth
 			, NodesPassDesc const & desc );
 
 	public:
@@ -268,7 +268,7 @@ namespace c3d
 			, uint32_t & index );
 		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index );
 		C3D_API static void addGIDescriptor( SceneFlags sceneFlags
 			, IndirectLightingData const & indirectLighting
@@ -375,8 +375,8 @@ namespace c3d
 		RenderSystem & m_renderSystem;
 		CameraUbo const & m_cameraUbo;
 		RenderUbo const & m_renderUbo;
-		crg::ImageViewIdArray m_targetImage;
-		crg::ImageViewIdArray m_targetDepth;
+		Texture * m_targetImage;
+		Texture * m_targetDepth;
 		String m_typeName;
 		RenderPassTypeID m_typeID{};
 		RenderFilters m_filters{ RenderFilter::eNone };

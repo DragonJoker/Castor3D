@@ -172,8 +172,7 @@ namespace c3d
 
 			bool doIsEnabled()const
 			{
-				return m_clusters.getConfig().sortLights
-					&& m_clusters.needsLightsUpdate()
+				return m_clusters.needsLightsUpdate()
 					&& m_lightCache.getLightsBufferCount( m_lightType ) > 0;
 			}
 
@@ -208,56 +207,61 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePassArray createBucketSortLightsPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	ClustersLightSortAttachs createBucketSortLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters )
+		, FrustumClusters & clusters
+		, ClustersLightSortAttachs const & sortAttachs
+		, crg::BufferViewIdArray const & pointLightMortonCodes
+		, crg::BufferViewIdArray const & spotLightMortonCodes
+		, crg::BufferViewIdArray const & pointLightIndices
+		, crg::BufferViewIdArray const & spotLightIndices )
 	{
-		// Point lights
-		auto & point = graph.createPass( "BucketSort/Point"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto result = makeRawUnique< buksrt::FramePass >( framePass
-					, context
-					, runnableGraph
-					, device
-					, clusters
-					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		point.addDependency( *previousPass );
-		createInputStoragePassBinding( point, uint32_t( buksrt::eInputKeys ), cuT( "C3D_InLightMortonCodes" ), clusters.getOutputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( point, uint32_t( buksrt::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getOutputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( buksrt::eOutputKeys ), cuT( "C3D_OutLightMortonCodes" ), clusters.getInputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( buksrt::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getInputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
-
-		// Spot lights
-		auto & spot = graph.createPass( "BucketSort/Spot"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto result = makeRawUnique< buksrt::FramePass >( framePass
-					, context
-					, runnableGraph
-					, device
-					, clusters
-					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		spot.addDependency( *previousPass );
-		createInputStoragePassBinding( spot, uint32_t( buksrt::eInputKeys ), cuT( "C3D_InLightMortonCodes" ), clusters.getOutputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( spot, uint32_t( buksrt::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getOutputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( buksrt::eOutputKeys ), cuT( "C3D_OutLightMortonCodes" ), clusters.getInputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( buksrt::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getInputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
-
-		return { &point, &spot };
+		ClustersLightSortAttachs result{};
+		{
+			// Point lights
+			auto & point = graph.createPass( "BucketSort/Point"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnableGraph )
+				{
+					auto runPass = makeRawUnique< buksrt::FramePass >( framePass
+						, context
+						, runnableGraph
+						, device
+						, clusters
+						, LightType::ePoint );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			point.addInputStorage( *sortAttachs.pointLightMortonCodes, uint32_t( buksrt::eInputKeys ) );
+			point.addInputStorage( *sortAttachs.pointLightIndices, uint32_t( buksrt::eInputValues ) );
+			result.pointLightMortonCodes = point.addClearableOutputStorageBuffer( pointLightMortonCodes, uint32_t( buksrt::eOutputKeys ) );
+			result.pointLightIndices = point.addClearableOutputStorageBuffer( pointLightIndices, uint32_t( buksrt::eOutputValues ) );
+		}
+		{
+			// Spot lights
+			auto & spot = graph.createPass( "BucketSort/Spot"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnableGraph )
+				{
+					auto result = makeRawUnique< buksrt::FramePass >( framePass
+						, context
+						, runnableGraph
+						, device
+						, clusters
+						, LightType::eSpot );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, result->getTimer() );
+					return result;
+				} );
+			spot.addInputStorage( *sortAttachs.spotLightMortonCodes, uint32_t( buksrt::eInputKeys ) );
+			spot.addInputStorage( *sortAttachs.spotLightIndices, uint32_t( buksrt::eInputValues ) );
+			result.spotLightMortonCodes = spot.addClearableOutputStorageBuffer( spotLightMortonCodes, uint32_t( buksrt::eOutputKeys ) );
+			result.spotLightIndices = spot.addClearableOutputStorageBuffer( spotLightIndices, uint32_t( buksrt::eOutputValues ) );
+		}
+		return result;
 	}
 
 	//*********************************************************************************************

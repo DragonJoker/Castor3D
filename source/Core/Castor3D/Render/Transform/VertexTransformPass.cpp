@@ -31,7 +31,7 @@ namespace c3d
 			, TransformPipeline const & pipeline
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
-			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
+			, BufferBase const & modelsBuffer
 			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
@@ -154,7 +154,7 @@ namespace c3d
 		, TransformPipeline const & pipeline
 		, ObjectBufferOffset const & input
 		, ObjectBufferOffset const & output
-		, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
+		, BufferBase const & modelsBuffer
 		, GpuBufferOffsetT< Point4f > const & morphTargets
 		, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 		, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
@@ -185,24 +185,21 @@ namespace c3d
 		if ( m_morphTargets )
 		{
 			context.memoryBarrier( commandBuffer
-				, m_morphTargets.buffer->getBuffer()
-				, { m_morphTargets.chunk.offset, m_morphTargets.chunk.size }
+				, m_morphTargets.getBuffer().bufferViewId
 				, HostWriteState, ComputeShaderReadState );
 		}
 
 		if ( m_morphingWeights )
 		{
 			context.memoryBarrier( commandBuffer
-				, m_morphingWeights.buffer->getBuffer()
-				, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
+				, m_morphingWeights.getBuffer().bufferViewId
 				, HostWriteState, ComputeShaderReadState );
 		}
 
 		if ( m_skinTransforms )
 		{
 			context.memoryBarrier( commandBuffer
-				, m_skinTransforms.buffer->getBuffer()
-				, { m_skinTransforms.chunk.offset, m_skinTransforms.chunk.size }
+				, m_skinTransforms.getBuffer().bufferViewId
 				, HostWriteState, ComputeShaderReadState );
 		}
 
@@ -214,12 +211,10 @@ namespace c3d
 			if ( itInput->buffer && itOutput->buffer )
 			{
 				context.memoryBarrier( commandBuffer
-					, itInput->buffer->getBuffer()
-					, { itInput->chunk.offset, itInput->chunk.size }
+					, itInput->getBuffer().bufferViewId
 					, HostWriteState, ComputeShaderReadState );
 				context.memoryBarrier( commandBuffer
-					, itOutput->buffer->getBuffer()
-					, { itOutput->chunk.offset, itOutput->chunk.size }
+					, itOutput->getBuffer().bufferViewId
 					, HostWriteState, ComputeShaderWriteState );
 			}
 
@@ -259,22 +254,19 @@ namespace c3d
 			if ( itInput->buffer && itOutput->buffer )
 			{
 				context.memoryBarrier( commandBuffer
-					, itOutput->buffer->getBuffer()
-					, { itOutput->chunk.offset, itOutput->chunk.size }
+					, itOutput->getBuffer().bufferViewId
 					, ComputeShaderReadState, HostWriteState );
 
 				if ( m_pipeline.meshletsBounds )
 				{
 					context.memoryBarrier( commandBuffer
-						, itInput->buffer->getBuffer()
-						, { itInput->chunk.offset, itInput->chunk.size }
+						, itInput->getBuffer().bufferViewId
 						, ComputeShaderWriteState, ComputeShaderReadState );
 				}
 				else
 				{
 					context.memoryBarrier( commandBuffer
-						, itInput->buffer->getBuffer()
-						, { itInput->chunk.offset, itInput->chunk.size }
+						, itInput->getBuffer().bufferViewId
 						, ComputeShaderWriteState, VertexAttributeInputState );
 				}
 			}
@@ -288,24 +280,21 @@ namespace c3d
 			if ( m_skinTransforms )
 			{
 				context.memoryBarrier( commandBuffer
-					, m_skinTransforms.buffer->getBuffer()
-					, { m_skinTransforms.chunk.offset, m_skinTransforms.chunk.size }
+					, m_skinTransforms.getBuffer().bufferViewId
 					, ComputeShaderReadState, HostWriteState );
 			}
 
 			if ( m_morphTargets )
 			{
 				context.memoryBarrier( commandBuffer
-					, m_morphTargets.buffer->getBuffer()
-					, { m_morphTargets.chunk.offset, m_morphTargets.chunk.size }
+					, m_morphTargets.getBuffer().bufferViewId
 					, ComputeShaderReadState, HostWriteState );
 			}
 
 			if ( m_morphingWeights )
 			{
 				context.memoryBarrier( commandBuffer
-					, m_morphingWeights.buffer->getBuffer()
-					, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
+					, m_morphingWeights.getBuffer().bufferViewId
 					, ComputeShaderReadState, HostWriteState );
 			}
 		}

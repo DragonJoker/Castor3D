@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBufferBase_H___
 #define ___C3D_UniformBufferBase_H___
 
-#include "BufferModule.hpp"
-
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
@@ -39,10 +38,11 @@ namespace c3d
 		 *\param[in]	sharingMode		Le mode de partage du tampon.
 		 */
 		C3D_API UniformBufferBase( RenderSystem const & renderSystem
-			, VkDeviceSize elemCount
-			, VkDeviceSize elemSize
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags flags
+			, crg::ResourcesCache & resources
+			, DeviceSize elemCount
+			, DeviceSize elemSize
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags flags
 			, String debugName
 			, ashes::QueueShare sharingMode = {} );
 		/**
@@ -51,7 +51,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~UniformBufferBase()noexcept = default;
+		C3D_API virtual ~UniformBufferBase()noexcept;
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
@@ -60,7 +60,7 @@ namespace c3d
 		 *\brief		Initialise le tampon GPU.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API uint32_t initialise( RenderDevice const & device );
+		C3D_API uint32_t initialise();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
@@ -71,8 +71,7 @@ namespace c3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	sharingMode	Le mode de partage du tampon.
 		 */
-		C3D_API uint32_t initialise( RenderDevice const & device
-			, ashes::QueueShare sharingMode );
+		C3D_API uint32_t initialise( ashes::QueueShare sharingMode );
 		/**
 		 *\~english
 		 *\brief		Cleans up the GPU buffer.
@@ -105,6 +104,23 @@ namespace c3d
 		 *\param[in]	offset	L'offset de la zone mémoire.
 		 */
 		C3D_API void deallocate( uint32_t offset );
+		/**
+		*\~english
+		*\brief
+		*	Retrieves the aligned size for an element.
+		*\param[in] size
+		*	The size of an element.
+		*\return
+		*	The aligned size.
+		*\~french
+		*\brief
+		*	Récupère la taille alignée d'un élément.
+		*\param[in] size
+		*	La taille d'un élément.
+		*\return
+		*	La taille alignée.
+		*/
+		C3D_API uint32_t getAlignedSize( uint32_t size )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -453,7 +469,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::UniformBuffer const & getBuffer()const
+		Buffer const & getBuffer()const
 		{
 			return *m_buffer;
 		}
@@ -465,7 +481,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::UniformBuffer & getBuffer()
+		Buffer & getBuffer()
 		{
 			return *m_buffer;
 		}
@@ -479,27 +495,7 @@ namespace c3d
 		*/
 		uint32_t getElementSize()const
 		{
-			return uint32_t( getBuffer().getElementSize() );
-		}
-		/**
-		*\~english
-		*\brief
-		*	Retrieves the aligned size for an element.
-		*\param[in] size
-		*	The size of an element.
-		*\return
-		*	The aligned size.
-		*\~french
-		*\brief
-		*	Récupère la taille alignée d'un élément.
-		*\param[in] size
-		*	La taille d'un élément.
-		*\return
-		*	La taille alignée.
-		*/
-		uint32_t getAlignedSize( uint32_t size )const
-		{
-			return uint32_t( getBuffer().getAlignedSize( size ) );
+			return m_elemSize;
 		}
 		/**
 		*\~english
@@ -515,26 +511,30 @@ namespace c3d
 		}
 
 	private:
-		VkBufferUsageFlags m_usage;
-		VkMemoryPropertyFlags m_flags;
+		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
+		BufferUsageFlags m_usage;
+		MemoryPropertyFlags m_flags;
 		uint32_t m_elemCount;
 		uint32_t m_elemSize;
 		ashes::QueueShare m_sharingMode;
 		Set< uint32_t > m_available;
-		ashes::UniformBufferPtr m_buffer;
+		c3d::BufferUPtr m_buffer;
 		String m_debugName;
 		ashes::FencePtr m_transferFence;
 	};
 
 	inline UniformBufferBaseUPtr makeUniformBufferBase( RenderSystem const & renderSystem
-		, VkDeviceSize count
-		, VkDeviceSize size
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
+		, crg::ResourcesCache & resources
+		, DeviceSize count
+		, DeviceSize size
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags flags
 		, String name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return makeUnique< UniformBufferBase >( renderSystem
+			, resources
 			, uint32_t( count )
 			, uint32_t( size )
 			, usage

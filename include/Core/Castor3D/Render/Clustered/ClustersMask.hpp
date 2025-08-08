@@ -8,11 +8,11 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	crg::FramePass const & createClustersMaskPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+	void createClustersMaskPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters
+		, CameraUbo const & clustersCameraUbo
+		, BufferBase const & reducedLightsAABB
 		, RenderTechnique & technique
 		, RenderNodesPass *& nodesPass );
 }

@@ -185,28 +185,15 @@ namespace c3d
 						, sdw::Vec4 clustersLightsData
 						, sdw::Vec4 lightsAABBRange )
 					{
-						if ( m_config && m_config->limitClustersToLightsAABB )
-						{
-							// Right handed means Z will be negative, hence minZ and maxZ are inverted.
-							auto nearZ = writer.declLocale( "nearZ"
-								, -lightsMax.z() );
-							auto farZ = writer.declLocale( "farZ"
-								, -lightsMin.z() );
-							nearZ = max( nearPlane, nearZ );
-							farZ = min( max( nearZ + 0.00001_f, farZ ), farPlane );
-							lightsMax.z() = -nearZ;
-							lightsMin.z() = -farZ;
-						}
-						else
-						{
-							auto nearZ = writer.declLocale( "nearZ"
-								, nearPlane );
-							auto farZ = writer.declLocale( "farZ"
-								, farPlane );
-						}
-
-						auto nearZ = writer.getVariable < sdw::Float >( "nearZ" );
-						auto farZ = writer.getVariable < sdw::Float >( "farZ" );
+						// Right handed means Z will be negative, hence minZ and maxZ are inverted.
+						auto nearZ = writer.declLocale( "nearZ"
+							, -lightsMax.z() );
+						auto farZ = writer.declLocale( "farZ"
+							, -lightsMin.z() );
+						nearZ = max( nearPlane, nearZ );
+						farZ = min( max( nearZ + 0.00001_f, farZ ), farPlane );
+						lightsMax.z() = -nearZ;
+						lightsMin.z() = -farZ;
 
 						sdw::UInt const Exponential = 0_u;
 						sdw::UInt const Linear = 1_u;
@@ -260,7 +247,7 @@ namespace c3d
 
 	ClustersUbo::ClustersUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal ) }
 	{
 	}
 

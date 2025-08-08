@@ -242,6 +242,16 @@ namespace c3d
 		{
 			m_version = value;
 		}
+		/**
+		 *\~english
+		 *\return		\p true fi the GPU vendor is NVIDIA.
+		 *\~french
+		 *\return		\ true si le vendeur du GPU est NVIDIA.
+		 */
+		bool isNVIDIA()const noexcept
+		{
+			return m_vendor.find( "NVIDIA" ) != std::string::npos;
+		}
 
 	private:
 		GpuFeatures m_features{ 0u };

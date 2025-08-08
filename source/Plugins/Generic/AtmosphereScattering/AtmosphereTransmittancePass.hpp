@@ -16,22 +16,15 @@ namespace atmosphere_scattering
 	{
 	public:
 		AtmosphereTransmittancePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo
-			, crg::ImageViewId const & resultView
+			, c3d::Texture & result
 			, bool const & enabled );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
-
-		crg::FramePass const & getLastPass()const
-		{
-			return *m_lastPass;
-		}
 
 	private:
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_lastPass;
 	};
 }
 
