@@ -58,51 +58,42 @@ namespace c3d
 		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
+		C3D_API void record();
 		/**
 		 *\~english
 		 *\brief		Renders the loading screen.
 		 *\param[in]	queue		The queue receiving the render commands.
-		 *\param[in]	framebuffer	The framebuffer receiving the render.
 		 *\param[in]	toWait		The semaphores from the previous render pass.
 		 *\param[in]	fence		The fence to wait, \p nullptr to prevent waiting.
 		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine l'écran de chargement.
 		 *\param[in]	queue		La queue recevant les commandes d'initialisation.
-		 *\param[in]	framebuffer	Le framebuffer recevant le rendu.
 		 *\param[in]	toWait		Les sémaphores de la passe de rendu précédente.
 		 *\param[in]	fence		La fence à attendre, \p nullptr pour ne pas attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		C3D_API SemaphoreWaitArray render( ashes::Queue const & queue
-			, ashes::FrameBuffer const & framebuffer
-			, SemaphoreWaitArray const & toWait
-			, crg::Fence *& fence );
+			, SemaphoreWaitArray const & toWait );
 		/**
 		 *\~english
 		 *\brief		Renders the loading screen.
 		 *\param[in]	queue		The queue receiving the render commands.
-		 *\param[in]	framebuffer	The framebuffer receiving the render.
 		 *\param[in]	toWait		The semaphore from the previous render pass.
 		 *\param[in]	fence		The fence to wait, \p nullptr to prevent waiting.
 		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine l'écran de chargement.
 		 *\param[in]	queue		La queue recevant les commandes d'initialisation.
-		 *\param[in]	framebuffer	Le framebuffer recevant le rendu.
 		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
 		 *\param[in]	fence		La fence à attendre, \p nullptr pour ne pas attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		SemaphoreWaitArray render( ashes::Queue const & queue
-			, ashes::FrameBuffer const & framebuffer
-			, SemaphoreWait const & toWait
-			, crg::Fence *& fence )
+			, SemaphoreWait const & toWait )
 		{
 			return render( queue
-				, framebuffer
-				, SemaphoreWaitArray{ toWait }
-				, fence );
+				, SemaphoreWaitArray{ toWait } );
 		}
 		/**
 		*\~english
@@ -152,53 +143,25 @@ namespace c3d
 		{
 			return m_progressBar;
 		}
+
+		PixelFormat getFormat()const noexcept
+		{
+			return m_colour.getFormat();
+		}
+
+		Texture const & getResult()const noexcept
+		{
+			return m_colour;
+		}
 		/**@}*/
 
 	private:
 		void doCreateOpaquePass();
 		void doCreateTransparentPass();
 		void doCreateOverlayPass();
-		void doCreateWindowPass();
 
 	public:
 		C3D_API static String const SceneName;
-
-	private:
-		class WindowPass
-			: public crg::RunnablePass
-		{
-		public:
-			WindowPass( crg::FramePass const & pass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph
-				, RenderDevice const & device
-				, VkRenderPass renderPass
-				, Extent2D const & renderSize );
-
-			void setRenderPass( VkRenderPass renderPass
-				, Extent2D const & renderSize );
-			void setTarget( ashes::FrameBuffer const & framebuffer
-				, Vector< VkClearValue > clearValues );
-
-			crg::Fence & getFence()
-			{
-				return m_passes[getIndex()].fence;
-			}
-
-		private:
-			void doRecordInto( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index );
-
-		private:
-			Extent2D m_renderSize;
-			VkRenderPass m_renderPass{};
-			ProgramModule m_shader;
-			ashes::PipelineShaderStageCreateInfoArray m_stages;
-			crg::RenderQuadHolder m_renderQuad;
-			VkFramebuffer m_framebuffer{};
-			Vector< VkClearValue > m_clearValues;
-		};
 
 	private:
 		RenderDevice const & m_device;
@@ -223,7 +186,6 @@ namespace c3d
 		RenderTechniquePass * m_opaquePass{};
 		RenderTechniquePass * m_transparentPass{};
 		OverlayPass * m_overlayPass{};
-		WindowPass * m_windowPass{};
 		crg::RunnableGraphPtr m_runnable;
 	};
 }

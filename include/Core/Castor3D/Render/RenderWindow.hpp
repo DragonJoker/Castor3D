@@ -23,6 +23,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Core/SwapChain.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
@@ -44,6 +45,7 @@ namespace c3d
 		{
 			Point4f multiply;
 			Point4f add;
+			Point4f uvMultiplyAdd;
 			Point4f data;
 		};
 
@@ -476,7 +478,6 @@ namespace c3d
 		void doDestroySwapchain()noexcept;
 		void doCreateRenderingResources();
 		void doDestroyRenderingResources()noexcept;
-		ashes::ImageViewCRefArray doPrepareAttaches( size_t index );
 		void doCreateFrameBuffers();
 		void doDestroyFrameBuffers()noexcept;
 		void doCreateLoadingScreen();
@@ -485,9 +486,7 @@ namespace c3d
 		void doDestroyPickingPass()noexcept;
 		void doCreateRenderQuad();
 		void doDestroyRenderQuad()noexcept;
-		void doRecordCommandBuffer( uint32_t index );
-		void doCreateCommandBuffers();
-		void doDestroyCommandBuffers()noexcept;
+		void doRecordCommandBuffer( uint32_t passIndex );
 		void doCreateIntermediateViews( QueueData const & queueData );
 		void doDestroyIntermediateViews()noexcept;
 		void doCreateSaveData();
@@ -495,29 +494,50 @@ namespace c3d
 		void doResetSwapChain();
 		void doResetSwapChainAndCommands();
 		RenderingResources * doGetResources();
-		SemaphoreWaitArray doSubmitLoadingFrame( QueueData const & queueData
-			, RenderingResources const & resources
-			, LoadingScreen & loadingScreen
-			, crg::Fence *& fence
-			, SemaphoreWaitArray toWait );
-		void doPresentLoadingFrame( QueueData const & queueData
-			, crg::Fence * fence
-			, RenderingResources & resources
-			, SemaphoreWaitArray const & toWait );
 		void doWaitFrame( QueueData const & queueData
-			, SemaphoreWaitArray const & toWait );
+			, SemaphoreWaitArray const & toWait
+			, uint32_t intermediateImageIndex );
 		void doSubmitFrame( QueueData const & queueData
 			, RenderingResources const * resources
-			, SemaphoreWaitArray const & toWait );
+			, SemaphoreWaitArray const & toWait
+			, uint32_t intermediateImageIndex );
 		void doPresentFrame( QueueData const & queueData
-			, RenderingResources * resources );
+			, RenderingResources * resources
+			, uint32_t intermediateImageIndex
+			, Size const & displaySize );
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
 		void doInitialiseTransferCommands( QueueData const & queueData
-			, CommandsSemaphore & commands
 			, uint32_t index );
 		void doProcessDeviceLost();
+
+	private:
+		struct SwapchainBuffer
+		{
+			SwapchainBuffer( ashes::ImageView view )
+				: view{ view }
+			{
+			}
+
+			ashes::ImageView view;
+			ashes::FrameBufferPtr frameBuffer;
+		};
+
+		struct IntermediateCommand
+		{
+			IntermediateCommand( crg::ResourceHandler & handler
+				, String const & baseName
+				, IntermediateView const * tex3DResult
+				, IntermediateView intermediateView
+				, uint32_t swapchainImageCount
+				, ashes::CommandPool const & commandBufferPool );
+			ashes::CommandBufferPtrArray commandBuffers;
+			CommandsSemaphore transferCommands;
+			IntermediateView intermediateView;
+			IntermediateView intermediateBarrierView;
+			IntermediateView intermediateSampledView;
+		};
 
 	private:
 		static uint32_t s_nbRenderWindows;
@@ -529,7 +549,6 @@ namespace c3d
 		QueueData const * m_reservedQueue{};
 		ashes::CommandPoolPtr m_commandBufferPool;
 		ashes::SwapChainPtr m_swapChain;
-		Vector< ashes::ImageViewArray > m_swapchainViews;
 		PixelFormat m_swapchainFormat;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
@@ -537,9 +556,7 @@ namespace c3d
 		ashes::RenderPassPtr m_renderPass;
 		BufferUPtr m_snapshotBuffer;
 		ByteArrayView m_snapshotData;
-		Vector< CommandsSemaphore > m_transferCommands;
-		Vector< ashes::FrameBufferPtr > m_frameBuffers;
-		Vector< ashes::CommandBufferPtrArray > m_commandBuffers;
+		Vector< SwapchainBuffer > m_swapchainBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetRPtr m_renderTarget{};
@@ -557,12 +574,11 @@ namespace c3d
 		Position m_mousePosition;
 		Texture3DTo2DUPtr m_texture3Dto2D;
 		IntermediateView m_tex3DTo2DIntermediate;
-		IntermediateViewArray m_intermediateBarrierViews;
-		IntermediateViewArray m_intermediateSampledViews;
+		Vector< IntermediateCommand > m_intermediates;
 		UniformBufferOffsetT< Configuration > m_configUbo;
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
-		Mutex m_renderMutex;
+		RecursiveMutex m_renderMutex;
 		bool m_allowHdrSwapchain{};
 		bool m_hasHdrSupport{};
 	};

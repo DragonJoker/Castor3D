@@ -157,86 +157,6 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	LoadingScreen::WindowPass::WindowPass( crg::FramePass const & pass
-		, crg::GraphContext & context
-		, crg::RunnableGraph & graph
-		, RenderDevice const & device
-		, VkRenderPass renderPass
-		, Extent2D const & renderSize )
-		: crg::RunnablePass{ pass
-			, context
-			, graph
-			, { crg::getDefaultV< crg::RunnablePass::InitialiseCallback >()
-				, crg::getDefaultV< crg::RunnablePass::GetPipelineStateCallback >()
-				, [this]( crg::RecordContext & context, VkCommandBuffer cmd, uint32_t i ){ doRecordInto( context, cmd, i ); } }
-			, { 1u, true } }
-		, m_renderSize{ renderSize }
-		, m_renderPass{ renderPass }
-		, m_shader{ SceneName, loadscreen::getProgram( *device.renderSystem.getEngine() ) }
-		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_renderQuad{ pass
-			, context
-			, graph
-			, crg::rq::Config{}
-				.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-			, 1u }
-	{
-	}
-
-	void LoadingScreen::WindowPass::setRenderPass( VkRenderPass renderPass
-		, Extent2D const & renderSize )
-	{
-		m_renderSize = renderSize;
-		m_renderPass = renderPass;
-		m_framebuffer = VkFramebuffer{};
-
-		if ( m_renderQuad.isInitialised() )
-		{
-			m_renderQuad.resetRenderPass( m_renderSize
-				, m_renderPass
-				, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
-				, 0u );
-			reRecordCurrent();
-		}
-	}
-
-	void LoadingScreen::WindowPass::setTarget( ashes::FrameBuffer const & framebuffer
-		, Vector< VkClearValue > clearValues )
-	{
-		m_framebuffer = framebuffer;
-		m_renderSize = crg::convert( framebuffer.getDimensions() );
-		m_clearValues = c3d::move( clearValues );
-	}
-
-	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
-	{
-		if ( m_renderPass && m_framebuffer )
-		{
-			if ( !m_renderQuad.isInitialised() )
-			{
-				m_renderQuad.initialise( m_renderSize
-					, m_renderPass
-					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
-					, index );
-			}
-
-			auto beginInfo = makeVkStruct< VkRenderPassBeginInfo >( m_renderPass
-				, m_framebuffer
-				, VkRect2D{ {}, convert( m_renderSize ) }
-				, uint32_t( m_clearValues.size() )
-				, m_clearValues.data() );
-			m_context.vkCmdBeginRenderPass( commandBuffer
-				, &beginInfo
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_renderQuad.record( context, commandBuffer, index );
-			m_context.vkCmdEndRenderPass( commandBuffer );
-		}
-	}
-
-	//*********************************************************************************************
-
 	String const LoadingScreen::SceneName = cuT( "C3D_LoadingScreen" );
 
 	LoadingScreen::LoadingScreen( ProgressBar & progressBar
@@ -272,7 +192,6 @@ namespace c3d
 		doCreateOpaquePass();
 		doCreateTransparentPass();
 		doCreateOverlayPass();
-		doCreateWindowPass();
 		m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
 		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
 	}
@@ -368,21 +287,10 @@ namespace c3d
 			m_swapchainFormat = swapchainFormat;
 			m_needsRecreate = true;
 		}
-
-		if ( m_windowPass )
-		{
-			m_windowPass->setRenderPass( renderPass
-				, makeExtent2D( m_renderSize ) );
-		}
 	}
 
-	SemaphoreWaitArray LoadingScreen::render( ashes::Queue const & queue
-		, ashes::FrameBuffer const & framebuffer
-		, SemaphoreWaitArray const & toWait
-		, crg::Fence *& fence )
+	void LoadingScreen::record()
 	{
-		auto result = toWait;
-
 		if ( m_enabled )
 		{
 			if ( m_needsRecreate.exchange( false ) )
@@ -408,18 +316,17 @@ namespace c3d
 				doCreateOpaquePass();
 				doCreateTransparentPass();
 				doCreateOverlayPass();
-				doCreateWindowPass();
 				m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
 			}
-
-			m_windowPass->resetCommandBuffer( m_windowPass->getIndex() );
-			m_windowPass->setTarget( framebuffer
-				, { convert( ClearValue{ transparentBlackClearColor } ) } );
-			m_windowPass->reRecordCurrent();
-			result = m_runnable->run( result, queue );
-			fence = &m_windowPass->getFence();
 		}
+	}
 
+	SemaphoreWaitArray LoadingScreen::render( ashes::Queue const & queue
+		, SemaphoreWaitArray const & toWait )
+	{
+		auto result = toWait;
+		if ( m_enabled )
+			result = m_runnable->run( result, queue );
 		return result;
 	}
 
@@ -497,24 +404,5 @@ namespace c3d
 				return result;
 			} );
 		m_colour.setLastAttach( pass.addInOutColourTarget( *m_colour.getLastAttach() ) );
-	}
-
-	void LoadingScreen::doCreateWindowPass()
-	{
-		auto & pass = m_graph->getDefaultGroup().createPass( "Window"
-			, [this]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = makeRawUnique< WindowPass >( framePass
-					, context
-					, graph
-					, m_device
-					, m_renderPass
-					, makeExtent2D( m_renderSize ) );
-				m_windowPass = result.get();
-				return result;
-			} );
-		pass.addInputSampled( *m_colour.getLastAttach(), 0u );
 	}
 }
