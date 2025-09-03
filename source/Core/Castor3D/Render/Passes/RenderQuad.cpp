@@ -196,8 +196,7 @@ namespace c3d
 		, m_config{ ( config.bindings ? *config.bindings : passrquad::defaultV< rq::BindingDescriptionArray > )
 			, ( config.range ? *config.range : passrquad::defaultV< ImageSubresourceRange > )
 			, ( config.texcoordConfig ? *config.texcoordConfig : passrquad::defaultV< rq::Texcoord > )
-			, ( config.blendMode ? *config.blendMode : passrquad::defaultV< BlendMode > )
-			, ( config.tex3DResult ? *config.tex3DResult : passrquad::defaultV< IntermediateView > ) }
+			, ( config.blendMode ? *config.blendMode : passrquad::defaultV< BlendMode > ) }
 		, m_useTexCoord{ config.texcoordConfig }
 	{
 	}
@@ -214,8 +213,6 @@ namespace c3d
 		, m_pipeline{ c3d::move( rhs.m_pipeline ) }
 		, m_descriptorSetPool{ c3d::move( rhs.m_descriptorSetPool ) }
 		, m_passes{ c3d::move( rhs.m_passes ) }
-		, m_descriptorSets{ c3d::move( rhs.m_descriptorSets ) }
-		, m_invertY{ c3d::move( rhs.m_invertY ) }
 		, m_vertexBuffer{ c3d::move( rhs.m_vertexBuffer ) }
 		, m_uvInvVertexBuffer{ c3d::move( rhs.m_uvInvVertexBuffer ) }
 	{
@@ -230,10 +227,9 @@ namespace c3d
 	{
 		for ( auto & pass : m_passes )
 		{
-			for ( auto & write : pass )
-			{
+			pass.descriptorSet = {};
+			for ( auto & write : pass.writes )
 				write = passrquad::clone( write );
-			}
 		}
 
 		if ( m_vertexBuffer )
@@ -248,7 +244,6 @@ namespace c3d
 			m_uvInvVertexBuffer.reset();
 		}
 
-		m_descriptorSets.clear();
 		m_descriptorSetPool.reset();
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
@@ -397,8 +392,16 @@ namespace c3d
 		CU_Require( passrquad::checkWrites( writes, m_config.bindings ) );
 #endif
 
-		m_passes.emplace_back( writes );
-		m_invertY.emplace_back( invertY );
+		m_passes.emplace_back( writes, invertY );
+	}
+
+	void RenderQuad::unregisterPasses( uint32_t firstPass, uint32_t passCount )
+	{
+		auto begin = std::min( uint32_t( m_passes.size() ), firstPass );
+		auto end = std::min( uint32_t( m_passes.size() ), firstPass + passCount );
+
+		if ( end > begin && begin < m_passes.size() )
+			m_passes.erase( std::next( m_passes.begin(), begin ), std::next( m_passes.begin(), end ) );
 	}
 
 	void RenderQuad::initialisePass( uint32_t passIndex )
@@ -407,20 +410,15 @@ namespace c3d
 		auto mbName = toUtf8( getName() );
 
 		if ( !m_descriptorSetPool )
-		{
-			auto descriptorSetCount = uint32_t( m_passes.size() );
-			m_descriptorSetPool = m_descriptorSetLayout->createPool( mbName
-				, descriptorSetCount );
-			m_descriptorSets.resize( descriptorSetCount );
-		}
+			m_descriptorSetPool = m_descriptorSetLayout->createPool( mbName, 1024u );
 
-		if ( !m_descriptorSets[passIndex] )
+		if ( !m_passes[passIndex].descriptorSet )
 		{
 			auto prefix = mbName + ", Pass " + string::toMbString( passIndex );
 			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix );
-			descriptorSet->setBindings( m_passes[passIndex] );
+			descriptorSet->setBindings( m_passes[passIndex].writes );
 			descriptorSet->update();
-			m_descriptorSets[passIndex] = c3d::move( descriptorSet );
+			m_passes[passIndex].descriptorSet = c3d::move( descriptorSet );
 		}
 	}
 
@@ -451,8 +449,7 @@ namespace c3d
 			, renderPass
 			, pushRanges
 			, c3d::move( dsState ) );
-		m_passes.emplace_back( writes );
-		m_invertY.emplace_back( false );
+		m_passes.emplace_back( writes, false );
 		initialisePasses();
 	}
 
@@ -460,17 +457,14 @@ namespace c3d
 		, uint32_t descriptorSetIndex )const
 	{
 		commandBuffer.bindPipeline( *m_pipeline );
+		auto & pass = m_passes[descriptorSetIndex];
 
-		if ( m_invertY[descriptorSetIndex] )
-		{
+		if ( pass.invertY )
 			commandBuffer.bindVertexBuffer( 0u, m_uvInvVertexBuffer->getBuffer(), 0u );
-		}
 		else
-		{
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		}
 
-		commandBuffer.bindDescriptorSet( *m_descriptorSets[descriptorSetIndex], *m_pipelineLayout );
+		commandBuffer.bindDescriptorSet( *pass.descriptorSet, *m_pipelineLayout );
 		doRegisterPass( commandBuffer );
 		commandBuffer.draw( 4u );
 	}

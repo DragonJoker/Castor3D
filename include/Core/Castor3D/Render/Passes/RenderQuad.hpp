@@ -81,7 +81,6 @@ namespace c3d
 			WrapperT< ImageSubresourceRange > range;
 			WrapperT< Texcoord > texcoordConfig;
 			WrapperT< BlendMode > blendMode;
-			WrapperT< IntermediateView > tex3DResult;
 		};
 
 		template< typename TypeT >
@@ -204,6 +203,23 @@ namespace c3d
 		/**
 		*\~english
 		*\brief
+		*	Removes the entries for some passes.
+		*\param[in] firstPass
+		*	The index of the first pass to remove.
+		*\param[in] passCount
+		*	The number of passes to remove.
+		*\~french
+		*\brief
+		*	Supprime les entrées pour des passes.
+		*\param[in] firstPass
+		*	L'indice de la première passe à supprimer.
+		*\param[in] passCount
+		*	Le nombre de passes à supprimer.
+		*/
+		C3D_API void unregisterPasses( uint32_t firstPass, uint32_t passCount );
+		/**
+		*\~english
+		*\brief
 		*	Initialises the descriptor sets for the registered pass at given index.
 		*\~french
 		*\brief
@@ -322,14 +338,26 @@ namespace c3d
 		rq::ConfigData m_config;
 
 	private:
+		struct Pass
+		{
+			Pass( ashes::WriteDescriptorSetArray writes
+				, bool invertY )
+				: writes{ move( writes ) }
+				, invertY{ invertY }
+			{
+			}
+
+			ashes::WriteDescriptorSetArray writes;
+			bool invertY;
+			ashes::DescriptorSetPtr descriptorSet;
+		};
+
 		bool m_useTexCoord{ true };
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		Vector< ashes::WriteDescriptorSetArray > m_passes;
-		Vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		Vector< bool > m_invertY;
+		Vector< Pass > m_passes;
 		BufferUPtrT< TexturedQuad::Vertex > m_vertexBuffer;
 		BufferUPtrT< TexturedQuad::Vertex > m_uvInvVertexBuffer;
 	};
@@ -459,25 +487,6 @@ namespace c3d
 			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
 		{
 			return binding( rq::BindingDescription{ descriptor, view, stageFlags } );
-		}
-		/**
-		*\~english
-		*	Sets the result used for for 3D texture inputs.
-		*\remarks
-		*	The 3D textures must be preprocessed externally to this result.
-		*\param[in] result
-		*	The result.
-		*\~french
-		*	Définit le résultat utilisé pour les textures 3D en entrée.
-		*\remarks
-		*	Les textures 3D doivent être traitées en externe dans ce résultat.
-		*\param[in] result
-		*	Le résultat.
-		*/
-		BuilderT & tex3DResult( IntermediateView result )
-		{
-			m_config.tex3DResult = result;
-			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english

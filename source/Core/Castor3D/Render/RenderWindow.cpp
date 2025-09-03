@@ -207,10 +207,9 @@ namespace c3d
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 
-		static IntermediateView doCreateBarrierView( RenderDevice const & device
+		static IntermediateView doCreateBarrierView( crg::ResourceHandler & handler
 			, IntermediateView const & view )
 		{
-			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto imageId = view.viewId.data->image;
 			auto info = view.viewId.data->info;
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ toUtf8( view.name ) + "Barrier"
@@ -229,39 +228,22 @@ namespace c3d
 				, view.factors };
 		}
 
-		static IntermediateViewArray doCreateBarrierViews( RenderDevice const & device
-			, IntermediateView const & tex3DResult
-			, IntermediateViewArray const & views )
-		{
-			using c3d::operator!=;
-			IntermediateViewArray result;
-
-			if ( views.size() == 1u )
-			{
-				auto & view = views[0u];
-				result.push_back( doCreateBarrierView( device, view ) );
-				return result;
-			}
-
-			for ( auto & view : views )
-			{
-				if ( view.viewId.data->info.viewType == crg::ImageViewType::e3D )
-				{
-					result.push_back( doCreateBarrierView( device, tex3DResult ) );
-				}
-				else
-				{
-					result.push_back( doCreateBarrierView( device, view ) );
-				}
-			}
-
-			return result;
-		}
-
-		static IntermediateView doCreateSampledView( RenderDevice const & device
+		static IntermediateView doCreateBarrierView( crg::ResourceHandler & handler
+			, IntermediateView const * tex3DResult
 			, IntermediateView const & view )
 		{
-			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
+			if ( view.viewId.data->info.viewType == crg::ImageViewType::e3D )
+			{
+				if ( tex3DResult )
+					return doCreateBarrierView( handler, *tex3DResult );
+				return {};
+			}
+			return doCreateBarrierView( handler, view );
+		}
+
+		static IntermediateView doCreateSampledView( crg::ResourceHandler & handler
+			, IntermediateView const & view )
+		{
 			auto imageId = view.viewId.data->image;
 			auto info = view.viewId.data->info;
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ toUtf8( view.name ) + "Sampled"
@@ -280,33 +262,17 @@ namespace c3d
 				, view.factors };
 		}
 
-		static IntermediateViewArray doCreateSampledViews( RenderDevice const & device
-			, IntermediateView const & tex3DResult
-			, IntermediateViewArray const & views )
+		static IntermediateView doCreateSampledView( crg::ResourceHandler & handler
+			, IntermediateView const * tex3DResult
+			, IntermediateView const & view )
 		{
-			using c3d::operator!=;
-			IntermediateViewArray result;
-
-			if ( views.size() == 1u )
+			if ( view.viewId.data->info.viewType == crg::ImageViewType::e3D )
 			{
-				auto & view = views[0u];
-				result.push_back( doCreateSampledView( device, view ) );
-				return result;
+				if ( tex3DResult )
+					return doCreateSampledView( handler, *tex3DResult );
+				return {};
 			}
-
-			for ( auto & view : views )
-			{
-				if ( view.viewId.data->info.viewType == crg::ImageViewType::e3D )
-				{
-					result.push_back( doCreateBarrierView( device, tex3DResult ) );
-				}
-				else
-				{
-					result.push_back( doCreateSampledView( device, view ) );
-				}
-			}
-
-			return result;
+			return doCreateSampledView( handler, view );
 		}
 
 #endif
@@ -427,6 +393,31 @@ namespace c3d
 
 	//*************************************************************************************************
 
+	RenderWindow::IntermediateCommand::IntermediateCommand( crg::ResourceHandler & handler
+		, String const & baseName
+		, IntermediateView const * tex3DResult
+		, IntermediateView intermediate
+		, uint32_t swapchainImageCount
+		, ashes::CommandPool const & commandBufferPool )
+		: intermediateView{ move( intermediate ) }
+		, intermediateBarrierView{ rendwndw::doCreateBarrierView( handler, tex3DResult, intermediateView ) }
+		, intermediateSampledView{ rendwndw::doCreateSampledView( handler, tex3DResult, intermediateView ) }
+	{
+		commandBuffers.resize( swapchainImageCount );
+		uint32_t index{};
+		for ( auto & commandBuffer : commandBuffers )
+		{
+			auto name = baseName + string::toString( index );
+			commandBuffer = commandBufferPool.createCommandBuffer( name );
+			commandBuffer->begin();
+			commandBuffer->end();
+
+			++index;
+		}
+	}
+
+	//*************************************************************************************************
+
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
 	RenderWindow::RenderWindow( String const & name
@@ -471,10 +462,7 @@ namespace c3d
 		if ( engine.isThreaded() )
 		{
 			if constexpr ( rendwndw::C3D_PersistLoadingScreen )
-			{
 				doCreateLoadingScreen();
-			}
-
 			getEngine()->registerWindow( *this );
 		}
 
@@ -541,10 +529,6 @@ namespace c3d
 								doCreatePickingPass( queue );
 								stepProgressBarLocal( prgrss, cuT( "Loading intermediate views" ) );
 								doCreateIntermediateViews( queue );
-								stepProgressBarLocal( prgrss, cuT( "Loading combine quad" ) );
-								doCreateRenderQuad();
-								stepProgressBarLocal( prgrss, cuT( "Loading command buffers" ) );
-								doCreateCommandBuffers();
 								stepProgressBarLocal( prgrss, cuT( "Loading save data" ) );
 								doCreateSaveData();
 								stepProgressBarLocal( prgrss, cuT( "Finalising..." ) );
@@ -585,8 +569,6 @@ namespace c3d
 			m_renderTarget->initialise( m_device, nullptr );
 			doCreatePickingPass( *queueData );
 			doCreateIntermediateViews( *queueData );
-			doCreateRenderQuad();
-			doCreateCommandBuffers();
 			doCreateSaveData();
 
 			if ( m_loadingScreen )
@@ -611,7 +593,8 @@ namespace c3d
 			queueData = m_queues->getQueue();
 		}
 
-		doWaitFrame( *queueData, {} );
+		auto lock = makeUniqueLock( m_renderMutex );
+		doWaitFrame( *queueData, {}, ~0u );
 		getDevice()->waitIdle();
 
 		doDestroySaveData();
@@ -621,8 +604,6 @@ namespace c3d
 			doDestroyLoadingScreen();
 		}
 
-		doDestroyCommandBuffers();
-		doDestroyRenderQuad();
 		doDestroyIntermediateViews();
 		doDestroyPickingPass();
 
@@ -650,6 +631,13 @@ namespace c3d
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
 			m_loadingScreen->update( updater );
+			auto extent = m_loadingScreen->getResult().getExtent();
+			auto & config = m_configUbo.getData();
+			config.multiply = Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
+			config.add = Point4f{};
+			config.uvMultiplyAdd = Point4f{ float( m_size->x ) / float( extent.width )
+				, float( m_size->y ) / float( extent.height )
+				, 0.0f, 0.0f };
 		}
 		else if ( auto target = getRenderTarget() )
 		{
@@ -660,12 +648,11 @@ namespace c3d
 #if C3D_DebugPicking == 0 && C3D_DebugBackgroundPicking == 0
 				if ( getEngine()->areDebugTargetsEnabled() )
 				{
-					auto const & intermediates = target->getIntermediateViews();
 					auto const & targetDebugConfig = target->getDebugConfig();
 					auto const & debugConfig = target->getScene()->getDebugConfig();
 					updater.combineIndex = targetDebugConfig.intermediateImageIndex;
 					updater.debugIndex = debugConfig.intermediateShaderValueIndex;
-					auto const & intermediate = intermediates[updater.combineIndex];
+					auto const & intermediate = m_intermediates[updater.combineIndex + 1u].intermediateView;
 
 					if ( intermediate.factors.grid )
 					{
@@ -688,6 +675,7 @@ namespace c3d
 					config.add = Point4f{ intermediate.factors.add };
 					config.data = Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
 						, 0.0f, 0.0f, 0.0f };
+					config.uvMultiplyAdd = Point4f{ 1.0f, 1.0f, 0.0f, 0.0f };
 				}
 				else
 #endif
@@ -698,6 +686,7 @@ namespace c3d
 					auto & config = m_configUbo.getData();
 					config.multiply = Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
 					config.add = Point4f{};
+					config.uvMultiplyAdd = Point4f{ 1.0f, 1.0f, 0.0f, 0.0f };
 				}
 			}
 		}
@@ -756,33 +745,29 @@ namespace c3d
 			queueData = m_queues->getQueue();
 		}
 
+		auto lock = makeUniqueLock( m_renderMutex );
 		auto target = getRenderTarget();
+		SemaphoreWaitArray toWait;
+		uint32_t intermediateImageIndex{ ~0u };
+		Size displaySize{};
 
-		if ( auto needLoadingScreen = ( !m_initialised
-				|| !target
-				|| target->isInitialising()
-				|| !target->isInitialised() );
-			needLoadingScreen
-				&& m_loadingScreen
-				&& m_loadingScreen->isEnabled() )
+		if ( auto needLoadingScreen = ( !m_initialised || !target
+				|| target->isInitialising() || !target->isInitialised() );
+			needLoadingScreen && m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
-			if ( auto resources = doGetResources() )
-			{
-				crg::Fence * fence{};
-				auto toWait = doSubmitLoadingFrame( *queueData 
-					, *resources
-					, *m_loadingScreen
-					, fence
-					, c3d::move( baseToWait ) );
-				doPresentLoadingFrame( *queueData
-					, fence
-					, *resources
-					, toWait );
-			}
+			intermediateImageIndex = 0u;
+			m_loadingScreen->record();
+			displaySize = makeSize( m_loadingScreen->getResult().getExtent() );
+			toWait = m_loadingScreen->render( *queueData->queue
+				, baseToWait );
+			baseToWait.clear();
 		}
 		else if ( !needLoadingScreen )
 		{
-			auto toWait = target->render( *queueData->queue
+			intermediateImageIndex = target->getDebugConfig().intermediateImageIndex
+				+ ( m_loadingScreen ? 1u : 0u );
+			displaySize = target->getDisplaySize();
+			toWait = target->render( *queueData->queue
 				, baseToWait );
 			baseToWait.clear();
 
@@ -793,17 +778,20 @@ namespace c3d
 			auto pickingToWait = m_picking->getSemaphoreWait();
 			toWait.insert( toWait.end(), pickingToWait.begin(), pickingToWait.end() );
 #endif
+		}
 
-			if ( waitOnly )
-			{
-				doWaitFrame( *queueData, toWait );
-			}
-			else if ( auto resources = doGetResources() )
+		if ( waitOnly || !m_renderQuad )
+		{
+			doWaitFrame( *queueData, toWait, intermediateImageIndex );
+		}
+		else if ( auto resources = doGetResources() )
+		{
+			if ( intermediateImageIndex != ~0u )
 			{
 				try
 				{
-					doSubmitFrame( *queueData, resources, toWait );
-					doPresentFrame( *queueData, resources );
+					doSubmitFrame( *queueData, resources, toWait, intermediateImageIndex );
+					doPresentFrame( *queueData, resources, intermediateImageIndex, displaySize );
 				}
 				catch ( ashes::Exception & exc )
 				{
@@ -817,10 +805,10 @@ namespace c3d
 					throw;
 				}
 			}
-			else
-			{
-				std::cerr << "Can't render" << std::endl;
-			}
+		}
+		else
+		{
+			std::cerr << "Can't render" << std::endl;
 		}
 
 		if ( !m_reservedQueue )
@@ -1130,6 +1118,7 @@ namespace c3d
 			auto c3d_config = writer.declUniformBuffer( "c3d_config", 1u, 0u );
 			auto c3d_multiply = c3d_config.declMember< sdw::Vec4 >( "c3d_multiply" );
 			auto c3d_add = c3d_config.declMember< sdw::Vec4 >( "c3d_add" );
+			auto c3d_uvMultiplyAdd = c3d_config.declMember< sdw::Vec4 >( "c3d_uvMultiplyAdd" );
 			auto c3d_data = c3d_config.declMember< sdw::Vec4 >( "c3d_data" );
 			c3d_config.end();
 
@@ -1146,11 +1135,11 @@ namespace c3d
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&writer, &c3d_mapResult, &c3d_data, &c3d_multiply, &c3d_add]( sdw::FragmentInT< shader::Uv2FT > const & in
+			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&writer, &c3d_mapResult, c3d_uvMultiplyAdd, &c3d_data, &c3d_multiply, &c3d_add]( sdw::FragmentInT< shader::Uv2FT > const & in
 				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto sampled = writer.declLocale( "sampled"
-						, c3d_mapResult.sample( in.uv() ) );
+						, c3d_mapResult.sample( sdw::fma( in.uv(), c3d_uvMultiplyAdd.xy(), c3d_uvMultiplyAdd.zw() ) ) );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 					out.colour() = vec4( vec3( sampled.xyz() ), 1.0_f );
 #else
@@ -1198,20 +1187,16 @@ namespace c3d
 		m_swapchainFormat = c3d::convert( m_swapChain->getFormat() );
 		doCreateRenderingResources();
 		doCreateFrameBuffers();
-
 		if constexpr ( !rendwndw::C3D_PersistLoadingScreen )
-		{
 			doCreateLoadingScreen();
-		}
+		doCreateRenderQuad();
 	}
 
 	void RenderWindow::doDestroySwapchain()noexcept
 	{
+		doDestroyRenderQuad();
 		if constexpr ( !rendwndw::C3D_PersistLoadingScreen  )
-		{
 			doDestroyLoadingScreen();
-		}
-
 		doDestroyFrameBuffers();
 		doDestroyRenderingResources();
 		m_swapChain.reset();
@@ -1236,35 +1221,24 @@ namespace c3d
 		m_renderingResources.clear();
 	}
 
-	ashes::ImageViewCRefArray RenderWindow::doPrepareAttaches( size_t index )
+	void RenderWindow::doCreateFrameBuffers()
 	{
-		ashes::ImageViewCRefArray attaches;
-		auto & image = *m_swapChain->getImages()[index];
+		m_swapchainBuffers.reserve( m_swapChain->getImageCount() );
 
-		for ( auto it = m_renderPass->getAttachments().begin(); it != m_renderPass->getAttachments().end(); ++it )
+		for ( uint32_t i = 0u; i < m_swapChain->getImageCount(); ++i )
 		{
-			m_swapchainViews[index].push_back( image.createView( makeVkStruct< VkImageViewCreateInfo >( 0u
+			ashes::ImageViewCRefArray attaches;
+			auto & image = *m_swapChain->getImages()[i];
+			auto & swapchainBuffer = m_swapchainBuffers.emplace_back( image.createView( makeVkStruct< VkImageViewCreateInfo >( 0u
 				, image
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_swapChain->getFormat()
 				, VkComponentMapping{}
 				, VkImageSubresourceRange{ ashes::getAspectMask( m_swapChain->getFormat() ), 0u, 1u, 0u, 1u } ) ) );
-			attaches.emplace_back( m_swapchainViews[index].back() );
-		}
+			attaches.emplace_back( swapchainBuffer.view );
 
-		return attaches;
-	}
-
-	void RenderWindow::doCreateFrameBuffers()
-	{
-		m_swapchainViews.resize( m_swapChain->getImageCount() );
-		m_frameBuffers.resize( m_swapChain->getImageCount() );
-
-		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
-		{
-			auto attaches = doPrepareAttaches( uint32_t( i ) );
 			auto mbName = toUtf8( getName() + string::toString( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( mbName
+			swapchainBuffer.frameBuffer = m_renderPass->createFrameBuffer( mbName
 				, m_swapChain->getDimensions()
 				, c3d::move( attaches ) );
 		}
@@ -1272,69 +1246,69 @@ namespace c3d
 
 	void RenderWindow::doDestroyFrameBuffers()noexcept
 	{
-		m_frameBuffers.clear();
-		m_swapchainViews.clear();
+		m_swapchainBuffers.clear();
 	}
 
 	void RenderWindow::doCreateLoadingScreen()
 	{
 		auto scene = getEngine()->getLoadingScene();
-
 		if ( !scene )
-		{
 			return;
-		}
 
 		auto const & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
 		auto global = manager.findControl( cuT( "C3D_LoadingScreen/GlobalProgress" ), scene );
 		auto local = manager.findControl( cuT( "C3D_LoadingScreen/LocalProgress" ), scene );
 
 		if ( !m_progressBar )
-		{
 			m_progressBar = makeUnique< ProgressBar >( *getEngine()
 				, static_cast< ProgressCtrl * >( global )
 				, static_cast< ProgressCtrl * >(  local ) );
-		}
 		else
-		{
 			m_progressBar->update( static_cast< ProgressCtrl * >( global )
 				, static_cast< ProgressCtrl * >( local ) );
-		}
 
-		if ( rendwndw::C3D_PersistLoadingScreen
-			&& getEngine()->isThreaded() )
-		{
+		if ( rendwndw::C3D_PersistLoadingScreen && getEngine()->isThreaded() )
 			m_loadingScreen = makeUnique< LoadingScreen >( *m_progressBar
 				, m_device
 				, m_resources
 				, scene
 				, *m_renderPass
 				, rendwndw::getScreenSize() );
-		}
 		else
-		{
 			m_loadingScreen = makeUnique< LoadingScreen >( *m_progressBar
 				, m_device
 				, m_resources
 				, scene
 				, *m_renderPass
 				, m_size );
-		}
 
-		if ( m_loading && m_loadingScreen )
+		if ( m_loadingScreen )
 		{
-			m_loadingScreen->enable();
+			if ( m_loading )
+				m_loadingScreen->enable();
+
+			//
+			m_intermediates.emplace( m_intermediates.begin()
+				, m_resources.getHandler()
+				, getName()
+				, m_texture3Dto2D ? &m_tex3DTo2DIntermediate : nullptr
+				, IntermediateView{ cuT( "LoadingScreen Result" ), m_loadingScreen->getResult(), ImageLayout::eColorAttachment }
+				, m_swapChain->getImageCount()
+				, *m_commandBufferPool );
 		}
 	}
 
 	void RenderWindow::doDestroyLoadingScreen()noexcept
 	{
-		if ( m_loading && m_loadingScreen )
+		if ( m_loadingScreen )
 		{
-			m_loadingScreen->disable();
-		}
+			if ( m_loading )
+				m_loadingScreen->disable();
+			m_loadingScreen.reset();
 
-		m_loadingScreen.reset();
+			//
+			m_intermediates.erase( m_intermediates.begin() );
+		}
 	}
 
 	void RenderWindow::doCreatePickingPass( QueueData const & queueData )
@@ -1363,18 +1337,10 @@ namespace c3d
 
 	void RenderWindow::doCreateRenderQuad()
 	{
-		auto target = getRenderTarget();
-
-		if ( !target )
-		{
-			return;
-		}
-
 		m_renderQuad = RenderQuadBuilder{}
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ImageViewType::e2D )
 			.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
 			.texcoordConfig( rq::Texcoord{} )
-			.tex3DResult( m_tex3DTo2DIntermediate )
 			.build( m_device
 				, getName()
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
@@ -1394,20 +1360,24 @@ namespace c3d
 				, m_renderQuad->getSampler().getSampler(), 0u )
 			, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
 			, true );
+		m_renderQuad->initialisePass( 0u );
 
 #else
 
-		for ( auto const & intermediate : m_intermediateSampledViews )
+		if ( !m_intermediates.empty() )
 		{
-			m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-					, makeDescriptorWrite( m_configUbo, 1u ) }
-				, intermediate.factors.invertY );
+			for ( auto const & intermediate : m_intermediates )
+			{
+				auto const & intermediateView = intermediate.intermediateSampledView;
+				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediateView.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+						, makeDescriptorWrite( m_configUbo, 1u ) }
+					, intermediateView.factors.invertY );
+			}
+
+			m_renderQuad->initialisePass( 0u );
 		}
 
 #endif
-
-		auto const & debugConfig = target->getDebugConfig();
-		m_renderQuad->initialisePass( debugConfig.intermediateImageIndex );
 	}
 
 	void RenderWindow::doDestroyRenderQuad()noexcept
@@ -1420,33 +1390,21 @@ namespace c3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		passIndex = 0u;
 #else
-		auto target = getRenderTarget();
-		CU_Require( target );
-		auto & intermediates = target->getIntermediateViews();
-		auto & intermediate = intermediates[passIndex];
-		auto const & intermediateBarrierView = m_intermediateBarrierViews[passIndex];
+		auto const & intermediateCommands = m_intermediates[passIndex];
+		auto const & intermediate = intermediateCommands.intermediateView;
+		auto const & intermediateBarrierView = intermediateCommands.intermediateSampledView;
 		auto & context = m_device.makeContext();
 #endif
-		auto & commandBuffers = m_commandBuffers[passIndex];
+		auto & commandBuffers = intermediateCommands.commandBuffers;
 		uint32_t index = 0u;
 		m_renderQuad->initialisePass( passIndex );
 
 		for ( auto & commandBuffer : commandBuffers )
 		{
-			auto const & frameBuffer = *m_frameBuffers[index];
-			auto name = toUtf8( getName() + string::toString( index ) );
-
-			if ( !commandBuffer )
-			{
-				commandBuffer = m_commandBufferPool->createCommandBuffer( name );
-			}
-			else
-			{
-				commandBuffer->reset();
-			}
-
+			auto const & frameBuffer = *m_swapchainBuffers[index].frameBuffer;
+			commandBuffer->reset();
 			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-			commandBuffer->beginDebugBlock( { "RenderWindow " + name
+			commandBuffer->beginDebugBlock( { "RenderWindow " + getName() + string::toString( index )
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
@@ -1465,7 +1423,7 @@ namespace c3d
 			commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
 				, { convert( ClearValue{ opaqueWhiteClearColor } ) }
-			, VK_SUBPASS_CONTENTS_INLINE );
+				, VK_SUBPASS_CONTENTS_INLINE );
 			m_renderQuad->registerPass( *commandBuffer, passIndex );
 			commandBuffer->endRenderPass();
 
@@ -1484,8 +1442,8 @@ namespace c3d
 #else
 			commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
-				, { opaqueWhiteClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
+				, { convert( ClearValue{ opaqueWhiteClearColor } ) }
+				, VK_SUBPASS_CONTENTS_INLINE );
 			m_renderQuad->registerPass( *commandBuffer, passIndex );
 			commandBuffer->endRenderPass();
 #endif
@@ -1496,75 +1454,102 @@ namespace c3d
 		}
 	}
 
-	void RenderWindow::doCreateCommandBuffers()
-	{
-		auto target = getRenderTarget();
-
-		if ( !target )
-		{
-			return;
-		}
-
-#if C3D_DebugPicking || C3D_DebugBackgroundPicking
-		m_commandBuffers.resize( 1u );
-#else
-		m_commandBuffers.resize( target->getIntermediateViews().size() );
-#endif
-
-		for ( auto & commandBuffers : m_commandBuffers )
-		{
-			commandBuffers.resize( m_swapChain->getImageCount() );
-		}
-	}
-
-	void RenderWindow::doDestroyCommandBuffers()noexcept
-	{
-		m_commandBuffers.clear();
-	}
-
 	void RenderWindow::doCreateIntermediateViews( QueueData const & queueData )
 	{
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		auto target = getRenderTarget();
 
-		if ( !target || !target->hasTechnique() )
+		if ( !m_loadingScreen
+			&& ( !target || !target->hasTechnique() ) )
 		{
 			return;
 		}
 
-		auto intermediates = getEngine()->areDebugTargetsEnabled()
-			? target->getIntermediateViews()
-			: IntermediateViewArray{ target->getIntermediateViews()[0] };
-				
-		if ( m_device.hasGeometryShader() )
+		auto lock( makeUniqueLock( m_renderMutex ) );
+
+		if ( target )
 		{
-			Extent2D extent{ m_size.getWidth(), m_size.getHeight() };
-			m_texture3Dto2D = makeUnique< Texture3DTo2D >( m_device
-				, m_resources
-				, extent
-				, target->getCameraUbo() );
-			m_texture3Dto2D->createPasses( queueData, intermediates );
+			if ( m_device.hasGeometryShader() )
+			{
+				Extent2D extent{ m_size.getWidth(), m_size.getHeight() };
+				m_texture3Dto2D = makeUnique< Texture3DTo2D >( m_device
+					, m_resources
+					, extent
+					, target->getCameraUbo() );
+				m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
+					, m_texture3Dto2D->getTarget().getSampledViewId()
+					, ImageLayout::eShaderReadOnly
+					, TextureFactors{}.invert( true ) };
+			}
+
+			IntermediateViewArray intermediates;
+			for ( auto & intermediate : m_intermediates )
+				intermediates.emplace_back( intermediate.intermediateView );
+
+			auto targetIntermediates = target->getIntermediateViews();
+			auto current = targetIntermediates.begin();
+			do
+			{
+				intermediates.emplace_back( *current );
+				m_intermediates.emplace_back( m_resources.getHandler()
+					, getName()
+					, m_texture3Dto2D ? &m_tex3DTo2DIntermediate : nullptr
+					, *current
+					, m_swapChain->getImageCount()
+					, *m_commandBufferPool );
+				++current;
+			}
+			while ( getEngine()->areDebugTargetsEnabled()
+				&& current != targetIntermediates.end() );
+
+			if ( m_texture3Dto2D )
+				m_texture3Dto2D->createPasses( queueData, intermediates );
 		}
 
-		m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
-			, m_texture3Dto2D->getTarget().getSampledViewId()
-			, ImageLayout::eShaderReadOnly
-			, TextureFactors{}.invert( true ) };
-		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
-			, m_tex3DTo2DIntermediate
-			, intermediates );
-		m_intermediateSampledViews = rendwndw::doCreateSampledViews( m_device
-			, m_tex3DTo2DIntermediate
-			, intermediates );
+		if ( m_renderQuad )
+		{
+			auto & context = m_device.makeContext();
+			auto begin = m_loadingScreen ? std::next( m_intermediates.begin() ) : m_intermediates.begin();
+			for ( auto const & intermediate : makeArrayView( begin, m_intermediates.end() ) )
+			{
+				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediate.intermediateSampledView.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+						, makeDescriptorWrite( m_configUbo, 1u ) }
+				, intermediate.intermediateSampledView.factors.invertY );
+			}
+
+			if ( target )
+				m_renderQuad->initialisePass( target->getDebugConfig().intermediateImageIndex );
+			else
+				m_renderQuad->initialisePass( 0u );
+		}
 #endif
 	}
 
 	void RenderWindow::doDestroyIntermediateViews()noexcept
 	{
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
+
+		auto lock = makeUniqueLock( m_renderMutex );
+
 		m_texture3Dto2D.reset();
-		m_intermediateSampledViews.clear();
-		m_intermediateBarrierViews.clear();
+		m_tex3DTo2DIntermediate = {};
+
+		if ( m_renderQuad )
+		{
+			if ( m_loadingScreen )
+				m_renderQuad->unregisterPasses( 1u, ~0u );
+			else
+				m_renderQuad->unregisterPasses( 0u, ~0u );
+		}
+
+		if ( !m_intermediates.empty() )
+		{
+			if ( m_loadingScreen )
+				m_intermediates.erase( std::next( m_intermediates.begin() ), m_intermediates.end() );
+			else
+				m_intermediates.clear();
+		}
+
 #endif
 	}
 
@@ -1587,17 +1572,10 @@ namespace c3d
 			, cuT( "Snapshot" ) );
 		m_snapshotData = makeArrayView( m_snapshotBuffer->lock()
 			, bufferSize );
-#if C3D_DebugPicking || C3D_DebugBackgroundPicking
-		m_transferCommands.resize( 1u );
-#else
-		auto & intermediates = target->getIntermediateViews();
-		m_transferCommands.resize( intermediates.size() );
-#endif
 	}
 
 	void RenderWindow::doDestroySaveData()noexcept
 	{
-		m_transferCommands.clear();
 		m_snapshotData = {};
 
 		if ( m_snapshotBuffer )
@@ -1638,33 +1616,18 @@ namespace c3d
 				, [this]( RenderDevice const &
 					, QueueData const & queueData )
 				{
-					doWaitFrame( queueData, {} );
+					doWaitFrame( queueData, {}, ~0u );
 					getDevice()->waitIdle();
 
 					if ( !m_initialised || m_loading )
 					{
 						doResetSwapChain();
-
-						if ( m_loading )
-						{
-							getListener()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-								, [this]( RenderDevice const &
-									, QueueData const & )
-								{
-									doDestroyCommandBuffers();
-									doCreateCommandBuffers();
-								} ) );
-						}
 					}
 					else
 					{
-						doDestroyCommandBuffers();
-						doDestroyRenderQuad();
 						doDestroyIntermediateViews();
 						doResetSwapChain();
 						doCreateIntermediateViews( queueData );
-						doCreateRenderQuad();
-						doCreateCommandBuffers();
 					}
 
 					m_skip = false;
@@ -1692,76 +1655,23 @@ namespace c3d
 		return nullptr;
 	}
 
-	SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( QueueData const & queue
-		, RenderingResources const & resources
-		, LoadingScreen & loadingScreen
-		, crg::Fence *& fence
-		, SemaphoreWaitArray toWait )
-	{
-		toWait.push_back( { *resources.imageAvailableSemaphore
-			, PipelineStageFlags::eColorAttachmentOutput } );
-		return loadingScreen.render( *queue.queue
-			, *m_frameBuffers[resources.imageIndex]
-			, toWait
-			, fence );
-	}
-
-	void RenderWindow::doPresentLoadingFrame( QueueData const & queueData
-		, crg::Fence * fence
-		, RenderingResources & resources
-		, SemaphoreWaitArray const & toWait )
-	{
-		try
-		{
-			ashes::VkSemaphoreArray semaphores;
-			rendwndw::convert( toWait, semaphores );
-
-			//if ( fence )
-			//{
-			//	auto res = fence->wait( ashes::MaxTimeout );
-			//	ashes::checkError( res, "Wait between swapchain images presentation." );
-			//}
-
-			queueData.queue->present( { *m_swapChain }
-				, { resources.imageIndex }
-				, semaphores );
-
-			if ( m_toSave )
-			{
-				std::memcpy( m_saveBuffer->getPtr(), m_snapshotData.data(), m_snapshotData.size() );
-				m_toSave = false;
-			}
-		}
-		catch ( ashes::Exception & exc )
-		{
-			doCheckNeedReset( exc.getResult()
-				, false
-				, "Image presentation" );
-		}
-
-		resources.imageIndex = ~0u;
-	}
-
 	void RenderWindow::doInitialiseTransferCommands( QueueData const & queueData
-		, CommandsSemaphore & transferCommands
 		, uint32_t index )
 	{
+		auto & intermediateCommands = m_intermediates[index];
+		auto & transferCommands = intermediateCommands.transferCommands;
 		if ( transferCommands.commandBuffer )
-		{
 			return;
-		}
 
+		auto lock = makeUniqueLock( m_renderMutex );
 		auto & context = m_device.makeContext();
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 
 		transferCommands = { getDevice(), queueData, cuT( "Snapshot" ) };
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-		auto target = getRenderTarget();
-		CU_Require( target );
-		auto intermediates = target->getIntermediateViews();
-		auto const & intermediate = intermediates[index];
-		auto const & intermediateBarrierView = m_intermediateBarrierViews[index];
-		auto const & intermediateSampledView = m_intermediateSampledViews[index];
+		auto const & intermediate = intermediateCommands.intermediateView;
+		auto const & intermediateBarrierView = intermediateCommands.intermediateBarrierView;
+		auto const & intermediateSampledView = intermediateCommands.intermediateSampledView;
 #endif
 		auto const & commands = *transferCommands.commandBuffer;
 		commands.begin();
@@ -1871,54 +1781,46 @@ namespace c3d
 	}
 
 	void RenderWindow::doWaitFrame( QueueData const & queueData
-		, SemaphoreWaitArray const & toWait )
-	{
-		auto target = getRenderTarget();
-
-		if ( target )
-		{
-			ashes::VkSemaphoreArray semaphores;
-			ashes::VkPipelineStageFlagsArray stages;
-			crg::convert( toWait, semaphores, stages );
-
-			if ( m_toSave )
-			{
-#if C3D_DebugPicking || C3D_DebugBackgroundPicking
-				m_savedFormat = m_picking->getImageView().data->info.format;
-#else
-				auto const & intermediates = target->getIntermediateViews();
-				auto const & debugConfig = target->getDebugConfig();
-				m_savedFormat = getFormat( intermediates[debugConfig.intermediateImageIndex].viewId );
-#endif
-				auto & transferCommands = m_transferCommands[debugConfig.intermediateImageIndex];
-				doInitialiseTransferCommands( queueData, transferCommands, debugConfig.intermediateImageIndex );
-				queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
-					, semaphores
-					, stages
-					, ashes::VkSemaphoreArray{ *transferCommands.semaphore } );
-				semaphores = { *transferCommands.semaphore };
-				stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
-			}
-
-			queueData.queue->submit( ashes::VkCommandBufferArray{}
-				, semaphores
-				, stages
-				, ashes::VkSemaphoreArray{} );
-		}
-	}
-
-	void RenderWindow::doSubmitFrame( QueueData const & queueData
-		, RenderingResources const * resources
-		, SemaphoreWaitArray const & toWait )
+		, SemaphoreWaitArray const & toWait
+		, uint32_t intermediateImageIndex )
 	{
 		ashes::VkSemaphoreArray semaphores;
 		ashes::VkPipelineStageFlagsArray stages;
 		crg::convert( toWait, semaphores, stages );
-		auto target = getRenderTarget();
-		CU_Require( target );
-		auto const & debugConfig = target->getDebugConfig();
-		auto passIndex = debugConfig.intermediateImageIndex;
-		doRecordCommandBuffer( passIndex );
+
+		if ( m_toSave && intermediateImageIndex != ~0u )
+		{
+			auto const & intermediateCommands = m_intermediates[intermediateImageIndex];
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+			m_savedFormat = m_picking->getImageView().data->info.format;
+#else
+			m_savedFormat = getFormat( intermediateCommands.intermediateView.viewId );
+#endif
+			doInitialiseTransferCommands( queueData, intermediateImageIndex );
+			auto const & transferCommands = intermediateCommands.transferCommands;
+			queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
+				, semaphores
+				, stages
+				, ashes::VkSemaphoreArray{ *transferCommands.semaphore } );
+			semaphores = { *transferCommands.semaphore };
+			stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
+		}
+
+		queueData.queue->submit( ashes::VkCommandBufferArray{}
+			, semaphores
+			, stages
+			, ashes::VkSemaphoreArray{} );
+	}
+
+	void RenderWindow::doSubmitFrame( QueueData const & queueData
+		, RenderingResources const * resources
+		, SemaphoreWaitArray const & toWait
+		, uint32_t intermediateImageIndex )
+	{
+		ashes::VkSemaphoreArray semaphores;
+		ashes::VkPipelineStageFlagsArray stages;
+		crg::convert( toWait, semaphores, stages );
+		doRecordCommandBuffer( intermediateImageIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		if ( getEngine()->areDebugTargetsEnabled() && m_texture3Dto2D )
@@ -1928,16 +1830,17 @@ namespace c3d
 				, stages );
 		}
 #endif
+		auto const & intermediateCommands = m_intermediates[intermediateImageIndex];
+
 		if ( m_toSave )
 		{
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 			m_savedFormat = m_picking->getImageView().data->info.format;
 #else
-			auto intermediates = target->getIntermediateViews();
-			m_savedFormat = getFormat( intermediates[passIndex].viewId );
+			m_savedFormat = getFormat( intermediateCommands.intermediateView.viewId );
 #endif
-			auto & transferCommands = m_transferCommands[passIndex];
-			doInitialiseTransferCommands( queueData, transferCommands, passIndex );
+			doInitialiseTransferCommands( queueData, intermediateImageIndex );
+			auto const & transferCommands = intermediateCommands.transferCommands;
 			queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 				, semaphores
 				, stages
@@ -1948,7 +1851,7 @@ namespace c3d
 
 		semaphores.push_back( *resources->imageAvailableSemaphore );
 		stages.push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-		queueData.queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[passIndex][resources->imageIndex] }
+		queueData.queue->submit( ashes::VkCommandBufferArray{ *intermediateCommands.commandBuffers[resources->imageIndex] }
 			, semaphores
 			, stages
 			, ashes::VkSemaphoreArray{}
@@ -1956,7 +1859,9 @@ namespace c3d
 	}
 
 	void RenderWindow::doPresentFrame( QueueData const & queueData
-		, RenderingResources * resources )
+		, RenderingResources * resources
+		, uint32_t intermediateImageIndex
+		, Size const & displaySize )
 	{
 		try
 		{
@@ -1967,12 +1872,10 @@ namespace c3d
 
 			if ( m_toSave )
 			{
-				auto target = getRenderTarget();
-				CU_Require( target );
-				auto const & debugConfig = target->getDebugConfig();
-				auto const & intermediate = m_intermediateBarrierViews[debugConfig.intermediateImageIndex];
+				auto const & intermediateCommands = m_intermediates[intermediateImageIndex];
+				auto const & intermediate = intermediateCommands.intermediateBarrierView;
 				auto srcExtent = getExtent( intermediate.viewId );
-				auto dstExtent = makeExtent2D( target->getDisplaySize() );
+				auto dstExtent = makeExtent2D( displaySize );
 				dstExtent.width = std::min( dstExtent.width, srcExtent.width );
 				dstExtent.height = std::min( dstExtent.height, srcExtent.height );
 				auto subresourceRange = intermediate.viewId.data->info.subresourceRange;
@@ -1980,7 +1883,7 @@ namespace c3d
 				dstExtent.width = std::max( 1u, dstExtent.width >> mipLevel );
 				dstExtent.height = std::max( 1u, dstExtent.height >> mipLevel );
 				m_saveBuffer = PxBufferBase::create( makeSize( dstExtent )
-					, target->getPixelFormat()
+					, getFormat( intermediate.viewId )
 					, m_snapshotData.data()
 					, PixelFormat( m_savedFormat )
 					, 0u );
