@@ -114,7 +114,7 @@ namespace c3d
 		uint32_t m_currentUboIndex{ 0u };
 		Map< uint32_t, BufferArray > m_buffers;
 		String m_debugName;
-		Mutex m_mutex;
+		mutable Mutex m_mutex;
 	};
 }
 
