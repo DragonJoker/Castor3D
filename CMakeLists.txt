@@ -276,6 +276,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set( Castor3D_MATERIAL_DEPS )
 
 	if ( VCPKG_TOOLCHAIN )
+		set( VulkanHeaders_DIR ${VCPKG_SHARE_DIR}/cmake/VulkanHeaders )
 		set( ZLIB_DIR ${VCPKG_SHARE_DIR}/zlib )
 		set( freetype_DIR ${VCPKG_SHARE_DIR}/freetype )
 		find_package( ZLIB QUIET )

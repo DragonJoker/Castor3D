@@ -58,7 +58,7 @@ namespace c3d
 					auto view = attach->view( index );
 					auto image = m_graph.createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
-					assert( attach->isTransferOutputView() );
+					assert( attach->isTransferOutputImageView() );
 					m_context.vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
