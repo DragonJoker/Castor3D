@@ -51,6 +51,7 @@ namespace c3d
 
 	UniformBufferPool::~UniformBufferPool()noexcept
 	{
+		auto lock( makeUniqueLock( m_mutex ) );
 		for ( auto & [_, buffers] : m_buffers )
 		{
 			for ( auto & buffer : buffers )
@@ -62,6 +63,7 @@ namespace c3d
 
 	AllocationStats UniformBufferPool::getAllocationStats()const noexcept
 	{
+		auto lock( makeUniqueLock( m_mutex ) );
 		AllocationStats result{};
 
 		for ( auto const & [_, buffers] : m_buffers )
@@ -81,6 +83,7 @@ namespace c3d
 
 	Vector< Pair< MemChunk, String > > UniformBufferPool::listAllocations()const
 	{
+		auto lock( makeUniqueLock( m_mutex ) );
 		Vector< Pair< MemChunk, String > > result;
 		for ( auto const & [_, buffers] : m_buffers )
 		{
@@ -96,6 +99,7 @@ namespace c3d
 
 	void UniformBufferPool::upload( UploadData const & uploader )const
 	{
+		auto lock( makeUniqueLock( m_mutex ) );
 		auto & commandBuffer = uploader.getCommandBuffer();
 
 		for ( auto & [id, buffers] : m_buffers )
@@ -136,6 +140,7 @@ namespace c3d
 
 	uint32_t UniformBufferPool::getBufferCount()const
 	{
+		auto lock( makeUniqueLock( m_mutex ) );
 		uint32_t result = 0u;
 
 		for ( auto & [id, buffers] : m_buffers )
