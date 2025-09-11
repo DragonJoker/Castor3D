@@ -1,0 +1,15 @@
+diff --git a/bcdec.h b/bcdec.h
+index cb7336a..a1d771f 100644
+--- a/bcdec.h
++++ b/bcdec.h
+@@ -290,7 +290,7 @@ static void bcdec__bc4_block(const void* compressedBlock, void* decompressedBloc
+ 
+     indices = block >> 16;
+     if (isSigned) {
+-        sblock = (char*)decompressedBlock;
++        sblock = (signed char*)decompressedBlock;
+         for (i = 0; i < 4; ++i) {
+             for (j = 0; j < 4; ++j) {
+                 sblock[j * pixelSize] = (char)alpha[indices & 0x07];
+
+warning: in the working copy of 'bcdec.h', LF will be replaced by CRLF the next time Git touches it

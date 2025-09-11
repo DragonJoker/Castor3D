@@ -1,0 +1,4 @@
+The package bcdec provides CMake targets:
+
+    find_package(bcdec REQUIRED)
+    target_include_directories(main PRIVATE ${bcdec_INCLUDE_DIR})

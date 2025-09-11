@@ -1,0 +1,18 @@
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO iOrange/bcdec
+    REF 963c5e56b7a335e066cff7d16a3de75f4e8ad366 # committed on 2024-11-12
+    SHA512 0fb1d2d7c2b828d0a548999130ce80d73ecafa0b5693d3702e3ce81059f8d60c71802693c392e1301bc1a8bff4e9b39a6a32aeeee48bae6d0372e72b9bd65080
+    HEAD_REF main
+    PATCHES
+        bcdec.patch
+)
+
+set(HEADER_FILES "${SOURCE_PATH}/bcdec.h")
+file(COPY ${HEADER_FILES} DESTINATION "${CURRENT_PACKAGES_DIR}/include")
+
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/Findbcdec.cmake" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/vcpkg-cmake-wrapper.cmake" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
