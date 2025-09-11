@@ -9,6 +9,8 @@ set( PNG_DIR ${VCPKG_SHARE_DIR}/libpng )
 set( WebP_DIR ${VCPKG_SHARE_DIR}/WebP )
 set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
 set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
+list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/bcdec )
+find_package( bcdec REQUIRED )
 find_package( unofficial-convectionkernels CONFIG REQUIRED )
 find_package( unofficial-skia CONFIG REQUIRED )
 find_package( gli CONFIG REQUIRED )
@@ -700,6 +702,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
+			${bcdec_INCLUDE_DIR}
 	)
 	if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 		target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )

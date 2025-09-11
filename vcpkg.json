@@ -4,6 +4,7 @@
   "version": "0.16.0",
   "builtin-baseline": "d912d8d62818710b876969cd60d547f50687a613",
   "dependencies": [
+    "bcdec",
     "convectionkernels",
     "freetype",
     "gli",
@@ -26,6 +27,7 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
+      "./data/vcpkg/ports/bcdec",
       "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/fastgltf",
       "./data/vcpkg/ports/liblzma",

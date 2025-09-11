@@ -6,10 +6,63 @@
 
 #include <ashes/common/Format.hpp>
 
+#define BCDEC_IMPLEMENTATION
+#define BCDEC_BC4BC5_PRECISE
+#include <bcdec.h>
+
 #pragma GCC diagnostic ignored "-Wrestrict"
 
 namespace c3d
 {
+	//*****************************************************************************************
+
+	namespace px
+	{
+		static void dec_bc4_unorm( void const * compressed, void * decompressed, int destinationPitch )
+		{
+			bcdec_bc4( compressed, decompressed, destinationPitch, 0 );
+		}
+
+		static void dec_bc4_snorm( void const * compressed, void * decompressed, int destinationPitch )
+		{
+			bcdec_bc4( compressed, decompressed, destinationPitch, 1 );
+		}
+
+		static void dec_bc5_unorm( void const * compressed, void * decompressed, int destinationPitch )
+		{
+			bcdec_bc5( compressed, decompressed, destinationPitch, 0 );
+		}
+
+		static void dec_bc5_snorm( void const * compressed, void * decompressed, int destinationPitch )
+		{
+			bcdec_bc5( compressed, decompressed, destinationPitch, 1 );
+		}
+
+		static void dec_bc6h_float_unorm( void const * compressed, void * decompressed, int destinationPitch )
+		{
+			bcdec_bc6h_float( compressed, decompressed, destinationPitch, 0 );
+		}
+
+		static void dec_bc6h_float_snorm( void const * compressed, void * decompressed, int destinationPitch )
+		{
+			bcdec_bc6h_float( compressed, decompressed, destinationPitch, 1 );
+		}
+
+		static bool hasAlphaPixels( PxBufferBase const & alphaChannel )
+		{
+			return !std::all_of( alphaChannel.begin(), alphaChannel.end()
+					, []( uint8_t byte )
+					{
+							return byte == 0x00;
+					} )
+				&& !std::all_of( alphaChannel.begin(), alphaChannel.end()
+					, []( uint8_t byte )
+					{
+							return byte == 0xFF;
+					} );
+		}
+	}
+
 	//*****************************************************************************************
 
 	PixelFormat getFormatByName( StringView formatName )
@@ -220,11 +273,6 @@ namespace c3d
 		}
 	}
 
-	String getFormatName( PixelFormat format )
-	{
-		return makeString( getName( format ) );
-	}
-
 	void convertPixel( PixelFormat srcFormat
 		, uint8_t const *& srcBuffer
 		, PixelFormat dstFormat
@@ -267,7 +315,7 @@ namespace c3d
 
 	namespace pxf
 	{
-		using PFNDecompressBlock = bool( * )( uint8_t const * data, uint8_t * pixelBuffer );
+		using PFNDecompressBuffer = void( * )( void const * compressed, void * decompressed, int detinationPitch );
 
 		template< PixelFormat PFSrc >
 		void compressBufferT( PxBufferConvertOptions const * options
@@ -470,21 +518,56 @@ namespace c3d
 
 		if ( isCompressed( src.getFormat() ) )
 		{
-			pxf::PFNDecompressBlock decompressBlock = nullptr;
+			pxf::PFNDecompressBuffer decompressBuffer = nullptr;
+			bool isSRGB = false;
+			bool isFloat = false;
 
 			switch ( src.getFormat() )
 			{
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
 			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-				decompressBlock = decompressBC1Block;
+				isSRGB = true;
+				[[fallthrough]];
+			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+				decompressBuffer = bcdec_bc1;
 				break;
-			case PixelFormat::eBC3_UNORM_BLOCK:
+			case PixelFormat::eBC2_SRGB_BLOCK:
+				isSRGB = true;
+				[[fallthrough]];
+			case PixelFormat::eBC2_UNORM_BLOCK:
+				decompressBuffer = bcdec_bc2;
+				break;
 			case PixelFormat::eBC3_SRGB_BLOCK:
-				decompressBlock = decompressBC3Block;
+				isSRGB = true;
+				[[fallthrough]];
+			case PixelFormat::eBC3_UNORM_BLOCK:
+				decompressBuffer = bcdec_bc3;
+				break;
+			case PixelFormat::eBC4_UNORM_BLOCK:
+				decompressBuffer = px::dec_bc4_unorm;
+				break;
+			case PixelFormat::eBC4_SNORM_BLOCK:
+				decompressBuffer = px::dec_bc4_snorm;
 				break;
 			case PixelFormat::eBC5_UNORM_BLOCK:
+				decompressBuffer = px::dec_bc5_unorm;
+				break;
 			case PixelFormat::eBC5_SNORM_BLOCK:
-				decompressBlock = decompressBC5Block;
+				decompressBuffer = px::dec_bc5_snorm;
+				break;
+			case PixelFormat::eBC6H_UFLOAT_BLOCK:
+				decompressBuffer = px::dec_bc6h_float_unorm;
+				isFloat = true;
+				break;
+			case PixelFormat::eBC6H_SFLOAT_BLOCK:
+				decompressBuffer = px::dec_bc6h_float_snorm;
+				isFloat = true;
+				break;
+			case PixelFormat::eBC7_SRGB_BLOCK:
+				isSRGB = true;
+				[[fallthrough]];
+			case PixelFormat::eBC7_UNORM_BLOCK:
+				decompressBuffer = bcdec_bc7;
+				isFloat = true;
 				break;
 			default:
 				CU_Failure( "Unsupported compression format" );
@@ -492,23 +575,12 @@ namespace c3d
 			}
 
 			result = PxBufferBase::create( src.getDimensions()
-				, PixelFormat::eR8G8B8A8_UNORM );
-			uint8_t * pixelBuffer = result->getPtr();
-			Array< uint8_t, 16 * 4u > blockBuffer;
-			uint8_t const * data = src.getConstPtr();
-			auto pixelSize = uint32_t( getBytesPerPixel( result->getFormat() ) );
-			uint32_t height = src.getHeight();
-			uint32_t width = src.getWidth();
-			uint32_t heightInBlocks = height / 4u;
-			uint32_t widthInBlocks = width / 4u;
-
-			for ( uint32_t y = 0u; y < heightInBlocks; ++y )
-			{
-				if ( !pxf::decompressRowBlock( data, width, height, pixelSize, y, widthInBlocks, blockBuffer, pixelBuffer, decompressBlock ) )
-				{
-					return src.clone();
-				}
-			}
+				, ( isFloat
+					? PixelFormat::eR32G32B32A32_SFLOAT
+					: ( isSRGB ? PixelFormat::eR8G8B8A8_SRGB : PixelFormat::eR8G8B8A8_UNORM ) ) );
+			uint8_t * decompressed = result->getPtr();
+			uint8_t const * compressed = src.getConstPtr();
+			decompressBuffer( compressed, decompressed, 0 );
 		}
 
 		return result;

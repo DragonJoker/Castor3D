@@ -17,12 +17,6 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	bool decompressBC1Block( uint8_t const * bitstring
-		, uint8_t * pixelBuffer );
-	bool decompressBC3Block( uint8_t const * bitstring
-		, uint8_t * pixelBuffer );
-	bool decompressBC5Block( uint8_t const * bitstring
-		, uint8_t * pixelBuffer );
 	/**
 	 *\~english
 	 *\brief		Function to retrieve Pixel size without templates
