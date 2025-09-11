@@ -186,6 +186,9 @@ namespace c3d
 		bool generateMips{};
 		bool layersToTiles{};
 		bool allowSRGB{ true };
+		//!\~english	When compression is allowed, keep alpha channel uncompressed, in a separate buffer.
+		//!\~french		Quand la compression est autorisée, garde le canal alpha non compressé, dans un buffer séparé.
+		bool keepAlphaChannel{ false };
 	};
 	/**
 	\~english

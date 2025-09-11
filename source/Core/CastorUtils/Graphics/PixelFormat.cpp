@@ -633,18 +633,10 @@ namespace c3d
 
 	bool hasAlphaChannel( Image const & image )
 	{
-		auto alphaChannel = extractComponent( image.getPixels()
-			, PixelComponent::eAlpha );
-		return alphaChannel
-			&& !std::all_of( alphaChannel->begin(), alphaChannel->end()
-				, []( uint8_t byte )
-				{
-					return byte == 0x00;
-				} )
-			&& !std::all_of( alphaChannel->begin(), alphaChannel->end()
-				, []( uint8_t byte )
-				{
-					return byte == 0xFF;
-				} );
+		if ( auto alphaChannel = image.getAlphaChannel() )
+			return px::hasAlphaPixels( *alphaChannel );
+		if ( auto alphaChannel = extractComponent( *image.getPixels(), PixelComponent::eAlpha ) )
+			return px::hasAlphaPixels( *alphaChannel );
+		return false;
 	}
 }

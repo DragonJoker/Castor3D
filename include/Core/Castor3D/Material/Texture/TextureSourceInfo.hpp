@@ -122,6 +122,18 @@ namespace c3d
 			m_loadConfig.allowCompression = v;
 		}
 
+		bool keepAlphaChannel()const noexcept
+		{
+			CU_Require( isFileImage() || isBufferImage() );
+			return m_loadConfig.keepAlphaChannel;
+		}
+
+		void keepAlphaChannel( bool v )noexcept
+		{
+			CU_Require( isFileImage() || isBufferImage() );
+			m_loadConfig.keepAlphaChannel = v;
+		}
+
 		bool allowSRGB()const noexcept
 		{
 			return m_loadConfig.allowSRGB;

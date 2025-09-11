@@ -198,10 +198,10 @@ namespace c3d
 		}
 	}
 
-	PxBufferBaseUPtr extractComponent( PxBufferBaseRPtr src
+	PxBufferBaseUPtr extractComponent( PxBufferBase const & src
 		, PixelComponent component )
 	{
-		auto decomp = decompressBuffer( *src );
+		auto decomp = decompressBuffer( src );
 		auto result = PxBufferBase::create( decomp->getDimensions()
 			, getSingleComponent( decomp->getFormat() ) );
 		pfext::copyComponent( *decomp
@@ -211,10 +211,10 @@ namespace c3d
 		return result;
 	}
 
-	PxBufferBaseUPtr extractComponents( PxBufferBaseRPtr src
+	PxBufferBaseUPtr extractComponents( PxBufferBase const & src
 		, PixelComponents components )
 	{
-		auto decomp = decompressBuffer( *src );
+		auto decomp = decompressBuffer( src );
 		auto result = PxBufferBase::create( decomp->getDimensions()
 			, getPixelFormat( decomp->getFormat(), components ) );
 		auto dstIndex = 0u;

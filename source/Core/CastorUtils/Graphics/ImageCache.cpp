@@ -51,6 +51,20 @@ namespace c3d
 			, c3d::move( buffer ) );
 	}
 
+	ResourceCacheTraitsT< Image, String >::ElementPtrT ResourceCacheTraitsT< Image, String >::makeElement( ResourceCacheBaseT< Image, String, ResourceCacheTraitsT< Image, String > > const &
+		, String const & name
+		, Path const & path
+		, ImageMemoryLayout layout
+		, PxBufferBaseUPtr buffer
+		, PxBufferBaseUPtr alphaChannel )
+	{
+		return makeResource< Image, String >( name
+			, path
+			, c3d::move( layout )
+			, c3d::move( buffer )
+			, c3d::move( alphaChannel ) );
+	}
+
 	//*********************************************************************************************
 
 	ResourceCacheT< Image, String, ImageCacheTraits >::ResourceCacheT( LoggerInstance & logger

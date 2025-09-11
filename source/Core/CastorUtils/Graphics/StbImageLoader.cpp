@@ -28,28 +28,14 @@ namespace c3d
 				, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB
 				, data
 				, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB );
-			auto redChannel = c3d::extractComponent( result.get()
-				, PixelComponent::eRed );
-			auto alphaChannel = c3d::extractComponent( result.get()
-				, PixelComponent::eGreen );
+			auto redChannel = c3d::extractComponent( *result, PixelComponent::eRed );
+			auto alphaChannel = c3d::extractComponent( *result, PixelComponent::eGreen );
 			result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
-			, isHdr ? PixelFormat::eR8G8B8A8_UNORM : PixelFormat::eR8G8B8A8_SRGB );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eRed
-				, *redChannel
-				, *result );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eGreen
-				, *redChannel
-				, *result );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eBlue
-				, *redChannel
-				, *result );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eAlpha
-				, *alphaChannel
-				, *result );
+				, isHdr ? PixelFormat::eR8G8B8A8_UNORM : PixelFormat::eR8G8B8A8_SRGB );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eRed, *redChannel, *result );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eGreen, *redChannel, *result );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eBlue, *redChannel, *result );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eAlpha, *alphaChannel, *result );
 			return result;
 		}
 
@@ -126,28 +112,14 @@ namespace c3d
 				, PixelFormat::eR32G32_SFLOAT
 				, BytePtr( data )
 				, PixelFormat::eR32G32_SFLOAT );
-			auto redChannel = c3d::extractComponent( result.get()
-				, PixelComponent::eRed );
-			auto alphaChannel = c3d::extractComponent( result.get()
-				, PixelComponent::eGreen );
+			auto redChannel = c3d::extractComponent( *result, PixelComponent::eRed );
+			auto alphaChannel = c3d::extractComponent( *result, PixelComponent::eGreen );
 			result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
-			, PixelFormat::eR32G32B32A32_SFLOAT );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eRed
-				, *redChannel
-				, *result );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eGreen
-				, *redChannel
-				, *result );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eBlue
-				, *redChannel
-				, *result );
-			c3d::copyBufferComponents( PixelComponent::eRed
-				, PixelComponent::eAlpha
-				, *alphaChannel
-				, *result );
+				, PixelFormat::eR32G32B32A32_SFLOAT );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eRed, *redChannel, *result );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eGreen, *redChannel, *result );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eBlue, *redChannel, *result );
+			c3d::copyBufferComponents( PixelComponent::eRed, PixelComponent::eAlpha, *alphaChannel, *result );
 			return result;
 		}
 

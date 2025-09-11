@@ -42,6 +42,15 @@ namespace c3d
 	*	Implàmentation d'un thread de travail à placer dans un pool de threads.
 	*/
 	class WorkerThread;
+	/**
+	*\~english
+	*\brief
+	*	Asynchronous jobs queue, runs jobs in a thread pool.
+	*\~french
+	*\brief
+	*	File de travail asynchrone, exécute les tâches dans un pool de thread.
+	*/
+	class AsyncJobQueue;
 	//@}
 }
 

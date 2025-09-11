@@ -30,7 +30,7 @@ namespace c3d
 		};
 
 		explicit ImageCreateParams( Path ppath
-			, ImageLoaderConfig ploadConfig = { true, true, true } )
+			, ImageLoaderConfig ploadConfig = { true, true, true, true } )
 			: mode{ eFile }
 			, path{ c3d::move( ppath ) }
 			, loadConfig{ c3d::move( ploadConfig ) }
@@ -39,7 +39,7 @@ namespace c3d
 
 		explicit ImageCreateParams( String ptype
 			, ByteArray pdata
-			, ImageLoaderConfig ploadConfig = { true, true, true } )
+			, ImageLoaderConfig ploadConfig = { true, true, true, true } )
 			: mode{ eBuffer }
 			, loadConfig{ c3d::move( ploadConfig ) }
 			, type{ c3d::move( ptype ) }
@@ -95,6 +95,12 @@ namespace c3d
 			, Path const & path
 			, ImageMemoryLayout layout
 			, PxBufferBaseUPtr buffer );
+		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< ElementT, KeyT, ResourceCacheTraitsT< ElementT, KeyT > > const & cache
+			, KeyT const & name
+			, Path const & path
+			, ImageMemoryLayout layout
+			, PxBufferBaseUPtr buffer
+			, PxBufferBaseUPtr alphaChannel );
 	};
 	using ImageCacheTraits = ResourceCacheTraitsT< Image, String >;
 	/**

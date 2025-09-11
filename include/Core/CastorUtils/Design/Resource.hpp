@@ -40,8 +40,8 @@ namespace c3d
 
 		template< typename ... ParametersT >
 		explicit ResourceT( ParametersT && ... params );
-		explicit ResourceT( ElementT && rhs );
-		ResourceT & operator=( ElementT && rhs );
+		explicit ResourceT( ElementT && rhs )noexcept;
+		ResourceT & operator=( ElementT && rhs )noexcept;
 		/**@}*/
 		/**
 		*\~english

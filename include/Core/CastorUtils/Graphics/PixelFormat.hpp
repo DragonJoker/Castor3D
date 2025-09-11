@@ -391,7 +391,7 @@ namespace c3d
 	 *\param[in]	component	La composante à extraire
 	 *\return		Le tampon contenant la composante extraite, au format c3d::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 	 */
-	CU_API PxBufferBaseUPtr extractComponent( PxBufferBaseRPtr src
+	CU_API PxBufferBaseUPtr extractComponent( PxBufferBase const & src
 		, PixelComponent component );
 	/**
 	 *\~english
@@ -405,7 +405,7 @@ namespace c3d
 	 *\param[in]	component	La composante à extraire
 	 *\return		Le tampon contenant la composante extraite, au format c3d::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 	 */
-	CU_API PxBufferBaseUPtr extractComponents( PxBufferBaseRPtr src
+	CU_API PxBufferBaseUPtr extractComponents( PxBufferBase const & src
 		, PixelComponents component );
 	/**
 	 *\~english
