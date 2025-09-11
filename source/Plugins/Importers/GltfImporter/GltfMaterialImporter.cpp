@@ -126,8 +126,6 @@ namespace c3d_gltf
 			case fastgltf::MimeType::JPEG:
 				return cuT( "jpg" );
 			case fastgltf::MimeType::PNG:
-			case fastgltf::MimeType::GltfBuffer:
-			case fastgltf::MimeType::OctetStream:
 				return cuT( "png" );
 			case fastgltf::MimeType::KTX2:
 				return cuT( "ktx2" );
@@ -156,7 +154,7 @@ namespace c3d_gltf
 			}
 		}
 
-		static void getData( fastgltf::Asset const & impAsset
+		static void getData( [[maybe_unused]] fastgltf::Asset const & impAsset
 			, fastgltf::sources::URI const & impData
 			, size_t offset
 			, size_t size
@@ -174,7 +172,7 @@ namespace c3d_gltf
 			mimeType = impData.mimeType;
 		}
 
-		static void getData( fastgltf::Asset const & impAsset
+		static void getData( [[maybe_unused]] fastgltf::Asset const & impAsset
 			, fastgltf::sources::Array const & impData
 			, size_t offset
 			, size_t size
@@ -187,7 +185,7 @@ namespace c3d_gltf
 			mimeType = impData.mimeType;
 		}
 
-		static void getData( fastgltf::Asset const & impAsset
+		static void getData( [[maybe_unused]] fastgltf::Asset const & impAsset
 			, fastgltf::sources::Vector const & impData
 			, size_t offset
 			, size_t size
@@ -200,7 +198,7 @@ namespace c3d_gltf
 			mimeType = impData.mimeType;
 		}
 
-		static void getData( fastgltf::Asset const & impAsset
+		static void getData( [[maybe_unused]] fastgltf::Asset const & impAsset
 			, fastgltf::sources::ByteView const & impData
 			, size_t offset
 			, size_t size
@@ -230,9 +228,9 @@ namespace c3d_gltf
 
 			std::visit( OverloadedGetDataT{ []( auto const & ){}
 				, [&uri]( fastgltf::sources::URI const & source ){ uri = c3d::string::toString( source.uri.fspath() ); }
-				, []( fastgltf::sources::Array const & source ){}
-				, []( fastgltf::sources::Vector const & source ){}
-				, []( fastgltf::sources::ByteView const & source ){} }
+				, []( [[maybe_unused]] fastgltf::sources::Array const & source ){}
+				, []( [[maybe_unused]] fastgltf::sources::Vector const & source ){}
+				, []( [[maybe_unused]] fastgltf::sources::ByteView const & source ){} }
 				, impImage.data );
 
 			if ( uri.empty() )
@@ -406,27 +404,20 @@ namespace c3d_gltf
 		static c3d::Image const & loadImage( c3d::TextureSourceInfo const & source
 			, c3d::MaterialImporter const & importer )
 		{
-			c3d::Image const * result{};
+			c3d::Image * result{};
+			auto loadConfig = source.loadConfig();
+			if ( loadConfig.allowCompression )
+				loadConfig.keepAlphaChannel = true;
 
 			if ( source.isBufferImage() )
-			{
 				result = importer.loadImage( source.name()
-					, c3d::ImageCreateParams{ source.type()
-						, source.buffer()
-						, source.loadConfig() } );
-			}
+					, c3d::ImageCreateParams{ source.type(), source.buffer(), loadConfig } );
 			else if ( source.isFileImage() )
-			{
 				result = importer.loadImage( source.name()
-					, c3d::ImageCreateParams{ source.folder() / source.relative()
-						, source.loadConfig() } );
-			}
+					, c3d::ImageCreateParams{ source.folder() / source.relative(), loadConfig } );
 
 			if ( !result )
-			{
 				CU_LoaderError( "Couldn't load image" + c3d::toUtf8( source.name() ) + "." );
-			}
-
 			return *result;
 		}
 
@@ -459,7 +450,8 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter & importer
+			, bool checkAlpha )
 		{
 			if ( texInfo )
 			{
@@ -469,11 +461,14 @@ namespace c3d_gltf
 
 					if ( auto sourceInfo = loadTexture( impAsset, *texInfo, texConfig, loadConfig, importer ) )
 					{
-						if ( auto & image = loadImage( *sourceInfo, importer );
-							hasAlphaChannel( image ) )
+						if ( checkAlpha )
 						{
-							addFlagConfiguration( texConfig, { pass.getComponentPlugin< c3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
-							*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+							if ( auto & image = loadImage( *sourceInfo, importer );
+								hasAlphaChannel( image ) )
+							{
+								addFlagConfiguration( texConfig, { pass.getComponentPlugin< c3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
+								*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+							}
 						}
 
 						fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
@@ -700,7 +695,7 @@ namespace c3d_gltf
 		}
 	}
 
-	bool GltfMaterialImporter::doImportMaterial( c3d::Material & material )
+	bool GltfMaterialImporter::importMaterial( c3d::Material & material )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 
@@ -729,7 +724,7 @@ namespace c3d_gltf
 		fastgltf::Material const & impMaterial = *it;
 		material.setLightingModelId( materials::getLightingModel( *getEngine()
 			, impMaterial.anisotropy != nullptr ) );
-		auto pass = material.createPass(  );
+		auto pass = material.createPass();
 
 		if ( impMaterial.unlit )
 		{
@@ -775,7 +770,7 @@ namespace c3d_gltf
 			pass.createComponent< c3d::MetalnessComponent >()->setMetalness( impMaterial.pbrData.metallicFactor );
 			pass.createComponent< c3d::RoughnessComponent >()->setRoughness( impMaterial.pbrData.roughnessFactor );
 
-			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.pbrData.baseColorTexture, m_loadConfig, *this );
+			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.pbrData.baseColorTexture, m_loadConfig, *this, impMaterial.alphaMode != fastgltf::AlphaMode::Opaque );
 			materials::parseRghMetTexture( file, pass, impAsset, impMaterial.pbrData.metallicRoughnessTexture, m_loadConfig, *this );
 
 			if ( impMaterial.specular )
@@ -810,7 +805,7 @@ namespace c3d_gltf
 			auto rghComponent = pass.createComponent< c3d::RoughnessComponent >();
 			rghComponent->setRoughness( 1.0f - impMaterial.specularGlossiness->glossinessFactor );
 
-			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.specularGlossiness->diffuseTexture, m_loadConfig, *this );
+			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.specularGlossiness->diffuseTexture, m_loadConfig, *this, impMaterial.alphaMode != fastgltf::AlphaMode::Opaque );
 			materials::parseSpcGlsTexture( file, pass, impAsset, impMaterial.specularGlossiness->specularGlossinessTexture, m_loadConfig, *this );
 		}
 	}
@@ -818,9 +813,6 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportIridescenceData( fastgltf::Material const & impMaterial
 		, c3d::Pass & pass )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-
 		if ( impMaterial.iridescence )
 		{
 			auto component = pass.createComponent< c3d::IridescenceComponent >();
@@ -828,6 +820,9 @@ namespace c3d_gltf
 			component->setIor( impMaterial.iridescence->iridescenceIor );
 			component->setMinThickness( impMaterial.iridescence->iridescenceThicknessMinimum );
 			component->setMaxThickness( impMaterial.iridescence->iridescenceThicknessMaximum );
+
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
 			materials::parseTexture< c3d::IridescenceMapComponent >( file, pass, impAsset, impMaterial.iridescence->iridescenceTexture, m_loadConfig, *this );
 			materials::parseTexture< c3d::IridescenceThicknessMapComponent >( file, pass, impAsset, impMaterial.iridescence->iridescenceThicknessTexture, m_loadConfig, *this );
 		}
@@ -836,11 +831,11 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportVolumeData( fastgltf::Material const & impMaterial
 		, c3d::Pass & pass )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-
 		if ( impMaterial.volume )
 		{
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
+
 			auto attenuationComponent = pass.createComponent< c3d::AttenuationComponent >();
 			attenuationComponent->setAttenuationColour( c3d::RgbColour::fromComponents( impMaterial.volume->attenuationColor[0]
 				, impMaterial.volume->attenuationColor[1]
@@ -856,11 +851,11 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportTransmissionData( fastgltf::Material const & impMaterial
 		, c3d::Pass & pass )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-
 		if ( impMaterial.transmission )
 		{
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
+
 			pass.createComponent< c3d::TransmissionComponent >()->setTransmission( impMaterial.transmission->transmissionFactor );
 			materials::parseTexture< c3d::TransmissionMapComponent >( file, pass, impAsset, impMaterial.transmission->transmissionTexture, m_loadConfig, *this );
 		}
@@ -869,14 +864,14 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportClearcoatData( fastgltf::Material const & impMaterial
 		, c3d::Pass & pass )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-
 		if ( impMaterial.clearcoat )
 		{
 			auto component = pass.createComponent< c3d::ClearcoatComponent >();
 			component->setClearcoatFactor( impMaterial.clearcoat->clearcoatFactor );
 			component->setRoughnessFactor( impMaterial.clearcoat->clearcoatRoughnessFactor );
+
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
 			materials::parseTexture< c3d::ClearcoatMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatTexture, m_loadConfig, *this );
 			materials::parseNmlTexture< c3d::ClearcoatNormalMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatNormalTexture, m_loadConfig, *this );
 			materials::parseTexture< c3d::ClearcoatRoughnessMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatRoughnessTexture, m_loadConfig, *this );
@@ -886,9 +881,6 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportSheenData( fastgltf::Material const & impMaterial
 		, c3d::Pass & pass )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-
 		if ( impMaterial.sheen )
 		{
 			auto component = pass.createComponent< c3d::SheenComponent >();
@@ -896,6 +888,9 @@ namespace c3d_gltf
 				, impMaterial.sheen->sheenColorFactor[1]
 				, impMaterial.sheen->sheenColorFactor[2] ) );
 			component->setRoughnessFactor( impMaterial.sheen->sheenRoughnessFactor );
+
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
 			materials::parseTexture< c3d::SheenMapComponent >( file, pass, impAsset, impMaterial.sheen->sheenColorTexture, m_loadConfig, *this );
 			materials::parseTexture< c3d::SheenRoughnessMapComponent >( file, pass, impAsset, impMaterial.sheen->sheenRoughnessTexture, m_loadConfig, *this );
 		}
@@ -913,9 +908,6 @@ namespace c3d_gltf
 					return lookup != 0.0f;
 				} ) )
 		{
-			auto & file = static_cast< GltfImporterFile const & >( *m_file );
-			auto & impAsset = file.getAsset();
-
 			auto component = pass.createComponent< c3d::EmissiveComponent >();
 
 			if ( impMaterial.emissiveStrength != 0.0f )
@@ -926,6 +918,9 @@ namespace c3d_gltf
 			component->setEmissive( c3d::RgbColour::fromComponents( impMaterial.emissiveFactor[0]
 				, impMaterial.emissiveFactor[1]
 				, impMaterial.emissiveFactor[2] ) );
+
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
 			materials::parseTexture< c3d::EmissiveMapComponent >( file, pass, impAsset, impMaterial.emissiveTexture, m_loadConfig, *this );
 		}
 	}
@@ -948,15 +943,15 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportDiffuseTransmissionData( fastgltf::Material const & impMaterial
 		, c3d::Pass & pass )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-
 		if ( impMaterial.diffuseTransmission )
 		{
 			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionFactor( impMaterial.diffuseTransmission->transmissionFactor );
 			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionColour( c3d::RgbColour::fromComponents( impMaterial.diffuseTransmission->transmissionColorFactor[0]
 				, impMaterial.diffuseTransmission->transmissionColorFactor[1]
 				, impMaterial.diffuseTransmission->transmissionColorFactor[2] ) );
+
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
 			materials::parseTexture< c3d::DiffuseTransmissionFactorMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionTexture, m_loadConfig, *this );
 			materials::parseTexture< c3d::DiffuseTransmissionColourMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionColorTexture, m_loadConfig, *this );
 		}

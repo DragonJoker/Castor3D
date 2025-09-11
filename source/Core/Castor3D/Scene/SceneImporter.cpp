@@ -164,6 +164,8 @@ namespace c3d
 			if ( auto toImport = m_file->listMaterials();
 				!toImport.empty() )
 			{
+				materialImporter->prepareImport( m_file, parameters, textureRemaps );
+				Vector< MaterialPtr > imported;
 				auto total = uint32_t( toImport.size() );
 				stepProgressBarGlobalStartLocal( m_file->getProgressBar()
 					, cuT( "Importing scene materials" )
@@ -175,17 +177,15 @@ namespace c3d
 					++index;
 					stepProgressBarLocal( m_file->getProgressBar()
 						, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
+					auto material = materialImporter->createMaterial( name );
+					if ( materialImporter->importMaterial( *material ) )
+						imported.emplace_back( move( material ) );
+				}
 
-					if ( !getOwner()->hasMaterial( name ) )
-					{
-						if ( auto material = materialImporter->importData( name
-							, m_file
-							, parameters
-							, textureRemaps ) )
-						{
-							scene.getMaterialView().add( name, material, true );
-						}
-					}
+				for ( auto & material : imported )
+				{
+					if ( !getOwner()->hasMaterial( material->getName() ) )
+						scene.getMaterialView().add( material->getName(), material, true );
 				}
 			}
 		}

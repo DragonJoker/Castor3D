@@ -34,7 +34,7 @@ namespace c3d
 			else
 			{
 				PathArray files;
-				String fileName = path.getFileName( true );
+				auto fileName = path.getFileName( true );
 				File::listDirectoryFiles( filePath, files, true );
 				auto it = std::find_if( files.begin()
 					, files.end()
@@ -82,24 +82,31 @@ namespace c3d
 	{
 	}
 
+	void MaterialImporter::prepareImport( ImporterFile * file
+		, Parameters const & parameters
+		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+	{
+		if ( !m_file )
+			m_file = file;
+		m_textureRemaps = textureRemaps;
+		m_parameters = parameters;
+		m_loadConfig.allowCompression = !m_parameters.get< bool >( cuT( "disable_image_compression" ) );
+		float fvalue;
+
+		if ( m_parameters.get( cuT( "emissive_mult" ), fvalue )
+			&& std::abs( fvalue - 1.0f ) > std::numeric_limits< float >::epsilon() )
+			m_emissiveMult = fvalue;
+	}
+
 	MaterialPtr MaterialImporter::importData( String const & name
 		, ImporterFile * file
 		, Parameters const & parameters
 		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
-		if ( !m_file )
-		{
-			m_file = file;
-		}
-
-		auto result = doCreateMaterial( name );
-
-		if ( !result
-			|| !importData( *result, file, parameters, textureRemaps ) )
-		{
+		prepareImport( file, parameters, textureRemaps );
+		auto result = createMaterial( name );
+		if ( !result || !importMaterial( *result ) )
 			return nullptr;
-		}
-
 		return result;
 	}
 
@@ -108,34 +115,15 @@ namespace c3d
 		, Parameters const & parameters
 		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
-		if ( !m_file )
-		{
-			m_file = file;
-		}
-
-		m_textureRemaps = textureRemaps;
-		m_parameters = parameters;
-		m_loadConfig.allowCompression = !m_parameters.get< bool >( cuT( "disable_image_compression" ) );
-		float fvalue;
-
-		if ( m_parameters.get( cuT( "emissive_mult" ), fvalue )
-			&& std::abs( fvalue - 1.0f ) > std::numeric_limits< float >::epsilon() )
-		{
-			m_emissiveMult = fvalue;
-		}
-
+		prepareImport( file, parameters, textureRemaps );
 		log::info << getPrefix() << cuT( "Loading Material [" ) << material.getName() << cuT( "]" ) << std::endl;
-		bool result = doImportMaterial( material );
+
+		bool result = importMaterial( material );
 
 		if ( result )
-		{
 			log::info << getPrefix() << cuT( "Loaded Material [" ) << material.getName() << cuT( "]" ) << std::endl;
-		}
 		else
-		{
 			log::info << getPrefix() << cuT( "Couldn't load Material [" ) << material.getName() << cuT( "]" ) << std::endl;
-		}
-
 		return result;
 	}
 
@@ -212,8 +200,7 @@ namespace c3d
 			matimp::findImage( path, m_file->getFilePath(), folder, relative ) )
 		{
 			result = loadImage( relative.getFileName()
-				, ImageCreateParams{ folder / relative
-					, c3d::move( loadConfig ) } );
+				, ImageCreateParams{ folder / relative, loadConfig } );
 		}
 
 		return result;
@@ -233,14 +220,14 @@ namespace c3d
 		return loadImage( name
 			, ImageCreateParams{ c3d::move( type )
 				, c3d::move( data )
-				, c3d::move( loadConfig ) } );
+				, loadConfig } );
 	}
 
-	ImageRPtr MaterialImporter::loadImage( String name
+	ImageRPtr MaterialImporter::loadImage( String const & name
 		, String type
 		, ByteArray data )const
 	{
-		return loadImage( std::move( name )
+		return loadImage( name
 			, std::move( type )
 			, std::move( data )
 			, { false, false, false } );
@@ -281,12 +268,6 @@ namespace c3d
 		, TextureConfiguration const & config
 		, ImageLoaderConfig const & loadConfig )const
 	{
-		if ( auto image = loadImage( name, type, data );
-			!image )
-		{
-			CU_Exception( "Couldn't load image [" + toUtf8( name ) + "]" );
-		}
-
 		auto loaderConfig = loadConfig;
 		loaderConfig.allowCompression = loaderConfig.allowCompression
 			&& !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
@@ -351,7 +332,8 @@ namespace c3d
 			pass.registerTexture( loadTexture( c3d::move( name )
 					, c3d::move( type )
 					, c3d::move( data )
-					, config )
+					, config
+					, loadConfig )
 				, passConfig );
 		}
 		catch ( std::exception & exc )
@@ -405,7 +387,7 @@ namespace c3d
 		return result;
 	}
 
-	MaterialPtr MaterialImporter::doCreateMaterial( String const & name )
+	MaterialPtr MaterialImporter::createMaterial( String const & name )
 	{
 		return getOwner()->createMaterial( name
 			, *getOwner()

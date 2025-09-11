@@ -52,6 +52,23 @@ namespace c3d
 			, ImporterFile * file );
 		/**
 		 *\~english
+		 *\brief		Stores import helper data.
+		 *\param[in]	file			The file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[in]	textureRemaps	The imported textures remapping parameters.
+		 *\return		The imported Material, \p nullptr if any problem occured.
+		 *\~french
+		 *\brief		Stocke les données d'aide à l'import.
+		 *\param[in]	file			Le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
+		 *\return		Le Material importé, \p nullptr si un problème quelconque est survenu.
+		 */
+		C3D_API void prepareImport( ImporterFile * file
+			, Parameters const & parameters
+			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+		/**
+		 *\~english
 		 *\brief		Material import Function.
 		 *\param[out]	name			The Material name.
 		 *\param[in]	file			The file to import.
@@ -92,14 +109,14 @@ namespace c3d
 			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
-		 *\brief		Scene import Function.
+		 *\brief		Material import Function.
 		 *\param[out]	material		Receives the imported data.
 		 *\param[in]	pathFile		The location of the file to import.
 		 *\param[in]	parameters		Import configuration parameters.
 		 *\param[in]	textureRemaps	The imported textures remapping parameters.
 		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de Scene.
+		 *\brief		Fonction d'import de Material.
 		 *\param[out]	material		Reçoit les données importées.
 		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
@@ -110,6 +127,17 @@ namespace c3d
 			, Path const & pathFile
 			, Parameters const & parameters
 			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+		/**
+		 *\~english
+		 *\brief		Material import Function.
+		 *\param[out]	material	Receives the imported data.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Material.
+		 *\param[out]	material	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		virtual bool importMaterial( Material & material ) = 0;
 		/**
 		 *\~english
 		 *\brief		Loads an image.
@@ -183,7 +211,7 @@ namespace c3d
 		 *\param[in]	data	Les données de l'image.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API ImageRPtr loadImage( String name
+		C3D_API ImageRPtr loadImage( String const & name
 			, String type
 			, ByteArray data )const;
 		/**
@@ -365,6 +393,8 @@ namespace c3d
 		C3D_API bool convertToNormalMap( Path & path
 			, TextureConfiguration & config )const;
 
+		C3D_API virtual MaterialPtr createMaterial( String const & name );
+
 		ImporterFile const * getImporterFile()const noexcept
 		{
 			return m_file;
@@ -376,8 +406,6 @@ namespace c3d
 		}
 
 	private:
-		C3D_API virtual MaterialPtr doCreateMaterial( String const & name );
-		virtual bool doImportMaterial( Material & material ) = 0;
 
 	protected:
 		String m_prefix;

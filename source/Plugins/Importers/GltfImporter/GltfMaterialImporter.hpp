@@ -22,9 +22,9 @@ namespace c3d_gltf
 		C3D_Gltf_API explicit GltfMaterialImporter( c3d::Engine & engine
 			, GltfImporterFile * file );
 
-	private:
-		bool doImportMaterial( c3d::Material & material )override;
+		C3D_Gltf_API bool importMaterial( c3d::Material & material )override;
 
+	private:
 		void doImportSpecularData( fastgltf::Material const & impMaterial
 			, c3d::Pass & pass );
 		void doImportIridescenceData( fastgltf::Material const & impMaterial
