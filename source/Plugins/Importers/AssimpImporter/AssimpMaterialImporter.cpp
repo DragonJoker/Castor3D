@@ -808,7 +808,6 @@ namespace c3d_assimp
 
 						if ( sourceInfo )
 						{
-							auto & image = loadImage( *sourceInfo );
 							auto texFlags = getFlags( texConfig );
 
 							if ( getComponentsMask( texConfig, m_opacityMapFlags )
@@ -821,25 +820,29 @@ namespace c3d_assimp
 									mixedInterpolative( true );
 								}
 
-								if ( !hasAlphaChannel( image ) )
+								if ( auto & image = loadImage( *sourceInfo );
+									!hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 									*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 								}
 							}
 							else if ( !hasOpacity
-								&& texConfig == m_colourBaseConfiguration
-								&& hasAlphaChannel( image ) )
+								&& texConfig == m_colourBaseConfiguration )
 							{
-								aiString alphaMode;
-
-								if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
+								if ( auto & image = loadImage( *sourceInfo );
+									hasAlphaChannel( image ) )
 								{
-									mixedInterpolative( true );
-								}
+									aiString alphaMode;
 
-								addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
-								*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+									if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
+									{
+										mixedInterpolative( true );
+									}
+
+									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
+									*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+								}
 							}
 
 							m_result.registerTexture( c3d::move( *sourceInfo )
@@ -1354,7 +1357,7 @@ namespace c3d_assimp
 	{
 	}
 
-	bool AssimpMaterialImporter::doImportMaterial( c3d::Material & material )
+	bool AssimpMaterialImporter::importMaterial( c3d::Material & material )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = material.getName();
