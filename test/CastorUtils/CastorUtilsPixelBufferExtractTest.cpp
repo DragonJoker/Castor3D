@@ -116,7 +116,7 @@ namespace Testing
 		{
 			CT_WHEN_EX( test, "components == " + c3d::toUtf8( getName( components ) ) );
 			auto src = createPixelBufferT< PfT >();
-			auto buffer = c3d::extractComponents( src.get(), components );
+			auto buffer = c3d::extractComponents( *src, components );
 			auto srcData = src->getConstPtr();
 			auto dstData = buffer->getConstPtr();
 			auto constexpr componentFormat = c3d::singleComponentV< PfT >;

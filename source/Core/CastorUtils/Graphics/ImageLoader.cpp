@@ -4,6 +4,7 @@
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
+#include "CastorUtils/Multithreading/AsyncJobQueue.hpp"
 
 namespace c3d
 {
@@ -16,26 +17,25 @@ namespace c3d
 			, ImageLoaderConfig const & config )
 		{
 			auto dstFormat = image.getPixelFormat();
-
 			if ( config.allowCompression )
-			{
 				dstFormat = options.getCompressed( dstFormat );
-			}
 
 			if ( dstFormat == image.getPixelFormat()
 				&& ( image.getLayout().levels > 1u
 					|| !config.generateMips ) )
 			{
+				// No change to apply on the image buffer, stop here.
 				return image;
 			}
 
 			auto buffer = image.getPixels()->clone();
-			auto path = image.getPath();
-			auto name = image.getName();
-			auto layout = image.getLayout();
+			PxBufferBaseUPtr alphaChannel;
 
+			// Compress result
 			if ( dstFormat != image.getPixelFormat() )
 			{
+				if ( config.keepAlphaChannel )
+					alphaChannel = extractComponent( *buffer, PixelComponent::eAlpha );
 				buffer = PxBufferBase::create( &options
 					, image.getDimensions()
 					, dstFormat
@@ -49,17 +49,18 @@ namespace c3d
 				if ( image.getPxBuffer().isZInverted() )
 					buffer->invertZ();
 			}
-			else if ( config.generateMips
-				&& !isCompressed( image.getPixelFormat() ) )
-			{
-				buffer->generateMips();
-			}
 
-			ImageMemoryLayout newLayout{ layout.type, *buffer };
-			return Image{ name
-				, path
+			// Generate mipmaps
+			if ( config.generateMips
+				&& !isCompressed( image.getPixelFormat() ) )
+				buffer->generateMips();
+
+			ImageMemoryLayout newLayout{ image.getLayout().type, *buffer };
+			return Image{ image.getName()
+				, image.getPath()
 				, newLayout
-				, c3d::move( buffer ) };
+				, c3d::move( buffer )
+				, c3d::move( alphaChannel ) };
 		}
 	}
 
@@ -195,10 +196,7 @@ namespace c3d
 		checkData( data, size );
 		auto loader = findLoader( imageFormat );
 		return imgl::postProcess( m_options
-			, loader->load( name
-				, imageFormat
-				, data
-				, size )
+			, loader->load( name, imageFormat, data, size )
 			, config );
 	}
 
@@ -211,10 +209,7 @@ namespace c3d
 		checkData( data, size );
 		auto loader = findLoader( imagePath );
 		return imgl::postProcess( m_options
-			, loader->load( name
-				, imagePath
-				, data
-				, size )
+			, loader->load( name, imagePath, data, size )
 			, config );
 	}
 

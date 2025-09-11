@@ -69,7 +69,8 @@ namespace c3d
 	Image::Image( String const & name
 		, Path const & path
 		, ImageMemoryLayout layout
-		, PxBufferBaseUPtr buffer )
+		, PxBufferBaseUPtr buffer
+		, PxBufferBaseUPtr alphaChannel )
 		: Named{ name }
 		, m_pathFile{ path }
 		, m_buffer{ ( buffer
@@ -78,6 +79,7 @@ namespace c3d
 				, layout.depthLayers()
 				, layout.levels
 				, layout.format ) ) }
+		, m_alphaChannel{ c3d::move( alphaChannel ) }
 		, m_layout{ c3d::move( layout ) }
 	{
 		CU_CheckInvariants();
@@ -87,7 +89,18 @@ namespace c3d
 		: Named{ image.getName() }
 		, m_pathFile{ image.m_pathFile }
 		, m_buffer{ image.m_buffer->clone() }
+		, m_alphaChannel{ ( !image.m_alphaChannel ) ? nullptr : image.m_alphaChannel->clone() }
 		, m_layout{ image.m_layout }
+	{
+		CU_CheckInvariants();
+	}
+
+	Image::Image( Image && image )noexcept
+		: Named{ image.getName() }
+		, m_pathFile{ move( image.m_pathFile ) }
+		, m_buffer{ move( image.m_buffer ) }
+		, m_alphaChannel{ c3d::move( image.m_alphaChannel ) }
+		, m_layout{ move( image.m_layout ) }
 	{
 		CU_CheckInvariants();
 	}
@@ -97,6 +110,16 @@ namespace c3d
 		m_pathFile = image.m_pathFile;
 		m_layout = image.m_layout;
 		m_buffer = image.m_buffer ? image.m_buffer->clone() : nullptr;
+		m_alphaChannel = image.m_alphaChannel ? image.m_alphaChannel->clone() : nullptr;
+		return * this;
+	}
+
+	Image & Image::operator=( Image && image )noexcept
+	{
+		m_pathFile = move( image.m_pathFile );
+		m_layout = move( image.m_layout );
+		m_buffer = move( image.m_buffer );
+		m_alphaChannel = move( image.m_alphaChannel );
 		return * this;
 	}
 
@@ -177,6 +200,8 @@ namespace c3d
 	Image & Image::resample( Size const & size )
 	{
 		m_buffer = resample( size, c3d::move( m_buffer ) );
+		if ( m_alphaChannel )
+			m_alphaChannel = resample( size, c3d::move( m_alphaChannel ) );
 		m_layout.extent->x = m_buffer->getHeight();
 		m_layout.extent->y = m_buffer->getWidth();
 		m_layout.format = m_buffer->getFormat();

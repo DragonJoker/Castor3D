@@ -23,13 +23,13 @@ namespace c3d
 	}
 
 	template< typename ResT, typename KeyT >
-	ResourceT< ResT, KeyT >::ResourceT( ElementT && rhs )
+	ResourceT< ResT, KeyT >::ResourceT( ElementT && rhs )noexcept
 		: ResT{ c3d::move( rhs ) }
 	{
 	}
 
 	template< typename ResT, typename KeyT >
-	ResourceT< ResT, KeyT > & ResourceT< ResT, KeyT >::operator=( ElementT && rhs )
+	ResourceT< ResT, KeyT > & ResourceT< ResT, KeyT >::operator=( ElementT && rhs )noexcept
 	{
 		ResT::operator=( c3d::move( rhs ) );
 		return *this;

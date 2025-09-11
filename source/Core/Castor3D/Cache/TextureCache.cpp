@@ -130,6 +130,7 @@ namespace c3d
 			// Compress result.
 			auto const & loader = engine.getImageLoader();
 			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
+			PxBufferBaseUPtr alphaChannel;
 
 			if ( auto compressedMinExtent = ashes::getMinimalExtent2D( convert( compressedFormat ) );
 				compressedFormat != buffer->getFormat()
@@ -137,6 +138,9 @@ namespace c3d
 					&& buffer->getHeight() >= compressedMinExtent.height
 					&& sourceInfo.allowCompression() )
 			{
+				if ( sourceInfo.keepAlphaChannel() )
+					alphaChannel = extractComponent( *buffer, PixelComponent::eAlpha );
+
 				log::debug << name << cuT( " - Compressing.\n" );
 				buffer = PxBufferBase::create( &loader.getOptions()
 					, &interrupted
@@ -162,7 +166,8 @@ namespace c3d
 			return engine.createImage( name
 				, image.getPath()
 				, c3d::move( layout )
-				, c3d::move( buffer ) );
+				, c3d::move( buffer )
+				, c3d::move( alphaChannel ) );
 		}
 
 		static ImageRes loadSource( Engine & engine

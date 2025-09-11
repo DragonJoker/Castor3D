@@ -45,7 +45,9 @@ namespace c3d
 		CU_API Image( String const & name
 			, Path const & path
 			, ImageMemoryLayout layout
-			, PxBufferBaseUPtr buffer = nullptr );
+			, PxBufferBaseUPtr buffer = nullptr
+			, PxBufferBaseUPtr alphaChannel = nullptr );
+
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		Image( String name
 			, Path path
@@ -58,7 +60,7 @@ namespace c3d
 			CU_CheckInvariants();
 		}
 
-		Image( String const & name
+		CU_API Image( String const & name
 			, Size const & size
 			, PixelFormat format
 			, uint8_t const * buffer
@@ -67,7 +69,7 @@ namespace c3d
 		{
 		}
 
-		Image( String const & name
+		CU_API Image( String const & name
 			, Size const & size
 			, PixelFormat format
 			, ByteArray const & buffer
@@ -76,16 +78,17 @@ namespace c3d
 		{
 		}
 
-		Image( String const & name
-			, PxBufferBase const & buffer )
-			: Image{ name, {}, buffer }
+		CU_API Image( String const & name
+			, ImageMemoryLayout layout
+			, PxBufferBaseUPtr buffer
+			, PxBufferBaseUPtr alphaChannel = nullptr )
+			: Image{ name, {}, c3d::move( layout ), c3d::move( buffer ), c3d::move( alphaChannel ) }
 		{
 		}
 
-		Image( String const & name
-			, ImageMemoryLayout layout
-			, PxBufferBaseUPtr buffer )
-			: Image{ name, {}, c3d::move( layout ), c3d::move( buffer ) }
+		CU_API Image( String const & name
+			, PxBufferBase const & buffer )
+			: Image{ name, {}, buffer }
 		{
 		}
 
@@ -97,9 +100,9 @@ namespace c3d
 		 */
 		//@{
 		CU_API Image( Image const & image );
-		CU_API Image( Image && image )noexcept = default;
+		CU_API Image( Image && image )noexcept;
 		CU_API Image & operator=( Image const & image );
-		CU_API Image & operator=( Image && image )noexcept = default;
+		CU_API Image & operator=( Image && image )noexcept;
 		//@}
 		/**
 		 *\name		Modification.
@@ -338,6 +341,11 @@ namespace c3d
 			return m_buffer.get();
 		}
 
+		PxBufferBaseRPtr getAlphaChannel()const noexcept
+		{
+			return m_alphaChannel.get();
+		}
+
 		ImageMemoryLayout const & getLayout()const noexcept
 		{
 			return m_layout;
@@ -365,6 +373,7 @@ namespace c3d
 	private:
 		Path m_pathFile;
 		PxBufferBaseUPtr m_buffer;
+		PxBufferBaseUPtr m_alphaChannel;
 		ImageMemoryLayout m_layout;
 	};
 }
