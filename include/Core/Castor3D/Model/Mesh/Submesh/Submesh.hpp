@@ -470,13 +470,6 @@ namespace c3d
 	{
 		MeshContext * mesh{};
 		SubmeshRPtr submesh{};
-		int face1{ -1 };
-		int face2{ -1 };
-		FloatArray vertexPos{};
-		FloatArray vertexNml{};
-		FloatArray vertexTan{};
-		FloatArray vertexTex{};
-		UInt32Array faces{};
 	};
 
 	C3D_API String getPrefix( SubmeshContext const & context );

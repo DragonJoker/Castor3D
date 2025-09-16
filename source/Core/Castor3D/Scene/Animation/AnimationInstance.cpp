@@ -92,6 +92,7 @@ namespace c3d
 	{
 		if ( m_state != AnimationState::eStopped )
 		{
+			doStop();
 			m_state = AnimationState::eStopped;
 			m_currentTime = m_startingPoint;
 		}

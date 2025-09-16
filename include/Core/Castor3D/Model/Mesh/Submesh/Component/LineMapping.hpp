@@ -157,6 +157,9 @@ namespace c3d
 		public:
 			using SubmeshComponentPlugin::SubmeshComponentPlugin;
 
+			void createParsers( AttributeParsers & result )const override;
+			void createSections( StrSectionIdMap & sections )const override;
+
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
 				return makeUniqueDerived< SubmeshComponent, LineMapping >( submesh );
@@ -218,6 +221,11 @@ namespace c3d
 		{
 			return *getDataT< ComponentData >();
 		}
+
+	private:
+		bool doWriteText( String const & tabs
+			, StringStream & file )const override;
+		bool doWriteBinary( BinaryChunk & chunk )const override;
 
 	public:
 		C3D_API static String const TypeName;

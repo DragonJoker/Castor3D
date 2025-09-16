@@ -232,6 +232,15 @@ namespace c3d
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
 		 */
 		virtual void doUpdate() = 0;
+		/**
+		 *\~english
+		 *\brief		Stops the animation.
+		 *\~french
+		 *\brief		Stoppe l'animation.
+		 */
+		virtual void doStop()
+		{
+		}
 
 	protected:
 		//!\~english	The animation.

@@ -309,6 +309,7 @@ namespace c3d
 		static bool writeNodes( StringStream & file
 			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
+			, bool forceText
 			, float scale
 			, TextWriterBase const & writer )
 		{
@@ -318,15 +319,20 @@ namespace c3d
 			{
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
-				TextWriter< SceneNode > subWriter{ writer.tabs(), scale };
+				TextWriter< SceneNode > subWriter{ writer.tabs(), forceText, scale };
 
-				for ( auto const & it : nodes )
+				for ( auto const & [_, node] : nodes )
 				{
-					auto node = it.second;
-
-					if ( result && node && writable( *node ) )
+					if ( node )
 					{
-						result = subWriter( *node, file );
+						if ( writable( *node ) )
+							result = result && subWriter( *node, file );
+
+						for ( auto const & [_2, childNode] : node->getChildren() )
+						{
+							if ( childNode )
+								result = result && subWriter( *childNode, file );
+						}
 					}
 				}
 			}
@@ -338,6 +344,7 @@ namespace c3d
 			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
 			, Path const & includePath
+			, bool forceText
 			, float scale
 			, TextWriterBase const & writer )
 		{
@@ -346,7 +353,7 @@ namespace c3d
 				return true;
 			}
 
-			return writeNodes( file, nodes, elemsName, scale, writer );
+			return writeNodes( file, nodes, elemsName, forceText, scale, writer );
 		}
 
 		static bool writeDefaultLightingModel( StringStream & file
@@ -441,11 +448,11 @@ namespace c3d
 						&& txtscn::writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.sceneMaterialsFile, *this, txtscn::writable< Sampler > )
 						&& txtscn::writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.sceneMaterialsFile, *this, txtscn::writable< Material >, m_options.rootFolder, m_options.subfolder )
 						&& txtscn::writeCache( file, scene.getOverlayCache(), cuT( "Overlays" ), *this, txtscn::writable< Overlay > )
-						&& txtscn::writeIncludedCache( file, scene.getSkeletonCache(), cuT( "Skeletons" ), m_options.skeletonsFile, *this, txtscn::writable< Skeleton >, m_options.subfolder )
-						&& txtscn::writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, *this, txtscn::writable< Mesh >, m_options.subfolder )
-						&& txtscn::writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), m_options.scale, *this )
+						&& txtscn::writeIncludedCache( file, scene.getSkeletonCache(), cuT( "Skeletons" ), m_options.skeletonsFile, *this, txtscn::writable< Skeleton >, m_options.subfolder, m_options.forceText )
+						&& txtscn::writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, *this, txtscn::writable< Mesh >, m_options.subfolder, m_options.forceText )
+						&& txtscn::writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), m_options.forceText, m_options.scale, *this )
 						&& txtscn::writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, txtscn::writable< Camera > )
-						&& txtscn::writeIncludedNodes( file, scene.getObjectRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, m_options.scale, *this )
+						&& txtscn::writeIncludedNodes( file, scene.getObjectRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, m_options.forceText, m_options.scale, *this )
 						&& txtscn::writeIncludedCache( file, scene.getLightCache(), cuT( "Lights" ), m_options.lightsFile, *this, txtscn::writable< Light > )
 						&& txtscn::writeIncludedCache( file, scene.getLightGroupCache(), cuT( "LightGroups" ), m_options.lightsFile, *this, txtscn::writable< LightGroup > )
 						&& txtscn::writeIncludedCache( file, scene.getGeometryCache(), cuT( "Geometries" ), m_options.objectsFile, *this, txtscn::writable< Geometry > )

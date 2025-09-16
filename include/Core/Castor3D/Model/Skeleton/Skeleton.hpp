@@ -205,6 +205,10 @@ namespace c3d
 	{
 		SceneContext * scene{};
 		SkeletonRPtr skeleton{};
+		String nodeName;
+		String nodeParentName;
+		SkeletonNodeType nodeType{};
+		Matrix4x4f inverseTransform{};
 	};
 
 	C3D_API String getPrefix( SkeletonContext const & context );

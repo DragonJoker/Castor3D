@@ -375,6 +375,11 @@ namespace c3d
 		{
 			m_serialisable = value;
 		}
+
+		void setStatic( bool value )noexcept
+		{
+			m_static = value;
+		}
 		/**@}*/
 
 	private:
@@ -497,15 +502,10 @@ namespace c3d
 	struct NodeContext
 	{
 		SceneContext * scene{};
-		String name{};
 		SceneNodeRPtr parentNode{};
 		SceneNodeRPtr currentNode{};
+		SceneNodeUPtr ownedNode{};
 		bool isCameraNode{};
-		bool isStatic{};
-		bool isVisible{ true };
-		Point3f position{};
-		Quaternion orientation{ Quaternion::identity() };
-		Point3f scale{ 1.0f, 1.0f, 1.0f };
 	};
 
 	C3D_API String getPrefix( NodeContext const & context );

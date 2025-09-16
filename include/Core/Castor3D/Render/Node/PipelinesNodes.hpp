@@ -34,7 +34,7 @@ namespace c3d
 	};
 
 	template< typename NodeT >
-	struct NodesViewT
+	struct NodesPageT
 	{
 		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodeArray = NodeArrayT< NodeT, RenderedNodeT >;
@@ -62,6 +62,11 @@ namespace c3d
 		void clear()noexcept
 		{
 			m_count = 0u;
+		}
+
+		bool isFull()const noexcept
+		{
+			return size() == maxNodes;
 		}
 
 		auto begin()noexcept
@@ -107,6 +112,89 @@ namespace c3d
 	private:
 		NodeArray m_nodes{ maxCount };
 		size_t m_count{};
+	};
+
+	template< typename NodeT >
+	struct NodesViewT
+	{
+		using RenderedNode = RenderedNodeT< NodeT >;
+		using NodePage = NodesPageT< NodeT >;
+		using NodePages = Vector< NodePage >;
+
+		static uint64_t constexpr maxPages = 128ULL;
+		static uint64_t constexpr maxCount = maxPages;
+
+		RenderedNode * emplace( RenderedNode node )
+		{
+			if ( m_pages[m_count - 1u].isFull() )
+			{
+				++m_count;
+			}
+
+			CU_Assert( size() < maxPages
+				, "Too many nodes for given buffer and given pipeline (no page available)" );
+
+			if constexpr ( C3D_EnsureNodesCounts )
+			{
+				if ( size() == maxPages )
+				{
+					CU_Exception( "Too many nodes for given buffer and given pipeline (no page available)" );
+				}
+			}
+
+			return m_pages[m_count - 1u].emplace( node );
+		}
+
+		void clear()noexcept
+		{
+			m_count = 1u;
+			for ( auto & page : m_pages )
+				page.clear();
+		}
+
+		auto begin()noexcept
+		{
+			return m_pages.data();
+		}
+
+		auto begin()const noexcept
+		{
+			return m_pages.data();
+		}
+
+		auto end()noexcept
+		{
+			return std::next( begin(), ptrdiff_t( m_count ) );
+		}
+
+		auto end()const noexcept
+		{
+			return std::next( begin(), ptrdiff_t( m_count ) );
+		}
+
+		auto & front()noexcept
+		{
+			return *begin();
+		}
+
+		auto & front()const noexcept
+		{
+			return *begin();
+		}
+
+		auto size()const noexcept
+		{
+			return m_count;
+		}
+
+		auto empty()const noexcept
+		{
+			return size() == 0;
+		}
+
+	private:
+		NodePages m_pages{ maxCount };
+		size_t m_count{ 1u };
 	};
 
 	template< typename NodeT >

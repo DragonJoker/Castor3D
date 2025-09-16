@@ -185,9 +185,9 @@ namespace c3d
 	void MeshAnimation::addParsers( AttributeParsers & result )
 	{
 		BlockParserContextT< MeshContext > meshContext{ result, CSCNSection::eMesh };
-		BlockParserContextT< MeshContext > animContext{ result, CSCNSection::eMeshAnimation, CSCNSection::eMesh };
-		BlockParserContextT< MeshContext > animationKeyframeContext{ result, CSCNSection::eMeshAnimationKeyframe, CSCNSection::eMeshAnimation };
-		BlockParserContextT< MeshContext > weightsContext{ result, CSCNSection::eMeshAnimationKeyframeWeights, CSCNSection::eMeshAnimationKeyframe };
+		BlockParserContextT< mshanm::MeshAnimationContext > animContext{ result, CSCNSection::eMeshAnimation, CSCNSection::eMesh };
+		BlockParserContextT< mshanm::MeshAnimationContext > animationKeyframeContext{ result, CSCNSection::eMeshAnimationKeyframe, CSCNSection::eMeshAnimation };
+		BlockParserContextT< mshanm::MeshAnimationContext > weightsContext{ result, CSCNSection::eMeshAnimationKeyframeWeights, CSCNSection::eMeshAnimationKeyframe };
 
 		meshContext.addPushParser( cuT( "morph_animation" ), CSCNSection::eMeshAnimation, mshanm::parserRoot, { makeParameter< ParameterType::eName >() } );
 		meshContext.addPushParser( cuT( "mesh_animation" ), CSCNSection::eMeshAnimation, mshanm::parserRoot, { makeParameter< ParameterType::eName >() } );

@@ -16,193 +16,160 @@ CU_ImplementSmartPtr( c3d, SceneNode )
 
 namespace c3d
 {
+	//*********************************************************************************************
+
 	namespace node
 	{
-		static CU_ImplementAttributeParserBlock( parserStatic, NodeContext )
+		static CU_ImplementAttributeParserNewBlock( parserCameraNode, SceneContext, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [static] parameter." ) );
-			}
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
 			else
 			{
-				params[0]->get( blockContext->isStatic );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
+				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( name );
+				if ( !newBlockContext->currentNode )
+				{
+					newBlockContext->ownedNode = makeUnique< SceneNode >( name, *blockContext->scene );
+					newBlockContext->currentNode = newBlockContext->ownedNode.get();
+				}
 			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNode )
+
+		static CU_ImplementAttributeParserNewBlock( parserObjectNode, SceneContext, NodeContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
+				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( name );
+				if ( !newBlockContext->currentNode )
+				{
+					newBlockContext->ownedNode = makeUnique< SceneNode >( name, *blockContext->scene );
+					newBlockContext->currentNode = newBlockContext->ownedNode.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNode )
+
+		static CU_ImplementAttributeParserBlock( parserStatic, NodeContext )
+		{
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
+			else
+				blockContext->currentNode->setStatic( params[0]->get< bool >() );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserParent, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [parent] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
-				SceneNodeRPtr parent;
+				SceneNodeRPtr parent{};
 
 				if ( name == Scene::ObjectRootNode )
-				{
 					parent = blockContext->scene->scene->getObjectRootNode();
-				}
 				else if ( name == Scene::CameraRootNode )
-				{
 					parent = blockContext->scene->scene->getCameraRootNode();
-				}
 				else if ( name == Scene::RootNode )
-				{
 					parent = blockContext->scene->scene->getRootNode();
-				}
 				else
-				{
 					parent = blockContext->scene->scene->findSceneNode( name );
-				}
 
 				if ( parent )
-				{
 					blockContext->parentNode = parent;
-				}
 				else
-				{
 					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
-				}
 			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserVisible, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [visible] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
-			{
-				params[0]->get( blockContext->isVisible );
-
-				if ( blockContext->currentNode )
-				{
-					blockContext->currentNode->setVisible( blockContext->isVisible );
-				}
-			}
+				blockContext->currentNode->setVisible( params[0]->get< bool >() );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserPosition, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [position] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
-			{
-				params[0]->get( blockContext->position );
-
-				if ( blockContext->currentNode )
-				{
-					blockContext->currentNode->setPosition( blockContext->position );
-				}
-			}
+				blockContext->currentNode->setPosition( params[0]->get< Point3f >() );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserOrientation, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
-			{
-				blockContext->orientation = Quaternion::fromAxisAngle( params[0]->get< Point3f >()
-					, Angle::fromDegrees( params[1]->get< float >() ) );
-
-				if ( blockContext->currentNode )
-				{
-					blockContext->currentNode->setOrientation( blockContext->orientation );
-				}
-			}
+				blockContext->currentNode->setOrientation( Quaternion::fromAxisAngle( params[0]->get< Point3f >()
+					, Angle::fromDegrees( params[1]->get< float >() ) ) );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserRotate, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
-			{
-				blockContext->orientation *= Quaternion::fromAxisAngle( params[0]->get< Point3f >()
-					, Angle::fromDegrees( params[1]->get< float >() ) );
-
-				if ( blockContext->currentNode )
-				{
-					blockContext->currentNode->setOrientation( blockContext->orientation );
-				}
-			}
+				blockContext->currentNode->rotate( Quaternion::fromAxisAngle( params[0]->get< Point3f >()
+					, Angle::fromDegrees( params[1]->get< float >() ) ) );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserDirection, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [direction] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
 			{
 				Point3f direction;
 				params[0]->get( direction );
 				Point3f up{ 0, 1, 0 };
 				Point3f right{ point::cross( direction, up ) };
-				blockContext->orientation = Quaternion::fromAxes( right, up, direction );
-
-				if ( blockContext->currentNode )
-				{
-					blockContext->currentNode->setOrientation( blockContext->orientation );
-				}
+				blockContext->currentNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
 			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserScale, NodeContext )
 		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing [direction] parameter." ) );
-			}
+			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
 			else
-			{
-				params[0]->get( blockContext->scale );
-
-				if ( blockContext->currentNode )
-				{
-					blockContext->currentNode->setScale( blockContext->scale );
-				}
-			}
+				blockContext->currentNode->setScale( params[0]->get< Point3f >() );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserEnd, NodeContext )
 		{
 			if ( !blockContext->currentNode )
+				CU_ParsingError( cuT( "No node initialised." ) );
+			else
 			{
-				SceneNodeUPtr sceneNode = blockContext->scene->scene->createSceneNode( blockContext->name
-					, *blockContext->scene->scene
-					, blockContext->parentNode
-					, blockContext->position
-					, blockContext->orientation
-					, blockContext->scale
-					, blockContext->isStatic );
-				sceneNode->setVisible( blockContext->isVisible );
-				auto name = sceneNode->getName();
-				auto node = blockContext->scene->scene->addSceneNode( name, sceneNode, true );
-				sceneNode.reset();
+				auto name = blockContext->currentNode->getName();
+				if ( blockContext->ownedNode )
+					blockContext->scene->scene->addSceneNode( name, blockContext->ownedNode );
 
-				if ( !blockContext->isStatic )
+				blockContext->currentNode->attachTo( *blockContext->parentNode );
+
+				if ( !blockContext->currentNode->isStatic() )
 				{
+
 					for ( auto const & fileName : blockContext->scene->root->csnaFiles )
 					{
 						auto fName = fileName.getFileName();
@@ -213,20 +180,22 @@ namespace c3d
 							if ( auto animName = fName.substr( name.size() + 1u );
 								!animName.empty() )
 							{
-								auto & animation = node->createAnimation( animName );
+								auto & animation = blockContext->currentNode->createAnimation( animName );
 								BinaryParser< SceneNodeAnimation > parser;
 								BinaryFile animFile{ fileName, File::OpenMode::eRead };
 								parser.parse( animation, animFile );
 							}
 						}
 					}
-				}
 
-				log::info << "Loaded scene node [" << name << "]" << std::endl;
+					log::info << "Loaded scene node [" << name << "]" << std::endl;
+				}
 			}
 		}
 		CU_EndAttributePop()
 	}
+
+	//*********************************************************************************************
 
 	uint64_t SceneNode::Count = 0;
 	uint64_t SceneNode::CurrentId = 0;
@@ -345,16 +314,23 @@ namespace c3d
 
 	void SceneNode::addParsers( AttributeParsers & result )
 	{
-		BlockParserContextT< NodeContext > context{ result, CSCNSection::eNode, CSCNSection::eScene };
-		context.addParser( cuT( "static" ), node::parserStatic, { makeParameter< ParameterType::eBool >() } );
-		context.addParser( cuT( "visible" ), node::parserVisible, { makeParameter< ParameterType::eBool >() } );
-		context.addParser( cuT( "parent" ), node::parserParent, { makeParameter< ParameterType::eName >() } );
-		context.addParser( cuT( "position" ), node::parserPosition, { makeParameter< ParameterType::ePoint3F >() } );
-		context.addParser( cuT( "orientation" ), node::parserOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
-		context.addParser( cuT( "rotate" ), node::parserRotate, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
-		context.addParser( cuT( "direction" ), node::parserDirection, { makeParameter< ParameterType::ePoint3F >() } );
-		context.addParser( cuT( "scale" ), node::parserScale, { makeParameter< ParameterType::ePoint3F >() } );
-		context.addPopParser( cuT( "}" ), node::parserEnd );
+		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene };
+		BlockParserContextT< NodeContext > nodeContext{ result, CSCNSection::eNode, CSCNSection::eScene };
+
+		sceneContext.addPushParser( cuT( "camera_node" ), CSCNSection::eNode, node::parserCameraNode, { makeParameter< ParameterType::eName >() } );
+		sceneContext.addPushParser( cuT( "scene_node" ), CSCNSection::eNode, node::parserObjectNode, { makeParameter< ParameterType::eName >() } );
+
+		nodeContext.addParser( cuT( "static" ), node::parserStatic, { makeParameter< ParameterType::eBool >() } );
+		nodeContext.addParser( cuT( "visible" ), node::parserVisible, { makeParameter< ParameterType::eBool >() } );
+		nodeContext.addParser( cuT( "parent" ), node::parserParent, { makeParameter< ParameterType::eName >() } );
+		nodeContext.addParser( cuT( "position" ), node::parserPosition, { makeParameter< ParameterType::ePoint3F >() } );
+		nodeContext.addParser( cuT( "orientation" ), node::parserOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+		nodeContext.addParser( cuT( "rotate" ), node::parserRotate, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+		nodeContext.addParser( cuT( "direction" ), node::parserDirection, { makeParameter< ParameterType::ePoint3F >() } );
+		nodeContext.addParser( cuT( "scale" ), node::parserScale, { makeParameter< ParameterType::ePoint3F >() } );
+		nodeContext.addPopParser( cuT( "}" ), node::parserEnd );
+
+		SceneNodeAnimation::addParsers( result );
 	}
 
 	void SceneNode::attachTo( SceneNode & node )
@@ -777,6 +753,8 @@ namespace c3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	String getPrefix( NodeContext const & context )
 	{
 		return getPrefix( *context.scene );
@@ -786,4 +764,6 @@ namespace c3d
 	{
 		return getEngine( *context.scene );
 	}
+
+	//*********************************************************************************************
 }

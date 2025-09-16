@@ -7,10 +7,13 @@
 #include "Text/TextLightGroup.hpp"
 #include "Text/TextMaterial.hpp"
 #include "Text/TextMesh.hpp"
+#include "Text/TextMeshAnimation.hpp"
 #include "Text/TextSampler.hpp"
 #include "Text/TextScene.hpp"
 #include "Text/TextSceneNode.hpp"
+#include "Text/TextSceneNodeAnimation.hpp"
 #include "Text/TextSkeleton.hpp"
+#include "Text/TextSkeletonAnimation.hpp"
 #include "Text/TextStylesHolder.hpp"
 #include "Text/TextTextureData.hpp"
 #include "Text/TextTheme.hpp"
@@ -95,17 +98,16 @@ namespace c3d::exporter
 				log::info << cuT( "SceneExporter::write - " ) << elemsName << cuT( "\n" );
 				TextWriter< ObjType > writer{ cuEmptyString
 					, c3d::forward< Params >( params )... };
+				c3d::StringMap< ObjType const * > sorted;
 
 				for ( auto const & name : view )
-				{
-					if ( auto elem = view.find( name ) )
-					{
-						if ( carryOn( result, ignoreFailures ) && filter( *elem ) )
-						{
-							result = writer( *elem, file );
-						}
-					}
-				}
+					if ( auto elem = view.find( name );
+						elem && filter( *elem ) )
+						sorted.emplace( name, elem.get() );
+
+				for ( auto const & [name, elem] : sorted )
+					if ( carryOn( result, ignoreFailures ) )
+						result = writer( *elem, file );
 			}
 
 			return result;
@@ -140,25 +142,25 @@ namespace c3d::exporter
 				TextWriter< ObjType > writer{ cuEmptyString
 					, c3d::forward< Params >( params )... };
 				auto lock( makeUniqueLock( cache ) );
+				c3d::StringMap< ObjType const * > sorted;
 
-				for ( auto const & elemIt : cache )
+				for ( auto const & [name, elem] : cache )
+					if ( elem && filter( *elem ) )
+						sorted.emplace( name, elem.get() );
+
+				for ( auto const & [name, elem] : sorted )
 				{
-					auto name = elemIt.first;
-
-					if ( auto elem = elemIt.second.get() )
+					if ( carryOn( result, ignoreFailures ) )
 					{
-						if ( carryOn( result, ignoreFailures ) && filter( *elem ) )
+						if ( view.has( name ) )
 						{
-							if ( view.has( name ) )
-							{
-								result = writer( *elem, sstream );
-								++scount;
-							}
-							else
-							{
-								result = writer( *elem, gstream );
-								++gcount;
-							}
+							result = writer( *elem, sstream );
+							++scount;
+						}
+						else
+						{
+							result = writer( *elem, gstream );
+							++gcount;
 						}
 					}
 				}
@@ -193,18 +195,17 @@ namespace c3d::exporter
 				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
 				TextWriter< ObjType > writer{ cuEmptyString
 					, c3d::forward< Params >( params )... };
-				auto lock( makeUniqueLock( cache ) );
-
-				for ( auto const & elemIt : cache )
+				c3d::StringMap< ObjType const * > sorted;
 				{
-					if ( auto elem = elemIt.second.get() )
-					{
-						if ( carryOn( result, ignoreFailures ) && filter( *elem ) )
-						{
-							result = writer( *elem, file );
-						}
-					}
+					auto lock( makeUniqueLock( cache ) );
+					for ( auto const & [name, elem] : cache )
+						if ( elem && filter( *elem ) )
+							sorted.emplace( name, elem.get() );
 				}
+
+				for ( auto const & [name, elem] : sorted )
+					if ( carryOn( result, ignoreFailures ) )
+						result = writer( *elem, file );
 			}
 
 			return result;
@@ -225,18 +226,81 @@ namespace c3d::exporter
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
 				TextWriter< ObjType > writer{ cuEmptyString, subfolder };
-				auto lock( makeUniqueLock( cache ) );
-
-				for ( auto const & elemIt : cache )
+				c3d::StringMap< ObjType const * > sorted;
 				{
-					if ( auto elem = elemIt.second.get() )
-					{
-						if ( carryOn( result, ignoreFailures ) && filter( *elem ) )
-						{
-							result = writer( *elem, file );
-						}
-					}
+					auto lock( makeUniqueLock( cache ) );
+					for ( auto const & [name, elem] : cache )
+						if ( elem && filter( *elem ) )
+							sorted.emplace( name, elem.get() );
 				}
+
+				for ( auto const & [name, elem] : sorted )
+					if ( carryOn( result, ignoreFailures ) )
+						result = writer( *elem, file );
+			}
+
+			return result;
+		}
+
+		template< typename CacheType >
+		bool writeCache( bool ignoreFailures
+			, CacheType const & cache
+			, String const & elemsName
+			, String const & subfolder
+			, bool forceText
+			, StringStream & file
+			, FilterFuncT< Mesh > filter = defaultFilterT< Mesh > )
+		{
+			bool result = true;
+
+			if ( !cache.isEmpty() )
+			{
+				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
+				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
+				TextWriter< Mesh > writer{ cuEmptyString, subfolder, forceText };
+				c3d::StringMap< Mesh const * > sorted;
+				{
+					auto lock( makeUniqueLock( cache ) );
+					for ( auto const & [name, elem] : cache )
+						if ( elem && filter( *elem ) )
+							sorted.emplace( name, elem.get() );
+				}
+
+				for ( auto const & [name, elem] : sorted )
+					if ( carryOn( result, ignoreFailures ) )
+						result = writer( *elem, file );
+			}
+
+			return result;
+		}
+
+		template< typename CacheType >
+		bool writeCache( bool ignoreFailures
+			, CacheType const & cache
+			, String const & elemsName
+			, String const & subfolder
+			, bool forceText
+			, StringStream & file
+			, FilterFuncT< Skeleton > filter = defaultFilterT< Skeleton > )
+		{
+			bool result = true;
+
+			if ( !cache.isEmpty() )
+			{
+				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
+				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
+				TextWriter< Skeleton > writer{ cuEmptyString, subfolder, forceText };
+				c3d::StringMap< Skeleton const * > sorted;
+				{
+					auto lock( makeUniqueLock( cache ) );
+					for ( auto const & [name, elem] : cache )
+						if ( elem && filter( *elem ) )
+							sorted.emplace( name, elem.get() );
+				}
+
+				for ( auto const & [name, elem] : sorted )
+					if ( carryOn( result, ignoreFailures ) )
+						result = writer( *elem, file );
 			}
 
 			return result;
@@ -256,10 +320,11 @@ namespace c3d::exporter
 			{
 				bool result = false;
 				{
-					result = writeCache< Skeleton >( ignoreFailures
+					result = writeCache( ignoreFailures
 						, scene.getSkeletonCache()
 						, cuT( "Skeletons" )
 						, options.subfolder
+						, options.forceText
 						, stream
 						, []( Skeleton const & )
 						{
@@ -278,10 +343,11 @@ namespace c3d::exporter
 			{
 				bool result = false;
 				{
-					result = writeCache< Mesh >( ignoreFailures
+					result = writeCache( ignoreFailures
 						, scene.getMeshCache()
 						, cuT( "Meshes" )
 						, options.subfolder
+						, options.forceText
 						, stream
 						, []( Mesh const & object )
 						{
@@ -337,7 +403,8 @@ namespace c3d::exporter
 				, String pname
 				, String psubfolder
 				, String poutputName
-				, bool psingleMesh )
+				, bool psingleMesh
+				, bool pforceText )
 				: options{ poptions }
 				, object{ pobject }
 				, geometries{ pgeometries }
@@ -350,6 +417,7 @@ namespace c3d::exporter
 				, subfolder{ c3d::move( psubfolder ) }
 				, outputName{ c3d::move( poutputName ) }
 				, singleMesh{ psingleMesh }
+				, forceText{ pforceText }
 			{
 			}
 
@@ -369,6 +437,7 @@ namespace c3d::exporter
 				, subfolder{ poptions.subfolder }
 				, outputName{ poptions.outputName }
 				, singleMesh{ poptions.singleMesh }
+				, forceText{ poptions.forceText }
 			{
 			}
 
@@ -384,6 +453,7 @@ namespace c3d::exporter
 			String subfolder;
 			String outputName;
 			bool singleMesh;
+			bool forceText;
 		};
 
 		using MeshWriterOptions = ObjectWriterOptionsT< Mesh >;
@@ -397,13 +467,15 @@ namespace c3d::exporter
 				, Path path
 				, String name
 				, String subfolder
-				, String outputName )
+				, String outputName
+				, bool forceText )
 				: options{ options }
 				, object{ object }
 				, path{ c3d::move( path ) }
 				, name{ c3d::move( name ) }
 				, subfolder{ c3d::move( subfolder ) }
 				, outputName{ c3d::move( outputName ) }
+				, forceText{ forceText }
 			{
 			}
 
@@ -417,6 +489,7 @@ namespace c3d::exporter
 				, name{ c3d::move( name ) }
 				, subfolder{ options.subfolder }
 				, outputName{ options.outputName }
+				, forceText{ options.forceText }
 			{
 			}
 
@@ -426,6 +499,7 @@ namespace c3d::exporter
 			String name;
 			String subfolder;
 			String outputName;
+			bool forceText;
 		};
 
 		using SceneNodeWriterOptions = ObjectWriterOptionsT< SceneNode >;
@@ -636,9 +710,12 @@ namespace c3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".cska" ) )
-								, File::OpenMode::eWrite };
-							result = BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation ), animFile );
+							if ( !options.forceText )
+							{
+								BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".cska" ) )
+									, File::OpenMode::eWrite };
+								result = BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation ), animFile );
+							}
 						}
 					}
 				}
@@ -661,9 +738,12 @@ namespace c3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".csna" ) )
-								, File::OpenMode::eWrite };
-							result = BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation ), animFile );
+							if ( !options.forceText )
+							{
+								BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".csna" ) )
+									, File::OpenMode::eWrite };
+								result = BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation ), animFile );
+							}
 						}
 					}
 				}
@@ -781,9 +861,12 @@ namespace c3d::exporter
 								}
 							}
 
-							BinaryFile file{ newPath, File::OpenMode::eWrite };
-							BinaryWriter< Mesh > writer;
-							result = writer.write( *mesh, file );
+							if ( !options.forceText )
+							{
+								BinaryFile file{ newPath, File::OpenMode::eWrite };
+								BinaryWriter< Mesh > writer;
+								result = writer.write( *mesh, file );
+							}
 
 							if ( carryOn( result, options ) )
 							{
@@ -802,6 +885,7 @@ namespace c3d::exporter
 				else
 				{
 					auto newPath = options.path / File::normaliseFileName( options.name + cuT( ".cmsh" ) );
+					if ( !options.forceText )
 					{
 						BinaryFile file{ newPath, File::OpenMode::eWrite };
 						BinaryWriter< Mesh > writer;
@@ -812,9 +896,12 @@ namespace c3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							BinaryFile animFile{ options.path / File::normaliseFileName( options.object.getName() + cuT( "-" ) + name + cuT( ".cmsa" ) )
-								, File::OpenMode::eWrite };
-							result = BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation ), animFile );
+							if ( !options.forceText )
+							{
+								BinaryFile animFile{ options.path / File::normaliseFileName( options.object.getName() + cuT( "-" ) + name + cuT( ".cmsa" ) )
+									, File::OpenMode::eWrite };
+								result = BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation ), animFile );
+							}
 						}
 					}
 				}
@@ -834,10 +921,14 @@ namespace c3d::exporter
 			bool operator()( SkeletonWriterOptions const & options
 				, SplitInfo const & split )const
 			{
-				auto newPath = options.path / File::normaliseFileName( options.name + cuT( ".cskl" ) );
-				BinaryFile file{ newPath, File::OpenMode::eWrite };
-				BinaryWriter< Skeleton > writer;
-				auto result = writer.write( options.object, file );
+				bool result{ true };
+				if ( !options.forceText )
+				{
+					auto newPath = options.path / File::normaliseFileName( options.name + cuT( ".cskl" ) );
+					BinaryFile file{ newPath, File::OpenMode::eWrite };
+					BinaryWriter< Skeleton > writer;
+					result = writer.write( options.object, file );
+				}
 
 				if ( carryOn( result, options ) )
 				{
@@ -1264,45 +1355,16 @@ namespace c3d::exporter
 		{
 			bool result = true;
 			TextWriter< SceneNode > writer{ cuEmptyString
+				, exportOptions.forceText
 				, exportOptions.scale };
-
-			if ( node.hasAnimation() )
-			{
-				auto found = node.getScene()->getAnimatedObjectGroupCache().findObject( node.getName() + cuT( "_Node" ) );
-
-				if ( !found.empty() )
-				{
-					auto animNode = static_cast< AnimatedSceneNode * >( found.front() );
-
-					if ( animNode->isPlayingAnimation() )
-					{
-						auto const & anim = animNode->getPlayingAnimation();
-						auto pos = node.getPosition();
-						auto rot = node.getOrientation();
-						auto scl = node.getScale();
-						node.setPosition( anim.getInitialPosition() );
-						node.setOrientation( anim.getInitialOrientation() );
-						node.setScale( anim.getInitialScale() );
-						result = result
-							&& writer( node, stream );
-						node.setPosition( pos );
-						node.setOrientation( rot );
-						node.setScale( scl );
-					}
-				}
-			}
-			else
-			{
-				result = carryOn( result, exportOptions )
-					&& writer( node, stream );
-			}
+			result = carryOn( result, exportOptions )
+				&& writer( node, stream );
 
 			for ( auto const & [_, childNode] : node.getChildren() )
 			{
-				if ( result && childNode )
-				{
-					result = writeNode( folder, filePath, *childNode, options, exportOptions, stream );
-				}
+				if ( childNode )
+					result = carryOn( result, exportOptions )
+						&& writeNode( folder, filePath, *childNode, options, exportOptions, stream );
 			}
 
 			result = postWriteT< false >( SceneNodeWriterOptions{ exportOptions
@@ -1310,7 +1372,8 @@ namespace c3d::exporter
 					, options.rootFolder / options.nodesFile.getPath()
 					, node.getName()
 					, options.subfolder
-					, node.getName() }
+					, node.getName()
+					, exportOptions.forceText }
 				, { nullptr, nullptr } );
 			return result;
 		}
@@ -1389,6 +1452,7 @@ namespace c3d::exporter
 			options.objectsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Objects.cscn" ) );
 			options.nodesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Nodes.cscn" ) );
 			options.scale = exportOptions.scale;
+			options.forceText = exportOptions.forceText;
 			return options;
 		}
 
@@ -1722,7 +1786,8 @@ namespace c3d::exporter
 							, skeleton->getName()
 							, options.subfolder
 							, outputName
-							, true }
+							, true
+							, options.forceText }
 						, { nullptr, nullptr } );
 				}
 
@@ -1739,7 +1804,8 @@ namespace c3d::exporter
 							, mesh.getName()
 							, options.subfolder
 							, outputName
-							, true }
+							, true
+							, options.forceText }
 						, { nullptr, nullptr } );
 				}
 			}
@@ -1758,7 +1824,8 @@ namespace c3d::exporter
 							, skeleton->getName()
 							, options.subfolder
 							, outputName
-							, true }
+							, true
+							, options.forceText }
 						, { nullptr, nullptr } );
 				}
 
@@ -1775,7 +1842,8 @@ namespace c3d::exporter
 							, mesh.getName()
 							, options.subfolder
 							, outputName
-							, true }
+							, true
+							, options.forceText }
 						, { nullptr, nullptr } );
 				}
 			}
@@ -1913,7 +1981,8 @@ namespace c3d::exporter
 								, name
 								, options.subfolder
 								, name
-								, false }
+								, false
+								, options.forceText }
 							, { nullptr, nullptr } );
 					}
 				}
@@ -1933,7 +2002,8 @@ namespace c3d::exporter
 								, name
 								, options.subfolder
 								, name
-								, false }
+								, false
+								, options.forceText }
 							, { nullptr, nullptr } );
 					}
 				}
@@ -1986,7 +2056,8 @@ namespace c3d::exporter
 									, name
 									, options.subfolder
 									, name
-									, false }
+									, false
+									, options.forceText }
 								, { nullptr, nullptr } );
 						}
 					}
@@ -2006,7 +2077,8 @@ namespace c3d::exporter
 									, name
 									, options.subfolder
 									, name
-									, false }
+									, false
+									, options.forceText }
 								, { nullptr, nullptr } );
 						}
 					}

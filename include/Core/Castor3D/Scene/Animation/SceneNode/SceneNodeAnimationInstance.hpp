@@ -66,6 +66,7 @@ namespace c3d
 
 	private:
 		void doUpdate()override;
+		void doStop()override;
 
 	protected:
 		AnimatedSceneNode & m_animatedSceneNode;

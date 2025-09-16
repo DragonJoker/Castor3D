@@ -61,6 +61,7 @@ namespace convert
 		std::cout << "              VALUE can be one of:" << std::endl;
 		std::cout << "              - phong : Phong" << std::endl;
 		std::cout << "              - pbr : PBR (default value)" << std::endl;
+		std::cout << "  -t          Force export as text cscn files." << std::endl;
 	}
 
 	static bool parseSwitchOption( c3d::MbString const & option
@@ -179,6 +180,7 @@ namespace convert
 		options.options.splitPerMaterial = parseSwitchOption( "s", args );
 		options.options.recenter = parseSwitchOption( "c", args );
 		options.options.ignoreFailures = !parseSwitchOption( "f", args );
+		options.options.forceText = !parseSwitchOption( "t", args );
 
 		if ( args.empty() )
 		{

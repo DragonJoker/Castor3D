@@ -1,6 +1,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Binary/ChunkWriter.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -8,8 +9,10 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( c3d, TriFaceMapping )
 
@@ -17,8 +20,42 @@ namespace c3d
 {
 	//*********************************************************************************************
 
+	template<>
+	class TextWriter< TriFaceMapping >
+		: public TextWriterT< TriFaceMapping >
+	{
+	public:
+		explicit TextWriter( String const & tabs )
+			: TextWriterT< TriFaceMapping >{ tabs }
+		{
+		}
+
+		bool operator()( TriFaceMapping const & object
+			, StringStream & file )override
+		{
+			bool result{ false };
+
+			if ( auto block{ beginBlock( file, cuT( "faces" ) ) } )
+			{
+				result = true;
+				for ( auto & value : object.getData().getFaces() )
+				{
+					StringStream stream;
+					stream << value[0] << " " << value[1] << " " << value[2];
+					result = result && write( file, cuT( "value " ), stream.str() );
+				}
+			}
+
+			return result;
+		}
+	};
+
+	//*********************************************************************************************
+
 	namespace smshcomptri
 	{
+		static constexpr SectionId sectionId = makeSectionName( 'S', 'M', 'S', 'H', 'T', 'R', 'M', 'P' );
+
 		struct FaceDistance
 		{
 			Array< uint32_t, 3u > m_index;
@@ -34,6 +71,51 @@ namespace c3d
 				return lhs.m_distance < rhs.m_distance;
 			}
 		};
+
+		struct FaceMappingContext
+		{
+			SubmeshContext * submesh;
+			Vector< FaceIndices > values;
+		};
+
+		static CU_ImplementAttributeParserNewBlock( parserSection, SubmeshContext, FaceMappingContext )
+		{
+			if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
+			else
+			{
+				newBlockContext->submesh = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( sectionId )
+
+			static CU_ImplementAttributeParserBlock( parserValue, FaceMappingContext )
+		{
+			if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
+			else
+			{
+				Point3ui indices;
+				params[0]->get( indices );
+				auto & face = blockContext->values.emplace_back();
+				face[0] = indices[0];
+				face[1] = indices[1];
+				face[2] = indices[2];
+			}
+		}
+		CU_EndAttribute()
+
+			static CU_ImplementAttributeParserBlock( parserEnd, FaceMappingContext )
+		{
+			if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
+			else if ( !blockContext->values.empty() )
+			{
+				if ( auto component = blockContext->submesh->submesh->createComponent< TriFaceMapping >() )
+					component->getData().addFaceGroup( blockContext->values );
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	//*********************************************************************************************
@@ -232,6 +314,46 @@ namespace c3d
 		auto result = makeUnique< TriFaceMapping >( submesh );
 		getData().copy( &result->getData() );
 		return ptrRefCast< SubmeshComponent >( result );
+	}
+
+	bool TriFaceMapping::doWriteText( String const & tabs
+		, StringStream & file )const
+	{
+		return TextWriter< TriFaceMapping >{ tabs }( *this, file );
+	}
+
+	bool TriFaceMapping::doWriteBinary( BinaryChunk & chunk )const
+	{
+		auto count = getData().getCount();
+		auto result = ChunkWriter< u32 >::write( 3u, ChunkType::eSubmeshIndexComponentCount, chunk )
+			&& ChunkWriter< u32 >::write( count, ChunkType::eSubmeshIndexCount, chunk );
+
+		if ( result )
+		{
+			auto & faces = getData().getFaces();
+			auto const * data = std::bit_cast< FaceIndices const * >( faces.data() );
+			result = ChunkWriter< FaceIndices >::write( data, data + count, ChunkType::eSubmeshIndices, chunk );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	void TriFaceMapping::Plugin::createParsers( AttributeParsers & result )const
+	{
+		BlockParserContextT< SubmeshContext > submeshContext{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
+		BlockParserContextT< smshcomptri::FaceMappingContext > sectionContext{ result, smshcomptri::sectionId, CSCNSection::eSubmesh };
+
+		submeshContext.addPushParser( "faces", smshcomptri::sectionId, smshcomptri::parserSection );
+
+		sectionContext.addParser( cuT( "value" ), smshcomptri::parserValue, { makeParameter< ParameterType::ePoint3U >() } );
+		sectionContext.addPopParser( cuT( "}" ), smshcomptri::parserEnd );
+	}
+
+	void TriFaceMapping::Plugin::createSections( StrSectionIdMap & sections )const
+	{
+		sections.try_emplace( SectionId( smshcomptri::sectionId ), "faces" );
 	}
 
 	//*********************************************************************************************

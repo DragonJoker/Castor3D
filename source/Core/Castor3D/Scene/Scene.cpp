@@ -175,48 +175,6 @@ namespace c3d
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eCamera )
 
-		static CU_ImplementAttributeParserNewBlock( parserCameraNode, SceneContext, NodeContext )
-		{
-			if ( !blockContext->scene )
-			{
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
-				newBlockContext->scene = blockContext;
-				newBlockContext->isCameraNode = true;
-				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
-				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( newBlockContext->name );
-			}
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eNode )
-
-		static CU_ImplementAttributeParserNewBlock( parserNode, SceneContext, NodeContext )
-		{
-			if ( !blockContext->scene )
-			{
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
-				newBlockContext->scene = blockContext;
-				newBlockContext->isCameraNode = false;
-				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
-				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( newBlockContext->name );
-			}
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eNode )
-
 		static CU_ImplementAttributeParserNewBlock( parserObject, SceneContext, ObjectContext )
 		{
 			if ( !blockContext->scene )
@@ -1528,8 +1486,6 @@ namespace c3d
 		sceneCtx.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, scene::parserSdfFont, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, scene::parserSamplerState, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "camera" ), CSCNSection::eCamera, scene::parserCamera, { makeParameter< ParameterType::eName >() } );
-		sceneCtx.addPushParser( cuT( "camera_node" ), CSCNSection::eNode, scene::parserCameraNode, { makeParameter< ParameterType::eName >() } );
-		sceneCtx.addPushParser( cuT( "scene_node" ), CSCNSection::eNode, scene::parserNode, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "object" ), CSCNSection::eObject, scene::parserObject, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "import" ), CSCNSection::eSceneImport, scene::parserImport );
 		sceneCtx.addPushParser( cuT( "billboard" ), CSCNSection::eBillboard, scene::parserBillboard, { makeParameter< ParameterType::eName >() } );

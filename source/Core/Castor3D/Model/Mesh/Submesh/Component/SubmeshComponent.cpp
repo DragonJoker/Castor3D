@@ -158,8 +158,19 @@ namespace c3d
 
 	void SubmeshComponent::initialiseRenderData()
 	{
-		auto & engine = *getOwner()->getParent().getEngine();
+		auto const & engine = *getOwner()->getParent().getEngine();
 		m_renderData = engine.getSubmeshComponentsRegister().createRenderData( *this );
+	}
+
+	bool SubmeshComponent::writeText( String const & tabs
+		, StringStream & file )const
+	{
+		return doWriteText( tabs, file );
+	}
+
+	bool SubmeshComponent::writeBinary( BinaryChunk & chunk )const
+	{
+		return doWriteBinary( chunk );
 	}
 
 	//*********************************************************************************************

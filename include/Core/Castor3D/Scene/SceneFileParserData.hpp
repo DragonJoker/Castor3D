@@ -95,6 +95,8 @@ namespace c3d
 		eSkeletonAnimationKeyframeObject = c3d::makeSectionName( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'B' ),
 		eMeshAnimationKeyframe = c3d::makeSectionName( 'M', 'S', 'H', 'A', 'N', 'K', 'F', 'M' ),
 		eMeshAnimationKeyframeWeights = c3d::makeSectionName( 'M', 'H', 'A', 'N', 'K', 'F', 'W', 'T' ),
+		eNodeAnimation = c3d::makeSectionName( 'N', 'O', 'D', 'E', 'A', 'N', 'I', 'M' ),
+		eNodeAnimationKeyframe = c3d::makeSectionName( 'N', 'O', 'D', 'A', 'N', 'K', 'F', 'M' ),
 	};
 
 	struct SceneContext;

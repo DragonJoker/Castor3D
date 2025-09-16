@@ -9,7 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include "Castor3D/Animation/Animation.hpp"
-#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
+
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace c3d
 {
@@ -137,6 +138,15 @@ namespace c3d
 			, String const & name )const;
 		/**
 		 *\~english
+		 *\brief			Adds the scene file parsers.
+		 *\param[in,out]	result	Receives the parsers.
+		 *\~french
+		 *\brief			Ajout les parsers de fichier de scène.
+		 *\param[in,out]	result	Reçoit les parsers.
+		 */
+		C3D_API static void addParsers( AttributeParsers & result );
+		/**
+		 *\~english
 		 *\return		The moving objects.
 		 *\~french
 		 *\return		Les objets mouvants.
@@ -175,6 +185,20 @@ namespace c3d
 		friend class BinaryParser< SkeletonAnimation >;
 		friend class SkeletonAnimationInstance;
 	};
+
+	struct SkeletonContext;
+	struct SkeletonAnimationContext
+	{
+		SkeletonContext * skeleton{};
+		SkeletonAnimationRPtr animation{};
+		SkeletonAnimationKeyFrameUPtr keyframe;
+		String objectName;
+		SkeletonNodeType objectType{};
+		NodeTransform objectTransform{};
+	};
+
+	C3D_API String getPrefix( SkeletonAnimationContext const & context );
+	C3D_API Engine * getEngine( SkeletonAnimationContext const & context );
 }
 
 #endif

@@ -4,11 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneNodeAnimation_H___
 #define ___C3D_SceneNodeAnimation_H___
 
-#include "AnimationModule.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include "Castor3D/Animation/Animation.hpp"
+
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace c3d
 {
@@ -33,6 +34,8 @@ namespace c3d
 		 */
 		C3D_API explicit SceneNodeAnimation( SceneNode & node
 			, String const & name = cuEmptyString );
+
+		C3D_API static void addParsers( AttributeParsers & result );
 
 	private:
 		void doCloneInto( Animation & output )const override

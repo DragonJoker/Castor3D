@@ -122,7 +122,7 @@ namespace c3d
 		//*****************************************************************************************
 
 		template< typename NodeT >
-		RenderedNodeT< NodeT > const * hasVisibleNode( NodesViewT< NodeT > const & nodes )
+		RenderedNodeT< NodeT > const * hasVisibleNode( NodesPageT< NodeT > const & nodes )
 		{
 			auto it = std::find_if( nodes.begin()
 				, nodes.end()
@@ -1692,50 +1692,53 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
 		{
-			if ( queuerndnd::hasVisibleNode( nodes ) )
+			for ( auto const & nodes : pages )
 			{
-				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *posBuffer
-					, idxBuffer
-					, m_nodesIds
-					, nodesIdsBuffer
-					, maxNodesCount );
-				auto pipelinesBuffer = pipelineNodes.data();
-				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
-					, *this
-					, pipeline
-					, *posBuffer
-					, idxBuffer
-					, viewport
-					, scissors
-					, false );
-				uint32_t visibleNodesCount{};
-
-				for ( auto const & node : nodes )
+				if ( queuerndnd::hasVisibleNode( nodes ) )
 				{
-					if ( node.visible )
-					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::registerDirectNodeCommands( pipeline
-							, node
-							, commandBuffer
-							, instanceCount
-							, pipelineId
-							, visibleNodesCount
-							, pipelinesBuffer
-							, idxIndex
-							, nidxIndex );
-						CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
-						m_visible.objectCount += instanceCount;
-						m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
-						m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
-						++visibleNodesCount;
-					}
-				}
+					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
+						, *posBuffer
+						, idxBuffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, pipeline
+						, *posBuffer
+						, idxBuffer
+						, viewport
+						, scissors
+						, false );
+					uint32_t visibleNodesCount{};
 
-				++result;
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::registerDirectNodeCommands( pipeline
+								, node
+								, commandBuffer
+								, instanceCount
+								, pipelineId
+								, visibleNodesCount
+								, pipelinesBuffer
+								, idxIndex
+								, nidxIndex );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+							m_visible.objectCount += instanceCount;
+							m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
+							m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
+							++visibleNodesCount;
+						}
+					}
+
+					++result;
+				}
 			}
 		}
 
@@ -1807,58 +1810,61 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
 		{
-			if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+			for ( auto const & nodes : pages )
 			{
-				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *posBuffer
-					, idxBuffer
-					, m_nodesIds
-					, nodesIdsBuffer
-					, maxNodesCount );
-				auto pipelinesBuffer = pipelineNodes.data();
-				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
-					, *this
-					, pipeline
-					, *posBuffer
-					, idxBuffer
-					, viewport
-					, scissors
-					, true );
-				uint32_t visibleNodesCount{};
-
-				for ( auto const & node : nodes )
+				if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 				{
-					if ( node.visible )
-					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::fillNodeIndirectCommands( node
-							, indirectIdxBuffer
-							, indirectNIdxBuffer
-							, instanceCount
-							, pipelinesBuffer );
-						m_visible.objectCount += instanceCount;
-						m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
-						m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
-						CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
-						++visibleNodesCount;
-					}
-				}
+					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
+						, *posBuffer
+						, idxBuffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, pipeline
+						, *posBuffer
+						, idxBuffer
+						, viewport
+						, scissors
+						, true );
+					uint32_t visibleNodesCount{};
 
-				queuerndnd::registerIndirectNodeCommands( pipeline
-					, *firstVisibleNode
-					, commandBuffer
-					, &submeshIdxCommands
-					, submeshNIdxCommands
-					, pipelineId
-					, 0u
-					, visibleNodesCount
-					, idxIndex
-					, nidxIndex );
-				++result;
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::fillNodeIndirectCommands( node
+								, indirectIdxBuffer
+								, indirectNIdxBuffer
+								, instanceCount
+								, pipelinesBuffer );
+							m_visible.objectCount += instanceCount;
+							m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
+							m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
+							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+							++visibleNodesCount;
+						}
+					}
+
+					queuerndnd::registerIndirectNodeCommands( pipeline
+						, *firstVisibleNode
+						, commandBuffer
+						, &submeshIdxCommands
+						, submeshNIdxCommands
+						, pipelineId
+						, 0u
+						, visibleNodesCount
+						, idxIndex
+						, nidxIndex );
+					++result;
+				}
 			}
 		}
 
@@ -1946,57 +1952,60 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
 		{
-			if ( queuerndnd::hasVisibleNode( nodes ) )
+			for ( auto const & nodes : pages )
 			{
-				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *posBuffer
-					, idxBuffer
-					, m_nodesIds
-					, nodesIdsBuffer
-					, maxNodesCount );
-				auto pipelinesBuffer = pipelineNodes.data();
-
-				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
-					, *this
-					, pipeline
-					, *posBuffer
-					, idxBuffer
-					, viewport
-					, scissors
-					, true );
-				uint32_t drawOffset{};
-
-				for ( auto const & node : nodes )
+				if ( queuerndnd::hasVisibleNode( nodes ) )
 				{
-					if ( node.visible )
-					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::fillNodeIndirectCommands( node
-							, indirectMshBuffer
-							, indirectIdxBuffer
-							, indirectNIdxBuffer
-							, instanceCount
-							, pipelinesBuffer );
-						m_visible.objectCount += instanceCount;
-						m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
-						m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
-						CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
-						CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
+						, *posBuffer
+						, idxBuffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
 
-						queuerndnd::registerMeshletNodeCommands( pipeline
-							, *node.node
-							, commandBuffer
-							, submeshMshCommands
-							, pipelineId
-							, drawOffset
-							, instanceCount
-							, mshIndex );
-						drawOffset += instanceCount;
-						++result;
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, pipeline
+						, *posBuffer
+						, idxBuffer
+						, viewport
+						, scissors
+						, true );
+					uint32_t drawOffset{};
+
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::fillNodeIndirectCommands( node
+								, indirectMshBuffer
+								, indirectIdxBuffer
+								, indirectNIdxBuffer
+								, instanceCount
+								, pipelinesBuffer );
+							m_visible.objectCount += instanceCount;
+							m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
+							m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
+							CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+
+							queuerndnd::registerMeshletNodeCommands( pipeline
+								, *node.node
+								, commandBuffer
+								, submeshMshCommands
+								, pipelineId
+								, drawOffset
+								, instanceCount
+								, mshIndex );
+							drawOffset += instanceCount;
+							++result;
+						}
 					}
 				}
 			}
@@ -2090,56 +2099,59 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
 		{
-			if ( queuerndnd::hasVisibleNode( nodes ) )
+			for ( auto const & nodes : pages )
 			{
-				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *posBuffer
-					, idxBuffer
-					, m_nodesIds
-					, nodesIdsBuffer
-					, maxNodesCount );
-				auto pipelinesBuffer = pipelineNodes.data();
-				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
-					, *this
-					, pipeline
-					, *posBuffer
-					, idxBuffer
-					, viewport
-					, scissors
-					, true );
-				uint32_t drawOffset{};
-
-				for ( auto const & node : nodes )
+				if ( queuerndnd::hasVisibleNode( nodes ) )
 				{
-					if ( node.visible )
-					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::fillNodeMeshletCommands( node
-							, indirectMshBuffer
-							, indirectIdxBuffer
-							, indirectNIdxBuffer
-							, instanceCount
-							, pipelinesBuffer );
-						m_visible.objectCount += instanceCount;
-						m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
-						m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
-						CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
-						CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
+						, *posBuffer
+						, idxBuffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, pipeline
+						, *posBuffer
+						, idxBuffer
+						, viewport
+						, scissors
+						, true );
+					uint32_t drawOffset{};
 
-						queuerndnd::registerMeshletNodeCommands( pipeline
-							, *node.node
-							, commandBuffer
-							, submeshMshCommands
-							, pipelineId
-							, drawOffset
-							, instanceCount
-							, mshIndex );
-						drawOffset += instanceCount;
-						++result;
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::fillNodeMeshletCommands( node
+								, indirectMshBuffer
+								, indirectIdxBuffer
+								, indirectNIdxBuffer
+								, instanceCount
+								, pipelinesBuffer );
+							m_visible.objectCount += instanceCount;
+							m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
+							m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
+							CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+
+							queuerndnd::registerMeshletNodeCommands( pipeline
+								, *node.node
+								, commandBuffer
+								, submeshMshCommands
+								, pipelineId
+								, drawOffset
+								, instanceCount
+								, mshIndex );
+							drawOffset += instanceCount;
+							++result;
+						}
 					}
 				}
 			}
@@ -2223,47 +2235,50 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
 		{
-			if ( queuerndnd::hasVisibleNode( nodes ) )
+			for ( auto const & nodes : pages )
 			{
-				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *posBuffer
-					, idxBuffer
-					, m_nodesIds
-					, nodesIdsBuffer
-					, maxNodesCount );
-				auto pipelinesBuffer = pipelineNodes.data();
-				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
-					, *this
-					, pipeline
-					, *posBuffer
-					, idxBuffer
-					, viewport
-					, scissors
-					, true );
-				uint32_t visibleNodesCount{};
-
-				for ( auto const & node : nodes )
+				if ( queuerndnd::hasVisibleNode( nodes ) )
 				{
-					if ( node.visible )
-					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::registerDirectNodeCommands( pipeline
-							, node
-							, commandBuffer
-							, instanceCount
-							, pipelineId
-							, visibleNodesCount
-							, pipelinesBuffer
-							, nidxIndex );
-						CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
-						m_visible.billboardCount += node.node->data.getCount();
-						++visibleNodesCount;
-					}
-				}
+					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
+						, *posBuffer
+						, idxBuffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, pipeline
+						, *posBuffer
+						, idxBuffer
+						, viewport
+						, scissors
+						, true );
+					uint32_t visibleNodesCount{};
 
-				++result;
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::registerDirectNodeCommands( pipeline
+								, node
+								, commandBuffer
+								, instanceCount
+								, pipelineId
+								, visibleNodesCount
+								, pipelinesBuffer
+								, nidxIndex );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+							m_visible.billboardCount += node.node->data.getCount();
+							++visibleNodesCount;
+						}
+					}
+
+					++result;
+				}
 			}
 		}
 
@@ -2285,54 +2300,57 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
 		{
-			if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+			for ( auto const & nodes : pages )
 			{
-				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *posBuffer
-					, idxBuffer
-					, m_nodesIds
-					, nodesIdsBuffer
-					, maxNodesCount );
-				auto pipelinesBuffer = pipelineNodes.data();
-				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
-					, *this
-					, pipeline
-					, *posBuffer
-					, idxBuffer
-					, viewport
-					, scissors
-					, true );
-				uint32_t visibleNodesCount{};
-
-				for ( auto const & node : nodes )
+				if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 				{
-					if ( node.visible )
-					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::fillNodeIndirectCommand( node
-							, indirectBuffer
-							, instanceCount
-							, pipelinesBuffer );
-						m_visible.billboardCount += node.node->data.getCount();
-						CU_Require( size_t( std::distance( origIndirectBuffer, indirectBuffer ) ) <= billboardCommands.getCount() );
-						CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
-						++visibleNodesCount;
-					}
-				}
+					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
+						, *posBuffer
+						, idxBuffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, pipeline
+						, *posBuffer
+						, idxBuffer
+						, viewport
+						, scissors
+						, true );
+					uint32_t visibleNodesCount{};
 
-				queuerndnd::registerIndirectNodeCommands( pipeline
-					, *firstVisibleNode
-					, commandBuffer
-					, nullptr
-					, billboardCommands
-					, pipelineId
-					, 0u
-					, visibleNodesCount
-					, idxIndex
-					, nidxIndex );
-				++result;
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::fillNodeIndirectCommand( node
+								, indirectBuffer
+								, instanceCount
+								, pipelinesBuffer );
+							m_visible.billboardCount += node.node->data.getCount();
+							CU_Require( size_t( std::distance( origIndirectBuffer, indirectBuffer ) ) <= billboardCommands.getCount() );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+							++visibleNodesCount;
+						}
+					}
+
+					queuerndnd::registerIndirectNodeCommands( pipeline
+						, *firstVisibleNode
+						, commandBuffer
+						, nullptr
+						, billboardCommands
+						, pipelineId
+						, 0u
+						, visibleNodesCount
+						, idxIndex
+						, nidxIndex );
+					++result;
+				}
 			}
 		}
 

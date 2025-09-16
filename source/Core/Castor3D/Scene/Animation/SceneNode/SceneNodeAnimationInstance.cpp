@@ -50,4 +50,11 @@ namespace c3d
 			m_animatedSceneNode.getSceneNode().setScale( scale );
 		}
 	}
+
+	void SceneNodeAnimationInstance::doStop()
+	{
+		m_animatedSceneNode.getSceneNode().setPosition( m_initialTranslate );
+		m_animatedSceneNode.getSceneNode().setOrientation( m_initialRotate );
+		m_animatedSceneNode.getSceneNode().setScale( m_initialScale );
+	}
 }
