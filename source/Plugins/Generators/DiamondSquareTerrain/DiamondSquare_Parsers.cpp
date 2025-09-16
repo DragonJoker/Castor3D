@@ -20,10 +20,10 @@ namespace diamond_square_terrain
 		};
 
 		enum class DiamondSquareSection
-			: uint32_t
+			: c3d::SectionId
 		{
-			eRoot = CU_MakeSectionName( 'D', 'M', 'S', 'Q' ),
-			eBiome = CU_MakeSectionName( 'D', 'S', 'B', 'M' ),
+			eRoot = c3d::makeSectionName( 'D', 'M', 'S', 'Q' ),
+			eBiome = c3d::makeSectionName( 'D', 'S', 'B', 'M' ),
 		};
 
 		static CU_ImplementAttributeParserNewBlock( parserDiamondSquareTerrain, c3d::MeshContext, TerrainContext )
@@ -324,12 +324,12 @@ namespace diamond_square_terrain
 		return result;
 	}
 
-	c3d::StrUInt32Map createSections()
+	c3d::StrSectionIdMap createSections()
 	{
 		return
 		{
-			{ uint32_t( parse::DiamondSquareSection::eRoot ), Generator::Type },
-			{ uint32_t( parse::DiamondSquareSection::eBiome ), Generator::Biome },
+			{ c3d::SectionId( parse::DiamondSquareSection::eRoot ), Generator::Type },
+			{ c3d::SectionId( parse::DiamondSquareSection::eBiome ), Generator::Biome },
 		};
 	}
 }

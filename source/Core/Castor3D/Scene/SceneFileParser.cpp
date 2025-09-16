@@ -166,7 +166,7 @@ namespace c3d
 	String SceneFileParser::doGetSectionName( SectionId section )const
 	{
 		String result;
-		static const Map< uint32_t, String > baseSections{ registerSceneFileSections() };
+		static const StrSectionIdMap baseSections{ registerSceneFileSections() };
 
 		if ( auto it = baseSections.find( section );
 			it != baseSections.end() )

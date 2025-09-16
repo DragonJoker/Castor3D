@@ -109,7 +109,7 @@ namespace waves
 			}
 
 			void createParsers( c3d::AttributeParsers & parsers )const override;
-			void createSections( c3d::StrUInt32Map & sections )const override;
+			void createSections( c3d::StrSectionIdMap & sections )const override;
 		};
 
 		static c3d::SubmeshComponentPluginUPtr createPlugin( c3d::SubmeshComponentRegister const & submeshComponents )

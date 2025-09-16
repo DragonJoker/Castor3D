@@ -528,7 +528,7 @@ namespace c3d
 		AttributeParsers parsers;
 		componentDesc.plugin->createParsers( parsers );
 
-		StrUInt32Map sections;
+		StrSectionIdMap sections;
 		componentDesc.plugin->createSections( sections );
 
 		getEngine()->registerParsers( componentType

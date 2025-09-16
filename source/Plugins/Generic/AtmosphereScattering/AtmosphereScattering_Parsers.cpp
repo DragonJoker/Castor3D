@@ -45,12 +45,12 @@ namespace atmosphere_scattering
 		}
 
 		enum class AtmosphereSection
-			: uint32_t
+			: c3d::SectionId
 		{
-			eRoot = CU_MakeSectionName( 'A', 'T', 'S', 'C' ),
-			eDensity = CU_MakeSectionName( 'A', 'T', 'D', 'S' ),
-			eWeather = CU_MakeSectionName( 'A', 'T', 'W', 'T' ),
-			eClouds = CU_MakeSectionName( 'A', 'T', 'C', 'L' ),
+			eRoot = c3d::makeSectionName( 'A', 'T', 'S', 'C' ),
+			eDensity = c3d::makeSectionName( 'A', 'T', 'D', 'S' ),
+			eWeather = c3d::makeSectionName( 'A', 'T', 'W', 'T' ),
+			eClouds = c3d::makeSectionName( 'A', 'T', 'C', 'L' ),
 		};
 		
 		static CU_ImplementAttributeParserNewBlock( parserAtmosphereScattering, c3d::SceneContext, AtmosphereContext )
@@ -1099,14 +1099,14 @@ namespace atmosphere_scattering
 		return result;
 	}
 
-	c3d::StrUInt32Map createSections()
+	c3d::StrSectionIdMap createSections()
 	{
 		return
 		{
-			{ uint32_t( parse::AtmosphereSection::eRoot ), AtmosphereBackgroundModel::PluginType },
-			{ uint32_t( parse::AtmosphereSection::eDensity ), cuT( "density" ) },
-			{ uint32_t( parse::AtmosphereSection::eWeather ), cuT( "weather" ) },
-			{ uint32_t( parse::AtmosphereSection::eClouds ), cuT( "clouds" ) },
+			{ c3d::SectionId( parse::AtmosphereSection::eRoot ), AtmosphereBackgroundModel::PluginType },
+			{ c3d::SectionId( parse::AtmosphereSection::eDensity ), cuT( "density" ) },
+			{ c3d::SectionId( parse::AtmosphereSection::eWeather ), cuT( "weather" ) },
+			{ c3d::SectionId( parse::AtmosphereSection::eClouds ), cuT( "clouds" ) },
 		};
 	}
 }

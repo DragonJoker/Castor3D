@@ -24,9 +24,9 @@ namespace smaa
 		};
 
 		enum class SmaaSection
-			: uint32_t
+			: c3d::SectionId
 		{
-			eRoot = CU_MakeSectionName( 'S', 'M', 'A', 'A' ),
+			eRoot = c3d::makeSectionName( 'S', 'M', 'A', 'A' ),
 		};
 
 		static CU_ImplementAttributeParserNewBlock( parserSmaa, c3d::TargetContext, SmaaContext )
@@ -401,11 +401,11 @@ namespace smaa
 		return result;
 	}
 
-	c3d::StrUInt32Map createSections()
+	c3d::StrSectionIdMap createSections()
 	{
 		return
 		{
-			{ uint32_t( parse::SmaaSection::eRoot ), cuT( "smaa" ) },
+			{ c3d::SectionId( parse::SmaaSection::eRoot ), cuT( "smaa" ) },
 		};
 	}
 }

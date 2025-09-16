@@ -25,9 +25,9 @@ namespace motion_blur
 		};
 
 		enum class MotionBlurSection
-			: uint32_t
+			: c3d::SectionId
 		{
-			eRoot = CU_MakeSectionName( 'M', 'T', 'B', 'R' ),
+			eRoot = c3d::makeSectionName( 'M', 'T', 'B', 'R' ),
 		};
 
 		static CU_ImplementAttributeParserNewBlock( parserMotionBlur, c3d::TargetContext, BlurContext )
@@ -120,11 +120,11 @@ namespace motion_blur
 		return result;
 	}
 
-	c3d::StrUInt32Map createSections()
+	c3d::StrSectionIdMap createSections()
 	{
 		return
 		{
-			{ uint32_t( parse::MotionBlurSection::eRoot ), cuT( "motion_blur" ) },
+			{ c3d::SectionId( parse::MotionBlurSection::eRoot ), cuT( "motion_blur" ) },
 		};
 	}
 }

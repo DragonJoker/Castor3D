@@ -52,9 +52,9 @@ namespace ocean_fft
 		};
 
 		enum class FFTWavesSection
-			: uint32_t
+			: c3d::SectionId
 		{
-			eWaves = CU_MakeSectionName( 'O', 'C', 'N', 'R' ),
+			eWaves = c3d::makeSectionName( 'O', 'C', 'N', 'R' ),
 		};
 
 		static CU_ImplementAttributeParserNewBlock( parserFftWavesComponent, c3d::MeshContext, OceanContext )
@@ -908,9 +908,9 @@ namespace ocean_fft
 		wavesContext.addPopParser( cuT( "}" ), &parse::parserFftWavesComponentEnd );
 	}
 
-	void FFTWavesComponent::Plugin::createSections( c3d::StrUInt32Map & sections )const
+	void FFTWavesComponent::Plugin::createSections( c3d::StrSectionIdMap & sections )const
 	{
-		sections.emplace( uint32_t( parse::FFTWavesSection::eWaves ), cuT( "fft_waves" ) );
+		sections.emplace( c3d::SectionId( parse::FFTWavesSection::eWaves ), cuT( "fft_waves" ) );
 	}
 
 	//*********************************************************************************************

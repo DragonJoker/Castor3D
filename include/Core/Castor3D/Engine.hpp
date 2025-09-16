@@ -377,7 +377,7 @@ namespace c3d
 		 */
 		C3D_API void registerParsers( String name
 			, AttributeParsers parsers
-			, StrUInt32Map sections
+			, StrSectionIdMap sections
 			, UserContextCreator contextCreator );
 		/**
 		 *\~english

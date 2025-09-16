@@ -117,11 +117,6 @@ See LICENSE file in root folder
 #define CU_ParsingDeprecated()\
 	context.preprocessed->parseWarning( "This directive is deprecated" )
 
-	//!\~english	Define to ease creation of a section name.
-	//!\~french		Un define pour faciliter la création d'un nom de section.
-#define CU_MakeSectionName( a, b, c, d )\
-	( (c3d::SectionId( a ) << 24 ) | ( c3d::SectionId( b ) << 16 ) | ( c3d::SectionId( c ) << 8 ) | ( c3d::SectionId( d ) << 0 ) )
-
 namespace c3d
 {
 	/**@name File Parser */
@@ -191,16 +186,8 @@ namespace c3d
 	*\brief
 	*	Le type d'un ID de section.
 	*/
-	using SectionId = uint32_t;
-	/**
-	*\~english
-	*\brief
-	*	Indicates that the next section for a parser is the previous one.
-	*\~french
-	*\brief
-	*	Indique que la prochaine section d'un parser est la précédente.
-	*/
-	static constexpr SectionId PreviousSection = CU_MakeSectionName( 'P', 'R', 'E', 'V' );
+	using SectionId = uint64_t;
+	using StrSectionIdMap = Map< SectionId, String >;
 	//@}
 	/**
 	\~english
@@ -355,7 +342,7 @@ namespace c3d
 		ParserFunctionAndParams() = default;
 
 		ParserFunctionAndParams( ParserFunction function
-			, uint32_t resultSection
+			, SectionId resultSection
 			, ParserParameterArray params = {} )
 			: function{ c3d::move( function ) }
 			, resultSection{ resultSection }
@@ -364,7 +351,7 @@ namespace c3d
 		}
 
 		ParserFunction function{};
-		uint32_t resultSection{};
+		SectionId resultSection{};
 		ParserParameterArray params{};
 	};
 	/**
@@ -398,7 +385,7 @@ namespace c3d
 	struct AdditionalParsers
 	{
 		AdditionalParsers( AttributeParsers pparsers = {}
-			, StrUInt32Map psections = {}
+			, StrSectionIdMap psections = {}
 			, UserContextCreator pcontextCreator = {} )
 			: parsers{ c3d::move( pparsers ) }
 			, sections{ c3d::move( psections ) }
@@ -407,7 +394,7 @@ namespace c3d
 		}
 
 		AttributeParsers parsers;
-		StrUInt32Map sections;
+		StrSectionIdMap sections;
 		UserContextCreator contextCreator;
 	};
 	/**
@@ -443,8 +430,8 @@ namespace c3d
 	*	Les paramètres attendus.
 	*/
 	CU_API void addParser( AttributeParsers & parsers
-		, uint32_t oldSection
-		, uint32_t newSection
+		, SectionId oldSection
+		, SectionId newSection
 		, String const & name
 		, ParserFunction function
 		, ParserParameterArray params = ParserParameterArray{} );
@@ -477,7 +464,7 @@ namespace c3d
 	*	Les paramètres attendus.
 	*/
 	static void addParser( AttributeParsers & parsers
-		, uint32_t section
+		, SectionId section
 		, String const & name
 		, ParserFunction function
 		, ParserParameterArray params = ParserParameterArray{} )
@@ -502,7 +489,7 @@ namespace c3d
 	{
 		using BaseFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
 		addParser( parsers
-			, uint32_t( section )
+			, SectionId( section )
 			, name
 			, BaseFunction( function )
 			, c3d::move( params ) );
@@ -518,12 +505,38 @@ namespace c3d
 	{
 		using BaseFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
 		addParser( parsers
-			, uint32_t( oldSection )
-			, uint32_t( newSection )
+			, SectionId( oldSection )
+			, SectionId( newSection )
 			, name
 			, BaseFunction( function )
 			, c3d::move( params ) );
 	}
+
+	static constexpr SectionId makeSectionName( char a, char b, char c, char d, char e, char f, char g, char h )
+	{
+		return SectionId( ( SectionId( a ) << 56 )
+			| ( SectionId( b ) << 48 )
+			| ( SectionId( c ) << 40 )
+			| ( SectionId( d ) << 32 )
+			| ( SectionId( e ) << 24 )
+			| ( SectionId( f ) << 16 )
+			| ( SectionId( g ) << 8 )
+			| ( SectionId( h ) << 0 ) );
+	}
+
+	static constexpr SectionId makeSectionName( char a, char b, char c, char d )
+	{
+		return makeSectionName( 0, 0, 0, 0, a, b, c, d );
+	}
+	/**
+	*\~english
+	*\brief
+	*	Indicates that the next section for a parser is the previous one.
+	*\~french
+	*\brief
+	*	Indique que la prochaine section d'un parser est la précédente.
+	*/
+	static constexpr SectionId PreviousSection = makeSectionName( 'P', 'R', 'E', 'V' );
 	//@}
 }
 

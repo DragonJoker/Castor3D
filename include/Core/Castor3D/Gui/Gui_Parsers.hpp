@@ -11,41 +11,41 @@ See LICENSE file in root folder
 namespace c3d
 {
 	enum class GUISection
-		: uint32_t
+		: SectionId
 	{
-		eGUI = CU_MakeSectionName( 'C', 'G', 'U', 'I' ),
-		eTheme = CU_MakeSectionName( 'C', 'G', 'T', 'H' ),
-		eButtonStyle = CU_MakeSectionName( 'C', 'T', 'B', 'T' ),
-		eEditStyle = CU_MakeSectionName( 'C', 'T', 'E', 'D' ),
-		eComboStyle = CU_MakeSectionName( 'C', 'T', 'C', 'X' ),
-		eListStyle = CU_MakeSectionName( 'C', 'T', 'L', 'B' ),
-		eSliderStyle = CU_MakeSectionName( 'C', 'T', 'S', 'L' ),
-		eStaticStyle = CU_MakeSectionName( 'C', 'T', 'S', 'T' ),
-		ePanelStyle = CU_MakeSectionName( 'P', 'N', 'S', 'T' ),
-		eProgressStyle = CU_MakeSectionName( 'P', 'G', 'S', 'T' ),
-		eExpandablePanelStyle = CU_MakeSectionName( 'X', 'P', 'S', 'T' ),
-		eFrameStyle = CU_MakeSectionName( 'F', 'M', 'S', 'T' ),
-		eScrollBarStyle = CU_MakeSectionName( 'S', 'C', 'S', 'T' ),
-		eButton = CU_MakeSectionName( 'B', 'U', 'T', 'N' ),
-		eStatic = CU_MakeSectionName( 'S', 'T', 'T', 'C' ),
-		eSlider = CU_MakeSectionName( 'S', 'L', 'D', 'R' ),
-		eComboBox = CU_MakeSectionName( 'C', 'M', 'B', 'O' ),
-		eListBox = CU_MakeSectionName( 'L', 'S', 'B', 'X' ),
-		eEdit = CU_MakeSectionName( 'E', 'D', 'I', 'T' ),
-		ePanel = CU_MakeSectionName( 'P', 'A', 'N', 'L' ),
-		eProgress = CU_MakeSectionName( 'P', 'R', 'G', 'S' ),
-		eExpandablePanel = CU_MakeSectionName( 'X', 'P', 'N', 'L' ),
-		eExpandablePanelHeader = CU_MakeSectionName( 'X', 'P', 'H', 'D' ),
-		eExpandablePanelExpand = CU_MakeSectionName( 'X', 'P', 'X', 'p' ),
-		eExpandablePanelContent = CU_MakeSectionName( 'X', 'P', 'C', 'T' ),
-		eFrame = CU_MakeSectionName( 'F', 'R', 'A', 'M' ),
-		eFrameContent = CU_MakeSectionName( 'F', 'M', 'C', 'T' ),
-		eBoxLayout = CU_MakeSectionName( 'B', 'X', 'L', 'T' ),
-		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
+		eGUI = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'G', 'U', 'I' ),
+		eTheme = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'G', 'T', 'H' ),
+		eButtonStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'T', 'B', 'T' ),
+		eEditStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'T', 'E', 'D' ),
+		eComboStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'T', 'C', 'X' ),
+		eListStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'T', 'L', 'B' ),
+		eSliderStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'T', 'S', 'L' ),
+		eStaticStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'T', 'S', 'T' ),
+		ePanelStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'P', 'N', 'S', 'T' ),
+		eProgressStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'P', 'G', 'S', 'T' ),
+		eExpandablePanelStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'X', 'P', 'S', 'T' ),
+		eFrameStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'F', 'M', 'S', 'T' ),
+		eScrollBarStyle = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'S', 'C', 'S', 'T' ),
+		eButton = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'B', 'U', 'T', 'N' ),
+		eStatic = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'S', 'T', 'T', 'C' ),
+		eSlider = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'S', 'L', 'D', 'R' ),
+		eComboBox = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'C', 'M', 'B', 'O' ),
+		eListBox = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'L', 'S', 'B', 'X' ),
+		eEdit = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'E', 'D', 'I', 'T' ),
+		ePanel = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'P', 'A', 'N', 'L' ),
+		eProgress = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'P', 'R', 'G', 'S' ),
+		eExpandablePanel = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'X', 'P', 'N', 'L' ),
+		eExpandablePanelHeader = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'X', 'P', 'H', 'D' ),
+		eExpandablePanelExpand = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'X', 'P', 'X', 'p' ),
+		eExpandablePanelContent = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'X', 'P', 'C', 'T' ),
+		eFrame = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'F', 'R', 'A', 'M' ),
+		eFrameContent = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'F', 'M', 'C', 'T' ),
+		eBoxLayout = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'B', 'X', 'L', 'T' ),
+		eLayoutCtrl = c3d::makeSectionName( 'C', 'G', 'U', 'I', 'L', 'T', 'C', 'T' ),
 	};
 
 	C3D_API AttributeParsers createGuiParsers();
-	C3D_API StrUInt32Map createGuiSections();
+	C3D_API StrSectionIdMap createGuiSections();
 }
 
 #endif

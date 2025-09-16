@@ -19,9 +19,9 @@ namespace draw_edges
 		};
 
 		enum class Section
-			: uint32_t
+			: c3d::SectionId
 		{
-			eRoot = CU_MakeSectionName( 'D', 'R', 'E', 'D' ),
+			eRoot = c3d::makeSectionName( 'D', 'R', 'E', 'D' ),
 		};
 
 		static CU_ImplementAttributeParserNewBlock( parserDrawEdges, c3d::TargetContext, EdgesContext )
@@ -97,11 +97,11 @@ namespace draw_edges
 		return result;
 	}
 
-	c3d::StrUInt32Map createSections()
+	c3d::StrSectionIdMap createSections()
 	{
 		return
 		{
-			{ uint32_t( draw_edges::parse::Section::eRoot ), draw_edges::PostEffect::Type },
+			{ c3d::SectionId( draw_edges::parse::Section::eRoot ), draw_edges::PostEffect::Type },
 		};
 	}
 }

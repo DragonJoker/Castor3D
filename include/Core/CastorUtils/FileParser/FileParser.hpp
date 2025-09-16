@@ -22,7 +22,7 @@ namespace c3d
 			Action( Path file
 				, uint64_t line
 				, String name = {}
-				, uint32_t section = {}
+				, SectionId section = {}
 				, ParserFunctionAndParams function = {}
 				, String params = {}
 				, bool implicit = {} )
@@ -39,7 +39,7 @@ namespace c3d
 			Path file{};
 			uint64_t line{};
 			String name{};
-			uint32_t section{};
+			SectionId section{};
 			ParserFunctionAndParams function{};
 			String params{};
 			bool implicit{};
@@ -473,7 +473,7 @@ namespace c3d
 			, bool & commented
 			, bool & isNextOpenBrace );
 		void doParseScriptBlockBegin( PreprocessedFile & preprocessed
-			, uint32_t newSection
+			, SectionId newSection
 			, uint64_t lineIndex
 			, bool implicit );
 		bool doParseScriptBlockEnd( PreprocessedFile & preprocessed

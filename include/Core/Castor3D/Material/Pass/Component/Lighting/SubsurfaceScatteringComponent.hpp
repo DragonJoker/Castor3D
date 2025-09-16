@@ -63,7 +63,7 @@ namespace c3d
 
 			void createParsers( AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
-			void createSections( StrUInt32Map & sections )const override;
+			void createSections( StrSectionIdMap & sections )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;

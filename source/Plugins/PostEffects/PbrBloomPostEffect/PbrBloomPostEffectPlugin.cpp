@@ -29,9 +29,9 @@ namespace PbrBloom
 	};
 
 	enum class PbrBloomSection
-		: uint32_t
+		: c3d::SectionId
 	{
-		eRoot = CU_MakeSectionName( 'P', 'B', 'B', 'M' ),
+		eRoot = c3d::makeSectionName( 'P', 'B', 'B', 'M' ),
 	};
 
 	static CU_ImplementAttributeParserNewBlock( parserPbrBloom, c3d::TargetContext, BloomContext )
@@ -126,11 +126,11 @@ namespace PbrBloom
 		return result;
 	}
 
-	static c3d::StrUInt32Map createSections()
+	static c3d::StrSectionIdMap createSections()
 	{
 		return
 		{
-			{ uint32_t( PbrBloomSection::eRoot ), cuT( "pbr_bloom" ) },
+			{ c3d::SectionId( PbrBloomSection::eRoot ), cuT( "pbr_bloom" ) },
 		};
 	}
 }

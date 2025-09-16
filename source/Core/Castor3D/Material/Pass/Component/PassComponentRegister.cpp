@@ -817,7 +817,7 @@ namespace c3d
 			m_channels.try_emplace( it->first, it->second.first );
 		}
 
-		StrUInt32Map sections;
+		StrSectionIdMap sections;
 		componentDesc.plugin->createSections( sections );
 
 		getEngine()->registerParsers( componentType

@@ -60,10 +60,10 @@ namespace c3d
 	namespace sss
 	{
 		enum class Section
-			: uint32_t
+			: c3d::SectionId
 		{
-			eSubsurfaceScattering = CU_MakeSectionName( 'S', 'S', 'S', 'G' ),
-			eTransmittanceProfile = CU_MakeSectionName( 'T', 'R', 'P', 'R' ),
+			eSubsurfaceScattering = c3d::makeSectionName( 'S', 'S', 'S', 'G' ),
+			eTransmittanceProfile = c3d::makeSectionName( 'T', 'R', 'P', 'R' ),
 		};
 
 		struct SubsurfaceScatteringContext
@@ -294,11 +294,11 @@ namespace c3d
 			, { makeParameter< ParameterType::ePoint4F >() } );
 	}
 
-	void SubsurfaceScatteringComponent::Plugin::createSections( StrUInt32Map & sections )const
+	void SubsurfaceScatteringComponent::Plugin::createSections( StrSectionIdMap & sections )const
 	{
-		sections.try_emplace( uint32_t( sss::Section::eSubsurfaceScattering )
+		sections.try_emplace( SectionId( sss::Section::eSubsurfaceScattering )
 			, cuT( "subsurface_scattering" ) );
-		sections.try_emplace( uint32_t( sss::Section::eTransmittanceProfile )
+		sections.try_emplace( SectionId( sss::Section::eTransmittanceProfile )
 			, cuT( "transmittance_profile" ) );
 	}
 

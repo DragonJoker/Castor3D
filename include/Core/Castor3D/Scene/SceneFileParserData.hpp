@@ -22,70 +22,79 @@ namespace c3d
 	*	Définit toutes les sections et soussections d'un fichier de scène.
 	*/
 	enum class CSCNSection
-		: uint32_t
+		: SectionId
 	{
-		eRoot = CU_MakeSectionName( 'R', 'O', 'O', 'T' ),
-		eScene = CU_MakeSectionName( 'S', 'C', 'N', 'E' ),
-		eWindow = CU_MakeSectionName( 'W', 'N', 'D', 'W' ),
-		eSampler = CU_MakeSectionName( 'S', 'M', 'P', 'R' ),
-		eCamera = CU_MakeSectionName( 'C', 'A', 'M', 'R' ),
-		eViewport = CU_MakeSectionName( 'V', 'W', 'P', 'T' ),
-		eLight = CU_MakeSectionName( 'L', 'G', 'H', 'T' ),
-		eNode = CU_MakeSectionName( 'N', 'O', 'D', 'E' ),
-		eObject = CU_MakeSectionName( 'O', 'B', 'J', 'T' ),
-		eObjectMaterials = CU_MakeSectionName( 'O', 'M', 'T', 'L' ),
-		eFont = CU_MakeSectionName( 'F', 'O', 'N', 'T' ),
-		ePanelOverlay = CU_MakeSectionName( 'P', 'O', 'V', 'L' ),
-		eBorderPanelOverlay = CU_MakeSectionName( 'B', 'O', 'V', 'L' ),
-		eTextOverlay = CU_MakeSectionName( 'T', 'O', 'V', 'L' ),
-		eMesh = CU_MakeSectionName( 'M', 'E', 'S', 'H' ),
-		eSubmesh = CU_MakeSectionName( 'S', 'M', 'S', 'H' ),
-		eMaterial = CU_MakeSectionName( 'M', 'T', 'R', 'L' ),
-		ePass = CU_MakeSectionName( 'P', 'A', 'S', 'S' ),
-		eTextureUnit = CU_MakeSectionName( 'U', 'N', 'I', 'T' ),
-		eRenderTarget = CU_MakeSectionName( 'R', 'T', 'G', 'R' ),
-		eShaderProgram = CU_MakeSectionName( 'G', 'L', 'S', 'L' ),
-		eShaderStage = CU_MakeSectionName( 'S', 'P', 'G', 'M' ),
-		eUBOVariable = CU_MakeSectionName( 'S', 'U', 'B', 'V' ),
-		eBillboard = CU_MakeSectionName( 'B', 'L', 'B', 'd' ),
-		eBillboardList = CU_MakeSectionName( 'B', 'L', 'B', 'L' ),
-		eAnimGroup = CU_MakeSectionName( 'A', 'N', 'G', 'P' ),
-		eAnimation = CU_MakeSectionName( 'A', 'N', 'M', 'T' ),
-		eSkybox = CU_MakeSectionName( 'S', 'K', 'B', 'X' ),
-		eParticleSystem = CU_MakeSectionName( 'P', 'L', 'S', 'M' ),
-		eParticle = CU_MakeSectionName( 'P', 'T', 'C', 'L' ),
-		eSsao = CU_MakeSectionName( 'S', 'S', 'A', 'O' ),
-		eHdrConfig = CU_MakeSectionName( 'H', 'D', 'R', 'C' ),
-		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
-		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),
-		eLpv = CU_MakeSectionName( 'L', 'P', 'V', 'I' ),
-		eRaw = CU_MakeSectionName( 'R', 'A', 'W', 'S' ),
-		ePcf = CU_MakeSectionName( 'P', 'C', 'F', 'S' ),
-		eVsm = CU_MakeSectionName( 'V', 'S', 'M', 'S' ),
-		eRsm = CU_MakeSectionName( 'R', 'S', 'M', 'S' ),
-		eTextureAnimation = CU_MakeSectionName( 'T', 'X', 'A', 'N' ),
-		eVoxelConeTracing = CU_MakeSectionName( 'V', 'C', 'T', 'C' ),
-		eTextureTransform = CU_MakeSectionName( 'T', 'X', 'T', 'R' ),
-		eSceneImport = CU_MakeSectionName( 'I', 'M', 'P', 'T' ),
-		eSkeleton = CU_MakeSectionName( 'S', 'K', 'E', 'L' ),
-		eMorphAnimation = CU_MakeSectionName( 'M', 'T', 'A', 'N' ),
-		eTextureRemapChannel = CU_MakeSectionName( 'T', 'X', 'R', 'C' ),
-		eTextureRemap = CU_MakeSectionName( 'T', 'X', 'R', 'P' ),
-		eClusters = CU_MakeSectionName( 'C', 'L', 'S', 'T' ),
-		eTexture = CU_MakeSectionName( 'T', 'X', 'U', 'R' ),
-		eColourGrading = CU_MakeSectionName( 'C', 'L', 'G', 'D' ),
-		eSdfFont = CU_MakeSectionName( 'S', 'D', 'F', 'T' ),
-		eLightingModel = CU_MakeSectionName( 'L', 'G', 'M', 'L' ),
-		eDefaultLightingModel = CU_MakeSectionName( 'D', 'L', 'M', 'L' ),
-		eLightGroup = CU_MakeSectionName( 'L', 'T', 'G', 'P' ),
-		eLightGroupInstances = CU_MakeSectionName( 'L', 'T', 'G', 'I' ),
-		eLightGroupShadows = CU_MakeSectionName( 'L', 'T', 'G', 'S' ),
-		eLightGroupShadowsLpv = CU_MakeSectionName( 'L', 'P', 'V', 'G' ),
-		eLightGroupShadowsRaw = CU_MakeSectionName( 'R', 'A', 'W', 'G' ),
-		eLightGroupShadowsPcf = CU_MakeSectionName( 'P', 'C', 'F', 'G' ),
-		eLightGroupShadowsVsm = CU_MakeSectionName( 'V', 'S', 'M', 'G' ),
-		eLightGroupShadowsRsm = CU_MakeSectionName( 'R', 'S', 'M', 'G' ),
-		eUpscaling = CU_MakeSectionName( 'U', 'P', 'S', 'C' ),
+		eRoot = c3d::makeSectionName( 'R', 'O', 'O', 'T' ),
+		eScene = c3d::makeSectionName( 'S', 'C', 'N', 'E' ),
+		eWindow = c3d::makeSectionName( 'W', 'N', 'D', 'W' ),
+		eSampler = c3d::makeSectionName( 'S', 'M', 'P', 'R' ),
+		eCamera = c3d::makeSectionName( 'C', 'A', 'M', 'R' ),
+		eViewport = c3d::makeSectionName( 'V', 'W', 'P', 'T' ),
+		eLight = c3d::makeSectionName( 'L', 'G', 'H', 'T' ),
+		eNode = c3d::makeSectionName( 'N', 'O', 'D', 'E' ),
+		eObject = c3d::makeSectionName( 'O', 'B', 'J', 'T' ),
+		eObjectMaterials = c3d::makeSectionName( 'O', 'M', 'T', 'L' ),
+		eFont = c3d::makeSectionName( 'F', 'O', 'N', 'T' ),
+		ePanelOverlay = c3d::makeSectionName( 'P', 'O', 'V', 'L' ),
+		eBorderPanelOverlay = c3d::makeSectionName( 'B', 'O', 'V', 'L' ),
+		eTextOverlay = c3d::makeSectionName( 'T', 'O', 'V', 'L' ),
+		eMesh = c3d::makeSectionName( 'M', 'E', 'S', 'H' ),
+		eSubmesh = c3d::makeSectionName( 'S', 'M', 'S', 'H' ),
+		eMaterial = c3d::makeSectionName( 'M', 'T', 'R', 'L' ),
+		ePass = c3d::makeSectionName( 'P', 'A', 'S', 'S' ),
+		eTextureUnit = c3d::makeSectionName( 'U', 'N', 'I', 'T' ),
+		eRenderTarget = c3d::makeSectionName( 'R', 'T', 'G', 'R' ),
+		eShaderProgram = c3d::makeSectionName( 'G', 'L', 'S', 'L' ),
+		eShaderStage = c3d::makeSectionName( 'S', 'P', 'G', 'M' ),
+		eUBOVariable = c3d::makeSectionName( 'S', 'U', 'B', 'V' ),
+		eBillboard = c3d::makeSectionName( 'B', 'L', 'B', 'd' ),
+		eBillboardList = c3d::makeSectionName( 'B', 'L', 'B', 'L' ),
+		eAnimGroup = c3d::makeSectionName( 'A', 'N', 'G', 'P' ),
+		eAnimation = c3d::makeSectionName( 'A', 'N', 'M', 'T' ),
+		eSkybox = c3d::makeSectionName( 'S', 'K', 'B', 'X' ),
+		eParticleSystem = c3d::makeSectionName( 'P', 'L', 'S', 'M' ),
+		eParticle = c3d::makeSectionName( 'P', 'T', 'C', 'L' ),
+		eSsao = c3d::makeSectionName( 'S', 'S', 'A', 'O' ),
+		eHdrConfig = c3d::makeSectionName( 'H', 'D', 'R', 'C' ),
+		eShadows = c3d::makeSectionName( 'S', 'H', 'D', 'W' ),
+		eMeshDefaultMaterials = c3d::makeSectionName( 'M', 'M', 'T', 'L' ),
+		eLpv = c3d::makeSectionName( 'L', 'P', 'V', 'I' ),
+		eRaw = c3d::makeSectionName( 'R', 'A', 'W', 'S' ),
+		ePcf = c3d::makeSectionName( 'P', 'C', 'F', 'S' ),
+		eVsm = c3d::makeSectionName( 'V', 'S', 'M', 'S' ),
+		eRsm = c3d::makeSectionName( 'R', 'S', 'M', 'S' ),
+		eTextureAnimation = c3d::makeSectionName( 'T', 'X', 'A', 'N' ),
+		eVoxelConeTracing = c3d::makeSectionName( 'V', 'C', 'T', 'C' ),
+		eTextureTransform = c3d::makeSectionName( 'T', 'X', 'T', 'R' ),
+		eSceneImport = c3d::makeSectionName( 'I', 'M', 'P', 'T' ),
+		eSkeleton = c3d::makeSectionName( 'S', 'K', 'E', 'L' ),
+		eMeshAnimation = c3d::makeSectionName( 'M', 'E', 'S', 'H', 'A', 'N', 'I', 'M' ),
+		eTextureRemapChannel = c3d::makeSectionName( 'T', 'X', 'R', 'C' ),
+		eTextureRemap = c3d::makeSectionName( 'T', 'X', 'R', 'P' ),
+		eClusters = c3d::makeSectionName( 'C', 'L', 'S', 'T' ),
+		eTexture = c3d::makeSectionName( 'T', 'X', 'U', 'R' ),
+		eColourGrading = c3d::makeSectionName( 'C', 'L', 'G', 'D' ),
+		eSdfFont = c3d::makeSectionName( 'S', 'D', 'F', 'T' ),
+		eLightingModel = c3d::makeSectionName( 'L', 'G', 'M', 'L' ),
+		eDefaultLightingModel = c3d::makeSectionName( 'D', 'L', 'M', 'L' ),
+		eLightGroup = c3d::makeSectionName( 'L', 'T', 'G', 'P' ),
+		eLightGroupInstances = c3d::makeSectionName( 'L', 'T', 'G', 'I' ),
+		eLightGroupShadows = c3d::makeSectionName( 'L', 'T', 'G', 'S' ),
+		eLightGroupShadowsLpv = c3d::makeSectionName( 'L', 'P', 'V', 'G' ),
+		eLightGroupShadowsRaw = c3d::makeSectionName( 'R', 'A', 'W', 'G' ),
+		eLightGroupShadowsPcf = c3d::makeSectionName( 'P', 'C', 'F', 'G' ),
+		eLightGroupShadowsVsm = c3d::makeSectionName( 'V', 'S', 'M', 'G' ),
+		eLightGroupShadowsRsm = c3d::makeSectionName( 'R', 'S', 'M', 'G' ),
+		eUpscaling = c3d::makeSectionName( 'U', 'P', 'S', 'C' ),
+		eSkeletonArmature = c3d::makeSectionName( 'S', 'K', 'E', 'L', 'A', 'R', 'M', 'A' ),
+		eSkeletonNode = c3d::makeSectionName( 'S', 'K', 'L', 'A', 'R', 'N', 'O', 'D' ),
+		eSkeletonBone = c3d::makeSectionName( 'S', 'K', 'L', 'A', 'R', 'B', 'O', 'N' ),
+		eSkeletonAnimation = c3d::makeSectionName( 'S', 'K', 'E', 'L', 'A', 'N', 'I', 'M' ),
+		eSkeletonAnimationObject = c3d::makeSectionName( 'S', 'K', 'L', 'A', 'N', 'O', 'B', 'J' ),
+		eSkeletonAnimationKeyframe = c3d::makeSectionName( 'S', 'K', 'L', 'A', 'N', 'K', 'F', 'M' ),
+		eSkeletonAnimationKeyframeObject = c3d::makeSectionName( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'B' ),
+		eMeshAnimationKeyframe = c3d::makeSectionName( 'M', 'S', 'H', 'A', 'N', 'K', 'F', 'M' ),
+		eMeshAnimationKeyframeWeights = c3d::makeSectionName( 'M', 'H', 'A', 'N', 'K', 'F', 'W', 'T' ),
 	};
 
 	struct SceneContext;
@@ -161,8 +170,8 @@ namespace c3d
 		explicit BlockParserContextT( AttributeParsers & pparsers
 			, SectionT psection
 			, SectionU poldSection )
-			: section{ uint32_t( psection ) }
-			, oldSection{ uint32_t( poldSection ) }
+			: section{ SectionId( psection ) }
+			, oldSection{ SectionId( poldSection ) }
 			, parsers{ pparsers }
 		{
 		}
@@ -206,7 +215,7 @@ namespace c3d
 		{
 			c3d::addParser( parsers
 				, section
-				, uint32_t( newSection )
+				, SectionId( newSection )
 				, name
 				, ParserFunctionT< void >( function )
 				, c3d::move( params ) );
@@ -220,7 +229,7 @@ namespace c3d
 		{
 			c3d::addParser( parsers
 				, section
-				, uint32_t( newSection )
+				, SectionId( newSection )
 				, name
 				, RawParserFunctionT< void >( function )
 				, c3d::move( params ) );
@@ -257,8 +266,8 @@ namespace c3d
 				, parserDefaultEnd );
 		}
 
-		uint32_t section;
-		uint32_t oldSection;
+		SectionId section;
+		SectionId oldSection;
 		AttributeParsers & parsers;
 	};
 

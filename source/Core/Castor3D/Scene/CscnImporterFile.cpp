@@ -168,100 +168,107 @@ namespace c3d
 			{
 			}
 
-			SectionId getCategory( String const & name
+			uint32_t getCategory( String const & name
 				, SectionId curSection
 				, SectionId nextSection
 				, bool implicit )
 			{
-				SectionId result{};
+				uint32_t result{};
 
 				switch ( getCurrentSection() )
 				{
-				case uint32_t( CSCNSection::eSampler ):
+				case SectionId( CSCNSection::eSampler ):
 					result = uint32_t( Category::eSampler );
 					break;
-				case uint32_t( CSCNSection::eLight ):
-				case uint32_t( CSCNSection::eShadows ):
-				case uint32_t( CSCNSection::eLpv ):
-				case uint32_t( CSCNSection::eRaw ):
-				case uint32_t( CSCNSection::ePcf ):
-				case uint32_t( CSCNSection::eVsm ):
-				case uint32_t( CSCNSection::eLightGroup ):
-				case uint32_t( CSCNSection::eLightGroupShadows ):
-				case uint32_t( CSCNSection::eLightGroupShadowsLpv ):
-				case uint32_t( CSCNSection::eLightGroupShadowsRaw ):
-				case uint32_t( CSCNSection::eLightGroupShadowsPcf ):
-				case uint32_t( CSCNSection::eLightGroupShadowsVsm ):
+				case SectionId( CSCNSection::eLight ):
+				case SectionId( CSCNSection::eShadows ):
+				case SectionId( CSCNSection::eLpv ):
+				case SectionId( CSCNSection::eRaw ):
+				case SectionId( CSCNSection::ePcf ):
+				case SectionId( CSCNSection::eVsm ):
+				case SectionId( CSCNSection::eLightGroup ):
+				case SectionId( CSCNSection::eLightGroupShadows ):
+				case SectionId( CSCNSection::eLightGroupShadowsLpv ):
+				case SectionId( CSCNSection::eLightGroupShadowsRaw ):
+				case SectionId( CSCNSection::eLightGroupShadowsPcf ):
+				case SectionId( CSCNSection::eLightGroupShadowsVsm ):
 					result = uint32_t( Category::eLight );
 					break;
-				case uint32_t( CSCNSection::eNode ):
+				case SectionId( CSCNSection::eNode ):
 					result = uint32_t( Category::eNode );
 					break;
-				case uint32_t( CSCNSection::eObject ):
-				case uint32_t( CSCNSection::eObjectMaterials ):
+				case SectionId( CSCNSection::eObject ):
+				case SectionId( CSCNSection::eObjectMaterials ):
 					result = uint32_t( Category::eObject );
 					break;
-				case uint32_t( CSCNSection::eMesh ):
-				case uint32_t( CSCNSection::eSubmesh ):
-				case uint32_t( CSCNSection::eBillboard ):
-				case uint32_t( CSCNSection::eBillboardList ):
-				case uint32_t( CSCNSection::eParticleSystem ):
-				case uint32_t( CSCNSection::eParticle ):
-				case uint32_t( CSCNSection::eMeshDefaultMaterials ):
-				case uint32_t( CSCNSection::eSkeleton ):
-				case uint32_t( CSCNSection::eMorphAnimation ):
+				case SectionId( CSCNSection::eMesh ):
+				case SectionId( CSCNSection::eSubmesh ):
+				case SectionId( CSCNSection::eBillboard ):
+				case SectionId( CSCNSection::eBillboardList ):
+				case SectionId( CSCNSection::eParticleSystem ):
+				case SectionId( CSCNSection::eParticle ):
+				case SectionId( CSCNSection::eMeshDefaultMaterials ):
+				case SectionId( CSCNSection::eSkeleton ):
+				case SectionId( CSCNSection::eMeshAnimation ):
+				case SectionId( CSCNSection::eSkeletonArmature ):
+				case SectionId( CSCNSection::eSkeletonNode ):
+				case SectionId( CSCNSection::eSkeletonBone ):
+				case SectionId( CSCNSection::eSkeletonAnimation ):
+				case SectionId( CSCNSection::eSkeletonAnimationObject ):
+				case SectionId( CSCNSection::eSkeletonAnimationKeyframe ):
+				case SectionId( CSCNSection::eSkeletonAnimationKeyframeObject ):
 					result = uint32_t( Category::eMesh );
 					break;
-				case uint32_t( CSCNSection::eMaterial ):
-				case uint32_t( CSCNSection::ePass ):
-				case uint32_t( CSCNSection::eTextureUnit ):
-				case uint32_t( CSCNSection::eShaderProgram ):
-				case uint32_t( CSCNSection::eShaderStage ):
-				case uint32_t( CSCNSection::eUBOVariable ):
-				case uint32_t( CSCNSection::eTextureAnimation ):
-				case uint32_t( CSCNSection::eTextureTransform ):
+				case SectionId( CSCNSection::eMaterial ):
+				case SectionId( CSCNSection::ePass ):
+				case SectionId( CSCNSection::eTextureUnit ):
+				case SectionId( CSCNSection::eShaderProgram ):
+				case SectionId( CSCNSection::eShaderStage ):
+				case SectionId( CSCNSection::eUBOVariable ):
+				case SectionId( CSCNSection::eTextureAnimation ):
+				case SectionId( CSCNSection::eTextureTransform ):
 					result = uint32_t( Category::eMaterial );
 					break;
-				case uint32_t( CSCNSection::eTexture ):
+				case SectionId( CSCNSection::eTexture ):
 					result = uint32_t( Category::eTexture );
 					break;
-				case uint32_t( CSCNSection::ePanelOverlay ):
-				case uint32_t( CSCNSection::eBorderPanelOverlay ):
-				case uint32_t( CSCNSection::eTextOverlay ):
+				case SectionId( CSCNSection::ePanelOverlay ):
+				case SectionId( CSCNSection::eBorderPanelOverlay ):
+				case SectionId( CSCNSection::eTextOverlay ):
 					result = uint32_t( Category::eOverlay );
 					break;
-				case uint32_t( GUISection::eGUI ):
-				case uint32_t( GUISection::eTheme ):
-				case uint32_t( GUISection::eButtonStyle ):
-				case uint32_t( GUISection::eEditStyle ):
-				case uint32_t( GUISection::eComboStyle ):
-				case uint32_t( GUISection::eListStyle ):
-				case uint32_t( GUISection::eSliderStyle ):
-				case uint32_t( GUISection::eStaticStyle ):
-				case uint32_t( GUISection::ePanelStyle ):
-				case uint32_t( GUISection::eProgressStyle ):
-				case uint32_t( GUISection::eExpandablePanelStyle ):
-				case uint32_t( GUISection::eFrameStyle ):
-				case uint32_t( GUISection::eScrollBarStyle ):
-				case uint32_t( GUISection::eButton ):
-				case uint32_t( GUISection::eStatic ):
-				case uint32_t( GUISection::eSlider ):
-				case uint32_t( GUISection::eComboBox ):
-				case uint32_t( GUISection::eListBox ):
-				case uint32_t( GUISection::eEdit ):
-				case uint32_t( GUISection::ePanel ):
-				case uint32_t( GUISection::eProgress ):
-				case uint32_t( GUISection::eExpandablePanel ):
-				case uint32_t( GUISection::eExpandablePanelHeader ):
-				case uint32_t( GUISection::eExpandablePanelExpand ):
-				case uint32_t( GUISection::eExpandablePanelContent ):
-				case uint32_t( GUISection::eFrame ):
-				case uint32_t( GUISection::eFrameContent ):
-				case uint32_t( GUISection::eBoxLayout ):
-				case uint32_t( GUISection::eLayoutCtrl ):
+				case SectionId( GUISection::eGUI ):
+				case SectionId( GUISection::eTheme ):
+				case SectionId( GUISection::eButtonStyle ):
+				case SectionId( GUISection::eEditStyle ):
+				case SectionId( GUISection::eComboStyle ):
+				case SectionId( GUISection::eListStyle ):
+				case SectionId( GUISection::eSliderStyle ):
+				case SectionId( GUISection::eStaticStyle ):
+				case SectionId( GUISection::ePanelStyle ):
+				case SectionId( GUISection::eProgressStyle ):
+				case SectionId( GUISection::eExpandablePanelStyle ):
+				case SectionId( GUISection::eFrameStyle ):
+				case SectionId( GUISection::eScrollBarStyle ):
+				case SectionId( GUISection::eButton ):
+				case SectionId( GUISection::eStatic ):
+				case SectionId( GUISection::eSlider ):
+				case SectionId( GUISection::eComboBox ):
+				case SectionId( GUISection::eListBox ):
+				case SectionId( GUISection::eEdit ):
+				case SectionId( GUISection::ePanel ):
+				case SectionId( GUISection::eProgress ):
+				case SectionId( GUISection::eExpandablePanel ):
+				case SectionId( GUISection::eExpandablePanelHeader ):
+				case SectionId( GUISection::eExpandablePanelExpand ):
+				case SectionId( GUISection::eExpandablePanelContent ):
+				case SectionId( GUISection::eFrame ):
+				case SectionId( GUISection::eFrameContent ):
+				case SectionId( GUISection::eBoxLayout ):
+				case SectionId( GUISection::eLayoutCtrl ):
 					result = uint32_t( Category::eGui );
 					break;
-				case uint32_t( CSCNSection::eSceneImport ):
+				case SectionId( CSCNSection::eSceneImport ):
 					result = uint32_t( Category::eImport );
 					break;
 				default:
@@ -272,14 +279,14 @@ namespace c3d
 				return result;
 			}
 
-			uint32_t getCategoryActionsCount( SectionId section )const
+			uint32_t getCategoryActionsCount( uint32_t category )const
 			{
-				return m_totalCat[section];
+				return m_totalCat[category];
 			}
 
-			uint32_t incCategoryActions( SectionId section, uint32_t count = 1u )
+			uint32_t incCategoryActions( uint32_t category, uint32_t count = 1u )
 			{
-				return m_currentCat[section] += count;
+				return m_currentCat[category] += count;
 			}
 
 			uint32_t getCategoriesCount()const
@@ -291,7 +298,7 @@ namespace c3d
 					} ) );
 			}
 
-			xchar const * getCategoryName( SectionId section )const
+			xchar const * getCategoryName( uint32_t section )const
 			{
 				switch ( section )
 				{
@@ -439,14 +446,14 @@ namespace c3d
 			auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( SectionId section
 				, PreprocessedFile::Action const & action )
 				{
-					section = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
-					auto status = preprocessed.incCategoryActions( section );
-					auto total = preprocessed.getCategoryActionsCount( section );
+					auto category = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
+					auto status = preprocessed.incCategoryActions( category );
+					auto total = preprocessed.getCategoryActionsCount( category );
 					setProgressBarGlobalStep( progress
 						, cuT( "Importing scene..." )
-						, index + section );
+						, index + category );
 					setProgressBarLocal( progress
-						, preprocessed.getCategoryName( section )
+						, preprocessed.getCategoryName( category )
 						, string::toString( status ) + cuT( " / " ) + string::toString( total )
 						, total
 						, status );

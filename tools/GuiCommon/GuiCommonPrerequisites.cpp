@@ -120,7 +120,7 @@ namespace GuiCommon
 		public:
 			using c3d::PreprocessedFile::PreprocessedFile;
 
-			c3d::SectionId getCategory( c3d::String const & name
+			uint32_t getCategory( c3d::String const & name
 				, c3d::SectionId curSection
 				, c3d::SectionId nextSection
 				, bool implicit )const
@@ -144,76 +144,83 @@ namespace GuiCommon
 
 				switch ( curSection )
 				{
-				case uint32_t( CSCNSection::eSampler ):
+				case c3d::SectionId( CSCNSection::eSampler ):
 					return uint32_t( Category::eSampler );
-				case uint32_t( CSCNSection::eLight ):
-				case uint32_t( CSCNSection::eShadows ):
-				case uint32_t( CSCNSection::eLpv ):
-				case uint32_t( CSCNSection::eRaw ):
-				case uint32_t( CSCNSection::ePcf ):
-				case uint32_t( CSCNSection::eVsm ):
+				case c3d::SectionId( CSCNSection::eLight ):
+				case c3d::SectionId( CSCNSection::eShadows ):
+				case c3d::SectionId( CSCNSection::eLpv ):
+				case c3d::SectionId( CSCNSection::eRaw ):
+				case c3d::SectionId( CSCNSection::ePcf ):
+				case c3d::SectionId( CSCNSection::eVsm ):
 					return uint32_t( Category::eLight );
-				case uint32_t( CSCNSection::eNode ):
+				case c3d::SectionId( CSCNSection::eNode ):
 					return uint32_t( Category::eNode );
-				case uint32_t( CSCNSection::eObject ):
-				case uint32_t( CSCNSection::eObjectMaterials ):
+				case c3d::SectionId( CSCNSection::eObject ):
+				case c3d::SectionId( CSCNSection::eObjectMaterials ):
 					return uint32_t( Category::eObject );
-				case uint32_t( CSCNSection::eMesh ):
-				case uint32_t( CSCNSection::eSubmesh ):
-				case uint32_t( CSCNSection::eBillboard ):
-				case uint32_t( CSCNSection::eBillboardList ):
-				case uint32_t( CSCNSection::eParticleSystem ):
-				case uint32_t( CSCNSection::eParticle ):
-				case uint32_t( CSCNSection::eMeshDefaultMaterials ):
-				case uint32_t( CSCNSection::eSkeleton ):
-				case uint32_t( CSCNSection::eMorphAnimation ):
+				case c3d::SectionId( CSCNSection::eMesh ):
+				case c3d::SectionId( CSCNSection::eSubmesh ):
+				case c3d::SectionId( CSCNSection::eBillboard ):
+				case c3d::SectionId( CSCNSection::eBillboardList ):
+				case c3d::SectionId( CSCNSection::eParticleSystem ):
+				case c3d::SectionId( CSCNSection::eParticle ):
+				case c3d::SectionId( CSCNSection::eMeshDefaultMaterials ):
+				case c3d::SectionId( CSCNSection::eSkeleton ):
+				case c3d::SectionId( CSCNSection::eMeshAnimation ):
+				case c3d::SectionId( CSCNSection::eSkeletonArmature ):
+				case c3d::SectionId( CSCNSection::eSkeletonNode ):
+				case c3d::SectionId( CSCNSection::eSkeletonBone ):
+				case c3d::SectionId( CSCNSection::eSkeletonAnimation ):
+				case c3d::SectionId( CSCNSection::eSkeletonAnimationObject ):
+				case c3d::SectionId( CSCNSection::eSkeletonAnimationKeyframe ):
+				case c3d::SectionId( CSCNSection::eSkeletonAnimationKeyframeObject ):
 					return uint32_t( Category::eMesh );
-				case uint32_t( CSCNSection::eMaterial ):
-				case uint32_t( CSCNSection::ePass ):
-				case uint32_t( CSCNSection::eTextureUnit ):
-				case uint32_t( CSCNSection::eShaderProgram ):
-				case uint32_t( CSCNSection::eShaderStage ):
-				case uint32_t( CSCNSection::eUBOVariable ):
-				case uint32_t( CSCNSection::eTextureAnimation ):
-				case uint32_t( CSCNSection::eTextureTransform ):
+				case c3d::SectionId( CSCNSection::eMaterial ):
+				case c3d::SectionId( CSCNSection::ePass ):
+				case c3d::SectionId( CSCNSection::eTextureUnit ):
+				case c3d::SectionId( CSCNSection::eShaderProgram ):
+				case c3d::SectionId( CSCNSection::eShaderStage ):
+				case c3d::SectionId( CSCNSection::eUBOVariable ):
+				case c3d::SectionId( CSCNSection::eTextureAnimation ):
+				case c3d::SectionId( CSCNSection::eTextureTransform ):
 					return uint32_t( Category::eMaterial );
-				case uint32_t( CSCNSection::eTexture ):
+				case c3d::SectionId( CSCNSection::eTexture ):
 					return uint32_t( Category::eTexture );
-				case uint32_t( CSCNSection::ePanelOverlay ):
-				case uint32_t( CSCNSection::eBorderPanelOverlay ):
-				case uint32_t( CSCNSection::eTextOverlay ):
+				case c3d::SectionId( CSCNSection::ePanelOverlay ):
+				case c3d::SectionId( CSCNSection::eBorderPanelOverlay ):
+				case c3d::SectionId( CSCNSection::eTextOverlay ):
 					return uint32_t( Category::eOverlay );
-				case uint32_t( GUISection::eGUI ):
-				case uint32_t( GUISection::eTheme ):
-				case uint32_t( GUISection::eButtonStyle ):
-				case uint32_t( GUISection::eEditStyle ):
-				case uint32_t( GUISection::eComboStyle ):
-				case uint32_t( GUISection::eListStyle ):
-				case uint32_t( GUISection::eSliderStyle ):
-				case uint32_t( GUISection::eStaticStyle ):
-				case uint32_t( GUISection::ePanelStyle ):
-				case uint32_t( GUISection::eProgressStyle ):
-				case uint32_t( GUISection::eExpandablePanelStyle ):
-				case uint32_t( GUISection::eFrameStyle ):
-				case uint32_t( GUISection::eScrollBarStyle ):
-				case uint32_t( GUISection::eButton ):
-				case uint32_t( GUISection::eStatic ):
-				case uint32_t( GUISection::eSlider ):
-				case uint32_t( GUISection::eComboBox ):
-				case uint32_t( GUISection::eListBox ):
-				case uint32_t( GUISection::eEdit ):
-				case uint32_t( GUISection::ePanel ):
-				case uint32_t( GUISection::eProgress ):
-				case uint32_t( GUISection::eExpandablePanel ):
-				case uint32_t( GUISection::eExpandablePanelHeader ):
-				case uint32_t( GUISection::eExpandablePanelExpand ):
-				case uint32_t( GUISection::eExpandablePanelContent ):
-				case uint32_t( GUISection::eFrame ):
-				case uint32_t( GUISection::eFrameContent ):
-				case uint32_t( GUISection::eBoxLayout ):
-				case uint32_t( GUISection::eLayoutCtrl ):
+				case c3d::SectionId( GUISection::eGUI ):
+				case c3d::SectionId( GUISection::eTheme ):
+				case c3d::SectionId( GUISection::eButtonStyle ):
+				case c3d::SectionId( GUISection::eEditStyle ):
+				case c3d::SectionId( GUISection::eComboStyle ):
+				case c3d::SectionId( GUISection::eListStyle ):
+				case c3d::SectionId( GUISection::eSliderStyle ):
+				case c3d::SectionId( GUISection::eStaticStyle ):
+				case c3d::SectionId( GUISection::ePanelStyle ):
+				case c3d::SectionId( GUISection::eProgressStyle ):
+				case c3d::SectionId( GUISection::eExpandablePanelStyle ):
+				case c3d::SectionId( GUISection::eFrameStyle ):
+				case c3d::SectionId( GUISection::eScrollBarStyle ):
+				case c3d::SectionId( GUISection::eButton ):
+				case c3d::SectionId( GUISection::eStatic ):
+				case c3d::SectionId( GUISection::eSlider ):
+				case c3d::SectionId( GUISection::eComboBox ):
+				case c3d::SectionId( GUISection::eListBox ):
+				case c3d::SectionId( GUISection::eEdit ):
+				case c3d::SectionId( GUISection::ePanel ):
+				case c3d::SectionId( GUISection::eProgress ):
+				case c3d::SectionId( GUISection::eExpandablePanel ):
+				case c3d::SectionId( GUISection::eExpandablePanelHeader ):
+				case c3d::SectionId( GUISection::eExpandablePanelExpand ):
+				case c3d::SectionId( GUISection::eExpandablePanelContent ):
+				case c3d::SectionId( GUISection::eFrame ):
+				case c3d::SectionId( GUISection::eFrameContent ):
+				case c3d::SectionId( GUISection::eBoxLayout ):
+				case c3d::SectionId( GUISection::eLayoutCtrl ):
 					return uint32_t( Category::eGui );
-				case uint32_t( CSCNSection::eSceneImport ):
+				case c3d::SectionId( CSCNSection::eSceneImport ):
 					return uint32_t( Category::eImport );
 				default:
 					return uint32_t( Category::eOther );
@@ -467,14 +474,14 @@ namespace GuiCommon
 						auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( c3d::SectionId section
 							, c3d::PreprocessedFile::Action const & action )
 							{
-									section = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
-									auto status = preprocessed.incCategoryActions( section );
-									auto total = preprocessed.getCategoryActionsCount( section );
+									auto category = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
+									auto status = preprocessed.incCategoryActions( category );
+									auto total = preprocessed.getCategoryActionsCount( category );
 									c3d::setProgressBarGlobalStep( progress
 										, cuT( "Loading scene..." )
-										, index + section );
+										, index + category );
 									c3d::setProgressBarLocal( progress
-										, preprocessed.getCategoryName( section )
+										, preprocessed.getCategoryName( category )
 										, c3d::string::toString( status ) + cuT( " / " ) + c3d::string::toString( total )
 										, total
 										, status );

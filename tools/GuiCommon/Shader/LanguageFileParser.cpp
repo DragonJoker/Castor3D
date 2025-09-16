@@ -439,12 +439,12 @@ namespace GuiCommon
 			return result;
 		}
 
-		static c3d::StrUInt32Map registerSections()
+		static c3d::StrSectionIdMap registerSections()
 		{
-			return { { uint32_t( LANGSection::eRoot ), c3d::String{} }
-				, { uint32_t( LANGSection::eLanguage ), cuT( "language" ) }
-				, { uint32_t( LANGSection::eKeywords ), cuT( "keywords" ) }
-				, { uint32_t( LANGSection::eStyle ), cuT( "style" ) } };
+			return { { c3d::SectionId( LANGSection::eRoot ), c3d::String{} }
+				, { c3d::SectionId( LANGSection::eLanguage ), cuT( "language" ) }
+				, { c3d::SectionId( LANGSection::eKeywords ), cuT( "keywords" ) }
+				, { c3d::SectionId( LANGSection::eStyle ), cuT( "style" ) } };
 		}
 
 		static void * createContext( c3d::FileParserContext & context )
