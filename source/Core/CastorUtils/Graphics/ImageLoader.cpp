@@ -52,7 +52,7 @@ namespace c3d
 
 			// Generate mipmaps
 			if ( config.generateMips
-				&& !isCompressed( image.getPixelFormat() ) )
+				&& !isCompressed( buffer->getFormat() ) )
 				buffer->generateMips();
 
 			ImageMemoryLayout newLayout{ image.getLayout().type, *buffer };

@@ -16,11 +16,13 @@ namespace c3d
 	{
 	public:
 		explicit TextWriter( String const & tabs
+			, bool forceText
 			, float scale = 1.0f );
 		bool operator()( SceneNode const & node
 			, StringStream & file )override;
 
 	private:
+		bool m_forceText;
 		float m_scale;
 	};
 }

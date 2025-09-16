@@ -50,6 +50,14 @@ namespace c3d
 			ins.transform.rotate = rotate;
 			ins.transform.scale = scale;
 		}
+		else
+		{
+			auto & ins = *it;
+			ins.object = &object;
+			ins.transform.translate = translate;
+			ins.transform.rotate = rotate;
+			ins.transform.scale = scale;
+		}
 	}
 
 	bool SkeletonAnimationKeyFrame::hasObject( SkeletonAnimationObject const & object )const

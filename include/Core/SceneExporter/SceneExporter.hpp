@@ -24,6 +24,7 @@ namespace c3d::exporter
 		bool splitPerMaterial{ false };
 		bool recenter{ false };
 		bool ignoreFailures{ false };
+		bool forceText{ false };
 	};
 	/**
 	\~english

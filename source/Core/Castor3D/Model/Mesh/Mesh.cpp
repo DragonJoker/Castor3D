@@ -10,6 +10,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -366,19 +367,6 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserMeshMorphAnimation, MeshContext )
-		{
-			if ( !blockContext->mesh )
-			{
-				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
-			else
-			{
-				blockContext->morphAnimation = makeUnique< MeshAnimation >( *blockContext->mesh, params[0]->get< String >() );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eMorphAnimation, blockContext )
-
 		static CU_ImplementAttributeParserBlock( parserMeshEnd, MeshContext )
 		{
 			if ( auto mesh = blockContext->mesh )
@@ -406,6 +394,8 @@ namespace c3d
 
 					mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 				}
+
+				mesh->computeContainers();
 			}
 			else
 			{
@@ -683,7 +673,6 @@ namespace c3d
 		meshCtx.addParser( cuT( "import_morph_target" ), mesh::parserMeshMorphTargetImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 		meshCtx.addParser( cuT( "default_material" ), mesh::parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
 		meshCtx.addParser( cuT( "skeleton" ), mesh::parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
-		meshCtx.addPushParser( cuT( "morph_animation" ), CSCNSection::eMorphAnimation, mesh::parserMeshMorphAnimation, { makeParameter< ParameterType::eName >() } );
 		meshCtx.addPushParser( cuT( "submesh" ), CSCNSection::eSubmesh, mesh::parserMeshSubmesh );
 		meshCtx.addPushParser( cuT( "default_materials" ), CSCNSection::eMeshDefaultMaterials, mesh::parserMeshDefaultMaterials );
 		meshCtx.addPopParser( cuT( "}" ), mesh::parserMeshEnd );

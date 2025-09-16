@@ -342,7 +342,6 @@ namespace c3d
 		ObjectContext * geometry{};
 		MeshResPtr mesh{};
 		MeshRes ownMesh{};
-		MeshAnimationUPtr morphAnimation{};
 		Submesh * submesh{};
 		SubmeshComponent * submeshComponent{};
 	};

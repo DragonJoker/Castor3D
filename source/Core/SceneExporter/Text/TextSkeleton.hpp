@@ -16,12 +16,14 @@ namespace c3d
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, String const & subfolder );
+			, String const & subfolder
+			, bool forceText );
 		bool operator()( Skeleton const & material
 			, StringStream & file )override;
 
 	private:
 		String m_subfolder;
+		bool m_forceText;
 	};
 }
 

@@ -590,6 +590,21 @@ namespace c3d
 	void SceneImporter::doCreateAnimationGroups( Scene & scene
 		, StringMap< AnimObjects > & anims )const
 	{
+		auto hasNodeAnim = [&anims]( SceneNode const & node, String const & animName )
+			{
+				for ( auto & [currAnimName, animObjects] : anims )
+				{
+					if ( animName != currAnimName )
+					{
+						if ( auto nodeIt = std::find( animObjects.nodes.begin(), animObjects.nodes.end(), &node );
+							nodeIt != animObjects.nodes.end() )
+							return true;
+					}
+				}
+
+				return false;
+			};
+
 		auto total = uint32_t( anims.size() );
 		stepProgressBarGlobalStartLocal( m_file->getProgressBar()
 			, cuT( "Creating scene animations groups" )
@@ -602,17 +617,14 @@ namespace c3d
 			stepProgressBarLocal( m_file->getProgressBar()
 				, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 
-			for ( auto const & [name, geometry] : scene.getGeometryCache() )
+			for ( auto const & [objectName, geometry] : scene.getGeometryCache() )
 			{
-				auto & mesh = *geometry->getMesh();
 				auto node = geometry->getParent();
 				Vector< SceneNode * > nodes;
 
-				while ( node )
+				while ( node && !hasNodeAnim( *node, animName ) )
 				{
-					if ( auto nodeIt = std::find( animObjects.nodes.begin()
-							, animObjects.nodes.end()
-							, node );
+					if ( auto nodeIt = std::find( animObjects.nodes.begin(), animObjects.nodes.end(), node );
 						nodeIt != animObjects.nodes.end() )
 					{
 						nodes.push_back( *nodeIt );
@@ -623,6 +635,7 @@ namespace c3d
 					node = node->getParent();
 				}
 
+				auto & mesh = *geometry->getMesh();
 				auto meshIt = std::find( animObjects.meshes.begin()
 					, animObjects.meshes.end()
 					, &mesh );
@@ -636,9 +649,9 @@ namespace c3d
 					|| meshIt != animObjects.meshes.end()
 					|| skelIt != animObjects.skeletons.end() )
 				{
-					auto animGroup = ( scene.hasAnimatedObjectGroup( name )
-						? scene.findAnimatedObjectGroup( name )
-						: scene.addNewAnimatedObjectGroup( name, scene ) );
+					auto animGroup = ( scene.hasAnimatedObjectGroup( objectName )
+						? scene.findAnimatedObjectGroup( objectName )
+						: scene.addNewAnimatedObjectGroup( objectName, scene ) );
 
 					if ( animGroup->addAnimation( animName ) )
 					{
@@ -652,17 +665,17 @@ namespace c3d
 
 					if ( meshIt != animObjects.meshes.end() )
 					{
-						animGroup->addObject( **meshIt, *geometry, name );
+						animGroup->addObject( **meshIt, *geometry, objectName );
 					}
 
 					if ( skelIt != animObjects.skeletons.end() )
 					{
-						animGroup->addObject( **skelIt, mesh, *geometry, name );
+						animGroup->addObject( **skelIt, mesh, *geometry, objectName );
 					}
 				}
 			}
 
-			for ( auto const & [name, node] : scene.getSceneNodeCache() )
+			for ( auto const & [nodeName, node] : scene.getSceneNodeCache() )
 			{
 				auto nodeIt = std::find( animObjects.nodes.begin()
 					, animObjects.nodes.end()
@@ -670,19 +683,16 @@ namespace c3d
 
 				if ( nodeIt != animObjects.nodes.end() )
 				{
-					auto animGroup = ( scene.hasAnimatedObjectGroup( name )
-						? scene.findAnimatedObjectGroup( name )
-						: scene.addNewAnimatedObjectGroup( name, scene ) );
+					auto animGroup = ( scene.hasAnimatedObjectGroup( nodeName )
+						? scene.findAnimatedObjectGroup( nodeName )
+						: scene.addNewAnimatedObjectGroup( nodeName, scene ) );
 
 					if ( animGroup->addAnimation( animName ) )
 					{
 						animGroup->setAnimationLooped( animName, true );
 					}
 
-					if ( nodeIt != animObjects.nodes.end() )
-					{
-						animGroup->addObject( **nodeIt, ( *nodeIt )->getName() );
-					}
+					animGroup->addObject( **nodeIt, ( *nodeIt )->getName() );
 				}
 			}
 		}

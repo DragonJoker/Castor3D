@@ -2270,30 +2270,33 @@ namespace c3d
 				auto pipelineHash = origPipeline.pipeline->getFlagsHash();
 				auto & buffers = pipelinesNodes.nodes;
 
-				for ( auto & [posBuffer, idxBuffer, nodes] : buffers )
+				for ( auto & [posBuffer, idxBuffer, pages] : buffers )
 				{
-					for ( auto & node : nodes )
+					for ( auto & nodes : pages )
 					{
-						auto & positionsBuffer = node.node->data.getVertexBuffer();
-						auto & pipeline = doCreatePipeline( pipelineFlags
-							, node.node->data.getVertexStride() );
-						auto it = m_activeBillboardPipelines.try_emplace( &pipeline ).first;
-						auto hash = size_t( positionsBuffer.getOffset() );
-						hash = hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
-						auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
-						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer );
-
-						if ( res )
+						for ( auto & node : nodes )
 						{
-							pit->second = visres::createVtxDescriptorSet( getName()
-								, *pipeline.vtxDescriptorPool
-								, positionsBuffer.getBuffer()
-								, positionsBuffer.getOffset()
-								, positionsBuffer.getSize() );
-						}
+							auto & positionsBuffer = node.node->data.getVertexBuffer();
+							auto & pipeline = doCreatePipeline( pipelineFlags
+								, node.node->data.getVertexStride() );
+							auto it = m_activeBillboardPipelines.try_emplace( &pipeline ).first;
+							auto hash = size_t( positionsBuffer.getOffset() );
+							hash = hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
+							auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
+							auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer );
 
-						it->second.try_emplace( node.node->getId()
-							, PipelineNodesDescriptors{ pipelineId, pit->second.get() } );
+							if ( res )
+							{
+								pit->second = visres::createVtxDescriptorSet( getName()
+									, *pipeline.vtxDescriptorPool
+									, positionsBuffer.getBuffer()
+									, positionsBuffer.getOffset()
+									, positionsBuffer.getSize() );
+							}
+
+							it->second.try_emplace( node.node->getId()
+								, PipelineNodesDescriptors{ pipelineId, pit->second.get() } );
+						}
 					}
 				}
 			}

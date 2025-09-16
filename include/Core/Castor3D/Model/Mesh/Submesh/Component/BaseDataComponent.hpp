@@ -39,12 +39,33 @@ namespace c3d
 	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
 		, sdw::type::BaseStruct & type );
 	C3D_API String getBaseDataComponentName( SubmeshData submeshData );
+	C3D_API void createBaseDataParsers( SubmeshData submeshData
+		, AttributeParsers & result );
+	C3D_API void createBaseDataSections( SubmeshData submeshData
+		, StrSectionIdMap & result );
+	C3D_API bool writeBaseDataText( SubmeshData submeshData
+		, Point3fArray const & data
+		, String const & tabs
+		, StringStream & file );
+	C3D_API bool writeBaseDataText( SubmeshData submeshData
+		, Point4fArray const & data
+		, String const & tabs
+		, StringStream & file );
+	C3D_API bool writeBaseDataBinary( SubmeshData submeshData
+		, Point3fArray const & data
+		, BinaryChunk & chunk );
+	C3D_API bool writeBaseDataBinary( SubmeshData submeshData
+		, Point4fArray const & data
+		, BinaryChunk & chunk );
 
 	template< SubmeshData SubmeshDataT, typename DataT >
 	class BaseDataComponentT
 		: public SubmeshComponent
 	{
 	public:
+		static constexpr SubmeshData SubmeshData = SubmeshDataT;
+		using Data = DataT;
+
 		struct SurfaceShader
 			: public shader::SubmeshVertexSurfaceShader
 		{
@@ -141,6 +162,16 @@ namespace c3d
 		public:
 			using SubmeshComponentPlugin::SubmeshComponentPlugin;
 
+			void createParsers( AttributeParsers & result )const override
+			{
+				createBaseDataParsers( SubmeshDataT, result );
+			}
+
+			void createSections( StrSectionIdMap & sections )const
+			{
+				createBaseDataSections( SubmeshDataT, sections );
+			}
+
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
 				return makeUniqueDerived< SubmeshComponent, BaseDataComponentT< SubmeshDataT, DataT > >( submesh );
@@ -232,6 +263,18 @@ namespace c3d
 		ComponentData & getData()const noexcept
 		{
 			return *getDataT< ComponentData >();
+		}
+
+	private:
+		bool doWriteText( String const & tabs
+			, StringStream & file )const override
+		{
+			return writeBaseDataText( SubmeshDataT, getData().getData(), tabs, file );
+		}
+
+		bool doWriteBinary( BinaryChunk & chunk )const override
+		{
+			return writeBaseDataBinary( SubmeshDataT, getData().getData(), chunk );
 		}
 
 	public:

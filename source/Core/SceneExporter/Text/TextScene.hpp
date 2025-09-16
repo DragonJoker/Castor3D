@@ -37,7 +37,8 @@ namespace c3d
 				, Path psceneControlsFile = {}
 				, Path pglobalControlsFile = {}
 				, String psubfolder = {}
-				, float pscale = 1.0f )
+				, float pscale = 1.0f
+				, bool pforceText = false )
 				: rootFolder{ c3d::move( prootFolder ) }
 				, sceneTexturesFile{ c3d::move( psceneTexturesFile ) }
 				, sceneSamplersFile{ c3d::move( psceneSamplersFile ) }
@@ -59,6 +60,7 @@ namespace c3d
 				, globalControlsFile{ c3d::move( pglobalControlsFile ) }
 				, subfolder{ c3d::move( psubfolder ) }
 				, scale{ pscale }
+				, forceText{ pforceText }
 			{
 			}
 
@@ -83,6 +85,7 @@ namespace c3d
 			Path globalControlsFile;
 			String subfolder;
 			float scale;
+			bool forceText;
 		};
 
 		explicit TextWriter( String const & tabs

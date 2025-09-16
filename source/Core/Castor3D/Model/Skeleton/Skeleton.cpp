@@ -20,13 +20,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserSkeletonImport, SkeletonContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( !blockContext->skeleton )
-			{
 				CU_ParsingError( cuT( "No Skeleton initialised." ) );
-			}
 			else
 			{
 				Path path;
@@ -50,16 +46,114 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserArmature, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( !blockContext->skeleton )
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			else
+			{
+				blockContext->inverseTransform = Matrix4x4f::getIdentity();
+				blockContext->nodeParentName = {};
+				blockContext->nodeName = {};
+				blockContext->nodeType = {};
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eSkeletonArmature, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserArmatureNode, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( !blockContext->skeleton )
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			else
+			{
+				params[0]->get( blockContext->nodeName );
+				blockContext->nodeType = SkeletonNodeType::eNode;
+				blockContext->nodeParentName = {};
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eSkeletonNode, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserArmatureBone, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( !blockContext->skeleton )
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			else
+			{
+				params[0]->get( blockContext->nodeName );
+				blockContext->nodeType = SkeletonNodeType::eBone;
+				blockContext->inverseTransform = Matrix4x4f::getIdentity();
+				blockContext->nodeParentName = {};
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eSkeletonBone, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserArmatureNodeParent, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( !blockContext->skeleton )
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			else
+			{
+				params[0]->get( blockContext->nodeParentName );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserArmatureBoneTransform, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( !blockContext->skeleton )
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			else if ( params.size() < 4u )
+				CU_ParsingError( cuT( "Not enough parameters for a Matrix4x4." ) );
+			else
+			{
+				params[0]->get( blockContext->inverseTransform[0] );
+				params[1]->get( blockContext->inverseTransform[1] );
+				params[2]->get( blockContext->inverseTransform[2] );
+				params[3]->get( blockContext->inverseTransform[3] );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserArmatureNodeEnd, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( !blockContext->skeleton )
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			else
+			{
+				auto node = ( blockContext->nodeType == SkeletonNodeType::eBone )
+					? blockContext->skeleton->createBone( blockContext->nodeName, blockContext->inverseTransform )
+					: blockContext->skeleton->createNode( blockContext->nodeName );
+
+				if ( auto parent = blockContext->nodeParentName.empty()
+					? nullptr : blockContext->skeleton->findNode( blockContext->nodeParentName ) )
+					blockContext->skeleton->setNodeParent( *node, *parent );
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserArmatureEnd, SkeletonContext )
+		{
+		}
+		CU_EndAttributePop()
+
 		static CU_ImplementAttributeParserBlock( parserSkeletonAnimImport, SkeletonContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( !blockContext->skeleton )
-			{
 				CU_ParsingError( cuT( "No Skeleton initialised." ) );
-			}
 			else
 			{
 				Path path;
@@ -126,13 +220,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserSkeletonSingleAnimImport, SkeletonContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( !blockContext->skeleton )
-			{
 				CU_ParsingError( cuT( "No Skeleton initialised." ) );
-			}
 			else
 			{
 				auto animRename = params[0]->get< String >();
@@ -211,13 +301,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserSkeletonEnd, SkeletonContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No Scene initialised." ) );
-			}
 			else if ( !blockContext->skeleton )
-			{
 				CU_ParsingError( cuT( "No Skeleton initialised." ) );
-			}
 			else
 			{
 				log::info << "Loaded skeleton [" << blockContext->skeleton->getName() << "]" << std::endl;
@@ -399,12 +485,29 @@ namespace c3d
 
 	void Skeleton::addParsers( AttributeParsers & result )
 	{
-		BlockParserContextT< SkeletonContext > context{ result, CSCNSection::eSkeleton, CSCNSection::eScene };
+		BlockParserContextT< SkeletonContext > skeletonContext{ result, CSCNSection::eSkeleton, CSCNSection::eScene };
+		BlockParserContextT< SkeletonContext > armatureContext{ result, CSCNSection::eSkeletonArmature, CSCNSection::eSkeleton };
+		BlockParserContextT< SkeletonContext > nodeContext{ result, CSCNSection::eSkeletonNode, CSCNSection::eSkeleton };
+		BlockParserContextT< SkeletonContext > boneContext{ result, CSCNSection::eSkeletonBone, CSCNSection::eSkeleton };
 
-		context.addParser( cuT( "import" ), skel::parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-		context.addParser( cuT( "import_anim" ), skel::parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-		context.addParser( cuT( "import_single_anim" ), skel::parserSkeletonSingleAnimImport, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-		context.addPopParser( cuT( "}" ), skel::parserSkeletonEnd );
+		skeletonContext.addParser( cuT( "import" ), skel::parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+		skeletonContext.addParser( cuT( "import_anim" ), skel::parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+		skeletonContext.addParser( cuT( "import_single_anim" ), skel::parserSkeletonSingleAnimImport, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+		skeletonContext.addPushParser( cuT( "armature" ), CSCNSection::eSkeletonArmature, skel::parserArmature );
+		skeletonContext.addPopParser( cuT( "}" ), skel::parserSkeletonEnd );
+
+		armatureContext.addPushParser( cuT( "node" ), CSCNSection::eSkeletonNode, skel::parserArmatureNode, { makeParameter< ParameterType::eName >() } );
+		armatureContext.addPushParser( cuT( "bone" ), CSCNSection::eSkeletonBone, skel::parserArmatureBone, { makeParameter< ParameterType::eName >() } );
+		armatureContext.addPopParser( cuT( "}" ), skel::parserArmatureEnd );
+
+		nodeContext.addParser( cuT( "parent" ), skel::parserArmatureNodeParent, { makeParameter< ParameterType::eName >() } );
+		nodeContext.addPopParser( cuT( "}" ), skel::parserArmatureNodeEnd );
+
+		boneContext.addParser( cuT( "parent" ), skel::parserArmatureNodeParent, { makeParameter< ParameterType::eName >() } );
+		boneContext.addParser( cuT( "inverse_transform" ), skel::parserArmatureBoneTransform, { makeParameter< ParameterType::ePoint4F >(), makeParameter< ParameterType::ePoint4F >(), makeParameter< ParameterType::ePoint4F >(), makeParameter< ParameterType::ePoint4F >() } );
+		boneContext.addPopParser( cuT( "}" ), skel::parserArmatureNodeEnd );
+
+		SkeletonAnimation::addParsers( result );
 	}
 
 	String getPrefix( SkeletonContext const & context )

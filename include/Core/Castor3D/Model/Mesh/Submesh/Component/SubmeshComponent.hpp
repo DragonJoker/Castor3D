@@ -13,6 +13,7 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	class BinaryChunk;
 	struct SubmeshSubComponent
 	{
 		SubmeshSubComponent() = default;
@@ -667,6 +668,27 @@ namespace c3d
 		 */
 		C3D_API void initialiseRenderData();
 		/**
+		 *\~english
+		 *\brief			Writes the component content to text.
+		 *\param[in]		tabs		The current tabulation level.
+		 *\param[in,out]	file		The output file.
+		 *\~french
+		 *\brief			Ecrit le contenu du composant en texte.
+		 *\param[in]		tabs		Le niveau actuel de tabulation.
+		 *\param[in,out]	file		Le fichier de sortie.
+		 */
+		C3D_API bool writeText( String const & tabs
+			, StringStream & file )const;
+		/**
+		 *\~english
+		 *\brief			Writes the component content to binary.
+		 *\param[in,out]	chunk	The output binary chunk.
+		 *\~french
+		 *\brief			Ecrit le contenu du composant en binaire.
+		 *\param[in,out]	chunk	Le chunk binaire de sortie.
+		 */
+		C3D_API bool writeBinary( BinaryChunk & chunk )const;
+		/**
 		*\~english
 		*\name
 		*	Getters.
@@ -721,6 +743,18 @@ namespace c3d
 	protected:
 		SubmeshComponentDataUPtr m_data;
 		SubmeshRenderDataPtr m_renderData;
+
+	private:
+		virtual bool doWriteText( String const & tabs
+			, StringStream & file )const
+		{
+			return true;
+		}
+
+		virtual bool doWriteBinary( BinaryChunk & chunk )const
+		{
+			return true;
+		}
 
 	private:
 		String m_type;

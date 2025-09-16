@@ -70,6 +70,24 @@ namespace c3d
 			CU_Require( index < m_submeshes.size() );
 			return m_submeshes[index];
 		}
+		/**
+		 *\~english
+		 *\param[in]	index	The index.
+		 *\return		The animated submesh at given index.
+		 *\~french
+		 *\param[in]	index	L'indice.
+		 *\return		Le sous-maillage animé à l'indice donné.
+		 */
+		MeshAnimationSubmesh const & getSubmesh( uint32_t index )const
+		{
+			CU_Require( index < m_submeshes.size() );
+			return m_submeshes[index];
+		}
+
+		uint32_t getSubmeshCount()const noexcept
+		{
+			return uint32_t( m_submeshes.size() );
+		}
 
 		C3D_API static void addParsers( AttributeParsers & result );
 
