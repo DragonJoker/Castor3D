@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace smaa
 {
 	c3d::AttributeParsers createParsers();
-	c3d::StrUInt32Map createSections();
+	c3d::StrSectionIdMap createSections();
 }
 
 #endif

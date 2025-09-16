@@ -375,7 +375,7 @@ namespace c3d
 		 *\brief			Remplit la liste de sections donnée avec les sections créées par ce composant.
 		 *\param[in,out]	sections	Reçoit les sections.
 		 */
-		C3D_API virtual void createSections( StrUInt32Map & sections )const
+		C3D_API virtual void createSections( StrSectionIdMap & sections )const
 		{
 		}
 

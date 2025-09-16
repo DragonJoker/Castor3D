@@ -14,70 +14,143 @@ namespace c3d
 {
 	namespace mshanm
 	{
-		static CU_ImplementAttributeParserBlock( parserMeshMorphTargetWeight, MeshContext )
+		struct MeshAnimationContext
 		{
-			if ( !blockContext->morphAnimation )
-			{
-				CU_ParsingError( cuT( "No Morph Animation initialised." ) );
-			}
-			else if ( params.size() < 3u )
-			{
-				CU_ParsingError( cuT( "Invalid parameters." ) );
-			}
-			else if ( auto mesh = blockContext->mesh )
-			{
-				float timeIndex{};
-				params[0]->get( timeIndex );
-				uint32_t targetIndex{};
-				params[1]->get( targetIndex );
-				float targetWeight{};
-				params[2]->get( targetWeight );
-				auto & animation = *blockContext->morphAnimation;
+			MeshContext * mesh{};
+			MeshAnimationRPtr animation{};
+			MeshMorphTargetUPtr keyframe;
+			SubmeshRPtr submesh{};
+			FloatArray weights;
+		};
 
-				for ( auto const & submesh : *mesh )
-				{
-					MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-					animation.addChild( c3d::move( animSubmesh ) );
-					auto time = Milliseconds{ uint64_t( timeIndex * 1000 ) };
-					auto kfit = animation.find( time );
-					MeshMorphTarget * kf{};
-
-					if ( kfit == animation.end() )
-					{
-						auto keyFrame = makeUnique< MeshMorphTarget >( animation, time );
-						kf = keyFrame.get();
-						animation.addKeyFrame( ptrRefCast< AnimationKeyFrame >( keyFrame ) );
-					}
-					else
-					{
-						kf = &static_cast< MeshMorphTarget & >( **kfit );
-					}
-
-					kf->setTargetWeight( *submesh, targetIndex, targetWeight );
-				}
-			}
+		static CU_ImplementAttributeParserNewBlock( parserRoot, MeshContext, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
 			else
 			{
-				CU_ParsingError( cuT( "No Mesh initialised." ) );
+				newBlockContext->mesh = blockContext;
+				newBlockContext->animation = &blockContext->mesh->createAnimation( params[0]->get< String >() );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMeshAnimation )
+
+		static CU_ImplementAttributeParserBlock( parserKeyframe, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eMeshAnimationKeyframe, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserKeyframeIndex, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else
+				blockContext->keyframe = makeUnique< MeshMorphTarget >( *blockContext->animation
+					, Milliseconds{ params[0]->get< uint64_t >() } );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserKeyframeSubmesh, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else
+			{
+				if ( auto id = params[0]->get< uint32_t >();
+					id >= blockContext->mesh->mesh->getSubmeshCount() )
+					CU_ParsingError( cuT( "Submesh ID is out of bounds." ) );
+				else
+				{
+					blockContext->submesh = blockContext->mesh->mesh->getSubmesh( id );
+					if ( !blockContext->animation->hasChild( *blockContext->submesh ) )
+						blockContext->animation->addChild( { *blockContext->animation, *blockContext->submesh } );
+				}
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserMeshMorphAnimationEnd, MeshContext )
+		static CU_ImplementAttributeParserBlock( parserKeyframeWeights, MeshAnimationContext )
 		{
-			if ( !blockContext->morphAnimation )
-			{
-				CU_ParsingError( cuT( "No Morph Animation initialised." ) );
-			}
-			else if ( auto mesh = blockContext->mesh )
-			{
-				log::info << "Loaded morp animation [" << blockContext->morphAnimation->getName() << "]" << std::endl;
-				mesh->addAnimation( ptrRefCast< Animation >( blockContext->morphAnimation ) );
-			}
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else if ( !blockContext->keyframe )
+				CU_ParsingError( cuT( "No keyframe initialised." ) );
+			else if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
 			else
 			{
-				CU_ParsingError( cuT( "No Mesh initialised." ) );
+				blockContext->weights.clear();
+				blockContext->weights.reserve( blockContext->submesh->getMorphTargetsCount() );
 			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eMeshAnimationKeyframeWeights, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserKeyframeTargetTargetWeight, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else if ( !blockContext->keyframe )
+				CU_ParsingError( cuT( "No keyframe initialised." ) );
+			else if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
+			else if ( blockContext->weights.size() >= blockContext->submesh->getMorphTargetsCount() )
+				CU_ParsingWarning( cuT( "Too many morph target weights, ignoring the additional ones." ) );
+			else
+				params[0]->get( blockContext->weights.emplace_back() );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserKeyframeWeightsEnd, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else if ( !blockContext->keyframe )
+				CU_ParsingError( cuT( "No keyframe initialised." ) );
+			else if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
+			else if ( blockContext->weights.size() < blockContext->submesh->getMorphTargetsCount() )
+				CU_ParsingError( cuT( "Not enough morph target weights specified." ) );
+			else
+				blockContext->keyframe->setTargetsWeights( *blockContext->submesh, move( blockContext->weights ) );
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserKeyframeEnd, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->keyframe )
+				CU_ParsingError( cuT( "No keyframe initialised." ) );
+			else
+				blockContext->animation->addKeyFrame( ptrRefCast< AnimationKeyFrame >( blockContext->keyframe ) );
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, MeshAnimationContext )
+		{
+			if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No mesh animation initialised." ) );
+			else if ( auto mesh = blockContext->mesh )
+			{
+				log::info << "Loaded morp animation [" << blockContext->animation->getName() << "]" << std::endl;
+				*blockContext = {};
+			}
+			else
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		CU_EndAttributePop()
 	}
@@ -111,10 +184,24 @@ namespace c3d
 
 	void MeshAnimation::addParsers( AttributeParsers & result )
 	{
-		BlockParserContextT< MeshContext > context{ result, CSCNSection::eMorphAnimation, CSCNSection::eMesh };
+		BlockParserContextT< MeshContext > meshContext{ result, CSCNSection::eMesh };
+		BlockParserContextT< MeshContext > animContext{ result, CSCNSection::eMeshAnimation, CSCNSection::eMesh };
+		BlockParserContextT< MeshContext > animationKeyframeContext{ result, CSCNSection::eMeshAnimationKeyframe, CSCNSection::eMeshAnimation };
+		BlockParserContextT< MeshContext > weightsContext{ result, CSCNSection::eMeshAnimationKeyframeWeights, CSCNSection::eMeshAnimationKeyframe };
 
-		context.addParser( cuT( "target_weight" ), mshanm::parserMeshMorphTargetWeight, ParserParameterArray{ makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eUInt32 >(), makeParameter< ParameterType::eFloat >() } );
-		context.addPopParser( cuT( "}" ), mshanm::parserMeshMorphAnimationEnd );
+		meshContext.addPushParser( cuT( "morph_animation" ), CSCNSection::eMeshAnimation, mshanm::parserRoot, { makeParameter< ParameterType::eName >() } );
+		meshContext.addPushParser( cuT( "mesh_animation" ), CSCNSection::eMeshAnimation, mshanm::parserRoot, { makeParameter< ParameterType::eName >() } );
+
+		animContext.addPushParser( cuT( "keyframe" ), CSCNSection::eMeshAnimationKeyframe, mshanm::parserKeyframe );
+		animContext.addPopParser( cuT( "}" ), mshanm::parserEnd );
+
+		animationKeyframeContext.addParser( cuT( "index" ), mshanm::parserKeyframeIndex, { makeParameter< ParameterType::eUInt64 >() } );
+		animationKeyframeContext.addParser( cuT( "submesh" ), mshanm::parserKeyframeSubmesh, { makeParameter< ParameterType::eUInt32 >() } );
+		animationKeyframeContext.addPushParser( cuT( "weights" ), CSCNSection::eMeshAnimationKeyframeWeights, mshanm::parserKeyframeWeights );
+		animationKeyframeContext.addPopParser( cuT( "}" ), mshanm::parserKeyframeEnd );
+
+		weightsContext.addParser( cuT( "weight" ), mshanm::parserKeyframeTargetTargetWeight, { makeParameter< ParameterType::eFloat >() } );
+		weightsContext.addPopParser( cuT( "}" ), mshanm::parserKeyframeWeightsEnd );
 	}
 
 	void MeshAnimation::doCloneInto( Animation & output )const

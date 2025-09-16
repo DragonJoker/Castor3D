@@ -240,7 +240,7 @@ namespace c3d
 		//@}
 
 		C3D_API static AttributeParsers createParsers();
-		C3D_API static StrUInt32Map createSections();
+		C3D_API static StrSectionIdMap createSections();
 
 	private:
 		/** Sets the control that is currently moved (only one at a time is allowed).

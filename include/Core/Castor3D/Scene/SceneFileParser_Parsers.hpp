@@ -11,7 +11,7 @@ See LICENSE file in root folder
 namespace c3d
 {
 	C3D_API AdditionalParsers createSceneFileParsers( Engine const & engine );
-	C3D_API StrUInt32Map registerSceneFileSections();
+	C3D_API StrSectionIdMap registerSceneFileSections();
 	C3D_API uint32_t getSceneFileRootSection();
 }
 

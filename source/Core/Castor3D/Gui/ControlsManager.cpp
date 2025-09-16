@@ -426,7 +426,7 @@ namespace c3d
 		return createGuiParsers();
 	}
 
-	StrUInt32Map ControlsManager::createSections()
+	StrSectionIdMap ControlsManager::createSections()
 	{
 		return createGuiSections();
 	}

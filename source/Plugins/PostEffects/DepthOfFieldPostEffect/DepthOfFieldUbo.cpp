@@ -44,9 +44,9 @@ namespace dof
 		};
 
 		enum class Section
-			: uint32_t
+			: c3d::SectionId
 		{
-			eRoot = CU_MakeSectionName( 'D', 'O', 'F', 'R' ),
+			eRoot = c3d::makeSectionName( 'D', 'O', 'F', 'R' ),
 		};
 
 		struct DoFContext
@@ -198,11 +198,11 @@ namespace dof
 		return result;
 	}
 
-	c3d::StrUInt32Map DepthOfFieldConfig::createSections()
+	c3d::StrSectionIdMap DepthOfFieldConfig::createSections()
 	{
 		return
 		{
-			{ uint32_t( parse::Section::eRoot ), PostEffect::Type },
+			{ c3d::SectionId( parse::Section::eRoot ), PostEffect::Type },
 		};
 	}
 

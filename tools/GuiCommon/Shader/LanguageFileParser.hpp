@@ -17,11 +17,12 @@ namespace GuiCommon
 	\brief Enumàration des sections de fichier de langage
 	*/
 	enum class LANGSection
+		: c3d::SectionId
 	{
-		eRoot = CU_MakeSectionName( 'R', 'O', 'O', 'T' ),
-		eLanguage = CU_MakeSectionName( 'L', 'A', 'N', 'G' ),
-		eKeywords = CU_MakeSectionName( 'K', 'W', 'R', 'D' ),
-		eStyle = CU_MakeSectionName( 'S', 'T', 'Y', 'L' ),
+		eRoot = c3d::makeSectionName( 'R', 'O', 'O', 'T' ),
+		eLanguage = c3d::makeSectionName( 'L', 'A', 'N', 'G' ),
+		eKeywords = c3d::makeSectionName( 'K', 'W', 'R', 'D' ),
+		eStyle = c3d::makeSectionName( 'S', 'T', 'Y', 'L' ),
 	};
 	/**
 	\~english

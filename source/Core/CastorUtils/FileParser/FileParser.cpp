@@ -224,13 +224,27 @@ namespace c3d
 			}
 			while ( pos != String::npos );
 		}
+
+		static String splitSectionId( SectionId id )
+		{
+			Array< char, 9 > v{};
+			v[7] = char( ( id >> 56 ) & 0xFF );
+			v[6] = char( ( id >> 48 ) & 0xFF );
+			v[5] = char( ( id >> 40 ) & 0xFF );
+			v[4] = char( ( id >> 32 ) & 0xFF );
+			v[3] = char( ( id >> 24 ) & 0xFF );
+			v[2] = char( ( id >> 16 ) & 0xFF );
+			v[1] = char( ( id >> 8 ) & 0xFF );
+			v[0] = char( ( id >> 0 ) & 0xFF );
+			return String{ v.data() };
+		}
 	}
 
 	//*********************************************************************************************
 
 	void addParser( AttributeParsers & parsers
-		, uint32_t oldSection
-		, uint32_t newSection
+		, SectionId oldSection
+		, SectionId newSection
 		, String const & name
 		, ParserFunction function
 		, ParserParameterArray params )
@@ -291,7 +305,7 @@ namespace c3d
 	void PreprocessedFile::addParserAction( Path file
 		, uint64_t line
 		, String name
-		, uint32_t section
+		, SectionId section
 		, ParserFunctionAndParams function
 		, String params
 		, bool implicit )
@@ -454,7 +468,7 @@ namespace c3d
 
 			std::for_each( begin + 1
 				, m_context->sections.end()
-				, [&sections, this]( uint32_t section )
+				, [&sections, this]( SectionId section )
 				{
 					sections << cuT( "::" ) << m_parser.getSectionName( section );
 				} );
@@ -488,7 +502,7 @@ namespace c3d
 	void PreprocessedFile::doAddParserAction( Path file
 		, uint64_t line
 		, String name
-		, uint32_t section
+		, SectionId section
 		, ParserFunctionAndParams function
 		, String params
 		, bool implicit )
@@ -696,7 +710,7 @@ namespace c3d
 			m_logger.logError( makeStringStream()
 				<< cuT( "Parser " ) << name
 				<< cuT( " for section " ) << doGetSectionName( oldSection )
-				<< cuT( " (" ) << oldSection
+				<< cuT( " (" ) << fileprs::splitSectionId( oldSection )
 				<< cuT( ") already exists." ) );
 		}
 	}
@@ -795,7 +809,7 @@ namespace c3d
 	}
 
 	void FileParser::doParseScriptBlockBegin( PreprocessedFile & preprocessed
-		, uint32_t newSection
+		, SectionId newSection
 		, uint64_t lineIndex
 		, bool implicit )
 	{

@@ -42,10 +42,10 @@ namespace waves
 	namespace parse
 	{
 		enum class WavesSection
-			: uint32_t
+			: c3d::SectionId
 		{
-			eWaves = CU_MakeSectionName( 'W', 'A', 'V', 'S' ),
-			eWave = CU_MakeSectionName( 'W', 'A', 'V', 'E' ),
+			eWaves = c3d::makeSectionName( 'W', 'A', 'V', 'S' ),
+			eWave = c3d::makeSectionName( 'W', 'A', 'V', 'E' ),
 		};
 
 		static CU_ImplementAttributeParserNewBlock( parserWavesComponent, c3d::MeshContext, WavesContext )
@@ -807,10 +807,10 @@ namespace waves
 		waveContext.addPopParser( cuT( "}" ), &parse::parserWaveEnd );
 	}
 
-	void WavesRenderComponent::Plugin::createSections( c3d::StrUInt32Map & sections )const
+	void WavesRenderComponent::Plugin::createSections( c3d::StrSectionIdMap & sections )const
 	{
-		sections.emplace( uint32_t( parse::WavesSection::eWaves ), cuT( "waves" ) );
-		sections.emplace( uint32_t( parse::WavesSection::eWave ), cuT( "wave" ) );
+		sections.emplace( c3d::SectionId( parse::WavesSection::eWaves ), cuT( "waves" ) );
+		sections.emplace( c3d::SectionId( parse::WavesSection::eWave ), cuT( "wave" ) );
 	}
 
 	//*********************************************************************************************

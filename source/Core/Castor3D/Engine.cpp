@@ -1475,7 +1475,7 @@ namespace c3d
 
 	void Engine::registerParsers( String name
 		, AttributeParsers parsers
-		, StrUInt32Map sections
+		, StrSectionIdMap sections
 		, UserContextCreator contextCreator )
 	{
 		if ( auto it = m_additionalParsers.find( name );

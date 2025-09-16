@@ -21,7 +21,7 @@ namespace dof
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 		bool write( c3d::StringStream & file, c3d::String const & tabs )const;
 		static c3d::AttributeParsers createParsers();
-		static c3d::StrUInt32Map createSections();
+		static c3d::StrSectionIdMap createSections();
 
 		c3d::RangedValue< float > focalDistance{ 10.0f, c3d::makeRange( 0.0f, 100.0f ) };
 		c3d::RangedValue< float > focalLength{ 1.0f, c3d::makeRange( 0.0f, 100.0f ) };
