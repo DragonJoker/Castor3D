@@ -139,7 +139,7 @@ namespace c3d_assimp
 				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
-				, bool disableImageCompression
+				, c3d::ImageLoaderConfig loadConfig
 				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 				, c3d::Pass & result )
 				: m_material{ material }
@@ -147,7 +147,7 @@ namespace c3d_assimp
 				, m_sampler{ sampler }
 				, m_importer{ importer }
 				, m_emissiveMult{ emissiveMult }
-				, m_loadConfig{ !disableImageCompression, true, true }
+				, m_loadConfig{ c3d::move( loadConfig ) }
 				, m_textureRemaps{ textureRemaps }
 				, m_shadingModel{ shadingMode }
 				, m_isPbr{ detectPbr() }
@@ -221,11 +221,11 @@ namespace c3d_assimp
 				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
-				, bool disableImageCompression
+				, c3d::ImageLoaderConfig loadConfig
 				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 				, c3d::Pass & pass )
 			{
-				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, disableImageCompression, textureRemaps, pass };
+				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, c3d::move( loadConfig ), textureRemaps, pass };
 				parser.parseDatas();
 				parser.finish();
 				pass.prepareTextures();
@@ -1372,7 +1372,7 @@ namespace c3d_assimp
 			, getEngine()->getDefaultSampler()
 			, *this
 			, m_emissiveMult
-			, !m_loadConfig.allowCompression
+			, m_loadConfig
 			, m_textureRemaps
 			, *pass );
 		return true;
