@@ -904,20 +904,13 @@ namespace c3d_assimp
 
 					if ( hasMinFilter || hasMagFilter || hasAddressModeU || hasAddressModeV )
 					{
-						c3d::String samplerName;
-						aiString mappingName;
-						m_material.Get( AI_MATKEY_GLTF_MAPPINGNAME( type, index ), mappingName );
-
-						if ( mappingName.length > 0 )
-						{
-							samplerName = makeString( mappingName );
-						}
-						else
-						{
-							samplerName = m_result.getOwner()->getName()
-								+ cuT( "_" ) + c3d::string::toString( m_result.getIndex() )
-								+ cuT( "_" ) + result.name;
-						}
+						auto samplerName = c3d::getSamplerName( c3d::ComparisonFunc::eNever
+							, hasMinFilter ? fromAssimp( minFilter ) : m_sampler->getMinFilter()
+							, hasMagFilter ? fromAssimp( magFilter ) : m_sampler->getMagFilter()
+							, hasMinFilter ? getMipFilter( minFilter ) : m_sampler->getMipFilter()
+							, hasAddressModeU ? fromAssimp( addressModeU ) : m_sampler->getWrapS()
+							, hasAddressModeV ? fromAssimp( addressModeV ) : m_sampler->getWrapT()
+							, m_sampler->getWrapR() );
 
 						if ( !cache.has( samplerName ) )
 						{
