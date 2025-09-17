@@ -374,10 +374,10 @@ namespace c3d_gltf
 		static size_t getMeshNodeIndex( GltfImporterFile const & file
 			, AnimationChannelSamplers const & channelSamplers
 			, c3d::String const & name
-			, uint32_t submeshIndex )
+			, c3d::Submesh const & submesh )
 		{
 			size_t result{};
-			size_t meshIndex = file.getMeshIndex( name, submeshIndex );
+			size_t meshIndex = file.getMeshIndex( name, submesh );
 			auto it = std::find_if( channelSamplers.begin()
 				, channelSamplers.end()
 				, [&result, meshIndex, &file]( AnimationChannelSamplers::value_type const & lookup )
@@ -486,8 +486,7 @@ namespace c3d_gltf
 
 		for ( auto & submesh : mesh )
 		{
-			auto index = submesh->getId();
-			auto animations = file.getMeshAnimations( mesh, index );
+			auto animations = file.getMeshAnimations( mesh, *submesh );
 			auto animIt = animations.find( name );
 
 			if ( animIt != animations.end()
@@ -495,7 +494,7 @@ namespace c3d_gltf
 			{
 				c3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
 				auto & animChannels = animIt->second;
-				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName(), index );
+				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName(), *submesh );
 				auto impNodeAnim = anims::findNodeAnim( animChannels, nodeIndex );
 				bool hasKeyframes = false;
 

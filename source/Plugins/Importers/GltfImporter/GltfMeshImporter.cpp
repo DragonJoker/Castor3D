@@ -312,7 +312,7 @@ namespace c3d_gltf
 
 	bool GltfMeshImporter::doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto & file = static_cast< GltfImporterFile & >( *m_file );
 		auto name = mesh.getName();
 		auto it = file.getMeshes().find( name );
 
@@ -321,9 +321,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		using PrimitiveMap = c3d::Map< fastgltf::PrimitiveType, PrimitiveArray >;
-		using MaterialPrimitiveMap = c3d::Map< c3d::Material *, PrimitiveMap >;
-		c3d::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
 		auto const & engine = *file.getOwner();
 		uint32_t meshIndex{};
 
@@ -331,86 +328,52 @@ namespace c3d_gltf
 		{
 			if ( submeshIndex == 0xFFFFFFFFu || submeshIndex == meshIndex )
 			{
-				fastgltf::Mesh const & impMesh = *submesh.mesh;
+				auto impMesh = submesh.mesh;
 
-				for ( auto & primitive : impMesh.primitives )
+				for ( auto & primitiveData : submesh.primitives )
 				{
-					c3d::MaterialRPtr material;
+					auto impPrimitive = primitiveData.primitive;
+					auto impMaterial = engine.tryFindMaterial( primitiveData.material );
+					if ( !impMaterial )
+						CU_LoaderError( "glTF Material not found." );
+					impMaterial->setSerialisable( true );
 
-					if ( primitive.materialIndex )
+					switch ( impPrimitive->type )
 					{
-						material = engine.tryFindMaterial( file.getMaterialName( uint32_t( *primitive.materialIndex ) ) );
-
-						if ( !material )
-						{
-							CU_LoaderError( "glTF Material not found." );
-						}
+					case fastgltf::PrimitiveType::Points:
+						primitiveData.submesh = doProcessPointsSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
+						break;
+					case fastgltf::PrimitiveType::Lines:
+						primitiveData.submesh = doProcessLinesSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
+						break;
+					case fastgltf::PrimitiveType::LineLoop:
+						primitiveData.submesh = doProcessLineStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive, true );
+						break;
+					case fastgltf::PrimitiveType::LineStrip:
+						primitiveData.submesh = doProcessLineStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive, false );
+						break;
+					case fastgltf::PrimitiveType::Triangles:
+						primitiveData.submesh = doProcessTrianglesSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
+						break;
+					case fastgltf::PrimitiveType::TriangleStrip:
+						primitiveData.submesh = doProcessTriangleStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
+						break;
+					case fastgltf::PrimitiveType::TriangleFan:
+						primitiveData.submesh = doProcessTriangleFanSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
+						break;
+					default:
+						break;
 					}
-					else
-					{
-						material = engine.tryFindMaterial( DefaultMaterial );
-
-						if ( !material )
-						{
-							CU_LoaderError( "Default glTF material not found." );
-						}
-
-						material->setSerialisable( true );
-					}
-
-					auto pit = submeshes.try_emplace( &impMesh ).first;
-					auto mit = pit->second.try_emplace( material ).first;
-					auto sit = mit->second.try_emplace( primitive.type ).first;
-					sit->second.push_back( &primitive );
 				}
 			}
 
 			++meshIndex;
 		}
 
-		for ( auto const & [impMesh, impMaterials] : submeshes )
-		{
-			for ( auto const & [impMaterial, impSubmeshes] : impMaterials )
-			{
-				for ( auto const & [impPrimitiveType, impPrimitives] : impSubmeshes )
-				{
-					for ( auto & impPrimitive : impPrimitives )
-					{
-						switch ( impPrimitiveType )
-						{
-						case fastgltf::PrimitiveType::Points:
-							doProcessPointsSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
-							break;
-						case fastgltf::PrimitiveType::Lines:
-							doProcessLinesSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
-							break;
-						case fastgltf::PrimitiveType::LineLoop:
-							doProcessLineStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive, true );
-							break;
-						case fastgltf::PrimitiveType::LineStrip:
-							doProcessLineStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive, false );
-							break;
-						case fastgltf::PrimitiveType::Triangles:
-							doProcessTrianglesSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
-							break;
-						case fastgltf::PrimitiveType::TriangleStrip:
-							doProcessTriangleStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
-							break;
-						case fastgltf::PrimitiveType::TriangleFan:
-							doProcessTriangleFanSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
-							break;
-						default:
-							break;
-						}
-					}
-				}
-			}
-		}
-
 		return true;
 	}
 
-	void GltfMeshImporter::doProcessPointsSubmesh( c3d::Mesh & mesh
+	c3d::SubmeshRPtr GltfMeshImporter::doProcessPointsSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )const
@@ -427,10 +390,13 @@ namespace c3d_gltf
 		else
 		{
 			mesh.removeSubmesh( *submesh );
+			submesh = nullptr;
 		}
+
+		return submesh;
 	}
 
-	void GltfMeshImporter::doProcessLinesSubmesh( c3d::Mesh & mesh
+	c3d::SubmeshRPtr GltfMeshImporter::doProcessLinesSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )const
@@ -463,7 +429,7 @@ namespace c3d_gltf
 				default:
 					mapping.reset();
 					c3d::log::error << "Unsupported data type for face index\n";
-					return;
+					return nullptr;
 				}
 
 				if ( mapping )
@@ -475,10 +441,13 @@ namespace c3d_gltf
 		else
 		{
 			mesh.removeSubmesh( *submesh );
+			submesh = nullptr;
 		}
+
+		return submesh;
 	}
 
-	void GltfMeshImporter::doProcessLineStripSubmesh( c3d::Mesh & mesh
+	c3d::SubmeshRPtr GltfMeshImporter::doProcessLineStripSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive
@@ -513,7 +482,7 @@ namespace c3d_gltf
 				default:
 					mapping.reset();
 					c3d::log::error << "Unsupported data type for face index\n";
-					return;
+					return nullptr;
 				}
 
 				if ( mapping )
@@ -525,10 +494,13 @@ namespace c3d_gltf
 		else
 		{
 			mesh.removeSubmesh( *submesh );
+			submesh = nullptr;
 		}
+
+		return submesh;
 	}
 
-	void GltfMeshImporter::doProcessTrianglesSubmesh( c3d::Mesh & mesh
+	c3d::SubmeshRPtr GltfMeshImporter::doProcessTrianglesSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )const
@@ -560,7 +532,7 @@ namespace c3d_gltf
 				default:
 					mapping.reset();
 					c3d::log::error << "Unsupported data type for face index\n";
-					return;
+					return nullptr;
 				}
 
 				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
@@ -596,10 +568,13 @@ namespace c3d_gltf
 		else
 		{
 			mesh.removeSubmesh( *submesh );
+			submesh = nullptr;
 		}
+
+		return submesh;
 	}
 
-	void GltfMeshImporter::doProcessTriangleStripSubmesh( c3d::Mesh & mesh
+	c3d::SubmeshRPtr GltfMeshImporter::doProcessTriangleStripSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )const
@@ -631,7 +606,7 @@ namespace c3d_gltf
 				default:
 					mapping.reset();
 					c3d::log::error << "Unsupported data type for face index\n";
-					return;
+					return nullptr;
 				}
 
 				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
@@ -670,10 +645,13 @@ namespace c3d_gltf
 		else
 		{
 			mesh.removeSubmesh( *submesh );
+			submesh = nullptr;
 		}
+
+		return submesh;
 	}
 
-	void GltfMeshImporter::doProcessTriangleFanSubmesh( c3d::Mesh & mesh
+	c3d::SubmeshRPtr GltfMeshImporter::doProcessTriangleFanSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )const
@@ -705,7 +683,7 @@ namespace c3d_gltf
 				default:
 					mapping.reset();
 					c3d::log::error << "Unsupported data type for face index\n";
-					return;
+					return nullptr;
 				}
 
 				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
@@ -738,7 +716,10 @@ namespace c3d_gltf
 		else
 		{
 			mesh.removeSubmesh( *submesh );
+			submesh = nullptr;
 		}
+
+		return submesh;
 	}
 
 	bool GltfMeshImporter::doProcessMeshVertices( fastgltf::Asset const & impAsset

@@ -77,6 +77,24 @@ namespace c3d_gltf
 		c3d::HashSet< c3d::String > names;
 	};
 
+	struct GltfSubmeshPrimitiveData
+	{
+		GltfSubmeshPrimitiveData( uint32_t pprimitiveIndex
+			, c3d::String pmaterial
+			, fastgltf::Primitive const * pprimitive )
+			: primitiveIndex{ pprimitiveIndex }
+			, material{ pmaterial }
+			, primitive{ pprimitive }
+		{
+		}
+
+		uint32_t primitiveIndex{};
+		c3d::String material{};
+		fastgltf::Primitive const * primitive{};
+		c3d::Submesh const * submesh{};
+		Animations anims;
+	};
+
 	struct GltfSubmeshData
 	{
 		GltfSubmeshData( fastgltf::Mesh const * pmesh
@@ -88,7 +106,7 @@ namespace c3d_gltf
 
 		fastgltf::Mesh const * mesh;
 		uint32_t meshIndex;
-		Animations anims;
+		c3d::Vector< GltfSubmeshPrimitiveData > primitives;
 	};
 
 	struct GltfMeshData
@@ -222,9 +240,9 @@ namespace c3d_gltf
 
 		size_t getNodeIndex( c3d::String const & name )const;
 		size_t getSkeletonNodeIndex( c3d::String const & name )const;
-		size_t getMeshIndex( c3d::String const & name, uint32_t submeshIndex )const;
+		size_t getMeshIndex( c3d::String const & name, c3d::Submesh const & submesh )const;
 
-		Animations getMeshAnimations( c3d::Mesh const & mesh, uint32_t submeshIndex )const;
+		Animations getMeshAnimations( c3d::Mesh const & mesh, c3d::Submesh const & submesh )const;
 		Animations getSkinAnimations( c3d::Skeleton const & skeleton )const;
 		Animations getNodeAnimations( c3d::SceneNode const & node )const;
 
@@ -281,7 +299,7 @@ namespace c3d_gltf
 			return m_expAsset.error() == fastgltf::Error::None;
 		}
 
-		auto const & getMeshes()const
+		auto & getMeshes()
 		{
 			return m_sceneData.meshes;
 		}

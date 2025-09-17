@@ -18,31 +18,29 @@ namespace c3d_gltf
 		explicit GltfMeshImporter( c3d::Engine & engine );
 
 	private:
-		using PrimitiveArray = c3d::Vector< fastgltf::Primitive const * >;
-
 		bool doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )override;
-		void doProcessPointsSubmesh( c3d::Mesh & mesh
+		c3d::SubmeshRPtr doProcessPointsSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive )const;
-		void doProcessLinesSubmesh( c3d::Mesh & mesh
+		c3d::SubmeshRPtr doProcessLinesSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive )const;
-		void doProcessLineStripSubmesh( c3d::Mesh & mesh
+		c3d::SubmeshRPtr doProcessLineStripSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive
 			, bool loop )const;
-		void doProcessTrianglesSubmesh( c3d::Mesh & mesh
+		c3d::SubmeshRPtr doProcessTrianglesSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive )const;
-		void doProcessTriangleStripSubmesh( c3d::Mesh & mesh
+		c3d::SubmeshRPtr doProcessTriangleStripSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive )const;
-		void doProcessTriangleFanSubmesh( c3d::Mesh & mesh
+		c3d::SubmeshRPtr doProcessTriangleFanSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive )const;
