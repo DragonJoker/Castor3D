@@ -23,7 +23,7 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseLineList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, c3d::LineMapping & mapping
+			, c3d::LineMapping const & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
@@ -54,7 +54,7 @@ namespace c3d_gltf
 		static void parseLineStrip( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
 			, uint32_t lineCount
-			, c3d::LineMapping & mapping
+			, c3d::LineMapping const & mapping
 			, bool loop
 			, CompressedBufferDataAdapter const & adapter )
 		{
@@ -99,7 +99,7 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseTriangleList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, c3d::TriFaceMapping & mapping
+			, c3d::TriFaceMapping const & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
@@ -130,7 +130,7 @@ namespace c3d_gltf
 		template< typename IndexT, bool IsStripT >
 		static void parseTriangleStrip( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, c3d::TriFaceMapping & mapping
+			, c3d::TriFaceMapping const & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
@@ -183,18 +183,17 @@ namespace c3d_gltf
 			mapping.getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
-		auto findAttribute( auto const & attributes
+		static auto findAttribute( auto const & attributes
 			, std::pmr::string const & name )
 		{
-			return std::find_if( attributes.begin()
-				, attributes.end()
+			return std::find_if( std::begin( attributes ), std::end( attributes )
 				, [&name]( auto const & lookup )
 				{
 					return lookup.name == name;
 				} );
 		}
 
-		bool hasAttribute( auto const & attributes
+		static bool hasAttribute( auto const & attributes
 			, std::pmr::string const & name )
 		{
 			return findAttribute( attributes, name ) != attributes.end();
@@ -243,7 +242,7 @@ namespace c3d_gltf
 			return !result.empty();
 		}
 
-		inline void createVertexBuffer( fastgltf::Asset const & impAsset
+		static void createVertexBuffer( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
 			, c3d::Point3fArray & positions
 			, c3d::Point3fArray & normals
@@ -262,12 +261,10 @@ namespace c3d_gltf
 				return;
 			}
 
-			if ( meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals, adapter ) )
+			if ( meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals, adapter )
+				&& !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter ) )
 			{
-				if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter ) )
-				{
-					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter );
-				}
+				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter );
 			}
 
 			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_0", texcoords0, adapter );
@@ -275,12 +272,10 @@ namespace c3d_gltf
 			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_2", texcoords2, adapter );
 			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_3", texcoords3, adapter );
 
-			if ( !ignoreVertexColour )
+			if ( !ignoreVertexColour
+				&& !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter ) )
 			{
-				if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter ) )
-				{
-					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
-				}
+				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
 			}
 		}
 
@@ -329,7 +324,7 @@ namespace c3d_gltf
 		using PrimitiveMap = c3d::Map< fastgltf::PrimitiveType, PrimitiveArray >;
 		using MaterialPrimitiveMap = c3d::Map< c3d::Material *, PrimitiveMap >;
 		c3d::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
-		auto & engine = *file.getOwner();
+		auto const & engine = *file.getOwner();
 		uint32_t meshIndex{};
 
 		for ( auto & submesh : it->second.submeshes )
@@ -363,9 +358,9 @@ namespace c3d_gltf
 						material->setSerialisable( true );
 					}
 
-					auto pit = submeshes.emplace( &impMesh, MaterialPrimitiveMap{} ).first;
-					auto mit = pit->second.emplace( material, PrimitiveMap{} ).first;
-					auto sit = mit->second.emplace( primitive.type, PrimitiveArray{} ).first;
+					auto pit = submeshes.try_emplace( &impMesh ).first;
+					auto mit = pit->second.try_emplace( material ).first;
+					auto sit = mit->second.try_emplace( primitive.type ).first;
 					sit->second.push_back( &primitive );
 				}
 			}
@@ -373,40 +368,36 @@ namespace c3d_gltf
 			++meshIndex;
 		}
 
-		for ( auto & meshesIt : submeshes )
+		for ( auto const & [impMesh, impMaterials] : submeshes )
 		{
-			auto & impMesh = *meshesIt.first;
-
-			for ( auto & materialsIt : meshesIt.second )
+			for ( auto const & [impMaterial, impSubmeshes] : impMaterials )
 			{
-				auto material = materialsIt.first;
-
-				for ( auto & submeshesIt : materialsIt.second )
+				for ( auto const & [impPrimitiveType, impPrimitives] : impSubmeshes )
 				{
-					for ( auto & impPrimitive : submeshesIt.second )
+					for ( auto & impPrimitive : impPrimitives )
 					{
-						switch ( submeshesIt.first )
+						switch ( impPrimitiveType )
 						{
 						case fastgltf::PrimitiveType::Points:
-							doProcessPointsSubmesh( mesh, material, impMesh, *impPrimitive );
+							doProcessPointsSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
 							break;
 						case fastgltf::PrimitiveType::Lines:
-							doProcessLinesSubmesh( mesh, material, impMesh, *impPrimitive );
+							doProcessLinesSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
 							break;
 						case fastgltf::PrimitiveType::LineLoop:
-							doProcessLineStripSubmesh( mesh, material, impMesh, *impPrimitive, true );
+							doProcessLineStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive, true );
 							break;
 						case fastgltf::PrimitiveType::LineStrip:
-							doProcessLineStripSubmesh( mesh, material, impMesh, *impPrimitive, false );
+							doProcessLineStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive, false );
 							break;
 						case fastgltf::PrimitiveType::Triangles:
-							doProcessTrianglesSubmesh( mesh, material, impMesh, *impPrimitive );
+							doProcessTrianglesSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
 							break;
 						case fastgltf::PrimitiveType::TriangleStrip:
-							doProcessTriangleStripSubmesh( mesh, material, impMesh, *impPrimitive );
+							doProcessTriangleStripSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
 							break;
 						case fastgltf::PrimitiveType::TriangleFan:
-							doProcessTriangleFanSubmesh( mesh, material, impMesh, *impPrimitive );
+							doProcessTriangleFanSubmesh( mesh, impMaterial, *impMesh, *impPrimitive );
 							break;
 						default:
 							break;
@@ -422,13 +413,13 @@ namespace c3d_gltf
 	void GltfMeshImporter::doProcessPointsSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
-		, fastgltf::Primitive const & impPrimitive )
+		, fastgltf::Primitive const & impPrimitive )const
 	{
 		auto submesh = mesh.createSubmesh();
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
+		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
 			submesh->createComponent< c3d::DefaultRenderComponent >();
@@ -442,13 +433,13 @@ namespace c3d_gltf
 	void GltfMeshImporter::doProcessLinesSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
-		, fastgltf::Primitive const & impPrimitive )
+		, fastgltf::Primitive const & impPrimitive )const
 	{
 		auto submesh = mesh.createSubmesh();
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
+		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->createComponent< c3d::DefaultRenderComponent >();
@@ -491,13 +482,13 @@ namespace c3d_gltf
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive
-		, bool loop )
+		, bool loop )const
 	{
 		auto submesh = mesh.createSubmesh();
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
+		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->createComponent< c3d::DefaultRenderComponent >();
@@ -540,13 +531,13 @@ namespace c3d_gltf
 	void GltfMeshImporter::doProcessTrianglesSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
-		, fastgltf::Primitive const & impPrimitive )
+		, fastgltf::Primitive const & impPrimitive )const
 	{
 		auto submesh = mesh.createSubmesh();
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
+		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->createComponent< c3d::DefaultRenderComponent >();
 
@@ -611,13 +602,13 @@ namespace c3d_gltf
 	void GltfMeshImporter::doProcessTriangleStripSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
-		, fastgltf::Primitive const & impPrimitive )
+		, fastgltf::Primitive const & impPrimitive )const
 	{
 		auto submesh = mesh.createSubmesh();
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
+		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->createComponent< c3d::DefaultRenderComponent >();
 
@@ -685,13 +676,13 @@ namespace c3d_gltf
 	void GltfMeshImporter::doProcessTriangleFanSubmesh( c3d::Mesh & mesh
 		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
-		, fastgltf::Primitive const & impPrimitive )
+		, fastgltf::Primitive const & impPrimitive )const
 	{
 		auto submesh = mesh.createSubmesh();
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
+		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->createComponent< c3d::DefaultRenderComponent >();
 
@@ -753,11 +744,10 @@ namespace c3d_gltf
 	bool GltfMeshImporter::doProcessMeshVertices( fastgltf::Asset const & impAsset
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive
-		, c3d::Mesh & mesh
 		, c3d::Submesh & submesh
-		, c3d::Material * material )
+		, c3d::Material * material )const
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
 		submesh.setDefaultMaterial( material );
 		auto positions = submesh.createComponent< c3d::PositionsComponent >();
 		c3d::Point3fArray nml;
@@ -854,7 +844,8 @@ namespace c3d_gltf
 			if ( index < impMesh.weights.size()
 				&& impMesh.weights[index] != 0.0f )
 			{
-				meshes::applyWeight( buffer, impMesh.weights[index++] );
+				meshes::applyWeight( buffer, impMesh.weights[index] );
+				++index;
 			}
 
 			morphTargets.emplace_back( c3d::move( buffer ) );
@@ -867,7 +858,7 @@ namespace c3d_gltf
 				? submesh.getComponent< c3d::MorphComponent >()
 				: submesh.createComponent< c3d::MorphComponent >();
 
-			for ( auto & morphTarget : morphTargets )
+			for ( auto const & morphTarget : morphTargets )
 			{
 				component->getData().addMorphTarget( morphTarget );
 			}
@@ -908,7 +899,7 @@ namespace c3d_gltf
 	}
 
 	void GltfMeshImporter::doCheckNmlTan( c3d::Submesh & submesh
-		, c3d::IndexMappingUPtr mapping )
+		, c3d::IndexMappingUPtr mapping )const
 	{
 		if ( mapping )
 		{

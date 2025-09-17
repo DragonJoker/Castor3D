@@ -24,36 +24,35 @@ namespace c3d_gltf
 		void doProcessPointsSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
-			, fastgltf::Primitive const & impPrimitive );
+			, fastgltf::Primitive const & impPrimitive )const;
 		void doProcessLinesSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
-			, fastgltf::Primitive const & impPrimitive );
+			, fastgltf::Primitive const & impPrimitive )const;
 		void doProcessLineStripSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive
-			, bool loop );
+			, bool loop )const;
 		void doProcessTrianglesSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
-			, fastgltf::Primitive const & impPrimitive );
+			, fastgltf::Primitive const & impPrimitive )const;
 		void doProcessTriangleStripSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
-			, fastgltf::Primitive const & impPrimitive );
+			, fastgltf::Primitive const & impPrimitive )const;
 		void doProcessTriangleFanSubmesh( c3d::Mesh & mesh
 			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
-			, fastgltf::Primitive const & impPrimitive );
+			, fastgltf::Primitive const & impPrimitive )const;
 		bool doProcessMeshVertices( fastgltf::Asset const & impAsset
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive
-			, c3d::Mesh & mesh
 			, c3d::Submesh & submesh
-			, c3d::Material * material );
+			, c3d::Material * material )const;
 		void doCheckNmlTan( c3d::Submesh & submesh
-			, c3d::IndexMappingUPtr mapping );
+			, c3d::IndexMappingUPtr mapping )const;
 		void doTransformMesh( fastgltf::Node const & impNode
 			, c3d::Vector< fastgltf::Node > const & impNodes
 			, c3d::Mesh & mesh
