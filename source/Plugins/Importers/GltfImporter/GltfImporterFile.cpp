@@ -235,22 +235,6 @@ namespace c3d_gltf
 					} );
 		}
 
-		static auto findNodeMesh( size_t meshIndex
-			, c3d::StringMap< GltfMeshData > const & meshes )
-		{
-			return std::find_if( meshes.begin()
-				, meshes.end()
-				, [&meshIndex]( c3d::StringMap< GltfMeshData >::value_type const & lookup )
-				{
-					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin()
-						, lookup.second.submeshes.end()
-						, [&meshIndex]( GltfSubmeshData const & submesh )
-						{
-							return submesh.meshIndex == meshIndex;
-						} );
-				} );
-		}
-
 		static c3d::String getElementName( auto const & elements
 			, size_t index
 			, c3d::StringView baseName )
@@ -341,9 +325,8 @@ namespace c3d_gltf
 				&& asset.nodes[*channel.nodeIndex].meshIndex;
 		}
 
-		template< typename DataT >
 		static void listDataAnimations( GltfImporterFile const & file
-			, DataT & data )
+			, GltfNodeData & nodeData )
 		{
 			auto & asset = file.getAsset();
 			size_t animIndex{};
@@ -352,11 +335,36 @@ namespace c3d_gltf
 			{
 				for ( auto & channel : animation.channels )
 				{
-					if ( isAnimationTarget( asset, channel, data ) )
+					if ( isAnimationTarget( asset, channel, nodeData ) )
 					{
-						auto & channelSamplers = data.anims.emplace( file.getAnimationName( animIndex ), AnimationChannelSamplers{} ).first->second;
+						auto & channelSamplers = nodeData.anims.emplace( file.getAnimationName( animIndex ), AnimationChannelSamplers{} ).first->second;
 						auto & nodeSamplers = channelSamplers.emplace( channel.path, NodeAnimationChannelSampler{} ).first->second;
 						nodeSamplers.emplace_back( channel, animation.samplers[channel.samplerIndex] );
+					}
+				}
+
+				++animIndex;
+			}
+		}
+
+		static void listDataAnimations( GltfImporterFile const & file
+			, GltfSubmeshData & submeshData )
+		{
+			auto & asset = file.getAsset();
+			size_t animIndex{};
+
+			for ( auto & animation : asset.animations )
+			{
+				for ( auto & channel : animation.channels )
+				{
+					if ( isAnimationTarget( asset, channel, submeshData ) )
+					{
+						for ( auto & primitiveData : submeshData.primitives )
+						{
+							auto & channelSamplers = primitiveData.anims.emplace( file.getAnimationName( animIndex ), AnimationChannelSamplers{} ).first->second;
+							auto & nodeSamplers = channelSamplers.emplace( channel.path, NodeAnimationChannelSampler{} ).first->second;
+							nodeSamplers.emplace_back( channel, animation.samplers[channel.samplerIndex] );
+						}
 					}
 				}
 
@@ -377,9 +385,8 @@ namespace c3d_gltf
 				, asset.nodes.end()
 				, [meshIndex]( fastgltf::Node const & lookup )
 				{
-					return lookup.meshIndex
-						&& *lookup.meshIndex == meshIndex
-						&& lookup.skinIndex;
+					return lookup.skinIndex && lookup.meshIndex
+						&& *lookup.meshIndex == meshIndex;
 				} );
 			auto result = meshes.end();
 
@@ -393,14 +400,25 @@ namespace c3d_gltf
 					{
 						return skin == lookup.second.skin;
 					} );
-
 				if ( result != meshes.end() )
-				{
 					result = file::replaceIter( meshName, result, meshes ).first;
-				}
 			}
 
 			return result;
+		}
+
+		static auto findNodeMesh( size_t meshIndex
+			, c3d::StringMap< GltfMeshData > const & meshes )
+		{
+			return std::find_if( meshes.begin(), meshes.end()
+				, [&meshIndex]( c3d::StringMap< GltfMeshData >::value_type const & lookup )
+				{
+					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin(), lookup.second.submeshes.end()
+						, [&meshIndex]( GltfSubmeshData const & submesh )
+						{
+							return submesh.meshIndex == meshIndex;
+						} );
+				} );
 		}
 
 		static void listNodeMeshes( c3d::Vector< c3d::Matrix4x4f > const & cumulativeTransforms
@@ -811,21 +829,42 @@ namespace c3d_gltf
 		return ( *it )->index;
 	}
 
-	size_t GltfImporterFile::getMeshIndex( c3d::String const & name, uint32_t submeshIndex )const
+	size_t GltfImporterFile::getMeshIndex( c3d::String const & name, c3d::Submesh const & submesh )const
 	{
 		auto mit = m_sceneData.meshes.find( name );
 		CU_Require( mit != m_sceneData.meshes.end() );
-		CU_Require( submeshIndex < mit->second.submeshes.size() );
-		return mit->second.submeshes[submeshIndex].meshIndex;
+		auto sit = mit->second.submeshes.begin();
+		while ( sit != mit->second.submeshes.end() )
+		{
+			auto pit = sit->primitives.begin();
+			while ( pit != sit->primitives.end() )
+			{
+				if ( &submesh == pit->submesh )
+					return sit->meshIndex;
+				++pit;
+			}
+			++sit;
+		}
+		return ~0u;
 	}
 
-	Animations GltfImporterFile::getMeshAnimations( c3d::Mesh const & mesh, uint32_t submeshIndex )const
+	Animations GltfImporterFile::getMeshAnimations( c3d::Mesh const & mesh, c3d::Submesh const & submesh )const
 	{
-		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
-			it != m_sceneData.meshes.end()
-				&& submeshIndex < it->second.submeshes.size() )
+		if ( auto mit = m_sceneData.meshes.find( mesh.getName() );
+			mit != m_sceneData.meshes.end() )
 		{
-			return it->second.submeshes[submeshIndex].anims;
+			auto sit = mit->second.submeshes.begin();
+			while ( sit != mit->second.submeshes.end() )
+			{
+				auto pit = sit->primitives.begin();
+				while ( pit != sit->primitives.end() )
+				{
+					if ( &submesh == pit->submesh )
+						return pit->anims;
+					++pit;
+				}
+				++sit;
+			}
 		}
 
 		static Animations const dummy;
@@ -1047,7 +1086,7 @@ namespace c3d_gltf
 		{
 			for ( auto const & submesh : it->second.submeshes )
 			{
-				for ( auto const & [name, _] : submesh.anims )
+				for ( auto const & [name, _] : submesh.primitives.front().anims )
 				{
 					result.insert( name );
 				}
@@ -1129,7 +1168,7 @@ namespace c3d_gltf
 		{
 			for ( auto & submesh : mesh.submeshes )
 			{
-				result += uint32_t( submesh.anims.size() );
+				result += uint32_t( submesh.primitives.front().anims.size() );
 			}
 		}
 
@@ -1244,11 +1283,8 @@ namespace c3d_gltf
 		for ( auto & node : m_asset->nodes )
 		{
 			auto transform = convert( node.transform );
-
 			if ( node.cameraIndex )
-			{
 				transform.rotate *= c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0f, 1.0f, 0.0f }, c3d::Angle::fromDegrees( 180.0f ) );
-			}
 
 			auto & nodeData = m_sceneData.nodes.emplace_back( node.cameraIndex.has_value()
 				, file::isSkeletonNode( *m_asset, m_asset->skins, nodeIndex, skinsRootNodes )
@@ -1417,19 +1453,29 @@ namespace c3d_gltf
 				regIt = m_sceneData.meshes.find( meshName );
 			}
 
+			// Try to merge the mesh with other ones (if they share the same skin)
 			if ( regIt == m_sceneData.meshes.end() )
-			{
 				regIt = file::mergeMeshes( *this, meshIndex, meshName
 					, m_sceneData.meshes, skinIndex, skin );
-			}
 
+			// Brand new mesh
 			if ( regIt == m_sceneData.meshes.end() )
-			{
 				regIt = m_sceneData.meshes.try_emplace( meshName, skin, skinIndex ).first;
+
+			auto & submeshData = regIt->second.submeshes.emplace_back( &impMesh, meshIndex );
+
+			// Now split submesh by primitive type.
+			uint32_t primitiveIndex{};
+			for ( auto & primitive : submeshData.mesh->primitives )
+			{
+				c3d::String material = primitive.materialIndex
+					? getMaterialName( uint32_t( *primitive.materialIndex ) )
+					: DefaultMaterial;
+				submeshData.primitives.emplace_back( primitiveIndex, material, &primitive );
+				++primitiveIndex;
 			}
 
-			file::listDataAnimations( *this
-				, regIt->second.submeshes.emplace_back( &impMesh, meshIndex ) );
+			file::listDataAnimations( *this, submeshData );
 
 			++meshIndex;
 		}
