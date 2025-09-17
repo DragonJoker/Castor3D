@@ -19,12 +19,12 @@ namespace c3d_assimp
 	private:
 		bool doImportMesh( c3d::Mesh & mesh, uint32_t submesh )override;
 		void doImportSingleMesh( c3d::Mesh & mesh, uint32_t submesh );
-		bool doImportSceneMesh( c3d::Mesh & mesh, uint32_t submesh );
+		bool doImportSceneMesh( c3d::Mesh & mesh, uint32_t submesh )const;
 		void doProcessMesh( aiScene const & aiScene
 			, aiMesh const & aiMesh
 			, uint32_t aiMeshIndex
-			, c3d::Mesh & mesh
-			, c3d::Submesh & submesh );
+			, c3d::Mesh const & mesh
+			, c3d::Submesh & submesh )const;
 		void doTransformMesh( aiNode const & aiNode
 			, c3d::Mesh & mesh
 			, aiMatrix4x4 transformAcc = aiMatrix4x4{} );
