@@ -36,7 +36,8 @@ namespace c3d_assimp
 			bool noValidation = parameters.get< bool >( cuT( "no_validation" ) );
 			uint32_t importFlags{ aiProcess_Triangulate
 				| aiProcess_FixInfacingNormals
-				| aiProcess_LimitBoneWeights };
+				| aiProcess_LimitBoneWeights
+				| aiProcess_PopulateArmatureData };
 			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 );
 			importer.SetPropertyBool( AI_CONFIG_IMPORT_NO_SKELETON_MESHES, true );
 			importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes
@@ -105,22 +106,122 @@ namespace c3d_assimp
 			return { iter, common };
 		}
 
-		static c3d::String getMaterialName( AssimpImporterFile const & file
-			, aiMaterial const & aiMaterial
-			, uint32_t materialIndex )
+		c3d::String getRawName( aiMaterial const & element )
 		{
-			c3d::String result = file.getExtension() + cuT( "-" );
-
+			c3d::String result;
 			if ( aiString name;
-				aiMaterial.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
+				element.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
+				result += makeString( name );
+			return result;
+		}
+
+		c3d::String getRawName( aiMesh const & element )
+		{
+			return makeString( element.mName );
+		}
+
+		c3d::String getRawName( aiLight const & element )
+		{
+			return makeString( element.mName );
+		}
+
+		c3d::String getRawName( aiCamera const & element )
+		{
+			return makeString( element.mName );
+		}
+
+		c3d::String getRawName( aiSkeleton const & element )
+		{
+			return makeString( element.mName );
+		}
+
+		c3d::String getRawName( aiAnimation const & element )
+		{
+			return makeString( element.mName );
+		}
+
+		static c3d::String reworkName( c3d::String const & name
+			, c3d::StringView baseName
+			, uint32_t index )
+		{
+			c3d::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
+			auto split = c3d::string::split( name, separators, ~0u, false );
+			c3d::Set< int > numbers;
+			c3d::Set< c3d::String > names;
+
+			for ( auto s : split )
 			{
-				result += makeString( name ) + cuT( "-" ) + c3d::string::toString( materialIndex );
-			}
-			else
-			{
-				result += file.getName() + cuT( "-" ) + c3d::string::toString( materialIndex );
+				c3d::string::trim( s, true, true, separators );
+
+				if ( !s.empty() )
+				{
+					if ( c3d::string::isInteger( s ) )
+						numbers.emplace( c3d::string::toInt( s ) );
+					else
+						names.insert( s );
+				}
 			}
 
+			c3d::String result;
+			c3d::String sep;
+
+			for ( auto & s : names )
+			{
+				result += sep + s;
+				sep = cuT( "_" );
+			}
+
+			for ( auto i : numbers )
+			{
+				result += sep + c3d::string::toString( i );
+				sep = cuT( "_" );
+			}
+
+			if ( result.empty() )
+				result = c3d::string::toString( index );
+
+			if ( result.size() > 150u )
+				result = c3d::String{ baseName } + c3d::string::toString( index );
+			return normalizeName( result );
+		}
+
+		template< typename aiElementT >
+		static c3d::String getElementName( aiElementT const & element
+			, uint32_t index
+			, c3d::StringView baseName )
+		{
+			c3d::String result = getRawName( element );
+
+			if ( result.empty() )
+				result = c3d::String{ baseName } + cuT( "-" ) + c3d::string::toString( index );
+			else
+				result = reworkName( result, baseName, index );
+
+			return result;
+		}
+
+		template< typename aiElementT >
+		static c3d::String getElementName( aiElementT const & element
+			, uint32_t index
+			, c3d::StringView baseName
+			, NameContainer & names )
+		{
+			if ( auto it = names.namesByIndex.find( index );
+				it != names.namesByIndex.end() )
+				return it->second;
+
+			auto result = getRawName( element );
+			if ( result.empty() )
+				result = baseName;
+			else
+				result = reworkName( result, baseName, index );
+
+			if ( auto it = names.names.find( result );
+				it != names.names.end() )
+				result += cuT( "-" ) + c3d::string::toString( index );
+
+			names.namesByIndex.try_emplace( index, result );
+			names.names.emplace( result );
 			return result;
 		}
 
@@ -142,25 +243,32 @@ namespace c3d_assimp
 				} );
 		}
 
-		static c3d::Map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
+		struct NodeAnimAndIndex
+		{
+			NodeAnimAndIndex( aiNodeAnim const * channel
+				, uint32_t index )
+				: channel{ channel }
+				, index{ index }
+			{
+			}
+
+			aiNodeAnim const * channel;
+			uint32_t index;
+		};
+
+		static c3d::Map< aiAnimation const *, NodeAnimAndIndex > findNodeAnims( aiNode const & aiNode
 			, c3d::ArrayView< aiAnimation * > const & animations )
 		{
-			c3d::Map< aiAnimation const *, aiNodeAnim const * > result;
+			c3d::Map< aiAnimation const *, NodeAnimAndIndex > result;
+			uint32_t index{};
 
 			for ( auto aiAnimation : animations )
 			{
 				auto channels = c3d::makeArrayView( aiAnimation->mChannels, aiAnimation->mNumChannels );
-				auto it = std::find_if( channels.begin()
-					, channels.end()
-					, [&aiNode]( aiNodeAnim const * lookup )
-					{
-						return lookup->mNodeName == aiNode.mName;
-					} );
-
-				if ( it != channels.end() )
-				{
-					result.emplace( aiAnimation, *it );
-				}
+				if ( auto it = std::find_if( channels.begin(), channels.end(), [&aiNode]( aiNodeAnim const * lookup ){ return lookup->mNodeName == aiNode.mName; } );
+					it != channels.end() )
+					result.try_emplace( aiAnimation, *it, index );
+				++index;
 			}
 
 			return result;
@@ -284,54 +392,6 @@ namespace c3d_assimp
 				&& c3d_assimp::isValidMesh( *scene.mMeshes[meshIndex] );
 		}
 
-		static c3d::String reworkMeshName( c3d::String const & name
-			, uint32_t meshIndex )
-		{
-			c3d::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
-			auto split = c3d::string::split( name, separators, ~0u, false );
-			c3d::Set< int > numbers;
-			c3d::Set< c3d::String > names;
-
-			for ( auto s : split )
-			{
-				c3d::string::trim( s, true, true, separators );
-
-				if ( !s.empty() )
-				{
-					if ( c3d::string::isInteger( s ) )
-					{
-						numbers.emplace( c3d::string::toInt( s ) );
-					}
-					else
-					{
-						names.insert( s );
-					}
-				}
-			}
-
-			c3d::String result;
-			c3d::String sep;
-
-			for ( auto & s : names )
-			{
-				result += sep + s;
-				sep = cuT( "_" );
-			}
-
-			for ( auto i : numbers )
-			{
-				result += sep + c3d::string::toString( i );
-				sep = cuT( "_" );
-			}
-
-			if ( result.empty() )
-			{
-				result = c3d::string::toString( meshIndex );
-			}
-
-			return result;
-		}
-
 		static void accumulateTransformsRec( aiNode const * node
 			, c3d::Vector< AssimpNodeData > const & nodes
 			, c3d::Vector< c3d::Matrix4x4f > & transforms )
@@ -419,11 +479,34 @@ namespace c3d_assimp
 		}
 	}
 
-	c3d::String AssimpImporterFile::getMaterialName( uint32_t materialIndex )const
+	c3d::String AssimpImporterFile::getMaterialName( c3d::u32 index )const
 	{
-		return file::getMaterialName( *this
-			, *m_aiScene->mMaterials[materialIndex]
-			, materialIndex );
+		return getInternalName( file::getElementName( *m_aiScene->mMaterials[index], index, getName(), m_materialNames ) );
+	}
+
+	c3d::String AssimpImporterFile::getMeshName( c3d::u32 index )const
+	{
+		return getInternalName( file::getElementName( *m_aiScene->mMeshes[index], index, getName(), m_meshNames ) );
+	}
+
+	c3d::String AssimpImporterFile::getSkinName( c3d::u32 index )const
+	{
+		return getInternalName( file::getElementName( *m_aiScene->mSkeletons[index], index, getName(), m_skinNames ) );
+	}
+
+	c3d::String AssimpImporterFile::getLightName( c3d::u32 index )const
+	{
+		return getInternalName( file::getElementName( *m_aiScene->mLights[index], index, getName(), m_lightNames ) );
+	}
+
+	c3d::String AssimpImporterFile::getCameraName( c3d::u32 index )const
+	{
+		return getInternalName( file::getElementName( *m_aiScene->mCameras[index], index, getName(), m_cameraNames ) );
+	}
+
+	c3d::String AssimpImporterFile::getAnimationName( uint32_t index )const
+	{
+		return getInternalName( file::getElementName( *m_aiScene->mAnimations[index], index, getName() ) );
 	}
 
 	NodeAnimations const & AssimpImporterFile::getNodesAnimations( c3d::SceneNode const & node )const
@@ -760,7 +843,7 @@ namespace c3d_assimp
 
 		for ( auto aiMaterial : c3d::makeArrayView( m_aiScene->mMaterials, m_aiScene->mNumMaterials ) )
 		{
-			auto name = file::getMaterialName( *this, *aiMaterial, materialIndex );
+			auto name = getMaterialName( materialIndex );
 			m_sceneData.materials.try_emplace( name, aiMaterial );
 			++materialIndex;
 		}
@@ -796,30 +879,23 @@ namespace c3d_assimp
 			++meshIndex;
 		}
 
+		uint32_t animIndex{};
 		for ( auto aiAnimation : c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) )
 		{
 			if ( auto [skeletonData, skeleton] = file::findSkeletonForAnim( getScene(), *m_aiScene->mRootNode, *aiAnimation, m_sceneData );
 				skeletonData )
 			{
 				auto [frameCount, minFrameTicks, maxFrameTicks] = getAnimationFrameTicks( *aiAnimation );
-
 				if ( frameCount > 1 )
 				{
-					c3d::String animName{ normalizeName( makeString( aiAnimation->mName ) ) };
-
-					if ( animName.empty() )
-					{
-						animName = normalizeName( getName() );
-					}
-
+					c3d::String animName{ getAnimationName( animIndex ) };
 					if ( skeleton && skeleton->hasAnimation( animName ) )
-					{
 						animName += cuT( "_" ) + getName();
-					}
-
 					skeletonData->anims.try_emplace( animName, aiAnimation );
 				}
 			}
+
+			++animIndex;
 		}
 
 		return result;
@@ -833,17 +909,9 @@ namespace c3d_assimp
 		{
 			if ( isValidMesh( *aiMesh ) )
 			{
-				auto meshName = normalizeName( getInternalName( file::reworkMeshName( makeString( aiMesh->mName ), meshIndex ) ) );
-
-				if ( meshName.size() > 150u )
-				{
-					meshName = getInternalName( getName() ) + c3d::string::toString( meshIndex );
-				}
-				
+				auto meshName = getMeshName( meshIndex );
 				if ( file::hasNodeAnim( *m_aiScene, meshIndex ) )
-				{
 					meshName += c3d::string::toString( meshIndex );
-				}
 
 				auto regIt = m_sceneData.meshes.find( meshName );
 				aiNode const * skelNode{};
@@ -937,34 +1005,21 @@ namespace c3d_assimp
 			auto anims = file::findNodeAnims( node
 				, c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
-			for ( auto anim : anims )
+			for ( auto const & [anim, channelIndex] : anims )
 			{
-				auto [frameCount, minFrameTicks, maxFrameTicks] = getNodeAnimFrameTicks( *anim.second );
-
-				if ( frameCount > 1 )
-				{
-					c3d::String animName{ normalizeName( makeString( anim.first->mName ) ) };
-
-					if ( animName.empty() )
-					{
-						animName = normalizeName( aiNodeName );
-					}
-
-					nodeData.anims.try_emplace( animName, anim );
-				}
+				if ( auto [frameCount, minFrameTicks, maxFrameTicks] = getNodeAnimFrameTicks( *channelIndex.channel );
+					frameCount > 1 )
+					nodeData.anims.try_emplace( getAnimationName( channelIndex.index ), anim, channelIndex.channel );
 			}
 		}
 
 		for ( auto meshIndex : c3d::makeArrayView( node.mMeshes, node.mNumMeshes ) )
 		{
 			if ( !file::isValidMesh( *m_aiScene, meshIndex ) )
-			{
 				continue;
-			}
 
-			auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
-
-			if ( it != m_sceneData.meshes.end() )
+			if ( auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
+				it != m_sceneData.meshes.end() )
 			{
 				if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
 					, nodeData.meshes.end()
@@ -972,15 +1027,15 @@ namespace c3d_assimp
 				{
 					// Don't add the mesh if it has already been added to a node with the same transform.
 					auto & nodeArray = processedMeshes.try_emplace( &it->second ).first->second;
-					auto nodeIt = std::find_if( nodeArray.begin()
+
+					if ( auto nodeIt = std::find_if( nodeArray.begin()
 						, nodeArray.end()
 						, [&cumulativeTransforms, &transform]( aiNode const * lookup )
 						{
 							auto lookupIt = cumulativeTransforms.find( lookup );
 							return lookupIt->second == transform;
 						} );
-
-					if ( nodeIt == nodeArray.end() )
+						nodeIt == nodeArray.end() )
 					{
 						nodeArray.push_back( &node );
 						nodeData.meshes.push_back( &it->second );
@@ -1009,13 +1064,14 @@ namespace c3d_assimp
 
 	void AssimpImporterFile::doPrelistLights()
 	{
+		uint32_t lightIndex{};
 		for ( auto aiLight : c3d::makeArrayView( m_aiScene->mLights, m_aiScene->mNumLights ) )
 		{
 			if ( aiLight->mType == aiLightSource_DIRECTIONAL
 				|| aiLight->mType == aiLightSource_POINT
 				|| aiLight->mType == aiLightSource_SPOT )
 			{
-				c3d::String name = getInternalName( aiLight->mName );
+				c3d::String name = getLightName( lightIndex );
 				m_sceneData.lights.try_emplace( name, aiLight );
 
 				auto position = c3d::Point3f{};
@@ -1073,14 +1129,17 @@ namespace c3d_assimp
 					c3d::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 				}
 			}
+
+			++lightIndex;
 		}
 	}
 
 	void AssimpImporterFile::doPrelistCameras()
 	{
+		uint32_t cameraIndex{};
 		for ( auto aiCamera : c3d::makeArrayView( m_aiScene->mCameras, m_aiScene->mNumCameras ) )
 		{
-			c3d::String name = getInternalName( aiCamera->mName );
+			c3d::String name = getCameraName( cameraIndex );
 			m_sceneData.cameras.try_emplace( name, aiCamera );
 
 			auto position = c3d::Point3f{};
@@ -1095,14 +1154,14 @@ namespace c3d_assimp
 				, position
 				, c3d::Point3f{ 1.0, 1.0, 1.0 }
 				, orientation );
-			auto it = std::find_if( m_sceneData.nodes.begin()
+
+			if ( auto it = std::find_if( m_sceneData.nodes.begin()
 				, m_sceneData.nodes.end()
 				, [&name]( AssimpNodeData const & lookup )
 				{
 					return lookup.name == name;
 				} );
-
-			if ( it == m_sceneData.nodes.end() )
+				it == m_sceneData.nodes.end() )
 			{
 				file::accumulateTransforms( *this
 					, name
@@ -1128,6 +1187,8 @@ namespace c3d_assimp
 				matrix *= transform;
 				c3d::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 			}
+
+			++cameraIndex;
 		}
 	}
 

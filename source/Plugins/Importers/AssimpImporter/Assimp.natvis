@@ -246,6 +246,34 @@
 		</Expand>
 	</Type>
 
+	<Type Name="aiMetadataEntry">
+		<DisplayString Condition="mType == 0">{*((bool*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 1">{*((int32_t*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 2">{*((uint64_t*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 3">{*((float*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 4">{*((double*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 5">{*((aiString*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 6">{*((aiVector3D*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 7">{*((aiMetadata*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 8">{*((int64_t*)mData)}</DisplayString>
+		<DisplayString Condition="mType == 9">{*((uint32_t*)mData)}</DisplayString>
+		<DisplayString Condition="mType > 9">{mType} {mData}</DisplayString>
+		<Expand>
+			<Item Name="[type]">mType</Item>
+			<Item Name="[value]" Condition="mType == 0">*((bool*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 1">*((int32_t*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 2">*((uint64_t*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 3">*((float*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 4">*((double*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 5">*((aiString*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 6">*((aiVector3D*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 7">*((aiMetadata*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 8">*((int64_t*)mData)</Item>
+			<Item Name="[value]" Condition="mType == 9">*((uint32_t*)mData)</Item>
+			<Item Name="[value]" Condition="mType > 9">mData</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="aiMetadata">
 		<Expand>
 			<Synthetic Name="[keys]">
@@ -937,6 +965,42 @@
 		</Expand>
 	</Type>
 
+	<Type Name="aiSkeletonBone">
+		<DisplayString>{*mMeshId} {mParent}</DisplayString>
+		<Expand>
+			<Item Name="[parent]">mParent</Item>
+			<Item Condition="mArmature != 0" Name="[armature]">*mArmature</Item>
+			<Item Condition="mNode != 0" Name="[node]">*mNode</Item>
+			<Item Name="[offsetMatrix]">mOffsetMatrix</Item>
+			<Item Name="[localMatrix]">mLocalMatrix</Item>
+			<Synthetic Name="[weights]" Condition="mNumnWeights!=0">
+				<DisplayString>[size={mNumnWeights}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumnWeights</Size>
+						<ValuePointer>mWeights</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiSkeleton">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Synthetic Name="[bones]" Condition="mNumBones!=0">
+				<DisplayString>[size={mNumBones}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumBones</Size>
+						<ValuePointer>mBones</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
 	<Type Name="aiScene">
 		<Expand>
 			<Item Name="[flags]">mFlags</Item>
@@ -993,6 +1057,15 @@
 					<ArrayItems>
 						<Size>mNumCameras</Size>
 						<ValuePointer>mCameras</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[skeletons]">
+				<DisplayString>[size={mNumSkeletons}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumSkeletons</Size>
+						<ValuePointer>mSkeletons</ValuePointer>
 					</ArrayItems>
 				</Expand>
 			</Synthetic>

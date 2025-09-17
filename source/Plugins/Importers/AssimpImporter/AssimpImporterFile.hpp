@@ -21,6 +21,12 @@ namespace c3d_assimp
 	using NodeAnimations = c3d::StringMap< c3d::Pair< aiAnimation const *, aiNodeAnim const * > >;
 	using aiNodeArray = c3d::Vector< aiNode const * >;
 
+	struct NameContainer
+	{
+		c3d::HashMap< c3d::u32, c3d::String > namesByIndex;
+		c3d::HashSet< c3d::String > names;
+	};
+
 	struct AssimpSkeletonData
 	{
 		explicit AssimpSkeletonData( aiNode const * prootNode )
@@ -113,6 +119,13 @@ namespace c3d_assimp
 
 		using c3d::ImporterFile::getInternalName;
 
+		c3d::String getMaterialName( c3d::u32 index )const;
+		c3d::String getMeshName( c3d::u32 index )const;
+		c3d::String getSkinName( c3d::u32 index )const;
+		c3d::String getLightName( c3d::u32 index )const;
+		c3d::String getCameraName( c3d::u32 index )const;
+		c3d::String getAnimationName( c3d::u32 index )const;
+
 		c3d::StringArray listMaterials()override;
 		c3d::Vector< MeshData > listMeshes()override;
 		c3d::StringArray listSkeletons()override;
@@ -139,7 +152,6 @@ namespace c3d_assimp
 		c3d::LightImporterUPtr createLightImporter()override;
 		c3d::CameraImporterUPtr createCameraImporter()override;
 
-		c3d::String getMaterialName( uint32_t materialIndex )const;
 		NodeAnimations const & getNodesAnimations( c3d::SceneNode const & node )const;
 		SkeletonAnimations const & getSkeletonsAnimations( c3d::Skeleton const & skeleton )const;
 		MeshAnimations const & getMeshesAnimations( c3d::Mesh const & mesh
@@ -225,6 +237,14 @@ namespace c3d_assimp
 		c3d::StringArray m_listedSkeletons;
 
 		AssimpSceneData m_sceneData;
+		mutable NameContainer m_materialNames;
+		mutable NameContainer m_meshNames;
+		mutable NameContainer m_nodeNames;
+		mutable NameContainer m_skinNames;
+		mutable NameContainer m_lightNames;
+		mutable NameContainer m_cameraNames;
+		mutable NameContainer m_samplerNames;
+		mutable NameContainer m_animationNames;
 	};
 }
 
