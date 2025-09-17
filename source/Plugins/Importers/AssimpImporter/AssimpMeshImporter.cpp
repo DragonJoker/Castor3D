@@ -32,23 +32,23 @@ namespace c3d_assimp
 			, c3d::Scene & scene
 			, aiNode const & sceneRootNode
 			, aiNode const & skelRootNode
-			, c3d::String skelName )
+			, c3d::String const & skelName )
 		{
-			auto skelIt = std::find_if( scene.getSkeletonCache().begin()
+
+			if ( auto skelIt = std::find_if( scene.getSkeletonCache().begin()
 				, scene.getSkeletonCache().end()
 				, [&file, &skelName]( auto const & lookup )
 				{
 					return file.getExternalName( lookup.second->getRootNode()->getName() ) == skelName;
 				} );
-
-			if ( skelIt != scene.getSkeletonCache().end() )
+				skelIt != scene.getSkeletonCache().end() )
 			{
 				return skelIt->second.get();
 			}
 
-			for ( auto & skeleton : scene.getSkeletonCache() )
+			for ( auto const & [_, skeleton] : scene.getSkeletonCache() )
 			{
-				auto skelRootNodeName = c3d::toUtf8( file.getExternalName( skeleton.second->getRootNode()->getName() ) );
+				auto skelRootNodeName = c3d::toUtf8( file.getExternalName( skeleton->getRootNode()->getName() ) );
 
 				if ( toUtf8( sceneRootNode.mName ) == skelRootNodeName )
 				{
@@ -64,13 +64,13 @@ namespace c3d_assimp
 
 					if ( it != children.end() )
 					{
-						return skeleton.second.get();
+						return skeleton.get();
 					}
 				}
 				else if ( auto node = sceneRootNode.FindNode( skelRootNodeName.c_str() );
 					&skelRootNode == node )
 				{
-					return skeleton.second.get();
+					return skeleton.get();
 				}
 			}
 
@@ -85,9 +85,8 @@ namespace c3d_assimp
 
 	bool AssimpMeshImporter::doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
-		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
-
-		if ( file.getListedMeshes().empty() )
+		if ( auto & file = static_cast< AssimpImporterFile const & >( *m_file );
+			file.getListedMeshes().empty() )
 		{
 			doImportSingleMesh( mesh, submeshIndex );
 			return true;
@@ -109,9 +108,9 @@ namespace c3d_assimp
 				&& ( submeshIndex == meshIndex || submeshIndex == 0xFFFFFFFFu ) )
 			{
 				auto matName = file.getMaterialName( aiMesh->mMaterialIndex );
-				auto materialRes = scene.tryFindMaterial( matName );
 
-				if ( !materialRes )
+				if ( auto materialRes = scene.tryFindMaterial( matName );
+					!materialRes )
 				{
 					if ( auto importer = file.createMaterialImporter() )
 					{
@@ -143,7 +142,7 @@ namespace c3d_assimp
 			, mesh );
 	}
 
-	bool AssimpMeshImporter::doImportSceneMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
+	bool AssimpMeshImporter::doImportSceneMesh( c3d::Mesh & mesh, uint32_t submeshIndex )const
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = mesh.getName();
@@ -156,7 +155,7 @@ namespace c3d_assimp
 
 		auto & aiScene = file.getAiScene();
 
-		for ( auto submesh : it->second.submeshes )
+		for ( auto const & submesh : it->second.submeshes )
 		{
 			if ( submeshIndex == submesh.meshIndex || submeshIndex == 0xFFFFFFFFu )
 			{
@@ -174,22 +173,17 @@ namespace c3d_assimp
 	void AssimpMeshImporter::doProcessMesh( aiScene const & aiScene
 		, aiMesh const & aiMesh
 		, uint32_t aiMeshIndex
-		, c3d::Mesh & mesh
-		, c3d::Submesh & submesh )
+		, c3d::Mesh const & mesh
+		, c3d::Submesh & submesh )const
 	{
-		auto & file = static_cast< AssimpImporterFile & >( *m_file );
+		auto const & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & scene = *mesh.getScene();
-		auto materialRes = scene.tryFindMaterial( file.getMaterialName( aiMesh.mMaterialIndex ) );
 		c3d::MaterialObs material{};
 
-		if ( !materialRes )
-		{
-			material = scene.getEngine()->getDefaultMaterial();
-		}
-		else
-		{
+		if ( auto materialRes = scene.tryFindMaterial( file.getMaterialName( aiMesh.mMaterialIndex ) ) )
 			material = materialRes;
-		}
+		else
+			material = scene.getEngine()->getDefaultMaterial();
 
 		submesh.setDefaultMaterial( material );
 		submesh.createComponent< c3d::DefaultRenderComponent >();
@@ -260,25 +254,25 @@ namespace c3d_assimp
 			, *texcoords2
 			, *texcoords3
 			, *colours );
-		auto animBuffers = gatherMeshAnimBuffers( positions->getData().getData()
-			, normals->getData().getData()
-			, *tangents
-			, *bitangents
-			, *texcoords0
-			, *texcoords1
-			, *texcoords2
-			, *texcoords3
-			, *colours
-			, c3d::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) );
 
-		if ( !animBuffers.empty() )
+		if ( auto animBuffers = gatherMeshAnimBuffers( positions->getData().getData()
+				, normals->getData().getData()
+				, *tangents
+				, *bitangents
+				, *texcoords0
+				, *texcoords1
+				, *texcoords2
+				, *texcoords3
+				, *colours
+				, c3d::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) );
+			!animBuffers.empty() )
 		{
 			c3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( animBuffers.size() ) << cuT( "]" ) << std::endl;
 			auto component = submesh.hasComponent( c3d::MorphComponent::TypeName )
 				? submesh.getComponent< c3d::MorphComponent >()
 				: submesh.createComponent< c3d::MorphComponent >();
 
-			for ( auto & animBuffer : animBuffers )
+			for ( auto const & animBuffer : animBuffers )
 			{
 				component->getData().addMorphTarget( animBuffer );
 			}
