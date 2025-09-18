@@ -32,53 +32,37 @@ namespace c3d_assimp
 			, c3d::Path const & filePath
 			, c3d::Parameters const & parameters )
 		{
-			bool noOptimisation = parameters.get< bool >( cuT( "no_optimisations" ) );
-			bool noValidation = parameters.get< bool >( cuT( "no_validation" ) );
 			uint32_t importFlags{ aiProcess_Triangulate
 				| aiProcess_FixInfacingNormals
 				| aiProcess_LimitBoneWeights
-				| aiProcess_PopulateArmatureData };
+				| aiProcess_SplitByBoneCount
+				| aiProcess_RemoveRedundantMaterials
+				| aiProcess_FindDegenerates };
+			if ( !parameters.get< bool >( cuT( "no_validation" ) ) )
+				importFlags |= aiProcess_ValidateDataStructure
+				| aiProcess_FindInvalidData;
+			if ( !parameters.get< bool >( cuT( "no_optimisations" ) ) )
+				importFlags |= aiProcess_JoinIdenticalVertices
+				| aiProcess_OptimizeMeshes
+				| aiProcess_OptimizeGraph
+				| aiProcess_ImproveCacheLocality;
+			if ( parameters.get< c3d::String >( cuT( "normals" ) ) == cuT( "smooth" ) )
+				importFlags |= aiProcess_GenSmoothNormals;
+			if ( parameters.get< bool >( cuT( "tangent_space" ) ) )
+				importFlags |= aiProcess_CalcTangentSpace;
+
 			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 );
 			importer.SetPropertyBool( AI_CONFIG_IMPORT_NO_SKELETON_MESHES, true );
+			importer.SetPropertyInteger( AI_CONFIG_IMPORT_TER_MAKE_UVS, 1 );
+			importer.SetPropertyFloat( AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0 );
 			importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes
 			importer.SetPropertyInteger( AI_CONFIG_FBX_CONVERT_TO_M, 0 ); //< Convert FBX cm to m.
-
-			if ( !noValidation )
-			{
-				importFlags |= aiProcess_ValidateDataStructure
-					| aiProcess_FindInvalidData;
-			}
-
-			if ( !noOptimisation )
-			{
-				importFlags |= aiProcess_JoinIdenticalVertices
-					| aiProcess_OptimizeMeshes
-					| aiProcess_OptimizeGraph;
-			}
-
-			bool tangentSpace = false;
-
-			if ( c3d::String normals;
-				parameters.get( cuT( "normals" ), normals )
-					&& normals == cuT( "smooth" ) )
-			{
-				importFlags |= aiProcess_GenSmoothNormals;
-			}
-
-			if ( parameters.get( cuT( "tangent_space" ), tangentSpace ) && tangentSpace )
-			{
-				importFlags |= aiProcess_CalcTangentSpace;
-			}
 
 			try
 			{
 				auto result = importer.ReadFile( c3d::toUtf8( filePath ), importFlags );
-
 				if ( !result )
-				{
 					c3d::log::error << "Scene loading failed : " << importer.GetErrorString() << std::endl;
-				}
-
 				return result;
 			}
 			catch ( std::exception & exc )
@@ -856,24 +840,16 @@ namespace c3d_assimp
 
 		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
-			if ( aiMesh->HasBones() )
+			if ( auto meshNode = findMeshNode( meshIndex, *m_aiScene->mRootNode );
+				meshNode && aiMesh->HasBones() )
 			{
-				auto meshNode = findMeshNode( meshIndex, *m_aiScene->mRootNode );
-
-				if ( meshNode == nullptr )
-				{
-					CU_Failure( "Could not find mesh' node ?" );
-				}
-				else
-				{
-					auto rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
-						, c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
-						, meshNode );
-					auto skelName = getInternalName( findSkeletonName( m_bonesNodes
-						, *rootNode ) );
-					m_sceneData.skeletons.try_emplace( skelName, rootNode );
-					result.emplace( aiMesh, rootNode );
-				}
+				auto rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
+					, c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
+					, meshNode );
+				auto skelName = getInternalName( findSkeletonName( m_bonesNodes
+					, *rootNode ) );
+				m_sceneData.skeletons.try_emplace( skelName, rootNode );
+				result.emplace( aiMesh, rootNode );
 			}
 
 			++meshIndex;
@@ -907,7 +883,8 @@ namespace c3d_assimp
 
 		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
-			if ( isValidMesh( *aiMesh ) )
+			if (auto meshNode = findMeshNode( meshIndex, *m_aiScene->mRootNode );
+				meshNode && isValidMesh( *aiMesh ) )
 			{
 				auto meshName = getMeshName( meshIndex );
 				if ( file::hasNodeAnim( *m_aiScene, meshIndex ) )
