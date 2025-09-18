@@ -1357,7 +1357,6 @@ namespace c3d_gltf
 
 		// List their attached objects
 		c3d::Map< GltfMeshData const *, c3d::Vector< size_t > > processedMeshes;
-		nodeIndex = {};
 		for ( auto nodeData : m_sceneData.sortedNodes )
 		{
 			auto & node = *nodeData->node;
@@ -1365,7 +1364,7 @@ namespace c3d_gltf
 			//
 			if ( node.meshIndex )
 			{
-				file::listNodeMeshes( cumulativeTransforms, m_sceneData.meshes, *node.meshIndex, cumulativeTransforms[nodeIndex]
+				file::listNodeMeshes( cumulativeTransforms, m_sceneData.meshes, *node.meshIndex, cumulativeTransforms[nodeData->index]
 					, processedMeshes, *nodeData );
 			}
 
@@ -1401,8 +1400,6 @@ namespace c3d_gltf
 			{
 				file::listDataAnimations( *this, *nodeData );
 			}
-
-			++nodeIndex;
 		}
 
 		// Fill helper containers.
