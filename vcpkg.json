@@ -27,6 +27,7 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
+      "./data/vcpkg/ports/assimp",
       "./data/vcpkg/ports/bcdec",
       "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/fastgltf",

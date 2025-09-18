@@ -463,6 +463,19 @@ namespace c3d_assimp
 
 	inline std::tuple< uint32_t, double, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
 	{
+		if ( aiAnimation.mDuration > 0.0 )
+		{
+			uint32_t count = 0u;
+			for ( auto nodeAnim : c3d::makeArrayView( aiAnimation.mChannels, aiAnimation.mNumChannels ) )
+			{
+				count = std::max( { count
+					, nodeAnim->mNumPositionKeys
+					, nodeAnim->mNumRotationKeys
+					, nodeAnim->mNumScalingKeys } );
+			}
+			return { count, 0.0, aiAnimation.mDuration };
+		}
+
 		uint32_t count = 0u;
 		double maxTicks = 0.0;
 		double minTicks = std::numeric_limits< double >::max();
@@ -495,7 +508,7 @@ namespace c3d_assimp
 					: 0.0 ) } );
 		}
 
-		return { count, minTicks, maxTicks };
+		return { count, std::max( 0.0, minTicks ), maxTicks };
 	}
 
 	inline aiNode const * findMeshNode( uint32_t meshIndex
@@ -631,6 +644,8 @@ namespace c3d_assimp
 
 	template< typename KeyT >
 	inline c3d::Map< c3d::Milliseconds, KeyDataTypeT< KeyT > > processKeys( c3d::ArrayView< KeyT > const & keys
+		, c3d::Milliseconds minTime
+		, c3d::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, c3d::Set< c3d::Milliseconds > & times )
 	{
@@ -638,9 +653,9 @@ namespace c3d_assimp
 
 		for ( auto const & key : keys )
 		{
-			if ( key.mTime >= 0 )
+			if ( auto time = fromAssimp( key.mTime, ticksPerSecond );
+				time >= minTime && time <= maxTime )
 			{
-				auto time = fromAssimp( key.mTime, ticksPerSecond );
 				times.insert( time );
 				result.emplace( time, fromAssimp( key.mValue ) );
 			}
@@ -777,14 +792,20 @@ namespace c3d_assimp
 		c3d::Set< c3d::Milliseconds > times;
 		auto translates = processKeys( c3d::makeArrayView( aiAnim.mPositionKeys
 				, aiAnim.mNumPositionKeys )
+			, minTime
+			, maxTime
 			, ticksPerSecond
 			, times );
 		auto scales = processKeys( c3d::makeArrayView( aiAnim.mScalingKeys
 				, aiAnim.mNumScalingKeys )
+			, minTime
+			, maxTime
 			, ticksPerSecond
 			, times );
 		auto rotates = processKeys( c3d::makeArrayView( aiAnim.mRotationKeys
 				, aiAnim.mNumRotationKeys )
+			, minTime
+			, maxTime
 			, ticksPerSecond
 			, times );
 		synchroniseKeys( translates
