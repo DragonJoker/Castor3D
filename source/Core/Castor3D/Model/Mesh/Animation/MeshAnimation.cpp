@@ -23,7 +23,62 @@ namespace c3d
 			FloatArray weights;
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserRoot, MeshContext, MeshAnimationContext )
+		static CU_ImplementAttributeParserNewBlock( parserMorphAnimation, MeshContext, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			else
+			{
+				newBlockContext->mesh = blockContext;
+				newBlockContext->animation = &blockContext->mesh->createAnimation( params[0]->get< String >() );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMorphAnimation )
+
+		static CU_ImplementAttributeParserBlock( parserMorphTargetWeight, MeshAnimationContext )
+		{
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else if ( params.size() < 3u )
+				CU_ParsingError( cuT( "Invalid parameters." ) );
+			else
+			{
+				float timeIndex{};
+				params[0]->get( timeIndex );
+				uint32_t targetIndex{};
+				params[1]->get( targetIndex );
+				float targetWeight{};
+				params[2]->get( targetWeight );
+				auto & animation = *blockContext->animation;
+
+				for ( auto const & submesh : *blockContext->mesh->mesh )
+				{
+					MeshAnimationSubmesh animSubmesh{ animation, *submesh };
+					animation.addChild( c3d::move( animSubmesh ) );
+					auto time = Milliseconds{ uint64_t( timeIndex * 1000 ) };
+					auto kfit = animation.find( time );
+					MeshMorphTarget * kf{};
+
+					if ( kfit == animation.end() )
+					{
+						auto keyFrame = makeUnique< MeshMorphTarget >( animation, time );
+						kf = keyFrame.get();
+						animation.addKeyFrame( ptrRefCast< AnimationKeyFrame >( keyFrame ) );
+					}
+					else
+					{
+						kf = &static_cast< MeshMorphTarget & >( **kfit );
+					}
+
+					kf->setTargetWeight( *submesh, targetIndex, targetWeight );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserMeshAnimation, MeshContext, MeshAnimationContext )
 		{
 			if ( !blockContext->mesh )
 				CU_ParsingError( cuT( "No mesh initialised." ) );
@@ -142,15 +197,15 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserEnd, MeshAnimationContext )
 		{
-			if ( !blockContext->animation )
-				CU_ParsingError( cuT( "No mesh animation initialised." ) );
-			else if ( auto mesh = blockContext->mesh )
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			else if ( !blockContext->animation )
+				CU_ParsingError( cuT( "No animation initialised." ) );
+			else
 			{
 				log::info << "Loaded morp animation [" << blockContext->animation->getName() << "]" << std::endl;
 				*blockContext = {};
 			}
-			else
-				CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		CU_EndAttributePop()
 	}
@@ -185,12 +240,16 @@ namespace c3d
 	void MeshAnimation::addParsers( AttributeParsers & result )
 	{
 		BlockParserContextT< MeshContext > meshContext{ result, CSCNSection::eMesh };
+		BlockParserContextT< mshanm::MeshAnimationContext > morphContext{ result, CSCNSection::eMorphAnimation, CSCNSection::eMesh };
 		BlockParserContextT< mshanm::MeshAnimationContext > animContext{ result, CSCNSection::eMeshAnimation, CSCNSection::eMesh };
 		BlockParserContextT< mshanm::MeshAnimationContext > animationKeyframeContext{ result, CSCNSection::eMeshAnimationKeyframe, CSCNSection::eMeshAnimation };
 		BlockParserContextT< mshanm::MeshAnimationContext > weightsContext{ result, CSCNSection::eMeshAnimationKeyframeWeights, CSCNSection::eMeshAnimationKeyframe };
 
-		meshContext.addPushParser( cuT( "morph_animation" ), CSCNSection::eMeshAnimation, mshanm::parserRoot, { makeParameter< ParameterType::eName >() } );
-		meshContext.addPushParser( cuT( "mesh_animation" ), CSCNSection::eMeshAnimation, mshanm::parserRoot, { makeParameter< ParameterType::eName >() } );
+		meshContext.addPushParser( cuT( "morph_animation" ), CSCNSection::eMorphAnimation, mshanm::parserMorphAnimation, { makeParameter< ParameterType::eName >() } );
+		meshContext.addPushParser( cuT( "mesh_animation" ), CSCNSection::eMeshAnimation, mshanm::parserMeshAnimation, { makeParameter< ParameterType::eName >() } );
+
+		morphContext.addParser( cuT( "target_weight" ), mshanm::parserMorphTargetWeight, ParserParameterArray{ makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eUInt32 >(), makeParameter< ParameterType::eFloat >() } );
+		morphContext.addPopParser( cuT( "}" ), mshanm::parserEnd );
 
 		animContext.addPushParser( cuT( "keyframe" ), CSCNSection::eMeshAnimationKeyframe, mshanm::parserKeyframe );
 		animContext.addPopParser( cuT( "}" ), mshanm::parserEnd );
