@@ -12,7 +12,7 @@ namespace c3d
 		{
 #define RGPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
 				getFormatName( PixelFormat::e##name ),
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 		};
 
 		static StringArray const & listExtensions()

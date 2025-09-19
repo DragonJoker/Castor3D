@@ -477,7 +477,7 @@ namespace c3d
 		case PixelFormat::e##name:\
 			result = alpha;\
 			break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 		default:
 			result = false;
 			break;
@@ -523,7 +523,7 @@ namespace c3d
 		case PixelFormat::e##name:\
 			result = singleComponentV< PixelFormat::e##name >;\
 			break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 		default:
 			result = PixelFormat::eUNDEFINED;
 			break;

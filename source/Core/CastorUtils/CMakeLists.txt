@@ -820,12 +820,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		COMPONENT Castor3D
 		CONFIGURATIONS Release
 	)
-	install(
-		FILES ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.enum
-		DESTINATION include/${PROJECT_NAME}/Graphics
-		COMPONENT Castor3D
-		CONFIGURATIONS Release
-	)
 	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D

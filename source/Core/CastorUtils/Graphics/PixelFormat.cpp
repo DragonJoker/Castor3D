@@ -77,7 +77,7 @@ namespace c3d
 			case PixelFormat::e##name:\
 				result = ( formatName == PixelDefinitionsT< PixelFormat::e##name >::toStr() ? PixelFormat( i ) : PixelFormat::eCOUNT );\
 				break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 			default:
 				break;
 			}
@@ -285,7 +285,7 @@ namespace c3d
 			PixelDefinitionsT< PixelFormat::e##name >::convert( srcBuffer, dstBuffer, dstFormat );\
 			break;
 #define RGPF_ENUM_VALUE_COMPRESSED( name, value, components, alpha )
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 		default:
 			CU_Failure( "Unsupported pixel format" );
 			break;
@@ -306,7 +306,7 @@ namespace c3d
 #define RGPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) case PixelFormat::e##name:\
 			PixelDefinitionsT< PixelFormat::e##name >::convert( nullptr, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
 			break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 		default:
 			CU_Failure( "Unsupported pixel format" );
 			break;
@@ -506,7 +506,7 @@ namespace c3d
 				, dstFormat\
 				, dstBuffer, dstSize );\
 			break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 		default:
 			break;
 		}
