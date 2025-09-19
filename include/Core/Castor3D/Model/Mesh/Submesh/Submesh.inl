@@ -57,9 +57,7 @@ namespace c3d
 	{
 		auto component = makeUnique< ComponentT >( *this
 			, c3d::forward< ParamsT >( params )... );
-		auto result = component.get();
-		addComponent( ptrRefCast< SubmeshComponent >( component ) );
-		return result;
+		return &static_cast< ComponentT & >( *addComponent( ptrRefCast< SubmeshComponent >( component ) ) );
 	}
 
 	inline void Submesh::setTopology( VkPrimitiveTopology value )

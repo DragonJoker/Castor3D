@@ -334,7 +334,7 @@ namespace c3d
 		C3D_API void enableSceneUpdate( bool updateScene );
 		C3D_API void setBaseData( SubmeshData submeshData, Point3fArray data );
 		C3D_API void setBaseData( SubmeshData submeshData, Point4fArray data );
-		C3D_API void addComponent( SubmeshComponentUPtr component );
+		C3D_API SubmeshComponentRPtr addComponent( SubmeshComponentUPtr component );
 		C3D_API void setIndexCount( uint32_t value );
 		void disableSceneUpdate();
 		void needsUpdate();

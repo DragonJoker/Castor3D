@@ -344,6 +344,7 @@ namespace c3d
 		MeshRes ownMesh{};
 		Submesh * submesh{};
 		SubmeshComponent * submeshComponent{};
+		bool imported{};
 	};
 
 	C3D_API String getPrefix( MeshContext const & context );
