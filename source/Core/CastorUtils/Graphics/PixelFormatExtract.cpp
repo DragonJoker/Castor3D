@@ -191,7 +191,7 @@ namespace c3d
 				, uint32_t( getBytesPerPixel( singleComponentV< PixelFormat::e##name > ) )\
 				, dst.getCount() );\
 			break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 			default:
 				break;
 			}

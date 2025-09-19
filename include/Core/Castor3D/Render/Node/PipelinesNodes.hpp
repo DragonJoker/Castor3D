@@ -124,12 +124,15 @@ namespace c3d
 		static uint64_t constexpr maxPages = 128ULL;
 		static uint64_t constexpr maxCount = maxPages;
 
+		NodesViewT()
+		{
+			m_pages.emplace_back();
+		}
+
 		RenderedNode * emplace( RenderedNode node )
 		{
-			if ( m_pages[m_count - 1u].isFull() )
-			{
-				++m_count;
-			}
+			if ( m_pages.back().isFull() )
+				m_pages.emplace_back();
 
 			CU_Assert( size() < maxPages
 				, "Too many nodes for given buffer and given pipeline (no page available)" );
@@ -142,34 +145,33 @@ namespace c3d
 				}
 			}
 
-			return m_pages[m_count - 1u].emplace( node );
+			return m_pages.back().emplace( c3d::move( node ) );
 		}
 
 		void clear()noexcept
 		{
-			m_count = 1u;
-			for ( auto & page : m_pages )
-				page.clear();
+			m_pages = {};
+			m_pages.emplace_back();
 		}
 
 		auto begin()noexcept
 		{
-			return m_pages.data();
+			return m_pages.begin();
 		}
 
 		auto begin()const noexcept
 		{
-			return m_pages.data();
+			return m_pages.begin();
 		}
 
 		auto end()noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_pages.end();
 		}
 
 		auto end()const noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_pages.end();
 		}
 
 		auto & front()noexcept
@@ -184,17 +186,16 @@ namespace c3d
 
 		auto size()const noexcept
 		{
-			return m_count;
+			return m_pages.size();
 		}
 
 		auto empty()const noexcept
 		{
-			return size() == 0;
+			return m_pages.empty();
 		}
 
 	private:
-		NodePages m_pages{ maxCount };
-		size_t m_count{ 1u };
+		NodePages m_pages;
 	};
 
 	template< typename NodeT >

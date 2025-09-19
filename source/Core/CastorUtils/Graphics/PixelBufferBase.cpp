@@ -144,7 +144,7 @@ namespace c3d
 //			case PixelFormat::e##name:\
 //				return generateMipmapsT< PixelFormat::e##name, KernelLanczosFilterT >( extent, buffer, align, dstLevels );\
 //				break;
-#include <RenderGraph/PixelFormat.enum>
+#include <RenderGraph/PixelFormat.inl>
 			default:
 				CU_Failure( "Unsupported format type for CPU mipmaps generation" );
 				return ByteArray{};
