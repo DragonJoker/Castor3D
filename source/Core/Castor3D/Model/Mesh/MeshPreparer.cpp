@@ -409,9 +409,9 @@ namespace c3d
 		String param;
 
 		if ( !indexMapping
-			|| indexMapping->getComponentsCount() != 3u )
-		{
-			// Don't optimize non triangular meshes.
+			|| indexMapping->getComponentsCount() != 3u// Don't optimize non triangular meshes.
+			|| indexMapping->getCount() < 10u )// Or low face count ones.
+		{	
 			return true;
 		}
 

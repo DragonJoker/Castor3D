@@ -105,6 +105,40 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserFace, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			else if ( params.empty() )
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			else if ( auto component = blockContext->submesh->createComponent< TriFaceMapping >() )
+			{
+				auto strParams = params[0]->get< String >();
+				auto arrayValues = string::split( strParams, cuT( " \t" ) );
+
+				if ( arrayValues.size() >= 4 )
+				{
+					if ( Point4ui indices;
+						parseValues( *blockContext->mesh->root->logger, strParams, indices ) )
+					{
+						component->getData().getFaces().emplace_back( indices[0], indices[1], indices[2] );
+						component->getData().getFaces().emplace_back( indices[0], indices[2], indices[3] );
+					}
+				}
+				else if ( arrayValues.size() >= 3 )
+				{
+					if ( Point3ui indices;
+						parseValues( *blockContext->mesh->root->logger, strParams, indices ) )
+						component->getData().getFaces().emplace_back( indices[0], indices[1], indices[2] );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Not enough parameters." ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
 			static CU_ImplementAttributeParserBlock( parserEnd, FaceMappingContext )
 		{
 			if ( !blockContext->submesh )
@@ -345,6 +379,7 @@ namespace c3d
 		BlockParserContextT< SubmeshContext > submeshContext{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
 		BlockParserContextT< smshcomptri::FaceMappingContext > sectionContext{ result, smshcomptri::sectionId, CSCNSection::eSubmesh };
 
+		submeshContext.addParser( "face", smshcomptri::parserFace, { makeParameter< ParameterType::eText >() } );
 		submeshContext.addPushParser( "faces", smshcomptri::sectionId, smshcomptri::parserSection );
 
 		sectionContext.addParser( cuT( "value" ), smshcomptri::parserValue, { makeParameter< ParameterType::ePoint3U >() } );

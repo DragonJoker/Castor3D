@@ -102,6 +102,19 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserLine, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
+				CU_ParsingError( cuT( "No submesh initialised." ) );
+			else if ( auto component = blockContext->submesh->createComponent< LineMapping >() )
+			{
+				Point2ui indices;
+				params[0]->get( indices );
+				component->getData().getFaces().emplace_back( indices[0], indices[1] );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserEnd, LineMappingContext )
 		{
 			if ( !blockContext->submesh )
@@ -245,6 +258,7 @@ namespace c3d
 		BlockParserContextT< SubmeshContext > submeshContext{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
 		BlockParserContextT< smshcompline::LineMappingContext > sectionContext{ result, smshcompline::sectionId, CSCNSection::eSubmesh };
 
+		submeshContext.addParser( "line", smshcompline::parserLine, { makeParameter< ParameterType::ePoint2U >() } );
 		submeshContext.addPushParser( "lines", smshcompline::sectionId, smshcompline::parserSection );
 
 		sectionContext.addParser( cuT( "value" ), smshcompline::parserValue, { makeParameter< ParameterType::ePoint2U >() } );

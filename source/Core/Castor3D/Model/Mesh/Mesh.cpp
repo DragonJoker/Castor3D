@@ -48,21 +48,6 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserNewBlock( parserMeshSubmesh, MeshContext, SubmeshContext )
-		{
-			if ( !blockContext->mesh )
-			{
-				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
-			else
-			{
-				newBlockContext->mesh = blockContext;
-				newBlockContext->submesh = blockContext->mesh->createSubmesh();
-				newBlockContext->submesh->createComponent< DefaultRenderComponent >();
-			}
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eSubmesh )
-
 		static CU_ImplementAttributeParserBlock( parserMeshImport, MeshContext )
 		{
 			if ( auto mesh = blockContext->mesh )
@@ -84,6 +69,8 @@ namespace c3d
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 					blockContext->mesh = {};
 				}
+
+				blockContext->imported = true;
 			}
 			else
 			{
@@ -374,28 +361,22 @@ namespace c3d
 				blockContext->mesh = {};
 
 				if ( blockContext->ownMesh )
-				{
 					mesh->getScene()->addMesh( mesh->getName()
 						, blockContext->ownMesh
 						, true );
-				}
 
 				if ( blockContext->geometry )
-				{
 					blockContext->geometry->geometry->setMesh( mesh );
-				}
 
 				for ( auto const & submesh : *mesh )
 				{
 					if ( !submesh->hasRenderComponent() )
-					{
 						submesh->createComponent< DefaultRenderComponent >();
-					}
-
 					mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 				}
 
-				mesh->computeContainers();
+				if ( !blockContext->imported )
+					mesh->updateContainers();
 			}
 			else
 			{
@@ -673,7 +654,6 @@ namespace c3d
 		meshCtx.addParser( cuT( "import_morph_target" ), mesh::parserMeshMorphTargetImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 		meshCtx.addParser( cuT( "default_material" ), mesh::parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
 		meshCtx.addParser( cuT( "skeleton" ), mesh::parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
-		meshCtx.addPushParser( cuT( "submesh" ), CSCNSection::eSubmesh, mesh::parserMeshSubmesh );
 		meshCtx.addPushParser( cuT( "default_materials" ), CSCNSection::eMeshDefaultMaterials, mesh::parserMeshDefaultMaterials );
 		meshCtx.addPopParser( cuT( "}" ), mesh::parserMeshEnd );
 

@@ -11,6 +11,7 @@
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
@@ -148,16 +149,37 @@ namespace c3d
 				+ "Mesh";
 		}
 
+		static CU_ImplementAttributeParserNewBlock( parserMeshSubmesh, MeshContext, SubmeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else
+			{
+				newBlockContext->mesh = blockContext;
+				newBlockContext->submesh = blockContext->mesh->createSubmesh();
+				newBlockContext->submesh->createComponent< DefaultRenderComponent >();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSubmesh )
+
 		static CU_ImplementAttributeParserBlock( parserSubmeshEnd, SubmeshContext )
 		{
-			if ( blockContext->submesh->getPointsCount() > 0 )
+			if ( blockContext->submesh->getPointsCount() > 0
+				&& blockContext->submesh->getFaceCount() > 0 )
 			{
 				MeshPreparer::prepare( *blockContext->submesh
 					, Parameters{} );
 				blockContext->submesh->computeContainers();
 				blockContext->submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *blockContext->submesh ) );
-				blockContext->submesh = {};
 			}
+			else
+			{
+				blockContext->mesh->mesh->removeSubmesh( *blockContext->submesh );
+			}
+
+			blockContext->submesh = {};
 		}
 		CU_EndAttributePop()
 	}
@@ -766,8 +788,12 @@ namespace c3d
 
 	void Submesh::addParsers( AttributeParsers & result )
 	{
-		BlockParserContextT< SubmeshContext > context{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
-		context.addPopParser( cuT( "}" ), smsh::parserSubmeshEnd );
+		BlockParserContextT< SubmeshContext > meshContext{ result, CSCNSection::eMesh };
+		BlockParserContextT< SubmeshContext > submeshContext{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
+
+		meshContext.addPushParser( cuT( "submesh" ), CSCNSection::eSubmesh, smsh::parserMeshSubmesh );
+
+		submeshContext.addPopParser( cuT( "}" ), smsh::parserSubmeshEnd );
 	}
 
 	void Submesh::enableSceneUpdate( bool )
@@ -879,7 +905,7 @@ namespace c3d
 		}
 	}
 
-	void Submesh::addComponent( SubmeshComponentUPtr component )
+	SubmeshComponentRPtr Submesh::addComponent( SubmeshComponentUPtr component )
 	{
 		if ( component->getPlugin().getRenderFlag()
 			&& m_render != component.get() )
@@ -914,7 +940,7 @@ namespace c3d
 		}
 
 		auto id = component->getId();
-		m_components.emplace( id, c3d::move( component ) );
+		return m_components.emplace( id, c3d::move( component ) ).first->second.get();
 	}
 
 	void Submesh::setIndexCount( uint32_t value )
