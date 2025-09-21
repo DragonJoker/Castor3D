@@ -15,7 +15,7 @@ namespace c3d::shader
 {
 	//*********************************************************************************************
 
-	inline sdw::Float operator "" _h( unsigned long long value )
+	inline sdw::Float operator ""_h( unsigned long long value )
 	{
 		return sdw::Float{ float( value ) };
 	}

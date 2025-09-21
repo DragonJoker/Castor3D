@@ -1337,7 +1337,7 @@ namespace c3d::string
 	}
 }
 
-constexpr c3d::StringView operator "" _sv( c3d::xchar const * const value, size_t length )noexcept
+constexpr c3d::StringView operator ""_sv( c3d::xchar const * const value, size_t length )noexcept
 {
 	return c3d::StringView{ value, length };
 }

@@ -560,17 +560,17 @@ namespace c3d
 	using Angle = AngleT< float >;
 }
 
-constexpr c3d::Angle operator "" _turns( long double value )
+constexpr c3d::Angle operator ""_turns( long double value )
 {
 	return c3d::Angle::fromTurns( value );
 }
 
-constexpr c3d::Angle operator "" _degrees( long double value )
+constexpr c3d::Angle operator ""_degrees( long double value )
 {
 	return c3d::Angle::fromDegrees( value );
 }
 
-constexpr c3d::Angle operator "" _radians( long double value )
+constexpr c3d::Angle operator ""_radians( long double value )
 {
 	return c3d::Angle::fromRadians( value );
 }
