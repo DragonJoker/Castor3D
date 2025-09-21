@@ -14,6 +14,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 CU_ImplementSmartPtr( c3d, SkinComponent )

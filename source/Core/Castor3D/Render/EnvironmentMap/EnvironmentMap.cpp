@@ -14,6 +14,7 @@
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 

@@ -333,22 +333,22 @@ namespace c3d
 	}
 }
 
-constexpr c3d::Seconds operator "" _s( unsigned long long value )
+constexpr c3d::Seconds operator ""_s( unsigned long long value )
 {
 	return c3d::Seconds( int64_t( value ) );
 }
 
-constexpr c3d::Milliseconds operator "" _ms( unsigned long long value )
+constexpr c3d::Milliseconds operator ""_ms( unsigned long long value )
 {
 	return c3d::Milliseconds( int64_t( value ) );
 }
 
-constexpr c3d::Microseconds operator "" _us( unsigned long long value )
+constexpr c3d::Microseconds operator ""_us( unsigned long long value )
 {
 	return c3d::Microseconds( int64_t( value ) );
 }
 
-constexpr c3d::Nanoseconds operator "" _ns( unsigned long long value )
+constexpr c3d::Nanoseconds operator ""_ns( unsigned long long value )
 {
 	return c3d::Nanoseconds( int64_t( value ) );
 }

@@ -130,8 +130,8 @@ namespace c3d
 		, uint32_t level
 		, uint32_t levelSize )
 	{
-		auto srcLevelExtent = ashes::getSubresourceDimensions( fullExtent, level - 1u, VkFormat( PFT ) );
-		auto dstLevelExtent = ashes::getSubresourceDimensions( fullExtent, level, VkFormat( PFT ) );
+		auto srcLevelExtent = ashes::getSubresourceDimensions( convert( fullExtent ), level - 1u, VkFormat( PFT ) );
+		auto dstLevelExtent = ashes::getSubresourceDimensions( convert( fullExtent ), level, VkFormat( PFT ) );
 		auto pixelSize = getBytesPerPixel( PFT );
 		auto dstLineSize = pixelSize * dstLevelExtent.width;
 

@@ -376,37 +376,37 @@ namespace c3d
 	/**@}*/
 }
 
-inline c3d::Length operator "" _km( long double value )
+inline c3d::Length operator ""_km( long double value )
 {
 	return c3d::Length::fromKilometres( value );
 }
 
-inline c3d::Length operator "" _m( long double value )
+inline c3d::Length operator ""_m( long double value )
 {
 	return c3d::Length::fromMetres( value );
 }
 
-inline c3d::Length operator "" _cm( long double value )
+inline c3d::Length operator ""_cm( long double value )
 {
 	return c3d::Length::fromCentimetres( value );
 }
 
-inline c3d::Length operator "" _mm( long double value )
+inline c3d::Length operator ""_mm( long double value )
 {
 	return c3d::Length::fromMillimetres( value );
 }
 
-inline c3d::Length operator "" _yd( long double value )
+inline c3d::Length operator ""_yd( long double value )
 {
 	return c3d::Length::fromYards( value );
 }
 
-inline c3d::Length operator "" _ft( long double value )
+inline c3d::Length operator ""_ft( long double value )
 {
 	return c3d::Length::fromFeet( value );
 }
 
-inline c3d::Length operator "" _in( long double value )
+inline c3d::Length operator ""_in( long double value )
 {
 	return c3d::Length::fromInches( value );
 }

@@ -12,6 +12,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
