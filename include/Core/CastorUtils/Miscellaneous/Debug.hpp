@@ -21,7 +21,7 @@ namespace c3d
 			int m_toCapture;
 			int m_toSkip;
 
-			Backtrace( int toCapture = 20, int toSkip = 2 )
+			explicit Backtrace( int toCapture = 20, int toSkip = 2 )
 				: m_toCapture{ toCapture }
 				, m_toSkip{ toSkip }
 			{

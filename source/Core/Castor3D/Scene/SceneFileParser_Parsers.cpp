@@ -308,7 +308,7 @@ namespace c3d
 		VctConfig::addParsers( parsers );
 		Material::addParsers( parsers, engine.getPassComponentsRegister().getTextureChannels() );
 
-		return { parsers
+		return AdditionalParsers{ parsers
 			, registerSceneFileSections()
 			, nullptr };
 	}

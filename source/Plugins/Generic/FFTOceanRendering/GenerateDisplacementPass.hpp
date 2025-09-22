@@ -43,7 +43,7 @@ namespace ocean_fft
 		/**
 		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */
-		void accept( c3d::RenderTechniqueVisitor & visitor );
+		void accept( c3d::RenderTechniqueVisitor & visitor )const;
 
 	public:
 		static c3d::MbString const Name;

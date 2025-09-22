@@ -26,7 +26,7 @@ namespace atmosphere_scattering
 			, c3d::Texture & result
 			, uint32_t index
 			, bool const & enabled );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::ProgramModule m_shader;

@@ -283,7 +283,6 @@ namespace c3d
 		: panelPipeline{ doCreatePanelPipeline( device, *commonData.panelVertexBuffer, commonData.cameraUbo ) }
 		, borderPipeline{ doCreateBorderPipeline( device, *commonData.borderVertexBuffer, commonData.cameraUbo ) }
 		, textPipeline{ doCreateTextPipeline( device ) }
-		, m_device{ device }
 		, m_commonData{ commonData }
 	{
 	}
@@ -329,7 +328,6 @@ namespace c3d
 
 		if ( hasTexts )
 		{
-			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
 			// Common buffers preparation
 			context.memoryBarrier( commandBuffer
 				, m_commonData.textVertexBuffer->overlaysData->bufferViewId

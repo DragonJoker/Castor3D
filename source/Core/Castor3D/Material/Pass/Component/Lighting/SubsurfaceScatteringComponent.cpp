@@ -398,7 +398,7 @@ namespace c3d
 
 		auto result = makeRawUnique< SubsurfaceScatteringComponent >( pass );
 		result->setSubsurfaceScattering( c3d::move( sss ) );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool SubsurfaceScatteringComponent::doWriteText( String const & tabs

@@ -384,7 +384,7 @@ namespace c3d
 
 	struct AdditionalParsers
 	{
-		AdditionalParsers( AttributeParsers pparsers = {}
+		explicit AdditionalParsers( AttributeParsers pparsers = {}
 			, StrSectionIdMap psections = {}
 			, UserContextCreator pcontextCreator = {} )
 			: parsers{ c3d::move( pparsers ) }
@@ -491,7 +491,10 @@ namespace c3d
 		addParser( parsers
 			, SectionId( section )
 			, name
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 			, BaseFunction( function )
+#pragma clang diagnostic pop
 			, c3d::move( params ) );
 	}
 
@@ -508,7 +511,10 @@ namespace c3d
 			, SectionId( oldSection )
 			, SectionId( newSection )
 			, name
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 			, BaseFunction( function )
+#pragma clang diagnostic pop
 			, c3d::move( params ) );
 	}
 

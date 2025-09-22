@@ -34,7 +34,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLineMapping_addLine( C3DLineMapping * object, uint32_t x, uint32_t y )
+	C3D_CAPIMETHODIMP c3dLineMapping_addLine( C3DLineMapping const * object, uint32_t x, uint32_t y )
 	{
 		if ( !object )
 			return C3D_POINTER;

@@ -425,7 +425,7 @@ namespace GuiCommon
 		wxDECLARE_DYNAMIC_CLASS( gcImageFileProperty );
 
 	public:
-		gcImageFileProperty( c3d::ImageLoader * loader = nullptr
+		explicit gcImageFileProperty( c3d::ImageLoader * loader = nullptr
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, wxString const & value = wxEmptyString );
@@ -453,7 +453,7 @@ namespace GuiCommon
 		wxDECLARE_DYNAMIC_CLASS( gcTextureProperty );
 
 	public:
-		gcTextureProperty( c3d::ImageLoader * loader = nullptr
+		explicit gcTextureProperty( c3d::ImageLoader * loader = nullptr
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, c3d::TextureSourceInfo * value = nullptr );

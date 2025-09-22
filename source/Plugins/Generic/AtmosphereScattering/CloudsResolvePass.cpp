@@ -213,7 +213,7 @@ namespace atmosphere_scattering
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 
-	void CloudsResolvePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CloudsResolvePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

@@ -71,7 +71,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dCamera_attachTo( C3DCamera * object, C3DSceneNode * val )
+	C3D_CAPIMETHODIMP c3dCamera_attachTo( C3DCamera const * object, C3DSceneNode const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -85,7 +85,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dCamera_detach( C3DCamera * object )
+	C3D_CAPIMETHODIMP c3dCamera_detach( C3DCamera const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -109,7 +109,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dCamera_setViewportType( C3DCamera * object, C3D_VIEWPORT_TYPE val )
+	C3D_CAPIMETHODIMP c3dCamera_setViewportType( C3DCamera const * object, C3D_VIEWPORT_TYPE val )
 	{
 		if ( !object )
 			return C3D_POINTER;

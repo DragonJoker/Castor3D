@@ -100,56 +100,6 @@ namespace c3d
 			auto colour()const { return this->template getMember< "value" >(); }
 		};
 
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in )
-		{
-			return vec3( writer.cast< sdw::Float >( in ) );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in )
-		{
-			return vec3( vec2( in ), 0.0_f );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in )
-		{
-			return vec3( in.xyz() );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in )
-		{
-			return vec3( writer.cast< sdw::Float >( in ) );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in )
-		{
-			return vec3( vec2( in ), 0.0_f );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in )
-		{
-			return vec3( in.xyz() );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in )
-		{
-			return vec3( in );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in )
-		{
-			return vec3( in, 0.0_f );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in )
-		{
-			return in;
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in )
-		{
-			return in.xyz();
-		}
-
 		template< ast::type::ImageFormat FormatT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, Extent2D const & size
@@ -226,7 +176,7 @@ namespace c3d
 										, 0.0_f
 										, 0.5_f * log2( omegaS / omegaP ) ) );
 
-								prefilteredColor += makeVec3( writer, c3d_mapEnvironment.lod( L, lod ) ) * NdotL;
+								prefilteredColor += shader::makeVec3( writer, c3d_mapEnvironment.lod( L, lod ) ) * NdotL;
 								totalWeight += NdotL;
 							}
 							sdwFI
@@ -400,7 +350,7 @@ namespace c3d
 			CU_Failure( "Unsupported ImageFormat" );
 			break;
 		}
-		createPipelines( size, move( program ), srcView, renderPass, {} );
+		createPipelines( size, program, srcView, renderPass, {} );
 	}
 
 	void EnvironmentPrefilter::MipRenderCube::registerFrames()

@@ -115,30 +115,6 @@ namespace c3d
 			return result;
 		}
 
-		static ShaderPtr getProgram( Engine & engine )
-		{
-			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
-
-			auto c3d_source = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_source", 0u, 0u );
-
-			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
-			auto fragColor = writer.declOutput< sdw::Vec4 >( "fragColor", sdw::EntryPoint::eFragment, 0 );
-
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&position]( sdw::VertexIn const & 
-					, sdw::VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&c3d_source, &fragColor]( sdw::FragmentIn const & in
-				, sdw::FragmentOut const & )
-				{
-					fragColor = c3d_source.fetch( ivec2( in.fragCoord.xy() ), 0_i );
-				} );
-
-			return writer.getBuilder().releaseShader();
-		}
-
 		static crg::RunnableGraphPtr createRunnableGraph( crg::FrameGraph & graph
 			, RenderDevice const & device )
 		{

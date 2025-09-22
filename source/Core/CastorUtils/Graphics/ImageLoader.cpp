@@ -66,6 +66,14 @@ namespace c3d
 
 	//*********************************************************************************************
 
+	ImageMemoryLayout ImageLoaderImpl::load( String const & imageFormat
+			, uint8_t const * data
+			, uint32_t size
+			, PxBufferBaseUPtr & buffer )const
+	{
+		return doLoad( imageFormat, data, size, buffer );
+	}
+
 	Image ImageLoaderImpl::load( String const & name
 		, Path const & imagePath
 		, String const & imageFormat

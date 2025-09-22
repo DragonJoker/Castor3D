@@ -52,7 +52,7 @@ namespace c3d
 		 *\param[in]	target		Le module shader concerné.
 		 *\param[in]	pathFile	Le nom du fichier.
 		 */
-		C3D_API void setFile( VkShaderStageFlagBits target, Path const & pathFile );
+		C3D_API void setFile( ast::ShaderStage stage, Path const & pathFile );
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -63,7 +63,7 @@ namespace c3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	source	Le code de la source.
 		 */
-		C3D_API void setSource( VkShaderStageFlagBits target, MbString const & source );
+		C3D_API void setSource( ast::ShaderStage stage, MbString const & source );
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -74,7 +74,7 @@ namespace c3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	shader	Le shader de la source.
 		 */
-		C3D_API void setSource( VkShaderStageFlagBits target, ShaderPtr shader );
+		C3D_API void setSource( ast::ShaderStage stage, ShaderPtr shader );
 		/**
 		 *\~english
 		 *\brief		Sets the program source.
@@ -116,7 +116,7 @@ namespace c3d
 		/**@}*/
 
 	protected:
-		Map< VkShaderStageFlagBits, Path > m_files;
+		Map< ast::ShaderStage, Path > m_files;
 		ProgramModule m_module;
 		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
@@ -177,7 +177,7 @@ namespace c3d
 		ParticleSystemContext * particleSystem{};
 		String name{};
 		ShaderProgramRPtr shaderProgram{};
-		VkShaderStageFlagBits shaderStage{};
+		ast::ShaderStage shaderStage{ ast::ShaderStage( -1 ) };
 	};
 }
 

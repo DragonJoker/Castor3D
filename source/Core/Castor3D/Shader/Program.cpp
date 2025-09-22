@@ -13,45 +13,45 @@ namespace c3d
 {
 	namespace shdprog
 	{
-		static String getName( VkShaderStageFlagBits value )
+		static String getName( ast::ShaderStage value )
 		{
 			switch ( value )
 			{
-			case VK_SHADER_STAGE_VERTEX_BIT:
+			case  ast::ShaderStage::eVertex:
 				return cuT( "Vert" );
-			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+			case ast::ShaderStage::eTessellationControl:
 				return cuT( "Tesc" );
-			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+			case ast::ShaderStage::eTessellationEvaluation:
 				return cuT( "Tese" );
-			case VK_SHADER_STAGE_GEOMETRY_BIT:
+			case ast::ShaderStage::eGeometry:
 				return cuT( "Geom" );
-			case VK_SHADER_STAGE_FRAGMENT_BIT:
+			case ast::ShaderStage::eFragment:
 				return cuT( "Frag" );
-			case VK_SHADER_STAGE_COMPUTE_BIT:
+			case ast::ShaderStage::eCompute:
 				return cuT( "Comp" );
 #ifdef VK_NV_ray_tracing
-			case VK_SHADER_STAGE_RAYGEN_BIT_NV:
+			case ast::ShaderStage::eRayGeneration:
 				return cuT( "Rgen" );
-			case VK_SHADER_STAGE_ANY_HIT_BIT_NV:
+			case ast::ShaderStage::eRayAnyHit:
 				return cuT( "Ahit" );
-			case VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV:
+			case ast::ShaderStage::eRayClosestHit:
 				return cuT( "Chit" );
-			case VK_SHADER_STAGE_MISS_BIT_NV:
+			case ast::ShaderStage::eRayMiss:
 				return cuT( "Rmis" );
-			case VK_SHADER_STAGE_INTERSECTION_BIT_NV:
+			case ast::ShaderStage::eRayIntersection:
 				return cuT( "Rint" );
-			case VK_SHADER_STAGE_CALLABLE_BIT_NV:
+			case ast::ShaderStage::eCallable:
 				return cuT( "Call" );
 #endif
 #if defined( VK_EXT_mesh_shader )
-			case VK_SHADER_STAGE_TASK_BIT_EXT:
+			case ast::ShaderStage::eTask:
 				return cuT( "Task" );
-			case VK_SHADER_STAGE_MESH_BIT_EXT:
+			case ast::ShaderStage::eMesh:
 				return cuT( "Mesh" );
 #elif defined( VK_NV_mesh_shader )
-			case VK_SHADER_STAGE_TASK_BIT_NV:
+			case ast::ShaderStage::eTaskNV:
 				return cuT( "Task" );
-			case VK_SHADER_STAGE_MESH_BIT_NV:
+			case ast::ShaderStage::eMeshNV:
 				return cuT( "Mesh" ); 
 #endif
 			default:
@@ -60,28 +60,25 @@ namespace c3d
 			}
 		}
 
-		static void eraseFile( VkShaderStageFlagBits target
-			, Map< VkShaderStageFlagBits, Path > & files )
+		static void eraseFile( ast::ShaderStage stage
+			, Map< ast::ShaderStage, Path > & files )
 		{
-			auto it = files.find( target );
-
-			if ( it != files.end() )
-			{
+			if ( auto it = files.find( stage );
+				it != files.end() )
 				files.erase( it );
-			}
 		}
 
-		static void eraseStage( VkShaderStageFlagBits target
+		static void eraseStage( RenderDevice const & device
+			, ast::ShaderStage stage
 			, ashes::PipelineShaderStageCreateInfoArray & states )
 		{
-			auto it = std::find_if( states.begin()
+			if ( auto it = std::find_if( states.begin()
 				, states.end()
-				, [target]( ashes::PipelineShaderStageCreateInfo const & lookup )
+				, [&device, stage]( ashes::PipelineShaderStageCreateInfo const & lookup )
 				{
-					return lookup->stage == target;
+					return getShaderStage( device, lookup->stage ) == stage;
 				} );
-
-			if ( it != states.end() )
+				it != states.end() )
 			{
 				states.erase( it );
 			}
@@ -89,23 +86,18 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserComputeShader, ProgramContext )
 		{
-			blockContext->shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
+			blockContext->shaderStage = ast::ShaderStage::eCompute;
 		}
 		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
 
 		static CU_ImplementAttributeParserBlock( parserShaderProgramEnd, ProgramContext )
 		{
 			if ( !blockContext->shaderProgram )
-			{
 				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-			}
 			else
 			{
 				if ( blockContext->particleSystem )
-				{
 					blockContext->particleSystem->particleSystem->setCSUpdateProgram( blockContext->shaderProgram );
-				}
-
 				blockContext->shaderProgram = {};
 			}
 		}
@@ -114,50 +106,29 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserShaderFile, ProgramContext )
 		{
 			if ( !blockContext->shaderProgram )
-			{
 				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
+			else if ( blockContext->shaderStage == ast::ShaderStage( -1 ) )
+				CU_ParsingError( cuT( "Shader not initialised" ) );
 			else
-			{
-				if ( blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
-				{
-					blockContext->shaderProgram->setFile( blockContext->shaderStage
-						, context.file.getPath() / params[0]->get< Path >() );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Shader not initialised" ) );
-				}
-			}
+				blockContext->shaderProgram->setFile( blockContext->shaderStage
+					, context.file.getPath() / params[0]->get< Path >() );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserShaderGroupSizes, ProgramContext )
 		{
 			if ( !blockContext->shaderProgram )
-			{
 				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-			}
+			if ( !blockContext->particleSystem )
+				CU_ParsingError( cuT( "No particle system initialised." ) );
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
+			else if ( blockContext->shaderStage == ast::ShaderStage( -1 ) )
+				CU_ParsingError( cuT( "Shader not initialised" ) );
 			else
-			{
-				if ( blockContext->particleSystem
-					&& blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
-				{
-					blockContext->particleSystem->particleSystem->setCSGroupSizes( params[0]->get< Point3i >() );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Shader not initialised" ) );
-				}
-			}
+				blockContext->particleSystem->particleSystem->setCSGroupSizes( params[0]->get< Point3i >() );
 		}
 		CU_EndAttribute()
 	}
@@ -172,38 +143,40 @@ namespace c3d
 	{
 	}
 
-	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
+	void ShaderProgram::setFile( ast::ShaderStage stage, Path const & pathFile )
 	{
 		String source;
 		{
 			TextFile file{ pathFile, File::OpenMode::eRead };
 			file.copyToString( source );
 		}
-		setSource( target, toUtf8( source ) );
-		m_files[target] = pathFile;
+		setSource( stage, toUtf8( source ) );
+		m_files[stage] = pathFile;
 	}
 
-	void ShaderProgram::setSource( VkShaderStageFlagBits target, MbString const & source )
+	void ShaderProgram::setSource( ast::ShaderStage stage, MbString const & source )
 	{
-		shdprog::eraseFile( target, m_files );
-		shdprog::eraseStage( target, m_states );
-		auto & renderSystem = *getRenderSystem();
+		auto const & renderSystem = *getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
-		auto const & spirvShader = m_module.compiled.try_emplace( getShaderStage( getOwner()->getRenderDevice(), target )
-			, renderSystem.compileShader( target, getName(), source ) ).first->second;
-		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
+		shdprog::eraseFile( stage, m_files );
+		shdprog::eraseStage( device, stage, m_states );
+		auto stageFlags = getVkShaderStage( stage );
+		auto const & spirvShader = m_module.compiled.try_emplace( stage
+			, renderSystem.compileShader( stageFlags, getName(), source ) ).first->second;
+		m_states.push_back( makeShaderState( *device, stageFlags, spirvShader, getName() + shdprog::getName( stage ) ) );
 	}
 
-	void ShaderProgram::setSource( VkShaderStageFlagBits target, ShaderPtr shader )
+	void ShaderProgram::setSource( ast::ShaderStage stage, ShaderPtr shader )
 	{
-		shdprog::eraseFile( target, m_files );
-		shdprog::eraseStage( target, m_states );
 		auto & renderSystem = *getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
-		ast::EntryPointConfig entryPoint{ getShaderStage( getOwner()->getRenderDevice(), target ), "main" };
-		auto const & spirvShader = m_module.compiled.try_emplace( getShaderStage( getOwner()->getRenderDevice(), target )
-			, renderSystem.compileShader( target, getName(), *shader, entryPoint ) ).first->second;
-		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
+		shdprog::eraseFile( stage, m_files );
+		shdprog::eraseStage( device, stage, m_states );
+		ast::EntryPointConfig entryPoint{ stage, "main" };
+		auto stageFlags = getVkShaderStage( stage );
+		auto const & spirvShader = m_module.compiled.try_emplace( stage
+			, renderSystem.compileShader( stageFlags, getName(), *shader, entryPoint ) ).first->second;
+		m_states.push_back( makeShaderState( *device, stageFlags, spirvShader, getName() + shdprog::getName( stage ) ) );
 	}
 
 	void ShaderProgram::setSource( ShaderPtr shader )

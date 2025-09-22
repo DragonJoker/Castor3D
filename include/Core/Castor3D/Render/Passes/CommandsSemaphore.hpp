@@ -15,7 +15,7 @@ namespace c3d
 {
 	struct CommandsSemaphore
 	{
-		C3D_API CommandsSemaphore( ashes::CommandBufferPtr commandBuffer = nullptr
+		C3D_API explicit CommandsSemaphore( ashes::CommandBufferPtr commandBuffer = nullptr
 			, ashes::SemaphorePtr semaphore = nullptr );
 		C3D_API CommandsSemaphore( RenderDevice const & device
 			, QueueData const & queueData

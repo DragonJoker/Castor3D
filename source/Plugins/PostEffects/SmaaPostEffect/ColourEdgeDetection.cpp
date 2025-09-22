@@ -169,16 +169,6 @@ namespace smaa
 				} );
 			return writer.getBuilder().releaseShader();
 		}
-
-		static crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )
-		{
-			return crg::ImageViewData{ "SMCEDPred"
-				, pred.data->image
-				, c3d::ImageViewCreateFlags::eNone
-				, c3d::ImageViewType::e2D
-				, getFormat( pred )
-				, { c3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } };
-		}
 	}
 
 	//*********************************************************************************************

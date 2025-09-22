@@ -23,7 +23,7 @@ namespace c3d
 		 *\param[in]	phi		Angle Phi
 		 *\param[in]	theta	Angle Theta
 		 */
-		CU_API SphericalVertex( float radius = 0, float phi = 0, float theta = 0 );
+		CU_API explicit SphericalVertex( float radius = 0, float phi = 0, float theta = 0 );
 		/**
 		 *\~english
 		 *\brief		Constructor from a cartesian point

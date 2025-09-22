@@ -107,7 +107,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_initialise( C3DEngine * object, uint32_t fps, bool threaded )
+	C3D_CAPIMETHODIMP c3dEngine_initialise( C3DEngine const * object, uint32_t fps, bool threaded )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -123,7 +123,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_cleanup( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_cleanup( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -139,7 +139,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_clearScenes( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_clearScenes( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -151,7 +151,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadRenderer( C3DEngine * object, C3DString type )
+	C3D_CAPIMETHODIMP c3dEngine_loadRenderer( C3DEngine const * object, C3DString type )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -168,7 +168,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadPlugin( C3DEngine * object, C3DString path )
+	C3D_CAPIMETHODIMP c3dEngine_loadPlugin( C3DEngine const * object, C3DString path )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -184,7 +184,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadScene( C3DEngine * object, C3DString name, C3DRenderTarget ** result )
+	C3D_CAPIMETHODIMP c3dEngine_loadScene( C3DEngine const * object, C3DString name, C3DRenderTarget ** result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -210,7 +210,7 @@ extern "C"
 			return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadImageFromFile( C3DEngine * object, C3DString name, C3DString val, C3DImage ** result )
+	C3D_CAPIMETHODIMP c3dEngine_loadImageFromFile( C3DEngine const * object, C3DString name, C3DString val, C3DImage ** result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -246,7 +246,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadImageFromFormat( C3DEngine * object, C3DString name, C3D_PIXEL_FORMAT fmt, C3DSize const * size, C3DImage ** result )
+	C3D_CAPIMETHODIMP c3dEngine_loadImageFromFormat( C3DEngine const * object, C3DString name, C3D_PIXEL_FORMAT fmt, C3DSize const * size, C3DImage ** result )
 	{
 		if ( !object || !result || !size )
 			return C3D_POINTER;
@@ -267,7 +267,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadFontFromFile( C3DEngine * object, C3DString name, C3DString path, uint32_t height, C3DFont ** result )
+	C3D_CAPIMETHODIMP c3dEngine_loadFontFromFile( C3DEngine const * object, C3DString name, C3DString path, uint32_t height, C3DFont ** result )
 	{
 		if ( !object || !result || !path || !name )
 			return C3D_POINTER;
@@ -297,7 +297,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_addScene( C3DEngine * object, C3DScene * val )
+	C3D_CAPIMETHODIMP c3dEngine_addScene( C3DEngine const * object, C3DScene * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -317,7 +317,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_addOverlay( C3DEngine * object, C3DOverlay * val )
+	C3D_CAPIMETHODIMP c3dEngine_addOverlay( C3DEngine const * object, C3DOverlay * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -337,7 +337,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_addSampler( C3DEngine * object, C3DSampler * val )
+	C3D_CAPIMETHODIMP c3dEngine_addSampler( C3DEngine const * object, C3DSampler * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -357,7 +357,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_removeScene( C3DEngine * object, C3DScene * val )
+	C3D_CAPIMETHODIMP c3dEngine_removeScene( C3DEngine const * object, C3DScene * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -379,7 +379,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_removeOverlay( C3DEngine * object, C3DOverlay * val )
+	C3D_CAPIMETHODIMP c3dEngine_removeOverlay( C3DEngine const * object, C3DOverlay * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -401,7 +401,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_removeSampler( C3DEngine * object, C3DSampler * val )
+	C3D_CAPIMETHODIMP c3dEngine_removeSampler( C3DEngine const * object, C3DSampler * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -486,7 +486,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_renderOneFrame( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_renderOneFrame( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -502,7 +502,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_startRendering( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_startRendering( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -518,7 +518,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_pauseRendering( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_pauseRendering( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -534,7 +534,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_resumeRendering( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_resumeRendering( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -550,7 +550,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_endRendering( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_endRendering( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -566,7 +566,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_registerGuiCallbacks( C3DEngine * object, C3DGuiCallbacks * callbacks )
+	C3D_CAPIMETHODIMP c3dEngine_registerGuiCallbacks( C3DEngine const * object, C3DGuiCallbacks * callbacks )
 	{
 		if ( !object || !callbacks )
 			return C3D_POINTER;
@@ -611,7 +611,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_unregisterGuiCallbacks( C3DEngine * object )
+	C3D_CAPIMETHODIMP c3dEngine_unregisterGuiCallbacks( C3DEngine const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -629,7 +629,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_createOverlay( C3DEngine const * object, C3D_OVERLAY_TYPE type, C3DString name, C3DOverlay * parent, C3DOverlay ** result )
+	C3D_CAPIMETHODIMP c3dEngine_createOverlay( C3DEngine const * object, C3D_OVERLAY_TYPE type, C3DString name, C3DOverlay const * parent, C3DOverlay ** result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -714,7 +714,7 @@ extern "C"
 			return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_createSkybox( C3DEngine const * object, C3DScene * scene, C3DSkybox ** result )
+	C3D_CAPIMETHODIMP c3dEngine_createSkybox( C3DEngine const * object, C3DScene const * scene, C3DSkybox ** result )
 	{
 		if ( !object || !scene || !result )
 			return C3D_POINTER;

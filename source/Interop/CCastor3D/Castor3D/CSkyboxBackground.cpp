@@ -23,7 +23,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setLeftImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setLeftImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -36,7 +36,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setRightImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setRightImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -49,7 +49,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setTopImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setTopImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -62,7 +62,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setBottomImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setBottomImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -75,7 +75,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setFrontImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setFrontImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -88,7 +88,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setBackImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setBackImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -101,7 +101,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setCrossImage( C3DSkybox * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dSkybox_setCrossImage( C3DSkybox const * object, C3DString filePath )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -114,7 +114,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSkybox_setEquirectangularImage( C3DSkybox * object, C3DString filePath, uint32_t size )
+	C3D_CAPIMETHODIMP c3dSkybox_setEquirectangularImage( C3DSkybox const * object, C3DString filePath, uint32_t size )
 	{
 		if ( !object )
 			return C3D_POINTER;

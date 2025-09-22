@@ -135,7 +135,7 @@ namespace atmosphere_scattering
 		result.setLastAttach( computePass.addOutputStorageImage( result.getTargetViewId(), curl::eOutput ) );
 	}
 
-	void CloudsCurlPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CloudsCurlPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_computeShader );
 	}

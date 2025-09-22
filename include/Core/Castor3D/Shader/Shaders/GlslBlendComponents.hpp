@@ -22,7 +22,7 @@ namespace c3d::shader
 	template< typename T >
 	struct BlendComponentT
 	{
-		BlendComponentT( T v, bool e = true )
+		explicit BlendComponentT( T v, bool e = true )
 			: value{ c3d::move( v ) }
 			, enabled{ e }
 		{
@@ -52,7 +52,7 @@ namespace c3d::shader
 			, Material const & material
 			, DerivSurfaceBase const & surface
 			, sdw::Vec4 const & clrCot );
-		BlendComponents( Materials const & materials
+		explicit BlendComponents( Materials const & materials
 			, bool zeroInit = false );
 
 		SDW_DeclStructInstance( , BlendComponents );

@@ -36,7 +36,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setMinFilter( C3DSampler * object, C3D_FILTER_MODE val )
+	C3D_CAPIMETHODIMP c3dSampler_setMinFilter( C3DSampler const * object, C3D_FILTER_MODE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -60,7 +60,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setMagFilter( C3DSampler * object, C3D_FILTER_MODE val )
+	C3D_CAPIMETHODIMP c3dSampler_setMagFilter( C3DSampler const * object, C3D_FILTER_MODE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -84,7 +84,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setMipmapMode( C3DSampler * object, C3D_MIPMAP_MODE val )
+	C3D_CAPIMETHODIMP c3dSampler_setMipmapMode( C3DSampler const * object, C3D_MIPMAP_MODE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -108,7 +108,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setWrapModeU( C3DSampler * object, C3D_WRAP_MODE val )
+	C3D_CAPIMETHODIMP c3dSampler_setWrapModeU( C3DSampler const * object, C3D_WRAP_MODE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -132,7 +132,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setWrapModeV( C3DSampler * object, C3D_WRAP_MODE val )
+	C3D_CAPIMETHODIMP c3dSampler_setWrapModeV( C3DSampler const * object, C3D_WRAP_MODE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -156,7 +156,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setWrapModeW( C3DSampler * object, C3D_WRAP_MODE val )
+	C3D_CAPIMETHODIMP c3dSampler_setWrapModeW( C3DSampler const * object, C3D_WRAP_MODE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -180,7 +180,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setMaxAnisotropy( C3DSampler * object, float val )
+	C3D_CAPIMETHODIMP c3dSampler_setMaxAnisotropy( C3DSampler const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -204,7 +204,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setMinLod( C3DSampler * object, float val )
+	C3D_CAPIMETHODIMP c3dSampler_setMinLod( C3DSampler const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -228,7 +228,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setMaxLod( C3DSampler * object, float val )
+	C3D_CAPIMETHODIMP c3dSampler_setMaxLod( C3DSampler const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -252,7 +252,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setLodBias( C3DSampler * object, float val )
+	C3D_CAPIMETHODIMP c3dSampler_setLodBias( C3DSampler const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -276,7 +276,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSampler_setBorderColour( C3DSampler * object, C3D_BORDER_COLOUR val )
+	C3D_CAPIMETHODIMP c3dSampler_setBorderColour( C3DSampler const * object, C3D_BORDER_COLOUR val )
 	{
 		if ( !object )
 			return C3D_POINTER;

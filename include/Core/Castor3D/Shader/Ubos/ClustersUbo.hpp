@@ -69,7 +69,6 @@ namespace c3d
 				, sdw::Vec4 & lightsAABBRange );
 
 		private:
-			ClustersConfig const * m_config{};
 			sdw::Function< sdw::U32Vec3
 				, sdw::InUInt32 > m_computeClusterIndex3DIdx;
 			sdw::Function< sdw::U32Vec3

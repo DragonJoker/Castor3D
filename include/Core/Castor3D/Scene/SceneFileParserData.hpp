@@ -206,7 +206,10 @@ namespace c3d
 			c3d::addParser( parsers
 				, section
 				, name
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 				, RawParserFunctionT< void >( function )
+#pragma clang diagnostic pop
 				, c3d::move( params ) );
 		}
 
@@ -234,7 +237,10 @@ namespace c3d
 				, section
 				, SectionId( newSection )
 				, name
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 				, RawParserFunctionT< void >( function )
+#pragma clang diagnostic pop
 				, c3d::move( params ) );
 		}
 
@@ -257,7 +263,10 @@ namespace c3d
 				, section
 				, oldSection
 				, name
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 				, RawParserFunctionT< void >( function ) );
+#pragma clang diagnostic pop
 		}
 
 		void addDefaultPopParser()

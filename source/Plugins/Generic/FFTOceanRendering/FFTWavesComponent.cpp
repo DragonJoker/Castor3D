@@ -257,7 +257,7 @@ namespace ocean_fft
 
 			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint
-				, c3d::PipelineFlags flags )
+				, c3d::PipelineFlags const & flags )
 			{
 				auto result = cache.getIOStruct( "C3DORFFT_Patch"
 					, entryPoint
@@ -294,7 +294,7 @@ namespace ocean_fft
 			}
 
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-				, c3d::PipelineFlags flags )
+				, c3d::PipelineFlags const & flags )
 			{
 				auto result = cache.getStruct( ast::type::MemoryLayout::eC
 					, "C3DORFFT_Patch" );
@@ -874,7 +874,6 @@ namespace ocean_fft
 				out.curPosition = curCSPosition.xyw();
 				out.prvPosition = prvCSPosition.xyw();
 				out.worldPosition = curWorldPos;
-				//out.worldPosition.w() = height;
 				out.viewPosition = curViewPosition;
 				out.vtx.position = curCSPosition;
 			} );
@@ -910,7 +909,7 @@ namespace ocean_fft
 
 	void FFTWavesComponent::Plugin::createSections( c3d::StrSectionIdMap & sections )const
 	{
-		sections.emplace( c3d::SectionId( parse::FFTWavesSection::eWaves ), cuT( "fft_waves" ) );
+		sections.try_emplace( c3d::SectionId( parse::FFTWavesSection::eWaves ), cuT( "fft_waves" ) );
 	}
 
 	//*********************************************************************************************

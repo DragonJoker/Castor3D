@@ -47,7 +47,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setTwoSided( C3DPass * object, bool val )
+	C3D_CAPIMETHODIMP c3dPass_setTwoSided( C3DPass const * object, bool val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -78,7 +78,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setOpacity( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setOpacity( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -109,7 +109,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setEmissiveColour( C3DPass * object, C3DRgbColour const * val )
+	C3D_CAPIMETHODIMP c3dPass_setEmissiveColour( C3DPass const * object, C3DRgbColour const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -140,7 +140,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setEmissiveFactor( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setEmissiveFactor( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -171,7 +171,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setRefractionRatio( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setRefractionRatio( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -202,7 +202,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setAlphaFunc( C3DPass * object, C3D_COMPARISON_FUNC val )
+	C3D_CAPIMETHODIMP c3dPass_setAlphaFunc( C3DPass const * object, C3D_COMPARISON_FUNC val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -233,7 +233,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setBlendAlphaFunc( C3DPass * object, C3D_COMPARISON_FUNC val )
+	C3D_CAPIMETHODIMP c3dPass_setBlendAlphaFunc( C3DPass const * object, C3D_COMPARISON_FUNC val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -264,7 +264,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setAlphaRefValue( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setAlphaRefValue( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -295,7 +295,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setDiffuse( C3DPass * object, C3DRgbColour const * val )
+	C3D_CAPIMETHODIMP c3dPass_setDiffuse( C3DPass const * object, C3DRgbColour const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -326,7 +326,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setAlbedo( C3DPass * object, C3DHdrRgbColour const * val )
+	C3D_CAPIMETHODIMP c3dPass_setAlbedo( C3DPass const * object, C3DHdrRgbColour const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -357,7 +357,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setSpecular( C3DPass * object, C3DRgbColour const * val )
+	C3D_CAPIMETHODIMP c3dPass_setSpecular( C3DPass const * object, C3DRgbColour const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -388,7 +388,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setSpecularFactor( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setSpecularFactor( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -419,7 +419,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setMetalness( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setMetalness( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -450,7 +450,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setRoughness( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setRoughness( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -481,7 +481,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setGlossiness( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setGlossiness( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -512,7 +512,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPass_setShininess( C3DPass * object, float val )
+	C3D_CAPIMETHODIMP c3dPass_setShininess( C3DPass const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;

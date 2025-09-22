@@ -309,21 +309,6 @@ namespace c3d
 		}
 #endif
 
-		static void convert( SemaphoreWaitArray const & toWait
-			, std::vector< VkSemaphore > & semaphores )
-		{
-			for ( auto & wait : toWait )
-			{
-				if ( wait.semaphore
-					&& semaphores.end() == std::find( semaphores.begin()
-						, semaphores.end()
-						, wait.semaphore ) )
-				{
-					semaphores.push_back( wait.semaphore );
-				}
-			}
-		}
-
 		static CU_ImplementAttributeParserNewBlock( parserRenderTarget, WindowContext, TargetContext )
 		{
 			newBlockContext->window = blockContext;
@@ -399,7 +384,7 @@ namespace c3d
 		, IntermediateView intermediate
 		, uint32_t swapchainImageCount
 		, ashes::CommandPool const & commandBufferPool )
-		: intermediateView{ move( intermediate ) }
+		: intermediateView{ c3d::move( intermediate ) }
 		, intermediateBarrierView{ rendwndw::doCreateBarrierView( handler, tex3DResult, intermediateView ) }
 		, intermediateSampledView{ rendwndw::doCreateSampledView( handler, tex3DResult, intermediateView ) }
 	{

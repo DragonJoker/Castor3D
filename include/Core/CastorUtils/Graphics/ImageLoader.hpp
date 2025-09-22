@@ -34,10 +34,10 @@ namespace c3d
 		 *\param[out]	buffer		Reçoit le buffer.
 		 *\return		Le layout de l'image.
 		 */
-		CU_API virtual ImageMemoryLayout load( String const & imageFormat
+		CU_API ImageMemoryLayout load( String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
-			, PxBufferBaseUPtr & buffer )const = 0;
+			, PxBufferBaseUPtr & buffer )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -101,6 +101,28 @@ namespace c3d
 			, Path const & imagePath
 			, uint8_t const * data
 			, uint32_t size )const;
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Loads an image file data.
+		 *\param[in]	imageFormat	The image format, loader wise.
+		 *\param[in]	data		The image data.
+		 *\param[in]	size		The image data size.
+		 *\param[out]	buffer		Receives the buffer data.
+		 *\return		The image layout.
+		 *\~french
+		 *\brief		Charge les données d'un fichier image.
+		 *\param[in]	imageFormat	Le format de l'image, niveau loader.
+		 *\param[in]	data		Les données de l'image.
+		 *\param[in]	size		La taille des données de l'image.
+		 *\param[out]	buffer		Reçoit le buffer.
+		 *\return		Le layout de l'image.
+		 */
+		virtual ImageMemoryLayout doLoad( String const & imageFormat
+			, uint8_t const * data
+			, uint32_t size
+			, PxBufferBaseUPtr & buffer )const = 0;
 	};
 
 	class ImageLoader

@@ -741,7 +741,7 @@ namespace c3d
 		/**
 		 *\copydoc	RenderTechniquePass::doAccept
 		 */
-		C3D_API void doAccept( RenderTechniqueVisitor & visitor );
+		C3D_API virtual void doAccept( RenderTechniqueVisitor & visitor );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 		C3D_API void doAddShadowBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings

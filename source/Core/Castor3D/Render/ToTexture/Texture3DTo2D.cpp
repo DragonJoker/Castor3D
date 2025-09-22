@@ -431,56 +431,6 @@ namespace c3d
 			auto voxelColour()const { return this->template getMember< "voxelColour" >(); }
 		};
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Int const in )
-		{
-			return vec4( writer.cast< sdw::Float >( in ) );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec2 const in )
-		{
-			return vec4( vec2( in ), 0.0_f, 1.0_f );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec4 const in )
-		{
-			return vec4( vec3( in.xyz() ), 1.0_f );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UInt const in )
-		{
-			return vec4( writer.cast< sdw::Float >( in ) );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec2 const in )
-		{
-			return vec4( vec2( in ), 0.0_f, 1.0_f );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec4 const in )
-		{
-			return vec4( vec3( in.xyz() ), 1.0_f );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Float const in )
-		{
-			return vec4( in );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec2 const in )
-		{
-			return vec4( in, 0.0_f, 1.0_f );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec3 const in )
-		{
-			return vec4( in, 1.0_f );
-		}
-
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec4 const in )
-		{
-			return vec4( in );
-		}
-
 		template< ast::type::ImageFormat FormatT >
 		static ShaderPtr getProgramVolume( RenderSystem const & renderSystem )
 		{
@@ -512,7 +462,7 @@ namespace c3d
 							, uvec3( grid.gridSize ) ) );
 					out.vtx.position = vec4( vec3( coord ), 1.0f );
 
-					out.voxelColour() = makeVec4( writer, inSource.load( ivec3( coord ) ) );
+					out.voxelColour() = shader::makeVec4( writer, inSource.load( ivec3( coord ) ) );
 				} );
 
 			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&writer, &grid, &createCube, &c3d_cameraData]( sdw::GeometryIn const &
@@ -887,7 +837,7 @@ namespace c3d
 				else
 				{
 					ast::type::ImageFormat format = getImageFormat( getFormat( intermediate.viewId ) );
-					auto [it, inserted] = m_pipelineVolume.emplace( format, PipelineProgram{ {}, {} } );
+					auto [it, inserted] = m_pipelineVolume.try_emplace( format, PipelineProgram{ {}, {} } );
 					if ( inserted )
 					{
 						switch ( format )

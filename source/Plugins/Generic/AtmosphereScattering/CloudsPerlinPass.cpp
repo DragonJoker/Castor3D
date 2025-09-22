@@ -469,7 +469,7 @@ namespace atmosphere_scattering
 		result.setLastAttach( mipsPass.addInOutTransfer( *result.getLastAttach() ) );
 	}
 
-	void CloudsPerlinPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CloudsPerlinPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_computeShader );
 	}

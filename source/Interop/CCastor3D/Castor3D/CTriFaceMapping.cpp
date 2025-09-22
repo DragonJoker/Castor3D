@@ -34,7 +34,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dTriFaceMapping_addFace( C3DTriFaceMapping * object, uint32_t x, uint32_t y, uint32_t z )
+	C3D_CAPIMETHODIMP c3dTriFaceMapping_addFace( C3DTriFaceMapping const * object, uint32_t x, uint32_t y, uint32_t z )
 	{
 		if ( !object )
 			return C3D_POINTER;

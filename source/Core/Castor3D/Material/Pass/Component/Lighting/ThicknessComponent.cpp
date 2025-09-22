@@ -175,7 +175,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< ThicknessComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool ThicknessComponent::doWriteText( String const & tabs

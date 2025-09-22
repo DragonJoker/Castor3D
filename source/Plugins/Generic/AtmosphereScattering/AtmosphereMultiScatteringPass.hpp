@@ -21,7 +21,7 @@ namespace atmosphere_scattering
 			, c3d::Texture const & transmittanceLut
 			, c3d::Texture & result
 			, bool const & enabled );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::ShaderModule m_computeShader;

@@ -179,7 +179,7 @@ namespace c3d
 						, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 					auto material = materialImporter->createMaterial( name );
 					if ( materialImporter->importMaterial( *material ) )
-						imported.emplace_back( move( material ) );
+						imported.emplace_back( c3d::move( material ) );
 				}
 
 				for ( auto & material : imported )

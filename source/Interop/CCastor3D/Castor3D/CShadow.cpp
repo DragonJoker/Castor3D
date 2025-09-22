@@ -34,7 +34,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setEnabled( C3DShadow * object, bool val )
+	C3D_CAPIMETHODIMP c3dShadow_setEnabled( C3DShadow const * object, bool val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -58,7 +58,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setFilter( C3DShadow * object, C3D_SHADOW_TYPE val )
+	C3D_CAPIMETHODIMP c3dShadow_setFilter( C3DShadow const * object, C3D_SHADOW_TYPE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -82,7 +82,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setRawMinOffset( C3DShadow * object, float val )
+	C3D_CAPIMETHODIMP c3dShadow_setRawMinOffset( C3DShadow const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -106,7 +106,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setRawMaxSlopeOffset( C3DShadow * object, float val )
+	C3D_CAPIMETHODIMP c3dShadow_setRawMaxSlopeOffset( C3DShadow const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -130,7 +130,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setPcfMinOffset( C3DShadow * object, float val )
+	C3D_CAPIMETHODIMP c3dShadow_setPcfMinOffset( C3DShadow const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -154,7 +154,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setPcfMaxSlopeOffset( C3DShadow * object, float val )
+	C3D_CAPIMETHODIMP c3dShadow_setPcfMaxSlopeOffset( C3DShadow const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -178,7 +178,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setPcfFilterSize( C3DShadow * object, uint32_t val )
+	C3D_CAPIMETHODIMP c3dShadow_setPcfFilterSize( C3DShadow const * object, uint32_t val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -202,7 +202,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setPcfSampleCount( C3DShadow * object, uint32_t val )
+	C3D_CAPIMETHODIMP c3dShadow_setPcfSampleCount( C3DShadow const * object, uint32_t val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -226,7 +226,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setVsmMinVariance( C3DShadow * object, float val )
+	C3D_CAPIMETHODIMP c3dShadow_setVsmMinVariance( C3DShadow const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -250,7 +250,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dShadow_setVsmLightBleedingReduction( C3DShadow * object, float val )
+	C3D_CAPIMETHODIMP c3dShadow_setVsmLightBleedingReduction( C3DShadow const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;

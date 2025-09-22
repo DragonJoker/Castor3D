@@ -59,7 +59,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_setBackgroundColour( C3DScene * object, C3DRgbColour const * val )
+	C3D_CAPIMETHODIMP c3dScene_setBackgroundColour( C3DScene const * object, C3DRgbColour const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -71,7 +71,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_setBackgroundImage( C3DScene * object, C3DString filePath )
+	C3D_CAPIMETHODIMP c3dScene_setBackgroundImage( C3DScene const * object, C3DString filePath )
 	{
 		if ( !object || !filePath )
 			return C3D_POINTER;
@@ -89,7 +89,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_setBackgroundSkybox( C3DScene * object, C3DSkybox * skybox )
+	C3D_CAPIMETHODIMP c3dScene_setBackgroundSkybox( C3DScene const * object, C3DSkybox * skybox )
 	{
 		if ( !object || !skybox )
 			return C3D_POINTER;
@@ -123,7 +123,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_setAmbientLight( C3DScene * object, C3DRgbColour const * val )
+	C3D_CAPIMETHODIMP c3dScene_setAmbientLight( C3DScene const * object, C3DRgbColour const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -189,7 +189,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_addNode( C3DScene * object, C3DSceneNode * val )
+	C3D_CAPIMETHODIMP c3dScene_addNode( C3DScene const * object, C3DSceneNode * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -209,7 +209,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_addGeometry( C3DScene * object, C3DGeometry * val )
+	C3D_CAPIMETHODIMP c3dScene_addGeometry( C3DScene const * object, C3DGeometry * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -228,7 +228,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_addCamera( C3DScene * object, C3DCamera * val )
+	C3D_CAPIMETHODIMP c3dScene_addCamera( C3DScene const * object, C3DCamera * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -248,7 +248,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_addLight( C3DScene * object, C3DLight * val )
+	C3D_CAPIMETHODIMP c3dScene_addLight( C3DScene const * object, C3DLight * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -268,7 +268,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_addLightGroup( C3DScene * object, C3DLightGroup * val )
+	C3D_CAPIMETHODIMP c3dScene_addLightGroup( C3DScene const * object, C3DLightGroup * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -288,7 +288,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_addMesh( C3DScene * object, C3DMesh * val )
+	C3D_CAPIMETHODIMP c3dScene_addMesh( C3DScene const * object, C3DMesh * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -308,7 +308,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_removeNode( C3DScene * object, C3DSceneNode * val )
+	C3D_CAPIMETHODIMP c3dScene_removeNode( C3DScene const * object, C3DSceneNode * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -330,7 +330,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_removeGeometry( C3DScene * object, C3DGeometry * val )
+	C3D_CAPIMETHODIMP c3dScene_removeGeometry( C3DScene const * object, C3DGeometry * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -352,7 +352,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_removeCamera( C3DScene * object, C3DCamera * val )
+	C3D_CAPIMETHODIMP c3dScene_removeCamera( C3DScene const * object, C3DCamera * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -374,7 +374,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_removeLight( C3DScene * object, C3DLight * val )
+	C3D_CAPIMETHODIMP c3dScene_removeLight( C3DScene const * object, C3DLight * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -396,7 +396,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_removeLightGroup( C3DScene * object, C3DLightGroup * val )
+	C3D_CAPIMETHODIMP c3dScene_removeLightGroup( C3DScene const * object, C3DLightGroup * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -418,7 +418,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_removeMesh( C3DScene * object, C3DMesh * val )
+	C3D_CAPIMETHODIMP c3dScene_removeMesh( C3DScene const * object, C3DMesh * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;

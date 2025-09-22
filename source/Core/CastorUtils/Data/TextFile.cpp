@@ -96,8 +96,6 @@ namespace c3d
 
 	uint64_t TextFile::writeText( String const & line )
 	{
-		using ByteCPtr = uint8_t const *;
-
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;

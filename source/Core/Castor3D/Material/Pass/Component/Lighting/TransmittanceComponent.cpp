@@ -173,7 +173,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< TransmittanceComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool TransmittanceComponent::doWriteText( String const & tabs

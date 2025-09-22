@@ -11,8 +11,6 @@
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
-
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 #include <RenderGraph/FramePassTimer.hpp>

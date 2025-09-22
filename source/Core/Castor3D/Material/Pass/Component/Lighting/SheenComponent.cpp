@@ -205,7 +205,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< SheenComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool SheenComponent::doWriteText( String const & tabs

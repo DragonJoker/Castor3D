@@ -2,15 +2,12 @@ project( CastorUtilsTest )
 
 if ( VCPKG_TOOLCHAIN )
 	set( glm_DIR ${VCPKG_SHARE_DIR}/glm )
-	set( OpenCL_DIR ${VCPKG_SHARE_DIR}/opencl )
 	find_package( glm CONFIG QUIET )
-	find_package( OpenCL CONFIG QUIET )
 	if ( glm_FOUND )
 		set( GLM_FOUND ${glm_FOUND} )
 	endif ()
 else ()
 	find_package( GLM QUIET )
-	find_package( OpenCL QUIET )
 endif ()
 
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
@@ -37,10 +34,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsUniqueTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsWorkerThreadTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsZipTest.hpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/cl.hpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/OpenClBench.hpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/Point.hpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/Point.inl
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsArrayViewTest.cpp
@@ -60,10 +53,6 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsWorkerThreadTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsZipTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/main.cpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/OpenClBench.cpp
-)
-set( ${PROJECT_NAME}_OCL_FILES
-	${CASTOR_SOURCE_DIR}/test/${FOLDER_NAME}/mtx_ope.cl
 )
 source_group( "Header Files"
 	FILES
@@ -108,16 +97,6 @@ if( GLM_FOUND )
 			glm::glm
 	)
 endif()
-if( OPENCL_FOUND )
-	target_compile_definitions( ${PROJECT_NAME}
-		PUBLIC 
-			CASTOR_USE_OCL
-	)
-	target_link_libraries( ${PROJECT_NAME}
-		PUBLIC
-			OpenCL::OpenCL
-	)
-endif()
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 	target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
 	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
@@ -136,7 +115,6 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Tests/Castor"
 )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-copy_target_files( ${PROJECT_NAME} "" ${CMAKE_CURRENT_SOURCE_DIR}/mtx_ope.cl )
 if ( WIN32 )
 	find_rsc_file( ${PROJECT_NAME} bin_dos )
 	target_add_manifest( ${PROJECT_NAME} )

@@ -32,7 +32,7 @@ void onKeyboardKey( GLFWwindow * glfwWindow, int key, int scancode, int action, 
 void onMouseButton( GLFWwindow * glfwWindow, int button, int action, int mods );
 void onMouseMove( GLFWwindow * glfwWindow, double xpos, double ypos );
 
-bool windowCreate( GLFWwindow * glfwWindow, C3DEngine * engine, MainWindow * window )
+bool windowCreate( GLFWwindow * glfwWindow, C3DEngine const * engine, MainWindow * window )
 {
 	bool result = false;
 	C3DWindowHandle handle;
@@ -76,12 +76,12 @@ bool windowCreate( GLFWwindow * glfwWindow, C3DEngine * engine, MainWindow * win
 
 	doStartTimer( window, IDT_MOTION, onMotionTimer );
 
-end:
-	return result;
-
 cleanup:
 	windowDestroy( window );
 	goto end;
+
+end:
+	return result;
 }
 
 void windowDestroy( MainWindow * window )

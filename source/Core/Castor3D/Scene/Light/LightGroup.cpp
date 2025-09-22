@@ -506,7 +506,10 @@ namespace c3d
 		ShadowConfig::addParsers( result
 			, CSCNSection::eLightGroup, CSCNSection::eLightGroupShadows
 			, CSCNSection::eLightGroupShadowsRaw, CSCNSection::eLightGroupShadowsPcf, CSCNSection::eLightGroupShadowsVsm
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 			, RawParserFunctionT< void >( lgtgrp::parserShadows ), RawParserFunctionT< void >( lgtgrp::parserShadowProducer )
+#pragma clang diagnostic pop
 			, lgtgrp::parserRawConfig, lgtgrp::parserPcfConfig, lgtgrp::parserVsmConfig );
 		LpvConfig::addParsers( result
 			, CSCNSection::eLightGroupShadows, CSCNSection::eLightGroupShadowsLpv

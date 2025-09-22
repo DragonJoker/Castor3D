@@ -206,7 +206,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< DiffuseTransmissionComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool DiffuseTransmissionComponent::doWriteText( String const & tabs

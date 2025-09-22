@@ -39,7 +39,7 @@ namespace c3d
 		 *\param[in]	origin	Position
 		 *\param[in]	size	Dimensions
 		 */
-		CU_API Rectangle( Position const & origin = Position(), Size const & size = Size() );
+		CU_API explicit Rectangle( Position const & origin = Position{}, Size const & size = Size{} );
 		/**
 		 *\~english
 		 *\brief		Constructor

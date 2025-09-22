@@ -87,7 +87,6 @@ namespace c3d
 		Texture & m_colour;
 		CameraUbo m_cameraUbo;
 		UniformBufferOffsetT< ModelBufferConfiguration > m_modelUbo;
-		crg::FramePass const * m_backgroundPassDesc{};
 		BackgroundPassBase * m_backgroundPass{};
 	};
 }

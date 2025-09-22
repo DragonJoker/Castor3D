@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_Castor3DModule_H___
 #define ___C3D_Castor3DModule_H___
 
-#undef RGB
+#ifdef RGB
+#	undef RGB
+#endif
 
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>
@@ -115,8 +117,6 @@ namespace c3d
 
 	using crg::FramePassTimer;
 
-	using BytePtr = uint8_t *;
-	using ByteCPtr = uint8_t const *;
 	/**
 	*\~english
 	*\brief		Castor3D engine.

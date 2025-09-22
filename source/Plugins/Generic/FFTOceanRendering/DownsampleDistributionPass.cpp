@@ -175,7 +175,7 @@ namespace ocean_fft
 	{
 	}
 
-	void DownsampleDistributionPass::accept( c3d::RenderTechniqueVisitor & visitor )
+	void DownsampleDistributionPass::accept( c3d::RenderTechniqueVisitor & visitor )const
 	{
 		visitor.visit( m_shader );
 	}
@@ -214,8 +214,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	void createDownsampleDistributionPass( c3d::String const & prefix
-		, c3d::String const & name
+	void createDownsampleDistributionPass( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, c3d::Extent2D const & extent

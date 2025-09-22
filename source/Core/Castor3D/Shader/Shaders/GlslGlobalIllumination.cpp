@@ -312,9 +312,12 @@ namespace c3d
 			, uint32_t texSetIndex )
 		{
 			C3D_LpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
-			auto c3d_lpvAccumulatorR = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulatorG = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulatorB = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator" ) ) ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorR = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulatorG = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulatorB = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
@@ -366,15 +369,24 @@ namespace c3d
 			, uint32_t texSetIndex )
 		{
 			C3D_LayeredLpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
-			auto c3d_lpvAccumulator1R = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator1" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator1G = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator1" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator1B = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator1" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2R = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator2" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2G = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator2" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2B = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator2" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3R = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator3" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3G = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator3" ) ) ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3B = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator3" ) ) ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1R = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator1" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator1G = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator1" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator1B = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator1" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator2R = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator2" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator2G = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator2" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator2B = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator2" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator3R = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Accumulator3" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator3G = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Accumulator3" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
+			auto c3d_lpvAccumulator3B = m_writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Accumulator3" ) ) ), texBindingIndex, texSetIndex );
+			++texBindingIndex;
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"

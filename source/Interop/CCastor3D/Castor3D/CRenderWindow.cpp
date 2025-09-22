@@ -36,7 +36,7 @@ extern "C"
 		return cc3d::copyString( object->internal->getName(), result );
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderWindow_initialise( C3DRenderWindow * object, C3DRenderTarget const * target )
+	C3D_CAPIMETHODIMP c3dRenderWindow_initialise( C3DRenderWindow const * object, C3DRenderTarget const * target )
 	{
 		if ( !object || !target )
 			return C3D_POINTER;
@@ -55,7 +55,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderWindow_cleanup( C3DRenderWindow * object )
+	C3D_CAPIMETHODIMP c3dRenderWindow_cleanup( C3DRenderWindow const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -71,7 +71,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderWindow_resize( C3DRenderWindow * object, C3DSize const * size )
+	C3D_CAPIMETHODIMP c3dRenderWindow_resize( C3DRenderWindow const * object, C3DSize const * size )
 	{
 		if ( !object || !size )
 			return C3D_POINTER;

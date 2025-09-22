@@ -222,7 +222,6 @@ namespace c3d
 				, OverlayRenderer::TextComputePipelineDescriptor const & set )const;
 
 		private:
-			RenderDevice const & m_device;
 			OverlaysCommonData & m_commonData;
 		};
 

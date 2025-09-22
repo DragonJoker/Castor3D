@@ -62,7 +62,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dMesh_createSubmesh( C3DMesh * object, C3DSubmesh ** result )
+	C3D_CAPIMETHODIMP c3dMesh_createSubmesh( C3DMesh const * object, C3DSubmesh ** result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -80,7 +80,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dMesh_removeSubmesh( C3DMesh * object, C3DSubmesh * submesh )
+	C3D_CAPIMETHODIMP c3dMesh_removeSubmesh( C3DMesh const * object, C3DSubmesh * submesh )
 	{
 		if ( !object || !submesh )
 			return C3D_POINTER;

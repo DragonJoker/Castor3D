@@ -319,7 +319,7 @@ int main( int argc, char * argv[] )
 		if ( doInitialiseEngine( engine ) )
 		{
 			c3d::Scene scene{ cuT( "DummyScene" ), engine };
-			auto name = inputPath.getFileName();
+			auto name = c3d::String{ inputPath.getFileName() };
 			auto & renderSystem = *engine.getRenderSystem();
 			auto surface( renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice()
 				, ashes::WindowHandle{ c3d::makeRawUnique< DummyWindowHandle >() } ) );

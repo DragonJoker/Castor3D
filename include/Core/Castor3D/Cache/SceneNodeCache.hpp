@@ -16,7 +16,7 @@ namespace c3d
 	\brief		Cache de SceneNode.
 	*/
 	template<>
-	class ObjectCacheT< SceneNode, String, SceneNodeCacheTraits >
+	class ObjectCacheT< SceneNode, String, SceneNodeCacheTraits > final
 		: public ObjectCacheBaseT< SceneNode, String, SceneNodeCacheTraits >
 	{
 	public:

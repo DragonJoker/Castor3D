@@ -22,7 +22,6 @@ namespace c3d
 		 */
 		static uint8_t * allocate( size_t size )
 		{
-			using BytePtr = uint8_t *;
 			return BytePtr( alignedAlloc( Align, size ) );
 		}
 		/**

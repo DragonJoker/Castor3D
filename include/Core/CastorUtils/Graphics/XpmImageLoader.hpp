@@ -14,10 +14,12 @@ namespace c3d
 	public:
 		CU_API static void registerLoader( ImageLoader & reg );
 		CU_API static void unregisterLoader( ImageLoader & reg );
+
+	private:
 		/**
-		 *\copydoc c3d::ImageLoaderImpl::load
+		 *\copydoc c3d::ImageLoaderImpl::doLoad
 		 */
-		CU_API ImageMemoryLayout load( String const & imageFormat
+		CU_API ImageMemoryLayout doLoad( String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
 			, PxBufferBaseUPtr & buffer )const override;

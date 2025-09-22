@@ -674,7 +674,7 @@ namespace water
 	{
 		auto result = c3d::makeRawUnique< WaterComponent >( pass );
 		result->setData( getData() );
-		return c3d::PassComponentUPtr{ result.release() };
+		return c3d::passComponentCast( result );
 	}
 
 	bool WaterComponent::doWriteText( c3d::String const & tabs

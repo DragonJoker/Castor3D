@@ -62,10 +62,10 @@ namespace ocean_fft
 			for ( uint32_t level = range.baseMipLevel; level < range.baseMipLevel + range.levelCount - 1u; ++level )
 			{
 				ashes::WriteDescriptorSetArray writes;
-				writes.push_back( ashes::WriteDescriptorSet{ eInput
+				writes.emplace_back( uint32_t( eInput )
 					, 0u
 					, 1u
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER );
 				writes.back().imageInfo.push_back( { sampler
 					, inView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
@@ -74,10 +74,10 @@ namespace ocean_fft
 				data.name = imageId.data->name + "_L" + c3d::string::toMbString( data.info.subresourceRange.baseMipLevel );
 				auto outViewId = graph.getResources().getHandler().createViewId( data );
 				auto outView = graph.createImageView( outViewId );
-				writes.push_back( ashes::WriteDescriptorSet{ eOutput
+				writes.emplace_back( uint32_t( eOutput )
 					, 0u
 					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE } );
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE );
 				writes.back().imageInfo.push_back( { nullptr
 					, outView
 					, VK_IMAGE_LAYOUT_GENERAL } );
@@ -153,20 +153,17 @@ namespace ocean_fft
 			GenerateMipmapsPass( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
-				, c3d::RenderDevice const & device
-				, crg::ru::Config ruConfig = {}
-				, crg::RunnablePass::GetPassIndexCallback passIndex = crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-				, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) )
+				, c3d::RenderDevice const & device )
 				: crg::RunnablePass{ pass
 					, context
 					, graph
-					, { [this]( uint32_t index ){ doInitialise( index ); }
-					, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, passIndex
-				, isEnabled
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-				, { 1u } }
+					, { crg::defaultV< InitialiseCallback >
+						, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
+						, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+						, crg::defaultV< GetPassIndexCallback >
+						, crg::defaultV< IsEnabledCallback >
+						, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+					, { 1u } }
 				, m_device{ device }
 				, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
 				, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
@@ -187,10 +184,6 @@ namespace ocean_fft
 			}
 
 		private:
-			void doInitialise( uint32_t index )
-			{
-			}
-
 			void doRecordInto( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
@@ -335,13 +328,7 @@ namespace ocean_fft
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto res = c3d::makeRawUnique< genmips::GenerateMipmapsPass >( framePass
-					, context
-					, graph
-					, device
-					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+				auto res = c3d::makeRawUnique< genmips::GenerateMipmapsPass >( framePass, context, graph, device );
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;

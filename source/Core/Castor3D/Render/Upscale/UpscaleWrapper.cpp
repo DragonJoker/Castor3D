@@ -5,7 +5,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Upscale/UpscaleBlit.hpp"
-#include "Castor3D/Render/Upscale/UpscaleDlSS.hpp"
+#include "Castor3D/Render/Upscale/UpscaleDLSS.hpp"
 
 CU_ImplementSmartPtr( c3d, UpscalingWrapper )
 CU_ImplementSmartPtr( c3d, UpscalingInstance )

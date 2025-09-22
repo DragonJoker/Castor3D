@@ -6,7 +6,7 @@
 
 #define TINYEXR_IMPLEMENTATION
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
-#include "tinyexr.h"
+#include <tinyexr.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace c3d
@@ -71,7 +71,7 @@ namespace c3d
 		reg.unregisterLoader( exrl::listExtensions() );
 	}
 
-	ImageMemoryLayout ExrImageLoader::load( String const & imageFormat
+	ImageMemoryLayout ExrImageLoader::doLoad( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

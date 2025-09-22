@@ -19,7 +19,7 @@ namespace c3d
 
 			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
 			{
-				auto split = string::split( MbStringView{ message.data() }, "\n", ~0u, false );
+				auto split = string::split( message, "\n", ~0u, false );
 				MbStringStream stream;
 
 				for ( auto const & str : split )
@@ -30,7 +30,7 @@ namespace c3d
 				return makeString( stream.str() );
 			}
 
-			auto split = string::split( MbStringView{ message.data() }, "|", ~0u, false );
+			auto split = string::split( message, "|", ~0u, false );
 			MbStringStream stream;
 
 			if ( !split.empty() )

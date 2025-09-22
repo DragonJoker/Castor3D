@@ -432,7 +432,7 @@ namespace atmosphere_scattering
 		result.setLastAttach( mipsPass.addInOutTransfer( *result.getLastAttach() ) );
 	}
 
-	void CloudsWorleyPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CloudsWorleyPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_computeShader );
 	}

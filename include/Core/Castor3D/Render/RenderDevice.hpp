@@ -235,7 +235,7 @@ namespace c3d
 		C3D_API QueuesData & operator=( QueuesData && rhs )noexcept;
 		C3D_API ~QueuesData()noexcept = default;
 
-		C3D_API QueuesData( QueueFamilyFlags familySupport = QueueFamilyFlag::eNone
+		C3D_API explicit QueuesData( QueueFamilyFlags familySupport = QueueFamilyFlag::eNone
 			, uint32_t familyIndex = 0xFFFFFFFFu );
 
 		C3D_API void initialise( ashes::Device const & device );
@@ -417,6 +417,8 @@ namespace c3d
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-private-field"
 #if VK_VERSION_1_3
 		VkPhysicalDeviceVulkan13Features m_features13{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES
 			, nullptr
@@ -541,6 +543,7 @@ namespace c3d
 			, nullptr
 			, {} };
 #endif
+#pragma clang diagnostic pop
 #pragma GCC diagnostic pop
 
 		bool m_prefersMeshShaderEXT{ true };

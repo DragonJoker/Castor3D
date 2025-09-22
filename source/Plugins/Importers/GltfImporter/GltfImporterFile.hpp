@@ -124,7 +124,7 @@ namespace c3d_gltf
 
 	struct GltfNodeData
 	{
-		GltfNodeData( bool pisCamera = {}
+		explicit GltfNodeData( bool pisCamera = {}
 			, bool pisSkeleton = {}
 			, size_t pindex = {}
 			, fastgltf::Node const * pnode = {} )

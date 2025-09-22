@@ -33,12 +33,19 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		CU_API Position();
+		/**
+		 *\~english
+		 *\brief		Constructor
 		 *\param[in]	x, y	The position
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	x, y	La position
 		 */
-		CU_API Position( int32_t x = 0, int32_t y = 0 );
+		CU_API Position( int32_t x, int32_t y );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor

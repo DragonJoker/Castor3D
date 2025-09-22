@@ -10,7 +10,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
-#include "stb_image.h"
+#include <stb_image.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace c3d
@@ -107,10 +107,9 @@ namespace c3d
 			, int width
 			, int height )
 		{
-			using BytePtr = uint8_t const *;
 			auto result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
 				, PixelFormat::eR32G32_SFLOAT
-				, BytePtr( data )
+				, ByteCPtr( data )
 				, PixelFormat::eR32G32_SFLOAT );
 			auto redChannel = c3d::extractComponent( *result, PixelComponent::eRed );
 			auto alphaChannel = c3d::extractComponent( *result, PixelComponent::eGreen );
@@ -146,10 +145,9 @@ namespace c3d
 				break;
 			}
 
-			using BytePtr = uint8_t const *;
 			return PxBufferBase::create( Size{ uint32_t( width ), uint32_t( height ) }
 				, format
-				, BytePtr( data )
+				, ByteCPtr( data )
 				, format );
 		}
 
@@ -225,7 +223,7 @@ namespace c3d
 		reg.unregisterLoader( stbil::listExtensions() );
 	}
 
-	ImageMemoryLayout StbImageLoader::load( String const & imageFormat
+	ImageMemoryLayout StbImageLoader::doLoad( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

@@ -36,7 +36,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderTarget_cleanup( C3DRenderTarget * object )
+	C3D_CAPIMETHODIMP c3dRenderTarget_cleanup( C3DRenderTarget const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -67,7 +67,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderTarget_setCamera( C3DRenderTarget * object, C3DCamera const * camera )
+	C3D_CAPIMETHODIMP c3dRenderTarget_setCamera( C3DRenderTarget const * object, C3DCamera const * camera )
 	{
 		if ( !object || !camera )
 			return C3D_POINTER;
@@ -93,7 +93,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderTarget_setViewportType( C3DRenderTarget * object, C3D_VIEWPORT_TYPE val )
+	C3D_CAPIMETHODIMP c3dRenderTarget_setViewportType( C3DRenderTarget const * object, C3D_VIEWPORT_TYPE val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -123,7 +123,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderTarget_setScene( C3DRenderTarget * object, C3DScene const * scene )
+	C3D_CAPIMETHODIMP c3dRenderTarget_setScene( C3DRenderTarget const * object, C3DScene const * scene )
 	{
 		if ( !object || !scene )
 			return C3D_POINTER;

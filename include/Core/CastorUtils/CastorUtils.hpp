@@ -53,6 +53,9 @@ namespace c3d
 	using f32 = float;
 	using f64 = double;
 
+	using BytePtr = u8 *;
+	using ByteCPtr = u8 const *;
+
 	CU_DeclareVector( byte, Byte );
 	CU_DeclareVector( s32, Int32 );
 	CU_DeclareVector( u32, UInt32 );

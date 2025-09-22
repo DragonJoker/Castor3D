@@ -122,7 +122,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< BlendComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool BlendComponent::doWriteText( String const & tabs

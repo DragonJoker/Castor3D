@@ -10,12 +10,8 @@
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
@@ -113,7 +109,7 @@ namespace smaa
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-			, crg::Attachment const & neighbourResult
+		, crg::Attachment const & neighbourResult
 		, crg::ImageViewIdArray const & currentColourViews
 		, crg::ImageViewIdArray const & previousColourViews
 		, c3d::Texture const * velocityView
@@ -164,7 +160,7 @@ namespace smaa
 
 		auto & pass = graph.createPass( "Reproject"
 			, [this, &device, &config, enabled]( crg::FramePass const & framePass
-				, crg::GraphContext & context
+				, crg::GraphContext & graphContext
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}
@@ -174,7 +170,7 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
-					.build( framePass, context, graph, { config.maxSubsampleIndices } );
+					.build( framePass, graphContext, graph, { config.maxSubsampleIndices } );
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

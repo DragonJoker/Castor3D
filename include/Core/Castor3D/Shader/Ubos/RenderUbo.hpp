@@ -55,7 +55,7 @@ namespace c3d
 	public:
 		C3D_API RenderUbo( RenderUbo const & rhs ) = delete;
 		C3D_API RenderUbo & operator=( RenderUbo const & rhs ) = delete;
-		C3D_API RenderUbo( RenderUbo && rhs )noexcept = default;
+		C3D_API RenderUbo( RenderUbo && rhs )noexcept = delete;
 		C3D_API RenderUbo & operator=( RenderUbo && rhs )noexcept = delete;
 		C3D_API explicit RenderUbo( RenderDevice const & device );
 		C3D_API ~RenderUbo()noexcept;

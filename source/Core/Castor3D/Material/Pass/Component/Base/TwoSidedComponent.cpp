@@ -77,7 +77,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< TwoSidedComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool TwoSidedComponent::doWriteText( String const & tabs

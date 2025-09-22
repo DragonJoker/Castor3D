@@ -76,56 +76,6 @@ namespace c3d
 				, 6u );
 		}
 
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in )
-		{
-			return vec3( writer.cast< sdw::Float >( in ) );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in )
-		{
-			return vec3( vec2( in ), 0.0_f );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in )
-		{
-			return vec3( in.xyz() );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in )
-		{
-			return vec3( writer.cast< sdw::Float >( in ) );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in )
-		{
-			return vec3( vec2( in ), 0.0_f );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in )
-		{
-			return vec3( in.xyz() );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in )
-		{
-			return vec3( in );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in )
-		{
-			return vec3( in, 0.0_f );
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in )
-		{
-			return in;
-		}
-
-		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in )
-		{
-			return in.xyz();
-		}
-
 		template< ast::type::ImageFormat FormatT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
@@ -178,7 +128,7 @@ namespace c3d
 								auto sampleVec = writer.declLocale( "sampleVec"
 									, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
 
-								irradiance += makeVec3( writer, c3d_mapEnvironment.lod( sampleVec, 0.0_f ) ) * cos( theta ) * sin( theta );
+								irradiance += shader::makeVec3( writer, c3d_mapEnvironment.lod( sampleVec, 0.0_f ) ) * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
 							sdwROF

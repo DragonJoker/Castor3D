@@ -41,7 +41,7 @@ namespace GuiCommon
 		}
 
 	public:
-		MatrixProperty( wxString const & label = wxPG_LABEL
+		explicit MatrixProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, c3d::SquareMatrix< T, Count > const & value = c3d::SquareMatrix< T, Count >() );
 		explicit MatrixProperty( wxString const( & rowNames )[Count]

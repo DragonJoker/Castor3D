@@ -39,7 +39,7 @@ namespace c3d
 		reg.unregisterLoader( ktx2::listExtensions() );
 	}
 
-	ImageMemoryLayout Ktx2ImageLoader::load( String const & imageFormat
+	ImageMemoryLayout Ktx2ImageLoader::doLoad( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

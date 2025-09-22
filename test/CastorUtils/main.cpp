@@ -1,4 +1,3 @@
-#include "OpenClBench.hpp"
 #include "CastorUtilsArrayViewTest.hpp"
 #include "CastorUtilsBuddyAllocatorTest.hpp"
 #include "CastorUtilsDynamicBitsetTest.hpp"
@@ -38,9 +37,6 @@ int main( int argc, char const * argv[] )
 #endif
 
 	c3d::Logger::setFileName( c3d::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-#if defined( CASTOR_USE_OCL )
-	Testing::registerType( c3d::makeRawUnique< Testing::OpenCLBench >() );
-#endif
 	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsDynamicBitsetTest >() );
 	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsBuddyAllocatorTest >() );
 	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsSignalTest >() );

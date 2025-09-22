@@ -95,7 +95,7 @@ namespace c3d
 		{
 			pool->upload( uploader
 				, getOffset(), getSize()
-				, move( dstAccessState ) );
+				, c3d::move( dstAccessState ) );
 		}
 
 		void markDirty( DeviceSize size
@@ -103,7 +103,7 @@ namespace c3d
 		{
 			pool->markDirty( getOffset()
 				, std::min( size, getSize() )
-				, std::move( dstAccessState ) );
+				, c3d::move( dstAccessState ) );
 		}
 
 		void markDirty( DeviceSize size
@@ -118,7 +118,7 @@ namespace c3d
 
 		void markDirty( AccessState dstAccessState )const
 		{
-			markDirty( getSize(), std::move( dstAccessState ) );
+			markDirty( getSize(), c3d::move( dstAccessState ) );
 		}
 
 		void markDirty( AccessFlags dstAccessFlags

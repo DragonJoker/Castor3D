@@ -278,9 +278,8 @@ namespace c3d
 		}
 
 		auto & targetResult = getOwner()->getTargetResult();
-		auto & targetDepth = getOwner()->getTargetDepth();
 		auto & pass = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredVisibilityResolve" } : MbString{ "VisibilityResolve" }
-			, [this, &targetResult, &targetDepth, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
+			, [this, &targetResult, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -325,7 +324,6 @@ namespace c3d
 						: String{ cuT( "Resolve" ) } )
 					, previous.getVisibilityPass()
 					, targetResult
-					, targetDepth
 					, c3d::move( renderPassDesc )
 					, c3d::move( techniquePassDesc ) );
 

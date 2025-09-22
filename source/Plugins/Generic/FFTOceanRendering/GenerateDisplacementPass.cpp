@@ -216,7 +216,7 @@ namespace ocean_fft
 	{
 	}
 
-	void GenerateDisplacementPass::accept( c3d::RenderTechniqueVisitor & visitor )
+	void GenerateDisplacementPass::accept( c3d::RenderTechniqueVisitor & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

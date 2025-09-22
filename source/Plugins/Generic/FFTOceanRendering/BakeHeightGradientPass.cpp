@@ -258,7 +258,7 @@ namespace ocean_fft
 	{
 	}
 
-	void BakeHeightGradientPass::accept( c3d::RenderTechniqueVisitor & visitor )
+	void BakeHeightGradientPass::accept( c3d::RenderTechniqueVisitor & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

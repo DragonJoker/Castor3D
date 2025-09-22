@@ -1267,6 +1267,12 @@ namespace c3d
 
 	template< typename ComponentT, typename ... ParamsT >
 	ComponentT * createPassComponent( Pass & pass, ParamsT && ... params );
+
+	template< typename TypeT >
+	PassComponentUPtr passComponentCast( RawUniquePtr< TypeT > & ptr )
+	{
+		return PassComponentUPtr{ &static_cast< PassComponent & >( *ptr.release() ) };
+	}
 }
 
 #endif

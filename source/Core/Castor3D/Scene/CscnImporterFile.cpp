@@ -20,7 +20,7 @@
 
 namespace c3d
 {
-	namespace import
+	namespace imprt
 	{
 		class FilteredPreprocessedFile
 			: public PreprocessedFile
@@ -168,10 +168,7 @@ namespace c3d
 			{
 			}
 
-			uint32_t getCategory( String const & name
-				, SectionId curSection
-				, SectionId nextSection
-				, bool implicit )
+			uint32_t getCategory()const
 			{
 				uint32_t result{};
 
@@ -352,11 +349,7 @@ namespace c3d
 				, String params
 				, bool implicit )override
 			{
-				auto nextSection = function.resultSection;
-				auto category = getCategory( name
-					, section
-					, nextSection
-					, implicit );
+				auto category = getCategory();
 				m_totalCat[category]++;
 
 				// If we are parsing the main imported scene, we replace it with the current scene
@@ -423,13 +416,13 @@ namespace c3d
 		String mainSceneName;
 		{
 			SceneFileParser parser{ engine };
-			import::FinalSceneFinder finder{ parser, parser.initialiseParser( path ) };
+			imprt::FinalSceneFinder finder{ parser, parser.initialiseParser( path ) };
 			parser.processFile( path, finder );
 			mainSceneName = finder.getMainScene();
 		}
 
 		// Then import
-		import::PreprocessedSceneFile preprocessed{ m_parser, m_parser.initialiseParser( path ), mainSceneName, getPrefix(), *scene };
+		imprt::PreprocessedSceneFile preprocessed{ m_parser, m_parser.initialiseParser( path ), mainSceneName, getPrefix(), *scene };
 		m_parser.processFile( path, preprocessed );
 
 
@@ -442,11 +435,11 @@ namespace c3d
 				, 1u );
 
 			auto index = incProgressBarGlobalRange( progress
-				, uint32_t( import::PreprocessedSceneFile::Category::eCount ) );
+				, uint32_t( imprt::PreprocessedSceneFile::Category::eCount ) );
 			auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( SectionId section
 				, PreprocessedFile::Action const & action )
 				{
-					auto category = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
+					auto category = preprocessed.getCategory();
 					auto status = preprocessed.incCategoryActions( category );
 					auto total = preprocessed.getCategoryActionsCount( category );
 					setProgressBarGlobalStep( progress

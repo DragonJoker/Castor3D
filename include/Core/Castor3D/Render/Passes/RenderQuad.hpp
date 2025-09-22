@@ -342,7 +342,7 @@ namespace c3d
 		{
 			Pass( ashes::WriteDescriptorSetArray writes
 				, bool invertY )
-				: writes{ move( writes ) }
+				: writes{ c3d::move( writes ) }
 				, invertY{ invertY }
 			{
 			}

@@ -74,7 +74,7 @@ extern "C"
 			return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dGeometry_attachTo( C3DGeometry * object, C3DSceneNode * val )
+	C3D_CAPIMETHODIMP c3dGeometry_attachTo( C3DGeometry const * object, C3DSceneNode const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -88,7 +88,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dGeometry_detach( C3DGeometry * object )
+	C3D_CAPIMETHODIMP c3dGeometry_detach( C3DGeometry const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -118,7 +118,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dGeometry_setMesh( C3DGeometry * object, C3DMesh const * val )
+	C3D_CAPIMETHODIMP c3dGeometry_setMesh( C3DGeometry const * object, C3DMesh const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -152,7 +152,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dGeometry_setMaterial( C3DGeometry * object, C3DSubmesh const * submesh, C3DMaterial const * val )
+	C3D_CAPIMETHODIMP c3dGeometry_setMaterial( C3DGeometry const * object, C3DSubmesh const * submesh, C3DMaterial const * val )
 	{
 		if ( !object || !submesh || !val )
 			return C3D_POINTER;

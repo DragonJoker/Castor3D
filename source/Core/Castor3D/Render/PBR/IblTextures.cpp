@@ -3,29 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-
-#include <ashespp/Buffer/UniformBuffer.hpp>
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-
-#include <RenderGraph/ResourceHandler.hpp>
 
 CU_ImplementSmartPtr( c3d, IblTextures )
 

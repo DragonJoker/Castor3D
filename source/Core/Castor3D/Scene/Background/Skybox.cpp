@@ -68,9 +68,9 @@ namespace c3d
 					&& File::fileExists( background.getEquiTexturePath() ) )
 				{
 						Path subfolder{ cuT( "Textures" ) };
-						String relative = copyFile( background.getEquiTexturePath()
+						auto relative = String{ copyFile( background.getEquiTexturePath()
 							, m_folder
-							, subfolder );
+							, subfolder ) };
 						string::replace( relative, cuT( "\\" ), cuT( "/" ) );
 						auto & size = background.getEquiSize();
 						file << ( tabs() + cuT( "equirectangular" )

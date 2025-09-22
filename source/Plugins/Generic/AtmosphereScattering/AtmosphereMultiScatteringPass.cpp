@@ -278,7 +278,7 @@ namespace atmosphere_scattering
 		result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), multiscatter::eOutput ) );
 	}
 
-	void AtmosphereMultiScatteringPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereMultiScatteringPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_computeShader );
 	}

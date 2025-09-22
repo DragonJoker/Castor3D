@@ -23,7 +23,7 @@ namespace c3d
 		C3D_API DirectUploadData( RenderDevice const & device
 			, String debugName
 			, ashes::CommandPool const & commandPool );
-		C3D_API ~DirectUploadData()noexcept;
+		C3D_API ~DirectUploadData()noexcept override;
 
 		C3D_API void begin()override;
 		C3D_API SemaphoreUsed end( ashes::Queue const & queue

@@ -254,7 +254,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< OpacityComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool OpacityComponent::doWriteText( String const & tabs

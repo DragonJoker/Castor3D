@@ -102,7 +102,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSubmesh_addPoint( C3DSubmesh * object, C3DVec3 const * point )
+	C3D_CAPIMETHODIMP c3dSubmesh_addPoint( C3DSubmesh const * object, C3DVec3 const * point )
 	{
 		if ( !object || !point )
 			return C3D_POINTER;

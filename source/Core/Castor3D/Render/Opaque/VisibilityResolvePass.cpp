@@ -2152,7 +2152,6 @@ namespace c3d
 		, String const & name
 		, RenderNodesPass const & nodesPass
 		, Texture & targetImage
-		, Texture & targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: Named{ category + cuT( "/" ) + name }
@@ -2172,7 +2171,6 @@ namespace c3d
 		, m_cameraUbo{ renderPassDesc.base().m_cameraUbo }
 		, m_sceneUbo{ *renderPassDesc.base().m_sceneUbo }
 		, m_targetImage{ targetImage }
-		, m_targetDepth{ targetDepth }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }

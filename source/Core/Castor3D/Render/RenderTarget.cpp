@@ -1617,7 +1617,6 @@ namespace c3d
 			, m_overlays
 			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) );
-		auto renderSize = getSafeBandedSize( m_renderSize );
 		result.emplace_back( cuT( "Target Velocity" )
 			, m_velocity
 			, ImageLayout::eColorAttachment

@@ -175,7 +175,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< MetalnessComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool MetalnessComponent::doWriteText( String const & tabs
