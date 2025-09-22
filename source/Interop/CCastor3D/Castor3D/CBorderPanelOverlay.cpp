@@ -36,7 +36,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setPosition( C3DBorderPanelOverlay * object, C3DPosition const * val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setPosition( C3DBorderPanelOverlay const * object, C3DPosition const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -61,7 +61,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setSize( C3DBorderPanelOverlay * object, C3DSize const * val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setSize( C3DBorderPanelOverlay const * object, C3DSize const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -85,7 +85,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setVisible( C3DBorderPanelOverlay * object, bool val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setVisible( C3DBorderPanelOverlay const * object, bool val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -115,7 +115,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setMaterial( C3DBorderPanelOverlay * object, C3DMaterial const * val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setMaterial( C3DBorderPanelOverlay const * object, C3DMaterial const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -141,7 +141,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setLeftBorderSize( C3DBorderPanelOverlay * object, uint32_t val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setLeftBorderSize( C3DBorderPanelOverlay const * object, uint32_t val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -165,7 +165,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setRightBorderSize( C3DBorderPanelOverlay * object, uint32_t val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setRightBorderSize( C3DBorderPanelOverlay const * object, uint32_t val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -189,7 +189,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setTopBorderSize( C3DBorderPanelOverlay * object, uint32_t val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setTopBorderSize( C3DBorderPanelOverlay const * object, uint32_t val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -213,7 +213,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setBottomBorderSize( C3DBorderPanelOverlay * object, uint32_t val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setBottomBorderSize( C3DBorderPanelOverlay const * object, uint32_t val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -243,7 +243,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setBorderMaterial( C3DBorderPanelOverlay * object, C3DMaterial const * val )
+	C3D_CAPIMETHODIMP c3dBorderPanelOverlay_setBorderMaterial( C3DBorderPanelOverlay const * object, C3DMaterial const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;

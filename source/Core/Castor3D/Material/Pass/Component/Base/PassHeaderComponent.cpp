@@ -114,7 +114,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< PassHeaderComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool PassHeaderComponent::doWriteText( String const & tabs

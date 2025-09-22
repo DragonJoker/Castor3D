@@ -126,7 +126,10 @@ namespace c3d
 		template< typename FuncType >
 		bool getFunction( FuncType & function, String const & name )noexcept
 		{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 			function = FuncType( doGetFunction( name ) );
+#pragma clang diagnostic pop
 			return function != nullptr;
 		}
 		/**
@@ -178,7 +181,10 @@ namespace c3d
 		template< typename FuncType >
 		bool getFunction( String const & name, FuncType & function )noexcept
 		{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 			function = FuncType( doGetFunction( name ) );
+#pragma clang diagnostic pop
 			return function != nullptr;
 		}
 		/**

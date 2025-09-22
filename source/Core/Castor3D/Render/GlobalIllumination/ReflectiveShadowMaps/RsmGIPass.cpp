@@ -83,7 +83,7 @@ namespace c3d
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< sdw::Vec2 >( "vtx_texture", 0u );
 
-			writer.implementMain( [&]( sdw::VertexIn const & in
+			writer.implementMain( [&vtx_texture, &uv, &position]( sdw::VertexIn const & in
 				, sdw::VertexOut out )
 				{
 					vtx_texture = uv;

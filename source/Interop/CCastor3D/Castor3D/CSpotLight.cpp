@@ -34,7 +34,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSpotLight_setColour( C3DSpotLight * object, C3DVec3 const * val )
+	C3D_CAPIMETHODIMP c3dSpotLight_setColour( C3DSpotLight const * object, C3DVec3 const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -76,7 +76,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSpotLight_setAttenuationRange( C3DSpotLight * object, float val )
+	C3D_CAPIMETHODIMP c3dSpotLight_setAttenuationRange( C3DSpotLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -100,7 +100,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSpotLight_setIntensity( C3DSpotLight * object, float val )
+	C3D_CAPIMETHODIMP c3dSpotLight_setIntensity( C3DSpotLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -124,7 +124,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSpotLight_setExponent( C3DSpotLight * object, float val )
+	C3D_CAPIMETHODIMP c3dSpotLight_setExponent( C3DSpotLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -148,7 +148,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSpotLight_setInnerCutOff( C3DSpotLight * object, float val )
+	C3D_CAPIMETHODIMP c3dSpotLight_setInnerCutOff( C3DSpotLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -172,7 +172,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSpotLight_setOuterCutOff( C3DSpotLight * object, float val )
+	C3D_CAPIMETHODIMP c3dSpotLight_setOuterCutOff( C3DSpotLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;

@@ -130,13 +130,13 @@ namespace c3d
 			{
 				destroy();
 
-				pool = move( rhs.pool );
-				bufferOffsets = move( rhs.bufferOffsets );
-				imageOffsets = move( rhs.imageOffsets );
-				buffers = move( rhs.buffers );
-				semaphore = move( rhs.semaphore );
-				pendingBuffers = move( rhs.pendingBuffers );
-				pendingImages = move( rhs.pendingImages );
+				pool = c3d::move( rhs.pool );
+				bufferOffsets = c3d::move( rhs.bufferOffsets );
+				imageOffsets = c3d::move( rhs.imageOffsets );
+				buffers = c3d::move( rhs.buffers );
+				semaphore = c3d::move( rhs.semaphore );
+				pendingBuffers = c3d::move( rhs.pendingBuffers );
+				pendingImages = c3d::move( rhs.pendingImages );
 				used = rhs.used;
 				currentSize = rhs.currentSize;
 				buffersCount = rhs.buffersCount;

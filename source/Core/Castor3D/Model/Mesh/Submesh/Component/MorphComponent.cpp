@@ -414,7 +414,7 @@ namespace c3d
 			if ( !blockContext->submesh )
 				CU_ParsingError( cuT( "No submesh initialised." ) );
 			else
-				blockContext->component->getData().addMorphTarget( move( blockContext->buffer ) );
+				blockContext->component->getData().addMorphTarget( c3d::move( blockContext->buffer ) );
 			blockContext->buffer = {};
 		}
 		CU_EndAttributePop()

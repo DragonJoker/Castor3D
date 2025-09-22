@@ -108,7 +108,7 @@ namespace c3d
 			if ( !blockContext->submesh )
 				CU_ParsingError( cuT( "No submesh initialised." ) );
 			else
-				blockContext->values.emplace_back( move( blockContext->data ) );
+				blockContext->values.emplace_back( c3d::move( blockContext->data ) );
 		}
 		CU_EndAttributePop()
 

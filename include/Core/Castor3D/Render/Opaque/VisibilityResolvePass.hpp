@@ -37,7 +37,6 @@ namespace c3d
 		 *\param[in]	name				The pass name.
 		 *\param[in]	nodesPass			The visibility nodes pass.
 		 *\param[in]	targetImage			The image this pass renders to.
-		 *\param[in]	targetDepth			The depth image this pass renders to.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
@@ -51,7 +50,6 @@ namespace c3d
 		 *\param[in]	name				Le nom de la passe.
 		 *\param[in]	nodesPass			La passe de visibilité des noeuds.
 		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
-		 *\param[in]	targetDepth			L'image de profondeur dans laquelle cette passe fait son rendu.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
@@ -64,7 +62,6 @@ namespace c3d
 			, String const & name
 			, RenderNodesPass const & nodesPass
 			, Texture & targetImage
-			, Texture & targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
@@ -197,7 +194,6 @@ namespace c3d
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
 		Texture & m_targetImage;
-		Texture & m_targetDepth;
 		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
 		DeferredLightingFilter m_deferredLightingFilter;

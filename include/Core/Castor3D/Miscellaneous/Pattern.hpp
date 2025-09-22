@@ -17,7 +17,7 @@ namespace c3d
 		using TObj = T;
 		using TObjRef = T &;
 		using TObjConstRef = T const &;
-		using TObjList = typename List< TObj > ;
+		using TObjList = List< TObj > ;
 
 	public:
 		/**

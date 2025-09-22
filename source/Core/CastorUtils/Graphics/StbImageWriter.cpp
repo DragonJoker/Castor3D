@@ -11,7 +11,7 @@
 #	define STBI_MSC_SECURE_CRT
 #endif
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
-#include "stb_image_write.h"
+#include <stb_image_write.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace c3d

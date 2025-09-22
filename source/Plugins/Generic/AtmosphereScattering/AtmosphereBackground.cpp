@@ -162,7 +162,6 @@ namespace atmosphere_scattering
 		, c3d::Texture const & perlinWorley
 		, c3d::Texture const & curl
 		, c3d::Texture const & weather
-		, c3d::Texture & colour
 		, c3d::Texture const * depthObj
 		, c3d::RenderUbo const & renderUbo
 		, c3d::SceneUbo const & sceneUbo
@@ -313,7 +312,7 @@ namespace atmosphere_scattering
 		cloudsResult.destroy();
 	}
 
-	void AtmosphereBackground::CameraPasses::accept( c3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereBackground::CameraPasses::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( cuT( "Atmosphere SkyView" )
 			, skyView.getSampledViewId()
@@ -599,7 +598,6 @@ namespace atmosphere_scattering
 					, m_perlinWorley
 					, m_curl
 					, m_weather
-					, colour
 					, depthObj
 					, renderUbo
 					, sceneUbo
@@ -869,30 +867,30 @@ namespace atmosphere_scattering
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, shaderStages ) );	// CameraBuffer
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// CameraBuffer
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, shaderStages ) );	// AtmosphereBuffer
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// AtmosphereBuffer
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, shaderStages ) );	// CloudsBuffer
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// CloudsBuffer
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, shaderStages ) );	// c3d_mapTransmittance
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// c3d_mapTransmittance
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, shaderStages ) );	// c3d_mapMultiScatter
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// c3d_mapMultiScatter
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, shaderStages ) );	// c3d_mapSkyView
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// c3d_mapSkyView
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, shaderStages ) );	// c3d_mapVolume
-		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
+			, shaderStages );	// c3d_mapVolume
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, shaderStages ) );	// c3d_mapClouds
+			, shaderStages );	// c3d_mapClouds
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites

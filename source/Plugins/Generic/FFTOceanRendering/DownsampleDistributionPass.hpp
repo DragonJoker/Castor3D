@@ -44,7 +44,7 @@ namespace ocean_fft
 		/**
 		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */
-		void accept( c3d::RenderTechniqueVisitor & visitor );
+		void accept( c3d::RenderTechniqueVisitor & visitor )const;
 
 	public:
 		static c3d::MbString const Name;
@@ -66,8 +66,7 @@ namespace ocean_fft
 		ashes::DescriptorSetPtr m_descriptorSet;
 		c3d::Extent3D m_extent;
 	};
-	void createDownsampleDistributionPass( c3d::String const & prefix
-		, c3d::String const & name
+	void createDownsampleDistributionPass( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, c3d::Extent2D const & extent

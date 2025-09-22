@@ -16,23 +16,6 @@ namespace c3d
 {
 	//*********************************************************************************************
 
-	namespace gpupol
-	{
-		static crg::VkBufferArray makeVkArray( Vector< ashes::BufferBase const * > const & buffers )
-		{
-			crg::VkBufferArray result;
-
-			for ( auto buffer : buffers )
-			{
-				result.push_back( *buffer );
-			}
-
-			return result;
-		}
-	}
-
-	//*********************************************************************************************
-
 	GpuBufferPool::GpuBufferPool( RenderDevice const & device
 		, crg::ResourcesCache & resources
 		, String debugName )

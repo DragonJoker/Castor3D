@@ -34,7 +34,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPointLight_setColour( C3DPointLight * object, C3DVec3 const * val )
+	C3D_CAPIMETHODIMP c3dPointLight_setColour( C3DPointLight const * object, C3DVec3 const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -76,7 +76,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPointLight_setAttenuationRange( C3DPointLight * object, float val )
+	C3D_CAPIMETHODIMP c3dPointLight_setAttenuationRange( C3DPointLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -100,7 +100,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPointLight_setIntensity( C3DPointLight * object, float val )
+	C3D_CAPIMETHODIMP c3dPointLight_setIntensity( C3DPointLight const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;

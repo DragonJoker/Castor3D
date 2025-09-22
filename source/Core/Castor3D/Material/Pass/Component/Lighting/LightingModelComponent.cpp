@@ -409,7 +409,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< LightingModelComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool LightingModelComponent::doWriteText( String const & tabs

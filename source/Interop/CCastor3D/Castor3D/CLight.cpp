@@ -72,7 +72,7 @@ extern "C"
 			return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLight_attachTo( C3DLight * object, C3DSceneNode * val )
+	C3D_CAPIMETHODIMP c3dLight_attachTo( C3DLight const * object, C3DSceneNode const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -86,7 +86,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLight_detach( C3DLight * object )
+	C3D_CAPIMETHODIMP c3dLight_detach( C3DLight const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;

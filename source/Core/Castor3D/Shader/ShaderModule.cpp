@@ -6,6 +6,8 @@
 
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
+#include <ShaderWriter/VecTypes/Vec4.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 CU_ImplementSmartPtr( c3d::shader, BufferBase )
 
@@ -116,6 +118,166 @@ namespace c3d
 			string::replace( lhs, cuT( "c3d." ), cuT( "" ) );
 			string::replace( rhs, cuT( "c3d." ), cuT( "" ) );
 			return cuT( "c3d." ) + lhs + cuT( "." ) + rhs;
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec3 const in )
+		{
+			return vec3( in );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec3 const in )
+		{
+			return vec3( in );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in )
+		{
+			return vec3( in );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in )
+		{
+			return vec3( in, 0.0_f );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in )
+		{
+			return in;
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in )
+		{
+			return in.xyz();
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Double const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec3 const in )
+		{
+			return vec3( in );
+		}
+
+		sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Int const in )
+		{
+			return vec4( writer.cast< sdw::Float >( in ) );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec2 const in )
+		{
+			return vec4( vec2( in ), 0.0_f, 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec3 const in )
+		{
+			return vec4( vec3( in ), 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec4 const in )
+		{
+			return vec4( vec3( in.xyz() ), 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UInt const in )
+		{
+			return vec4( writer.cast< sdw::Float >( in ) );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec2 const in )
+		{
+			return vec4( vec2( in ), 0.0_f, 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec3 const in )
+		{
+			return vec4( vec3( in ), 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec4 const in )
+		{
+			return vec4( vec3( in.xyz() ), 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Float const in )
+		{
+			return vec4( in );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec2 const in )
+		{
+			return vec4( in, 0.0_f, 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec3 const in )
+		{
+			return vec4( in, 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec4 const in )
+		{
+			return vec4( in );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Double const in )
+		{
+			return vec4( writer.cast< sdw::Float >( in ) );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec2 const in )
+		{
+			return vec4( vec2( in ), 0.0_f, 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec3 const in )
+		{
+			return vec4( vec3( in ), 1.0_f );
+		}
+
+		sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec4 const in )
+		{
+			return vec4( vec3( in.xyz() ), 1.0_f );
 		}
 	}
 

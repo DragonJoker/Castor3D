@@ -168,7 +168,7 @@ namespace atmosphere_scattering
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 
-	void AtmosphereSkyViewPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereSkyViewPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

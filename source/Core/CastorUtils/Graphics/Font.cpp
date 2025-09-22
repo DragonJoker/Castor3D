@@ -422,7 +422,7 @@ namespace c3d
 
 		if ( !pathFile.empty() )
 		{
-			String strFontName = pathFile.getFileName( true );
+			auto strFontName = String{ pathFile.getFileName( true ) };
 
 			try
 			{
@@ -440,7 +440,7 @@ namespace c3d
 					}
 				}
 
-				font.setFaceName( pathFile.getFileName() );
+				font.setFaceName( String{ pathFile.getFileName() } );
 				font.getGlyphLoader().initialise();
 				auto constexpr min = std::numeric_limits< uint8_t >::lowest();
 				auto constexpr max = std::numeric_limits< uint8_t >::max();

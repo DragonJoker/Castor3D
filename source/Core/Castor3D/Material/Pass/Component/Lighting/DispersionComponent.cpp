@@ -172,7 +172,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< DispersionComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool DispersionComponent::doWriteText( String const & tabs

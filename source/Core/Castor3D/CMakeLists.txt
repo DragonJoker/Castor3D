@@ -191,7 +191,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/PoolUniformBuffer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/StagedUploadData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UploadData.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UniformBufferBase.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UniformBufferPool.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -213,9 +212,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/PoolUniformBuffer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/StagedUploadData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UploadData.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferBase.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBuffer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBuffer.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferOffset.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferPool.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferPool.inl

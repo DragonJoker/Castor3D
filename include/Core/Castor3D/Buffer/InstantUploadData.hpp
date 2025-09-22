@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_InstantUploadData_H___
 
 #include "Castor3D/Buffer/UploadData.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 
 #include <ashespp/Sync/Fence.hpp>
 
@@ -19,7 +20,7 @@ namespace c3d
 		InstantUploadDataT & operator=( InstantUploadDataT const & ) = delete;
 		InstantUploadDataT & operator=( InstantUploadDataT && ) = delete;
 		template< typename ... ParamsT >
-		InstantUploadDataT( ashes::Queue const & queue
+		explicit InstantUploadDataT( ashes::Queue const & queue
 			, ParamsT && ... params )
 			: m_upload{ c3d::forward< ParamsT >( params )... }
 			, m_queue{ queue }

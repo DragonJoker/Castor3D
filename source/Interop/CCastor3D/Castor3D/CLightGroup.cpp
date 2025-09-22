@@ -54,7 +54,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLightGroup_addLight( C3DLightGroup * object, C3DSceneNode const * val )
+	C3D_CAPIMETHODIMP c3dLightGroup_addLight( C3DLightGroup const * object, C3DSceneNode const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -68,7 +68,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLightGroup_removeLight( C3DLightGroup * object, C3DSceneNode const * val )
+	C3D_CAPIMETHODIMP c3dLightGroup_removeLight( C3DLightGroup const * object, C3DSceneNode const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;

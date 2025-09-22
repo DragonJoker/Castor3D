@@ -367,6 +367,39 @@ namespace c3d::shader
 		return result;
 	}
 
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec3 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec3 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Double const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec2 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec3 const in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec4 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Int const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec2 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec3 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec4 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UInt const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec2 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec3 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec4 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Float const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec2 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec3 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec4 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Double const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec2 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec3 const in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec4 const in );
+
 	//@}
 }
 

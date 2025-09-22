@@ -44,7 +44,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLogger_setFileName( C3DLogger * object, C3DString name, C3D_LOG_TYPE target )
+	C3D_CAPIMETHODIMP c3dLogger_setFileName( C3DLogger const * object, C3DString name, C3D_LOG_TYPE target )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -60,7 +60,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLogger_logTrace( C3DLogger * object, C3DString msg )
+	C3D_CAPIMETHODIMP c3dLogger_logTrace( C3DLogger const * object, C3DString msg )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -75,7 +75,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLogger_logDebug( C3DLogger * object, C3DString msg )
+	C3D_CAPIMETHODIMP c3dLogger_logDebug( C3DLogger const * object, C3DString msg )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -91,7 +91,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLogger_logInfo( C3DLogger * object, C3DString msg )
+	C3D_CAPIMETHODIMP c3dLogger_logInfo( C3DLogger const * object, C3DString msg )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -107,7 +107,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLogger_logWarning( C3DLogger * object, C3DString msg )
+	C3D_CAPIMETHODIMP c3dLogger_logWarning( C3DLogger const * object, C3DString msg )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -123,7 +123,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLogger_logError( C3DLogger * object, C3DString msg )
+	C3D_CAPIMETHODIMP c3dLogger_logError( C3DLogger const * object, C3DString msg )
 	{
 		if ( !object )
 			return C3D_POINTER;

@@ -169,10 +169,9 @@ namespace c3d
 		template< typename ComponentT >
 		static CU_ImplementAttributeParserBlock( parserSubmeshComponentValue, SubmeshContext )
 		{
-			using DataT = typename ComponentT::Data;
 			if ( !blockContext->submesh )
 				CU_ParsingError( cuT( "No submesh initialised." ) );
-			else if ( auto component = blockContext->submesh->createComponent< ComponentT >() )
+			else if ( auto component = blockContext->submesh->template createComponent< ComponentT >() )
 				params[0]->get( component->getData().getData().emplace_back() );
 		}
 		CU_EndAttribute()
@@ -193,8 +192,8 @@ namespace c3d
 				CU_ParsingError( cuT( "No submesh initialised." ) );
 			else if ( !blockContext->values.empty() )
 			{
-				if ( auto component = blockContext->submesh->submesh->createComponent< ComponentT >() )
-					component->getData().setData( move( blockContext->values ) );
+				if ( auto component = blockContext->submesh->submesh->template createComponent< ComponentT >() )
+					component->getData().setData( c3d::move( blockContext->values ) );
 			}
 		}
 		CU_EndAttributePop()

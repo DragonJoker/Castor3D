@@ -2,6 +2,11 @@
 
 namespace c3d
 {
+	Position::Position()
+		: Position{ 0, 0 }
+	{
+	}
+
 	Position::Position( int32_t x, int32_t y )
 		: BaseType{ getData().buffer.data() }
 	{

@@ -501,7 +501,10 @@ namespace c3d
 		ShadowConfig::addParsers( result
 			, CSCNSection::eLight, CSCNSection::eShadows
 			, CSCNSection::eRaw, CSCNSection::ePcf, CSCNSection::eVsm
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
 			, RawParserFunctionT< void >( light::parserShadows ), RawParserFunctionT< void >( light::parserShadowProducer )
+#pragma clang diagnostic pop
 			, light::parserRawConfig, light::parserPcfConfig, light::parserVsmConfig );
 		LpvConfig::addParsers( result
 			, CSCNSection::eShadows, CSCNSection::eLpv

@@ -456,7 +456,7 @@ namespace c3d
 						&& txtscn::writeIncludedCache( file, scene.getLightCache(), cuT( "Lights" ), m_options.lightsFile, *this, txtscn::writable< Light > )
 						&& txtscn::writeIncludedCache( file, scene.getLightGroupCache(), cuT( "LightGroups" ), m_options.lightsFile, *this, txtscn::writable< LightGroup > )
 						&& txtscn::writeIncludedCache( file, scene.getGeometryCache(), cuT( "Geometries" ), m_options.objectsFile, *this, txtscn::writable< Geometry > )
-						&& txtscn::writeCache( file, scene.getParticleSystemCache(), cuT( "Particle systems" ), *this, txtscn::writable< ParticleSystem > )
+						&& txtscn::writeCache( file, scene.getParticleSystemCache(), cuT( "Particle systems" ), *this, txtscn::writable< ParticleSystem >, m_options.rootFolder )
 						&& txtscn::writeCache( file, scene.getAnimatedObjectGroupCache(), cuT( "Animated object groups" ), *this, txtscn::writable< AnimatedObjectGroup > );
 				}
 			}

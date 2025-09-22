@@ -180,7 +180,7 @@ namespace c3d
 			else if ( blockContext->weights.size() < blockContext->submesh->getMorphTargetsCount() )
 				CU_ParsingError( cuT( "Not enough morph target weights specified." ) );
 			else
-				blockContext->keyframe->setTargetsWeights( *blockContext->submesh, move( blockContext->weights ) );
+				blockContext->keyframe->setTargetsWeights( *blockContext->submesh, c3d::move( blockContext->weights ) );
 		}
 		CU_EndAttributePop()
 

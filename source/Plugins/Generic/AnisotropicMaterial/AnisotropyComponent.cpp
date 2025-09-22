@@ -342,7 +342,7 @@ namespace anisotropy
 	{
 		auto result = c3d::makeRawUnique< AnisotropyComponent >( pass );
 		result->setData( getData() );
-		return c3d::PassComponentUPtr{ result.release() };
+		return c3d::passComponentCast( result );
 	}
 
 	bool AnisotropyComponent::doWriteText( c3d::String const & tabs

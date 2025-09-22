@@ -301,7 +301,7 @@ namespace toon
 	{
 		auto result = c3d::makeRawUnique< EdgesComponent >( pass );
 		result->setData( getData() );
-		return c3d::PassComponentUPtr{ result.release() };
+		return c3d::passComponentCast( result );
 	}
 
 	bool EdgesComponent::doWriteText( c3d::String const & tabs

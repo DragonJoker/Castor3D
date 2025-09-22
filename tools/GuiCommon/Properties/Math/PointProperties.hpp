@@ -69,7 +69,7 @@ namespace GuiCommon
 		}
 
 	public:
-		PointProperty( wxString const & label = wxPG_LABEL
+		explicit PointProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, c3d::Point< T, Count > const & value = c3d::Point< T, Count >() );
 		PointProperty( wxString const & label

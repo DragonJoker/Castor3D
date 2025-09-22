@@ -70,7 +70,7 @@ namespace c3d
 		reg.unregisterLoader( xpml::listExtensions() );
 	}
 
-	ImageMemoryLayout XpmImageLoader::load( CU_UnusedParam( String const &, imageFormat )
+	ImageMemoryLayout XpmImageLoader::doLoad( CU_UnusedParam( String const &, imageFormat )
 		, uint8_t const * input
 		, uint32_t size
 		, PxBufferBaseUPtr & outbuffer )const

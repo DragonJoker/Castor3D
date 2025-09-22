@@ -319,7 +319,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< IridescenceComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool IridescenceComponent::doWriteText( String const & tabs

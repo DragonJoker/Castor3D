@@ -117,7 +117,7 @@ namespace c3d::shader
 			, ParamsT && ... params )const
 		{
 			return ( m_ssbo
-				? m_ssbo->getMemberArray< DataT >( "d", isEnabled() )[index]
+				? DataT{ m_ssbo->getMemberArray< DataT >( "d", isEnabled() )[index] }
 				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, c3d::forward< ParamsT >( params )... ) );
 		}
 	};

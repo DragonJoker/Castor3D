@@ -207,7 +207,7 @@ namespace ocean_fft
 	{
 	}
 
-	void GenerateHeightmapPass::accept( c3d::RenderTechniqueVisitor & visitor )
+	void GenerateHeightmapPass::accept( c3d::RenderTechniqueVisitor & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

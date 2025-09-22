@@ -207,7 +207,7 @@ namespace ocean_fft
 	{
 	}
 
-	void GenerateDistributionPass::accept( c3d::RenderTechniqueVisitor & visitor )
+	void GenerateDistributionPass::accept( c3d::RenderTechniqueVisitor & visitor )const
 	{
 		visitor.visit( m_shader );
 	}
@@ -246,8 +246,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	void createGenerateDistributionPass( c3d::String const & prefix
-		, c3d::String const & name
+	void createGenerateDistributionPass( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, c3d::Extent2D const & extent

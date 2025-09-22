@@ -198,7 +198,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< AmbientComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool AmbientComponent::doWriteText( String const & tabs

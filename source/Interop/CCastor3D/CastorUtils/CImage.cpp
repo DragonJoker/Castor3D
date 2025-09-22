@@ -8,7 +8,7 @@ extern "C"
 {
 #endif
 
-	static C3DString ERROR_UNINITIALISED_IMAGE = cuT( "The image must be initialised" );
+	static C3DChar const * const ERROR_UNINITIALISED_IMAGE = cuT( "The image must be initialised" );
 
 	C3D_CAPIMETHODIMP c3dImage_delete( C3DImage * object )
 	{
@@ -22,7 +22,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dImage_getBuffer( C3DImage * object, C3DPixelBuffer ** result )
+	C3D_CAPIMETHODIMP c3dImage_getBuffer( C3DImage const * object, C3DPixelBuffer ** result )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -41,7 +41,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dImage_resample( C3DImage * object, C3DSize * size )
+	C3D_CAPIMETHODIMP c3dImage_resample( C3DImage const * object, C3DSize * size )
 	{
 		if ( !object || !size )
 			return C3D_POINTER;
@@ -53,7 +53,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dImage_fill( C3DImage * object, C3DRgbaColour * colour )
+	C3D_CAPIMETHODIMP c3dImage_fill( C3DImage const * object, C3DRgbaColour * colour )
 	{
 		if ( !object || !colour )
 			return C3D_POINTER;

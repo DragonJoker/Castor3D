@@ -63,7 +63,7 @@ namespace c3d
 		: public SubmeshComponent
 	{
 	public:
-		static constexpr SubmeshData SubmeshData = SubmeshDataT;
+		static constexpr SubmeshData MySubmeshData = SubmeshDataT;
 		using Data = DataT;
 
 		struct SurfaceShader
@@ -167,7 +167,7 @@ namespace c3d
 				createBaseDataParsers( SubmeshDataT, result );
 			}
 
-			void createSections( StrSectionIdMap & sections )const
+			void createSections( StrSectionIdMap & sections )const override
 			{
 				createBaseDataSections( SubmeshDataT, sections );
 			}

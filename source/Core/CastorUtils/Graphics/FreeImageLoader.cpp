@@ -121,7 +121,7 @@ namespace c3d
 		reg.unregisterLoader( freeimgl::listExtensions() );
 	}
 
-	ImageMemoryLayout FreeImageLoader::load( CU_UnusedParam( String const &, imageFormat )
+	ImageMemoryLayout FreeImageLoader::doLoad( CU_UnusedParam( String const &, imageFormat )
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

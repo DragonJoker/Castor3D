@@ -17,7 +17,7 @@ namespace c3d
 	public:
 		struct Options
 		{
-			Options( Path prootFolder = {}
+			explicit Options( Path prootFolder = {}
 				, Path psceneTexturesFile = {}
 				, Path psceneSamplersFile = {}
 				, Path pglobalSamplersFile = {}
@@ -89,7 +89,7 @@ namespace c3d
 		};
 
 		explicit TextWriter( String const & tabs
-			, Options options = {} );
+			, Options options = Options{} );
 		bool operator()( Scene const & scene
 			, StringStream & file )override;
 

@@ -10,13 +10,6 @@
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
-
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 

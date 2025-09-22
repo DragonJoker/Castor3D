@@ -38,7 +38,7 @@ namespace c3d
 		reg.unregisterLoader( webpl::listExtensions() );
 	}
 
-	ImageMemoryLayout WebPImageLoader::load( String const & imageFormat
+	ImageMemoryLayout WebPImageLoader::doLoad( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

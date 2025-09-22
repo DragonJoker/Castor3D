@@ -36,7 +36,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dTextOverlay_setPosition( C3DTextOverlay * object, C3DPosition const * val )
+	C3D_CAPIMETHODIMP c3dTextOverlay_setPosition( C3DTextOverlay const * object, C3DPosition const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -61,7 +61,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dTextOverlay_setSize( C3DTextOverlay * object, C3DSize const * val )
+	C3D_CAPIMETHODIMP c3dTextOverlay_setSize( C3DTextOverlay const * object, C3DSize const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -85,7 +85,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dTextOverlay_setVisible( C3DTextOverlay * object, bool val )
+	C3D_CAPIMETHODIMP c3dTextOverlay_setVisible( C3DTextOverlay const * object, bool val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -115,7 +115,7 @@ extern "C"
 			return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dTextOverlay_setMaterial( C3DTextOverlay * object, C3DMaterial const * val )
+	C3D_CAPIMETHODIMP c3dTextOverlay_setMaterial( C3DTextOverlay const * object, C3DMaterial const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -139,7 +139,7 @@ extern "C"
 		return cc3d::copyString( object->internal->getFontName(), result );
 	}
 
-	C3D_CAPIMETHODIMP c3dTextOverlay_setFont( C3DTextOverlay * object, C3DString val )
+	C3D_CAPIMETHODIMP c3dTextOverlay_setFont( C3DTextOverlay const * object, C3DString val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -161,7 +161,7 @@ extern "C"
 		return cc3d::copyString( c3d::makeString( object->internal->getCaption() ), result );
 	}
 
-	C3D_CAPIMETHODIMP c3dTextOverlay_setCaption( C3DTextOverlay * object, C3DString val )
+	C3D_CAPIMETHODIMP c3dTextOverlay_setCaption( C3DTextOverlay const * object, C3DString val )
 	{
 		if ( !object )
 			return C3D_POINTER;

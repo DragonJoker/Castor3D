@@ -159,7 +159,7 @@ namespace c3d
 
 		String getName()const noexcept
 		{
-			return m_fileName.getFileName();
+			return String{ m_fileName.getFileName() };
 		}
 
 		Path const & getFileName()const noexcept

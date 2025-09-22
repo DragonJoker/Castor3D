@@ -8,7 +8,7 @@
 #include <ashes/common/Format.hpp>
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
-#include "stb_image_resize.h"
+#include <stb_image_resize2.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 CU_ImplementSmartPtr( c3d, PxBufferBase )
@@ -92,21 +92,48 @@ namespace c3d
 			return result;
 		}
 
+		static stbir_datatype getStbDataType( PixelFormat fmt )
+		{
+			if ( isFloatingPoint( fmt ) )
+				return STBIR_TYPE_FLOAT;
+
+			if ( isInt32( fmt ) || isInt16( fmt ) )
+				return STBIR_TYPE_UINT16;
+
+			return ( isSRGBFormat( fmt )
+				? STBIR_TYPE_UINT8_SRGB
+				: STBIR_TYPE_UINT8 );
+		}
+
+		static stbir_pixel_layout getStbPixelLayout( PixelFormat fmt )
+		{
+			auto components = getComponentsCount( fmt );
+			if ( components == 1u )
+				return STBIR_1CHANNEL;
+			if ( components == 2u )
+				return STBIR_2CHANNEL;
+			if ( components == 3u )
+			{
+				if ( isBGRFormat( fmt ) )
+					return STBIR_BGR;
+				return STBIR_RGB;
+			}
+
+			if ( isARGBFormat( fmt ) )
+				return STBIR_ARGB;
+			if ( isABGRFormat( fmt ) )
+				return STBIR_ABGR;
+			if ( isBGRAFormat( fmt ) )
+				return STBIR_BGRA;
+			return STBIR_RGBA;
+		}
 		static ByteArray resample( crg::Extent3D const & srcDimensions
 			, crg::Extent3D const & dstDimensions
 			, PixelFormat format
 			, uint8_t const * src )
 		{
-			auto channels = int( getComponentsCount( format ) );
-			int alpha{ hasAlpha( format )
-				? 1
-				: STBIR_ALPHA_CHANNEL_NONE };
-			stbir_datatype dataType{ isFloatingPoint( format )
-				? STBIR_TYPE_FLOAT
-				: STBIR_TYPE_UINT8 };
-			stbir_colorspace colorSpace{ isSRGBFormat( format )
-				? STBIR_COLORSPACE_SRGB
-				: STBIR_COLORSPACE_LINEAR };
+			stbir_pixel_layout pixelLayout{ getStbPixelLayout( format ) };
+			stbir_datatype dataType{ getStbDataType( format ) };
 			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.width, dstDimensions.height }
 				, convert( format ) );
 			ByteArray result;
@@ -115,11 +142,8 @@ namespace c3d
 
 			if ( auto ret = stbir_resize( src, int( srcDimensions.width ), int( srcDimensions.height ), 0
 					, dst, int( dstDimensions.width ), int( dstDimensions.height ), 0
-					, dataType
-					, channels, alpha, 0
-					, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-					, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-					, colorSpace, nullptr );
+					, pixelLayout, dataType
+					, STBIR_EDGE_CLAMP, STBIR_FILTER_CATMULLROM );
 				!ret )
 			{
 				CU_LoaderError( "Image couldn't be resized" );

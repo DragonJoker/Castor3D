@@ -20,7 +20,7 @@ namespace atmosphere_scattering
 			, c3d::RenderDevice const & device
 			, c3d::Texture & result
 			, bool & enabled );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::ShaderModule m_computeShader;

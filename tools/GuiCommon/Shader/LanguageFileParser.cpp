@@ -456,7 +456,7 @@ namespace GuiCommon
 
 		static c3d::AdditionalParsers createParsers()
 		{
-			return { registerParsers()
+			return c3d::AdditionalParsers{ registerParsers()
 				, registerSections()
 				, &createContext };
 		}

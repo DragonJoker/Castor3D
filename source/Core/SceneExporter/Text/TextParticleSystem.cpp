@@ -11,8 +11,9 @@
 
 namespace c3d
 {
-	TextWriter< ParticleSystem >::TextWriter( String const & tabs )
+	TextWriter< ParticleSystem >::TextWriter( String const & tabs, Path const & folder )
 		: TextWriterT< ParticleSystem >{ tabs }
+		, m_folder{ folder }
 	{
 	}
 
@@ -59,7 +60,9 @@ namespace c3d
 
 			if ( result && obj.getCompute().hasUpdateProgram() )
 			{
-				result = writeNamedSub( file, cuT( "cs_shader_program" ), obj.getCompute().getUpdateProgram() );
+				result = false;
+				if ( auto prgBlock{ beginBlock( file, cuT( "cs_shader_program" ) ) } )
+					result = writeSub( file, obj.getCompute().getUpdateProgram(), m_folder );
 			}
 		}
 

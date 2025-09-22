@@ -24,29 +24,33 @@ CU_ImplementSmartPtr( c3d, UploadData )
 
 namespace c3d
 {
-	OutputStream & operator<<( OutputStream & stream, ImageAspectFlags const & rhs )
+	namespace upld
 	{
-		std::string sep;
-		if ( checkFlag( rhs, ImageAspectFlags::eColor ) )
+		static String toString( ImageAspectFlags const & rhs )
 		{
-			stream << sep << "Color";
-			sep = "|";
+			String result;
+			String sep;
+			if ( checkFlag( rhs, ImageAspectFlags::eColor ) )
+			{
+				result += sep + "Color";
+				sep = cuT( "|" );
+			}
+			if ( checkFlag( rhs, ImageAspectFlags::eDepth ) )
+			{
+				result += sep + cuT( "Depth" );
+				sep = cuT( "|" );
+			}
+			if ( checkFlag( rhs, ImageAspectFlags::eStencil ) )
+			{
+				result += sep + cuT( "Stencil" );
+			}
+			return result;
 		}
-		if ( checkFlag( rhs, ImageAspectFlags::eDepth ) )
-		{
-			stream << sep << "Depth";
-			sep = "|";
-		}
-		if ( checkFlag( rhs, ImageAspectFlags::eStencil ) )
-		{
-			stream << sep << "Stencil";
-		}
-		return stream;
 	}
 
 	OutputStream & operator<<( OutputStream & stream, ImageSubresourceRange const & rhs )
 	{
-		stream << rhs.aspectMask
+		stream << upld::toString( rhs.aspectMask )
 			<< ", Array[" << rhs.baseArrayLayer << "/" << rhs.layerCount << "]"
 			<< ", Mips[" << rhs.baseMipLevel << "/" << rhs.levelCount << "]";
 		return stream;

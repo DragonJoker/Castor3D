@@ -25,7 +25,7 @@ namespace castortd
 			Invalid,
 		};
 
-		Cell( uint32_t x = 0u, uint32_t y = 0u, State state = State::Empty )
+		explicit Cell( uint32_t x = 0u, uint32_t y = 0u, State state = State::Empty )
 			: m_x{ x }
 			, m_y{ y }
 			, m_state{ state }

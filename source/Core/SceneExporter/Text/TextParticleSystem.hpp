@@ -15,9 +15,12 @@ namespace c3d
 		: public TextWriterT< ParticleSystem >
 	{
 	public:
-		explicit TextWriter( String const & tabs );
+		explicit TextWriter( String const & tabs, Path const & folder );
 		bool operator()( ParticleSystem const & obj
 			, StringStream & file )override;
+
+	private:
+		Path m_folder;
 	};
 }
 

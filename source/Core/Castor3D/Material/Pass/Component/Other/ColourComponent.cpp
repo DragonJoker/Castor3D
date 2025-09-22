@@ -217,7 +217,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< ColourComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool ColourComponent::doWriteText( String const & tabs

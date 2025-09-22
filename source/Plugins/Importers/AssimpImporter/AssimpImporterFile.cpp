@@ -90,7 +90,7 @@ namespace c3d_assimp
 			return { iter, common };
 		}
 
-		c3d::String getRawName( aiMaterial const & element )
+		static c3d::String getRawName( aiMaterial const & element )
 		{
 			c3d::String result;
 			if ( aiString name;
@@ -99,27 +99,27 @@ namespace c3d_assimp
 			return result;
 		}
 
-		c3d::String getRawName( aiMesh const & element )
+		static c3d::String getRawName( aiMesh const & element )
 		{
 			return makeString( element.mName );
 		}
 
-		c3d::String getRawName( aiLight const & element )
+		static c3d::String getRawName( aiLight const & element )
 		{
 			return makeString( element.mName );
 		}
 
-		c3d::String getRawName( aiCamera const & element )
+		static c3d::String getRawName( aiCamera const & element )
 		{
 			return makeString( element.mName );
 		}
 
-		c3d::String getRawName( aiSkeleton const & element )
+		static c3d::String getRawName( aiSkeleton const & element )
 		{
 			return makeString( element.mName );
 		}
 
-		c3d::String getRawName( aiAnimation const & element )
+		static c3d::String getRawName( aiAnimation const & element )
 		{
 			return makeString( element.mName );
 		}

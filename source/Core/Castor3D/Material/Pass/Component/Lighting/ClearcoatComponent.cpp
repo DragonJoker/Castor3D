@@ -274,7 +274,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< ClearcoatComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool ClearcoatComponent::doWriteText( String const & tabs

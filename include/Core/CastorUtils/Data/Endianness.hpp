@@ -41,7 +41,6 @@ namespace c3d
 	template< typename T >
 	constexpr T & switchEndianness( T & value )noexcept
 	{
-		using BytePtr = uint8_t *;
 		auto * p = BytePtr( &value );
 		size_t lo;
 		size_t hi;

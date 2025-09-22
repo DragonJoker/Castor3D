@@ -6,8 +6,6 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
-
 #include <ShaderWriter/Source.hpp>
 
 namespace c3d

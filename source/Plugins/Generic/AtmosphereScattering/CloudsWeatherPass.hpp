@@ -20,7 +20,7 @@ namespace atmosphere_scattering
 			, WeatherUbo const & weatherUbo
 			, c3d::Texture & result
 			, bool const & enabled );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::ProgramModule m_shader;

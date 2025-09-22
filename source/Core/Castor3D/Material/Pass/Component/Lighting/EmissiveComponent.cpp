@@ -198,7 +198,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< EmissiveComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool EmissiveComponent::doWriteText( String const & tabs

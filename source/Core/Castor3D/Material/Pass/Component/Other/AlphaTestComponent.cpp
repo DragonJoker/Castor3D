@@ -238,7 +238,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< AlphaTestComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool AlphaTestComponent::doWriteText( String const & tabs

@@ -90,7 +90,7 @@ namespace c3d
 		reg.unregisterLoader( glil::listExtensions() );
 	}
 
-	ImageMemoryLayout GliImageLoader::load( String const & imageFormat
+	ImageMemoryLayout GliImageLoader::doLoad( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

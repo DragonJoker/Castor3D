@@ -34,7 +34,7 @@ namespace c3d
 		reg.unregisterLoader( datal::listExtensions() );
 	}
 
-	ImageMemoryLayout DataImageLoader::load( String const & imageFormat
+	ImageMemoryLayout DataImageLoader::doLoad( String const & imageFormat
 		, uint8_t const * input
 		, uint32_t size
 		, PxBufferBaseUPtr & outbuffer )const

@@ -246,7 +246,6 @@ namespace atmosphere_scattering
 				, c3d::Texture const & perlinWorley
 				, c3d::Texture const & curl
 				, c3d::Texture const & weather
-				, c3d::Texture & colour
 				, c3d::Texture const * depthObj
 				, c3d::RenderUbo const & renderUbo
 				, c3d::SceneUbo const & sceneUbo
@@ -260,7 +259,7 @@ namespace atmosphere_scattering
 				, c3d::BackgroundPassBase *& backgroundPass );
 			~CameraPasses();
 
-			void accept( c3d::ConfigurationVisitorBase & visitor );
+			void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 			void update( c3d::CpuUpdater & updater
 				, c3d::Point3f const & sunDirection

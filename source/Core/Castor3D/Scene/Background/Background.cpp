@@ -114,7 +114,7 @@ namespace c3d
 			{
 			}
 
-			~BackgroundPass()noexcept
+			~BackgroundPass()noexcept override
 			{
 				if ( auto & buffer = IndexBufferHolder::getData() )
 					buffer->destroy();

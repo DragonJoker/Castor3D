@@ -488,37 +488,37 @@ namespace GuiCommon
 			}
 
 		private:
-			void visit( c3d::ShaderModule const & module
+			void visit( c3d::ShaderModule const & shaderModule
 				, bool forceProgramsVisit )override
 			{
-				if ( !module.shader
-					&& module.source.empty()
-					&& module.compiled.spirv.empty()
-					&& module.compiled.text.empty() )
+				if ( !shaderModule.shader
+					&& shaderModule.source.empty()
+					&& shaderModule.compiled.spirv.empty()
+					&& shaderModule.compiled.text.empty() )
 				{
 					return;
 				}
 
-				doGetSource( module.name ).sources.push_back( { module.shader.get()
-					, module.compiled
-					, c3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), module.stage ) } );
+				doGetSource( shaderModule.name ).sources.push_back( { shaderModule.shader.get()
+					, shaderModule.compiled
+					, c3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), shaderModule.stage ) } );
 			}
 
-			void visit( c3d::ProgramModule const & module
+			void visit( c3d::ProgramModule const & shaderModule
 				, ast::EntryPoint entryPoint
 				, bool forceProgramsVisit )override
 			{
-				auto it = module.compiled.find( getShaderStage( entryPoint ) );
+				auto it = shaderModule.compiled.find( getShaderStage( entryPoint ) );
 
-				if ( !module.shader
-					&& ( it == module.compiled.end()
+				if ( !shaderModule.shader
+					&& ( it == shaderModule.compiled.end()
 						|| ( it->second.text.empty()
 							&& it->second.spirv.empty() ) ) )
 				{
 					return;
 				}
 
-				doGetSource( module.name ).sources.push_back( { module.shader.get()
+				doGetSource( shaderModule.name ).sources.push_back( { shaderModule.shader.get()
 					, it->second
 					, entryPoint } );
 			}

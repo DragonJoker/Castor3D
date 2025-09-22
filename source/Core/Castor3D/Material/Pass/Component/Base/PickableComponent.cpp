@@ -78,7 +78,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< PickableComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool PickableComponent::doWriteText( String const & tabs

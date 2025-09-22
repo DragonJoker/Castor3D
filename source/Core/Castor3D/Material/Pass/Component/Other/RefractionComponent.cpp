@@ -200,7 +200,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< RefractionComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool RefractionComponent::doWriteText( String const & tabs

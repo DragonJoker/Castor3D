@@ -50,7 +50,7 @@ struct MainWindow_
 	bool isAltDown;
 };
 
-bool windowCreate( GLFWwindow * glfwWindow, C3DEngine * engine, MainWindow * result );
+bool windowCreate( GLFWwindow * glfwWindow, C3DEngine const * engine, MainWindow * result );
 void windowDestroy( MainWindow * window );
 
 #endif

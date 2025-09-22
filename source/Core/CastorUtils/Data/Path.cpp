@@ -164,7 +164,7 @@ namespace c3d
 		String copy{ *this };
 		return string::replace( copy, NativeSeparator, GenericSeparator );
 #else
-		return *this;
+		return String{ *this };
 #endif
 	}
 

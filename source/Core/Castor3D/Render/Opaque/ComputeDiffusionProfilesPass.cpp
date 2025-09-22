@@ -68,7 +68,6 @@ namespace c3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, SssProfileBuffer const & buffer
-				, uint32_t imageWidth
 				, uint32_t imageHeight
 				, crg::cp::Config config )
 				: crg::ComputePass{ framePass
@@ -82,7 +81,6 @@ namespace c3d
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
 				, m_buffer{ buffer }
-				, m_imageWidth{ imageWidth }
 				, m_imageHeight{ imageHeight }
 			{
 			}
@@ -125,7 +123,6 @@ namespace c3d
 		private:
 			RenderDevice const & m_device;
 			SssProfileBuffer const & m_buffer;
-			uint32_t m_imageWidth;
 			uint32_t m_imageHeight;
 			ShaderModule m_shaderModule;
 			ashes::PipelineShaderStageCreateInfoArray m_stages;
@@ -151,7 +148,6 @@ namespace c3d
 					, runGraph
 					, device
 					, buffer
-					, imageWidth
 					, imageHeight
 					, crg::cp::Config{}
 						.groupCountX( imageWidth / 32u )

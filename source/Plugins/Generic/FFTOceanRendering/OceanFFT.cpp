@@ -235,10 +235,10 @@ namespace ocean_fft
 			, c3d::PixelFormat::eR32G32_SFLOAT
 			, c3d::MipmapMode::eLinear ) }
 	{
-		createGenerateDistributionPass( Name, cuT( "Height" ), device, m_group
+		createGenerateDistributionPass( cuT( "Height" ), device, m_group
 			, m_heightMapSamples, false
 			, ubo, *m_heightSeeds, *m_heightDistribution );
-		createDownsampleDistributionPass( Name, cuT( "Displacement" ), device, m_group
+		createDownsampleDistributionPass( cuT( "Displacement" ), device, m_group
 			, m_heightMapSamples, m_displacementDownsample
 			, ubo, *m_heightDistribution, *m_displacementDistribution );
 		createBakeHeightGradientPass( m_fftConfig.device, m_group
@@ -248,7 +248,7 @@ namespace ocean_fft
 			, m_heightDisplacement.front() );
 		createGenerateMipmapsPass( cuT( "GradientJacobian" ), device, m_group
 			, m_gradientJacobian.front() );
-		createGenerateDistributionPass( Name, cuT( "Normals" ), device, m_group
+		createGenerateDistributionPass( cuT( "Normals" ), device, m_group
 			, m_heightMapSamples, true
 			, ubo, *m_normalSeeds, *m_normalDistribution );
 		createCopyAndGenerateMipmapsPass( cuT( "Normals" ), device, m_group

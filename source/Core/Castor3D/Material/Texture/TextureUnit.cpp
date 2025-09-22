@@ -65,7 +65,7 @@ namespace c3d
 
 			if ( !texture.folder.empty() || !texture.relative.empty() )
 			{
-				return ( texture.folder / texture.relative ).getFileName();
+				return String{ ( texture.folder / texture.relative ).getFileName() };
 			}
 
 			return cuEmptyString;

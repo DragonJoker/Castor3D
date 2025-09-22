@@ -36,7 +36,7 @@ namespace atmosphere_scattering
 			, c3d::Texture & sunResult
 			, c3d::Texture & cloudsResult
 			, uint32_t index );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::Vector< crg::AttachmentPtr > m_attachs;

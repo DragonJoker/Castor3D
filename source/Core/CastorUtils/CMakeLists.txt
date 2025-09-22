@@ -8,8 +8,10 @@ set( msdfgen_DIR ${VCPKG_SHARE_DIR}/msdfgen )
 set( PNG_DIR ${VCPKG_SHARE_DIR}/libpng )
 set( WebP_DIR ${VCPKG_SHARE_DIR}/WebP )
 set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
+set( tinyexr_DIR ${VCPKG_SHARE_DIR}/tinyexr )
 set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
 list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/bcdec )
+list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/stb )
 find_package( bcdec REQUIRED )
 find_package( unofficial-convectionkernels CONFIG REQUIRED )
 find_package( unofficial-skia CONFIG REQUIRED )
@@ -17,6 +19,8 @@ find_package( gli CONFIG REQUIRED )
 find_package( tinyxml2 CONFIG REQUIRED )
 find_package( msdfgen CONFIG REQUIRED )
 find_package( PNG REQUIRED )
+find_package( Stb REQUIRED )
+find_package( tinyexr CONFIG REQUIRED )
 find_package( WebP CONFIG REQUIRED )
 find_package( Ktx CONFIG REQUIRED )
 
@@ -399,10 +403,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/WebPImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PxBufferCompression.hpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image_resize.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image_write.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/tinyexr.h
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}
@@ -703,6 +703,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
 			${bcdec_INCLUDE_DIR}
+			${Stb_INCLUDE_DIR}
 	)
 	if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 		target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
@@ -729,6 +730,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			WebP::webpdecoder
 			WebP::webpdemux
 			KTX::ktx
+			unofficial::tinyexr::tinyexr
 	)
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}

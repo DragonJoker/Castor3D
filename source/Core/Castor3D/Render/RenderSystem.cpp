@@ -688,12 +688,15 @@ namespace c3d
 	{
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );
-		PFN_vkEnumerateInstanceLayerProperties enumLayerProperties;
-		enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( nullptr,
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
+		auto enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( nullptr,
 			"vkEnumerateInstanceLayerProperties" ) );
-		PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties;
-		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( nullptr,
+		auto enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( nullptr,
 			"vkEnumerateInstanceExtensionProperties" ) );
+		auto enumerateInstanceVersion = reinterpret_cast< PFN_vkEnumerateInstanceVersion >( plugin.getInstanceProcAddr( nullptr
+			, "vkEnumerateInstanceVersion" ) );
+#pragma clang diagnostic pop
 
 		auto layers = rendsys::enumerateLayerProperties( enumLayerProperties );
 		VkLayerProperties globalLayer{};
@@ -710,9 +713,6 @@ namespace c3d
 		}
 
 		uint32_t apiVersion{ rendsys::vk1_0 };
-		PFN_vkEnumerateInstanceVersion enumerateInstanceVersion;
-		enumerateInstanceVersion = reinterpret_cast< PFN_vkEnumerateInstanceVersion >( plugin.getInstanceProcAddr( nullptr
-			, "vkEnumerateInstanceVersion" ) );
 
 		if ( enumerateInstanceVersion )
 		{

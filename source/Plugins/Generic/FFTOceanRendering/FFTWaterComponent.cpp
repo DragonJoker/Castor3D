@@ -266,9 +266,9 @@ namespace ocean_fft
 
 	PassComponentUPtr FFTWaterComponent::doClone( Pass & pass )const
 	{
-		auto result = c3d::makeRawUnique< FFTWaterComponent >( pass );
+		auto result = c3d::makeUnique< FFTWaterComponent >( pass );
 		result->setData( getData() );
-		return c3d::PassComponentUPtr{ result.release() };
+		return c3d::ptrRefCast< c3d::PassComponent >( result );
 	}
 
 	bool FFTWaterComponent::doWriteText( c3d::String const & tabs

@@ -206,7 +206,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< AttenuationComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool AttenuationComponent::doWriteText( String const & tabs

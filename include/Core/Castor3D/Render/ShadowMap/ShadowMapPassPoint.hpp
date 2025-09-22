@@ -9,8 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
-
 namespace c3d
 {
 	class ShadowMapPassPoint

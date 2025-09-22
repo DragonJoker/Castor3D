@@ -36,7 +36,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPanelOverlay_setPosition( C3DPanelOverlay * object, C3DPosition const * val )
+	C3D_CAPIMETHODIMP c3dPanelOverlay_setPosition( C3DPanelOverlay const * object, C3DPosition const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -61,7 +61,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPanelOverlay_setSize( C3DPanelOverlay * object, C3DSize const * val )
+	C3D_CAPIMETHODIMP c3dPanelOverlay_setSize( C3DPanelOverlay const * object, C3DSize const * val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -85,7 +85,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPanelOverlay_setVisible( C3DPanelOverlay * object, bool val )
+	C3D_CAPIMETHODIMP c3dPanelOverlay_setVisible( C3DPanelOverlay const * object, bool val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -115,7 +115,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dPanelOverlay_setMaterial( C3DPanelOverlay * object, C3DMaterial const * val )
+	C3D_CAPIMETHODIMP c3dPanelOverlay_setMaterial( C3DPanelOverlay const * object, C3DMaterial const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;

@@ -8,7 +8,7 @@
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
-#include "stb_image_resize.h"
+#include <stb_image_resize2.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 CU_ImplementSmartPtr( c3d, Image )
@@ -20,18 +20,37 @@ namespace c3d
 		static stbir_datatype getStbDataType( PixelFormat fmt )
 		{
 			if ( isFloatingPoint( fmt ) )
-			{
 				return STBIR_TYPE_FLOAT;
-			}
 
-			if ( isInt32( fmt ) )
+			if ( isInt32( fmt ) || isInt16( fmt ) )
+				return STBIR_TYPE_UINT16;
+
+			return ( isSRGBFormat( fmt )
+				? STBIR_TYPE_UINT8_SRGB
+				: STBIR_TYPE_UINT8 );
+		}
+
+		static stbir_pixel_layout getStbPixelLayout( PixelFormat fmt )
+		{
+			auto components = getComponentsCount( fmt );
+			if ( components == 1u )
+				return STBIR_1CHANNEL;
+			if ( components == 2u )
+				return STBIR_2CHANNEL;
+			if ( components == 3u )
 			{
-				return STBIR_TYPE_UINT32;
+				if ( isBGRFormat( fmt ) )
+					return STBIR_BGR;
+				return STBIR_RGB;
 			}
 
-			return isInt16( fmt )
-				? STBIR_TYPE_UINT16
-				: STBIR_TYPE_UINT8;
+			if ( isARGBFormat( fmt ) )
+				return STBIR_ARGB;
+			if ( isABGRFormat( fmt ) )
+				return STBIR_ABGR;
+			if ( isBGRAFormat( fmt ) )
+				return STBIR_BGRA;
+			return STBIR_RGBA;
 		}
 	}
 
@@ -97,10 +116,10 @@ namespace c3d
 
 	Image::Image( Image && image )noexcept
 		: Named{ image.getName() }
-		, m_pathFile{ move( image.m_pathFile ) }
-		, m_buffer{ move( image.m_buffer ) }
+		, m_pathFile{ c3d::move( image.m_pathFile ) }
+		, m_buffer{ c3d::move( image.m_buffer ) }
 		, m_alphaChannel{ c3d::move( image.m_alphaChannel ) }
-		, m_layout{ move( image.m_layout ) }
+		, m_layout{ c3d::move( image.m_layout ) }
 	{
 		CU_CheckInvariants();
 	}
@@ -116,10 +135,10 @@ namespace c3d
 
 	Image & Image::operator=( Image && image )noexcept
 	{
-		m_pathFile = move( image.m_pathFile );
-		m_layout = move( image.m_layout );
-		m_buffer = move( image.m_buffer );
-		m_alphaChannel = move( image.m_alphaChannel );
+		m_pathFile = c3d::move( image.m_pathFile );
+		m_layout = c3d::move( image.m_layout );
+		m_buffer = c3d::move( image.m_buffer );
+		m_alphaChannel = c3d::move( image.m_alphaChannel );
 		return * this;
 	}
 
@@ -156,14 +175,8 @@ namespace c3d
 
 		ImageMemoryLayout layout{ *buffer };
 		auto format = buffer->getFormat();
-		auto channels = int( getComponentsCount( buffer->getFormat() ) );
-		int alpha{ hasAlpha( buffer->getFormat() )
-			? 1
-			: STBIR_ALPHA_CHANNEL_NONE };
+		stbir_pixel_layout pixelLayout{ img::getStbPixelLayout( buffer->getFormat() ) };
 		stbir_datatype dataType{ img::getStbDataType( buffer->getFormat() ) };
-		stbir_colorspace colorSpace{ isSRGBFormat( buffer->getFormat() )
-			? STBIR_COLORSPACE_SRGB
-			: STBIR_COLORSPACE_LINEAR };
 		auto srcLayerSize = layout.layerSize();
 		auto src = buffer->getPtr();
 		layout.extent->x = size.getWidth();
@@ -180,11 +193,8 @@ namespace c3d
 		{
 			if ( auto resized = stbir_resize( src, int( buffer->getWidth() ), int( buffer->getHeight() ), 0
 					, dst, int( result->getWidth() ), int( result->getHeight() ), 0
-					, dataType
-					, channels, alpha, 0
-					, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-					, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-					, colorSpace, nullptr );
+					, pixelLayout, dataType
+					, STBIR_EDGE_CLAMP, STBIR_FILTER_CATMULLROM );
 				!resized )
 			{
 				CU_LoaderError( "Image couldn't be resized" );

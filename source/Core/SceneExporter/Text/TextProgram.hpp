@@ -15,9 +15,12 @@ namespace c3d
 		: public TextWriterT< ShaderProgram >
 	{
 	public:
-		explicit TextWriter( String const & tabs );
+		explicit TextWriter( String const & tabs, Path const & folder );
 		bool operator()( ShaderProgram const & program
 			, StringStream & file )override;
+
+	private:
+		Path m_folder;
 	};
 }
 

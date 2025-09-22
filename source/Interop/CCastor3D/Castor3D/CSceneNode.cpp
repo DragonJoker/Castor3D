@@ -38,7 +38,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_setPosition( C3DSceneNode * object, C3DVec3 const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_setPosition( C3DSceneNode const * object, C3DVec3 const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -62,7 +62,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_setOrientation( C3DSceneNode * object, C3DQuat const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_setOrientation( C3DSceneNode const * object, C3DQuat const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -86,7 +86,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_setScaling( C3DSceneNode * object, C3DVec3 const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_setScaling( C3DSceneNode const * object, C3DVec3 const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -123,7 +123,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_attachTo( C3DSceneNode * object, C3DSceneNode const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_attachTo( C3DSceneNode const * object, C3DSceneNode const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -137,7 +137,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_detach( C3DSceneNode * object )
+	C3D_CAPIMETHODIMP c3dSceneNode_detach( C3DSceneNode const * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -149,7 +149,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_yaw( C3DSceneNode * object, float val )
+	C3D_CAPIMETHODIMP c3dSceneNode_yaw( C3DSceneNode const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -165,7 +165,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_pitch( C3DSceneNode * object, float val )
+	C3D_CAPIMETHODIMP c3dSceneNode_pitch( C3DSceneNode const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -181,7 +181,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_roll( C3DSceneNode * object, float val )
+	C3D_CAPIMETHODIMP c3dSceneNode_roll( C3DSceneNode const * object, float val )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -197,7 +197,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_rotate( C3DSceneNode * object, C3DQuat const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_rotate( C3DSceneNode const * object, C3DQuat const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -214,7 +214,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_translate( C3DSceneNode * object, C3DVec3 const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_translate( C3DSceneNode const * object, C3DVec3 const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;
@@ -231,7 +231,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSceneNode_scale( C3DSceneNode * object, C3DVec3 const * val )
+	C3D_CAPIMETHODIMP c3dSceneNode_scale( C3DSceneNode const * object, C3DVec3 const * val )
 	{
 		if ( !object || !val )
 			return C3D_POINTER;

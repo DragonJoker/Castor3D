@@ -58,8 +58,6 @@ namespace c3d
 
 		static gli::texture convert( PxBufferBase const & buffer )
 		{
-			using BytePtr = uint8_t *;
-
 			gli::texture result{ getTarget( buffer.getDimensions(), buffer.getLayers() )
 				, getFormat( buffer.getFormat() )
 				, getExtent( buffer.getDimensions() )

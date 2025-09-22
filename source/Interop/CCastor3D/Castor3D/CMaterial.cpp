@@ -57,7 +57,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dMaterial_createPass( C3DMaterial * object, C3DPass ** result )
+	C3D_CAPIMETHODIMP c3dMaterial_createPass( C3DMaterial const * object, C3DPass ** result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -75,7 +75,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dMaterial_removePass( C3DMaterial * object, C3DPass * pass )
+	C3D_CAPIMETHODIMP c3dMaterial_removePass( C3DMaterial const * object, C3DPass * pass )
 	{
 		if ( !object || !pass )
 			return C3D_POINTER;

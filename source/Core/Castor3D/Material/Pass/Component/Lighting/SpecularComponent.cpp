@@ -179,7 +179,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< SpecularComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool SpecularComponent::doWriteText( String const & tabs

@@ -70,7 +70,7 @@ namespace light_streaks
 			return writer.getBuilder().releaseShader();
 		}
 
-		void createSubpass( crg::FramePassGroup & graph
+		static void createSubpass( crg::FramePassGroup & graph
 			, c3d::RenderDevice const & device
 			, c3d::Texture const & srcView, uint32_t srcIndex
 			, c3d::Texture & dstView, uint32_t dstIndex

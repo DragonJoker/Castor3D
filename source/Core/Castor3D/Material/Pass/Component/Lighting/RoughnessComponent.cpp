@@ -249,7 +249,7 @@ namespace c3d
 	{
 		auto result = makeRawUnique< RoughnessComponent >( pass );
 		result->setData( getData() );
-		return PassComponentUPtr{ result.release() };
+		return passComponentCast( result );
 	}
 
 	bool RoughnessComponent::doWriteText( String const & tabs

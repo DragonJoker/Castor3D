@@ -325,7 +325,7 @@ namespace atmosphere_scattering
 		}
 	}
 
-	void CloudsVolumePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CloudsVolumePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

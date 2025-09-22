@@ -7,11 +7,18 @@ See LICENSE file in root folder
 
 #include <RenderGraph/Log.hpp>
 
-#if defined( CU_UseWChar )
-#	include <wchar.h>
-#	define c3dvsprintf vswprintf_s
+#if defined( CU_PlatformWindows )
+#	if defined( CU_UseWChar )
+#		include <cwchar>
+#		define c3dvsprintf vswprintf_s
+#	else
+#		define c3dvsprintf vsprintf_s
+#	endif
+#elif defined( CU_UseWChar )
+#	include <cwchar>
+#	define c3dvsprintf vswprintf
 #else
-#	define c3dvsprintf vsprintf_s
+#	define c3dvsprintf vsnprintf
 #endif
 
 namespace c3d
