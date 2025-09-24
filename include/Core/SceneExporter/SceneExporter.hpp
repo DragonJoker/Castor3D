@@ -3,7 +3,7 @@
 #define ___CastorMeshConverter_HPP___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Scene//SceneModule.hpp>
+#include <Castor3D/Scene/SceneModule.hpp>
 
 #if !defined( CU_PlatformWindows )
 #	define CSE_API
@@ -35,7 +35,7 @@ namespace c3d::exporter
 	class SceneExporter
 	{
 	public:
-		SceneExporter( ExportOptions options )
+		explicit SceneExporter( ExportOptions options )
 			: m_options{ c3d::move( options ) }
 		{
 		}

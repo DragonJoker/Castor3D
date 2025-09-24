@@ -8,8 +8,10 @@
 
 namespace GuiCommon
 {
-	MaterialTreeItemProperty::MaterialTreeItemProperty( bool editable, c3d::Engine * engine )
-		: TreeItemProperty( engine, editable )
+	MaterialTreeItemProperty::MaterialTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
+		, c3d::Engine * engine )
+		: TreeItemProperty( engine, imagesLoader, editable )
 	{
 		CreateTreeItemMenu();
 	}

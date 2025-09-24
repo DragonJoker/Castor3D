@@ -57,22 +57,6 @@ namespace c3d::shader
 
 	//*********************************************************************************************
 
-	ShadowsBuffer::ShadowsBuffer( sdw::ShaderWriter & writer
-		, uint32_t binding
-		, uint32_t set
-		, bool enable )
-	{
-		sdw::UniformBuffer buffer{ writer
-			, "C3D_ShadowsBuffer"
-			, "c3d_shadows"
-			, uint32_t( binding )
-			, uint32_t( set )
-			, sdw::type::MemoryLayout::eStd140
-			, enable };
-		m_data = makeRawUnique< AllShadowData >( buffer.declMember< AllShadowData >( "s", enable ) );
-		buffer.end();
-	}
-
 	DirectionalShadowData ShadowsBuffer::getDirectionalShadows()const
 	{
 		return m_data->directional();

@@ -38,12 +38,19 @@ namespace c3d
 		{
 			return getBlockIndex< BlockTypeT >( index ) + ( getBitIndex< BlockTypeT >( index ) ? 1u : 0u );
 		}
+
+		template< typename BlockTypeT >
+		void setBlockBitNoBranch( BlockTypeT & block, BlockTypeT mask, bool value )
+		{
+			// https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
+			block = ( block & ~mask ) | ( -value & mask );
+		}
 	}
 
 	//*************************************************************************
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT()
+	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT()noexcept
 		: m_bitCount{ 0u }
 	{
 	}
@@ -55,14 +62,8 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT( MbString const & bits )
+	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT( MbStringView bits )
 		: DynamicBitsetT{ bits.data(), bits.size() }
-	{
-	}
-
-	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT( char const * bits )
-		: DynamicBitsetT{ bits, std::strlen( bits ) }
 	{
 	}
 
@@ -80,20 +81,18 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline void DynamicBitsetT< BlockTypeT >::set( size_t bit, bool value )
+	inline void DynamicBitsetT< BlockTypeT >::set( size_t bit, bool value )noexcept
 	{
 		CU_Require( bit < m_bitCount );
 
 		BlockTypeT & block = m_blocks[details::getBlockIndex< BlockTypeT >( bit )];
 		BlockTypeT mask = BlockTypeT{ 1u } << details::getBitIndex< BlockTypeT >( bit );
 
-		// Setting of the bit without branching
-		// https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
-		block = ( block & ~mask ) | ( -value & mask );
+		details::setBlockBitNoBranch( block, mask, value );
 	}
 
 	template< typename BlockTypeT >
-	inline bool DynamicBitsetT< BlockTypeT >::get( size_t bit )const
+	inline bool DynamicBitsetT< BlockTypeT >::get( size_t bit )const noexcept
 	{
 		CU_Require( bit < m_bitCount );
 		return ( m_blocks[details::getBlockIndex< BlockTypeT >( bit )] & details::makeBitMask< BlockTypeT >( details::getBitIndex< BlockTypeT >( bit ) ) )
@@ -102,14 +101,14 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline BlockTypeT DynamicBitsetT< BlockTypeT >::getBlock( size_t index )const
+	inline BlockTypeT DynamicBitsetT< BlockTypeT >::getBlock( size_t index )const noexcept
 	{
 		CU_Require( index < m_blocks.size() );
 		return m_blocks[index];
 	}
 
 	template< typename BlockTypeT >
-	inline void DynamicBitsetT< BlockTypeT >::reset()
+	inline void DynamicBitsetT< BlockTypeT >::reset()noexcept
 	{
 		static constexpr BlockTypeT zero{};
 		std::fill( m_blocks.begin()
@@ -122,9 +121,9 @@ namespace c3d
 	{
 		size_t lastBlockIndex = m_blocks.size() - 1u;
 		m_blocks.resize( details::getBlockCount< BlockTypeT >( size ), ( value ? fullBitMask : BlockTypeT{} ) );
-		size_t remainingBits = details::getBitIndex< BlockTypeT >( m_bitCount );
 
-		if ( size > m_bitCount && remainingBits > 0u && value )
+		if ( size_t remainingBits = details::getBitIndex< BlockTypeT >( m_bitCount );
+			size > m_bitCount && remainingBits > 0u && value )
 		{
 			m_blocks[lastBlockIndex] |= BlockTypeT( fullBitMask << remainingBits );
 		}
@@ -134,25 +133,25 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline size_t DynamicBitsetT< BlockTypeT >::getSize()const
+	inline size_t DynamicBitsetT< BlockTypeT >::getSize()const noexcept
 	{
 		return m_bitCount;
 	}
 
 	template< typename BlockTypeT >
-	inline size_t DynamicBitsetT< BlockTypeT >::getBlockCount()const
+	inline size_t DynamicBitsetT< BlockTypeT >::getBlockCount()const noexcept
 	{
 		return m_blocks.size();
 	}
 
 	template< typename BlockTypeT >
-	inline bool DynamicBitsetT< BlockTypeT >::none()const
+	inline bool DynamicBitsetT< BlockTypeT >::none()const noexcept
 	{
 		return !any();
 	}
 
 	template< typename BlockTypeT >
-	inline bool DynamicBitsetT< BlockTypeT >::any()const
+	inline bool DynamicBitsetT< BlockTypeT >::any()const noexcept
 	{
 		return m_blocks.end() != std::find_if( m_blocks.begin()
 			, m_blocks.end()
@@ -163,7 +162,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline bool DynamicBitsetT< BlockTypeT >::all()const
+	inline bool DynamicBitsetT< BlockTypeT >::all()const noexcept
 	{
 		bool result = false;
 
@@ -184,20 +183,20 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline typename DynamicBitsetT< BlockTypeT >::Bit DynamicBitsetT< BlockTypeT >::operator[]( size_t index )
+	inline typename DynamicBitsetT< BlockTypeT >::Bit DynamicBitsetT< BlockTypeT >::operator[]( size_t index )noexcept
 	{
 		return Bit{ m_blocks[details::getBlockIndex< BlockTypeT >( index )]
 			, details::makeBitMask< BlockTypeT >( details::getBitIndex< BlockTypeT >( index ) ) };
 	}
 
 	template< typename BlockTypeT >
-	inline bool DynamicBitsetT< BlockTypeT >::operator[]( size_t index )const
+	inline bool DynamicBitsetT< BlockTypeT >::operator[]( size_t index )const noexcept
 	{
 		return get( index );
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator<<=( int value )
+	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator<<=( int value )noexcept
 	{
 		if ( value )
 		{
@@ -208,9 +207,8 @@ namespace c3d
 			else
 			{
 				size_t blockShift = value / bitsPerBlock;
-				size_t remainder = value % bitsPerBlock;
 
-				if ( remainder )
+				if ( size_t remainder = value % bitsPerBlock )
 				{
 					size_t lastIndex = m_blocks.size() - 1u;
 					size_t remaining = bitsPerBlock - remainder;
@@ -250,7 +248,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator>>=( int value )
+	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator>>=( int value )noexcept
 	{
 		if ( value )
 		{
@@ -261,9 +259,8 @@ namespace c3d
 			else
 			{
 				size_t blockShift = value / bitsPerBlock;
-				size_t remainder = value % bitsPerBlock;
 
-				if ( remainder )
+				if ( size_t remainder = value % bitsPerBlock )
 				{
 					size_t lastIndex = m_blocks.size() - 1u;
 					size_t remaining = bitsPerBlock - remainder;
@@ -303,7 +300,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator&=( DynamicBitsetT const & value )
+	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator&=( DynamicBitsetT const & value )noexcept
 	{
 		Pair< size_t, size_t > minmax = std::minmax( getBlockCount(), value.getBlockCount() );
 		m_blocks.resize( minmax.second );
@@ -324,7 +321,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator|=( DynamicBitsetT< BlockTypeT > const & value )
+	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator|=( DynamicBitsetT< BlockTypeT > const & value )noexcept
 	{
 		DynamicBitsetT const & greater = ( getSize() > value.getSize() ) ? *this : value;
 		DynamicBitsetT const & lesser = ( getSize() > value.getSize() ) ? value : *this;
@@ -349,7 +346,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator^=( DynamicBitsetT< BlockTypeT > const & value )
+	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator^=( DynamicBitsetT< BlockTypeT > const & value )noexcept
 	{
 		DynamicBitsetT const & greater = ( getSize() > value.getSize() ) ? *this : value;
 		DynamicBitsetT const & lesser = ( getSize() > value.getSize() ) ? value : *this;
@@ -374,7 +371,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT > DynamicBitsetT< BlockTypeT >::operator~()const
+	inline DynamicBitsetT< BlockTypeT > DynamicBitsetT< BlockTypeT >::operator~()const noexcept
 	{
 		DynamicBitsetT result;
 
@@ -401,7 +398,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	void DynamicBitsetT< BlockTypeT >::doResetExtraBits()
+	void DynamicBitsetT< BlockTypeT >::doResetExtraBits()noexcept
 	{
 		auto mask = doGetLastBlockMask();
 
@@ -412,7 +409,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	BlockTypeT DynamicBitsetT< BlockTypeT >::doGetLastBlockMask() const
+	BlockTypeT DynamicBitsetT< BlockTypeT >::doGetLastBlockMask()const noexcept
 	{
 		return BlockTypeT( ( BlockTypeT{ 1u } << details::getBitIndex< BlockTypeT >( m_bitCount ) ) - 1u );
 	}
@@ -421,7 +418,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline bool operator==( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs )
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept
 	{
 		DynamicBitsetT< BlockTypeT > const & greater = ( lhs.getSize() > rhs.getSize() ) ? lhs : rhs;
 		DynamicBitsetT< BlockTypeT > const & lesser = ( lhs.getSize() > rhs.getSize() ) ? rhs : lhs;
@@ -429,14 +426,18 @@ namespace c3d
 		size_t minBlockCount = lesser.getBlockCount();
 		bool result = true;
 
-		for ( size_t i = 0; result && i < minBlockCount; ++i )
+		size_t i = 0;
+		while ( result && i < minBlockCount )
 		{
 			result = ( lhs.getBlock( i ) == rhs.getBlock( i ) );
+			++i;
 		}
 
-		for ( size_t i = minBlockCount; result && i < maxBlockCount; ++i )
+		i = minBlockCount;
+		while ( result && i < maxBlockCount )
 		{
 			result = greater.getBlock( i ) == 0;
+			++i;
 		}
 
 		return result;
@@ -444,14 +445,14 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline bool operator!=( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs )
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept
 	{
 		return !( lhs == rhs );
 	}
 
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator<<( DynamicBitsetT< BlockTypeT > const & lhs
-		, int rhs )
+		, int rhs )noexcept
 	{
 		DynamicBitsetT< BlockTypeT > result{ lhs };
 		result <<= rhs;
@@ -460,7 +461,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator>>( DynamicBitsetT< BlockTypeT > const & lhs
-		, int rhs )
+		, int rhs )noexcept
 	{
 		DynamicBitsetT< BlockTypeT > result{ lhs };
 		result >>= rhs;
@@ -469,7 +470,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator&( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs )
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept
 	{
 		DynamicBitsetT< BlockTypeT > result{ lhs };
 		result &= rhs;
@@ -478,7 +479,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator|( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs )
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept
 	{
 		DynamicBitsetT< BlockTypeT > result{ lhs };
 		result |= rhs;
@@ -487,7 +488,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator^( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs )
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept
 	{
 		DynamicBitsetT< BlockTypeT > result{ lhs };
 		result ^= rhs;
@@ -497,7 +498,7 @@ namespace c3d
 	//*************************************************************************
 
 	template< typename BlockTypeT >
-	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator=( bool val )
+	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator=( bool val )noexcept
 	{
 		m_block = BlockTypeT( val
 			? m_block | m_mask
@@ -506,7 +507,7 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator=( DynamicBitsetT< BlockTypeT >::Bit const & bit )
+	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator=( DynamicBitsetT< BlockTypeT >::Bit const & bit )noexcept
 	{
 		set( bit );
 		return *this;
@@ -520,22 +521,13 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline void DynamicBitsetT< BlockTypeT >::Bit::set( bool value )
+	inline void DynamicBitsetT< BlockTypeT >::Bit::set( bool value )noexcept
 	{
-		// https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
-		m_block = ( m_block & ~m_mask ) | ( -value & m_mask );
+		details::setBlockBitNoBranch( m_block, m_mask, value );
 	}
 
 	template< typename BlockTypeT >
-	template< bool BadCall >
-	inline void * DynamicBitsetT< BlockTypeT >::Bit::operator&()const
-	{
-		static_assert( !BadCall, "Taking the address of a bit in a bitset is impossible." );
-		return nullptr;
-	}
-
-	template< typename BlockTypeT >
-	DynamicBitsetT< BlockTypeT >::Bit::operator bool()const
+	DynamicBitsetT< BlockTypeT >::Bit::operator bool()const noexcept
 	{
 		return ( m_block & m_mask )
 			? true
@@ -543,23 +535,23 @@ namespace c3d
 	}
 
 	template< typename BlockTypeT >
-	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator|=( bool value )
+	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator|=( bool value )noexcept
 	{
-		set( ( value ) ? true : bool( *this ) );
+		set( value ? true : bool( *this ) );
 		return *this;
 	}
 
 	template< typename BlockTypeT >
-	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator&=( bool value )
+	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator&=( bool value )noexcept
 	{
-		set( ( value ) ? bool( *this ) : false );
+		set( value ? bool( *this ) : false );
 		return *this;
 	}
 
 	template< typename BlockTypeT >
-	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator^=( bool value )
+	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator^=( bool value )noexcept
 	{
-		set( ( value ) ? !bool( *this ) : bool( *this ) );
+		set( value ? !bool( *this ) : bool( *this ) );
 		return *this;
 	}
 
@@ -567,21 +559,21 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	inline bool operator==( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs )
+		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs )noexcept
 	{
 		return bool( lhs ) == bool( rhs );
 	}
 
 	template< typename BlockTypeT >
 	inline bool operator!=( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs )
+		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs )noexcept
 	{
 		return bool( lhs ) != bool( rhs );
 	}
 
 	template< typename BlockTypeT >
 	typename DynamicBitsetT< BlockTypeT >::Bit operator|( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, bool rhs )
+		, bool rhs )noexcept
 	{
 		typename DynamicBitsetT< BlockTypeT >::Bit result{ lhs };
 		result |= rhs;
@@ -590,7 +582,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	typename DynamicBitsetT< BlockTypeT >::Bit operator&( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, bool rhs )
+		, bool rhs )noexcept
 	{
 		typename DynamicBitsetT< BlockTypeT >::Bit result{ lhs };
 		result &= rhs;
@@ -599,7 +591,7 @@ namespace c3d
 
 	template< typename BlockTypeT >
 	typename DynamicBitsetT< BlockTypeT >::Bit operator^( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, bool rhs )
+		, bool rhs )noexcept
 	{
 		typename DynamicBitsetT< BlockTypeT >::Bit result{ lhs };
 		result ^= rhs;

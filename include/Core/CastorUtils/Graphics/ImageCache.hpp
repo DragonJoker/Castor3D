@@ -22,7 +22,7 @@ namespace c3d
 	*/
 	struct ImageCreateParams
 	{
-		enum Mode
+		enum class Mode
 		{
 			eFile,
 			eBuffer,
@@ -31,7 +31,7 @@ namespace c3d
 
 		explicit ImageCreateParams( Path ppath
 			, ImageLoaderConfig ploadConfig = { true, true, true, true } )
-			: mode{ eFile }
+			: mode{ Mode::eFile }
 			, path{ c3d::move( ppath ) }
 			, loadConfig{ c3d::move( ploadConfig ) }
 		{
@@ -40,7 +40,7 @@ namespace c3d
 		explicit ImageCreateParams( String ptype
 			, ByteArray pdata
 			, ImageLoaderConfig ploadConfig = { true, true, true, true } )
-			: mode{ eBuffer }
+			: mode{ Mode::eBuffer }
 			, loadConfig{ c3d::move( ploadConfig ) }
 			, type{ c3d::move( ptype ) }
 			, data{ c3d::move( pdata ) }
@@ -49,7 +49,7 @@ namespace c3d
 
 		ImageCreateParams( Size const & psize
 			, PixelFormat pformat )
-			: mode{ eParam }
+			: mode{ Mode::eParam }
 			, size{ psize }
 			, format{ pformat }
 		{

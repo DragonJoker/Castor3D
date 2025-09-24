@@ -66,6 +66,8 @@ namespace c3d
 				, sdw::UIntField< "index" > >
 		{
 		public:
+			SDW_DeclStructInstance( , TextChar );
+
 			TextChar( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
@@ -95,6 +97,8 @@ namespace c3d
 				, sdw::UIntField< "pad" > >
 		{
 		public:
+			SDW_DeclStructInstance( , TextWord );
+
 			TextWord( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
@@ -121,6 +125,8 @@ namespace c3d
 				, sdw::UIntField< "pad" > >
 		{
 		public:
+			SDW_DeclStructInstance( , TextLine );
+
 			TextLine( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )

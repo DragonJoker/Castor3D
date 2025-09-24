@@ -26,21 +26,21 @@ GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point4d )
 
 namespace GuiCommon
 {
-	static const wxString GC_POINT_XY[2] = { wxT( "X" ), wxT( "Y" ) };
-	static const wxString GC_POINT_XYZ[3] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ) };
-	static const wxString GC_POINT_XYZW[4] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ), wxT( "W" ) };
+	static const c3d::Array< wxString, 2 > GC_POINT_XY{ wxT( "X" ), wxT( "Y" ) };
+	static const c3d::Array< wxString, 3 > GC_POINT_XYZ{ wxT( "X" ), wxT( "Y" ), wxT( "Z" ) };
+	static const c3d::Array< wxString, 4 > GC_POINT_XYZW{ wxT( "X" ), wxT( "Y" ), wxT( "Z" ), wxT( "W" ) };
 
-	static const wxString GC_COL_RGB[3] = { wxT( "R" ), wxT( "G" ), wxT( "B" ) };
-	static const wxString GC_COL_RGBA[4] = { wxT( "R" ), wxT( "G" ), wxT( "B" ), wxT( "A" ) };
+	static const c3d::Array< wxString, 3 > GC_COL_RGB{ wxT( "R" ), wxT( "G" ), wxT( "B" ) };
+	static const c3d::Array< wxString, 4 > GC_COL_RGBA{ wxT( "R" ), wxT( "G" ), wxT( "B" ), wxT( "A" ) };
 
-	static const wxString GC_POINT_12[2] = { wxT( "1" ), wxT( "2" ) };
-	static const wxString GC_POINT_123[3] = { wxT( "1" ), wxT( "2" ), wxT( "3" ) };
-	static const wxString GC_POINT_1234[4] = { wxT( "1" ), wxT( "2" ), wxT( "3" ), wxT( "4" ) };
+	static const c3d::Array< wxString, 2 > GC_POINT_12{ wxT( "1" ), wxT( "2" ) };
+	static const c3d::Array< wxString, 3 > GC_POINT_123{ wxT( "1" ), wxT( "2" ), wxT( "3" ) };
+	static const c3d::Array< wxString, 4 > GC_POINT_1234{ wxT( "1" ), wxT( "2" ), wxT( "3" ), wxT( "4" ) };
+	static const c3d::Array< wxString, 2 > GC_POINT_SIZE{ _( "Width" ), _( "Height" ) };
+	static const c3d::Array< wxString, 2 > GC_POINT_POSITION{ _( "Left" ), _( "Top" ) };
+	static const c3d::Array< wxString, 4 > GC_POINT_RECTANGLE{ _( "Left" ), _( "Top" ), _( "Right" ), _( "Bottom" ) };
 
-	static const wxString GC_POINT_SIZE[2] = { _( "Width" ), _( "Height" ) };
-	static const wxString GC_POINT_POSITION[2] = { _( "Left" ), _( "Top" ) };
-	static const wxString GC_POINT_RECTANGLE[4] = { _( "Left" ), _( "Top" ), _( "Right" ), _( "Bottom" ) };
-	static const wxString GC_HDR_COLOUR[4] = { _( "R" ), _( "G" ), _( "B" ), _( "A" ) };
+	static const c3d::Array< wxString, 4 > GC_HDR_COLOUR{ _( "R" ), _( "G" ), _( "B" ), _( "A" ) };
 
 	template< typename T, uint32_t Count >
 	class PointProperty
@@ -74,15 +74,15 @@ namespace GuiCommon
 			, c3d::Point< T, Count > const & value = c3d::Point< T, Count >() );
 		PointProperty( wxString const & label
 			, wxString const & name
-			, c3d::Coords< T, Count > const & value );
-		explicit PointProperty( wxString const( & names )[Count]
+			, c3d::PointView< T, Count > const & value );
+		explicit PointProperty( c3d::Array< wxString, Count > const & names
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, c3d::Point< T, Count > const & value = c3d::Point< T, Count >() );
-		PointProperty( wxString const( & names )[Count]
+		PointProperty( c3d::Array< wxString, Count > const & names
 			, wxString const & label
 			, wxString const & name
-			, c3d::Coords< T, Count > const & value );
+			, c3d::PointView< T, Count > const & value );
 		PointProperty( wxString const & label
 			, wxString const & name
 			, c3d::HdrRgbColour const & value );
@@ -108,25 +108,25 @@ namespace GuiCommon
 	template< uint32_t Count > using FloatPointProperty = PointProperty< float, Count >;
 	template< uint32_t Count > using DoublePointProperty = PointProperty< double, Count >;
 
-	typedef BoolPointProperty< 2 > Point2bProperty;
-	typedef BoolPointProperty< 3 > Point3bProperty;
-	typedef BoolPointProperty< 4 > Point4bProperty;
+	using Point2bProperty = BoolPointProperty< 2 >;
+	using Point3bProperty = BoolPointProperty< 3 >;
+	using Point4bProperty = BoolPointProperty< 4 >;
 
-	typedef IntPointProperty< 2 > Point2iProperty;
-	typedef IntPointProperty< 3 > Point3iProperty;
-	typedef IntPointProperty< 4 > Point4iProperty;
+	using Point2iProperty = IntPointProperty< 2 >;
+	using Point3iProperty = IntPointProperty< 3 >;
+	using Point4iProperty = IntPointProperty< 4 >;
 
-	typedef UIntPointProperty< 2 > Point2uiProperty;
-	typedef UIntPointProperty< 3 > Point3uiProperty;
-	typedef UIntPointProperty< 4 > Point4uiProperty;
+	using Point2uiProperty = UIntPointProperty< 2 >;
+	using Point3uiProperty = UIntPointProperty< 3 >;
+	using Point4uiProperty = UIntPointProperty< 4 >;
 
-	typedef FloatPointProperty< 2 > Point2fProperty;
-	typedef FloatPointProperty< 3 > Point3fProperty;
-	typedef FloatPointProperty< 4 > Point4fProperty;
+	using Point2fProperty = FloatPointProperty< 2 >;
+	using Point3fProperty = FloatPointProperty< 3 >;
+	using Point4fProperty = FloatPointProperty< 4 >;
 
-	typedef DoublePointProperty< 2 > Point2dProperty;
-	typedef DoublePointProperty< 3 > Point3dProperty;
-	typedef DoublePointProperty< 4 > Point4dProperty;
+	using Point2dProperty = DoublePointProperty< 2 >;
+	using Point3dProperty = DoublePointProperty< 3 >;
+	using Point4dProperty = DoublePointProperty< 4 >;
 }
 
 #include "GuiCommon/Properties/Math/PointProperties.inl"

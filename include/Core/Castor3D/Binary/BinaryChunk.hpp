@@ -436,7 +436,7 @@ namespace c3d
 		}
 
 	private:
-		C3D_API void binaryError( String view )const;
+		C3D_API void binaryError( StringView view )const;
 
 	private:
 		template< typename T >

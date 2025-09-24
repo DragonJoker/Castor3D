@@ -152,8 +152,9 @@ namespace c3d
 		}
 
 		it->second->fillDescriptorSet( descriptorLayout, descriptorSet );
-		fontTexture->getFontUbo().createSizedBinding( descriptorSet
-			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont ) ) );
+		if ( fontTexture )
+			fontTexture->getFontUbo().createSizedBinding( descriptorSet
+				, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont ) ) );
 	}
 
 	OverlayTextBufferIndex OverlayTextBufferPool::fill( uint32_t overlayIndex
@@ -184,9 +185,9 @@ namespace c3d
 		return result;
 	}
 
-	void OverlayTextBufferPool::upload( UploadData & uploader )
+	void OverlayTextBufferPool::upload( UploadData & uploader )const
 	{
-		for ( auto & [_, buffer] : m_buffers )
+		for ( auto const & [_, buffer] : m_buffers )
 		{
 			buffer->upload( uploader );
 		}

@@ -30,15 +30,15 @@ namespace Bloom
 
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, c3d_mapColor]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = vec4( c3d_mapColor.sample( in.uv(), 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
@@ -67,31 +67,17 @@ namespace Bloom
 		: m_graph{ graph }
 		, m_shader{ cuT( "BloomHiPass" ), hi::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-#if Bloom_DebugHiPass
 		, m_result{ device
 			, device.renderSystem.getEngine()->getGraphResourceCache()
 			, "BLHi"
 			, { c3d::ImageCreateFlags::eNone
-				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, 1u
+				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, DebugHiPass ? 1u : blurPassesCount
 				, sceneView.getFormat()
 				, ( c3d::ImageUsageFlags::eColorAttachment
 					| c3d::ImageUsageFlags::eSampled
 					| c3d::ImageUsageFlags::eTransferSrc
 					| c3d::ImageUsageFlags::eTransferDst ) }
 			, {} }
-#else
-		, m_result{ device
-			, device.renderSystem.getEngine()->getGraphResourceCache()
-			, "BLHi"
-			, { c3d::ImageCreateFlags::eNone
-				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, blurPassesCount
-				, sceneView.getFormat()
-				, ( c3d::ImageUsageFlags::eColorAttachment
-					| c3d::ImageUsageFlags::eSampled
-					| c3d::ImageUsageFlags::eTransferSrc
-					| c3d::ImageUsageFlags::eTransferDst ) }
-			, {} }
-#endif
 	{
 		crg::AttachmentArray attachs;
 		auto extent = m_result.getExtent();
@@ -117,37 +103,38 @@ namespace Bloom
 		hiPass.addInputSampled( *sceneView.getSampledLastAttach(), 0u );
 		attachs.push_back( m_result.setLastAttach( 0u, 0u, hiPass.addOutputColourTarget( m_result.getTargetViewId( 0u, 0u ) ) ) );
 
-#if !Bloom_DebugHiPass
-		for ( uint32_t index = 1u; index < blurPassesCount; ++index )
+		if constexpr ( !DebugHiPass )
 		{
-			auto & blitPass = graph.createPass( "HiPassBlit" + c3d::string::toString( index )
-				, [&device, extent, enabled]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
-				{
-					auto result = c3d::makeRawUnique< crg::ImageBlit >( framePass
-						, context
-						, graph
-						, c3d::Rect3D{ {}, extent }
-						, c3d::Rect3D{ {}, { extent.width >> 1u, extent.height >> 1u, 1u } }
-						, c3d::FilterMode::eLinear
-						, crg::ru::Config{}
-						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-						, crg::RunnablePass::IsEnabledCallback( [enabled](){ return *enabled; } ) );
-					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-						, result->getTimer() );
-					return result;
-				} );
-			blitPass.addInputTransfer( *m_result.getLastAttach( 0u, index - 1u ) );
-			attachs.push_back( m_result.setLastAttach( 0u, index, blitPass.addOutputTransferImage( m_result.getTargetViewId( 0u, index ) ) ) );
-			extent = { extent.width >> 1u, extent.height >> 1u, 1u };
+			for ( uint32_t index = 1u; index < blurPassesCount; ++index )
+			{
+				auto & blitPass = graph.createPass( "HiPassBlit" + c3d::string::toString( index )
+					, [&device, extent, enabled]( crg::FramePass const & framePass
+						, crg::GraphContext & context
+						, crg::RunnableGraph & graph )
+					{
+						auto result = c3d::makeRawUnique< crg::ImageBlit >( framePass
+							, context
+							, graph
+							, c3d::Rect3D{ {}, extent }
+							, c3d::Rect3D{ {}, { extent.width >> 1u, extent.height >> 1u, 1u } }
+							, c3d::FilterMode::eLinear
+							, crg::ru::Config{}
+							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::RunnablePass::IsEnabledCallback( [enabled](){ return *enabled; } ) );
+						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+							, result->getTimer() );
+						return result;
+					} );
+				blitPass.addInputTransfer( *m_result.getLastAttach( 0u, index - 1u ) );
+				attachs.push_back( m_result.setLastAttach( 0u, index, blitPass.addOutputTransferImage( m_result.getTargetViewId( 0u, index ) ) ) );
+				extent = { extent.width >> 1u, extent.height >> 1u, 1u };
+			}
 		}
-#endif
 
 		m_result.setLastAttach( graph.mergeAttachments( attachs ) );
 	}
 
-	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 

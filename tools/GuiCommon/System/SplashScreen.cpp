@@ -22,19 +22,20 @@ namespace GuiCommon
 		, int range
 		, c3d::Version const & appVersion
 		, c3d::Version const & engineVersion )
-		: wxFrame( nullptr, wxID_ANY, title, pos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
-		, m_bmpSplash( splash::splash_xpm )
-		, m_ptTitlePosition( titlePos )
-		, m_ptCopyrightPosition( copyrightPos )
-		, m_ptVersionPosition( versionPos )
-		, m_strAppVersion( wxString{} << appVersion.getMajor() << wxT( "." ) << appVersion.getMinor() << wxT( "." ) << appVersion.getBuild() )
-		, m_strEngineVersion( wxString{} << _( "Based on Castor3D" ) << wxT( " v" ) << engineVersion.getMajor() << wxT( "." ) << engineVersion.getMinor() << wxT( "." ) << engineVersion.getBuild() )
+		: wxFrame{ nullptr, wxID_ANY, title, pos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE }
+		, m_bmpSplash{ splash::splash_xpm }
+		, m_ptTitlePosition{ titlePos }
+		, m_ptCopyrightPosition{ copyrightPos }
+		, m_ptVersionPosition{ versionPos }
+		, m_strCopyright{ wxString{} << wxDateTime::GetCurrentYear() << wxT( " " ) << _( "DragonJoker, All rights shared" ) }
+		, m_strAppVersion{ wxString{} << appVersion.getMajor() << wxT( "." ) << appVersion.getMinor() << wxT( "." ) << appVersion.getBuild() }
+		, m_strEngineVersion{ wxString{} << _( "Based on Castor3D" ) << wxT( " v" ) << engineVersion.getMajor() << wxT( "." ) << engineVersion.getMinor() << wxT( "." ) << engineVersion.getBuild() }
+		, m_range{ range }
 	{
-		m_strCopyright << wxDateTime().Now().GetCurrentYear() << wxT( " " ) << _( "DragonJoker, All rights shared" );
 		SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 		wxSize size = GetClientSize();
 		m_pPanelBmp = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( size.x, size.y - 20 ) );
-		m_pGauge = new wxGauge( this, wxID_ANY, range, wxPoint( 0, size.y - 20 ), wxSize( size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );
+		m_pGauge = new wxGauge( this, wxID_ANY, m_range, wxPoint( 0, size.y - 20 ), wxSize( size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );
 		Show();
 		Update();
 	}
@@ -61,7 +62,7 @@ namespace GuiCommon
 		doDraw( &clientDC );
 	}
 
-	void SplashScreen::doDraw( wxDC * pDC )
+	void SplashScreen::doDraw( wxDC * pDC )const
 	{
 		if ( IsVisible() )
 		{
@@ -100,19 +101,19 @@ namespace GuiCommon
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( SplashScreen, wxFrame )
-	EVT_PAINT( SplashScreen::OnPaint )
-	EVT_ERASE_BACKGROUND( SplashScreen::OnEraseBackground )
+	EVT_PAINT( SplashScreen::onPaint )
+	EVT_ERASE_BACKGROUND( SplashScreen::onEraseBackground )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-		void SplashScreen::OnPaint( wxPaintEvent & event )
+	void SplashScreen::onPaint( wxPaintEvent & event )
 	{
 		wxPaintDC paintDC( this );
 		doDraw( &paintDC );
 		event.Skip();
 	}
 
-	void SplashScreen::OnEraseBackground( wxEraseEvent & event )
+	void SplashScreen::onEraseBackground( wxEraseEvent & event )
 	{
 		event.Skip();
 	}

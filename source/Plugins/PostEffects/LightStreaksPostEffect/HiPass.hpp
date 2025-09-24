@@ -18,7 +18,7 @@ namespace light_streaks
 			, c3d::Extent2D size
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::ProgramModule m_shader;

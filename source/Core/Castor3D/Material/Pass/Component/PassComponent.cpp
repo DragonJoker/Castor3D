@@ -27,14 +27,14 @@ namespace c3d
 			return m_plugin.getId();
 		}
 
-		sdw::Vec4 PassComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		sdw::RetVec4 PassComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 const & texCoords
 			, shader::BlendComponents const & components )const
 		{
 			return map.sample( texCoords.xy() );
 		}
 
-		sdw::Vec4 PassComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		sdw::RetVec4 PassComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
 			, shader::DerivTex const & texCoords
 			, shader::BlendComponents const & components )const
 		{

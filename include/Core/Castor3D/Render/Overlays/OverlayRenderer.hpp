@@ -94,7 +94,7 @@ namespace c3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( GpuUpdater & updater );
+		C3D_API void update( GpuUpdater const & updater );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.

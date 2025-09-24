@@ -32,11 +32,11 @@ namespace c3d::shader
 	{
 	}
 
-	LightSurface::LightSurface( sdw::Vec3 const eye
-		, DerivVec4 const world
-		, DerivVec3 const view
-		, sdw::Vec3 const clip
-		, DerivVec3 const normal
+	LightSurface::LightSurface( sdw::Vec3 const & eye
+		, DerivVec4 const & world
+		, DerivVec3 const & view
+		, sdw::Vec3 const & clip
+		, DerivVec3 const & normal
 		, bool enableDotProducts )
 		: LightSurface{ findWriterMandat( eye, world, view, clip, normal )
 			, makeInit( makeType( findTypesCache( eye, world, view, clip, normal ), enableDotProducts )
@@ -46,7 +46,7 @@ namespace c3d::shader
 	{
 	}
 
-	sdw::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
+	sdw::type::BaseStructPtr LightSurface::makeType( [[maybe_unused]] ast::type::TypesCache & cache
 		, sdw::type::TypePtr type )
 	{
 		return static_cast< sdw::type::BaseStruct * >( type );
@@ -83,7 +83,7 @@ namespace c3d::shader
 		return type;
 	}
 
-	ast::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
+	ast::type::BaseStructPtr LightSurface::makeType( [[maybe_unused]] ast::type::TypesCache & cache
 		, LightSurface const & rhs )
 	{
 		return static_cast< ast::type::BaseStruct * >( rhs.getType() );
@@ -91,11 +91,11 @@ namespace c3d::shader
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, MbString const & name
-		, sdw::Vec3 const eye
-		, DerivVec4 const world
-		, DerivVec3 const view
-		, sdw::Vec3 const clip
-		, DerivVec3 const normal
+		, sdw::Vec3 const & eye
+		, DerivVec4 const & world
+		, DerivVec3 const & view
+		, sdw::Vec3 const & clip
+		, DerivVec3 const & normal
 		, bool enableDotProducts )
 	{
 		auto result = writer.declLocale< LightSurface >( name
@@ -106,31 +106,16 @@ namespace c3d::shader
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, MbString const & name
-		, DerivVec4 const world
-		, sdw::Vec3 const clip
-		, DerivVec3 const normal
+		, DerivVec4 const & world
+		, sdw::Vec3 const & clip
+		, DerivVec3 const & normal
 		, bool enableDotProducts )
 	{
 		return create( writer, name, vec3( 0.0_f ), world, derivVec3( 0.0_f ), clip, normal
 			, enableDotProducts );
 	}
 
-	LightSurface LightSurface::create( sdw::ShaderWriter & writer
-		, Utils & utils
-		, MbString const & name
-		, sdw::Vec3 const eye
-		, DerivVec4 const world
-		, DerivVec3 const view
-		, sdw::Vec3 const clip
-		, DerivVec3 const normal
-		, BlendComponents const & components
-		, bool enableDotProducts )
-	{
-		auto result = create( writer, name, eye, world, view, clip, normal, enableDotProducts );
-		return result;
-	}
-
-	void LightSurface::updateN( DerivVec3 const n )const
+	void LightSurface::updateN( DerivVec3 const & n )const
 	{
 		N() = n;
 
@@ -139,7 +124,7 @@ namespace c3d::shader
 		m_NdotV = clamp( dot( N(), V() ), 0.0_f, 1.0_f );
 	}
 
-	void LightSurface::updateL( DerivVec3 const VtoL )const
+	void LightSurface::updateL( DerivVec3 const & VtoL )const
 	{
 		vertexToLight() = VtoL;
 		L() = normalize( vertexToLight() );
@@ -168,11 +153,11 @@ namespace c3d::shader
 	}
 
 	sdw::expr::ExprPtr LightSurface::makeInit( sdw::type::BaseStructPtr type
-		, sdw::Vec3 const eye
-		, DerivVec4 const world
-		, DerivVec3 const view
-		, sdw::Vec3 const clip
-		, DerivVec3 const normal
+		, sdw::Vec3 const & eye
+		, DerivVec4 const & world
+		, DerivVec3 const & view
+		, sdw::Vec3 const & clip
+		, DerivVec3 const & normal
 		, bool enableDotProducts )
 	{
 		using shader::operator-;

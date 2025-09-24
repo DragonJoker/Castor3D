@@ -67,19 +67,19 @@ namespace c3d
 		, X16FGetter getB
 		, X16FGetter getA );
 
-	uint32_t compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions const & options
 		, std::atomic_bool const * interrupt
 		, Vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
-	uint32_t compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions const & options
 		, std::atomic_bool const * interrupt
 		, Vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
-	uint32_t compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions const & options
 		, std::atomic_bool const * interrupt
 		, Vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
@@ -104,7 +104,7 @@ namespace c3d
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
-			, uint32_t dstSize )
+			, uint32_t dstSize )const
 		{
 			auto blocks = createBlocksU8( interrupt
 				, srcDimensions
@@ -147,7 +147,7 @@ namespace c3d
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
-			, uint32_t dstSize )
+			, uint32_t dstSize )const
 		{
 			auto blocks = createBlocksS8( interrupt
 				, srcDimensions
@@ -190,7 +190,7 @@ namespace c3d
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
-			, uint32_t dstSize )
+			, uint32_t dstSize )const
 		{
 			auto blocks = createBlocksF16( interrupt
 				, srcDimensions
@@ -232,15 +232,15 @@ namespace c3d
 
 		CU_API uint32_t extractBlock( uint8_t const * inPtr
 			, uint32_t width
-			, Block & colorBlock );
-		CU_API uint16_t colorTo565( Color const & color );
-		CU_API void emitByte( uint8_t *& dstBuffer, uint8_t b );
-		CU_API void emitWord( uint8_t *& dstBuffer, uint16_t s );
-		CU_API void emitDoubleWord( uint8_t *& dstBuffer, uint32_t i );
+			, Block & colorBlock )const;
+		CU_API uint16_t colorTo565( Color const & color )const;
+		CU_API void emitByte( uint8_t *& dstBuffer, uint8_t b )const;
+		CU_API void emitWord( uint8_t *& dstBuffer, uint16_t s )const;
+		CU_API void emitDoubleWord( uint8_t *& dstBuffer, uint32_t i )const;
 		CU_API void emitColorIndices( uint8_t *& dstBuffer
 			, Block const & colorBlock
 			, Color const & minColor
-			, Color const & maxColor );
+			, Color const & maxColor )const;
 
 	protected:
 		uint32_t const srcPixelSize;
@@ -266,12 +266,12 @@ namespace c3d
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
-			, uint32_t dstSize );
+			, uint32_t dstSize )const;
 
 	private:
 		void getMinMaxColors( Block const & colorBlock
 			, Color & minColor
-			, Color & maxColor );
+			, Color & maxColor )const;
 	};
 
 	struct BC3Compressor
@@ -282,23 +282,23 @@ namespace c3d
 			, X8UGetter getG
 			, X8UGetter getB
 			, X8UGetter getA
-			, std::atomic_bool const * interrupt );
+			, std::atomic_bool const * interrupt )const;
 
 		CU_API void compress( Size const & srcDimensions
 			, Size const & dstDimensions
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
-			, uint32_t dstSize );
+			, uint32_t dstSize )const;
 
 	private:
 		void getMinMaxColors( Block const & colorBlock
 			, Color & minColor
-			, Color & maxColor );
+			, Color & maxColor )const;
 		void emitAlphaIndices( uint8_t *& dstBuffer
 			, Block const & colorBlock
 			, uint8_t const minAlpha
-			, uint8_t const maxAlpha );
+			, uint8_t const maxAlpha )const;
 	};
 
 #endif

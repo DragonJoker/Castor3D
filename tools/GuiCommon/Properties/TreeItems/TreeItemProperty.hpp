@@ -44,20 +44,14 @@ namespace GuiCommon
 		 *\param[in]	type		The object type
 		 */
 		TreeItemProperty( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, bool editable );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~TreeItemProperty()override;
 		/**
 		 *\brief		Displays the wxTree item menu, at given coordinates
 		 *\param[in]	window	The wxWindow that displays the menu
 		 *\param[in]	x, y	The coordinates
 		 */
-		void DisplayTreeItemMenu( wxWindow * window, wxCoord x, wxCoord y );
+		void displayTreeItemMenu( wxWindow * window, wxCoord x, wxCoord y )const;
 		/**
 		 *\~english
 		 *\brief		Clears the properties.
@@ -83,7 +77,7 @@ namespace GuiCommon
 			return m_editable;
 		}
 
-		void setPrefix( c3d::String const & prefix )
+		void setPrefix( c3d::StringView prefix )
 		{
 			m_prefix = prefix;
 		}
@@ -125,10 +119,14 @@ namespace GuiCommon
 			, wxString const & name );
 		wxPGProperty * addProperty( wxPGProperty * parent
 			, wxString const & name );
+		template< typename ParentT, typename MyValueT >
+		wxPGProperty * createProperty( ParentT * parent
+			, wxString const & name
+			, MyValueT const & value );
 		template< typename ParentT, typename MyValueT, typename ControlT >
 		wxPGProperty * createProperty( ParentT * parent
 			, wxString const & name
-			, MyValueT && value
+			, MyValueT const & value
 			, PropertyChangeHandler handler
 			, c3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls );
 		template< typename ParentT, typename EnumT, typename FuncT, typename ControlT = bool >
@@ -210,11 +208,11 @@ namespace GuiCommon
 			, PropertyChangeHandler handler
 			, std::atomic_bool * control );
 		wxPGProperty * addMaterial( wxPropertyGrid * parent
-			, c3d::Engine & engine
+			, c3d::Engine const & engine
 			, wxString const & name
 			, wxArrayString const & choices
-			, c3d::MaterialObs selected
-			, c3d::Function< void( c3d::MaterialObs ) > setter );
+			, c3d::Material const * selected
+			, c3d::Function< void( c3d::MaterialObs ) > const & setter );
 
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
@@ -470,7 +468,7 @@ namespace GuiCommon
 				, name
 				, value
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
@@ -488,7 +486,7 @@ namespace GuiCommon
 				, value
 				, step
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
@@ -504,7 +502,7 @@ namespace GuiCommon
 				, name
 				, value
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
@@ -520,7 +518,7 @@ namespace GuiCommon
 				, name
 				, value
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
@@ -536,7 +534,7 @@ namespace GuiCommon
 				, name
 				, choices
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
@@ -554,7 +552,7 @@ namespace GuiCommon
 				, choices
 				, selected
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
@@ -571,7 +569,7 @@ namespace GuiCommon
 				, choices
 				, value
 				, c3d::ConfigurationVisitorBase::makeControlsList( control )
-				, onChange);
+				, onChange );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >
@@ -588,25 +586,26 @@ namespace GuiCommon
 				, choices
 				, selected
 				, object
-				, setter
+				, c3d::move( setter )
 				, c3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 	private:
 		PropertyChangeHandler doGetHandler( PropertyChangeHandler handler
-			, c3d::ConfigurationVisitorBase::ControlsList controls );
+			, c3d::ConfigurationVisitorBase::ControlsList controls )const;
 		PropertyChangeHandler doGetHandler( PropertyChangeHandler handler
-			, c3d::ConfigurationVisitorBase::AtomicControlsList controls );
+			, c3d::ConfigurationVisitorBase::AtomicControlsList controls )const;
 
 	protected:
-		wxMenu * m_menu;
+		c3d::RawUniquePtr< wxMenu > m_menu{};
+		ImagesLoader & m_imagesLoader;
 
 	private:
-		bool m_editable;
-		c3d::Engine * m_engine;
-		c3d::Map< wxString, PropertyChangeHandler > m_handlers;
+		bool m_editable{};
+		c3d::Engine * m_engine{};
+		c3d::Map< wxString, PropertyChangeHandler > m_handlers{};
 		wxPropertyGrid * m_grid{};
-		c3d::String m_prefix;
+		c3d::String m_prefix{};
 	};
 
 	template< typename ConfigT >
@@ -614,7 +613,8 @@ namespace GuiCommon
 		: public TreeItemProperty
 	{
 	public:
-		TreeItemPropertyT( bool editable
+		TreeItemPropertyT( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::Engine * engine
 			, ConfigT & config );
 

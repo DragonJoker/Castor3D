@@ -40,10 +40,10 @@
 
 CU_ImplementSmartPtr( c3d, Texture3DTo2D )
 
-#define UBO_GRID( Writer, Binding )\
+#define C3D_Grid( Writer, Binding )\
 	auto ubo = Writer.declUniformBuffer<>( "ubo", Binding, 0u );\
 	auto grid = ubo.declMember< GridData >( "grid" );\
-	ubo.end();\
+	ubo.end()\
 
 namespace c3d
 {
@@ -58,6 +58,8 @@ namespace c3d
 			, sdw::FloatField< "cellSize" >
 			, sdw::UIntField< "gridSize" > >
 		{
+			SDW_DeclStructInstance( , GridData );
+
 			GridData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -69,7 +71,7 @@ namespace c3d
 				, maxSlice{ cellSize }
 			{
 			}
-			
+
 			sdw::Vec3 gridCenter;
 			sdw::Float cellSize;
 			sdw::UInt gridSize;
@@ -77,7 +79,7 @@ namespace c3d
 			sdw::Float maxSlice;
 		};
 
-		enum IDs : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eGridUbo,
 			eCameraUbo,
@@ -200,22 +202,22 @@ namespace c3d
 
 			if ( isSlice )
 			{
-				bindings.push_back( makeDescriptorSetLayoutBinding( eGridUbo
+				bindings.push_back( makeDescriptorSetLayoutBindingT( Bindings::eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				bindings.push_back( makeDescriptorSetLayoutBinding( eSource
+				bindings.push_back( makeDescriptorSetLayoutBindingT( Bindings::eSource
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 			else
 			{
-				bindings.push_back( makeDescriptorSetLayoutBinding( eGridUbo
+				bindings.push_back( makeDescriptorSetLayoutBindingT( Bindings::eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT ) );
-				bindings.push_back( makeDescriptorSetLayoutBinding( eCameraUbo
+				bindings.push_back( makeDescriptorSetLayoutBindingT( Bindings::eCameraUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_GEOMETRY_BIT ) );
-				bindings.push_back( makeDescriptorSetLayoutBinding( eSource
+				bindings.push_back( makeDescriptorSetLayoutBindingT( Bindings::eSource
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_VERTEX_BIT ) );
 			}
@@ -235,19 +237,19 @@ namespace c3d
 		{
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" + suffix );
 			uniformBuffer.createSizedBinding( *descriptorSet
-				, pool.getLayout().getBinding( eGridUbo ) );
+				, pool.getLayout().getBinding( uint32_t( Bindings::eGridUbo ) ) );
 			auto & context = device.makeContext();
 
 			if ( !sampler )
 			{
 				cameraUbo.createSizedBinding( *descriptorSet
-					, pool.getLayout().getBinding( eCameraUbo ) );
-				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
+					, pool.getLayout().getBinding( uint32_t( Bindings::eCameraUbo ) ) );
+				descriptorSet->createBinding( pool.getLayout().getBinding( uint32_t( Bindings::eSource ) )
 					, resources.createImageView( context, texture3D.viewId ) );
 			}
 			else
 			{
-				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
+				descriptorSet->createBinding( pool.getLayout().getBinding( uint32_t( Bindings::eSource ) )
 					, resources.createImageView( context, texture3D.viewId )
 					, sampler->getSampler() );
 			}
@@ -438,9 +440,9 @@ namespace c3d
 
 			shader::Utils utils{ writer };
 
-			UBO_GRID( writer, eGridUbo );
-			C3D_Camera( writer, eCameraUbo, 0u );
-			auto inSource( writer.declStorageImg< FormatT, RImg3D >( "inSource", eSource, 0u ) );
+			C3D_Grid( writer, Bindings::eGridUbo );
+			C3D_Camera( writer, Bindings::eCameraUbo, 0u );
+			auto inSource( writer.declStorageImg< FormatT, RImg3D >( "inSource", Bindings::eSource, 0u ) );
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< sdw::Vec3 >( "createCube"
@@ -515,8 +517,8 @@ namespace c3d
 
 			shader::Utils utils{ writer };
 
-			UBO_GRID( writer, eGridUbo );
-			auto inSource( writer.declCombinedImg< Img3DRgba >( "inSource", eSource, 0u ) );
+			C3D_Grid( writer, Bindings::eGridUbo );
+			auto inSource( writer.declCombinedImg< Img3DRgba >( "inSource", Bindings::eSource, 0u ) );
 
 			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( []( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::Uv2FT > out )

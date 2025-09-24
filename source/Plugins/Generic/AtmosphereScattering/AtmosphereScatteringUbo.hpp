@@ -74,6 +74,8 @@ namespace atmosphere_scattering
 			, sdw::FloatField< "absorptionDensity1LinearTerm" >
 			, sdw::FloatField< "absorptionDensity1ConstantTerm" > >
 	{
+		SDW_DeclStructInstance( , AtmosphereData );
+
 		AtmosphereData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -137,6 +139,10 @@ namespace atmosphere_scattering
 	{
 	private:
 		using Configuration = AtmosphereScatteringConfig;
+		AtmosphereScatteringUbo( AtmosphereScatteringUbo const & ) = delete;
+		AtmosphereScatteringUbo & operator=( AtmosphereScatteringUbo const & ) = delete;
+		AtmosphereScatteringUbo( AtmosphereScatteringUbo && )noexcept = delete;
+		AtmosphereScatteringUbo & operator=( AtmosphereScatteringUbo && )noexcept = delete;
 
 	public:
 		AtmosphereScatteringUbo( c3d::RenderDevice const & device
@@ -146,8 +152,9 @@ namespace atmosphere_scattering
 			, c3d::SceneNode const & sunNode
 			, c3d::SceneNode const & planetNode );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			m_ubo.createPassBinding( pass, binding );
 		}

@@ -76,29 +76,11 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	bool operator==( TextureTransform const & lhs
-		, TextureTransform const & rhs )noexcept
-	{
-		return lhs.translate == rhs.translate
-			&& lhs.rotate == rhs.rotate
-			&& lhs.scale == rhs.scale;
-	}
-
-	//*********************************************************************************************
-
 	bool shallowEqual( TextureFlagConfiguration const & lhs
 		, TextureFlagConfiguration const & rhs )
 	{
 		return lhs.flag == rhs.flag
 			&& lhs.componentsMask == rhs.componentsMask;
-	}
-
-	bool operator==( TextureFlagConfiguration const & lhs
-		, TextureFlagConfiguration const & rhs )noexcept
-	{
-		return lhs.flag == rhs.flag
-			&& lhs.componentsMask == rhs.componentsMask
-			&& lhs.startIndex == rhs.startIndex;
 	}
 
 	//*********************************************************************************************
@@ -110,25 +92,6 @@ namespace c3d
 			&& shallowEqual( lhs.components[1], rhs.components[1] )
 			&& shallowEqual( lhs.components[2], rhs.components[2] )
 			&& shallowEqual( lhs.components[3], rhs.components[3] );
-	}
-
-	bool operator==( TextureConfiguration const & lhs
-		, TextureConfiguration const & rhs )
-	{
-		return lhs.components[0] == rhs.components[0]
-			&& lhs.components[1] == rhs.components[1]
-			&& lhs.components[2] == rhs.components[2]
-			&& lhs.components[3] == rhs.components[3]
-			&& lhs.normalFactor == rhs.normalFactor
-			&& lhs.heightFactor == rhs.heightFactor
-			&& lhs.normalDirectX == rhs.normalDirectX
-			&& lhs.needsYInversion == rhs.needsYInversion
-			&& lhs.needsXInversion == rhs.needsXInversion
-			&& lhs.needsZInversion == rhs.needsZInversion
-			&& lhs.normal2Channels == rhs.normal2Channels
-			&& lhs.transform.translate == rhs.transform.translate
-			&& lhs.transform.rotate == rhs.transform.rotate
-			&& lhs.transform.scale == rhs.transform.scale;
 	}
 
 	//*********************************************************************************************

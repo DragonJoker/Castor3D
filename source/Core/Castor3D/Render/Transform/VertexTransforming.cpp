@@ -61,6 +61,8 @@ namespace c3d
 		struct Skin
 			: public sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , Skin );
+
 			Skin( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -71,8 +73,6 @@ namespace c3d
 				, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , Skin );
 
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 				, bool hasSkin )
@@ -103,10 +103,6 @@ namespace c3d
 			sdw::UVec4 boneIds1;
 			sdw::Vec4 boneWeights0;
 			sdw::Vec4 boneWeights1;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
 		};
 
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
@@ -421,7 +417,10 @@ namespace c3d
 
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
-			, [&]( sdw::ComputeInT< sdw::VoidT > const & in )
+			, [&c3d_morphingWeights, &c3d_morphTargets, &c3d_objectIDs, &c3d_modelsData, &skinningData
+				, &c3d_outPosition, &c3d_outNormal, &c3d_outTangent, &c3d_outBitangent, &c3d_outTexcoord0, &c3d_outTexcoord1, &c3d_outTexcoord2, &c3d_outTexcoord3, &c3d_outColour, &c3d_outVelocity
+				, &c3d_inPosition, &c3d_inNormal, &c3d_inTangent, &c3d_inBitangent, &c3d_inTexcoord0, &c3d_inTexcoord1, &c3d_inTexcoord2, &c3d_inTexcoord3, &c3d_inColour, &c3d_inBones
+				, &writer, &combine, &pipeline]( sdw::ComputeInT< sdw::VoidT > const & in )
 			{
 				auto index = writer.declLocale( "index"
 					, in.globalInvocationID.x() );
@@ -574,7 +573,7 @@ namespace c3d
 				, 0u );
 
 			auto computeSphere = writer.implementFunction< sdw::Vec4 >( "computeSphere"
-				, [&]( sdw::Array< sdw::Vec3 > const & points
+				, [&writer]( sdw::Array< sdw::Vec3 > const & points
 					, sdw::UInt const & count )
 				{
 					// find extremum points along all 3 axes; for each axis we get a pair of points with min/max coordinates
@@ -660,7 +659,8 @@ namespace c3d
 
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
-				, [&]( sdw::ComputeInT< sdw::VoidT > const & in )
+				, [&writer, &computeCones, &computeSphere, &c3d_meshlets, &c3d_positions, c3d_normals
+					, &c3d_outCullData]( sdw::ComputeInT< sdw::VoidT > const & in )
 				{
 					auto meshletId = writer.declLocale( "meshletId"
 						, in.globalInvocationID.x() );

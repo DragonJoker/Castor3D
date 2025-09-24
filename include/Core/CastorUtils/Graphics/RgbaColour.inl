@@ -486,41 +486,6 @@ namespace c3d
 
 	//*************************************************************************************************
 
-	template< typename ComponentType >
-	bool operator==( RgbaColourT< ComponentType > const & lhs, RgbaColourT< ComponentType > const & rhs )
-	{
-		bool result = true;
-
-		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ) && result; i++ )
-		{
-			result = lhs[RgbaComponent( i )] == rhs[RgbaComponent( i )];
-		}
-
-		return result;
-	}
-
-	template< typename ComponentType >
-	bool operator!=( RgbaColourT< ComponentType > const & lhs, RgbaColourT< ComponentType > const & rhs )
-	{
-		return !operator==( lhs, rhs );
-	}
-
-	template< typename ComponentType >
-	RgbaColourT< ComponentType > operator+( RgbaColourT< ComponentType > const & lhs, RgbaColourT< ComponentType > const & rhs )
-	{
-		RgbaColourT< ComponentType > result( lhs );
-		result += rhs;
-		return result;
-	}
-
-	template< typename ComponentType >
-	RgbaColourT< ComponentType > operator-( RgbaColourT< ComponentType > const & lhs, RgbaColourT< ComponentType > const & rhs )
-	{
-		RgbaColourT< ComponentType > result( lhs );
-		result -= rhs;
-		return result;
-	}
-
 	Point3ub toRGBByte( RgbaColourT< ColourComponentValue > const & colour )
 	{
 		Point3ub result;

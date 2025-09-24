@@ -23,7 +23,7 @@ namespace light_streaks
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx
+		enum class Bindings
 		{
 			SceneMapIdx,
 			KawaseMapIdx,
@@ -33,18 +33,18 @@ namespace light_streaks
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, SceneMapIdx, 0u );
-			auto c3d_mapKawase = writer.declCombinedImg< FImg2DArrayRgba32 >( CombinePass::CombineMapKawase, KawaseMapIdx, 0u );
+			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, Bindings::SceneMapIdx, 0u );
+			auto c3d_mapKawase = writer.declCombinedImg< FImg2DArrayRgba32 >( CombinePass::CombineMapKawase, Bindings::KawaseMapIdx, 0u );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&c3d_mapScene, &c3d_mapKawase]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = c3d_mapScene.sample( in.uv() );
 					out.colour() += c3d_mapKawase.sample( vec3( in.uv(), 0.0f ) );
@@ -93,12 +93,12 @@ namespace light_streaks
 				return result;
 			} );
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
-		pass.addInputSampled( *sceneView.getSampledLastAttach(), combine::SceneMapIdx, linearSampler );
-		pass.addInputSampled( *kawaseViews.mergeLayerAttachments( graph ), combine::KawaseMapIdx, linearSampler );
+		pass.addInputSampledT( *sceneView.getSampledLastAttach(), combine::Bindings::SceneMapIdx, linearSampler );
+		pass.addInputSampledT( *kawaseViews.mergeLayerAttachments( graph ), combine::Bindings::KawaseMapIdx, linearSampler );
 		resultView.setLastAttach( pass.addOutputColourTarget( { resultView.getTargetViewId(), sceneView.getTargetViewId() } ) );
 	}
 
-	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

@@ -9,9 +9,15 @@
 #	include <gdk/gdkwayland.h>
 #	include <gtk/gtk.h>
 #	include <GL/glx.h>
-#	undef None
-#	undef Bool
-#	undef Always
+#	ifdef None
+#		undef None
+#	endif
+#	ifdef Bool
+#		undef Bool
+#	endif
+#	ifdef Always
+#		undef Always
+#	endif
 using Bool = int;
 #elif defined( CU_PlatformApple )
 #	include "GuiCommon/System/MetalLayer.h"
@@ -81,9 +87,9 @@ namespace GuiCommon
 			c3d::PathArray files;
 			c3d::File::listDirectoryFiles( folder, files );
 			c3d::PathArray result;
-			c3d::String endRel = c3d::String{ CU_SharedLibExt };
+			c3d::String endRel{ CU_SharedLibExt };
 
-			for ( auto file : files )
+			for ( auto const & file : files )
 			{
 				auto fileName = file.getFileName( true );
 				bool res = c3d::string::endsWith( fileName, endRel );
@@ -120,7 +126,7 @@ namespace GuiCommon
 		public:
 			using c3d::PreprocessedFile::PreprocessedFile;
 
-			uint32_t getCategory( c3d::String const & name
+			uint32_t getCategory( c3d::StringView name
 				, c3d::SectionId curSection
 				, c3d::SectionId nextSection
 				, bool implicit )const
@@ -325,15 +331,17 @@ namespace GuiCommon
 				{
 					uint32_t pitch = width * 4;
 					uint8_t const * buf = buffer + ( height - 1 ) * pitch;
+					uint32_t i = 0;
 
-					for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
+					while ( i < height && it.IsOk() )
 					{
 						uint8_t const * line = buf;
 #if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
+						uint32_t j = 0;
 
-						for ( uint32_t j = 0; j < width && it.IsOk(); j++ )
+						while (  j < width && it.IsOk() )
 						{
 							it.Red() = *line;
 							line++;
@@ -344,6 +352,7 @@ namespace GuiCommon
 							// don't write the alpha.
 							line++;
 							it++;
+							++j;
 						}
 
 						buf -= pitch;
@@ -352,19 +361,22 @@ namespace GuiCommon
 						it = rowStart;
 						it.OffsetY( data, 1 );
 #endif
+						++i;
 					}
 				}
 				else
 				{
 					uint8_t const * buf = buffer;
+					uint32_t i = 0;
 
-					for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
+					while ( i < height && it.IsOk() )
 					{
 #if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
+						uint32_t j = 0;
 
-						for ( uint32_t j = 0; j < width && it.IsOk(); j++ )
+						while ( j < width && it.IsOk() )
 						{
 							it.Red() = *buf;
 							buf++;
@@ -375,12 +387,14 @@ namespace GuiCommon
 							// don't write the alpha.
 							buf++;
 							it++;
+							++j;
 						}
 
 #if defined( CU_PlatformWindows )
 						it = rowStart;
 						it.OffsetY( data, 1 );
 #endif
+						++i;
 					}
 				}
 			}
@@ -630,7 +644,7 @@ window "MainWindow"
 		, c3d::String const & appName
 		, c3d::Path const & fileName
 		, c3d::ProgressBar * progress
-		, wxWindow * window
+		, wxWindow const * window
 		, int eventID )
 	{
 		std::thread async{ [&engine, appName, fileName, progress, window, eventID]()
@@ -677,7 +691,7 @@ window "MainWindow"
 		{
 			c3d::PathArray arrayFailed;
 
-			for ( auto file : arrayKept )
+			for ( auto const & file : arrayKept )
 			{
 				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
@@ -689,7 +703,7 @@ window "MainWindow"
 			{
 				c3d::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
-				for ( auto file : arrayFailed )
+				for ( auto const & file : arrayFailed )
 				{
 					c3d::Logger::logWarning( file.getFileName() );
 				}
@@ -701,7 +715,7 @@ window "MainWindow"
 		c3d::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	ashes::WindowHandle makeWindowHandle( wxWindow * window )
+	ashes::WindowHandle makeWindowHandle( wxWindow const * window )
 	{
 #if defined( CU_PlatformWindows )
 

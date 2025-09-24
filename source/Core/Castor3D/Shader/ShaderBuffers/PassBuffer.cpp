@@ -194,26 +194,10 @@ namespace c3d
 		m_dirty.clear();
 	}
 
-	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding( uint32_t binding
-		, VkShaderStageFlags stages )const
-	{
-		return m_buffer.createLayoutBinding( binding, stages );
-	}
-
-	void PassBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
-	{
-		return m_buffer.createPassBinding( pass, binding );
-	}
-
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		m_buffer.createBinding( descriptorSet, binding );
-	}
-
-	ashes::WriteDescriptorSet PassBuffer::getBinding( uint32_t binding )const
-	{
-		return m_buffer.getBinding( binding );
 	}
 
 	PassBuffer::PassDataPtr PassBuffer::getData( uint32_t passID )

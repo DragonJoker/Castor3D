@@ -23,23 +23,23 @@ namespace c3d::shader
 
 	void TextureConfigData::transformUV( Utils & utils
 		, TextureTransformData const & anim
-		, sdw::Vec2 & uv )const
+		, sdw::Vec2 & outUV )const
 	{
-		uv = utils.transformUV( *this, anim, uv );
+		outUV = utils.transformUV( *this, anim, outUV );
 	}
 
 	void TextureConfigData::transformUVW( Utils & utils
 		, TextureTransformData const & anim
-		, sdw::Vec3 & uvw )const
+		, sdw::Vec3 & outUVW )const
 	{
-		uvw = utils.transformUVW( *this, anim, uvw );
+		outUVW = utils.transformUVW( *this, anim, outUVW );
 	}
 
 	void TextureConfigData::transformUV( Utils & utils
 		, TextureTransformData const & anim
-		, DerivTex & uv )const
+		, DerivTex const & outUV )const
 	{
-		uv.value() = utils.transformUV( *this, anim, uv.value() );
+		outUV.value() = utils.transformUV( *this, anim, outUV.value() );
 	}
 
 	sdw::Float TextureConfigData::getFloat( sdw::Vec4 const & sampled
@@ -68,10 +68,10 @@ namespace c3d::shader
 		return uvw.value();
 	}
 
-	void TextureConfigData::setUv( DerivTex & lhs
+	void TextureConfigData::setUv( DerivTex const & ioLhs
 		, DerivTex const & rhs )const
 	{
-		lhs.value() = rhs.value();
+		ioLhs.value() = rhs.value();
 	}
 
 	DerivTex TextureConfigData::toUv( DerivTex const & uvw )const

@@ -340,7 +340,7 @@ namespace c3d
 			result.texcoordConfig( crg::Texcoord{} );
 			result.renderSize( makeExtent2D( size ) );
 			result.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) );
-			result.isEnabled( crg::RunnablePass::IsEnabledCallback( [enabled, &isEnabled](){ return *enabled && isEnabled(); } ) );
+			result.isEnabled( crg::RunnablePass::IsEnabledCallback( [enabled, isEnabled](){ return *enabled && isEnabled(); } ) );
 			return result;
 		}
 	}
@@ -402,7 +402,7 @@ namespace c3d
 		{
 			auto blurYDestination = &m_blurImages[i];
 			auto & blurX = m_group.createPass( "BlurX" + string::toMbString( i )
-				, [this, &isEnabled]( crg::FramePass const & framePass
+				, [this, isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnable )
 				{
@@ -425,7 +425,7 @@ namespace c3d
 			m_intermediate.setLastAttach( blurX.addOutputColourTarget( m_intermediate.getTargetViewId() ) );
 
 			auto & blurY = m_group.createPass( "BlurY" + string::toMbString( i )
-				, [this, &isEnabled]( crg::FramePass const & framePass
+				, [this, isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnable )
 				{
@@ -452,7 +452,7 @@ namespace c3d
 
 		stepProgressBarLocal( progress, cuT( "Creating SSSSS combine pass" ) );
 		auto & pass = m_group.createPass("Combine"
-			, [this, progress, &isEnabled]( crg::FramePass const & framePass
+			, [this, progress, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnable )
 			{

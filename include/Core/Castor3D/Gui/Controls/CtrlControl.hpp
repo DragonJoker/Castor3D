@@ -601,6 +601,9 @@ namespace c3d
 		ControlFlagType m_flags{};
 
 	private:
+		Size doGetBordersSize()const;
+
+	private:
 		const ControlID m_id;
 		const ControlType m_type;
 		Engine & m_engine;

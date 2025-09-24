@@ -197,22 +197,22 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< uint32_t Count > wxString const * getPointDefaultNames();
+	template< uint32_t Count > c3d::Array< wxString, Count > const & getPointDefaultNames();
 
 	template<>
-	inline wxString const * getPointDefaultNames< 2 >()
+	inline c3d::Array< wxString, 2 > const & getPointDefaultNames< 2 >()
 	{
 		return GC_POINT_XY;
 	}
 
 	template<>
-	inline wxString const * getPointDefaultNames< 3 >()
+	inline c3d::Array< wxString, 3 > const & getPointDefaultNames< 3 >()
 	{
 		return GC_POINT_XYZ;
 	}
 
 	template<>
-	inline wxString const * getPointDefaultNames< 4 >()
+	inline c3d::Array< wxString, 4 > const & getPointDefaultNames< 4 >()
 	{
 		return GC_POINT_XYZW;
 	}
@@ -221,7 +221,7 @@ namespace GuiCommon
 
 	template< typename T, uint32_t Count > struct PointPropertyHelper
 	{
-		static void addChildren( PointProperty< T, Count > * pprop, wxString const * names, c3d::Point< T, Count > const & value )
+		static void addChildren( PointProperty< T, Count > * pprop, c3d::Array< wxString, Count > const & names, c3d::Point< T, Count > const & value )
 		{
 			for ( uint32_t i = 0; i < Count; ++i )
 			{
@@ -284,7 +284,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, uint32_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, c3d::Coords< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, c3d::PointView< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		c3d::Point< T, Count > point{ value };
@@ -293,7 +293,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, uint32_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const( &names )[Count], wxString const & label, wxString const & name, c3d::Point< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( c3d::Array< wxString, Count > const & names, wxString const & label, wxString const & name, c3d::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -301,7 +301,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, uint32_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const( &names )[Count], wxString const & label, wxString const & name, c3d::Coords< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( c3d::Array< wxString, Count > const & names, wxString const & label, wxString const & name, c3d::PointView< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		c3d::Point< T, Count > point{ value };

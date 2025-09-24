@@ -188,7 +188,7 @@ namespace c3d
 		 *\~french
 		 *\return		Le nom du vendeur du GPU.
 		 */
-		String const & getVendor()const noexcept
+		StringView getVendor()const noexcept
 		{
 			return m_vendor;
 		}
@@ -198,7 +198,7 @@ namespace c3d
 		 *\~french
 		 *\param[in]	value	Le nom du vendeur du GPU.
 		 */
-		void setVendor( String value )noexcept
+		void setVendor( StringView value )noexcept
 		{
 			m_vendor = value;
 		}
@@ -208,7 +208,7 @@ namespace c3d
 		 *\~french
 		 *\return		Le type de GPU.
 		 */
-		String const & getRenderer()const noexcept
+		StringView getRenderer()const noexcept
 		{
 			return m_renderer;
 		}
@@ -218,7 +218,7 @@ namespace c3d
 		 *\~french
 		 *\param[in]	value	Le type de GPU.
 		 */
-		void setRenderer( String value )noexcept
+		void setRenderer( StringView value )noexcept
 		{
 			m_renderer = value;
 		}
@@ -228,7 +228,7 @@ namespace c3d
 		 *\~french
 		 *\return		La version de l'API de rendu.
 		 */
-		String const & getVersion()const noexcept
+		StringView getVersion()const noexcept
 		{
 			return m_version;
 		}
@@ -238,7 +238,7 @@ namespace c3d
 		 *\~french
 		 *\param[in]	value	La version de l'API de rendu.
 		 */
-		void setVersion( String value )noexcept
+		void setVersion( StringView value )noexcept
 		{
 			m_version = value;
 		}
@@ -250,7 +250,7 @@ namespace c3d
 		 */
 		bool isNVIDIA()const noexcept
 		{
-			return m_vendor.find( "NVIDIA" ) != std::string::npos;
+			return m_vendor.find( "NVIDIA" ) != String::npos;
 		}
 
 	private:
@@ -270,20 +270,102 @@ namespace c3d
 		String m_vendor;
 		String m_renderer;
 		String m_version;
+
+	private:
+		static void print( OutputStream & stream, Map< GpuMin, uint32_t > const & object )
+		{
+			static Array< String, size_t( GpuMin::eCount ) > const names
+			{
+				cuT( "Min buffer map size" ),
+				cuT( "Min uniform buffer offset alignment" ),
+			};
+
+			for ( auto const & [key, value] : object )
+			{
+				stream << "    " << names[size_t( key )] << ": " << value << "\n";
+			}
+		}
+
+		static void print( OutputStream & stream, Map< GpuMax, uint32_t > const & object )
+		{
+			static Array< String, size_t( GpuMax::eCount ) > const names
+			{
+				cuT( "Max image 1D size" ),
+				cuT( "Max image 2D size" ),
+				cuT( "Max image 3D size" ),
+				cuT( "Max image cube size" ),
+				cuT( "Max image layers count" ),
+				cuT( "Max sampler lod bias" ),
+				cuT( "Max clip distances" ),
+				cuT( "Max framebuffer width" ),
+				cuT( "Max framebuffer height" ),
+				cuT( "Max framebuffer layers" ),
+				cuT( "Max framebuffer samples" ),
+				cuT( "Max texel buffer range" ),
+				cuT( "Max uniform buffer range" ),
+				cuT( "Max storage buffer range" ),
+				cuT( "Max viewport width" ),
+				cuT( "Max viewport height" ),
+				cuT( "Max viewports count" ),
+				cuT( "Max work group count X" ),
+				cuT( "Max work group count Y" ),
+				cuT( "Max work group count Z" ),
+				cuT( "Max work group size X" ),
+				cuT( "Max work group size Y" ),
+				cuT( "Max work group size Z" ),
+				cuT( "Max work group invocations" ),
+				cuT( "Max mesh work group invocations" ),
+				cuT( "Max mesh work group size X" ),
+				cuT( "Max mesh work group size Y" ),
+				cuT( "Max mesh work group size Z" ),
+				cuT( "Max mesh output vertices" ),
+				cuT( "Max mesh output primitives" ),
+				cuT( "Max task work group invocations" ),
+				cuT( "Max task work group size X" ),
+				cuT( "Max task work group size Y" ),
+				cuT( "Max task work group size Z" ),
+			};
+
+			for ( auto const & [key, value] : object )
+			{
+				stream << "    " << names[size_t( key )] << ": " << value << "\n";
+			}
+		}
+
+		friend OutputStream & operator<<( OutputStream & stream, GpuInformations const & object )
+		{
+			auto support = []( bool supported )
+			{
+				return ( supported ? "supported" : "not supported" );
+			};
+			stream << "GPU informations:" << "\n";
+			stream << "    Vendor: " << object.getVendor() << "\n";
+			stream << "    API name: " << object.getRenderer() << "\n";
+			stream << "    API version: " << object.getVersion() << "\n";
+			stream << "    Storage Buffers: " << support( object.hasFeature( GpuFeature::eShaderStorageBuffers ) ) << "\n";
+			stream << "    Stereo Rendering: " << support( object.hasFeature( GpuFeature::eStereoRendering ) ) << "\n";
+			stream << "    Vertex shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_VERTEX_BIT ) ) << "\n";
+			stream << "    Tessellation Control shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) ) << "\n";
+			stream << "    Tessellation Evaluation shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT ) ) << "\n";
+			stream << "    Geometry shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) ) << "\n";
+			stream << "    Fragment shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_FRAGMENT_BIT ) ) << "\n";
+			stream << "    Compute shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_COMPUTE_BIT ) ) << "\n";
+			stream << "    Mesh shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_MESH_BIT_NV ) ) << "\n";
+			stream << "    Task shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_TASK_BIT_NV ) ) << "\n";
+			stream << "    Ray Generation shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_RAYGEN_BIT_KHR ) ) << "\n";
+			stream << "    Any Hit shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_ANY_HIT_BIT_KHR ) ) << "\n";
+			stream << "    Closest Hit shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR ) ) << "\n";
+			stream << "    Miss shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_MISS_BIT_KHR ) ) << "\n";
+			stream << "    Intersection shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_INTERSECTION_BIT_KHR ) ) << "\n";
+			stream << "    Callable shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_CALLABLE_BIT_KHR ) ) << "\n";
+
+			print( stream, object.m_minValues );
+			print( stream, object.m_maxValues );
+
+			stream << std::flush;
+			return stream;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief			Output stream operator.
-	 *\param[in,out]	stream	The stream.
-	 *\param[in]		object	The object to put in the stream.
-	 *\return			The stream.
-	 *\~french
-	 *\brief			Opérateur de flux de sortie.
-	 *\param[in,out]	stream	Le flux.
-	 *\param[in]		object	L'objet à mettre dans le flux.
-	 *\return			Le flux
-	 */
-	C3D_API OutputStream & operator<<( OutputStream & stream, GpuInformations const & object );
 }
 
 #endif

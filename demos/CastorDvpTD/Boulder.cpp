@@ -22,11 +22,11 @@ namespace castortd
 	{
 		m_damage = damage;
 		m_node.get().setPosition( origin );
-		m_target = target;
+		m_target = c3d::move( target );
 		m_speed = speed;
 	}
 
-	bool Boulder::accept( Game & game )
+	bool Boulder::accept( Game const & game )const
 	{
 		auto speed = float( game.getElapsed().count() ) * m_speed / 1000;
 		c3d::Point3f position{ m_node.get().getPosition() };

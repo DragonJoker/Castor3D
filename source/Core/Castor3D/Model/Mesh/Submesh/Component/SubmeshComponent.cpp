@@ -11,12 +11,6 @@ namespace c3d
 {
 	//*********************************************************************************************
 
-	bool operator==( SubmeshComponentCombine const & lhs, SubmeshComponentCombine const & rhs )noexcept
-	{
-		return lhs.baseId == rhs.baseId
-			&& lhs.flags == rhs.flags;
-	}
-
 	bool hasAny( SubmeshComponentCombine const & lhs
 		, SubmeshComponentFlag rhs )noexcept
 	{

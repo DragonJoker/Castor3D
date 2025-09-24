@@ -11,7 +11,7 @@ namespace c3d
 	class HdrColourComponentValue
 	{
 	public:
-		constexpr HdrColourComponentValue() = default;
+		constexpr HdrColourComponentValue()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from normalized component.
@@ -23,7 +23,7 @@ namespace c3d
 		 *\param[in]	gamma	La valeur de la correction gamma.
 		 */
 		CU_API explicit HdrColourComponentValue( ColourComponentValue const & rhs
-			, float gamma = 2.2f );
+			, float gamma = 2.2f )noexcept;
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -32,7 +32,7 @@ namespace c3d
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit constexpr HdrColourComponentValue( float value )
+		explicit constexpr HdrColourComponentValue( float value )noexcept
 			: m_component{ value }
 		{
 		}
@@ -46,7 +46,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( float rhs )
+		HdrColourComponentValue & operator=( float rhs )noexcept
 		{
 			m_component = rhs;
 			return *this;
@@ -61,7 +61,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( double rhs )
+		HdrColourComponentValue & operator=( double rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -76,7 +76,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( long double rhs )
+		HdrColourComponentValue & operator=( long double rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -91,7 +91,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( int8_t rhs )
+		HdrColourComponentValue & operator=( int8_t rhs )noexcept
 		{
 			m_component = float( uint8_t( rhs ) );
 			return *this;
@@ -106,7 +106,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( uint8_t rhs )
+		HdrColourComponentValue & operator=( uint8_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -121,7 +121,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( int16_t rhs )
+		HdrColourComponentValue & operator=( int16_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -136,7 +136,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( uint16_t rhs )
+		HdrColourComponentValue & operator=( uint16_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -151,7 +151,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( int32_t rhs )
+		HdrColourComponentValue & operator=( int32_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -166,7 +166,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( uint32_t rhs )
+		HdrColourComponentValue & operator=( uint32_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -181,7 +181,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( int64_t rhs )
+		HdrColourComponentValue & operator=( int64_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -196,7 +196,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponentValue & operator=( uint64_t rhs )
+		HdrColourComponentValue & operator=( uint64_t rhs )noexcept
 		{
 			m_component = float( rhs );
 			return *this;
@@ -207,7 +207,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers int8_t
 		 */
-		int8_t & convertTo( int8_t & v )const
+		int8_t & convertTo( int8_t & v )const noexcept
 		{
 			return v = int8_t( value() );
 		}
@@ -217,7 +217,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint8_t
 		 */
-		uint8_t & convertTo( uint8_t & v )const
+		uint8_t & convertTo( uint8_t & v )const noexcept
 		{
 			return v = uint8_t( value() );
 		}
@@ -227,7 +227,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers int16_t
 		 */
-		int16_t & convertTo( int16_t & v )const
+		int16_t & convertTo( int16_t & v )const noexcept
 		{
 			return v = int16_t( value() );
 		}
@@ -237,7 +237,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint16_t
 		 */
-		uint16_t & convertTo( uint16_t & v )const
+		uint16_t & convertTo( uint16_t & v )const noexcept
 		{
 			return v = uint16_t( value() );
 		}
@@ -247,7 +247,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers int32_t
 		 */
-		int32_t & convertTo( int32_t & v )const
+		int32_t & convertTo( int32_t & v )const noexcept
 		{
 			return v = int32_t( value() );
 		}
@@ -257,7 +257,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint32_t
 		 */
-		uint32_t & convertTo( uint32_t & v )const
+		uint32_t & convertTo( uint32_t & v )const noexcept
 		{
 			return v = uint32_t( value() );
 		}
@@ -267,7 +267,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers int64_t
 		 */
-		int64_t & convertTo( int64_t & v )const
+		int64_t & convertTo( int64_t & v )const noexcept
 		{
 			return v = int64_t( value() );
 		}
@@ -277,7 +277,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint64_t
 		 */
-		uint64_t & convertTo( uint64_t & v )const
+		uint64_t & convertTo( uint64_t & v )const noexcept
 		{
 			return v = uint64_t( value() );
 		}
@@ -287,7 +287,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		float & convertTo( float & v )const
+		float & convertTo( float & v )const noexcept
 		{
 			return v = value();
 		}
@@ -297,7 +297,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		double & convertTo( double & v )const
+		double & convertTo( double & v )const noexcept
 		{
 			return v = value();
 		}
@@ -307,7 +307,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		long double & convertTo( long double & v )const
+		long double & convertTo( long double & v )const noexcept
 		{
 			return v = value();
 		}
@@ -323,7 +323,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur à ajouter
 		 *\return		Resultat de this + rhs
 		 */
-		HdrColourComponentValue & operator+=( HdrColourComponentValue const & rhs )
+		HdrColourComponentValue & operator+=( HdrColourComponentValue const & rhs )noexcept
 		{
 			m_component += rhs.value();
 			return *this;
@@ -340,7 +340,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur à soustraire
 		 *\return		Resultat de this - rhs
 		 */
-		HdrColourComponentValue & operator-=( HdrColourComponentValue const & rhs )
+		HdrColourComponentValue & operator-=( HdrColourComponentValue const & rhs )noexcept
 		{
 			m_component -= rhs.value();
 			return *this;
@@ -357,7 +357,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur à multiplier
 		 *\return		Resultat de this * rhs
 		 */
-		HdrColourComponentValue & operator*=( HdrColourComponentValue const & rhs )
+		HdrColourComponentValue & operator*=( HdrColourComponentValue const & rhs )noexcept
 		{
 			m_component *= rhs.value();
 			return *this;
@@ -374,7 +374,7 @@ namespace c3d
 		 *\param[in]	rhs	La valeur à diviser
 		 *\return		Resultat de this / rhs
 		 */
-		HdrColourComponentValue & operator/=( HdrColourComponentValue const & rhs )
+		HdrColourComponentValue & operator/=( HdrColourComponentValue const & rhs )noexcept
 		{
 			m_component /= rhs.value();
 			return *this;
@@ -390,7 +390,7 @@ namespace c3d
 		 *\return		Resultat de this + rhs
 		 */
 		template< typename T >
-		HdrColourComponentValue & operator+=( T const & rhs )
+		HdrColourComponentValue & operator+=( T const & rhs )noexcept
 		{
 			m_component = float( m_component + rhs );
 			return *this;
@@ -406,7 +406,7 @@ namespace c3d
 		 *\return		Resultat de this - rhs
 		 */
 		template< typename T >
-		HdrColourComponentValue & operator-=( T const & rhs )
+		HdrColourComponentValue & operator-=( T const & rhs )noexcept
 		{
 			m_component = float( m_component - rhs );
 			return *this;
@@ -422,7 +422,7 @@ namespace c3d
 		 *\return		Resultat de this * rhs
 		 */
 		template< typename T >
-		HdrColourComponentValue & operator*=( T const & rhs )
+		HdrColourComponentValue & operator*=( T const & rhs )noexcept
 		{
 			m_component = float( m_component * rhs );
 			return *this;
@@ -438,7 +438,7 @@ namespace c3d
 		 *\return		Resultat de this / rhs
 		 */
 		template< typename T >
-		HdrColourComponentValue & operator/=( T const & rhs )
+		HdrColourComponentValue & operator/=( T const & rhs )noexcept
 		{
 			m_component = float( m_component / rhs );
 			return *this;
@@ -451,7 +451,7 @@ namespace c3d
 		 *\brief		Opérateur de conversion implicite
 		 *\return		La valeur
 		 */
-		constexpr operator float()const
+		constexpr operator float()const noexcept
 		{
 			return m_component;
 		}
@@ -463,7 +463,7 @@ namespace c3d
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		constexpr float const & value()const
+		constexpr float const & value()const noexcept
 		{
 			return m_component;
 		}
@@ -475,153 +475,100 @@ namespace c3d
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		float & value()
+		float & value()noexcept
 		{
 			return m_component;
 		}
 
 	private:
 		float m_component{};
+
+		friend bool operator==( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )noexcept
+		{
+			float uiA;
+			float uiB;
+			lhs.convertTo( uiA );
+			rhs.convertTo( uiB );
+			return uiA == uiB;
+		}
+
+		friend float operator-( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )noexcept
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			HdrColourComponentValue cpnt( fValue );
+			cpnt -= rhs;
+			return cpnt;
+		}
+
+		friend float operator+( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )noexcept
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			HdrColourComponentValue cpnt( fValue );
+			cpnt += rhs;
+			return cpnt;
+		}
+
+		friend float operator*( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )noexcept
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			HdrColourComponentValue cpnt( fValue );
+			cpnt *= rhs;
+			return cpnt;
+		}
+
+		friend float operator/( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )noexcept
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			HdrColourComponentValue cpnt( fValue );
+			cpnt /= rhs;
+			return cpnt;
+		}
+
+		template< typename T >
+		friend float operator+( HdrColourComponentValue const & lhs, T const & rhs )noexcept
+		{
+			float value;
+			lhs.convertTo( value );
+			HdrColourComponentValue cpnt( value );
+			cpnt += rhs;
+			return value;
+		}
+
+		template< typename T >
+		friend float operator-( HdrColourComponentValue const & lhs, T const & rhs )noexcept
+		{
+			float value;
+			lhs.convertTo( value );
+			HdrColourComponentValue cpnt( value );
+			cpnt -= rhs;
+			return value;
+		}
+
+		template< typename T >
+		friend float operator/( HdrColourComponentValue const & lhs, T const & rhs )noexcept
+		{
+			float value;
+			lhs.convertTo( value );
+			HdrColourComponentValue cpnt( value );
+			cpnt /= rhs;
+			return value;
+		}
+
+		template< typename T >
+		friend float operator*( HdrColourComponentValue const & lhs, T const & rhs )noexcept
+		{
+			float value;
+			lhs.convertTo( value );
+			HdrColourComponentValue cpnt( value );
+			cpnt *= rhs;
+			return value;
+		}
 	};
 	static_assert( sizeof( HdrColourComponentValue ) == sizeof( float ) );
-	/**
-	 *\~english
-	 *\brief		Equality operator
-	 *\param[in]	lhs, rhs	The components to compare
-	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	lhs, rhs	Les composantes à comparer
-	 */
-	CU_API bool operator==( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Inequality operator
-	 *\param[in]	lhs, rhs	The components to compare
-	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	lhs, rhs	Les composantes à comparer
-	 */
-	CU_API bool operator!=( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		addition assignment operator
-	 *\param[in]	lhs, rhs	The components to add
-	 *\return		Result of lhs + rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par addition
-	 *\param[in]	lhs, rhs	Les composantes à ajouter
-	 *\return		Resultat de lhs + rhs
-	 */
-	template< typename T >
-	float operator+( HdrColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		HdrColourComponentValue cpnt( value );
-		cpnt += rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		Substraction assignment operator
-	 *\param[in]	lhs, rhs	The components to subtract
-	 *\return		Result of lhs - rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par soustraction
-	 *\param[in]	lhs, rhs	Les composantes à soustraire
-	 *\return		Resultat de lhs - rhs
-	 */
-	template< typename T >
-	float operator-( HdrColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		HdrColourComponentValue cpnt( value );
-		cpnt -= rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		Division assignment operator
-	 *\param[in]	lhs, rhs	The components to divide
-	 *\return		Result of lhs / rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par division
-	 *\param[in]	lhs, rhs	Les composantes à diviser
-	 *\return		Resultat de lhs / rhs
-	 */
-	template< typename T >
-	float operator/( HdrColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		HdrColourComponentValue cpnt( value );
-		cpnt /= rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		Multiplication assignment operator
-	 *\param[in]	lhs, rhs	The components to multiply
-	 *\return		Result of lhs * rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par multiplication
-	 *\param[in]	lhs, rhs	Les composantes à multiplier
-	 *\return		Resultat de lhs * rhs
-	 */
-	template< typename T >
-	float operator*( HdrColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		HdrColourComponentValue cpnt( value );
-		cpnt *= rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		addition operator
-	 *\param[in]	lhs, rhs	The components to add
-	 *\return		Result of lhs + rhs
-	 *\~french
-	 *\brief		Opérateur d'addition
-	 *\param[in]	lhs, rhs	Les composantes à ajouter
-	 *\return		Resultat de lhs + rhs
-	 */
-	CU_API float operator+( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Subtraction operator
-	 *\param[in]	lhs, rhs	The components to subtract
-	 *\return		Result of lhs - rhs
-	 *\~french
-	 *\brief		Opérateur de soustraction
-	 *\param[in]	lhs, rhs	Les composantes à soustraire
-	 *\return		Resultat de lhs - rhs
-	 */
-	CU_API float operator-( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs, rhs	The components to multiply
-	 *\return		Result of lhs * rhs
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs, rhs	Les composantes à multiplier
-	 *\return		Resultat de lhs * rhs
-	 */
-	CU_API float operator*( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Division operator
-	 *\param[in]	lhs, rhs	The components to divide
-	 *\return		Result of lhs / rhs
-	 *\~french
-	 *\brief		Opérateur de division
-	 *\param[in]	lhs, rhs	Les composantes à diviser
-	 *\return		Resultat de lhs / rhs
-	 */
-	CU_API float operator/( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 }
 
 #endif

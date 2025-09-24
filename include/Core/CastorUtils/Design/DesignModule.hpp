@@ -27,7 +27,7 @@ namespace c3d
 	struct IteratorTraits : std::iterator_traits< IterT >
 	{
 		using iterator_category = typename std::iterator_traits< IterT >::iterator_category;
-		static_assert( std::is_convertible< iterator_category, std::random_access_iterator_tag >::value );
+		static_assert( std::is_convertible_v< iterator_category, std::random_access_iterator_tag > );
 	};
 
 	template< class TypeT >
@@ -61,9 +61,9 @@ namespace c3d
 			{
 				delete [] buffer;
 			} );
-			//
-			// ... Code that might throw an exception ...
-			//
+
+			... Code that might throw an exception ...
+
 		}
 	@endcode
 	\~french
@@ -82,9 +82,9 @@ namespace c3d
 			{
 				delete [] buffer;
 			} );
-			//
-			// ... Code pouvant lancer une exception ...
-			//
+
+			... Code pouvant lancer une exception ...
+
 		}
 	@endcode
 	*/
@@ -447,7 +447,7 @@ namespace c3d
 			, ElementPtrT ) >;
 
 		template< typename ... ParametersT >
-		static ElementPtrT makeElement( ElementCacheT const & cache
+		static ElementPtrT makeElement( [[maybe_unused]] ElementCacheT const & cache
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{
@@ -503,7 +503,6 @@ namespace c3d
 	\~french
 	\brief		Classe utilisée pour exécuter du code à la sortie d'un scope.
 	*/
-	template< typename ScopeExitFuncType >
 	class ScopeGuard;
 	/**
 	\~english
@@ -580,7 +579,7 @@ namespace c3d
 	template< typename ResT, typename KeyT >
 	struct Deleter< ResourceT< ResT, KeyT > >
 	{
-		inline void operator()( ResourceT< ResT, KeyT > * pointer )noexcept;
+		void operator()( ResourceT< ResT, KeyT > * pointer )noexcept;
 	};
 	//@}
 }

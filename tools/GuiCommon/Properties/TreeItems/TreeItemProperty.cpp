@@ -10,34 +10,28 @@ namespace GuiCommon
 {
 	namespace tiprop
 	{
-		typedef enum
+		enum class eID
 		{
-			eID_DELETE = 1
-		}	eID;
+			eDelete = 1
+		};
 	}
 
 	TreeItemProperty::PropertyChangeHandler const TreeItemProperty::EmptyHandler = []( wxVariant const & ){};
 
 	TreeItemProperty::TreeItemProperty( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, bool editable )
-		: wxTreeItemData()
-		, m_menu( nullptr )
-		, m_editable( editable )
-		, m_engine( engine )
+		: wxTreeItemData{}
+		, m_imagesLoader{ imagesLoader }
+		, m_editable{ editable }
+		, m_engine{ engine }
 	{
 	}
 
-	TreeItemProperty::~TreeItemProperty()
-	{
-		delete m_menu;
-	}
-
-	void TreeItemProperty::DisplayTreeItemMenu( wxWindow * window, wxCoord x, wxCoord y )
+	void TreeItemProperty::displayTreeItemMenu( wxWindow * window, wxCoord, wxCoord )const
 	{
 		if ( m_editable && m_menu )
-		{
-			window->PopupMenu( m_menu );
-		}
+			window->PopupMenu( m_menu.get() );
 	}
 
 	void TreeItemProperty::clearProperties()
@@ -57,9 +51,8 @@ namespace GuiCommon
 
 	void TreeItemProperty::onPropertyChange( wxPropertyGridEvent & event )
 	{
-		auto it = m_handlers.find( event.GetPropertyName() );
-
-		if ( it != m_handlers.end() )
+		if ( auto it = m_handlers.find( event.GetPropertyName() );
+			it != m_handlers.end() )
 		{
 			auto handler = it->second;
 			auto value = event.GetValue();
@@ -77,6 +70,8 @@ namespace GuiCommon
 				handler( value );
 			}
 		}
+
+		event.Skip( false );
 	}
 
 	wxArrayString TreeItemProperty::getMaterialsList()const
@@ -89,9 +84,9 @@ namespace GuiCommon
 			using LockType = c3d::UniqueLock< c3d::MaterialCache >;
 			LockType lock{ c3d::makeUniqueLock( cache ) };
 
-			for ( auto & pair : cache )
+			for ( auto const & [name, _] : cache )
 			{
-				choices.push_back( pair.first );
+				choices.push_back( name );
 			}
 		}
 
@@ -117,8 +112,8 @@ namespace GuiCommon
 	{
 		if ( m_editable )
 		{
-			m_menu = new wxMenu();
-			m_menu->Append( tiprop::eID_DELETE, _( "Delete" ) + wxT( "\tDEL" ) );
+			m_menu = c3d::makeRawUnique< wxMenu >();
+			m_menu->Append( int( tiprop::eID::eDelete ), _( "Delete" ) + wxT( "\tDEL" ) );
 			doCreateTreeItemMenu();
 		}
 	}
@@ -146,7 +141,7 @@ namespace GuiCommon
 		, PropertyChangeHandler handler
 		, bool * control )
 	{
-		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
+		wxPGProperty * prop = createProperty( grid, name, choices, c3d::move( handler ), control );
 		prop->SetValue( selected );
 		return prop;
 	}
@@ -158,7 +153,7 @@ namespace GuiCommon
 		, PropertyChangeHandler handler
 		, bool * control )
 	{
-		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
+		wxPGProperty * prop = createProperty( grid, name, choices, c3d::move( handler ), control );
 		prop->SetValue( selected );
 		return prop;
 	}
@@ -170,7 +165,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( c3d::move( handler ), c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -181,7 +176,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( c3d::move( handler ), c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -192,7 +187,7 @@ namespace GuiCommon
 		, PropertyChangeHandler handler
 		, std::atomic_bool * control )
 	{
-		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
+		wxPGProperty * prop = createProperty( grid, name, choices, c3d::move( handler ), control );
 		prop->SetValue( selected );
 		return prop;
 	}
@@ -204,7 +199,7 @@ namespace GuiCommon
 		, PropertyChangeHandler handler
 		, std::atomic_bool * control )
 	{
-		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
+		wxPGProperty * prop = createProperty( grid, name, choices, c3d::move( handler ), control );
 		prop->SetValue( selected );
 		return prop;
 	}
@@ -216,7 +211,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( c3d::move( handler ), c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -227,16 +222,16 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( c3d::move( handler ), c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 	
 	wxPGProperty * TreeItemProperty::addMaterial( wxPropertyGrid * parent
-		, c3d::Engine & engine
+		, c3d::Engine const & engine
 		, wxString const & name
 		, wxArrayString const & choices
-		, c3d::MaterialObs selected
-		, c3d::Function< void( c3d::MaterialObs ) > setter )
+		, c3d::Material const * selected
+		, c3d::Function< void( c3d::MaterialObs ) > const & setter )
 	{
 		if ( selected )
 		{
@@ -244,14 +239,11 @@ namespace GuiCommon
 				, name
 				, choices
 				, selected->getName()
-				, [&engine, &choices, setter]( wxVariant const & var )
+				, [&engine, &choices, &setter]( wxVariant const & var )
 				{
-					auto name = make_String( choices[size_t( var.GetLong() )] );
-
-					if ( auto material = engine.findMaterial( name ) )
-					{
+					if ( auto name = make_String( choices[size_t( var.GetLong() )] );
+						auto material = engine.findMaterial( name ) )
 						setter( material );
-					}
 				} );
 		}
 		
@@ -260,33 +252,25 @@ namespace GuiCommon
 			, choices
 			, [&engine, &choices, setter]( wxVariant const & var )
 			{
-				auto name = make_String( choices[size_t( var.GetLong() )] );
-
-				if ( auto material = engine.findMaterial( name ) )
-				{
+				if ( auto name = make_String( choices[size_t( var.GetLong() )] );
+					auto material = engine.findMaterial( name ) )
 					setter( material );
-				}
 			} );
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, c3d::ConfigurationVisitorBase::ControlsList controls )
+		, c3d::ConfigurationVisitorBase::ControlsList controls )const
 	{
 		if ( controls.empty() )
-		{
 			return handler;
-		}
 
 		return [controls = c3d::move( controls ), handler]( wxVariant const & var )
 		{
-			for ( auto control : controls )
+			for ( auto const & [control, callback] : controls )
 			{
-				*control.first = true;
-
-				if ( control.second )
-				{
-					control.second();
-				}
+				*control = true;
+				if ( callback )
+					callback();
 			}
 
 			handler( var );
@@ -294,7 +278,7 @@ namespace GuiCommon
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, c3d::ConfigurationVisitorBase::AtomicControlsList controls )
+		, c3d::ConfigurationVisitorBase::AtomicControlsList controls )const
 	{
 		if ( controls.empty() )
 		{
@@ -303,14 +287,11 @@ namespace GuiCommon
 
 		return [controls=c3d::move( controls ), handler]( wxVariant const & var )
 		{
-			for ( auto control : controls )
+			for ( auto const & [control, callback] : controls )
 			{
-				*control.first = true;
-
-				if ( control.second )
-				{
-					control.second();
-				}
+				*control = true;
+				if ( callback )
+					callback();
 			}
 
 			handler( var );

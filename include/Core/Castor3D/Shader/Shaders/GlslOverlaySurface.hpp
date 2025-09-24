@@ -15,6 +15,8 @@ namespace c3d::shader
 	struct OverlaySurfaceT
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( , OverlaySurfaceT );
+
 		OverlaySurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
@@ -26,27 +28,25 @@ namespace c3d::shader
 		{
 		}
 
-		OverlaySurfaceT( sdw::Vec2 const pos
-			, sdw::Vec2 const uv )
+		OverlaySurfaceT( sdw::Vec2 const & pos
+			, sdw::Vec2 const & uv )
 			: OverlaySurfaceT{ sdw::findWriterMandat( pos, uv )
 				, makeInitExpr( pos, uv )
 				, true }
 		{
 		}
 
-		OverlaySurfaceT( sdw::Vec2 const pos
-			, sdw::Vec2 const uv
-			, sdw::Vec2 const text )
+		OverlaySurfaceT( sdw::Vec2 const & pos
+			, sdw::Vec2 const & uv
+			, sdw::Vec2 const & text )
 			: OverlaySurfaceT{ sdw::findWriterMandat( pos, uv, text )
 				, makeInitExpr( pos, uv, text )
 				, true }
 		{
 		}
 
-		SDW_DeclStructInstance( , OverlaySurfaceT );
-
-		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const pos
-			, sdw::Vec2 const uv )
+		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const & pos
+			, sdw::Vec2 const & uv )
 		{
 			sdw::expr::ExprList params;
 			params.emplace_back( sdw::makeExpr( pos ) );
@@ -55,9 +55,9 @@ namespace c3d::shader
 				, c3d::move( params ) );
 		}
 
-		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const pos
-			, sdw::Vec2 const uv
-			, sdw::Vec2 const text )
+		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const & pos
+			, sdw::Vec2 const & uv
+			, sdw::Vec2 const & text )
 		{
 			sdw::expr::ExprList params;
 			params.emplace_back( sdw::makeExpr( pos ) );

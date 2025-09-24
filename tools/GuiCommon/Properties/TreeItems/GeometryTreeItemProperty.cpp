@@ -4,9 +4,10 @@
 
 namespace GuiCommon
 {
-	GeometryTreeItemProperty::GeometryTreeItemProperty( bool editable
+	GeometryTreeItemProperty::GeometryTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

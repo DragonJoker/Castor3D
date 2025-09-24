@@ -53,6 +53,8 @@ namespace c3d
 		struct SurfaceT
 			: sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , SurfaceT );
+
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -64,8 +66,6 @@ namespace c3d
 				, lightPosition{ getMember< sdw::Vec3 >( "lightPosition" ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , SurfaceT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint )
@@ -183,8 +183,10 @@ namespace c3d
 				}
 				, sdw::InVec3{ writer, "viewPos" } );
 
-			writer.implementEntryPointT< sdw::VoidT, lpvgeom::SurfaceT >( [&]( sdw::VertexIn const & in
-				, sdw::VertexOutT< lpvgeom::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvgeom::SurfaceT >( [&writer, &lpvGridData, &lights, &calculateSurfelAreaLightViewM
+				, &c3d_lpvLightData, &c3d_rsmPositionMap, &c3d_rsmNormalMap
+				, rsmTexSize]( sdw::VertexIn const & in
+					, sdw::VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lights.getDirectionalLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
@@ -250,14 +252,16 @@ namespace c3d
 
 			//Sample from camera
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< sdw::Float >( "calculateSurfelAreaLightViewM"
-				, [&]( sdw::Vec3 const & viewPos )
+				, [&writer, &c3d_lpvLightData, rsmTexSize]( sdw::Vec3 const & viewPos )
 				{
 					writer.returnStmt( ( 4.0f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf() * c3d_lpvLightData.tanFovYHalf() ) / sdw::Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, sdw::InVec3{ writer, "viewPos" } );
 
-			writer.implementEntryPointT< sdw::VoidT, lpvgeom::SurfaceT >( [&]( sdw::VertexIn const & in
-				, sdw::VertexOutT< lpvgeom::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvgeom::SurfaceT >( [&writer, &lpvGridData, &lights, &calculateSurfelAreaLightViewM
+				, &c3d_lpvLightData, &c3d_rsmPositionMap, &c3d_rsmNormalMap
+				, rsmTexSize]( sdw::VertexIn const & in
+					, sdw::VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lights.getSpotLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
@@ -322,14 +326,16 @@ namespace c3d
 
 			//Sample from camera
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< sdw::Float >( "calculateSurfelAreaLightViewM"
-				, [&]( sdw::Vec3 const & viewPos )
+				, [&writer, &c3d_lpvLightData, rsmTexSize]( sdw::Vec3 const & viewPos )
 				{
 					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf() * c3d_lpvLightData.tanFovYHalf() ) / sdw::Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, sdw::InVec3{ writer, "viewPos" } );
 
-			writer.implementEntryPointT< sdw::VoidT, lpvgeom::SurfaceT >( [&]( sdw::VertexIn const & in
-				, sdw::VertexOutT< lpvgeom::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvgeom::SurfaceT >( [&writer, &lpvGridData, &lights, &calculateSurfelAreaLightViewM
+				, &c3d_lpvLightData, &c3d_rsmPositionMap, &c3d_rsmNormalMap
+				, rsmTexSize, face]( sdw::VertexIn const & in
+					, sdw::VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lights.getPointLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
@@ -523,7 +529,7 @@ namespace c3d
 		}
 	}
 
-	void GeometryInjectionPass::PipelineHolder::recordInto( crg::RecordContext & context
+	void GeometryInjectionPass::PipelineHolder::recordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
@@ -640,7 +646,7 @@ namespace c3d
 			, context
 			, graph
 			, { [this]( uint32_t index ){ doSubInitialise( index ); }
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+				, [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
@@ -661,7 +667,7 @@ namespace c3d
 		m_holder.initialise( getRenderPass( index ), index );
 	}
 
-	void GeometryInjectionPass::doSubRecordInto( crg::RecordContext & context
+	void GeometryInjectionPass::doSubRecordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
@@ -669,8 +675,8 @@ namespace c3d
 		auto vplCount = m_rsmSize * m_rsmSize;
 		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
 		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer().getBuffer();
-		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
-		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
+		context->vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
+		context->vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
 
 	void GeometryInjectionPass::accept( ConfigurationVisitorBase & visitor )

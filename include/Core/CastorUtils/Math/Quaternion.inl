@@ -17,7 +17,7 @@ namespace c3d
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( NoInit const & )
-		: Coords4< T >{ &DataHolderT< QuaternionDataT< T > >::getData().x }
+		: PointView4< T >{ &DataHolderT< QuaternionDataT< T > >::getData().x }
 	{
 	}
 
@@ -638,69 +638,5 @@ namespace c3d
 	QuaternionT< T > QuaternionT< T >::null()
 	{
 		return QuaternionT< T >( 0, 0, 0, 0 );
-	}
-
-	template< typename T >
-	QuaternionT< T > operator+( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs )
-	{
-		QuaternionT< T > result( lhs );
-		result += rhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator-( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs )
-	{
-		QuaternionT< T > result( lhs );
-		result -= rhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator*( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs )
-	{
-		QuaternionT< T > result( lhs );
-		result *= rhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator*( QuaternionT< T > const & lhs, double rhs )
-	{
-		QuaternionT< T > result( lhs );
-		result *= rhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator*( QuaternionT< T > const & lhs, float rhs )
-	{
-		QuaternionT< T > result( lhs );
-		result *= rhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator*( double lhs, QuaternionT< T > const & rhs )
-	{
-		QuaternionT< T > result( rhs );
-		result *= lhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator*( float lhs, QuaternionT< T > const & rhs )
-	{
-		QuaternionT< T > result( rhs );
-		result *= lhs;
-		return result;
-	}
-
-	template< typename T >
-	QuaternionT< T > operator-( QuaternionT< T > const & rhs )
-	{
-		QuaternionT< T > result( rhs );
-		result->w = -result->w;
-		return result;
 	}
 }

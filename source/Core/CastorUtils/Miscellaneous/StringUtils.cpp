@@ -13,10 +13,12 @@ namespace c3d::string
 		if ( !text.empty() )
 		{
 			result = ( text[0] >= '0' && text[0] <= '9' ) || text[0] == '-';
+			std::size_t i = 1;
 
-			for ( std::size_t i = 1; i < text.size() && result; i++ )
+			while ( i < text.size() && result )
 			{
 				result = text[i] >= '0' && text[i] <= '9';
+				++i;
 			}
 		}
 

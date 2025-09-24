@@ -21,10 +21,10 @@ namespace CastorCom
 	public:
 		CComAtlObjectBaseT() = default;
 		CComAtlObjectBaseT( CComAtlObjectBaseT const & ) = default;
-		CComAtlObjectBaseT( CComAtlObjectBaseT && ) = default;
+		CComAtlObjectBaseT( CComAtlObjectBaseT && )noexcept = default;
 		CComAtlObjectBaseT & operator=( CComAtlObjectBaseT const & ) = default;
-		CComAtlObjectBaseT & operator=( CComAtlObjectBaseT && ) = default;
-		virtual ~CComAtlObjectBaseT() = default;
+		CComAtlObjectBaseT & operator=( CComAtlObjectBaseT && )noexcept = default;
+		virtual ~CComAtlObjectBaseT()noexcept = default;
 
 		inline HRESULT FinalConstruct()
 		{

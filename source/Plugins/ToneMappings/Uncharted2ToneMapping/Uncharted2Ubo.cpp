@@ -11,49 +11,6 @@ namespace Uncharted2
 {
 	//*********************************************************************************************
 
-	Uncharted2Data::Uncharted2Data( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, c3d::move( expr ), enabled }
-		, shoulderStrength{ getMember< sdw::Float >( "shoulderStrength" ) }
-		, linearStrength{ getMember< sdw::Float >( "linearStrength" ) }
-		, linearAngle{ getMember< sdw::Float >( "linearAngle" ) }
-		, toeStrength{ getMember< sdw::Float >( "toeStrength" ) }
-		, toeNumerator{ getMember< sdw::Float >( "toeNumerator" ) }
-		, toeDenominator{ getMember< sdw::Float >( "toeDenominator" ) }
-		, linearWhitePointValue{ getMember< sdw::Float >( "linearWhitePointValue" ) }
-		, exposureBias{ getMember< sdw::Float >( "exposureBias" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr Uncharted2Data::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-			, "C3D_Uncharted2Data" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "shoulderStrength", ast::type::Kind::eFloat );
-			result->declMember( "linearStrength", ast::type::Kind::eFloat );
-			result->declMember( "linearAngle", ast::type::Kind::eFloat );
-			result->declMember( "toeStrength", ast::type::Kind::eFloat );
-			result->declMember( "toeNumerator", ast::type::Kind::eFloat );
-			result->declMember( "toeDenominator", ast::type::Kind::eFloat );
-			result->declMember( "linearWhitePointValue", ast::type::Kind::eFloat );
-			result->declMember( "exposureBias", ast::type::Kind::eFloat );
-		}
-
-		return result;
-	}
-
-	c3d::RawUniquePtr< sdw::Struct > Uncharted2Data::declare( sdw::ShaderWriter & writer )
-	{
-		return c3d::makeRawUnique< sdw::Struct >( writer
-			, makeType( writer.getTypesCache() ) );
-	}
-
-	//*********************************************************************************************
-
 	const c3d::String Uncharted2Ubo::Buffer = cuT( "Uncharted2" );
 	const c3d::String Uncharted2Ubo::Data = cuT( "Uncharted2Data" );
 

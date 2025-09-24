@@ -52,25 +52,19 @@ namespace c3d
 			bool operator()( RenderWindow const & window )const
 			{
 				auto target = window.getRenderTarget();
-
 				if ( !target )
-				{
 					return false;
-				}
 
 				auto scn = target->getScene();
-
 				if ( !scn )
-				{
 					return false;
-				}
 
 				return scn->getName() == scene.getName();
 			}
 		};
 
 		template< typename ObjectT >
-		static bool writable( ObjectT const & object )
+		static bool writable( [[maybe_unused]] ObjectT const & object )
 		{
 			return true;
 		}
@@ -161,9 +155,7 @@ namespace c3d
 				for ( auto const & it : cache )
 				{
 					if ( result && it.second && filter( *it.second ) )
-					{
 						result = subWriter( *it.second, file );
-					}
 				}
 			}
 
@@ -195,9 +187,7 @@ namespace c3d
 				for ( auto const & it : cache )
 				{
 					if ( result && it.second && filter( *it.second ) )
-					{
 						result = subWriter( *it.second, file );
-					}
 				}
 			}
 
@@ -219,9 +209,7 @@ namespace c3d
 			, Params && ... params )
 		{
 			if ( !includePath.empty() )
-			{
 				return true;
-			}
 
 			return writeCache( file, cache, elemsName, writer
 				, filter
@@ -259,9 +247,7 @@ namespace c3d
 							auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *pelem );
 
 							if ( filter( elem ) )
-							{
 								result = subWriter( elem, file );
-							}
 						}
 					}
 				}
@@ -285,9 +271,7 @@ namespace c3d
 			, Params && ... params )
 		{
 			if ( !includePath.empty() )
-			{
 				return true;
-			}
 
 			return writeView( file, view, elemsName, writer
 				, filter
@@ -321,7 +305,7 @@ namespace c3d
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 				TextWriter< SceneNode > subWriter{ writer.tabs(), forceText, scale };
 
-				for ( auto const & [_, node] : nodes )
+				for ( auto const & [_1, node] : nodes )
 				{
 					if ( node )
 					{
@@ -397,7 +381,7 @@ namespace c3d
 	TextWriter< Scene >::TextWriter( String const & tabs
 		, Options options )
 		: TextWriterT< Scene >{ tabs }
-		, m_options{ options }
+		, m_options{ c3d::move( options ) }
 	{
 	}
 

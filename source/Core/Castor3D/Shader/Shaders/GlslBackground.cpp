@@ -46,7 +46,7 @@ namespace c3d::shader
 	void BackgroundModel::computeReflection( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
@@ -74,7 +74,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::CombinedImage2DRgba32 const & brdf )
 	{
 		return sdw::RetVec4{ vec4( 0.0_f ) };
@@ -83,7 +83,7 @@ namespace c3d::shader
 	sdw::RetVec3 BackgroundModel::computeRefraction( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -94,7 +94,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
 		, sdw::Float const & roughness
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::CombinedImage2DRgba32 const & brdf
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -102,16 +102,16 @@ namespace c3d::shader
 	}
 
 	sdw::RetVec3 BackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
 
-	void BackgroundModel::applyVolume( sdw::Vec2 const
-		, sdw::Float const
-		, sdw::Vec2 const
-		, sdw::Vec2 const
-		, sdw::Vec4 & )
+	void BackgroundModel::applyVolume( [[maybe_unused]] sdw::Vec2 const & fragCoord
+		, [[maybe_unused]] sdw::Float const & linearDepth
+		, [[maybe_unused]] sdw::Vec2 const & targetSize
+		, [[maybe_unused]] sdw::Vec2 const & cameraPlanes
+		, [[maybe_unused]] sdw::Vec4 const & output )
 	{
 	}
 

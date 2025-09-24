@@ -27,14 +27,15 @@ namespace c3d
 		ChangeTracked< float > intensity;
 		ChangeTracked< float > maxRadius;
 		ChangeTracked< RangedValue< uint32_t > > sampleCount{ makeRangedValue( 100u, 20u, MaxRsmRange ) };
-	};
 
-	inline bool operator==( RsmConfig const & lhs, RsmConfig const & rhs )noexcept
-	{
-		return lhs.intensity == rhs.intensity
-			&& lhs.maxRadius == rhs.maxRadius
-			&& lhs.sampleCount == rhs.sampleCount;
-	}
+	private:
+		friend bool operator==( RsmConfig const & lhs, RsmConfig const & rhs )noexcept
+		{
+			return lhs.intensity == rhs.intensity
+				&& lhs.maxRadius == rhs.maxRadius
+				&& lhs.sampleCount == rhs.sampleCount;
+		}
+	};
 }
 
 #endif

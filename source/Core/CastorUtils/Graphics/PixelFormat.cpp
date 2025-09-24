@@ -68,8 +68,9 @@ namespace c3d
 	PixelFormat getFormatByName( StringView formatName )
 	{
 		PixelFormat result = PixelFormat::eCOUNT;
+		int i = 0u;
 
-		for ( int i = 0u; i < int( result ) && result == PixelFormat::eCOUNT; ++i )
+		while ( i < int( result ) && result == PixelFormat::eCOUNT )
 		{
 			switch ( PixelFormat( i ) )
 			{
@@ -81,6 +82,8 @@ namespace c3d
 			default:
 				break;
 			}
+
+			++i;
 		}
 
 		if ( result == PixelFormat::eCOUNT
@@ -318,7 +321,7 @@ namespace c3d
 		using PFNDecompressBuffer = void( * )( void const * compressed, void * decompressed, int detinationPitch );
 
 		template< PixelFormat PFSrc >
-		void compressBufferT( PxBufferConvertOptions const * options
+		void compressBufferT( [[maybe_unused]] PxBufferConvertOptions const * options
 			, std::atomic_bool const * interrupt
 			, Size const & srcDimensions
 			, Size const & dstDimensions

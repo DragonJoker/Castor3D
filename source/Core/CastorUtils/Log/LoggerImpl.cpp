@@ -7,8 +7,30 @@
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
+#include <time.h>
+
 namespace c3d
 {
+	namespace details
+	{
+		static const char * strTime( char * buffer, size_t bufSize, time_t curTime )
+		{
+#if defined( CU_PlatformWindows )
+#	if !defined( NDEBUG )
+			errno_t e = ctime_s( buffer, bufSize, &curTime );
+			assert( e == 0 && "ctime_s returned an error" );
+#	else
+			ctime_s( buffer, bufSize, &curTime );
+#	endif
+			return buffer;
+#else 
+			const char * res = ctime_r( &curTime, buffer );
+			assert( res != NULL && "ctime_r failed..." );
+			return res;
+#endif
+		}
+	}
+
 	LoggerImpl::LoggerImpl( LoggerImpl && rhs )noexcept
 		: m_parent{ rhs.m_parent }
 		, m_console{ c3d::move( rhs.m_console ) }
@@ -80,7 +102,8 @@ namespace c3d
 	void LoggerImpl::logMessageQueue( MessageQueue const & queue )
 	{
 		std::time_t endTime = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
-		MbString timeStamp = std::ctime( &endTime );
+		Array< char, 128 > buffer;
+		MbString timeStamp = details::strTime( buffer.data(), buffer.size(), endTime );
 		string::replace( timeStamp, "\n", "" );
 		Array< MbStringStream, size_t( LogType::eCount ) > logs
 		{
@@ -126,15 +149,8 @@ namespace c3d
 					if ( auto text = stream.str();
 						!text.empty() )
 					{
-						try
-						{
-							TextFile file{ Path{ m_logFilePath[i] }, File::OpenMode::eAppend };
-							file.writeText( makeString( text ) );
-						}
-						catch ( Exception & exc )
-						{
-							printf( "Unexpected exception while writing log messages: %s", exc.what() );
-						}
+						TextFile file{ Path{ m_logFilePath[i] }, File::OpenMode::eAppend };
+						file.writeText( makeString( text ) );
 					}
 
 					++i;
@@ -143,7 +159,7 @@ namespace c3d
 		}
 		catch ( std::exception & exc )
 		{
-			printf( "Couldn't open log file: %s", exc.what() );
+			printf( "Unexpected exception while writing log messages: %s", exc.what() );
 		}
 	}
 

@@ -105,7 +105,7 @@ namespace c3d
 
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
-	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )noexcept
+	Point< T, TCount >::Point( PointView< U, UCount > const & rhs )noexcept
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -177,59 +177,59 @@ namespace c3d
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator+=( Point< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator+=( Point< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::add( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::add( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator-=( Point< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator-=( Point< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::sub( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::sub( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator*=( Point< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator*=( Point< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::mul( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::mul( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator/=( Point< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator/=( Point< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::div( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::div( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator+=( Coords< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator+=( PointView< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::add( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::add( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator-=( Coords< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator-=( PointView< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::sub( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::sub( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator*=( Coords< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator*=( PointView< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::mul( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::mul( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename U, uint32_t UCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator/=( Coords< U, UCount > const & rhs )
+	template< typename U >
+	inline Point< T, TCount > & Point< T, TCount >::operator/=( PointView< U, TCount > const & rhs )
 	{
-		return PtAssignOperators< T, U, TCount, UCount >::div( *this, rhs );
+		return PtAssignOperators< T, U, TCount, TCount >::div( *this, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
@@ -295,63 +295,6 @@ namespace c3d
 
 	//*************************************************************************************************
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline bool operator==( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
-	{
-		bool result = ( TCount == UCount );
-
-		for ( uint32_t i = 0; i < TCount && result; i++ )
-		{
-			result = lhs[i] == rhs[i];
-		}
-
-		return result;
-	}
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline bool operator!=( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
-	{
-		return !( lhs == rhs );
-	}
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline bool operator==( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
-	{
-		bool result = ( TCount == UCount );
-
-		for ( uint32_t i = 0; i < TCount && result; i++ )
-		{
-			result = lhs[i] == rhs[i];
-		}
-
-		return result;
-	}
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline bool operator!=( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
-	{
-		return !( lhs == rhs );
-	}
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline bool operator==( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
-	{
-		bool result = ( TCount == UCount );
-
-		for ( uint32_t i = 0; i < TCount && result; i++ )
-		{
-			result = lhs[i] == rhs[i];
-		}
-
-		return result;
-	}
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline bool operator!=( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
-	{
-		return !( lhs == rhs );
-	}
-
 	template< typename T, uint32_t TCount >
 	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & rhs )
 	{
@@ -365,76 +308,76 @@ namespace c3d
 		return result;
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::add( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::add( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::sub( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::sub( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::mul( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::mul( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::div( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::div( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator+( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator+( PointView< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::add( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::add( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator-( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator-( PointView< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::sub( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::sub( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator*( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator*( PointView< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::mul( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::mul( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator/( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator/( PointView< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::div( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::div( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, PointView< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::add( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::add( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, PointView< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::sub( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::sub( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, PointView< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::mul( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::mul( lhs, rhs );
 	}
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	template< typename T, uint32_t TCount, typename U >
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, PointView< U, TCount > const & rhs )
 	{
-		return PtOperators< T, U, TCount, UCount >::div( lhs, rhs );
+		return PtOperators< T, U, TCount, TCount >::div( lhs, rhs );
 	}
 
 	template <typename T, uint32_t TCount, typename U>
@@ -532,7 +475,7 @@ namespace c3d
 		}
 
 		template< typename CoordT, uint32_t CountT >
-		void setCoord( Coords< CoordT, CountT > & pt
+		void setCoord( PointView< CoordT, CountT > & pt
 			, uint32_t i
 			, CoordT const & c )
 		{
@@ -555,7 +498,7 @@ namespace c3d
 		}
 
 		template< typename CoordT, uint32_t CountT >
-		CoordT const & getCoord( Coords< CoordT, CountT > const & pt
+		CoordT const & getCoord( PointView< CoordT, CountT > const & pt
 			, uint32_t i )
 		{
 			return pt[i];
@@ -777,7 +720,7 @@ namespace c3d
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Point< T, TCount > const & lhs, Coords< U, TCount > const & rhs )
+		static T dot( Point< T, TCount > const & lhs, PointView< U, TCount > const & rhs )
 		{
 			T result = T();
 
@@ -790,7 +733,7 @@ namespace c3d
 		}
 
 		template< Vector3T LhsT, typename U >
-		static LhsT cross( LhsT const & lhs, Coords3< U > const & rhs )
+		static LhsT cross( LhsT const & lhs, PointView3< U > const & rhs )
 		{
 			LhsT result{ lhs };
 			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
@@ -800,7 +743,7 @@ namespace c3d
 		}
 
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Point< T, TCount > const & lhs, Coords< T, TCount > const & rhs )
+		static double cosTheta( Point< T, TCount > const & lhs, PointView< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -817,7 +760,7 @@ namespace c3d
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Coords< T, TCount > const & lhs, Point< U, TCount > const & rhs )
+		static T dot( PointView< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 		{
 			T result{};
 
@@ -830,7 +773,7 @@ namespace c3d
 		}
 
 		template< typename T, Vector3T RhsT >
-		static RhsT cross( Coords3< T > const & lhs, RhsT const & rhs )
+		static RhsT cross( PointView3< T > const & lhs, RhsT const & rhs )
 		{
 			RhsT result{ lhs };
 			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
@@ -840,7 +783,7 @@ namespace c3d
 		}
 
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Coords< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double cosTheta( PointView< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -857,7 +800,7 @@ namespace c3d
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Point< T, TCount > const & lhs, Coords< U const, TCount > const & rhs )
+		static T dot( Point< T, TCount > const & lhs, PointView< U const, TCount > const & rhs )
 		{
 			T result = T();
 
@@ -870,7 +813,7 @@ namespace c3d
 		}
 
 		template< typename T, typename U >
-		static Point3< T > cross( Point3< T > const & lhs, Coords3< U const > const & rhs )
+		static Point3< T > cross( Point3< T > const & lhs, PointView3< U const > const & rhs )
 		{
 			return Point< T, 3 >(
 				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
@@ -880,7 +823,7 @@ namespace c3d
 		}
 
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Point< T, TCount > const & lhs, Coords< T const, TCount > const & rhs )
+		static double cosTheta( Point< T, TCount > const & lhs, PointView< T const, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -897,7 +840,7 @@ namespace c3d
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Coords< T const, TCount > const & lhs, Point< U, TCount > const & rhs )
+		static T dot( PointView< T const, TCount > const & lhs, Point< U, TCount > const & rhs )
 		{
 			T result{};
 
@@ -910,7 +853,7 @@ namespace c3d
 		}
 
 		template< typename T, typename U >
-		static Point3< T > cross( Coords3< T const > const & lhs, Point3< U > const & rhs )
+		static Point3< T > cross( PointView3< T const > const & lhs, Point3< U > const & rhs )
 		{
 			return Point< T, 3 >(
 				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
@@ -920,7 +863,7 @@ namespace c3d
 		}
 
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Coords< T const, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double cosTheta( PointView< T const, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -935,52 +878,6 @@ namespace c3d
 
 			return result;
 		}
-	}
-
-	//*************************************************************************************************
-
-	template< typename T, uint32_t TCount >
-	inline String & operator<<( String & out, Point< T, TCount > const & in )
-	{
-		StringStream stream{ makeStringStream() };
-		stream << in;
-		out += stream.str();
-		return out;
-	}
-
-	template< typename T, uint32_t TCount >
-	inline String & operator>>( String & in, Point< T, TCount > & out )
-	{
-		StringStream stream( in );
-		stream >> out;
-		in = stream.str();
-		return in;
-	}
-
-	template< typename T, uint32_t TCount, typename CharT >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Point< T, TCount > const & in )
-	{
-		if constexpr ( TCount != 0u )
-		{
-			out << in[0];
-
-			for ( uint32_t i = 1; i < TCount; i++ )
-			{
-				out << "\t" << in[i];
-			}
-		}
-
-		return out;
-	}
-	template< typename T, uint32_t TCount, typename CharT >
-	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Point< T, TCount > & out )
-	{
-		for ( uint32_t i = 0; i < TCount; i++ )
-		{
-			in >> out[i];
-		}
-
-		return in;
 	}
 
 	//*************************************************************************************************

@@ -23,10 +23,9 @@ namespace smaa
 			, SmaaUbo const & ubo
 			, c3d::Texture const & edgeDetectionView
 			, c3d::Texture const & stencilView
-			, SmaaConfig const & config
 			, bool const * enabled );
 		~BlendingWeightCalculation();
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		c3d::Texture const & getResult()const
 		{

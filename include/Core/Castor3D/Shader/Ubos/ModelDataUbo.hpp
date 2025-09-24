@@ -29,6 +29,8 @@ namespace c3d::shader
 			, sdw::UIntField< "indexCount" >
 			, sdw::UIntField< "vertexCount" > >
 	{
+		SDW_DeclStructInstance( C3D_API, ModelData );
+
 		ModelData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -120,15 +122,10 @@ namespace c3d::shader
 }
 
 #define C3D_ModelsData( writer, binding, set )\
-	sdw::StorageBuffer c3d_modelsDataBuffer{ writer\
-		, "C3D_ModelsDataBuffer"\
-		, "c3d_modelsDataBuffer"\
+	auto c3d_modelsData = writer.declArrayStorageBuffer< c3d::shader::ModelData >( "c3d_modelsDataBuffer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< c3d::shader::ModelData >( "d" );\
-	c3d_modelsDataBuffer.end()
+		, true )
 
 #define C3D_ModelData( writer, binding, set )\
 	sdw::UniformBuffer c3d_modelDataBuffer{ writer\

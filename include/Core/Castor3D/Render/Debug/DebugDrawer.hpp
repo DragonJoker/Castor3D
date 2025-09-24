@@ -91,8 +91,8 @@ namespace c3d
 		 *\param[in]	shader				Le shader utilisé pour dessiner les géometries.
 		 *\param[in]	enableDepthTest		\p true pour activer le depth test.
 		 */
-		C3D_API void addDrawable( DebugVertexBuffers vertexBuffers
-			, DebugIndexBuffer indexBuffer
+		C3D_API void addDrawable( DebugVertexBuffers const & vertexBuffers
+			, DebugIndexBuffer const & indexBuffer
 			, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
 			, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
 			, ashes::VkDescriptorSetLayoutBindingArray const & descriptorBindings

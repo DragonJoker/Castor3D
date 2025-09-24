@@ -123,7 +123,7 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto depthIt = framePass.targets.begin();
+				auto depthIt = framePass.getTargets().begin();
 				auto depthObjIt = std::next( depthIt );
 				auto dataIt = std::next( depthObjIt );
 				auto velocityIt = std::next( dataIt );
@@ -182,12 +182,12 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto depthIt = framePass.targets.begin();
+				auto depthIt = framePass.getTargets().begin();
 				auto depthObjIt = std::next( depthIt );
 				auto velocityIt = std::next( depthObjIt );
 				auto normalIt = std::next( velocityIt );
 				stepProgressBarLocal( progress, cuT( "Initialising forward depth pass" ) );
-				auto res = makeRawUnique< DepthPass >( getOwner()
+				auto res = makeRawUnique< DepthPass >( *getOwner()
 					, framePass
 					, context
 					, runnableGraph

@@ -154,9 +154,8 @@ namespace GuiCommon
 			, [this]()
 			{
 				c3d::Point3f translate;
-				Angles angles;
-
-				if ( doUpdateVelocities( translate, angles ) )
+				if ( Angles angles;
+					doUpdateVelocities( translate, angles ) )
 				{
 					m_node->translate( translate );
 

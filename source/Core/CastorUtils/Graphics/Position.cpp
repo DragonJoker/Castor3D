@@ -57,14 +57,4 @@ namespace c3d
 		getData().position.x += x;
 		getData().position.y += y;
 	}
-
-	bool operator ==( Position const & lhs, Position const & rhs )
-	{
-		return lhs.x() == rhs.x() && lhs.y() == rhs.y();
-	}
-
-	bool operator !=( Position const & lhs, Position const & rhs )
-	{
-		return lhs.x() != rhs.x() || lhs.y() != rhs.y();
-	}
 }

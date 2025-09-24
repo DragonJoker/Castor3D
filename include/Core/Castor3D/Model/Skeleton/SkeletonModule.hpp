@@ -134,17 +134,27 @@ namespace c3d
 
 	struct NodeTransform
 	{
+		explicit NodeTransform( Point3f translate = {}
+			, Point3f scale = { 1.0f, 1.0f, 1.0f }
+			, Quaternion rotate = {} )
+			: translate{ c3d::move( translate ) }
+			, scale{ c3d::move( scale ) }
+			, rotate{ c3d::move( rotate ) }
+		{
+		}
+
 		Point3f translate{};
 		Point3f scale{ 1.0f, 1.0f, 1.0f };
 		Quaternion rotate{};
-	};
 
-	inline bool operator==( NodeTransform const & lhs, NodeTransform const & rhs )noexcept
-	{
-		return lhs.translate == rhs.translate
-			&& lhs.scale == rhs.scale
-			&& lhs.rotate == rhs.rotate;
-	}
+	private:
+		friend bool operator==( NodeTransform const & lhs, NodeTransform const & rhs )noexcept
+		{
+			return lhs.translate == rhs.translate
+				&& lhs.scale == rhs.scale
+				&& lhs.rotate == rhs.rotate;
+		}
+	};
 
 	//@}
 	//@}

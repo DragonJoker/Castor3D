@@ -66,7 +66,7 @@ namespace c3d
 		m_text->setVAlign( VAlign::eCenter );
 
 		setStyle( style );
-		doUpdateFlags();
+		doUpdateTitle();
 	}
 
 	ProgressCtrl::~ProgressCtrl()noexcept
@@ -239,38 +239,7 @@ namespace c3d
 
 	void ProgressCtrl::doUpdateFlags()
 	{
-		if ( isVertical() )
-		{
-			if ( hasTitle() )
-			{
-				if ( auto title = m_title )
-				{
-					title->setVisible( false );
-				}
-			}
-
-			if ( auto text = m_text )
-			{
-				text->setVisible( false );
-			}
-		}
-		else if ( isRightToLeft() )
-		{
-			if ( hasTitle() )
-			{
-				if ( auto title = m_title )
-				{
-					title->setHAlign( HAlign::eRight );
-				}
-			}
-		}
-		else if ( hasTitle() )
-		{
-			if ( auto title = m_title )
-			{
-				title->setHAlign( HAlign::eLeft );
-			}
-		}
+		doUpdateTitle();
 	}
 
 	void ProgressCtrl::doUpdateZIndex( uint32_t & index )
@@ -418,6 +387,42 @@ namespace c3d
 
 			m_progress->setPosition( { clientOffset.x() + left, clientOffset.y() + top } );
 			m_progress->setSize( { width, height } );
+		}
+	}
+
+	void ProgressCtrl::doUpdateTitle()
+	{
+		if ( isVertical() )
+		{
+			if ( hasTitle() )
+			{
+				if ( auto title = m_title )
+				{
+					title->setVisible( false );
+				}
+			}
+
+			if ( auto text = m_text )
+			{
+				text->setVisible( false );
+			}
+		}
+		else if ( isRightToLeft() )
+		{
+			if ( hasTitle() )
+			{
+				if ( auto title = m_title )
+				{
+					title->setHAlign( HAlign::eRight );
+				}
+			}
+		}
+		else if ( hasTitle() )
+		{
+			if ( auto title = m_title )
+			{
+				title->setHAlign( HAlign::eLeft );
+			}
 		}
 	}
 }

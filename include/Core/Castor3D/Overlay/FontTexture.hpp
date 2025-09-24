@@ -18,9 +18,9 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API void postPreRenderGpuEvent( Engine & engine
+	C3D_API void postPreRenderGpuEvent( Engine const & engine
 		, Function< void( RenderDevice const &, QueueData const & ) > event );
-	C3D_API void postQueueRenderCpuEvent( Engine & engine
+	C3D_API void postQueueRenderCpuEvent( Engine const & engine
 		, Function< void() > event );
 
 	template< typename ResourceT, template< typename ResT > typename PointerT >
@@ -293,7 +293,7 @@ namespace c3d
 		FontResPtr m_font{};
 		SamplerObs m_sampler{};
 		GlyphPositionMap m_glyphsPositions;
-		uint32_t m_id;
+		uint32_t m_id{};
 		FontUboUPtr m_ubo;
 		Map< char32_t, uint32_t > m_charIndices;
 	};

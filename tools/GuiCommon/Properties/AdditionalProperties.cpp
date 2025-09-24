@@ -18,20 +18,20 @@ namespace GuiCommon
 
 	uint32_t toBGRPacked( c3d::ColourWrapper const & colour )
 	{
-		uint32_t r = uint32_t( ( *colour.value )->x * 255.0f );
-		uint32_t g = uint32_t( ( *colour.value )->y * 255.0f );
-		uint32_t b = uint32_t( ( *colour.value )->z * 255.0f );
+		auto r = uint32_t( ( *colour.value )->x * 255.0f );
+		auto g = uint32_t( ( *colour.value )->y * 255.0f );
+		auto b = uint32_t( ( *colour.value )->z * 255.0f );
 		return ( r << 0 ) | ( g << 8 ) | ( b << 16 );
 	}
 
 	//************************************************************************************************
 
-	ButtonData::ButtonData( ButtonEventMethod method )
-		: m_method( method )
+	ButtonData::ButtonData( ButtonEventMethod const & method )
+		: m_method{ method }
 	{
 	}
 
-	void ButtonData::Call( wxVariant const & var )
+	void ButtonData::Call( wxVariant const & var )const
 	{
 		m_method( var );
 	}
@@ -57,7 +57,7 @@ namespace GuiCommon
 		if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
 		{
 			// extract the client data from the property
-			if ( ButtonData * btn = dynamic_cast< ButtonData * >( property->GetClientObject() ) )
+			if ( auto btn = dynamic_cast< ButtonData * >( property->GetClientObject() ) )
 			{
 				// call the method
 				btn->Call( property->GetValue() );
@@ -156,29 +156,23 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	wxPGEditor * wxPGEditor_ButtonCtrl{};
+	wxPGEditor * wxPGEditor_ButtonCtrl = {};
 
 	wxPGEditor * wxPGConstructButtonCtrlEditorClass()
 	{
 		if ( !wxPGEditor_ButtonCtrl )
-		{
 			wxPGEditor_ButtonCtrl = wxPropertyGrid::DoRegisterEditorClass( new ButtonEventEditor, wxT( "ButtonEventEditor" ) );
-		}
-
 		return wxPGEditor_ButtonCtrl;
 	}
 
 	//************************************************************************************************
 
-	wxPGEditor * wxPGEditor_SliderCtrl{};
+	wxPGEditor * wxPGEditor_SliderCtrl = {};
 
 	wxPGEditor * wxPGConstructSliderCtrlEditorClass()
 	{
 		if ( !wxPGEditor_SliderCtrl )
-		{
 			wxPGEditor_SliderCtrl = wxPropertyGrid::DoRegisterEditorClass( new SliderEditor, wxT( "SliderEditor" ) );
-		}
-
 		return wxPGEditor_SliderCtrl;
 	}
 
@@ -206,7 +200,7 @@ namespace GuiCommon
 
 	wxBoolProperty * CreateProperty( wxString const & name, bool const & value, bool checkbox )
 	{
-		wxBoolProperty * result = new wxBoolProperty( name, wxPG_LABEL );
+		auto result = new wxBoolProperty( name, wxPG_LABEL );
 		result->SetAttribute( wxT( "UseCheckbox" ), checkbox );
 		return result;
 	}
@@ -293,39 +287,40 @@ namespace GuiCommon
 
 	void gcImageFileProperty::doLoadImageFromFile()
 	{
+		if ( !m_loader )
+			return;
+
 		wxFileName filename = GetFileName();
+		if ( !filename.FileExists() )
+			return;
 
 		// Create the image thumbnail
-		if ( filename.FileExists() )
+		auto name = make_String( filename.GetName() );
+
+		try
 		{
-			CU_Require( m_loader );
-			auto name = make_String( filename.GetName() );
+			auto buffer = m_loader->load( name
+				, make_Path( filename.GetFullPath() )
+				, {} ).getPixels()->clone();
 
-			try
+			if ( c3d::isCompressed( buffer->getFormat() ) )
 			{
-				auto buffer = m_loader->load( name
-					, make_Path( filename.GetFullPath() )
-					, {} ).getPixels()->clone();
-
-				if ( c3d::isCompressed( buffer->getFormat() ) )
-				{
-					buffer = c3d::decompressBuffer( *buffer );
-				}
-
-				if ( buffer->getFormat() != c3d::PixelFormat::eR8G8B8A8_UNORM )
-				{
-					buffer = c3d::PxBufferBase::create( buffer->getDimensions()
-						, c3d::PixelFormat::eR8G8B8A8_UNORM
-						, buffer->getConstPtr()
-						, buffer->getFormat() );
-				}
-
-				m_image = c3d::makeRawUnique< c3d::Image >( name, *buffer );
+				buffer = c3d::decompressBuffer( *buffer );
 			}
-			catch ( std::exception & exc )
+
+			if ( buffer->getFormat() != c3d::PixelFormat::eR8G8B8A8_UNORM )
 			{
-				std::cerr << exc.what() << std::endl;
+				buffer = c3d::PxBufferBase::create( buffer->getDimensions()
+					, c3d::PixelFormat::eR8G8B8A8_UNORM
+					, buffer->getConstPtr()
+					, buffer->getFormat() );
 			}
+
+			m_image = c3d::makeRawUnique< c3d::Image >( name, *buffer );
+		}
+		catch ( std::exception & exc )
+		{
+			std::cerr << exc.what() << std::endl;
 		}
 	}
 
@@ -333,7 +328,7 @@ namespace GuiCommon
 
 	wxIMPLEMENT_DYNAMIC_CLASS( gcTextureProperty, wxFileProperty )
 
-		gcTextureProperty::gcTextureProperty( c3d::ImageLoader * loader
+	gcTextureProperty::gcTextureProperty( c3d::ImageLoader * loader
 		, wxString const & label
 		, wxString const & name
 		, c3d::TextureSourceInfo * value )
@@ -423,25 +418,25 @@ namespace GuiCommon
 
 	void gcTextureProperty::doLoadImageFromFile()
 	{
+		if ( !m_loader )
+			return;
+
 		wxFileName filename{ make_wxString( m_source->folder() / m_source->relative() ) };
+		if ( !filename.FileExists() )
+			return;
 
 		// Create the image thumbnail
-		if ( filename.FileExists() )
+		try
 		{
-			CU_Require( m_loader );
 			auto name = make_String( filename.GetName() );
-
-			try
-			{
-				doLoadImageBuffer( name
-					, m_loader->load( name
-						, make_Path( filename.GetFullPath() )
-						, {} ).getPixels()->clone() );
-			}
-			catch ( std::exception & exc )
-			{
-				std::cerr << exc.what() << std::endl;
-			}
+			doLoadImageBuffer( name
+				, m_loader->load( name
+					, make_Path( filename.GetFullPath() )
+					, {} ).getPixels()->clone() );
+		}
+		catch ( std::exception & exc )
+		{
+			std::cerr << exc.what() << std::endl;
 		}
 	}
 

@@ -2,7 +2,9 @@
 
 #include <objbase.h>
 
-#undef RegisterClass
+#ifdef RegisterClass
+#	undef RegisterClass
+#endif
 
 namespace CastorCom
 {
@@ -17,13 +19,15 @@ extern "C"
 #endif
 
 // Used to determine whether the DLL can be unloaded by OLE.
+__control_entrypoint( DllExport )
 HRESULT STDAPICALLTYPE DllCanUnloadNow()
 {
 	return CastorCom::g_module.DllCanUnloadNow();
 }
 
 // Returns a class factory to create an object of the requested type.
-HRESULT STDAPICALLTYPE DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID * ppv )
+_Check_return_
+HRESULT STDAPICALLTYPE DllGetClassObject( _In_ REFCLSID rclsid, _In_ REFIID riid, _Outptr_ LPVOID FAR * ppv )
 {
 	return CastorCom::g_module.DllGetClassObject( rclsid, riid, ppv );
 }
@@ -44,27 +48,19 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 }
 
 // DllInstall - adds/Removes entries to the system registry per user per machine.
-HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
+HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, _In_opt_ LPCWSTR pszCmdLine )
 {
-	HRESULT hr = E_FAIL;
-	static const wchar_t szUserSwitch[] = L"user";
+	auto hr = E_FAIL;
 
-	if ( pszCmdLine )
-	{
-		if ( _wcsnicmp( pszCmdLine, szUserSwitch, _countof( szUserSwitch ) ) == 0 )
-		{
-			ATL::AtlSetPerUserRegistration( true );
-		}
-	}
+	if ( static const wchar_t szUserSwitch[] = L"user";
+		pszCmdLine && ( _wcsnicmp( pszCmdLine, szUserSwitch, _countof( szUserSwitch ) ) == 0 ) )
+		ATL::AtlSetPerUserRegistration( true );
 
 	if ( bInstall )
 	{
 		hr = DllRegisterServer();
-
 		if ( FAILED( hr ) )
-		{
 			DllUnregisterServer();
-		}
 	}
 	else
 	{

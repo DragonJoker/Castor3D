@@ -47,11 +47,16 @@ namespace c3d
 		bool hasPassMaskFlag{};
 		bool hasVelocityFlag{};
 		bool hasRenderFlag{};
+
+	private:
+		friend bool operator==( SubmeshComponentCombine const & lhs, SubmeshComponentCombine const & rhs )noexcept
+		{
+			return lhs.baseId == rhs.baseId
+				&& lhs.flags == rhs.flags;
+		}
 	};
 
 	using SubmeshComponentCombines = Vector< SubmeshComponentCombine >;
-
-	C3D_API bool operator==( SubmeshComponentCombine const & lhs, SubmeshComponentCombine const & rhs )noexcept;
 
 	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
 		, SubmeshComponentFlag rhs )noexcept;

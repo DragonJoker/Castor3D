@@ -64,30 +64,20 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserBkColour, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->scene->setBackgroundColour( params[0]->get< RgbColour >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserBkImage, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto imgBackground = makeUnique< ImageBackground >( *getEngine( *blockContext )
@@ -101,13 +91,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserFont, SceneContext, FontContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				newBlockContext->scene = blockContext;
@@ -120,13 +106,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserSdfFont, SceneContext, FontContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				newBlockContext->scene = blockContext;
@@ -139,9 +121,7 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserSamplerState, SceneContext, SamplerContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -160,13 +140,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserCamera, SceneContext, CameraContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				newBlockContext->scene = blockContext;
@@ -178,13 +154,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserObject, SceneContext, ObjectContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -199,17 +171,11 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserAmbientLight, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->scene->setAmbientLight( params[0]->get< RgbColour >() );
-			}
 		}
 		CU_EndAttribute()
 
@@ -222,13 +188,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserBillboard, SceneContext, BillboardsContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -243,13 +205,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserAnimatedObjectGroup, SceneContext, AnimGroupContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -263,13 +221,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserPanelOverlay, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -295,13 +249,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlay, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -327,13 +277,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserTextOverlay, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -359,66 +305,46 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserSkybox, SceneContext, SkyboxContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else
-			{
 				newBlockContext->skybox = makeUnique< SkyboxBackground >( *getEngine( *blockContext )
 					, *blockContext->scene );
-			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eSkybox )
 
 		static CU_ImplementAttributeParserBlock( parserFogType, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else
-			{
 				blockContext->scene->getFog().setType( FogType( params[0]->get< uint32_t >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserFogDensity, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else
-			{
 				blockContext->scene->getFog().setDensity( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserDirectionalShadowCascades, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->scene->setDirectionalShadowCascades( params[0]->get< uint32_t >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserGlobalIndirectAttenuation, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No Scene initialised." ) );
-			}
 			else
 			{
 				float value{ 0u };
@@ -431,13 +357,9 @@ namespace c3d
 		static CU_ImplementAttributeParserNewBlock( parserParticleSystem, SceneContext, ParticleSystemContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				newBlockContext->scene = blockContext;
@@ -448,7 +370,9 @@ namespace c3d
 
 		static CU_ImplementAttributeParserNewBlock( parserMesh, SceneContext, MeshContext )
 		{
-			if ( blockContext->scene )
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
@@ -462,16 +386,14 @@ namespace c3d
 					newBlockContext->mesh = newBlockContext->ownMesh.get();
 				}
 			}
-			else
-			{
-				CU_ParsingError( cuT( "No scene initialised" ) );
-			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eMesh )
 
 		static CU_ImplementAttributeParserNewBlock( parserSkeleton, SceneContext, SkeletonContext )
 		{
-			if ( blockContext->scene )
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
@@ -483,19 +405,13 @@ namespace c3d
 						, *blockContext->scene );
 				}
 			}
-			else
-			{
-				CU_ParsingError( cuT( "No scene initialised" ) );
-			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eSkeleton )
 
 		static CU_ImplementAttributeParserBlock( parserEnd, SceneContext )
 		{
 			if ( !blockContext->scene )
-			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
 			else
 			{
 				log::info << "Loaded scene [" << blockContext->scene->getName() << "]" << std::endl;
@@ -588,52 +504,36 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserImportCenterCamera, SceneImportContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing name parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->centerCamera );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportPreferredImporter, SceneImportContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing name parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->preferredImporter );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportIgnoreVertexColour, SceneImportContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing name parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->ignoreVertexColour );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportDisableImageCompression, SceneImportContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing name parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->disableImageCompression );
-			}
 		}
 		CU_EndAttribute()
 
@@ -642,72 +542,34 @@ namespace c3d
 			Engine * engine = getEngine( *blockContext );
 
 			if ( blockContext->files.empty() )
-			{
 				CU_ParsingError( cuT( "No file chosen to import" ) );
-			}
 			else
 			{
 				Parameters parameters;
-
 				if ( blockContext->rescale != 1.0f )
-				{
 					parameters.add( cuT( "rescale" ), blockContext->rescale );
-				}
-
 				if ( blockContext->pitch != 0.0f )
-				{
 					parameters.add( cuT( "pitch" ), blockContext->pitch );
-				}
-
 				if ( blockContext->yaw != 0.0f )
-				{
 					parameters.add( cuT( "yaw" ), blockContext->yaw );
-				}
-
 				if ( blockContext->roll != 0.0f )
-				{
 					parameters.add( cuT( "roll" ), blockContext->roll );
-				}
-
 				if ( !blockContext->prefix.empty() )
-				{
 					parameters.add( cuT( "prefix" ), blockContext->prefix );
-				}
-
 				if ( blockContext->noOptimisations )
-				{
 					parameters.add( cuT( "no_optimisations" ), blockContext->noOptimisations );
-				}
-
 				if ( blockContext->noValidation )
-				{
 					parameters.add( cuT( "no_validation" ), blockContext->noValidation );
-				}
-
 				if ( blockContext->ignoreVertexColour )
-				{
 					parameters.add( cuT( "ignore_vertex_colour" ), blockContext->ignoreVertexColour );
-				}
-
 				if ( blockContext->emissiveMult != 1.0f )
-				{
 					parameters.add( cuT( "emissive_mult" ), blockContext->emissiveMult );
-				}
-
 				if ( !blockContext->centerCamera.empty() )
-				{
 					parameters.add( cuT( "center_camera" ), blockContext->centerCamera );
-				}
-
 				if ( !blockContext->preferredImporter.empty() )
-				{
 					parameters.add( cuT( "preferred_importer" ), blockContext->preferredImporter );
-				}
-
 				if ( blockContext->disableImageCompression )
-				{
 					parameters.add( cuT( "disable_image_compression" ), blockContext->disableImageCompression );
-				}
 
 				SceneImporter importer{ *engine };
 
@@ -978,7 +840,7 @@ namespace c3d
 
 		m_animatedObjectGroupCache->initialise( device );
 		m_lightCache->initialise( device );
-		m_lightGroupCache->initialise( device );
+		m_lightGroupCache->initialise();
 		m_background->initialise( device );
 		doUpdateLightsDependent();
 		updateBoundingBox();

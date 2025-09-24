@@ -15,44 +15,6 @@ namespace c3d
 {
 	//*********************************************************************************************
 
-	namespace shader
-	{
-		RsmConfigData::RsmConfigData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, c3d::move( expr ), enabled }
-			, intensity{ getMember< sdw::Float >( "intensity" ) }
-			, maxRadius{ getMember< sdw::Float >( "maxRadius" ) }
-			, sampleCount{ getMember< sdw::UInt >( "sampleCount" ) }
-			, index{ getMember< sdw::Int >( "index" ) }
-		{
-		}
-
-		ast::type::BaseStructPtr RsmConfigData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_RsmData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "intensity", ast::type::Kind::eFloat );
-				result->declMember( "maxRadius", ast::type::Kind::eFloat );
-				result->declMember( "sampleCount", ast::type::Kind::eUInt32 );
-				result->declMember( "index", ast::type::Kind::eInt32 );
-			}
-
-			return result;
-		}
-
-		RawUniquePtr< sdw::Struct > RsmConfigData::declare( sdw::ShaderWriter & writer )
-		{
-			return makeRawUnique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	RsmConfigUbo::RsmConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }

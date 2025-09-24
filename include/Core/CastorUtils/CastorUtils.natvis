@@ -71,7 +71,7 @@
     </Expand>
   </Type>
 
-  <Type Name="c3d::Coords&lt;*, 2&gt;">
+  <Type Name="c3d::PointView&lt;*, 2&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -79,7 +79,7 @@
     </Expand>
   </Type>
 
-  <Type Name="c3d::Coords&lt;*, 3&gt;">
+  <Type Name="c3d::PointView&lt;*, 3&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -88,7 +88,7 @@
     </Expand>
   </Type>
 
-  <Type Name="c3d::Coords&lt;*, 4&gt;">
+  <Type Name="c3d::PointView&lt;*, 4&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]} w={m_coords[3]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>

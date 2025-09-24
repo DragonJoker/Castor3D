@@ -16,7 +16,7 @@ namespace c3d
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		virtual bool operator()( AnimatedObjectGroup const & group
+		bool operator()( AnimatedObjectGroup const & group
 			, StringStream & file )override;
 	};
 }

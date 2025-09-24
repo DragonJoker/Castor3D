@@ -8,6 +8,10 @@
 
 #include <Windows.h>
 
+#if defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
+#	include <intrin.h>
+#endif
+
 namespace c3d::platform
 {
 	uint32_t getCoreCount()
@@ -19,7 +23,6 @@ namespace c3d::platform
 }
 
 #if defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
-#	include <intrin.h>
 
 namespace c3d::platform
 {

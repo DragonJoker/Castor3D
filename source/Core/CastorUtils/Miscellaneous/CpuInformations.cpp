@@ -29,13 +29,4 @@ namespace c3d
 	}
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;
-
-	OutputStream & operator<<( OutputStream & stream, CpuInformations const & object )
-	{
-		stream << "CPU informations:" << std::endl;
-		stream << "    Vendor: " << object.getVendor() << std::endl;
-		stream << "    Model: " << object.getModel() << std::endl;
-		stream << "    Core count: " << object.getCoreCount();
-		return stream;
-	}
 }

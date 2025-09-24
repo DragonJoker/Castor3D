@@ -9,37 +9,6 @@ namespace light_streaks
 {
 	//*********************************************************************************************
 
-	KawaseData::KawaseData( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
-		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
-		, direction{ getMember< sdw::Vec2 >( "direction" ) }
-		, samples{ getMember< sdw::Int >( "samples" ) }
-		, attenuation{ getMember< sdw::Float >( "attenuation" ) }
-		, pass{ getMember< sdw::Int >( "pass" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr KawaseData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-			, "C3D_KawaseData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "pixelSize", ast::type::Kind::eVec2F );
-			result->declMember( "direction", ast::type::Kind::eVec2F );
-			result->declMember( "samples", ast::type::Kind::eInt );
-			result->declMember( "attenuation", ast::type::Kind::eFloat );
-			result->declMember( "pass", ast::type::Kind::eInt );
-		}
-
-		return result;
-	}
-
-	//*********************************************************************************************
-
 	c3d::MbString const KawaseUbo::Buffer = "Kawase";
 	c3d::MbString const KawaseUbo::Data = "c3d_kawaseData";
 

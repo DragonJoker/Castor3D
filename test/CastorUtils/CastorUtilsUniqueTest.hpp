@@ -16,8 +16,6 @@ namespace Testing
 		void doRegisterTests() override;
 
 	private:
-		void NoInstanceTest();
-		void OneInstanceTest();
 		void MultipleInstanceTest();
 		void MemoryTest();
 	};

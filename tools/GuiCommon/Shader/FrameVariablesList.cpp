@@ -28,40 +28,38 @@ namespace GuiCommon
 {
 	namespace fbv
 	{
-		typedef enum eID
+		enum class eID
 		{
-			eID_FRAME_VARIABLE,
-			eID_FRAME_VARIABLE_SEL,
-			eID_FRAME_VARIABLE_BUFFER,
-			eID_FRAME_VARIABLE_BUFFER_SEL,
-		}	eID;
+			FrameVariable,
+			FrameVariableSelected,
+			FrameVariableBuffer,
+			FrameVariableBufferSelected,
+		};
 	}
 
 	FrameVariablesList::FrameVariablesList( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, PropertiesContainer * propertiesHolder
 		, wxWindow * parent
 		, wxPoint const & ptPos
 		, wxSize const & size )
 		: wxTreeCtrl( parent, wxID_ANY, ptPos, size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_engine{ engine }
+		, m_imagesLoader{ imagesLoader }
 		, m_propertiesHolder( propertiesHolder )
 	{
 		wxBusyCursor wait;
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, fbvx::frame_variable_xpm );
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, fbvx::frame_variable_sel_xpm );
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, fbvx::frame_variable_buffer_xpm );
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, fbvx::frame_variable_buffer_sel_xpm );
-		ImagesLoader::waitAsyncLoads();
+		imagesLoader.addBitmapT( eBMP::eFrameVariable, fbvx::frame_variable_xpm );
+		imagesLoader.addBitmapT( eBMP::eFrameVariableSelected, fbvx::frame_variable_sel_xpm );
+		imagesLoader.addBitmapT( eBMP::eFrameVariableBuffer, fbvx::frame_variable_buffer_xpm );
+		imagesLoader.addBitmapT( eBMP::eFrameVariableBufferSelected, fbvx::frame_variable_buffer_sel_xpm );
+		imagesLoader.waitAsyncLoads();
 
-		wxImage * icons[] =
-		{
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_SEL ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL ),
-		};
-
-		wxImageList * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
+		c3d::Array< wxImage *, 4u > icons{ imagesLoader.getBitmapT( eBMP::eFrameVariable )
+			, imagesLoader.getBitmapT( eBMP::eFrameVariableSelected )
+			, imagesLoader.getBitmapT( eBMP::eFrameVariableBuffer )
+			, imagesLoader.getBitmapT( eBMP::eFrameVariableBufferSelected ) };
+		auto imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
 		for ( auto image : icons )
 		{
@@ -75,7 +73,7 @@ namespace GuiCommon
 			imageList->Add( *image );
 		}
 
-		AssignImageList( imageList );
+		wxTreeCtrl::AssignImageList( imageList );
 	}
 
 	FrameVariablesList::~FrameVariablesList()
@@ -99,20 +97,21 @@ namespace GuiCommon
 
 	void FrameVariablesList::unloadVariables()
 	{
-		DeleteAllItems();
+		wxTreeCtrl::DeleteAllItems();
 	}
 
 	void FrameVariablesList::doAddBuffer( wxTreeItemId id
 		, UniformBufferValues & buffer )
 	{
 		wxTreeItemId bufferId = AppendItem( id, buffer.name
-			, fbv::eID_FRAME_VARIABLE_BUFFER
-			, fbv::eID_FRAME_VARIABLE_BUFFER_SEL
+			, int( fbv::eID::FrameVariableBuffer )
+			, int( fbv::eID::FrameVariableBufferSelected )
 			, new FrameVariableBufferTreeItemProperty( m_engine
+				, m_imagesLoader
 				, m_propertiesHolder->isEditable()
 				, buffer ) );
 
-		for ( auto & uniform : buffer.uniforms )
+		for ( auto const & uniform : buffer.uniforms )
 		{
 			doAddVariable( bufferId, *uniform );
 		}
@@ -123,9 +122,10 @@ namespace GuiCommon
 	{
 		AppendItem( id
 			, uniform.getName()
-			, fbv::eID_FRAME_VARIABLE
-			, fbv::eID_FRAME_VARIABLE_SEL
+			, int( fbv::eID::FrameVariable )
+			, int( fbv::eID::FrameVariableSelected )
 			, new FrameVariableTreeItemProperty( m_engine
+				, m_imagesLoader
 				, m_propertiesHolder->isEditable()
 				, uniform ) );
 	}
@@ -147,12 +147,13 @@ namespace GuiCommon
 
 	void FrameVariablesList::onSelectItem( wxTreeEvent & event )
 	{
-		TreeItemProperty * data = static_cast< TreeItemProperty * >( event.GetClientObject() );
+		auto data = static_cast< TreeItemProperty * >( event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
 		event.Skip();
 	}
 
 	void FrameVariablesList::onMouseRButtonUp( wxTreeEvent & event )
 	{
+		event.Skip( false );
 	}
 }

@@ -76,6 +76,8 @@ namespace water::shader
 			, sdw::UIntField< "ssrBackwardStepsCount" >
 			, sdw::FloatField< "ssrDepthMult" > >
 	{
+		SDW_DeclStructInstance( , WaterProfile );
+
 		WaterProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -117,7 +119,7 @@ namespace water::shader
 			, bool enable = true );
 
 		static c3d::ShaderBufferUPtr create( c3d::RenderDevice const & device );
-		static void update( c3d::ShaderBuffer & buffer
+		static void update( c3d::ShaderBuffer const & buffer
 			, c3d::Pass const & pass );
 		static c3ds::BufferBaseUPtr declare( sdw::ShaderWriter & writer
 			, uint32_t binding

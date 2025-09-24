@@ -37,27 +37,19 @@ namespace c3d
 	private:
 		CU_API Illumination( LuminousIntensity const & intensity, float metres )noexcept;
 
+		friend bool operator==( Illumination const & lhs, Illumination const & rhs )noexcept
+		{
+			return std::abs( lhs.lux() - rhs.lux() ) < std::numeric_limits< float >::epsilon();
+		}
+
+		friend constexpr auto operator<=>( Illumination const & lhs, Illumination const & rhs )noexcept
+		{
+			return lhs.lux() <=> rhs.lux();
+		}
+
+	private:
 		float m_lux{};
-
-		friend bool operator==( Illumination const & lhs, Illumination const & rhs )noexcept;
 	};
-	/**
-	 *\~english
-	 *\name Comparison operators.
-	 *\~french
-	 *\name Opérateurs de comparaison.
-	 **/
-	/**@{*/
-	inline bool operator==( Illumination const & lhs, Illumination const & rhs )noexcept
-	{
-		return std::abs( lhs.lux() - rhs.lux() ) < std::numeric_limits< float >::epsilon();
-	}
-
-	inline auto operator<=>( Illumination const & lhs, Illumination const & rhs )noexcept
-	{
-		return lhs.lux() <=> rhs.lux();
-	}
-	/**@}*/
 }
 
 #endif

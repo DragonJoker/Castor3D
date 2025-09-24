@@ -30,7 +30,7 @@ namespace c3d
 	{
 	}
 
-	void ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::initialise( RenderDevice const & device )
+	void ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::initialise()
 	{
 		if ( !m_lightBuffer )
 		{
@@ -84,7 +84,7 @@ namespace c3d
 		}
 	}
 
-	void ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::doUnregisterLightGroup( LightGroup & light )
+	void ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::doUnregisterLightGroup( LightGroup const & light )
 	{
 		auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
 		auto it = std::find_if( typeLights.begin(), typeLights.end()

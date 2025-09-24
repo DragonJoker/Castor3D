@@ -38,14 +38,10 @@ namespace c3d
 			if ( auto block{ beginBlock( file, cuT( "texture_unit" ) ) } )
 			{
 				if ( unit.getSampler().getSampler() && defaultSampler != &unit.getSampler().getSampler() )
-				{
 					result = writeName( file, cuT( "sampler" ), makeString( unit.getSampler().getName() ) );
-				}
 
 				if ( result )
-				{
-					result = writeName( file, cuT( "texture" ), unit.getTextureName() );
-				}
+					result = result && writeName( file, cuT( "texture" ), unit.getTextureName() );
 
 				auto dimensions = unit.getTextureDimensions();
 
@@ -53,14 +49,10 @@ namespace c3d
 					result
 					&& unit.getTextureMipmapCount() > 1
 					&& unit.getTextureMipmapCount() < getMipLevels( dimensions, format ) )
-				{
 					result = write( file, cuT( "levels_count" ), unit.getTextureMipmapCount() );
-				}
 
 				if ( result )
-				{
 					result = writeOpt( file, cuT( "texcoord_set" ), unit.getTexcoordSet(), 0u );
-				}
 
 				if ( result )
 				{
@@ -70,20 +62,16 @@ namespace c3d
 					auto scale = Point3f{ transform.scale };
 
 					if ( config.tileSet->z > 1 || config.tileSet->w > 1 )
-					{
 						result = writeNamedSub( file, cuT( "tile" ), Point2ui{ config.tileSet } );
-					}
 
 					if ( translate != Point3f{}
 						|| rotate != 0.0f
 						|| scale != Point3f{ 1.0f, 1.0f, 1.0f } )
 					{
 						if ( auto animBlock{ beginBlock( file, cuT( "transform" ) ) } )
-						{
 							result = writeNamedSubOpt( file, cuT( "translate" ), translate, Point3f{} )
 								&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
 								&& writeNamedSubOpt( file, cuT( "scale" ), scale, Point3f{ 1.0f, 1.0f, 1.0f } );
-						}
 					}
 				}
 
@@ -103,19 +91,15 @@ namespace c3d
 						if ( auto animBlock{ beginBlock( file, cuT( "animation" ) ) } )
 						{
 							if ( anim.isTileAnimated() )
-							{
 								result = write( file, cuT( "tiles" ), anim.isTileAnimated() );
-							}
 
 							if ( translate != Point2f{}
 								|| rotate != 0.0f
 								|| scale != Point2f{} )
-							{
 								result = result
 									&& writeNamedSubOpt( file, cuT( "translate" ), translate, Point2f{} )
 									&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
 									&& writeNamedSubOpt( file, cuT( "scale" ), scale, Point2f{} );
-							}
 						}
 					}
 				}

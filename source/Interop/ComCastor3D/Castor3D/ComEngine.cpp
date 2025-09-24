@@ -11,18 +11,6 @@
 
 #include <CCastor3D/Castor3DPlatformTypes.h>
 
-#undef max
-#undef min
-#undef abs
-
-#define CASTOR3D_THREADED false
-
-#if defined( NDEBUG )
-static const int CASTOR_WANTED_FPS	= 120;
-#else
-static const int CASTOR_WANTED_FPS	= 30;
-#endif
-
 namespace CastorCom
 {
 	static const tstring ERROR_RENDERER_NOT_LOADED = _T( "The renderer couldn't be loaded" );

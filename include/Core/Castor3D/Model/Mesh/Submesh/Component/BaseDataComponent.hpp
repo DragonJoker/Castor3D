@@ -17,7 +17,7 @@ namespace c3d
 	C3D_API void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
 		, Point4fArray const & data
-		, Point4fArray & up
+		, Point4fArray const & up
 		, UploadData & uploader );
 	C3D_API void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh

@@ -18,6 +18,8 @@ namespace c3d::shader
 		, sdw::BooleanField< "valid" >
 		, sdw::FloatField< "t" > >
 	{
+		SDW_DeclStructInstance( C3D_API, Intersection );
+
 		C3D_API Intersection( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -60,6 +62,8 @@ namespace c3d::shader
 		, sdw::Vec3Field< "origin" >
 		, sdw::Vec3Field< "direction" > >
 	{
+		SDW_DeclStructInstance( C3D_API, Ray );
+
 		C3D_API Ray( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )

@@ -45,6 +45,8 @@ namespace atmosphere_scattering
 			, sdw::Vec3Field< "newMultiScatStep0Out" >
 			, sdw::Vec3Field< "newMultiScatStep1Out" > >
 	{
+		SDW_DeclStructInstance( , SingleScatteringResult );
+
 		SingleScatteringResult( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -83,6 +85,8 @@ namespace atmosphere_scattering
 			, sdw::Vec3Field< "extinctionOzo" >
 			, sdw::Vec3Field< "albedo" > >
 	{
+		SDW_DeclStructInstance( , MediumSampleRGB );
+
 		MediumSampleRGB( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -207,7 +211,7 @@ namespace atmosphere_scattering
 			return atmosphereData.topRadius();
 		}
 
-		auto getAtmosphereH( sdw::Float const d )const noexcept
+		auto getAtmosphereH( sdw::Float const & d )const noexcept
 		{
 			return sqrt( max( 0.0_f, d * d - getPlanetRadius() * getPlanetRadius() ) );
 		}
@@ -230,19 +234,25 @@ namespace atmosphere_scattering
 		auto getCameraPosition()const noexcept
 		{
 			CU_Require( settings.cameraData );
-			return settings.cameraData->position();
+			return settings.cameraData
+				? settings.cameraData->position()
+				: vec3( 0.0_f );
 		}
 
 		auto camProjToWorld( sdw::Vec4 const & clipSpace )const noexcept
 		{
 			CU_Require( settings.cameraData );
-			return settings.cameraData->camProjToWorld( clipSpace );
+			return  settings.cameraData
+				? settings.cameraData->camProjToWorld( clipSpace )
+				: clipSpace;
 		}
 
 		auto objProjToWorld( sdw::Vec4 const & clipSpace )const noexcept
 		{
 			CU_Require( settings.cameraData );
-			return settings.cameraData->objProjToWorld( clipSpace );
+			return settings.cameraData
+				? settings.cameraData->objProjToWorld( clipSpace )
+				: clipSpace;
 		}
 
 		void setTransmittanceMap( sdw::CombinedImage2DRgba16 const & value )
@@ -293,10 +303,10 @@ namespace atmosphere_scattering
 			, sdw::Float const & cosTheta );
 
 		RetMediumSampleRGB sampleMediumRGB( sdw::Vec3 const & worldPos );
-		sdw::Float rayleighPhase( sdw::Float const & cosTheta );
+		static sdw::Float rayleighPhase( sdw::Float const & cosTheta );
 		// We should precompute those terms from resolutions (Or set resolution as #defined constants)
-		sdw::Float fromUnitToSubUvs( sdw::Float u, sdw::Float resolution );
-		sdw::Float fromSubUvsToUnit( sdw::Float u, sdw::Float resolution );
+		static sdw::Float fromUnitToSubUvs( sdw::Float const & u, sdw::Float const & resolution );
+		static sdw::Float fromSubUvsToUnit( sdw::Float const & u, sdw::Float const & resolution );
 
 		sdw::RetVec3 getWorldPos( sdw::Float const & depth
 			, sdw::Vec2 const & pixPos
@@ -315,19 +325,17 @@ namespace atmosphere_scattering
 		sdw::Void uvToLutTransmittanceParams( sdw::Float & viewHeight
 			, sdw::Float & viewZenithCosAngle
 			, sdw::Vec2 const & uv );
-		sdw::Void lutTransmittanceParamsToUv( sdw::Float const & viewHeight
-			, sdw::Float const & viewZenithCosAngle
-			, sdw::Vec2 & uv );
+		sdw::RetVec2 lutTransmittanceParamsToUv( sdw::Float const & viewHeight
+			, sdw::Float const & viewZenithCosAngle );
 		sdw::Void uvToSkyViewLutParams( sdw::Float & viewZenithCosAngle
 			, sdw::Float & lightViewCosAngle
 			, sdw::Float const & viewHeight
 			, sdw::Vec2 const & uv
 			, sdw::Vec2 const & size );
-		sdw::Void skyViewLutParamsToUv( sdw::Boolean const & intersectGround
+		sdw::RetVec2 skyViewLutParamsToUv( sdw::Boolean const & intersectGround
 			, sdw::Float const & viewZenithCosAngle
 			, sdw::Float const & lightViewCosAngle
 			, sdw::Float const & viewHeight
-			, sdw::Vec2 & uv
 			, sdw::Vec2 const & size );
 
 	private:
@@ -345,7 +353,7 @@ namespace atmosphere_scattering
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba16 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
-		c3d::shader::Shadow * shadows;
+		c3d::shader::Shadow * shadows{};
 
 	private:
 		sdw::Function< Ray
@@ -382,22 +390,20 @@ namespace atmosphere_scattering
 			, sdw::OutFloat
 			, sdw::OutFloat
 			, sdw::InVec2 > m_uvToLutTransmittanceParams;
-		sdw::Function< sdw::Void
+		sdw::Function< sdw::Vec2
 			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::OutVec2 > m_lutTransmittanceParamsToUv;
+			, sdw::InFloat > m_lutTransmittanceParamsToUv;
 		sdw::Function< sdw::Void
 			, sdw::OutFloat
 			, sdw::OutFloat
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InVec2 > m_uvToSkyViewLutParams;
-		sdw::Function< sdw::Void
+		sdw::Function< sdw::Vec2
 			, sdw::InBoolean
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
-			, sdw::OutVec2
 			, sdw::InVec2 > m_skyViewLutParamsToUv;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat

@@ -37,7 +37,7 @@ namespace c3d
 			, Texture const & gi
 			, Texture const & nml
 			, Texture & dst );
-		C3D_API void accept( ConfigurationVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 
 	private:
 		ShaderModule m_vertexShader;

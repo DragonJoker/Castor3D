@@ -145,6 +145,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserArmatureEnd, SkeletonContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -317,7 +318,7 @@ namespace c3d
 
 	Skeleton::Skeleton( String name
 		, Scene & scene )
-		: Named{ name }
+		: Named{ c3d::move( name ) }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
 	{

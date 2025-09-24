@@ -21,6 +21,7 @@ See LICENSE file in root folder
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
 
+#include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Descriptor/WriteDescriptorSet.hpp>
 
 #include <functional>
@@ -1113,6 +1114,18 @@ namespace c3d
 	C3D_API ashes::ImageView makeSampledImageView( Texture const & texture );
 	C3D_API ashes::ImageView makeWholeImageView( Texture const & texture );
 	C3D_API void printGraph( crg::RunnableGraph const & graph );
+	C3D_API VkSampler getSampler( ashes::Sampler const & sampler )noexcept;
+	C3D_API VkImageView getImageView( ashes::ImageView const & view )noexcept;
+	C3D_API VkBufferView getBufferView( ashes::BufferView const & view )noexcept;
+	C3D_API DeviceSize getAlignedSize( ashes::UniformBuffer const & buffer )noexcept;
+	C3D_API VkBuffer getBuffer( ashes::BufferBase const & buffer )noexcept;
+	C3D_API VkBuffer getBuffer( ashes::UniformBuffer const & buffer )noexcept;
+	C3D_API VkBuffer getBuffer( BufferBase const & buffer )noexcept;
+	C3D_API DeviceSize getOffset( ashes::BufferView const & view )noexcept;
+	C3D_API DeviceSize getRange( ashes::BufferView const & view )noexcept;
+	C3D_API VkBufferUsageFlags getUsageFlags( ashes::BufferBase const & buffer )noexcept;
+	C3D_API BufferSubresourceRange const & getSubresourceRange( BufferBase const & buffer )noexcept;
+	using crg::getSubresourceRange;
 	/**
 	*\~english
 	*\brief
@@ -1188,9 +1201,18 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeStorageImageDescriptorWrite( VkImageView view
+		, BindingT dstBinding
+		, uint32_t dstArrayElement = 0u )
+	{
+		auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
+		result.imageInfo.emplace_back() = { VkSampler{}, view, VK_IMAGE_LAYOUT_GENERAL };
+		return result;
+	}
 	/**
 	*\~english
 	*\brief
@@ -1215,61 +1237,19 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
-		, VkSampler const & sampler
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
-	/**
-	*\~english
-	*\brief
-	*	Creates a descriptor write for storage image.
-	*\param[in] view
-	*	The image view.
-	*\param[in] dstBinding
-	*	The binding inside the descriptor set.
-	*\param[in] dstArrayElement
-	*	The array element index.
-	*\~french
-	*\brief
-	*	Crée un descriptor write pour une storage image.
-	*\param[in] view
-	*	La vue sur l'image.
-	*\param[in] dstBinding
-	*	Le binding dans le descriptor set.
-	*\param[in] dstArrayElement
-	*	L'indice dans le tableau d'éléments.
-	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
-	/**
-	*\~english
-	*\brief
-	*	Creates a descriptor write for combined image sampler.
-	*\param[in] view
-	*	The image view.
-	*\param[in] sampler
-	*	The sampler.
-	*\param[in] dstBinding
-	*	The binding inside the descriptor set.
-	*\param[in] dstArrayElement
-	*	The array element index.
-	*\~french
-	*\brief
-	*	Crée un descriptor write pour un sampler et une image combinés.
-	*\param[in] view
-	*	La vue sur l'image.
-	*\param[in] sampler
-	*	Le sampler.
-	*\param[in] dstBinding
-	*	Le binding dans le descriptor set.
-	*\param[in] dstArrayElement
-	*	L'indice dans le tableau d'éléments.
-	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
-		, ashes::Sampler const & sampler
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView view
+		, VkSampler sampler
+		, BindingT dstBinding
+		, uint32_t dstArrayElement = 0u )
+	{
+		auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
+		result.imageInfo.emplace_back() = { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+		return result;
+	}
 	/**
 	*\~english
 	*\brief
@@ -1298,11 +1278,22 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
-		, uint32_t dstBinding
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeUniformBufferDescriptorWrite( ashes::UniformBuffer const & buffer
+		, BindingT dstBinding
 		, VkDeviceSize elemOffset
 		, VkDeviceSize elemRange
-		, uint32_t dstArrayElement = 0u );
+		, uint32_t dstArrayElement = 0u )
+	{
+		auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
+		result.bufferInfo.emplace_back() = { getBuffer( buffer )
+			, getAlignedSize( buffer ) * elemOffset
+			, getAlignedSize( buffer ) * elemRange };
+		return result;
+	}
 	/**
 	*\~english
 	*\brief
@@ -1331,11 +1322,62 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & storageBuffer
-		, uint32_t dstBinding
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeStorageBufferDescriptorWrite( VkBuffer storageBuffer
+		, BindingT dstBinding
 		, VkDeviceSize byteOffset
 		, VkDeviceSize byteRange
-		, uint32_t dstArrayElement = 0u );
+		, uint32_t dstArrayElement = 0u )
+	{
+		auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.emplace_back() = { storageBuffer
+			, byteOffset
+			, byteRange };
+		return result;
+	}
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage buffer.
+	*\param[in] storageBuffer
+	*	The storage buffer.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] byteOffset
+	*	The offset, expressed in bytes.
+	*\param[in] byteRange
+	*	The range, expressed in bytes.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un storage buffer.
+	*\param[in] storageBuffer
+	*	Le storage buffer.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] byteOffset
+	*	L'offset, exprimé en octets.
+	*\param[in] byteRange
+	*	L'intervalle, exprimé en octets.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeStorageBufferDescriptorWrite( ashes::BufferBase const & storageBuffer
+		, BindingT dstBinding
+		, VkDeviceSize byteOffset
+		, VkDeviceSize byteRange
+		, uint32_t dstArrayElement = 0u )
+	{
+		return makeStorageBufferDescriptorWrite( getBuffer( storageBuffer )
+			, dstBinding
+			, byteOffset, byteRange
+			, dstArrayElement );
+	}
 	/**
 	*\~english
 	*\brief
@@ -1356,9 +1398,17 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( BufferBase const & storageBuffer
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeStorageBufferDescriptorWrite( BufferBase const & storageBuffer
+		, BindingT dstBinding
+		, uint32_t dstArrayElement = 0u )
+	{
+		auto & range = getSubresourceRange( storageBuffer );
+		return makeStorageBufferDescriptorWrite( getBuffer( storageBuffer )
+			, uint32_t( dstBinding )
+			, range.offset, range.size
+			, dstArrayElement );
+	}
 	/**
 	*\~english
 	*\brief
@@ -1387,14 +1437,14 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	template< typename DataT >
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::Buffer< DataT > const & storageBuffer
-		, uint32_t dstBinding
+	template< typename DataT, typename BindingT >
+	ashes::WriteDescriptorSet makeStorageBufferDescriptorWrite( ashes::Buffer< DataT > const & storageBuffer
+		, BindingT dstBinding
 		, VkDeviceSize elemOffset
 		, VkDeviceSize elemRange
 		, uint32_t dstArrayElement = 0u )
 	{
-		return makeDescriptorWrite( storageBuffer.getBuffer()
+		return makeStorageBufferDescriptorWrite( storageBuffer.getBuffer()
 			, dstBinding
 			, elemOffset * sizeof( DataT )
 			, elemRange * sizeof( DataT )
@@ -1424,10 +1474,24 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
+	template< typename BindingT >
+	ashes::WriteDescriptorSet makeTexelBufferDescriptorWrite( ashes::BufferBase const & buffer
 		, ashes::BufferView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
+		, BindingT dstBinding
+		, uint32_t dstArrayElement = 0u )
+	{
+		auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
+			, dstArrayElement
+			, 1u
+			, ( ( getUsageFlags( buffer ) & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
+				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ), };
+		result.bufferInfo.emplace_back() = { getBuffer( buffer )
+			, getOffset( view )
+			, getRange( view ) };
+		result.texelBufferView.push_back( getBufferView( view ) );
+		return result;
+	}
 	/**
 	*\~english
 	*\brief
@@ -1452,13 +1516,13 @@ namespace c3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	template< typename DataT >
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::Buffer< DataT > const & buffer
+	template< typename DataT, typename BindingT >
+	ashes::WriteDescriptorSet makeTexelBufferDescriptorWrite( ashes::Buffer< DataT > const & buffer
 		, ashes::BufferView const & view
-		, uint32_t dstBinding
+		, BindingT dstBinding
 		, uint32_t dstArrayElement = 0u )
 	{
-		return makeDescriptorWrite( buffer.getBuffer()
+		return makeTexelBufferDescriptorWrite( buffer.getBuffer()
 			, view
 			, dstBinding
 			, dstArrayElement );

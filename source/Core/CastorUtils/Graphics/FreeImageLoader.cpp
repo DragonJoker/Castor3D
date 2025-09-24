@@ -128,9 +128,10 @@ namespace c3d
 	{
 #if C3D_UseFreeImage
 
+		ByteArray dataCopy{ data, data + size }; // Unnecessary copy used to prevent a const_cast when providing the data to FreeImage_OpenMemory...
 		PixelFormat sourceFmt{ PixelFormat::eR8G8B8A8_UNORM };
 		FreeImage_SetOutputMessage( freeimgl::outputMessageFunction );
-		auto fiMemory = FreeImage_OpenMemory( const_cast< uint8_t * >( data ), size );
+		auto fiMemory = FreeImage_OpenMemory( dataCopy.data(), size );
 		FREE_IMAGE_FORMAT fiFormat = FreeImage_GetFileTypeFromMemory( fiMemory, 0 );
 
 		if ( fiFormat == FIF_UNKNOWN || !FreeImage_FIFSupportsReading( fiFormat ) )
@@ -173,8 +174,6 @@ namespace c3d
 			sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
 			needsComponentSwap = true;
 			break;
-		case FIT_RGB16:
-		case FIT_RGBA16:
 		default:
 			sourceFmt = freeimgl::convertTo32Bits( fiImage );
 			needsComponentSwap = true;

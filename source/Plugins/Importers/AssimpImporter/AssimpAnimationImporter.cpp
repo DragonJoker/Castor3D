@@ -85,11 +85,10 @@ namespace c3d_assimp
 		}
 
 		auto & aiAnimation = *it->second;
-		auto & aiNode = *file.getAiScene().mRootNode;
 		auto [frameCount, minFrameTicks, maxFrameTicks] = getAnimationFrameTicks( aiAnimation );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
-			: 25ll;
+			: 25LL;
 		SkeletonAnimationKeyFrameMap keyframes;
 		SkeletonAnimationObjectSet notAnimated;
 		doProcessSkeletonAnimationNodes( animation
@@ -97,7 +96,6 @@ namespace c3d_assimp
 			, fromAssimp( maxFrameTicks, ticksPerSecond )
 			, ticksPerSecond
 			, skeleton
-			, aiNode
 			, aiAnimation
 			, keyframes
 			, notAnimated );
@@ -106,13 +104,13 @@ namespace c3d_assimp
 		{
 			auto & objTransform = object->getNodeTransform();
 
-			for ( auto & keyFrame : keyframes )
+			for ( auto const & [_, keyFrame] : keyframes )
 			{
-				auto kfit = keyFrame.second->find( *object );
+				auto kfit = keyFrame->find( *object );
 
-				if ( kfit == keyFrame.second->end() )
+				if ( kfit == keyFrame->end() )
 				{
-					keyFrame.second->addAnimationObject( *object
+					keyFrame->addAnimationObject( *object
 						, objTransform.translate
 						, objTransform.rotate
 						, objTransform.scale );
@@ -126,16 +124,16 @@ namespace c3d_assimp
 			}
 		}
 
-		for ( auto & keyFrame : keyframes )
+		for ( auto & [_, keyFrame] : keyframes )
 		{
-			animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame.second ) );
+			animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame ) );
 		}
 		return true;
 	}
 
 	bool AssimpAnimationImporter::doImportMesh( c3d::MeshAnimation & animation )
 	{
-		auto & file = static_cast< AssimpImporterFile & >( *m_file );
+		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = animation.getName();
 		auto & mesh = static_cast< c3d::Mesh const & >( *animation.getAnimable() );
 
@@ -198,7 +196,7 @@ namespace c3d_assimp
 		auto [frameCount, minFrameTicks, maxFrameTicks] = getNodeAnimFrameTicks( aiNodeAnim );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
-			: 25ll;
+			: 25LL;
 		SceneNodeAnimationKeyFrameMap keyframes;
 		processAnimationNodeKeys( aiNodeAnim
 			, getEngine()->getWantedFps()
@@ -215,9 +213,9 @@ namespace c3d_assimp
 				keyframe.setTransform( position, orientation, scale );
 			} );
 
-		for ( auto & keyFrame : keyframes )
+		for ( auto & [_, keyFrame] : keyframes )
 		{
-			animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame.second ) );
+			animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame ) );
 		}
 
 		return true;
@@ -228,10 +226,9 @@ namespace c3d_assimp
 		, c3d::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, c3d::Skeleton const & skeleton
-		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation
 		, SkeletonAnimationKeyFrameMap & keyFrames
-		, SkeletonAnimationObjectSet & notAnimated )
+		, SkeletonAnimationObjectSet & notAnimated )const
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 

@@ -27,7 +27,8 @@ namespace test_launcher
 
 	private:
 		bool doParseCommandLine();
-		c3d::EngineUPtr doInitialiseCastor();
+		c3d::EngineUPtr doInitialiseCastor()const;
+		void doRunTest( c3d::Engine & engine );
 
 		bool OnInit() override;
 		int OnRun() override;

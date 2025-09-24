@@ -50,38 +50,39 @@ namespace c3d
 		alignas( alignof( uint32_t ) ) bool enableHueShift{ true };
 		alignas( alignof( uint32_t ) ) bool enableContrast{ true };
 		alignas( alignof( uint32_t ) ) bool pad0{};
-	};
 
-	inline bool operator==( ColourGradingConfig const & lhs, ColourGradingConfig const & rhs )noexcept
-	{
-		return lhs.whiteBalance == rhs.whiteBalance
-			&& lhs.postExposure == rhs.postExposure
-			&& lhs.colourFilter == rhs.colourFilter
-			&& lhs.midGray == rhs.midGray
-			&& lhs.splitToningShadows == rhs.splitToningShadows
-			&& lhs.contrast == rhs.contrast
-			&& lhs.splitToningHighlights == rhs.splitToningHighlights
-			&& lhs.splitToningBalance == rhs.splitToningBalance
-			&& lhs.channelMixRed == rhs.channelMixRed
-			&& lhs.saturation == rhs.saturation
-			&& lhs.channelMixGreen == rhs.channelMixGreen
-			&& lhs.shadowsStart == rhs.shadowsStart
-			&& lhs.channelMixBlue == rhs.channelMixBlue
-			&& lhs.shadowsEnd == rhs.shadowsEnd
-			&& lhs.shadows == rhs.shadows
-			&& lhs.highlightsStart == rhs.highlightsStart
-			&& lhs.midtones == rhs.midtones
-			&& lhs.highlightsEnd == rhs.highlightsEnd
-			&& lhs.highlights == rhs.highlights
-			&& lhs.hueShift == rhs.hueShift
-			&& lhs.enabled == rhs.enabled
-			&& lhs.enableSplitToning == rhs.enableSplitToning
-			&& lhs.enableShadowMidToneHighlight == rhs.enableShadowMidToneHighlight
-			&& lhs.enableChannelMix == rhs.enableChannelMix
-			&& lhs.enableWhiteBalance == rhs.enableWhiteBalance
-			&& lhs.enableHueShift == rhs.enableHueShift
-			&& lhs.enableContrast == rhs.enableContrast;
-	}
+	private:
+		friend bool operator==( ColourGradingConfig const & lhs, ColourGradingConfig const & rhs )noexcept
+		{
+			return lhs.whiteBalance == rhs.whiteBalance
+				&& lhs.postExposure == rhs.postExposure
+				&& lhs.colourFilter == rhs.colourFilter
+				&& lhs.midGray == rhs.midGray
+				&& lhs.splitToningShadows == rhs.splitToningShadows
+				&& lhs.contrast == rhs.contrast
+				&& lhs.splitToningHighlights == rhs.splitToningHighlights
+				&& lhs.splitToningBalance == rhs.splitToningBalance
+				&& lhs.channelMixRed == rhs.channelMixRed
+				&& lhs.saturation == rhs.saturation
+				&& lhs.channelMixGreen == rhs.channelMixGreen
+				&& lhs.shadowsStart == rhs.shadowsStart
+				&& lhs.channelMixBlue == rhs.channelMixBlue
+				&& lhs.shadowsEnd == rhs.shadowsEnd
+				&& lhs.shadows == rhs.shadows
+				&& lhs.highlightsStart == rhs.highlightsStart
+				&& lhs.midtones == rhs.midtones
+				&& lhs.highlightsEnd == rhs.highlightsEnd
+				&& lhs.highlights == rhs.highlights
+				&& lhs.hueShift == rhs.hueShift
+				&& lhs.enabled == rhs.enabled
+				&& lhs.enableSplitToning == rhs.enableSplitToning
+				&& lhs.enableShadowMidToneHighlight == rhs.enableShadowMidToneHighlight
+				&& lhs.enableChannelMix == rhs.enableChannelMix
+				&& lhs.enableWhiteBalance == rhs.enableWhiteBalance
+				&& lhs.enableHueShift == rhs.enableHueShift
+				&& lhs.enableContrast == rhs.enableContrast;
+		}
+	};
 }
 
 #pragma warning( pop )

@@ -42,83 +42,83 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::doRegisterTests()
 	{
-		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
-		doRegisterTest( "TransformDecompose", std::bind( &CastorUtilsMatrixTest::TransformDecompose, this ) );
+		doRegisterTest( "MatrixInversion", [this](){ MatrixInversion(); } );
+		doRegisterTest( "TransformDecompose", [this](){ TransformDecompose(); } );
 
 #if defined( CASTOR_USE_GLM )
 
-		doRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
-		doRegisterTest( "MatrixNormalComparison", std::bind( &CastorUtilsMatrixTest::MatrixNormalComparison, this ) );
-		doRegisterTest( "MatrixMultiplicationComparison", std::bind( &CastorUtilsMatrixTest::MatrixMultiplicationComparison, this ) );
-		doRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
-		doRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
+		doRegisterTest( "MatrixInversionComparison", [this](){ MatrixInversionComparison(); } );
+		doRegisterTest( "MatrixNormalComparison", [this](){ MatrixNormalComparison(); } );
+		doRegisterTest( "MatrixMultiplicationComparison", [this](){ MatrixMultiplicationComparison(); } );
+		doRegisterTest( "TransformationMatrixComparison", [this](){ TransformationMatrixComparison(); } );
+		doRegisterTest( "ProjectionMatrixComparison", [this](){ ProjectionMatrixComparison(); } );
 
 #endif
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix3x3f const & lhs, Matrix3x3f const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix3x3f const & lhs, Matrix3x3f const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix3x3d const & lhs, Matrix3x3d const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix3x3d const & lhs, Matrix3x3d const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix4x4f const & lhs, Matrix4x4f const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix4x4f const & lhs, Matrix4x4f const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, Matrix4x4d const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, Matrix4x4d const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( c3d::Point3d const & lhs, c3d::Point3d const & rhs )
+	bool CastorUtilsMatrixTest::compare( c3d::Point3d const & lhs, c3d::Point3d const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( c3d::Point3f const & lhs, c3d::Point3f const & rhs )
+	bool CastorUtilsMatrixTest::compare( c3d::Point3f const & lhs, c3d::Point3f const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( c3d::Quaternion const & lhs, c3d::Quaternion const & rhs )
+	bool CastorUtilsMatrixTest::compare( c3d::Quaternion const & lhs, c3d::Quaternion const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
 #if defined( CASTOR_USE_GLM )
 
-	bool CastorUtilsMatrixTest::compare( Matrix4x4f const & lhs, glm::mat4x4 const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix4x4f const & lhs, glm::mat4x4 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, glm::mat4x4 const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, glm::mat4x4 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix3x3f const & lhs, glm::mat3x3 const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix3x3f const & lhs, glm::mat3x3 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix3x3d const & lhs, glm::mat3x3 const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix3x3d const & lhs, glm::mat3x3 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix2x2f const & lhs, glm::mat2x2 const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix2x2f const & lhs, glm::mat2x2 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( Matrix2x2d const & lhs, glm::mat2x2 const & rhs )
+	bool CastorUtilsMatrixTest::compare( Matrix2x2d const & lhs, glm::mat2x2 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
@@ -265,8 +265,9 @@ namespace Testing
 	{
 		CT_ON("	Translate" );
 
-		for ( float r = 0; r < 100; r += 1 )
+		for ( uint32_t i = 0; i < 100; i += 1 )
 		{
+			auto r = float( i );
 			Point3f pt( r, r, r );
 			Matrix4x4f mtx( 1 );
 			matrix::translate( mtx, pt );
@@ -277,8 +278,9 @@ namespace Testing
 
 		CT_ON("	Scale" );
 
-		for ( float r = 0; r < 100; r += 1 )
+		for ( uint32_t i = 0; i < 100; i += 1 )
 		{
+			auto r = float( i );
 			Point3f pt( r, r, r );
 			Matrix4x4f mtx( 1 );
 			matrix::scale( mtx, pt );
@@ -384,12 +386,12 @@ namespace Testing
 #endif
 	}
 
-	void CastorUtilsMatrixBench::MatrixMultiplicationsCastor()
+	void CastorUtilsMatrixBench::MatrixMultiplicationsCastor()const
 	{
 		doNotOptimizeAway( m_mtx1 * m_mtx2 );
 	}
 
-	void CastorUtilsMatrixBench::MatrixInversionCastor()
+	void CastorUtilsMatrixBench::MatrixInversionCastor()const
 	{
 		doNotOptimizeAway( m_mtx1.getInverse() );
 	}
@@ -401,11 +403,11 @@ namespace Testing
 
 #if defined( CASTOR_USE_GLM )
 
-	void CastorUtilsMatrixBench::MatrixMultiplicationsGlm()
+	void CastorUtilsMatrixBench::MatrixMultiplicationsGlm()const
 	{
 		doNotOptimizeAway( m_mtx1glm * m_mtx2glm );
 	}
-	void CastorUtilsMatrixBench::MatrixInversionGlm()
+	void CastorUtilsMatrixBench::MatrixInversionGlm()const
 	{
 		doNotOptimizeAway( glm::inverse( m_mtx1glm ) );
 	}

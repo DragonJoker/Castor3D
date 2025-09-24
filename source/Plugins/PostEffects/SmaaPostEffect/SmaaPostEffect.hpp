@@ -57,8 +57,8 @@ namespace smaa
 		 */
 		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs )override;
 
-		c3d::Texture const * doGetPredicationTexture();
-		c3d::Texture const * doGetVelocityView();
+		c3d::Texture const * doGetPredicationTexture()const;
+		c3d::Texture const * doGetVelocityView()const;
 
 	public:
 		static c3d::String Type;

@@ -64,19 +64,38 @@ namespace c3d
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding createLayoutBinding( BindingT binding
 			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| VK_SHADER_STAGE_GEOMETRY_BIT
 				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				| VK_SHADER_STAGE_VERTEX_BIT ) )const;
+				| VK_SHADER_STAGE_VERTEX_BIT ) )const
+		{
+			return m_buffer.createLayoutBinding( binding, stages );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates a frame pass binding.
+		 *\~french
+		 *\brief		Crée une attache de frame pass.
+		 */
+		template< typename BindingT >
+		void createPassBinding( crg::FramePass & pass, BindingT binding )const
+		{
+			return m_buffer.createPassBinding( pass, binding );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.
 		 *\~french
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getBinding( BindingT binding )const
+		{
+			return m_buffer.getBinding( binding );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.

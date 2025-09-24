@@ -104,7 +104,7 @@ namespace c3d
 		 *\param[in]	graph			Le graphe parent.
 		 */
 		C3D_API void record( crg::ResourcesCache & resources
-			, crg::FramePassGroup & graph );
+			, crg::FramePassGroup & graph )const;
 		/**
 		 *\~english
 		 *\brief		Records the components's dependencies.
@@ -154,7 +154,7 @@ namespace c3d
 		 *\param[in]	precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		C3D_API int isInMyPoints( Point3f const & position, double precision );
+		C3D_API int isInMyPoints( Point3f const & position, double precision )const;
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -335,7 +335,7 @@ namespace c3d
 		C3D_API void setBaseData( SubmeshData submeshData, Point3fArray data );
 		C3D_API void setBaseData( SubmeshData submeshData, Point4fArray data );
 		C3D_API SubmeshComponentRPtr addComponent( SubmeshComponentUPtr component );
-		C3D_API void setIndexCount( uint32_t value );
+		C3D_API void setIndexCount( uint32_t value )const;
 		void disableSceneUpdate();
 		void needsUpdate();
 		void addPoints( Vector< InterleavedVertex > const & vertices );
@@ -432,8 +432,8 @@ namespace c3d
 
 	private:
 		C3D_API void doInstantiate( Geometry const * geometry
-			, MaterialObs oldMaterial
-			, MaterialObs newMaterial
+			, Material const * oldMaterial
+			, Material * newMaterial
 			, bool update );
 		void doCreateDescriptorLayout( RenderDevice const & device );
 

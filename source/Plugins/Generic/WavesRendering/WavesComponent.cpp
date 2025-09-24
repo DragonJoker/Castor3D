@@ -51,98 +51,73 @@ namespace waves
 		static CU_ImplementAttributeParserNewBlock( parserWavesComponent, c3d::MeshContext, WavesContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "Mesh not initialised" ) );
-			}
-
-			newBlockContext->mesh = blockContext->mesh;
+			else
+				newBlockContext->mesh = blockContext->mesh;
 		}
 		CU_EndAttributePushNewBlock( WavesSection::eWaves )
 
 		static CU_ImplementAttributeParserBlock( parserWidthSubdiv, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				blockContext->parameters.add( cuT( "width_subdiv" )
 					, c3d::string::toString( params[0]->get< uint32_t >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserDepthSubdiv, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				blockContext->parameters.add( cuT( "depth_subdiv" )
 					, c3d::string::toString( params[0]->get< uint32_t >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserWidth, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				blockContext->parameters.add( cuT( "width" )
 					, c3d::string::toString( params[0]->get< uint32_t >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserDepth, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				blockContext->parameters.add( cuT( "depth" )
 					, c3d::string::toString( params[0]->get< uint32_t >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserTessellationFactor, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				blockContext->config.tessellationFactor = float( params[0]->get< uint32_t >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserDampeningFactor, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->config.dampeningFactor );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserWave, WavesContext )
 		{
+			// Nothing else to do than push the block
 		}
 		CU_EndAttributePushBlock( WavesSection::eWave, blockContext )
 
@@ -162,65 +137,45 @@ namespace waves
 		static CU_ImplementAttributeParserBlock( parserWaveDirection, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->config.waves[blockContext->wave].direction );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserWaveSteepness, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->config.waves[blockContext->wave].steepness );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserWaveLength, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->config.waves[blockContext->wave].length );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserWaveAmplitude, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->config.waves[blockContext->wave].amplitude );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserWaveSpeed, WavesContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter" ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->config.waves[blockContext->wave].speed );
-			}
 		}
 		CU_EndAttribute()
 
@@ -240,6 +195,8 @@ namespace waves
 		struct WaveResult
 			: sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , WaveResult );
+
 			WaveResult( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -250,8 +207,6 @@ namespace waves
 				, tangent{ getMember< sdw::Vec3 >( "tangent" ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , WaveResult );
 
 			static sdw::type::StructPtr makeType( sdw::type::TypesCache & cache )
 			{
@@ -305,16 +260,17 @@ namespace waves
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		c3d::addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_ALL_GRAPHICS ) );
+			, VK_SHADER_STAGE_ALL_GRAPHICS );
 	}
 
 	void WavesRenderComponent::RenderData::fillDescriptor( c3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		descriptorWrites.push_back( m_ubo->getDescriptorWrite( index++ ) );
+		descriptorWrites.push_back( m_ubo->getDescriptorWrite( index ) );
+		++index;
 	}
 
 	//*********************************************************************************************
@@ -367,11 +323,11 @@ namespace waves
 		pcb.end();
 
 		auto calculateWave = writer.implementFunction< shd::WaveResult >( "calculateWave"
-			, [&]( Wave wave
-				, sdw::Vec3 wavePosition
-				, sdw::Float edgeDampen
-				, sdw::UInt numWaves
-				, sdw::Float timeIndex )
+			, [&writer]( Wave const & wave
+				, sdw::Vec3 const & wavePosition
+				, sdw::Float const & edgeDampen
+				, sdw::UInt const & numWaves
+				, sdw::Float const & timeIndex )
 			{
 				auto result = writer.declLocale< shd::WaveResult >( "result" );
 
@@ -433,7 +389,8 @@ namespace waves
 			
 			writer.implementEntryPointT< sdw::VoidT, shader::FragmentSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-				, [&]( sdw::VertexIn const & in
+				, [&writer, &c3d_objectIdsData, &c3d_modelsData, &c3d_cameraData, &c3d_billboardData, &c3d_renderData, &meshBuffers, &pipelineID, &drawID
+					, &engine]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 				{
 					auto bbPositions = writer.declConstantArray( "bbPositions"
@@ -494,7 +451,8 @@ namespace waves
 		{
 			writer.implementEntryPointT< sdw::VoidT, shader::FragmentSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-				, [&]( sdw::VertexIn const & in
+				, [&writer, &c3d_objectIdsData, &c3d_modelsData, &c3d_cameraData, &materials, &meshBuffers, &pipelineID, &drawID
+					, &engine, &flags]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 				{
 					auto instanceId = writer.declLocale( "instanceId"
@@ -592,9 +550,9 @@ namespace waves
 				, passShaders
 				, flags }
 			, sdw::TrianglesTessPatchOutT< sdw::VoidT >{ writer, 9u }
-			, [&]( sdw::TessControlPatchRoutineIn in
-				, sdw::TessControlListInT< shader::FragmentSurfaceT, shd::OutputVertices > listIn
-				, sdw::TrianglesTessPatchOut patchOut )
+			, [&c3d_wavesData]( sdw::TessControlPatchRoutineIn const &
+				, sdw::TessControlListInT< shader::FragmentSurfaceT, shd::OutputVertices > const &
+				, sdw::TrianglesTessPatchOut const & patchOut )
 			{
 				patchOut.tessLevelOuter[0] = c3d_wavesData.tessellationFactor();
 				patchOut.tessLevelOuter[1] = c3d_wavesData.tessellationFactor();
@@ -616,8 +574,8 @@ namespace waves
 				, submeshShaders
 				, passShaders
 				, flags }
-			, [&]( sdw::TessControlMainIn in
-				, sdw::TessControlListInT< shader::FragmentSurfaceT, shd::OutputVertices > listIn
+			, []( sdw::TessControlMainIn const & in
+				, sdw::TessControlListInT< shader::FragmentSurfaceT, shd::OutputVertices > const & listIn
 				, sdw::TrianglesTessControlListOutT< shader::FragmentSurfaceT > listOut )
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
@@ -645,10 +603,11 @@ namespace waves
 				, submeshShaders
 				, passShaders
 				, flags }
-			, [&]( sdw::TessEvalMainIn mainIn
-				, sdw::TessEvalListInT< shader::FragmentSurfaceT, shd::OutputVertices > listIn
-				, sdw::TrianglesTessPatchInT< sdw::VoidT > patchIn
-				, sdw::TessEvalDataOutT< shader::FragmentSurfaceT > out )
+			, [&writer, &utils, &c3d_wavesData, &c3d_modelsData, &c3d_cameraData
+				, &calculateWave, &flags]( sdw::TessEvalMainIn const &
+					, sdw::TessEvalListInT< shader::FragmentSurfaceT, shd::OutputVertices > const & listIn
+					, sdw::TrianglesTessPatchInT< sdw::VoidT > const & patchIn
+					, sdw::TessEvalDataOutT< shader::FragmentSurfaceT > out )
 			{
 				auto position = writer.declLocale( "position"
 					, patchIn.tessCoord.x() * listIn[0].vtx.position
@@ -769,7 +728,6 @@ namespace waves
 				out.curPosition = curCSPosition.xyw();
 				out.prvPosition = prvCSPosition.xyw();
 				out.worldPosition = curWorldPos;
-				//out.worldPosition.w() = height;
 				out.viewPosition = curViewPosition;
 				out.vtx.position = curCSPosition;
 			} );
@@ -809,8 +767,8 @@ namespace waves
 
 	void WavesRenderComponent::Plugin::createSections( c3d::StrSectionIdMap & sections )const
 	{
-		sections.emplace( c3d::SectionId( parse::WavesSection::eWaves ), cuT( "waves" ) );
-		sections.emplace( c3d::SectionId( parse::WavesSection::eWave ), cuT( "wave" ) );
+		sections.try_emplace( c3d::SectionId( parse::WavesSection::eWaves ), cuT( "waves" ) );
+		sections.try_emplace( c3d::SectionId( parse::WavesSection::eWave ), cuT( "wave" ) );
 	}
 
 	//*********************************************************************************************

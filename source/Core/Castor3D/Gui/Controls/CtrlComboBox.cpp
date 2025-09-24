@@ -190,7 +190,7 @@ namespace c3d
 				onKeyDown( event );
 			} );
 		NonClientEventHandler::connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr
+			, [this]( Control const *
 				, KeyboardEvent const & event )
 			{
 				onNcKeyDown( event );

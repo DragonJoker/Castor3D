@@ -200,7 +200,7 @@ namespace c3d
 				return pointer == getNull().data;
 			}
 
-			inline void registerAllocation( PointerType pointer
+			inline void registerAllocation( PointerType
 				, VkDeviceSize wantedSize
 				, VkDeviceSize pointerSize )
 			{
@@ -210,7 +210,7 @@ namespace c3d
 				m_maxAllocated = std::max< uint64_t >( m_maxAllocated, m_currentAllocated );
 			}
 
-			inline void registerDeallocation( PointerType pointer
+			inline void registerDeallocation( PointerType
 				, VkDeviceSize pointerSize )
 			{
 				m_currentAllocated -= pointerSize;

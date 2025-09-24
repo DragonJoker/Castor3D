@@ -145,43 +145,24 @@ namespace c3d
 	private:
 		iterator m_begin;
 		iterator m_end;
+
+		friend bool operator==( ArrayView const & lhs
+			, ArrayView const & rhs )noexcept
+		{
+			auto result = lhs.size() == rhs.size();
+			auto itLhs = lhs.begin();
+			auto itRhs = rhs.begin();
+
+			while ( result && itLhs != lhs.end() )
+			{
+				result = ( *itLhs == *itRhs );
+				++itLhs;
+				++itRhs;
+			}
+
+			return result;
+		}
 	};
-
-	template< typename IterT >
-	bool operator==( ArrayView< IterT > const & lhs
-		, ArrayView< IterT > const & rhs )
-	{
-		auto result = lhs.size() == rhs.size();
-		auto itLhs = lhs.begin();
-		auto itRhs = rhs.begin();
-
-		while ( result && itLhs != lhs.end() )
-		{
-			result = ( *itLhs == *itRhs );
-			++itLhs;
-			++itRhs;
-		}
-
-		return result;
-	}
-
-	template< typename IterT >
-	bool operator!=( ArrayView< IterT > const & lhs
-		, ArrayView< IterT > const & rhs )
-	{
-		auto result = lhs.size() != rhs.size();
-		auto itLhs = lhs.begin();
-		auto itRhs = rhs.begin();
-
-		while ( !result && itLhs != lhs.end() )
-		{
-			result = ( *itLhs != *itRhs );
-			++itLhs;
-			++itRhs;
-		}
-
-		return result;
-	}
 
 	template< typename IterT, typename ValueT = typename IteratorTraits< IterT >::value_type >
 	ArrayView< ValueT > makeArrayView( IterT begin, IterT end )

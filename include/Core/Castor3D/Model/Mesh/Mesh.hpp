@@ -99,7 +99,7 @@ namespace c3d
 		 *\param[in]	graph			Le graphe parent.
 		 */
 		C3D_API void record( crg::ResourcesCache & resources
-			, crg::FramePassGroup & graph );
+			, crg::FramePassGroup & graph )const;
 		/**
 		 *\~english
 		 *\brief		Records the submeshes's dependencies.
@@ -190,7 +190,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void computeNormals( bool reverted = false );
+		C3D_API void computeNormals( bool reverted = false )const;
 		/**
 		 *\~english
 		 *\brief		Sets the skeleton

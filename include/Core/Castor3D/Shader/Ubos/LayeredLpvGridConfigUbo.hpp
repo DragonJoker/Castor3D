@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Grid.hpp>
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
@@ -20,21 +20,28 @@ namespace c3d
 	namespace shader
 	{
 		struct LayeredLpvGridData
-			: public sdw::StructInstance
+			: sdw::StructInstanceHelperT< "C3D_LayeredLpvGridData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::Vec4ArrayField< "allMinVolumeCorners", LpvMaxCascadesCount >
+				, sdw::Vec4Field< "allCellSizes" >
+				, sdw::Vec3Field< "gridSizes" >
+				, sdw::FloatField< "indirectAttenuation" > >
 		{
-			C3D_API LayeredLpvGridData( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, LayeredLpvGridData );
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			LayeredLpvGridData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+				, allMinVolumeCorners{ StructInstanceHelperT::getMember< "allMinVolumeCorners" >() }
+				, allCellSizes{ StructInstanceHelperT::getMember< "allCellSizes" >() }
+				, gridSizes{ StructInstanceHelperT::getMember< "gridSizes" >() }
+				, indirectAttenuation{ StructInstanceHelperT::getMember< "indirectAttenuation" >() }
+			{
+			}
 
-			// Raw values
 			sdw::Array< sdw::Vec4 > allMinVolumeCorners;
 			sdw::Vec4 allCellSizes;
-			sdw::Vec4 gridSizesAtt;
-			// Specific values
 			sdw::Vec3 gridSizes;
 			sdw::Float indirectAttenuation;
 
@@ -52,7 +59,7 @@ namespace c3d
 	public:
 		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo const & rhs ) = delete;
 		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo const & rhs ) = delete;
-		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo && rhs )noexcept = default;
+		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo && rhs )noexcept = delete;
 		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LayeredLpvGridConfigUbo()noexcept;

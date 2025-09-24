@@ -30,7 +30,6 @@ namespace GuiCommon
 				background.accept( vis );
 			}
 
-		private:
 			explicit BackgroundDisplayer( TreeItemProperty & property
 				, wxPropertyGrid & grid )
 				: m_properties{ property }
@@ -38,6 +37,7 @@ namespace GuiCommon
 			{
 			}
 
+		private:
 			void visit( c3d::ColourBackground & background )override
 			{
 			}
@@ -302,7 +302,7 @@ namespace GuiCommon
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
 				m_properties.addProperty( &m_grid, category );
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new BackgroundDisplayer{ m_properties, m_grid } );
+				return c3d::makeRawUnique< BackgroundDisplayer >( m_properties, m_grid );
 			}
 
 		private:
@@ -311,9 +311,10 @@ namespace GuiCommon
 		};
 	}
 
-	BackgroundTreeItemProperty::BackgroundTreeItemProperty( bool editable
+	BackgroundTreeItemProperty::BackgroundTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::SceneBackground & background )
-		: TreeItemProperty{ background.getScene().getEngine(), editable }
+		: TreeItemProperty{ background.getScene().getEngine(), imagesLoader, editable }
 		, m_background{ background }
 	{
 		CreateTreeItemMenu();

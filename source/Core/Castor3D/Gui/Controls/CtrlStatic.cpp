@@ -68,7 +68,7 @@ namespace c3d
 		text->setVAlign( VAlign::eCenter );
 
 		setStyle( style );
-		doUpdateFlags();
+		doUpdateTextAlign();
 	}
 
 	StaticCtrl::~StaticCtrl()noexcept
@@ -224,11 +224,7 @@ namespace c3d
 
 	void StaticCtrl::doUpdateFlags()
 	{
-		if ( auto text = m_text )
-		{
-			text->setHAlign( getHAlign() );
-			text->setVAlign( getVAlign() );
-		}
+		doUpdateTextAlign();
 	}
 
 	void StaticCtrl::doUpdateZIndex( uint32_t & index )
@@ -245,6 +241,15 @@ namespace c3d
 		if ( auto text = m_text )
 		{
 			text->setOrder( text->getLevel() + offset, 0u );
+		}
+	}
+
+	void StaticCtrl::doUpdateTextAlign()
+	{
+		if ( auto text = m_text )
+		{
+			text->setHAlign( getHAlign() );
+			text->setVAlign( getVAlign() );
 		}
 	}
 }

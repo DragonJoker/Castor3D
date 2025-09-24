@@ -41,6 +41,8 @@ namespace c3d
 		{
 			friend struct BillboardData;
 
+			SDW_DeclStructInstance( C3D_API, CameraData );
+
 			CameraData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -59,9 +61,9 @@ namespace c3d
 			C3D_API sdw::Vec4 prvViewToWorld( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec2 viewToScreenUV( Utils & utils
-				, sdw::Vec4 vsPosition )const;
+				, sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec2 worldToCurScreenUV( Utils & utils
-				, sdw::Vec4 wsPosition )const;
+				, sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec3 projToView( Utils & utils
 				, sdw::Vec2 const & texCoord
 				, sdw::Float const & depth )const;
@@ -119,7 +121,7 @@ namespace c3d
 				return projection();
 			}
 
-			sdw::Vec4 getFrustumPlane( sdw::UInt index )const
+			sdw::Vec4 getFrustumPlane( sdw::UInt const & index )const
 			{
 				return frustumPlanes()[index];
 			}
@@ -132,7 +134,7 @@ namespace c3d
 		using Configuration = CameraUboConfiguration;
 		C3D_API CameraUbo( CameraUbo const & rhs ) = delete;
 		C3D_API CameraUbo & operator=( CameraUbo const & rhs ) = delete;
-		C3D_API CameraUbo( CameraUbo && rhs )noexcept = default;
+		C3D_API CameraUbo( CameraUbo && rhs )noexcept = delete;
 		C3D_API CameraUbo & operator=( CameraUbo && rhs )noexcept = delete;
 		C3D_API explicit CameraUbo( RenderDevice const & device );
 		C3D_API ~CameraUbo()noexcept;
@@ -199,8 +201,9 @@ namespace c3d
 		C3D_API Configuration & cpuUpdate( Matrix4x4f const & projection
 			, Point2f const & jitter = Point2f{} );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			return m_ubo.createPassBinding( pass, binding );
 		}
@@ -211,7 +214,8 @@ namespace c3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );

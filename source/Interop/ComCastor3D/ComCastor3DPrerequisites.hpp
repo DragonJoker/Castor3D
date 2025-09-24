@@ -61,7 +61,7 @@ namespace CastorCom
 	template< typename T, typename FuncT >
 	HRESULT retrieveValue( T * pVal, FuncT func )
 	{
-		HRESULT hr = E_POINTER;
+		auto hr = E_POINTER;
 
 		if ( *pVal )
 		{

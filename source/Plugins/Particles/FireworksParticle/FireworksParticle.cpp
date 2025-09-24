@@ -27,7 +27,7 @@ namespace fireworks
 		public:
 			c3d::Particle emit( c3d::Point3f const & position
 				, c3d::Point3f const & velocity
-				, float age );
+				, float age )const;
 
 		private:
 			float m_type;
@@ -95,7 +95,7 @@ namespace fireworks
 		}
 
 		inline void doUpdateLauncher( ParticleEmitter & emitter
-			, c3d::Coords3f & position
+			, c3d::PointView3f position
 			, float & age )
 		{
 			if ( age >= float( g_launcherCooldown.count() ) )
@@ -112,8 +112,8 @@ namespace fireworks
 		inline void doUpdateShell( ParticleEmitter & emitter
 			, c3d::Milliseconds const & time
 			, float & type
-			, c3d::Coords3f & position
-			, c3d::Coords3f & velocity
+			, c3d::PointView3f position
+			, c3d::PointView3f velocity
 			, float & age )
 		{
 			auto deltaS = float( time.count() ) / 1000.0f;
@@ -144,8 +144,8 @@ namespace fireworks
 
 		inline void doUpdateSecondaryShell( c3d::Milliseconds const & time
 			, float & type
-			, c3d::Coords3f & position
-			, c3d::Coords3f & velocity
+			, c3d::PointView3f position
+			, c3d::PointView3f velocity
 			, float & age )
 		{
 			if ( age < float( g_secondaryShellLifetime.count() ) )
@@ -174,7 +174,7 @@ namespace fireworks
 
 		c3d::Particle ParticleEmitter::emit( c3d::Point3f const & position
 			, c3d::Point3f const & velocity
-			, float age )
+			, float age )const
 		{
 			c3d::ParticleValues particle;
 			particle.add( size_t( ePosition ), position );
@@ -241,8 +241,8 @@ namespace fireworks
 		void ParticleUpdater::update( c3d::Milliseconds const & time
 			, c3d::Particle & particle )
 		{
-			c3d::Coords3f pos{ reinterpret_cast< float * >( particle.getData() + m_position->m_offset ) };
-			c3d::Coords3f vel{ reinterpret_cast< float * >( particle.getData() + m_velocity->m_offset ) };
+			c3d::PointView3f pos{ reinterpret_cast< float * >( particle.getData() + m_position->m_offset ) };
+			c3d::PointView3f vel{ reinterpret_cast< float * >( particle.getData() + m_velocity->m_offset ) };
 			float * age{ reinterpret_cast< float * >( particle.getData() + m_age->m_offset ) };
 			float * type{ reinterpret_cast< float * >( particle.getData() + m_type->m_offset ) };
 			*age += float( time.count() );

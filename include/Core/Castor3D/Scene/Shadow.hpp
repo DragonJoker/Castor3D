@@ -39,23 +39,24 @@ namespace c3d
 		RangedValue< uint32_t > pcfSampleCount{ 8u, makeRange( 0u, MaxPcfSampleCount ) };
 		LpvConfig lpvConfig;
 		RsmConfig rsmConfig;
-	};
 
-	inline bool operator==( ShadowConfig const & lhs, ShadowConfig const & rhs )noexcept
-	{
-		return lhs.filterType == rhs.filterType
-			&& lhs.globalIllumination == rhs.globalIllumination
-			&& lhs.volumetricSteps == rhs.volumetricSteps
-			&& lhs.volumetricScattering == rhs.volumetricScattering
-			&& lhs.rawOffsets == rhs.rawOffsets
-			&& lhs.pcfOffsets == rhs.pcfOffsets
-			&& lhs.vsmMinVariance == rhs.vsmMinVariance
-			&& lhs.vsmLightBleedingReduction == rhs.vsmLightBleedingReduction
-			&& lhs.pcfFilterSize == rhs.pcfFilterSize
-			&& lhs.pcfSampleCount == rhs.pcfSampleCount
-			&& lhs.lpvConfig == rhs.lpvConfig
-			&& lhs.rsmConfig == rhs.rsmConfig;
-	}
+	private:
+		friend bool operator==( ShadowConfig const & lhs, ShadowConfig const & rhs )noexcept
+		{
+			return lhs.filterType == rhs.filterType
+				&& lhs.globalIllumination == rhs.globalIllumination
+				&& lhs.volumetricSteps == rhs.volumetricSteps
+				&& lhs.volumetricScattering == rhs.volumetricScattering
+				&& lhs.rawOffsets == rhs.rawOffsets
+				&& lhs.pcfOffsets == rhs.pcfOffsets
+				&& lhs.vsmMinVariance == rhs.vsmMinVariance
+				&& lhs.vsmLightBleedingReduction == rhs.vsmLightBleedingReduction
+				&& lhs.pcfFilterSize == rhs.pcfFilterSize
+				&& lhs.pcfSampleCount == rhs.pcfSampleCount
+				&& lhs.lpvConfig == rhs.lpvConfig
+				&& lhs.rsmConfig == rhs.rsmConfig;
+		}
+	};
 }
 
 namespace c3d
@@ -69,7 +70,7 @@ namespace c3d
 				UInt32StrMap result;
 				result = getEnumMapT< ShadowType >();
 				return result;
-			}( );
+			}();
 	};
 
 	template<>
@@ -81,7 +82,7 @@ namespace c3d
 				UInt32StrMap result;
 				result = getEnumMapT< GlobalIlluminationType >();
 				return result;
-			}( );
+			}();
 	};
 }
 

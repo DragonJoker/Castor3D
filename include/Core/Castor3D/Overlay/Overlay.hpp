@@ -304,7 +304,7 @@ namespace c3d
 			m_category->setPixelSize( size );
 		}
 
-		void rename( String name )
+		void rename( StringView name )
 		{
 			m_name = name;
 		}

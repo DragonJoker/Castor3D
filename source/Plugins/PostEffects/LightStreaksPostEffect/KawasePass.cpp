@@ -22,7 +22,7 @@ namespace light_streaks
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx
+		enum class Bindings
 		{
 			KawaseUboIdx,
 			DifImgIdx,
@@ -32,18 +32,18 @@ namespace light_streaks
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			C3D_Kawase( writer, KawaseUboIdx, 0u );
-			auto c3d_mapHiPass = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHiPass", DifImgIdx, 0u );
+			C3D_Kawase( writer, Bindings::KawaseUboIdx, 0u );
+			auto c3d_mapHiPass = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHiPass", Bindings::DifImgIdx, 0u );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &c3d_kawaseData, &c3d_mapHiPass]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, vec3( 0.0_f ) );
@@ -96,8 +96,8 @@ namespace light_streaks
 						, result->getTimer() );
 					return result;
 				} );
-			kawaseUbo.createPassBinding( pass, kawase::KawaseUboIdx, index );
-			pass.addInputSampled( *srcView.getSampledLastAttach( srcIndex ), kawase::DifImgIdx
+			kawaseUbo.createPassBinding( pass, kawase::Bindings::KawaseUboIdx, index );
+			pass.addInputSampledT( *srcView.getSampledLastAttach( srcIndex ), kawase::Bindings::DifImgIdx
 				, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest } );
 			dstView.setLastAttach( dstIndex, pass.addOutputColourTarget( dstView.getTargetViewId( dstIndex ) ) );
 		}
@@ -109,12 +109,10 @@ namespace light_streaks
 		, c3d::RenderDevice const & device
 		, c3d::Texture & hiViews
 		, c3d::Texture & kawaseViews
-		, KawaseUbo & kawaseUbo
+		, KawaseUbo const & kawaseUbo
 		, c3d::Extent2D dimensions
 		, bool const * enabled )
-		: m_device{ device }
-		, m_kawaseUbo{ kawaseUbo }
-		, m_shader{ cuT( "LightStreaksKawasePass" ), kawase::getProgram( device ) }
+		: m_shader{ cuT( "LightStreaksKawasePass" ), kawase::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		assert( hiViews.size() == kawaseViews.size() + 1u

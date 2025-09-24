@@ -78,6 +78,8 @@ namespace c3d
 			, ValueT * values
 			, uint32_t count )
 		{
+			static_assert( std::is_trivially_copyable_v< ValueT >
+				, "Parameters can only store trivially copyable values" );
 			bool result = false;
 
 			if ( auto it = m_values.find( name );
@@ -191,6 +193,26 @@ namespace c3d
 		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
+		template< typename T, uint32_t Count >
+		bool add( KeyT const & name
+			, Point< T, Count > const & value )
+		{
+			return add( name, value.constPtr(), Count );
+		}
+		/**
+		 *\~english
+		 *\brief		adds a string parameter
+		 *\remarks		If a parameter with the given name already exists, nothing is done
+		 *\param[in]	name	The parameter name
+		 *\param[in]	value	The parameter value
+		 *\return		\p false if a parameter with the given name already exists
+		 *\~french
+		 *\brief		Ajoute un paramètre chaîne de caractères
+		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	value	La valeur du paramètre
+		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 */
 		bool add( KeyT const & name
 			, StringView value )
 		{
@@ -231,6 +253,8 @@ namespace c3d
 		bool set( KeyT const & name
 			, ValueT const & value )
 		{
+			static_assert( std::is_trivially_copyable_v< ValueT >
+				, "Parameters can only store trivially copyable values" );
 			bool result = false;
 
 			if ( auto it = m_values.find( name );

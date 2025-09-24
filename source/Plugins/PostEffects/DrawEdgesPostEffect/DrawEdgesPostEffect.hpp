@@ -26,7 +26,7 @@ namespace draw_edges
 		PostEffect( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
-		~PostEffect()override;
+		~PostEffect()noexcept override;
 		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
@@ -58,6 +58,8 @@ namespace draw_edges
 		 *\copydoc		c3d::PostEffect::doWriteInto
 		 */
 		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs ) override;
+
+		void doParseParameters( c3d::Parameters parameters );
 
 	public:
 		static const c3d::MbString Name;

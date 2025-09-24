@@ -62,8 +62,17 @@ namespace c3d
 			, VctConfig const & voxelConfig
 			, bool isStatic );
 		/**
-		 *\copydoc		RenderTechniquePass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
 		*\~english

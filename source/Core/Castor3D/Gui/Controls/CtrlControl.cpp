@@ -53,7 +53,12 @@ namespace c3d
 		, m_size{ size }
 		, m_resizeBorderSize{ ResizeBorderSize }
 	{
-		updateClientRect();
+		auto borders = doGetBordersSize();
+		borders->x /= 2;
+		borders->y /= 2;
+		m_clientRect = { borders->x, borders->y
+			, m_size->x - borders->x , m_size->y - borders->y };
+
 		EventHandler::connect( MouseEventType::eEnter
 			, [this]( MouseEvent const & event )
 			{
@@ -633,31 +638,18 @@ namespace c3d
 			diff->y = 0;
 		}
 
-		auto bordersWidth = int32_t( getBorderSize()->x + getBorderSize()->z );
-		auto bordersHeight = int32_t( getBorderSize()->y + getBorderSize()->w );
+		auto borders = doGetBordersSize();
+		borders->x = std::max( borders->x, 1u );
+		borders->y = std::max( borders->y, 1u );
 
-		if ( auto background = m_background )
+		if ( diff->x <= int32_t( borders->x ) - int32_t( m_mouseStartSize->x ) )
 		{
-			if ( background->getBorderPosition() == BorderPosition::eMiddle )
-			{
-				bordersWidth /= 2;
-				bordersHeight /= 2;
-			}
-			else if ( background->getBorderPosition() == BorderPosition::eExternal )
-			{
-				bordersWidth = 1;
-				bordersHeight = 1;
-			}
+			diff->x = int32_t( borders->x ) - int32_t( m_mouseStartSize->x );
 		}
 
-		if ( diff->x <= bordersWidth - int32_t( m_mouseStartSize->x ) )
+		if ( diff->y <= int32_t( borders->y ) - int32_t( m_mouseStartSize->y ) )
 		{
-			diff->x = bordersWidth - int32_t( m_mouseStartSize->x );
-		}
-
-		if ( diff->y <= bordersHeight - int32_t( m_mouseStartSize->y ) )
-		{
-			diff->y = bordersHeight - int32_t( m_mouseStartSize->y );
+			diff->y = int32_t( borders->y ) - int32_t( m_mouseStartSize->y );
 		}
 
 		auto newSize = m_mouseStartSize + diff;
@@ -677,6 +669,16 @@ namespace c3d
 
 	void Control::updateClientRect()
 	{
+		auto borders = doGetBordersSize();
+		borders->x /= 2;
+		borders->y /= 2;
+		auto & size = getSize();
+		m_clientRect = doUpdateClientRect( { borders->x, borders->y
+			, size->x - borders->x, size->y - borders->y } );
+	}
+
+	Size Control::doGetBordersSize()const
+	{
 		auto & borders = getBorderSize();
 		auto bordersWidth = borders->x + borders->z;
 		auto bordersHeight = borders->y + borders->w;
@@ -695,12 +697,6 @@ namespace c3d
 			}
 		}
 
-		bordersWidth /= 2;
-		bordersHeight /= 2;
-		auto & size = getSize();
-		m_clientRect = doUpdateClientRect( { bordersWidth
-			, bordersHeight
-			, size->x - bordersWidth
-			, size->y - bordersHeight } );
+		return { bordersWidth, bordersHeight };
 	}
 }

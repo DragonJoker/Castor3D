@@ -77,9 +77,9 @@ namespace c3d
 				crg::rm::Config result;
 				result.vertexBuffer( doCreateVertexBuffer( device ) )
 					.indexBuffer( doCreateIndexBuffer( device ) )
-					.depthStencilState( ( depth
+					.depthStencilState( depth
 						? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL }
-						: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } ) )
+						: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } )
 					.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 					.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
 					.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
@@ -116,9 +116,9 @@ namespace c3d
 
 			~BackgroundPass()noexcept override
 			{
-				if ( auto & buffer = IndexBufferHolder::getData() )
+				if ( auto const & buffer = IndexBufferHolder::getData() )
 					buffer->destroy();
-				if ( auto & buffer = VertexBufferHolder::getData() )
+				if ( auto const & buffer = VertexBufferHolder::getData() )
 					buffer->destroy();
 			}
 
@@ -195,7 +195,7 @@ namespace c3d
 						, BufferUsageFlags::eTransferDst
 						, MemoryPropertyFlags::eHostVisible
 						, cuT( "Background" )) );
-					auto & vertexBuffer = *VertexBufferHolder::getData();
+					auto const & vertexBuffer = *VertexBufferHolder::getData();
 					{
 						auto data = m_device.graphicsData();
 						InstantDirectUploadData uploader{ *data->queue
@@ -207,7 +207,7 @@ namespace c3d
 					}
 				}
 
-				auto & vertexBuffer = *VertexBufferHolder::getData();
+				auto const & vertexBuffer = *VertexBufferHolder::getData();
 				return crg::VertexBuffer{ vertexBuffer.bufferViewId
 					, { 1u, VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } }
 					, { 1u, VkVertexInputBindingDescription{ 0u, sizeof( Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } } };

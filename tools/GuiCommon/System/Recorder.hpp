@@ -15,49 +15,43 @@ namespace GuiCommon
 		{
 		public:
 			virtual ~IRecorderImpl() = default;
-			virtual bool StartRecord( c3d::Size const & size, int wantedFPS ) = 0;
-			virtual bool IsRecording() = 0;
-			virtual bool UpdateTime() = 0;
-			virtual bool RecordFrame( c3d::PxBufferBaseRPtr buffer ) = 0;
-			virtual void StopRecord() = 0;
+			virtual bool startRecord( c3d::Size const & size, int wantedFPS ) = 0;
+			virtual bool isRecording() = 0;
+			virtual bool updateTime() = 0;
+			virtual bool recordFrame( c3d::PxBufferBaseRPtr buffer ) = 0;
+			virtual void stopRecord() = 0;
 		};
 
 	public:
 		Recorder();
 
-		inline bool StartRecord( c3d::Size const & size, int wantedFPS )
+		inline bool startRecord( c3d::Size const & size, int wantedFPS )
 		{
-			bool result = !IsRecording();
-
+			bool result = !isRecording();
 			if ( result )
-			{
-				result = m_impl->StartRecord( size, wantedFPS );
-			}
-
+				result = m_impl->startRecord( size, wantedFPS );
 			return result;
 		}
 
-		inline bool IsRecording()
+		inline bool isRecording()
 		{
-			return m_impl->IsRecording();
+			return m_impl->isRecording();
 		}
 
-		inline bool UpdateTime()
+		inline bool updateTime()
 		{
-			return m_impl->UpdateTime();
+			return m_impl->updateTime();
 		}
 
-		inline bool RecordFrame( c3d::PxBufferBaseRPtr buffer )
+		inline bool recordFrame( c3d::PxBufferBaseRPtr buffer )
 		{
-			return m_impl->RecordFrame( buffer );
+			return m_impl->recordFrame( buffer );
 		}
 
-		inline void StopRecord()
+		inline void stopRecord()
 		{
-			if ( IsRecording() )
-			{
-				m_impl->StopRecord();
-			}
+			if ( isRecording() )
+				m_impl->stopRecord();
 		}
 
 	private:

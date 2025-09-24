@@ -12,7 +12,7 @@ namespace c3d
 {
 	namespace dbg
 	{
-		static String formatMessage( String prefix
+		static String formatMessage( StringView prefix
 			, MbStringView message )
 		{
 			auto mbPrefix = toUtf8( prefix );

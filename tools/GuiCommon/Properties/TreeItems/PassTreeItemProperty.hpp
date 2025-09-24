@@ -56,7 +56,8 @@ namespace GuiCommon
 		 *\param[in]	scene		La scène.
 		 *\param[in]	parent		La fenêtre parent.
 		 */
-		PassTreeItemProperty( bool editable
+		PassTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::Scene & scene
 			, wxWindow * parent );
 

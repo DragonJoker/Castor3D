@@ -26,7 +26,7 @@ namespace atmosphere_scattering
 
 	namespace transmittance
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eAtmosphere,
 		};
@@ -37,7 +37,7 @@ namespace atmosphere_scattering
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_AtmosphereScattering( writer
-				, eAtmosphere
+				, Bindings::eAtmosphere
 				, 0u );
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
@@ -48,14 +48,15 @@ namespace atmosphere_scattering
 			auto depthBufferValue = writer.declConstant( "depthBufferValue"
 				, -1.0_f );
 
-			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &atmosphere, &c3d_atmosphereData, &sampleCountIni, &depthBufferValue
+				, &renderSize]( sdw::FragmentIn const & in
+					, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
@@ -116,7 +117,7 @@ namespace atmosphere_scattering
 				return result;
 			} );
 		atmosphereUbo.createPassBinding( pass
-			, transmittance::eAtmosphere );
+			, transmittance::Bindings::eAtmosphere );
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 

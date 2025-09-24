@@ -18,10 +18,9 @@ namespace PbrBloom
 			, uint32_t passesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
-		crg::FramePassGroup & m_graph;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		c3d::Vector< crg::RenderQuad * > m_quads;

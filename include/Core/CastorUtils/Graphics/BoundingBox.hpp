@@ -127,20 +127,13 @@ namespace c3d
 		//!\~english	The dimensions of the bounding box.
 		//!\~french		Les dimensions de la bounding box.
 		Point3f m_dimensions{};
+
+		friend bool operator==( BoundingBox const & lhs, BoundingBox const & rhs )noexcept
+		{
+			return lhs.getCenter() == rhs.getCenter()
+				&& lhs.getDimensions() == rhs.getDimensions();
+		}
 	};
-
-	inline bool operator==( BoundingBox const & lhs
-		, BoundingBox const & rhs )
-	{
-		return lhs.getCenter() == rhs.getCenter()
-			&& lhs.getDimensions() == rhs.getDimensions();
-	}
-
-	inline bool operator!=( BoundingBox const & lhs
-		, BoundingBox const & rhs )
-	{
-		return !( lhs == rhs );
-	}
 }
 
 #endif

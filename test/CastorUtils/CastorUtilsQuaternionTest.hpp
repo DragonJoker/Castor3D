@@ -24,8 +24,8 @@ namespace Testing
 
 #if defined( CASTOR_USE_GLM )
 
-		bool compare( c3d::Matrix4x4f const & lhs, glm::mat4x4 const & rhs );
-		bool compare( c3d::Matrix4x4d const & lhs, glm::mat4x4 const & rhs );
+		bool compare( c3d::Matrix4x4f const & lhs, glm::mat4x4 const & rhs )const;
+		bool compare( c3d::Matrix4x4d const & lhs, glm::mat4x4 const & rhs )const;
 
 #endif
 
@@ -39,12 +39,12 @@ namespace Testing
 
 	private:
 		template< typename T, typename U >
-		inline bool compare( T const & a, U const & b )
+		inline bool compare( T const & a, U const & b )const
 		{
 			return TestCase::compare( a, b );
 		}
 
-		inline bool compare( c3d::SquareMatrix< float, 4 > const & a, c3d::SquareMatrix< float, 4 > const & b )
+		inline bool compare( c3d::SquareMatrix< float, 4 > const & a, c3d::SquareMatrix< float, 4 > const & b )const
 		{
 			float epsilon = 0.0001f;
 			return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -65,7 +65,7 @@ namespace Testing
 				&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 		}
 
-		inline bool compare( c3d::SquareMatrix< double, 4 > const & a, c3d::SquareMatrix< double, 4 > const & b )
+		inline bool compare( c3d::SquareMatrix< double, 4 > const & a, c3d::SquareMatrix< double, 4 > const & b )const
 		{
 			double epsilon = 0.0001;
 			return std::abs( a[0][0] - b[0][0] ) < epsilon

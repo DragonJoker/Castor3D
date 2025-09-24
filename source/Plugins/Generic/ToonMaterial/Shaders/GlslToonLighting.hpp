@@ -57,7 +57,7 @@ namespace toon::shader
 			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
-		C3D_ToonMaterial_API static const c3d::String getName();
+		C3D_ToonMaterial_API static c3d::String getName();
 		static c3ds::LightingModelPtr create( c3d::LightingModelID lightingModelId
 			, c3ds::LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer
@@ -92,7 +92,7 @@ namespace toon::shader
 			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
-		C3D_ToonMaterial_API static const c3d::String getName();
+		C3D_ToonMaterial_API static c3d::String getName();
 		static c3ds::LightingModelPtr create( c3d::LightingModelID lightingModelId
 			, c3ds::LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer

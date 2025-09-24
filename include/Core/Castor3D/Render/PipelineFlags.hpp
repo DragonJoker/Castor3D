@@ -19,17 +19,23 @@ namespace c3d
 	{
 		uint64_t hi;
 		uint64_t lo;
+
+	private:
+		friend bool operator==( PipelineBaseHash const & lhs
+			, PipelineBaseHash const & rhs )noexcept
+		{
+			return lhs.hi == rhs.hi
+				&& lhs.lo == rhs.lo;
+		}
+
+		friend bool operator<( PipelineBaseHash const & lhs
+			, PipelineBaseHash const & rhs )noexcept
+		{
+			return lhs.hi < rhs.hi
+				|| ( ( lhs.hi == rhs.hi )
+					&& ( lhs.lo < rhs.lo ) );
+		}
 	};
-
-	C3D_API bool operator<( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs )noexcept;
-
-	inline bool operator==( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs )noexcept
-	{
-		return lhs.hi == rhs.hi
-			&& lhs.lo == rhs.lo;
-	}
 
 	struct PipelineHiHashDetails
 	{
@@ -72,9 +78,24 @@ namespace c3d
 		bool isStatic{};
 		ProgramFlags m_programFlags{};
 		ShaderFlags m_shaderFlags{};
-	};
 
-	C3D_API bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs )noexcept;
+	private:
+		friend bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs )noexcept
+		{
+			return lhs.pass == rhs.pass
+				&& lhs.submesh == rhs.submesh
+				&& lhs.textures == rhs.textures
+				&& lhs.lightingModelId == rhs.lightingModelId
+				&& lhs.backgroundModelId == rhs.backgroundModelId
+				&& lhs.alphaFunc == rhs.alphaFunc
+				&& lhs.passLayerIndex == rhs.passLayerIndex
+				&& lhs.submeshDataBindings == rhs.submeshDataBindings
+				&& lhs.topology == rhs.topology
+				&& lhs.isStatic == rhs.isStatic
+				&& lhs.m_programFlags == rhs.m_programFlags
+				&& lhs.m_shaderFlags == rhs.m_shaderFlags;
+		}
+	};
 
 	struct PipelineLoHashDetails
 	{
@@ -90,9 +111,13 @@ namespace c3d
 		VkDeviceSize morphTargetsOffset{};
 		SubmeshRenderData const * submeshData{};
 		uint32_t vertexStride{};
-	};
 
-	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )noexcept;
+	private:
+		friend bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )noexcept
+		{
+			return lhs.morphTargetsOffset == rhs.morphTargetsOffset;
+		}
+	};
 	/**
 	*\~english
 	*\brief
@@ -370,9 +395,19 @@ namespace c3d
 		bool enableTexcoord( SubmeshData data )const noexcept;
 		bool enableNonTexcoord( SubmeshData data )const noexcept;
 		bool hasSubmeshData( SubmeshData data )const noexcept;
+
+		friend bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )noexcept
+		{
+			return static_cast< PipelineHiHashDetails const & >( lhs ) == static_cast< PipelineHiHashDetails const & >( rhs )
+				&& static_cast< PipelineLoHashDetails const & >( lhs ) == static_cast< PipelineLoHashDetails const & >( rhs )
+				&& lhs.m_sceneFlags == rhs.m_sceneFlags
+				&& lhs.colourBlendMode == rhs.colourBlendMode
+				&& lhs.alphaBlendMode == rhs.alphaBlendMode
+				&& lhs.renderPassType == rhs.renderPassType
+				&& lhs.patchVertices == rhs.patchVertices;
+		}
 	};
 
-	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )noexcept;
 	C3D_API PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
 		, SubmeshComponentRegister const & submeshComponents
 		, PipelineFlags const & flags )noexcept;

@@ -107,9 +107,9 @@ namespace c3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 				return true;
+			default:
+				return false;
 			}
-
-			return false;
 		}
 	}
 
@@ -282,7 +282,7 @@ namespace c3d
 		return result;
 	}
 
-	void BinaryChunk::binaryError( String view )const
+	void BinaryChunk::binaryError( StringView view )const
 	{
 		log::error << view;
 	}

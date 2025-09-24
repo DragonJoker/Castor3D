@@ -36,23 +36,28 @@ namespace smaa
 	{
 		namespace c3ds = c3d::shader;
 
+		enum class Bindings : uint32_t
+		{
+			Texture = uint32_t( smaa::Bindings::SmaaUboIdx ) + 1u,
+		};
+
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, SmaaConfig const & config )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", SmaaUboIdx + 1, 0u );
+			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
+			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", Bindings::Texture, 0u );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &config, &c3d_map, &c3d_smaaData]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					if ( config.data.mode == Mode::eT2X
 						&& C3D_DebugVelocity )
@@ -177,7 +182,7 @@ namespace smaa
 		visitor.visit( cuT( "Preset" )
 			, m_config.data.preset
 			, c3d::StringArray{ cuT( "Low" ), cuT( "Medium" ), cuT( "High" ), cuT( "Ultra" ), cuT( "Custom" ) }
-			, c3d::ConfigurationVisitorBase::OnEnumValueChangeT< Preset >( [this]( Preset oldV, Preset newV )
+			, c3d::ConfigurationVisitorBase::OnEnumValueChangeT< Preset >( [this]( Preset, Preset )
 			{
 				m_config.updatePreset();
 			} ) );
@@ -254,7 +259,6 @@ namespace smaa
 				, m_ubo
 				, m_edgeDetection->getColourResult()
 				, m_edgeDetection->getDepthResult()
-				, m_config
 				, &m_enabled );
 			smaaResult = m_blendingWeightCalculation->getResult().getLastAttach();
 
@@ -321,8 +325,8 @@ namespace smaa
 				return result;
 			} );
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
-		m_ubo.createPassBinding( pass, SmaaUboIdx );
-		pass.addInputSampled( *smaaResult, SmaaUboIdx + 1, linearSampler );
+		m_ubo.createPassBinding( pass, smaa::Bindings::SmaaUboIdx );
+		pass.addInputSampledT( *smaaResult, copy::Bindings::Texture, linearSampler );
 		crg::ImageViewIdArray outputs;
 		crg::ImageViewIdArray addOutputs;
 
@@ -419,7 +423,7 @@ namespace smaa
 		return true;
 	}
 
-	c3d::Texture const * PostEffect::doGetPredicationTexture()
+	c3d::Texture const * PostEffect::doGetPredicationTexture()const
 	{
 		c3d::Texture const * predication = nullptr;
 		if ( m_config.data.enablePredication )
@@ -427,20 +431,11 @@ namespace smaa
 		return predication;
 	}
 
-	c3d::Texture const * PostEffect::doGetVelocityView()
+	c3d::Texture const * PostEffect::doGetVelocityView()const
 	{
 		c3d::Texture const * velocityView = nullptr;
-
-		switch ( m_config.data.mode )
-		{
-		case Mode::eT2X:
-			if ( m_config.data.enableReprojection )
-				velocityView = &m_renderTarget.getVelocity();
-			break;
-		default:
-			break;
-		}
-
+		if ( m_config.data.mode == Mode::eT2X && m_config.data.enableReprojection )
+			velocityView = &m_renderTarget.getVelocity();
 		return velocityView;
 	}
 }

@@ -53,7 +53,7 @@ namespace c3d
 		, ScrollableCtrl{ *this
 			, scrollableStyle }
 	{
-		doUpdateFlags();
+		checkScrollBarFlags();
 	}
 
 	void LayoutControl::setLayout( LayoutUPtr layout )

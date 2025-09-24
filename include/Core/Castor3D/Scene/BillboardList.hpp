@@ -73,7 +73,7 @@ namespace c3d
 		 *\param[in]	count	Le nombre d'éléments.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( RenderDevice const & device
+		C3D_API bool initialiseBase( RenderDevice const & device
 			, uint32_t count );
 		/**
 		 *\~english
@@ -92,7 +92,7 @@ namespace c3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( GpuUpdater & updater );
+		C3D_API void update( GpuUpdater const & updater );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object ID in models buffer.
@@ -146,37 +146,37 @@ namespace c3d
 		/**@{*/
 		C3D_API ProgramFlags getProgramFlags()const;
 
-		SubmeshComponentCombineID getComponentCombineID()const
+		SubmeshComponentCombineID getComponentCombineID()const noexcept
 		{
 			return m_proxyCombine.baseId;
 		}
 
-		MaterialObs getMaterial()const
+		MaterialObs getMaterial()const noexcept
 		{
 			return m_material;
 		}
 
-		Point2f const & getDimensions()const
+		Point2f const & getDimensions()const noexcept
 		{
 			return m_dimensions;
 		}
 
-		uint32_t getCount()const
+		uint32_t getCount()const noexcept
 		{
 			return m_count;
 		}
 
-		bool isInitialised()const
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		GpuBufferOffsetT< uint8_t > const & getVertexBuffer()const
+		GpuBufferOffsetT< uint8_t > const & getVertexBuffer()const noexcept
 		{
 			return m_vertexBuffer;
 		}
 
-		GpuBufferOffsetT< uint8_t > & getVertexBuffer()
+		GpuBufferOffsetT< uint8_t > & getVertexBuffer()noexcept
 		{
 			return m_vertexBuffer;
 		}
@@ -186,52 +186,52 @@ namespace c3d
 			return m_vertexStride;
 		}
 
-		GeometryBuffers const & getGeometryBuffers()const
+		GeometryBuffers const & getGeometryBuffers()const noexcept
 		{
 			return m_geometryBuffers;
 		}
 
-		ObjectBufferOffset const & getBufferOffsets()const
+		ObjectBufferOffset const & getBufferOffsets()const noexcept
 		{
 			return m_bufferOffsets;
 		}
 
-		Scene const & getParentScene()const
+		Scene const & getParentScene()const noexcept
 		{
 			return m_scene;
 		}
 
-		Scene & getParentScene()
+		Scene & getParentScene()noexcept
 		{
 			return m_scene;
 		}
 
-		SceneNode * getNode()const
+		SceneNode * getNode()const noexcept
 		{
 			return m_node;
 		}
 
-		BillboardType getBillboardType()const
+		BillboardType getBillboardType()const noexcept
 		{
 			return m_billboardType;
 		}
 
-		BillboardSize getBillboardSize()const
+		BillboardSize getBillboardSize()const noexcept
 		{
 			return m_billboardSize;
 		}
 
-		HashMap< Pass const *, IdRenderNode > const & getIds()const
+		HashMap< Pass const *, IdRenderNode > const & getIds()const noexcept
 		{
 			return m_ids;
 		}
 
-		ashes::DescriptorSetLayout const & getDescriptorLayout()const
+		ashes::DescriptorSetLayout const & getDescriptorLayout()const noexcept
 		{
 			return *m_descriptorLayout;
 		}
 
-		ashes::DescriptorSet const & getDescriptorSet()const
+		ashes::DescriptorSet const & getDescriptorSet()const noexcept
 		{
 			return *m_descriptorSet;
 		}
@@ -245,32 +245,32 @@ namespace c3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setDimensions( Point2f const & value )
+		void setDimensions( Point2f const & value )noexcept
 		{
 			m_dimensions = value;
 		}
 
-		void setCenterOffset( uint32_t value )
+		void setCenterOffset( uint32_t value )noexcept
 		{
 			m_centerOffset = value;
 		}
 
-		void setNode( SceneNode & value )
+		void setNode( SceneNode & value )noexcept
 		{
 			m_node = &value;
 		}
 
-		void setBillboardType( BillboardType value )
+		void setBillboardType( BillboardType value )noexcept
 		{
 			m_billboardType = value;
 		}
 
-		void setBillboardSize( BillboardSize value )
+		void setBillboardSize( BillboardSize value )noexcept
 		{
 			m_billboardSize = value;
 		}
 
-		void setGpuFilled( bool value )
+		void setGpuFilled( bool value )noexcept
 		{
 			m_gpuFilled = value;
 		}

@@ -30,29 +30,32 @@ namespace GuiCommon
 	{
 		auto targetId = list->AppendItem( id
 			, make_wxString( target.getName() )
-			, eBMP_RENDER_TARGET
-			, eBMP_RENDER_TARGET_SEL
-			, new SceneObjectsTree::DataType{ std::make_unique< RenderTargetTreeItemProperty >( editable, target ) } );
+			, int( eBMP::eRenderTarget )
+			, int( eBMP::eRenderTargetSelected )
+			, new SceneObjectsTree::DataType{ std::make_unique< RenderTargetTreeItemProperty >( list->getImagesLoader(), editable, target ) } );
 
 		list->AppendItem( targetId
 			, _( "SSAO Configuration" )
-			, eBMP_SSAO_CONFIG
-			, eBMP_SSAO_CONFIG_SEL
-			, new SceneObjectsTree::DataType{ std::make_unique< SsaoConfigTreeItemProperty >( editable
+			, int( eBMP::eSSAOConfig )
+			, int( eBMP::eSSAOConfigSelected )
+			, new SceneObjectsTree::DataType{ std::make_unique< SsaoConfigTreeItemProperty >( list->getImagesLoader()
+				, editable
 				, target.getEngine()
 				, target.getSsaoConfig() ) } );
 		list->AppendItem( targetId
 			, _( "Colour Grading Configuration" )
-			, eBMP_COLOURGRADING_CONFIG
-			, eBMP_COLOURGRADING_CONFIG_SEL
-			, new SceneObjectsTree::DataType{ std::make_unique< ColourGradingConfigTreeItemProperty >( editable
+			, int( eBMP::eColourGradingConfig )
+			, int( eBMP::eColourGradingConfigSelected )
+			, new SceneObjectsTree::DataType{ std::make_unique< ColourGradingConfigTreeItemProperty >( list->getImagesLoader()
+				, editable
 				, target.getEngine()
 				, target.getColourGradingConfig() ) } );
 		list->AppendItem( targetId
 			, _( "Clusters Configuration" )
-			, eBMP_CLUSTERS_CONFIG
-			, eBMP_CLUSTERS_CONFIG_SEL
-			, new SceneObjectsTree::DataType{ std::make_unique< ClustersConfigTreeItemProperty >( editable
+			, int( eBMP::eClustersConfig )
+			, int( eBMP::eClustersConfigSelected )
+			, new SceneObjectsTree::DataType{ std::make_unique< ClustersConfigTreeItemProperty >( list->getImagesLoader()
+				, editable
 				, target.getEngine()
 				, target.getClustersConfig() ) } );
 
@@ -61,9 +64,10 @@ namespace GuiCommon
 		{
 			list->AppendItem( targetId
 				, _( "VCT Configuration" )
-				, eBMP_VCT_CONFIG
-				, eBMP_VCT_CONFIG_SEL
-				, new SceneObjectsTree::DataType{ std::make_unique< VCTConfigTreeItemProperty >( editable
+				, int( eBMP::eVCTConfig )
+				, int( eBMP::eVCTConfigSelected )
+				, new SceneObjectsTree::DataType{ std::make_unique< VCTConfigTreeItemProperty >( list->getImagesLoader()
+					, editable
 					, target.getEngine()
 					, target.getScene()->getVoxelConeTracingConfig() ) } );
 		}
@@ -74,9 +78,10 @@ namespace GuiCommon
 			{
 				list->AppendItem( targetId
 					, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
-					, eBMP_POST_EFFECT
-					, eBMP_POST_EFFECT_SEL
-					, new SceneObjectsTree::DataType{ std::make_unique< PostEffectTreeItemProperty >( editable, *postEffect, list ) } );
+					, int( eBMP::ePostEffect )
+					, int( eBMP::ePostEffectSelected )
+					, new SceneObjectsTree::DataType{ std::make_unique< PostEffectTreeItemProperty >( list->getImagesLoader()
+						, editable, *postEffect, list ) } );
 			}
 		}
 
@@ -86,22 +91,25 @@ namespace GuiCommon
 			{
 				list->AppendItem( targetId
 					, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
-					, eBMP_POST_EFFECT
-					, eBMP_POST_EFFECT_SEL
-					, new SceneObjectsTree::DataType{ std::make_unique< PostEffectTreeItemProperty >( editable, *postEffect, list ) } );
+					, int( eBMP::ePostEffect )
+					, int( eBMP::ePostEffectSelected )
+					, new SceneObjectsTree::DataType{ std::make_unique< PostEffectTreeItemProperty >( list->getImagesLoader()
+						, editable, *postEffect, list ) } );
 			}
 		}
 
 		list->AppendItem( targetId
 			, _( "Tone Mapping" )
-			, eBMP_TONE_MAPPING
-			, eBMP_TONE_MAPPING_SEL
-			, new SceneObjectsTree::DataType{ std::make_unique< ToneMappingTreeItemProperty >( editable, target, list ) } );
+			, int( eBMP::eToneMapping )
+			, int( eBMP::eToneMappingSelected )
+			, new SceneObjectsTree::DataType{ std::make_unique< ToneMappingTreeItemProperty >( list->getImagesLoader()
+				, editable, target, list ) } );
 	}
 
-	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
+	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::RenderTarget & target )
-		: TreeItemProperty( target.getEngine(), editable )
+		: TreeItemProperty( target.getEngine(), imagesLoader, editable )
 		, m_target( target )
 	{
 		CreateTreeItemMenu();
@@ -114,11 +122,8 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
 
 		auto & target = getRenderTarget();
-		wxString TARGETS[] =
-		{
-			_( "Window" ),
-			_( "Texture" )
-		};
+		c3d::Array< wxString, 2u > TARGETS{ _( "Window" )
+			, _( "Texture" ) };
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] );
 

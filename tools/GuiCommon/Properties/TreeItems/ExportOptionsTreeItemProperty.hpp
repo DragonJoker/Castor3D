@@ -31,7 +31,8 @@ namespace GuiCommon
 		*\param[in]	editable	Dit si les propriétés sont modifiables.
 		*\param[in]	toneMapping	L'objet cible.
 		*/
-		ExportOptionsTreeItemProperty( bool editable
+		ExportOptionsTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::exporter::ExportOptions & options );
 
 	private:

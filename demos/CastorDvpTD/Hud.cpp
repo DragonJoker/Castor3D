@@ -40,9 +40,9 @@ namespace castortd
 	{
 	}
 
-	void Hud::initialise()
+	void Hud::initialise()const
 	{
-		auto & scene = m_game.getScene();
+		auto const & scene = m_game.getScene();
 		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( true );
 		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
@@ -52,9 +52,9 @@ namespace castortd
 		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 	}
 
-	void Hud::start()
+	void Hud::start()const
 	{
-		auto & scene = m_game.getScene();
+		auto const & scene = m_game.getScene();
 		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( true );
 		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( true );
@@ -65,9 +65,9 @@ namespace castortd
 		update();
 	}
 
-	void Hud::pause()
+	void Hud::pause()const
 	{
-		auto & scene = m_game.getScene();
+		auto const & scene = m_game.getScene();
 		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
@@ -77,9 +77,9 @@ namespace castortd
 		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 	}
 
-	void Hud::resume()
+	void Hud::resume()const
 	{
-		auto & scene = m_game.getScene();
+		auto const & scene = m_game.getScene();
 		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( true );
 		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( true );
@@ -89,9 +89,9 @@ namespace castortd
 		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 	}
 
-	void Hud::Help()
+	void Hud::Help()const
 	{
-		auto & scene = m_game.getScene();
+		auto const & scene = m_game.getScene();
 		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
@@ -101,9 +101,9 @@ namespace castortd
 		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( true );
 	}
 
-	void Hud::GameOver()
+	void Hud::GameOver()const
 	{
-		auto & scene = m_game.getScene();
+		auto const & scene = m_game.getScene();
 		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
 		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
@@ -116,71 +116,41 @@ namespace castortd
 		getTextOverlay( m_game.getScene(), cuT( "ResultKillsValue" ) )->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getKills() ) ) );
 	}
 
-	void Hud::update()
+	void Hud::update()const
 	{
-		auto text = m_lives;
-
-		if ( text )
-		{
+		if ( auto text = m_lives )
 			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getLives() ) ) );
-		}
 
-		text = m_ore;
-
-		if ( text )
-		{
+		if ( auto text = m_ore )
 			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getOre() ) ) );
-		}
 
-		text = m_level;
-
-		if ( text )
-		{
+		if ( auto text = m_level )
 			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getWave() ) ) );
-		}
 
-		text = m_kills;
-
-		if ( text )
-		{
+		if ( auto text = m_kills )
 			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getKills() ) ) );
-		}
 
-		text = m_enemyLife;
-
-		if ( text )
-		{
+		if ( auto text = m_enemyLife )
 			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getEnemiesLife() ) ) );
-		}
 
-		text = m_enemyBounty;
-
-		if ( text )
-		{
+		if ( auto text = m_enemyBounty )
 			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getEnemiesBounty() ) ) );
-		}
 
 		if ( auto tower = m_game.getSelectedTower() )
 		{
-			text = m_towerDamage;
-
-			if ( text )
+			if ( auto text = m_towerDamage )
 			{
 				text->setVisible( true );
 				text->setCaption( c3d::toUtf8U32String( c3d::string::toString( tower->getDamage() ) ) );
 			}
 
-			text = m_towerSpeed;
-
-			if ( text )
+			if ( auto text = m_towerSpeed )
 			{
 				text->setVisible( true );
 				text->setCaption( c3d::toUtf8U32String( c3d::string::toString( tower->getSpeed() ) ) );
 			}
 
-			text = m_towerRange;
-
-			if ( text )
+			if ( auto text = m_towerRange )
 			{
 				text->setVisible( true );
 				text->setCaption( c3d::toUtf8U32String( c3d::string::toString( tower->getRange() ) ) );
@@ -188,26 +158,14 @@ namespace castortd
 		}
 		else
 		{
-			text = m_towerDamage;
-
-			if ( text )
-			{
+			if ( auto text = m_towerDamage )
 				text->setVisible( false );
-			}
 
-			text = m_towerSpeed;
-
-			if ( text )
-			{
+			if ( auto text = m_towerSpeed )
 				text->setVisible( false );
-			}
 
-			text = m_towerRange;
-
-			if ( text )
-			{
+			if ( auto text = m_towerRange )
 				text->setVisible( false );
-			}
 		}
 	}
 }

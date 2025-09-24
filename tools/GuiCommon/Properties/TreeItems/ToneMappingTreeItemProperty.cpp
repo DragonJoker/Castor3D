@@ -22,8 +22,8 @@ namespace GuiCommon
 		class ToneMappingShaderGatherer
 			: public c3d::ToneMappingVisitor
 		{
-		private:
-			explicit ToneMappingShaderGatherer( c3d::RenderDevice const & device
+		public:
+			ToneMappingShaderGatherer( c3d::RenderDevice const & device
 				, ShaderSources & sources )
 				: c3d::ToneMappingVisitor{ { true } }
 				, m_device{ device }
@@ -31,7 +31,6 @@ namespace GuiCommon
 			{
 			}
 
-		public:
 			static ShaderSources submit( c3d::ToneMapping & toneMapping )
 			{
 				ShaderSources result;
@@ -40,39 +39,39 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( c3d::ShaderModule const & module
+			void visit( c3d::ShaderModule const & shaderModule
 				, bool forceProgramsVisit )override
 			{
-				if ( !module.shader
-					&& module.source.empty()
-					&& module.compiled.spirv.empty()
-					&& module.compiled.text.empty() )
+				if ( !shaderModule.shader
+					&& shaderModule.source.empty()
+					&& shaderModule.compiled.spirv.empty()
+					&& shaderModule.compiled.text.empty() )
 				{
 					return;
 				}
 
-				doGetSource( module.name ).sources.push_back( { module.shader.get()
-					, module.compiled
-					, c3d::getEntryPointType( m_device, module.stage ) } );
+				doGetSource( shaderModule.name ).sources.emplace_back( shaderModule.shader.get()
+					, shaderModule.compiled
+					, c3d::getEntryPointType( m_device, shaderModule.stage ) );
 			}
 
-			void visit( c3d::ProgramModule const & module
+			void visit( c3d::ProgramModule const & shaderModule
 				, ast::EntryPoint entryPoint
 				, bool forceProgramsVisit )override
 			{
-				auto it = module.compiled.find( getShaderStage( entryPoint ) );
+				auto it = shaderModule.compiled.find( getShaderStage( entryPoint ) );
 
-				if ( !module.shader
-					&& ( it == module.compiled.end()
+				if ( !shaderModule.shader
+					&& ( it == shaderModule.compiled.end()
 						|| ( it->second.text.empty()
 							&& it->second.spirv.empty() ) ) )
 				{
 					return;
 				}
 
-				doGetSource( module.name ).sources.push_back( { module.shader.get()
+				doGetSource( shaderModule.name ).sources.emplace_back( shaderModule.shader.get()
 					, it->second
-					, entryPoint } );
+					, entryPoint );
 			}
 
 			void visit( c3d::String const & name
@@ -89,19 +88,18 @@ namespace GuiCommon
 		private:
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_device, m_sources } );
+				return c3d::makeRawUnique< ToneMappingShaderGatherer >( m_device, m_sources );
 			}
 
 			ShaderSource & doGetSource( c3d::String const & name )
 			{
-				auto it = std::find_if( m_sources.begin()
+				if ( auto it = std::find_if( m_sources.begin()
 					, m_sources.end()
 					, [&name]( ShaderSource const & lookup )
 					{
 						return lookup.name == name;
 					} );
-
-				if ( it != m_sources.end() )
+					it != m_sources.end() )
 				{
 					return *it;
 				}
@@ -117,10 +115,11 @@ namespace GuiCommon
 		};
 	}
 
-	ToneMappingTreeItemProperty::ToneMappingTreeItemProperty( bool editable
+	ToneMappingTreeItemProperty::ToneMappingTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::RenderTarget & target
 		, wxWindow * parent )
-		: TreeItemProperty{ target.getEngine(), editable }
+		: TreeItemProperty{ target.getEngine(), imagesLoader, editable }
 		, m_target{ target }
 		, m_parent{ parent }
 	{
@@ -140,10 +139,10 @@ namespace GuiCommon
 		m_choices.Clear();
 		auto types = m_target.getEngine()->getToneMappingFactory().listRegisteredTypes();
 
-		for ( auto & toneMapping : types )
+		for ( auto const & [key, id] : types )
 		{
-			auto name = make_wxString( toneMapping.key );
-			m_nameToChoice[toneMapping.key] = uint32_t( m_choices.size() );
+			auto name = make_wxString( key );
+			m_nameToChoice[key] = uint32_t( m_choices.size() );
 			name.Replace( wxT( " Tone Mapping" ), wxEmptyString );
 			m_choices.Add( name );
 		}
@@ -157,9 +156,8 @@ namespace GuiCommon
 				m_target.setToneMappingType( make_String( m_choices[selected] ) );
 
 			} );
-		auto toneMapping = m_target.getToneMapping();
 
-		if ( toneMapping )
+		if ( auto toneMapping = m_target.getToneMapping() )
 		{
 			prop->SetValue( m_choices[m_nameToChoice[m_target.getToneMapping()->getName()]] );
 		}
@@ -171,18 +169,17 @@ namespace GuiCommon
 			, [this]( wxVariant const & var ){ onEditShader( var ); } );
 	}
 
-	void ToneMappingTreeItemProperty::onEditShader( wxVariant const & var )
+	void ToneMappingTreeItemProperty::onEditShader( wxVariant const & )
 	{
-		auto toneMapping = m_target.getToneMapping();
-
-		if ( toneMapping )
+		if ( auto toneMapping = m_target.getToneMapping() )
 		{
 			ShaderSources sources = ToneMappingShaderGatherer::submit( *toneMapping );
-			ShaderDialog * editor = new ShaderDialog{ toneMapping->getEngine()
+			ShaderDialog editor{ toneMapping->getEngine()
+				, m_imagesLoader
 				, c3d::move( sources )
 				, toneMapping->getFullName()
 				, m_parent };
-			editor->Show();
+			editor.Show();
 		}
 	}
 }

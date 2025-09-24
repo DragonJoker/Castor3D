@@ -44,7 +44,7 @@ namespace c3d::debug
 			return ret;
 		}
 
-		static void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
+		void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
 		{
 			stream << cuT( "CALL STACK:" ) << std::endl;
 			Vector< void * > backTrace( toCapture );
@@ -61,7 +61,7 @@ namespace c3d::debug
 
 #else
 
-		static void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
+		void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
 		{
 		}
 
@@ -82,12 +82,6 @@ namespace c3d::debug
 
 	void unloadModule( DynamicLibrary const & library )
 	{
-	}
-
-	OutputStream & operator<<( OutputStream & stream, Backtrace const & bt )
-	{
-		backtrace::showBacktrace( stream, bt.m_toCapture, bt.m_toSkip );
-		return stream;
 	}
 }
 

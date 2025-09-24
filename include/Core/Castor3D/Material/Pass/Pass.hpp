@@ -379,6 +379,7 @@ namespace c3d
 		C3D_API PassComponentRegister & getPassComponentsRegister()const;
 		C3D_API String getTextureFlagsName( PassComponentTextureFlag flags )const;
 		C3D_API LightingModelID getLightingModelId()const;
+		C3D_API RenderPassTypeID getRenderPassTypeId()const;
 
 		bool isInitialised()const noexcept
 		{
@@ -507,7 +508,7 @@ namespace c3d
 			setColour( HdrRgbColour{ v, gamma } );
 		}
 
-		void setColour( Coords3f const & v )const
+		void setColour( PointView3f const & v )const
 		{
 			setColour( HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}

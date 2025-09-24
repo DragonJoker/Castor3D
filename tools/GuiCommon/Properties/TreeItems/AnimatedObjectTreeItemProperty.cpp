@@ -8,9 +8,10 @@
 namespace GuiCommon
 {
 	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, bool editable
 		, c3d::AnimatedObjectRPtr object )
-		: TreeItemProperty( engine, editable )
+		: TreeItemProperty( engine, imagesLoader, editable )
 		, m_object( object )
 	{
 		CreateTreeItemMenu();

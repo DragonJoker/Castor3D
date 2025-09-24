@@ -58,6 +58,12 @@
 #include <assimp/version.h>
 #if !defined( AI_MATKEY_ROUGHNESS_FACTOR )
 #	include <assimp/pbrmaterial.h>
+#else
+#	include <assimp/GltfMaterial.h>
+#endif
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
+
+#if !defined( AI_MATKEY_ROUGHNESS_FACTOR )
 #	define AI_MATKEY_ROUGHNESS_FACTOR "$mat.roughnessFactor", 0, 0
 #	define AI_MATKEY_SPECULAR_FACTOR "$mat.specularFactor", 0, 0
 #	define AI_MATKEY_GLOSSINESS_FACTOR "$mat.glossinessFactor", 0, 0
@@ -77,12 +83,9 @@
 #	define AI_MATKEY_USE_EMISSIVE_MAP "$mat.useEmissiveMap", 0, 0
 #	define AI_MATKEY_EMISSIVE_INTENSITY "$mat.emissiveIntensity", 0, 0
 #	define AI_MATKEY_ANISOTROPY_FACTOR "$mat.anisotropyFactor", 0, 0
-	static constexpr aiShadingMode aiShadingMode_PBR_BRDF = aiShadingMode( 0xb );
-	static constexpr aiShadingMode aiShadingMode_Unlit = aiShadingMode_NoShading;
-#else
-#	include <assimp/GltfMaterial.h>
+static constexpr aiShadingMode aiShadingMode_PBR_BRDF = aiShadingMode( 0xb );
+static constexpr aiShadingMode aiShadingMode_Unlit = aiShadingMode_NoShading;
 #endif
-#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace c3d_assimp
 {
@@ -105,11 +108,11 @@ namespace c3d_assimp
 	{
 		static constexpr aiShadingMode ShadingMode_PBR_BRDF = aiShadingMode( 0xb );
 
-		static c3d::String decodeUri( c3d::String uri )
+		static c3d::String decodeUri( c3d::StringView uri )
 		{
 			c3d::MbString escaped{ c3d::toUtf8( uri ) };
 
-			for ( auto i = escaped.begin(); i != escaped.end(); i++ )
+			for ( auto i = escaped.begin(); i != escaped.end(); ++i )
 			{
 				if ( *i == '%' )
 				{
@@ -236,12 +239,10 @@ namespace c3d_assimp
 			{
 				parseComponentBoolData< c3d::TwoSidedComponent >( AI_MATKEY_TWOSIDED );
 
-				if ( !parseRoughness() )
+				if ( !parseRoughness()
+					&& !parseGlossiness() )
 				{
-					if ( !parseGlossiness() )
-					{
-						parseShininess();
-					}
+					parseShininess();
 				}
 
 				parseComponentDataT< c3d::MetalnessComponent, float >( AI_MATKEY_METALLIC_FACTOR );
@@ -614,18 +615,16 @@ namespace c3d_assimp
 			{
 				aiColor3D emissive = { 1, 1, 1 };
 
-				if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS )
+				if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS
+					&& ( emissive.r != 0 || emissive.g != 0 || emissive.b != 0 ) )
 				{
-					if ( emissive.r != 0 || emissive.g != 0 || emissive.b != 0 )
-					{
-						auto component = m_result.createComponent< c3d::EmissiveComponent >();
-						component->setEmissive( c3d::RgbColour{ m_emissiveMult * emissive.r
-							, m_emissiveMult * emissive.g
-							, m_emissiveMult * emissive.b } );
-						float emissiveIntensity = 1.0f;
-						m_material.Get( AI_MATKEY_EMISSIVE_INTENSITY, emissiveIntensity );
-						component->setEmissiveFactor( emissiveIntensity );
-					}
+					auto component = m_result.createComponent< c3d::EmissiveComponent >();
+					component->setEmissive( c3d::RgbColour{ m_emissiveMult * emissive.r
+						, m_emissiveMult * emissive.g
+						, m_emissiveMult * emissive.b } );
+					float emissiveIntensity = 1.0f;
+					m_material.Get( AI_MATKEY_EMISSIVE_INTENSITY, emissiveIntensity );
+					component->setEmissiveFactor( emissiveIntensity );
 				}
 			}
 
@@ -680,37 +679,34 @@ namespace c3d_assimp
 
 			void parseAlphaRefValue()
 			{
-				float ref{ 1.0f };
 				aiString value;
 
-				if ( m_material.Get( AI_MATKEY_GLTF_ALPHACUTOFF, ref ) == aiReturn_SUCCESS )
+				if ( float ref{ 1.0f };
+					m_material.Get( AI_MATKEY_GLTF_ALPHACUTOFF, ref ) == aiReturn_SUCCESS
+						&& m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
 				{
-					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
-					{
-						auto mode = makeString( value );
+					auto mode = makeString( value );
 
-						if ( mode == cuT( "MASK" ) )
-						{
-							auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
-							alphaTest->setAlphaRefValue( ref );
-							alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
-							alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
-						}
+					if ( mode == cuT( "MASK" ) )
+					{
+						auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
+						alphaTest->setAlphaRefValue( ref );
+						alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+						alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
 					}
 				}
 			}
 
 			bool parseRefractionRatio()
 			{
-				float ior{ 1.0f };
-
-				if ( m_material.Get( AI_MATKEY_REFRACTI, ior ) == aiReturn_SUCCESS )
+				if ( float ior{ 1.0f };
+					m_material.Get( AI_MATKEY_REFRACTI, ior ) == aiReturn_SUCCESS )
 				{
 					auto component = m_result.createComponent< c3d::RefractionComponent >();
 					component->setRefractionRatio( ior );
-					auto transmission = m_result.getComponent< c3d::TransmissionComponent >();
 
-					if ( !transmission )
+					if ( auto transmission = m_result.getComponent< c3d::TransmissionComponent >();
+						!transmission )
 					{
 						transmission = m_result.createComponent< c3d::TransmissionComponent >();
 						transmission->setTransmission( 0.0f );
@@ -736,9 +732,9 @@ namespace c3d_assimp
 				return it->second;
 			}
 
-			c3d::Image const & loadImage( c3d::TextureSourceInfo const & source )
+			c3d::Image const & loadImage( c3d::TextureSourceInfo const & source )const
 			{
-				c3d::ImageRPtr result{};
+				c3d::Image const * result{};
 
 				if ( source.isBufferImage() )
 				{
@@ -808,14 +804,12 @@ namespace c3d_assimp
 
 						if ( sourceInfo )
 						{
-							auto texFlags = getFlags( texConfig );
-
-							if ( getComponentsMask( texConfig, m_opacityMapFlags )
-								&& c3d::hasAny( texFlags, m_opacityMapFlags ) )
+							if ( auto texFlags = getFlags( texConfig );
+								getComponentsMask( texConfig, m_opacityMapFlags )
+									&& c3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
-								aiString alphaMode;
-
-								if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
+								if ( aiString alphaMode;
+									m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
 								{
 									mixedInterpolative( true );
 								}
@@ -833,9 +827,8 @@ namespace c3d_assimp
 								if ( auto & image = loadImage( *sourceInfo );
 									hasAlphaChannel( image ) )
 								{
-									aiString alphaMode;
-
-									if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
+									if ( aiString alphaMode;
+										m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
 									{
 										mixedInterpolative( true );
 									}
@@ -869,9 +862,9 @@ namespace c3d_assimp
 				if ( name.length > 0 )
 				{
 					result.name = makeString( name );
-					int texcoordSet{};
 
-					if ( m_material.Get( AI_MATKEY_UVWSRC( type, index ), texcoordSet ) == AI_SUCCESS )
+					if ( int texcoordSet{};
+						m_material.Get( AI_MATKEY_UVWSRC( type, index ), texcoordSet ) == AI_SUCCESS )
 					{
 						result.texcoordSet = uint32_t( texcoordSet );
 					}
@@ -881,17 +874,11 @@ namespace c3d_assimp
 
 				if ( !result.name.empty() )
 				{
-					switch ( type )
-					{
-					case aiTextureType_REFLECTION:
+					if ( type == aiTextureType_REFLECTION )
 						m_result.createComponent< c3d::ReflectionComponent >()->enableReflections();
-						break;
-					default:
-						break;
-					}
 
 					auto & engine = *m_result.getOwner()->getEngine();
-					auto & cache = engine.getSamplerCache();
+					auto const & cache = engine.getSamplerCache();
 
 					GlFilter minFilter{ GlFilter::LINEAR };
 					GlFilter magFilter{ GlFilter::LINEAR };
@@ -942,9 +929,8 @@ namespace c3d_assimp
 
 				while ( result.name.empty() && index < c3d::MaxTextureCoordinatesSets )
 				{
-					auto tmp = getTextureInfo( type, index );
-
-					if ( !tmp.name.empty() )
+					if ( auto tmp = getTextureInfo( type, index );
+						!tmp.name.empty() )
 					{
 						result = tmp;
 					}
@@ -989,14 +975,14 @@ namespace c3d_assimp
 				}
 			}
 
-			bool hasMatKey( const char * pKey, unsigned int type, unsigned int idx )
+			bool hasMatKey( const char * pKey, unsigned int type, unsigned int idx )const
 			{
 				aiMaterialProperty const * p{};
 				return aiGetMaterialProperty( &m_material, pKey, type, idx, &p ) == aiReturn_SUCCESS
 					&& p;
 			}
 
-			bool hasTexKey( aiTextureType type )
+			bool hasTexKey( aiTextureType type )const
 			{
 				return aiGetMaterialTextureCount( &m_material, type ) > 0;
 			}
@@ -1100,41 +1086,29 @@ namespace c3d_assimp
 						auto spcConfig{ getRemap( m_specularMapFlags, c3d::TextureConfiguration{} ) };
 
 						if ( !getComponentsMask( spcConfig, m_metalnessMapFlags ) )
-						{
 							addFlagConfiguration( spcConfig, { m_metalnessMapFlags, 0x000000FF } );
-						}
 
 						if ( !getComponentsMask( spcConfig, m_roughnessMapFlags ) )
-						{
 							addFlagConfiguration( spcConfig, { m_roughnessMapFlags, 0x0000FF00 } );
-						}
 
 						if ( spcInfo.name == occInfo.name )
 						{
 							if ( !getComponentsMask( spcConfig, m_occlusionMapFlags ) )
-							{
 								addFlagConfiguration( spcConfig, { m_occlusionMapFlags, 0x00FF0000 } );
-							}
 
 							occInfo.name.clear();
 						}
 
 						if ( spcInfo.name == mtlInfo.name )
-						{
 							mtlInfo.name.clear();
-						}
 
 						if ( spcInfo.name == shnInfo.name )
-						{
 							shnInfo.name.clear();
-						}
 
 						if ( spcInfo.name == rghInfo.name )
-						{
 							rghInfo.name.clear();
-						}
 
-						m_textureRemaps.emplace( m_specularMapFlags, spcConfig );
+						m_textureRemaps.try_emplace( m_specularMapFlags, spcConfig );
 					}
 				}
 			}
@@ -1161,7 +1135,7 @@ namespace c3d_assimp
 						{
 							auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
 							addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
-							m_textureRemaps.emplace( m_colourMapFlags, config );
+							m_textureRemaps.try_emplace( m_colourMapFlags, config );
 							hasOpacityTex = true;
 							mixedInterpolative( mode == cuT( "BLEND" ) );
 						}

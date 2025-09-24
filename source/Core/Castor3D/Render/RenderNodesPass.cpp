@@ -90,8 +90,8 @@ namespace c3d
 		static auto findPipeline( PipelineFlags const & flags
 			, PipelineContT & pipelines )
 		{
-			return std::find_if( pipelines.begin()
-				, pipelines.end()
+			return std::find_if( std::begin( pipelines )
+				, std::end( pipelines )
 				, [&flags]( auto & lookup )
 				{
 					return lookup->getFlags() == flags;
@@ -136,14 +136,14 @@ namespace c3d
 		, Texture * targetImage
 		, Texture * targetDepth
 		, RenderNodesPassDesc const & desc )
-		: NodesPass{ device, pass.group.getFullName(), typeName, pass.getFullName(), targetImage, targetDepth, desc.base() }
+		: NodesPass{ device, pass.getGroup().getFullName(), typeName, pass.getFullName(), targetImage, targetDepth, desc.base() }
 		, SceneCullerHolder{ &desc.m_culler }
 		, RenderQueueHolder{ makeUnique< RenderQueue >( *this, device, desc.m_culler, typeName, desc.m_meshShading, desc.m_ignored ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph
 			, { [this]( uint32_t ){ doSubInitialise(); }
-				, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( cb ); }
+				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( ctx, cb ); }
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
@@ -166,7 +166,7 @@ namespace c3d
 		m_frontPipelines.clear();
 	}
 
-	void RenderNodesPass::setIgnoredNode( SceneNode const & node )
+	void RenderNodesPass::setIgnoredNode( SceneNode const & node )const
 	{
 		getRenderQueue().setIgnoredNode( node );
 	}
@@ -252,51 +252,14 @@ namespace c3d
 			, vertexStride };
 
 		if ( isFrontCulled )
-		{
 			addFlag( result.m_programFlags, ProgramFlag::eFrontCulled );
-		}
 
 		doUpdateFlags( result );
 
 		if ( hasAny( result.pass, getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() ) )
-		{
 			result.alphaFunc = blendAlphaFunc;
-		}
 
 		return result;
-	}
-
-	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
-		, TextureCombine const & textures
-		, SubmeshComponentCombine const & submeshComponents
-		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags
-		, VkPrimitiveTopology topology
-		, bool isFrontCulled
-		, GpuBufferOffsetT< Point4f > const & morphTargets
-		, SubmeshRenderData const * submeshData
-		, uint32_t vertexStride )const noexcept
-	{
-		return createPipelineFlags( pass.getPassFlags()
-			, submeshComponents
-			, pass.getColourBlendMode()
-			, pass.getAlphaBlendMode()
-			, ( pass.getRenderPassInfo()
-				? pass.getRenderPassInfo()->id
-				: RenderPassTypeID{} )
-			, pass.getLightingModelId()
-			, getScene().getBackgroundModelId()
-			, pass.getAlphaFunc()
-			, pass.getBlendAlphaFunc()
-			, textures
-			, programFlags
-			, sceneFlags
-			, topology
-			, isFrontCulled
-			, pass.getIndex()
-			, morphTargets
-			, submeshData
-			, vertexStride );
 	}
 
 	PipelineAndID RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
@@ -323,17 +286,13 @@ namespace c3d
 			, VK_CULL_MODE_FRONT_BIT );
 	}
 
-	void RenderNodesPass::cleanupPipelines()
+	void RenderNodesPass::cleanupPipelines()const
 	{
 		for ( auto const & pipeline : m_backPipelines )
-		{
 			pipeline->cleanup();
-		}
 
 		for ( auto const & pipeline : m_frontPipelines )
-		{
 			pipeline->cleanup();
-		}
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderNodesPass::createBlendState( BlendMode colourBlendMode
@@ -537,25 +496,24 @@ namespace c3d
 				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
 			}
 
-			auto & nodesIds = getRenderQueue().getRenderNodes().getNodesIds();
-			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
+			auto const & nodesIds = getRenderQueue().getRenderNodes().getNodesIds();
+			auto & nodesIdsWrite = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 				, 0u
 				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			nodesIdsWrite.bufferInfo.push_back( { *nodesIds.buffer
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER );
+			nodesIdsWrite.bufferInfo.emplace_back() = { *nodesIds.buffer
 				, 0u
-				, nodesIds.getSize() } );
-			descriptorWrites.push_back( nodesIdsWrite );
+				, nodesIds.getSize() };
 
 			auto & modelBuffer = scene.getModelBuffer();
-			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
+			auto & modelDataWrite = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eModelsData )
 				, 0u
 				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			modelDataWrite.bufferInfo.push_back( { *modelBuffer.buffer
-				, 0u, modelBuffer.getSize() } );
-			descriptorWrites.push_back( modelDataWrite );
-			auto const & matCache = getOwner()->getMaterialCache();
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER );
+			modelDataWrite.bufferInfo.emplace_back() = { *modelBuffer.buffer
+				, 0u, modelBuffer.getSize() };
+
+			auto const & matCache = getOwner()->getMaterialCache();			
 			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
 			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
 			descriptorWrites.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
@@ -567,13 +525,12 @@ namespace c3d
 			if ( pipeline.getFlags().isBillboard() )
 			{
 				auto & billboardDatas = scene.getBillboardsBuffer();
-				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
+				auto & write = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eBillboardsData )
 					, 0u
 					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				write.bufferInfo.push_back( { *billboardDatas.buffer
-					, 0u, billboardDatas.getSize() } );
-				descriptorWrites.push_back( write );
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER );
+				write.bufferInfo.emplace_back() = { *billboardDatas.buffer
+					, 0u, billboardDatas.getSize() };
 			}
 
 			auto index = uint32_t( GlobalBuffersIdx::eCount );
@@ -599,10 +556,11 @@ namespace c3d
 		getRenderQueue().invalidate();
 	}
 
-	void RenderNodesPass::doSubRecordInto( VkCommandBuffer commandBuffer )const
+	void RenderNodesPass::doSubRecordInto( crg::RecordContext const & context
+		, VkCommandBuffer commandBuffer )const
 	{
 		VkCommandBuffer secondary = getRenderQueue().initCommandBuffer();
-		m_context.vkCmdExecuteCommands( commandBuffer
+		context->vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
 	}
@@ -666,7 +624,7 @@ namespace c3d
 		if ( shadowBuffer )
 		{
 			addShadowDescriptor( *getEngine()->getRenderSystem()
-				, m_graph
+				, getGraph()
 				, doAdjustSceneFlags( scene.getFlags() )
 				, descriptorWrites
 				, shadowMaps

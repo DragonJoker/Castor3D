@@ -50,7 +50,6 @@ namespace c3d
 		}
 
 		static bool isBoxVisible( Frustum const & frustum
-			, SceneNode const & sceneNode
 			, Geometry const & instance
 			, Submesh const & data )
 		{
@@ -107,7 +106,7 @@ namespace c3d
 			&& node.pass->isVisible()
 			&& ( node.data.getInstantiation().isInstanced( *node.pass ) // Don't cull individual instances
 				|| ( cull::isSphereVisible( frustum, *sceneNode, node.instance, node.data )
-					&& cull::isBoxVisible( frustum, *sceneNode, node.instance, node.data ) ) );
+					&& cull::isBoxVisible( frustum, node.instance, node.data ) ) );
 	}
 
 	//*********************************************************************************************

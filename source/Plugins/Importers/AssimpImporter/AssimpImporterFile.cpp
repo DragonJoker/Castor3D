@@ -214,9 +214,7 @@ namespace c3d_assimp
 			, c3d::StringMap< AssimpSkeletonData > const & skeletons )
 		{
 			if ( bonesNodes.find( aiNodeName ) != bonesNodes.end() )
-			{
 				return true;
-			}
 
 			auto mbName = c3d::toUtf8( aiNodeName );
 			return skeletons.end() != std::find_if( skeletons.begin()
@@ -279,9 +277,7 @@ namespace c3d_assimp
 			for ( auto & [_, skeleton] : sceneData.skeletons )
 			{
 				if ( isAnimForSkeleton( animation, skeleton ) )
-				{
 					return { &skeleton, nullptr };
-				}
 			}
 
 			if ( scene )
@@ -291,11 +287,8 @@ namespace c3d_assimp
 					if ( auto node = rootNode.FindNode( c3d::toUtf8( skeleton->getRootNode()->getName() ).c_str() ) )
 					{
 						auto & data = sceneData.skeletons.try_emplace( name, node ).first->second;
-
 						if ( isAnimForSkeleton( animation, data ) )
-						{
 							return { &data, skeleton.get() };
-						}
 					}
 				}
 			}
@@ -313,7 +306,7 @@ namespace c3d_assimp
 			for ( auto anim : animations )
 			{
 				auto morphChannels = c3d::makeArrayView( anim->mMorphMeshChannels, anim->mNumMorphMeshChannels );
-				auto morphIt = std::find_if( morphChannels.begin()
+				if ( auto morphIt = std::find_if( morphChannels.begin()
 					, morphChannels.end()
 					, [aiNumAnimMeshes, aiMeshIndex, &rootNode]( aiMeshMorphAnim const * morphChannel )
 					{
@@ -333,8 +326,7 @@ namespace c3d_assimp
 
 						return res;
 					} );
-
-				if ( morphIt != morphChannels.end() )
+					morphIt != morphChannels.end() )
 				{
 					result.try_emplace( makeString( anim->mName ), *morphIt );
 				}
@@ -381,9 +373,7 @@ namespace c3d_assimp
 			, c3d::Vector< c3d::Matrix4x4f > & transforms )
 		{
 			if ( !node )
-			{
 				return;
-			}
 
 			auto it = std::find_if( nodes.begin()
 				, nodes.end()
@@ -419,10 +409,7 @@ namespace c3d_assimp
 				c3d::Matrix4x4f cumulative{ 1.0f };
 
 				for ( auto const & t : transforms )
-				{
 					cumulative *= t;
-				}
-
 				transform = cumulative * transform;
 			}
 
@@ -445,13 +432,9 @@ namespace c3d_assimp
 		if ( m_aiScene )
 		{
 			for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
-			{
 				for ( auto aiBone : c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
-				{
 					m_bonesNodes.try_emplace( makeString( aiBone->mName )
 						, fromAssimp( aiBone->mOffsetMatrix ) );
-				}
-			}
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
@@ -513,18 +496,13 @@ namespace c3d_assimp
 	SkeletonAnimations const & AssimpImporterFile::getSkeletonsAnimations( c3d::Skeleton const & skeleton )const
 	{
 		auto name = skeleton.getName();
-
 		if ( getListedMeshes().empty()
 			&& !getSkeletons().empty() )
-		{
 			name = getSkeletons().begin()->first;
-		}
 
 		if ( auto it = m_sceneData.skeletons.find( name );
 			it != m_sceneData.skeletons.end() )
-		{
 			return it->second.anims;
-		}
 
 		static SkeletonAnimations const dummy;
 		return dummy;
@@ -536,9 +514,7 @@ namespace c3d_assimp
 		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
 			it != m_sceneData.meshes.end()
 				&& submeshIndex < it->second.submeshes.size() )
-		{
 			return it->second.submeshes[submeshIndex].anims;
-		}
 
 		static MeshAnimations const dummy;
 		return dummy;
@@ -547,12 +523,8 @@ namespace c3d_assimp
 	c3d::StringArray AssimpImporterFile::listMaterials()
 	{
 		c3d::StringArray result;
-
 		for ( auto const & [name, _] : m_sceneData.materials )
-		{
 			result.emplace_back( name );
-		}
-
 		return result;
 	}
 
@@ -589,12 +561,8 @@ namespace c3d_assimp
 	c3d::Vector< c3d::ImporterFile::NodeData > AssimpImporterFile::listSceneNodes()
 	{
 		c3d::Vector< NodeData > result;
-
 		for ( auto const & node : m_sceneData.nodes )
-		{
 			result.emplace_back( node.parent, node.name, node.isCamera );
-		}
-
 		return result;
 	}
 
@@ -669,12 +637,8 @@ namespace c3d_assimp
 			it != m_sceneData.meshes.end() )
 		{
 			for ( auto const & submesh : it->second.submeshes )
-			{
 				for ( auto & [name, _] : submesh.anims )
-				{
 					result.insert( name );
-				}
-			}
 		}
 
 		return c3d::StringArray{ result.begin()
@@ -684,12 +648,9 @@ namespace c3d_assimp
 	c3d::StringArray AssimpImporterFile::listSkeletonAnimations( c3d::Skeleton const & skeleton )
 	{
 		auto name = skeleton.getName();
-
 		if ( getListedMeshes().empty()
 			&& !getSkeletons().empty() )
-		{
 			name = getSkeletons().begin()->first;
-		}
 
 		c3d::StringArray result;
 
@@ -697,9 +658,7 @@ namespace c3d_assimp
 			it != m_sceneData.skeletons.end() )
 		{
 			for ( auto const & [animName, _] : it->second.anims )
-			{
 				result.push_back( animName );
-			}
 		}
 
 		return result;
@@ -718,9 +677,7 @@ namespace c3d_assimp
 			it != m_sceneData.nodes.end() )
 		{
 			for ( auto const & [name, _] : it->anims )
-			{
 				result.push_back( name );
-			}
 		}
 
 		return result;
@@ -736,39 +693,25 @@ namespace c3d_assimp
 	uint32_t AssimpImporterFile::countAllMeshAnimations()const
 	{
 		uint32_t result{};
-
 		for ( auto & [_, mesh] : m_sceneData.meshes )
-		{
 			for ( auto & submesh : mesh.submeshes )
-			{
 				result += uint32_t( submesh.anims.size() );
-			}
-		}
-
 		return result;
 	}
 
 	uint32_t AssimpImporterFile::countAllSkeletonAnimations()const
 	{
 		uint32_t result{};
-
 		for ( auto & [_, skeleton] : m_sceneData.skeletons )
-		{
 			result += uint32_t( skeleton.anims.size() );
-		}
-
 		return result;
 	}
 
 	uint32_t AssimpImporterFile::countAllSceneNodeAnimations()const
 	{
 		uint32_t result{};
-
 		for ( auto & node : m_sceneData.nodes )
-		{
 			result += uint32_t( node.anims.size() );
-		}
-
 		return result;
 	}
 
@@ -913,18 +856,13 @@ namespace c3d_assimp
 							{
 								return skelNode == lookup.second.skelNode;
 							} );
-
 						if ( regIt != m_sceneData.meshes.end() )
-						{
 							regIt = file::replaceIter( meshName, regIt, m_sceneData.meshes ).first;
-						}
 					}
 				}
 
 				if ( regIt == m_sceneData.meshes.end() )
-				{
 					regIt = m_sceneData.meshes.try_emplace( meshName, skelNode ).first;
-				}
 
 				auto & submeshData = regIt->second.submeshes.emplace_back( aiMesh, meshIndex );
 				m_meshes.insert( meshIndex );
@@ -955,11 +893,8 @@ namespace c3d_assimp
 		, c3d::Matrix4x4f transform )
 	{
 		auto aiNodeName = makeString( node.mName );
-
 		if ( m_bonesNodes.find( aiNodeName ) != m_bonesNodes.end() )
-		{
 			return;
-		}
 
 		aiVector3D translate;
 		aiVector3D scale;
@@ -1063,9 +998,7 @@ namespace c3d_assimp
 				}
 
 				if ( aiLight->mType != aiLightSource_DIRECTIONAL )
-				{
 					position = fromAssimp( aiLight->mPosition );
-				}
 
 				auto transform = c3d::Matrix4x4f{ 1.0f };
 				c3d::matrix::setTransform( transform

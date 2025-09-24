@@ -42,7 +42,7 @@ namespace c3d
 	void TextureAnimationBuffer::addTextureAnimation( AnimatedTexture const & texture )
 	{
 		CU_Require( texture.hasTextureUnit() );
-		auto & unit = texture.getTextureUnit();
+		auto const & unit = texture.getTextureUnit();
 		CU_Require( unit.getId() != 0u );
 		auto lock( makeUniqueLock( m_mutex ) );
 		m_animations[unit.getId()] = &texture;
@@ -53,7 +53,7 @@ namespace c3d
 	{
 		if ( texture.hasTextureUnit() )
 		{
-			auto & unit = texture.getTextureUnit();
+			auto const & unit = texture.getTextureUnit();
 			--m_count;
 			auto lock( makeUniqueLock( m_mutex ) );
 			m_animations[unit.getId()] = nullptr;
@@ -90,17 +90,6 @@ namespace c3d
 				, 0u
 				, VkDeviceSize( sizeof( TextureAnimationData ) * count ) );
 		}
-	}
-
-	VkDescriptorSetLayoutBinding TextureAnimationBuffer::createLayoutBinding( uint32_t binding
-		, VkShaderStageFlags stages )const
-	{
-		return m_buffer.createLayoutBinding( binding, stages );
-	}
-
-	ashes::WriteDescriptorSet TextureAnimationBuffer::getBinding( uint32_t binding )const
-	{
-		return m_buffer.getBinding( binding );
 	}
 
 	void TextureAnimationBuffer::createBinding( ashes::DescriptorSet & descriptorSet

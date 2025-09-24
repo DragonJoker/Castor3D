@@ -24,13 +24,8 @@ namespace c3d
 		log::info << tabs() << cuT( "Writing ComboBoxCtrl " ) << control.getName() << std::endl;
 		bool result = writeSub< Control >( file, control );
 
-		for ( auto item : control.getItems() )
-		{
-			if ( result )
-			{
-				result = writeName( file, cuT( "item" ), item );
-			}
-		}
+		for ( auto const & item : control.getItems() )
+			result = result && writeName( file, cuT( "item" ), item );
 
 		return result;
 	}

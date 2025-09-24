@@ -46,7 +46,7 @@ namespace c3d
 {
 	namespace ssaoraw
 	{
-		enum Idx
+		enum class Bindings
 		{
 			SsaoCfgUboIdx,
 			CameraUboIdx,
@@ -59,13 +59,13 @@ namespace c3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
-			C3D_Camera( writer, CameraUboIdx, 0u );
+			C3D_SsaoConfig( writer, Bindings::SsaoCfgUboIdx, 0u );
+			C3D_Camera( writer, Bindings::CameraUboIdx, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_mapDepth", DepthMapIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_mapDepth", Bindings::DepthMapIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", NormalMapIdx, 0u, useNormalsBuffer );
+			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", Bindings::NormalMapIdx, 0u, useNormalsBuffer );
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
@@ -138,7 +138,7 @@ namespace c3d
 
 			// Read the camera-space position of the point at screen-space pixel ssPosition
 			auto getPosition = writer.implementFunction< sdw::Vec3 >( "getPosition"
-				, [&]( sdw::IVec2 const & ssPosition )
+				, [&writer, &reconstructCSPosition, &c3d_mapDepth, &c3d_ssaoConfigData]( sdw::IVec2 const & ssPosition )
 				{
 					auto position = writer.declLocale< sdw::Vec3 >( "position" );
 					position.z() = c3d_mapDepth.fetch( ssPosition, 0_i );
@@ -165,7 +165,7 @@ namespace c3d
 			// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.
 			// Assumes length(unitOffset) == 1.
 			auto getOffsetPosition = writer.implementFunction< sdw::Vec3 >( "getOffsetPosition"
-				, [&]( sdw::IVec2 const & ssCenter
+				, [&writer, &getMipLevel, &reconstructCSPosition, &c3d_mapDepth, &c3d_ssaoConfigData]( sdw::IVec2 const & ssCenter
 					, sdw::Vec2 const & unitOffset
 					, sdw::Float const & ssRadius
 					, sdw::Float const & invCszBufferScale )
@@ -198,7 +198,7 @@ namespace c3d
 
 			// Smaller return value = less occlusion
 			auto fallOffFunction = writer.implementFunction< sdw::Float >( "fallOffFunction"
-				, [&]( sdw::Float const & vv
+				, [&writer, &c3d_ssaoConfigData]( sdw::Float const & vv
 					, sdw::Float const & vn
 					, sdw::Float const & epsilon )
 				{
@@ -240,7 +240,7 @@ namespace c3d
 
 			// Compute the occlusion due to sample point \a occluder about camera-space point \a csCenter with unit normal \a normal
 			auto aoValueFromPositionsAndNormal = writer.implementFunction< sdw::Float >( "aoValueFromPositionsAndNormal"
-				, [&]( sdw::Vec3 const & csCenter
+				, [&writer, &fallOffFunction]( sdw::Vec3 const & csCenter
 					, sdw::Vec3 const & normal
 					, sdw::Vec3 const & occluder )
 				{
@@ -267,7 +267,7 @@ namespace c3d
 
 			// Four versions of the falloff function are implemented below."
 			auto sampleAO = writer.implementFunction< sdw::Vec3 >( "sampleAO"
-				, [&]( sdw::IVec2 const & ssCenter
+				, [&writer, &tapLocation, &getOffsetPosition, &aoValueFromPositionsAndNormal]( sdw::IVec2 const & ssCenter
 					, sdw::Vec3 const & csCenter
 					, sdw::Vec3 const & normal
 					, sdw::Float const & ssDiskRadius
@@ -306,7 +306,7 @@ namespace c3d
 				, sdw::OutFloat{ writer, "occlusion" } );
 
 			auto isOccluded = writer.implementFunction< sdw::Float >( "isOccluded"
-				, [&]( sdw::Vec3 const &
+				, [&writer]( sdw::Vec3 const &
 					, sdw::Vec3 const & )
 				{
 					writer.returnStmt( 0.0_f );
@@ -315,7 +315,7 @@ namespace c3d
 				, sdw::InVec3{ writer, "csCenter" } );
 
 			auto sampleRay = writer.implementFunction< sdw::Vec3 >( "sampleRay"
-				, [&]( sdw::Vec3 const & csCenter
+				, [&writer, &c3d_ssaoConfigData, &isOccluded]( sdw::Vec3 const & csCenter
 					, sdw::Vec3 const & csRay )
 				{
 					// Offset on the unit disk, spun for this pixel
@@ -342,19 +342,22 @@ namespace c3d
 				, sdw::InVec3{ writer, "csRay" } );
 
 			auto square = writer.implementFunction< sdw::Float >( "square"
-				, [&]( sdw::Float const & x )
+				, [&writer]( sdw::Float const & x )
 				{
 					writer.returnStmt( x * x );
 				}
 				, sdw::InFloat{ writer, "x" } );
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn const &
+			writer.implementEntryPoint( [&inPosition]( sdw::VertexIn const &
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+			writer.implementEntryPoint( [useNormalsBuffer
+					, &writer, &getPosition, &csZToKey, reconstructNonUnitCSFaceNormal, square, sampleAO, sampleRay
+					, c3d_mapNormal, c3d_cameraData, c3d_ssaoConfigData
+					, outBentNormal, outColour]( sdw::FragmentIn const & in
 				, sdw::FragmentOut const & )
 				{
 					// Pixel being shaded
@@ -588,9 +591,9 @@ namespace c3d
 		auto & pass = m_graph.createPass( "RawAO"
 			, [this, &passIndex, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
-				auto resultIt = framePass.targets.begin();
+				auto resultIt = framePass.getTargets().begin();
 				auto bentIt = std::next( resultIt );
 				crg::ru::Config ruConfig{ 2u, false };
 				ruConfig.implicitAction( ( *resultIt )->view(), crg::RecordContext::clearAttachment( **resultIt ) );
@@ -598,7 +601,7 @@ namespace c3d
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO raw AO pass" ) );
 				auto result = makeRawUnique< RenderQuad >( framePass
 					, context
-					, graph
+					, runGraph
 					, ruConfig
 					, ssaoraw::getConfig( m_size
 						, m_ssaoConfig
@@ -610,10 +613,10 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		m_ssaoConfigUbo.createPassBinding( pass, ssaoraw::SsaoCfgUboIdx );
-		m_cameraUbo.createPassBinding( pass, ssaoraw::CameraUboIdx );
-		pass.addInputSampled( *linearisedDepthBuffer.getSampledLastAttach(), ssaoraw::DepthMapIdx );
-		pass.addInputSampled( *normals.getSampledLastAttach(), ssaoraw::NormalMapIdx );
+		m_ssaoConfigUbo.createPassBinding( pass, ssaoraw::Bindings::SsaoCfgUboIdx );
+		m_cameraUbo.createPassBinding( pass, ssaoraw::Bindings::CameraUboIdx );
+		pass.addInputSampledT( *linearisedDepthBuffer.getSampledLastAttach(), ssaoraw::Bindings::DepthMapIdx );
+		pass.addInputSampledT( *normals.getSampledLastAttach(), ssaoraw::Bindings::NormalMapIdx );
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), opaqueWhiteClearColor ) );
 		m_bentNormals.setLastAttach( pass.addOutputColourTarget( m_bentNormals.getTargetViewId(), transparentBlackClearColor ) );
 		m_result.create();

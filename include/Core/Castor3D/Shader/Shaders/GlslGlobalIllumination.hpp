@@ -30,27 +30,27 @@ namespace c3d::shader
 			, bool hasDiffuseGI
 			, SceneData const & sceneData
 			, BlendComponents const & components
-			, LightSurface lightSurface
-			, sdw::Float roughness
-			, sdw::CombinedImage2DRgba32 brdfMap
+			, LightSurface const & lightSurface
+			, sdw::Float const & roughness
+			, sdw::CombinedImage2DRgba32 const & brdfMap
 			, IndirectLighting & indirectLighting );
 		C3D_API void computeOcclusion( SceneFlags sceneFlags
-			, LightSurface lightSurface
+			, LightSurface const & lightSurface
 			, IndirectLighting & indirectLighting );
 		C3D_API void computeDiffuse( SceneFlags sceneFlags
-			, LightSurface lightSurface
+			, LightSurface const & lightSurface
 			, IndirectLighting & indirectLighting );
 		C3D_API void computeAmbient( SceneFlags sceneFlags
 			, SceneData const & sceneData
 			, BlendComponents const & components
-			, IndirectLighting & indirectLighting );
+			, IndirectLighting & indirectLighting )const;
 		C3D_API void computeSpecular( SceneFlags sceneFlags
-			, LightSurface lightSurface
-			, sdw::Float roughness
-			, sdw::CombinedImage2DRgba32 brdfMap
+			, LightSurface const & lightSurface
+			, sdw::Float const & roughness
+			, sdw::CombinedImage2DRgba32 const & brdfMap
 			, IndirectLighting & indirectLighting );
 		C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
-			, LightSurface lightSurface
+			, LightSurface const & lightSurface
 			, VoxelData const & voxelData );
 		C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 			, sdw::Vec3 const & wsNormal
@@ -80,11 +80,11 @@ namespace c3d::shader
 			, sdw::Float const & indirectOcclusion
 			, sdw::Float const & indirectBlend
 			, VoxelData const & voxelData );
-		sdw::Vec4 computeRSMRadiance( sdw::Vec2 const & texcoord );
-		sdw::Vec4 computeLPVRadiance( LightSurface surface
-			, LpvGridData lpvGridData );
-		sdw::Vec4 computeLLPVRadiance( LightSurface surface
-			, LayeredLpvGridData llpvGridData );
+		sdw::Vec4 computeRSMRadiance( sdw::Vec2 const & texcoord )const;
+		sdw::Vec4 computeLPVRadiance( LightSurface const & surface
+			, LpvGridData const & lpvGridData )const;
+		sdw::Vec4 computeLLPVRadiance( LightSurface const & surface
+			, LayeredLpvGridData const & llpvGridData )const;
 		sdw::Vec4 traceCone( sdw::CombinedImage3DRgba32 const & voxels
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
@@ -92,11 +92,11 @@ namespace c3d::shader
 			, sdw::Float const & coneAperture
 			, VoxelData const & voxelData );
 		sdw::Vec4 traceConeReflection( sdw::CombinedImage3DRgba32 const & voxels
-			, LightSurface lightSurface
+			, LightSurface const & lightSurface
 			, sdw::Float const & roughness
 			, VoxelData const & voxelData );
 		sdw::Float traceConeOcclusion( sdw::CombinedImage3DRgba32 const & voxels
-			, LightSurface lightSurface
+			, LightSurface const & lightSurface
 			, VoxelData const & voxelData );
 
 	private:

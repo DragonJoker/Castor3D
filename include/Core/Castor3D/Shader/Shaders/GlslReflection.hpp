@@ -23,7 +23,7 @@ namespace c3d::shader
 
 		C3D_API static sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera );
-		C3D_API static DerivVec3 computeIncident( DerivVec3 const & wsPosition
+		C3D_API static RetDerivVec3 computeIncident( DerivVec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera );
 		C3D_API static sdw::Vec3 getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsIncident
@@ -33,16 +33,16 @@ namespace c3d::shader
 			, sdw::Vec3 const & attenuationColor
 			, sdw::Float const & attenuationDistance );
 		C3D_API static sdw::Float applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior );
-		C3D_API void computeWithTransmission( BlendComponents & components
+		C3D_API void computeWithTransmission( BlendComponents const & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
 			, CameraData const & camera
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
-			, ReflectionRefraction & output
+			, ReflectionRefraction const & output
 			, DebugOutputCategory const & debugOutput );
-		C3D_API void computeWithTransmission( BlendComponents & components
+		C3D_API void computeWithTransmission( BlendComponents const & components
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
@@ -52,15 +52,15 @@ namespace c3d::shader
 			, CameraData const & camera
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
-			, ReflectionRefraction & output
+			, ReflectionRefraction const & output
 			, DebugOutputCategory const & debugOutput );
-		C3D_API void computeWithoutTransmission( BlendComponents & components
+		C3D_API void computeWithoutTransmission( BlendComponents const & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular );
-		C3D_API sdw::Boolean computeWithoutTransmission( BlendComponents & components
+		C3D_API sdw::Boolean computeWithoutTransmission( BlendComponents const & components
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
@@ -68,16 +68,16 @@ namespace c3d::shader
 			, sdw::UInt envMapIndex
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular );
-		C3D_API void computeWithoutTransmission( BlendComponents & components
+		C3D_API void computeWithoutTransmission( BlendComponents const & components
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
-			, ReflectionRefraction & output
+			, ReflectionRefraction const & output
 			, DebugOutputCategory const & debugOutput );
-		C3D_API void computeDiffuseBrdf( BlendComponents & components
+		C3D_API void computeDiffuseBrdf( BlendComponents const & components
 			, BackgroundModel & background
 			, sdw::Vec3 const & reflectedDiffuse
 			, sdw::Vec3 const & wsNormal
@@ -138,21 +138,21 @@ namespace c3d::shader
 		*\param csHitPoint
 		*	Camera space location of the ray hit.
 		*/
-		C3D_API sdw::RetBoolean traceScreenSpace( sdw::Vec3 csOrigin
-			, sdw::Vec3 csDirection
-			, sdw::Mat4 projectToPixelMatrix
-			, sdw::CombinedImage2DR32 csZBuffer
-			, sdw::Vec2 csZBufferSize
-			, sdw::Float csZThickness
-			, sdw::Boolean csZBufferIsHyperbolic
-			, sdw::Vec3 clipInfo
-			, sdw::Float nearPlaneZ
-			, sdw::Float stride
-			, sdw::Float jitterFraction
-			, sdw::Float maxSteps
-			, sdw::Float maxRayTraceDistance
-			, sdw::Vec2 & hitPixel
-			, sdw::Vec3 & csHitPoint );
+		C3D_API sdw::RetBoolean traceScreenSpace( sdw::Vec3 const & csOrigin
+			, sdw::Vec3 const & csDirection
+			, sdw::Mat4 const & projectToPixelMatrix
+			, sdw::CombinedImage2DR32 const & csZBuffer
+			, sdw::Vec2 const & csZBufferSize
+			, sdw::Float const & csZThickness
+			, sdw::Boolean const & csZBufferIsHyperbolic
+			, sdw::Vec3 const & clipInfo
+			, sdw::Float const & nearPlaneZ
+			, sdw::Float const & stride
+			, sdw::Float const & jitterFraction
+			, sdw::Float const & maxSteps
+			, sdw::Float const & maxRayTraceDistance
+			, sdw::Vec2 const & hitPixel
+			, sdw::Vec3 const & csHitPoint );
 
 		Utils & getUtils()const
 		{
@@ -171,23 +171,23 @@ namespace c3d::shader
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 			, sdw::UInt const & envMapIndex
 			, sdw::Float const & NdotV
-			, BlendComponents & components );
+			, BlendComponents const & components );
 		sdw::RetVec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & f0 );
+			, BlendComponents const & components );
 		sdw::RetVec3 computeDiffuseEnvMaps( sdw::Vec3 const & wsDirection
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components );
+			, BlendComponents const & components );
 		sdw::RetVec3 doComputeSpecularTransmission( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImage2DRgba32 const & sceneMap
 			, CameraData const & camera
-			, sdw::Vec2 sceneUv
-			, BlendComponents & components );
+			, sdw::Vec2 const & sceneUv
+			, BlendComponents const & components );
 		sdw::RetVec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
@@ -202,7 +202,7 @@ namespace c3d::shader
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular );
 		void doComputeSpecularTransmission( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
@@ -212,14 +212,14 @@ namespace c3d::shader
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec3 & refracted );
 		void doComputeDiffuse( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
 			, sdw::Vec3 const & wsDirection
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec3 & result );
 		void doComputeClearcoat( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 			, sdw::Boolean const & hasEnvMap
@@ -227,7 +227,7 @@ namespace c3d::shader
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec3 & coatReflected );
 		void doComputeSheen( sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
@@ -238,7 +238,7 @@ namespace c3d::shader
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec4 & sheenReflected );
 
 	private:
@@ -249,7 +249,7 @@ namespace c3d::shader
 		bool m_allowIbl;
 		bool m_hasEnvMap;
 		sdw::Function< sdw::Void
-			, InOutBlendComponents
+			, InBlendComponents
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -259,21 +259,13 @@ namespace c3d::shader
 			, sdw::InUInt
 			, OutReflectionRefraction > m_computeWithTransmission;
 		sdw::Function< sdw::Void
-			, InOutBlendComponents
+			, InBlendComponents
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InUInt
 			, OutReflectionRefraction > m_computeWithoutTransmission;
-		sdw::Function< sdw::Void
-			, InOutBlendComponents
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InUInt
-			, OutReflectionRefraction > m_computeEnvReflRefr;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3
 			, sdw::InVec3
@@ -307,15 +299,6 @@ namespace c3d::shader
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeScreenSpace2;
 
-		sdw::Function< sdw::Void
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InCombinedImageCubeArrayR11fG11fB10f
-			, sdw::InUInt
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3

@@ -167,7 +167,7 @@ namespace
 	template< c3d::PixelFormat PFDst, c3d::PixelFormat PFSrc >
 	struct PixelConverter
 	{
-		void operator()( c3d::Pixel< PFSrc > const & source )
+		void operator()( c3d::Pixel< PFSrc > const & source )const
 		{
 			c3d::Pixel< PFDst > dest( source );
 			auto stream = c3d::makeStringStream();
@@ -180,7 +180,7 @@ namespace
 	template< c3d::PixelFormat PFSrc >
 	struct PixelConverter< PFSrc, PFSrc >
 	{
-		void operator()( c3d::Pixel< PFSrc > const & source )
+		void operator()( [[maybe_unused]] c3d::Pixel< PFSrc > const & source )const
 		{
 		}
 	};
@@ -237,7 +237,7 @@ namespace
 	template< c3d::PixelFormat PFDst, c3d::PixelFormat PFSrc >
 	struct BufferConverter
 	{
-		void operator()( c3d::PxBuffer< PFSrc > & source )
+		void operator()( c3d::PxBuffer< PFSrc > & source )const
 		{
 			auto destination = c3d::PxBufferBase::create( source.getDimensions()
 				, c3d::PixelFormat( PFDst )
@@ -256,7 +256,7 @@ namespace
 	{
 		using PixelBuffer = c3d::PxBuffer< PFSrc >;
 
-		void operator()( PixelBuffer & source )
+		void operator()( [[maybe_unused]] PixelBuffer & source )const
 		{
 		}
 	};
@@ -273,7 +273,7 @@ namespace
 	template< c3d::PixelFormat PFSrc >
 	struct BufferConversionChecker< PFSrc, std::enable_if_t< c3d::IsColourFormat< PFSrc >::value > >
 	{
-		void operator()()
+		void operator()()const
 		{
 			c3d::Size size = { 16, 16 };
 			c3d::Vector< uint8_t > buffer;
@@ -285,10 +285,14 @@ namespace
 			for ( size_t i = 0; i < count; i += c3d::PixelDefinitionsT< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
-				c3d::setA8U( pixel, value++ );
-				c3d::setR8U( pixel, value++ );
-				c3d::setG8U( pixel, value++ );
-				c3d::setB8U( pixel, value++ );
+				c3d::setA8U( pixel, value );
+				++value;
+				c3d::setR8U( pixel, value );
+				++value;
+				c3d::setG8U( pixel, value );
+				++value;
+				c3d::setB8U( pixel, value );
+				++value;
 			}
 
 			auto src = c3d::PxBufferBase::create( size
@@ -317,7 +321,7 @@ namespace
 	template< c3d::PixelFormat PFSrc >
 	struct BufferConversionChecker < PFSrc, std::enable_if_t < c3d::IsDepthFormat< PFSrc >::value && PFSrc != c3d::PixelFormat::eD24_UNORM_S8_UINT > >
 	{
-		void operator()()
+		void operator()()const
 		{
 			c3d::Size size = { 16, 16 };
 			c3d::Vector< uint8_t > buffer;
@@ -355,7 +359,7 @@ namespace
 	template< c3d::PixelFormat PFSrc >
 	struct BufferConversionChecker< PFSrc, std::enable_if_t< PFSrc == c3d::PixelFormat::eD24_UNORM_S8_UINT > >
 	{
-		void operator()()
+		void operator()()const
 		{
 			c3d::Size size = { 16, 16 };
 			c3d::Vector< uint8_t > buffer;
@@ -394,7 +398,7 @@ namespace
 	template< c3d::PixelFormat PFSrc >
 	struct BufferConversionChecker < PFSrc, std::enable_if_t < c3d::IsStencilFormat< PFSrc >::value && PFSrc != c3d::PixelFormat::eD24_UNORM_S8_UINT > >
 	{
-		void operator()()
+		void operator()()const
 		{
 			c3d::Size size = { 16, 16 };
 			c3d::Vector< uint8_t > buffer;
@@ -406,8 +410,10 @@ namespace
 			for ( size_t i = 0; i < count; i += c3d::PixelDefinitionsT< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
-				c3d::setD24U( pixel, value++ );
-				c3d::setS8U( pixel, value++ );
+				c3d::setD24U( pixel, value );
+				++value;
+				c3d::setS8U( pixel, value );
+				++value;
 			}
 
 			auto src = c3d::PxBufferBase::create( size
@@ -445,7 +451,7 @@ namespace Testing
 		doRegisterTest( "TestBufferConversions", [this](){ TestBufferConversions(); } );
 	}
 
-	void CastorUtilsPixelFormatTest::TestPixelConversions()
+	void CastorUtilsPixelFormatTest::TestPixelConversions()const
 	{
 		CheckPixelConversions< c3d::PixelFormat::eR8_UNORM >();
 		CheckPixelConversions< c3d::PixelFormat::eR32_SFLOAT >();
@@ -463,7 +469,7 @@ namespace Testing
 		CheckPixelConversions< c3d::PixelFormat::eS8_UINT >();
 	}
 
-	void CastorUtilsPixelFormatTest::TestBufferConversions()
+	void CastorUtilsPixelFormatTest::TestBufferConversions()const
 	{
 		CheckBufferConversions< c3d::PixelFormat::eR8_UNORM >();
 		CheckBufferConversions< c3d::PixelFormat::eR32_SFLOAT >();

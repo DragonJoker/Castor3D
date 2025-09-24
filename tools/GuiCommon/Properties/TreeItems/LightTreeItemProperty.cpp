@@ -9,8 +9,10 @@
 
 namespace GuiCommon
 {
-	LightTreeItemProperty::LightTreeItemProperty( bool editable, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+	LightTreeItemProperty::LightTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
+		, c3d::Engine * engine )
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

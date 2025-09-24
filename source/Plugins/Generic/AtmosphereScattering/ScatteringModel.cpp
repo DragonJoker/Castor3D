@@ -7,6 +7,16 @@
 
 namespace atmosphere_scattering
 {
+	namespace sctmdl
+	{
+		static uint32_t getNextBinding( uint32_t & binding )
+		{
+			auto result = binding;
+			++binding;
+			return result;
+		}
+	}
+
 	ScatteringModel::ScatteringModel( sdw::ShaderWriter & writer
 		, AtmosphereModel & atmosphere
 		, Settings settings
@@ -16,17 +26,17 @@ namespace atmosphere_scattering
 		, m_atmosphere{ atmosphere }
 		, m_settings{ c3d::move( settings ) }
 		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
-			, binding++
+			, sctmdl::getNextBinding( binding )
 			, set ) }
 		, multiScatterMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
-			, ( settings.needsMultiscatter ? binding++ : 0u )
+			, ( settings.needsMultiscatter ? sctmdl::getNextBinding( binding ) : 0u )
 			, set
 			, settings.needsMultiscatter ) }
 		, skyViewMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "skyViewMap"
-			, binding++
+			, sctmdl::getNextBinding( binding )
 			, set ) }
 		, volumeMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "volumeMap"
-			, binding++
+			, sctmdl::getNextBinding( binding )
 			, set ) }
 	{
 		m_atmosphere.setTransmittanceMap( transmittanceMap );
@@ -38,7 +48,7 @@ namespace atmosphere_scattering
 		if ( !m_getSunLuminance )
 		{
 			m_getSunLuminance = m_writer.implementFunction< sdw::Vec3 >( "scatter_getSunLuminance"
-				, [&]( Ray const & ray )
+				, [this]( Ray const & ray )
 				{
 					auto sunDir = m_writer.declLocale( "sunDir"
 						, m_atmosphere.getSunDirection() );
@@ -162,7 +172,7 @@ namespace atmosphere_scattering
 		return skyViewMap.grad( coord, dPdx, dPdy );
 	}
 
-	sdw::Float ScatteringModel::aerialPerspectiveDepthToSlice( sdw::Float const & depth )
+	sdw::Float ScatteringModel::aerialPerspectiveDepthToSlice( sdw::Float const & depth )const
 	{
 		auto apKmPerSlice = 4.0_f;
 		return depth * ( 1.0_f / apKmPerSlice );
@@ -171,13 +181,13 @@ namespace atmosphere_scattering
 	c3d::shader::RetRay ScatteringModel::getPixelTransLum( sdw::Vec2 const & pfragPos
 		, sdw::Vec2 const & pfragSize
 		, sdw::Float const & pfragDepth
-		, sdw::Vec4 & ptransmittance
-		, sdw::Vec4 & pluminance )
+		, sdw::Vec4 const & ptransmittance
+		, sdw::Vec4 const & pluminance )
 	{
 		if ( !m_getPixelTransLum )
 		{
 			m_getPixelTransLum = m_writer.implementFunction< c3d::shader::Ray >( "scatter_getPixelTransLum"
-				, [&]( sdw::Vec2 const & fragPos
+				, [this]( sdw::Vec2 const & fragPos
 					, sdw::Vec2 const & fragSize
 					, sdw::Float const & fragDepth
 					, sdw::Vec4 transmittance
@@ -252,7 +262,7 @@ namespace atmosphere_scattering
 		if ( !m_getSkyRadiance )
 		{
 			m_getSkyRadiance = m_writer.implementFunction< sdw::Vec3 >( "scatter_getSkyRadiance"
-				, [&]( sdw::Vec3 const & wsNormal
+				, [this]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
 					, sdw::Vec2 const & fragSize )
@@ -279,8 +289,8 @@ namespace atmosphere_scattering
 					auto lightViewCosAngle = m_writer.declLocale( "lightViewCosAngle"
 						, lightOnPlane.x() );
 
-					auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
-					m_atmosphere.skyViewLutParamsToUv( 0_b, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
+					auto uv = m_writer.declLocale( "uv"
+						, m_atmosphere.skyViewLutParamsToUv( 0_b, viewZenithCosAngle, lightViewCosAngle, viewHeight, fragSize ) );
 
 					auto result = m_writer.declLocale( "result"
 						, skyViewMap.lod( uv, 0.0_f ).rgb() );
@@ -324,7 +334,6 @@ namespace atmosphere_scattering
 		{
 			sdwIF( m_writer, viewHeight < m_atmosphere.getAtmosphereRadius() && fragDepth == 0.0_f )
 			{
-				auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
 				auto upVector = m_writer.declLocale( "upVector"
 					, normalize( ray.origin ) );
 				auto viewZenithCosAngle = m_writer.declLocale( "viewZenithCosAngle"
@@ -346,7 +355,8 @@ namespace atmosphere_scattering
 						, vec3( 0.0_f )
 						, m_atmosphere.getPlanetRadius() ).valid() );
 
-				m_atmosphere.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
+				auto uv = m_writer.declLocale( "uv"
+					, m_atmosphere.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, fragSize ) );
 
 				luminance = vec4( skyViewMap.lod( uv, 0.0_f ).rgb(), 1.0_f );
 

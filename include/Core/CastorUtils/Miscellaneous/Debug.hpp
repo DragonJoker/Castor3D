@@ -16,6 +16,11 @@ namespace c3d
 
 	namespace debug
 	{
+		namespace backtrace
+		{
+			CU_API void showBacktrace( OutputStream & stream, int toCapture, int toSkip );
+		}
+
 		struct Backtrace
 		{
 			int m_toCapture;
@@ -25,6 +30,13 @@ namespace c3d
 				: m_toCapture{ toCapture }
 				, m_toSkip{ toSkip }
 			{
+			}
+
+		private:
+			friend OutputStream & operator<<( OutputStream & stream, Backtrace const & trace )
+			{
+				backtrace::showBacktrace( stream, trace.m_toCapture, trace.m_toSkip );
+				return stream;
 			}
 		};
 		/**
@@ -56,19 +68,6 @@ namespace c3d
 		 */
 		CU_API void cleanup();
 		/**
-		 *\~english
-		 *\brief			Puts the backtrace into a stream
-		 *\param[in,out]	stream	The stream
-		 *\~french
-		 *\brief			Transmet la pile d'appels dans un flux
-		 *\param[in,out]	stream	Le flux
-		 */
-		CU_API OutputStream & operator<<( OutputStream & stream, Backtrace const & );
-
-		/**
-		\author 	Sylvain DOREMUS
-		\date		05/10/2015
-		\version	0.8.0
 		\~english
 		\brief		Helper class used to enable allocation backtrace retrieval.
 		\~french
@@ -94,19 +93,17 @@ namespace c3d
 
 		protected:
 			String m_callStack;
-			friend OutputStream & operator<<( OutputStream & stream, Backtraced const & traced );
 
 #endif
-		};
 
-		inline OutputStream & operator<<( OutputStream & stream
-			, [[maybe_unused]] Backtraced const & traced )
-		{
+			friend OutputStream & operator<<( OutputStream & stream, [[maybe_unused]] Backtraced const & traced )
+			{
 #if !defined( NDEBUG )
-			stream << traced.m_callStack;
+				stream << traced.m_callStack;
 #endif
-			return stream;
-		}
+				return stream;
+			}
+		};
 	}
 }
 

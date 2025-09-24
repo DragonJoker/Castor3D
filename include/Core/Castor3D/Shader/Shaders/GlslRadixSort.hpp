@@ -31,16 +31,16 @@ namespace c3d::shader
 		/**
 		 *\arg	ValueT		The value type.
 		 */
-		template< typename ValueT >
+		template< typename ValueT, template< typename DataT > typename ArrayT >
 		void sortT( sdw::ShaderWriter & writer
-			, sdw::UInt elementOffset
-			, sdw::UInt elementCount
-			, sdw::UInt groupIndex
-			, sdw::UInt threadIndex
-			, sdw::Array< sdw::UInt > const & inputKeys
-			, sdw::Array< sdw::UInt > const & outputKeys
-			, sdw::Array< ValueT > const & inputValues
-			, sdw::Array< ValueT > const & outputValues
+			, sdw::UInt const & elementOffset
+			, sdw::UInt const & elementCount
+			, sdw::UInt const & groupIndex
+			, sdw::UInt const & threadIndex
+			, ArrayT< sdw::UInt > const & inputKeys
+			, ArrayT< sdw::UInt > const & outputKeys
+			, ArrayT< ValueT > const & inputValues
+			, ArrayT< ValueT > const & outputValues
 			, ValueT const & invalidValue )const
 		{
 			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", threadsCount ); // A temporary buffer to store the input keys. (threadsCount * sizeof(uint) Bytes)
@@ -147,14 +147,14 @@ namespace c3d::shader
 		/**
 		 *\arg	ValueT		The value type.
 		 */
-		template< typename ValueT >
+		template< typename ValueT, template< typename DataT > typename ArrayT >
 		void sortT( sdw::ComputeWriter & writer
 			, sdw::UInt elementOffset
 			, sdw::UInt elementCount
 			, sdw::UInt groupIndex
 			, sdw::UInt threadIndex
-			, sdw::Array< sdw::UInt > const & inputKeys
-			, sdw::Array< sdw::UInt > const & outputKeys
+			, ArrayT< sdw::UInt > const & inputKeys
+			, ArrayT< sdw::UInt > const & outputKeys
 			, ValueT const & invalidValue )
 		{
 			sdw::Array< ValueT > inputValues = writer.declGlobalArray< ValueT >( "c3d_dummyInValues", 1u, false );

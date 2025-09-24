@@ -225,7 +225,7 @@ namespace c3d
 		}
 	}
 
-	void ListBoxCtrl::doUpdateItems()
+	void ListBoxCtrl::doUpdateItems()const
 	{
 		auto position = getClientOffset();
 
@@ -365,7 +365,7 @@ namespace c3d
 		}
 	}
 
-	void ListBoxCtrl::onItemMouseLButtonUp( ControlRPtr control
+	void ListBoxCtrl::onItemMouseLButtonUp( Control const * control
 		, MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft
@@ -416,7 +416,7 @@ namespace c3d
 		}
 	}
 
-	void ListBoxCtrl::onItemKeyDown( ControlRPtr control
+	void ListBoxCtrl::onItemKeyDown( Control const * control
 		, KeyboardEvent const & event )
 	{
 		onKeyDown( event );

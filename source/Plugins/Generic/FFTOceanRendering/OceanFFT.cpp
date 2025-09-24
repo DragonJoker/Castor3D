@@ -154,7 +154,7 @@ namespace ocean_fft
 		, m_engine{ createRandomEngine( m_config.disableRandomSeed ) }
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
 		, m_displacementDownsample{ m_config.displacementDownsample }
-		, m_fftConfig{ device, m_heightMapSamples }
+		, m_fftConfig{ device }
 		, m_heightSeeds{ c3d::makeBuffer< cfloat >( device, resources
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
@@ -171,8 +171,7 @@ namespace ocean_fft
 			, ubo
 			, m_heightMapSamples
 			, m_fftConfig
-			, *m_heightDistribution
-			, FFTMode::eC2R }
+			, *m_heightDistribution }
 		, m_displacementDistribution{ c3d::makeBuffer< cfloat >( device, resources
 			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
 			, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
@@ -184,8 +183,7 @@ namespace ocean_fft
 			, ubo
 			, { m_heightMapSamples.width >> m_displacementDownsample, m_heightMapSamples.height >> m_displacementDownsample }
 			, m_fftConfig
-			, *m_displacementDistribution
-			, FFTMode::eC2C }
+			, *m_displacementDistribution }
 		, m_heightDisplacement{ createTexture( device
 				, resources
 				, m_heightMapSamples
@@ -226,8 +224,7 @@ namespace ocean_fft
 			, ubo
 			, m_heightMapSamples
 			, m_fftConfig
-			, *m_normalDistribution
-			, FFTMode::eC2C }
+			, *m_normalDistribution }
 		, m_normals{ createTexture( device
 			, resources
 			, m_heightMapSamples
@@ -296,7 +293,7 @@ namespace ocean_fft
 		visitor.visit( cuT( "LOD 0 Distance" ), m_config.lod0Distance );
 	}
 
-	void OceanFFT::generateDistributionSeeds( c3d::BufferT< cfloat > & distribBuffer )
+	void OceanFFT::generateDistributionSeeds( c3d::BufferT< cfloat > const & distribBuffer )
 	{
 		auto Nx = int32_t( m_heightMapSamples.width );
 		auto Nz = int32_t( m_heightMapSamples.height );

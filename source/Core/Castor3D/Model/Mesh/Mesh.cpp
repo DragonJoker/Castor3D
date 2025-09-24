@@ -30,9 +30,7 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserMeshType, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 			else
 			{
 				Parameters parameters;
@@ -50,7 +48,9 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserMeshImport, MeshContext )
 		{
-			if ( auto mesh = blockContext->mesh )
+			if ( !blockContext->mesh )
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			else
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
@@ -61,7 +61,7 @@ namespace c3d
 					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
 				}
 
-				if ( !MeshImporter::importData( *mesh
+				if ( !MeshImporter::importData( *blockContext->mesh
 					, pathFile
 					, parameters
 					, true ) )
@@ -72,19 +72,13 @@ namespace c3d
 
 				blockContext->imported = true;
 			}
-			else
-			{
-				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserMeshAnimImport, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 			else
 			{
 				Path path;
@@ -102,13 +96,9 @@ namespace c3d
 				if ( !AnimationImporter::importData( *animation
 					, pathFile
 					, parameters ) )
-				{
 					CU_ParsingError( cuT( "Mesh animation Import failed" ) );
-				}
 				else
-				{
 					blockContext->mesh->addAnimation( ptrRefCast< Animation >( animation ) );
-				}
 			}
 		}
 		CU_EndAttribute()
@@ -116,9 +106,7 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserMeshSingleAnimImport, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 			else
 			{
 				auto animName = params[0]->get< String >();
@@ -137,13 +125,9 @@ namespace c3d
 				if ( !AnimationImporter::importData( *animation
 					, pathFile
 					, parameters ) )
-				{
 					CU_ParsingError( cuT( "Mesh animation Import failed" ) );
-				}
 				else
-				{
 					blockContext->mesh->addAnimation( ptrRefCast< Animation >( animation ) );
-				}
 			}
 		}
 		CU_EndAttribute()
@@ -151,19 +135,14 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserMeshMorphTargetImport, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No mesh initialised." ) );
-			}
 			else
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
 				Parameters parameters;
-
 				if ( params.size() > 1 )
-				{
 					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
-				}
 
 				Mesh mesh{ cuT( "MorphImport" ), *blockContext->mesh->getScene() };
 
@@ -176,7 +155,7 @@ namespace c3d
 				}
 				else if ( mesh.getSubmeshCount() == blockContext->mesh->getSubmeshCount() )
 				{
-					for ( auto & morphSubmesh : mesh )
+					for ( auto const & morphSubmesh : mesh )
 					{
 						auto id = morphSubmesh->getId();
 						auto submesh = blockContext->mesh->getSubmesh( id );
@@ -192,7 +171,8 @@ namespace c3d
 
 							for ( auto & position : buffer.positions )
 							{
-								position -= submesh->getPositions()[index++];
+								position -= submesh->getPositions()[index];
+								++index;
 							}
 						}
 
@@ -203,7 +183,8 @@ namespace c3d
 
 							for ( auto & normal : buffer.normals )
 							{
-								normal -= submesh->getNormals()[index++];
+								normal -= submesh->getNormals()[index];
+								++index;
 							}
 						}
 
@@ -214,7 +195,8 @@ namespace c3d
 
 							for ( auto & tangent : buffer.tangents )
 							{
-								tangent -= submesh->getTangents()[index++];
+								tangent -= submesh->getTangents()[index];
+								++index;
 							}
 						}
 
@@ -225,7 +207,8 @@ namespace c3d
 
 							for ( auto & bitangent : buffer.bitangents )
 							{
-								bitangent -= submesh->getBitangents()[index++];
+								bitangent -= submesh->getBitangents()[index];
+								++index;
 							}
 						}
 
@@ -236,7 +219,8 @@ namespace c3d
 
 							for ( auto & texcoord : buffer.texcoords0 )
 							{
-								texcoord -= submesh->getTexcoords0()[index++];
+								texcoord -= submesh->getTexcoords0()[index];
+								++index;
 							}
 						}
 
@@ -247,7 +231,8 @@ namespace c3d
 
 							for ( auto & texcoord : buffer.texcoords1 )
 							{
-								texcoord -= submesh->getTexcoords1()[index++];
+								texcoord -= submesh->getTexcoords1()[index];
+								++index;
 							}
 						}
 
@@ -258,7 +243,8 @@ namespace c3d
 
 							for ( auto & texcoord : buffer.texcoords2 )
 							{
-								texcoord -= submesh->getTexcoords2()[index++];
+								texcoord -= submesh->getTexcoords2()[index];
+								++index;
 							}
 						}
 
@@ -269,7 +255,8 @@ namespace c3d
 
 							for ( auto & texcoord : buffer.texcoords3 )
 							{
-								texcoord -= submesh->getTexcoords3()[index++];
+								texcoord -= submesh->getTexcoords3()[index];
+								++index;
 							}
 						}
 
@@ -280,7 +267,8 @@ namespace c3d
 
 							for ( auto & colour : buffer.colours )
 							{
-								colour -= submesh->getColours()[index++];
+								colour -= submesh->getColours()[index];
+								++index;
 							}
 						}
 
@@ -300,13 +288,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterial, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -314,9 +298,7 @@ namespace c3d
 				if ( auto material = getEngine( *blockContext )->findMaterial( name ) )
 				{
 					for ( auto const & submesh : *blockContext->mesh )
-					{
 						submesh->setDefaultMaterial( material );
-					}
 				}
 				else
 				{
@@ -335,9 +317,7 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserMeshSkeleton, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
@@ -388,13 +368,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterialsMaterial, MeshContext )
 		{
 			if ( !blockContext->mesh )
-			{
 				CU_ParsingError( cuT( "No Mesh initialised." ) );
-			}
 			else if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				auto name = getPrefixedName( params[1]->get< String >(), *blockContext );
@@ -447,7 +423,7 @@ namespace c3d
 
 		while ( it != m_submeshes.end() )
 		{
-			auto & submesh = *it;
+			auto const & submesh = *it;
 
 			if ( submesh->getPointsCount() > 0
 				&& ( !submesh->getIndexMapping()
@@ -467,7 +443,7 @@ namespace c3d
 	{
 		Animable::cleanupAnimations();
 
-		for ( auto & submesh : m_submeshes )
+		for ( auto const & submesh : m_submeshes )
 		{
 			submesh->cleanup( getEngine()->getRenderSystem()->getRenderDevice() );
 		}
@@ -476,33 +452,26 @@ namespace c3d
 	}
 
 	void Mesh::record( crg::ResourcesCache & resources
-		, crg::FramePassGroup & graph )
+		, crg::FramePassGroup & graph )const
 	{
-		for ( auto & submesh : *this )
+		for ( auto const & submesh : *this )
 			submesh->record( resources, graph );
 	}
 
 	void Mesh::registerDependencies( crg::FramePass & pass )const
 	{
 		for ( auto & submesh : *this )
-		{
 			submesh->registerDependencies( pass );
-		}
 	}
 
 	void Mesh::update( CpuUpdater & updater )
 	{
 		bool dirty = false;
-
 		for ( auto const & submesh : m_submeshes )
-		{
 			dirty = submesh->update( updater ) || dirty;
-		}
 
 		if ( dirty )
-		{
 			onChange( *this );
-		}
 	}
 
 	void Mesh::updateContainers()
@@ -510,11 +479,8 @@ namespace c3d
 		if ( !m_submeshes.empty() )
 		{
 			m_box = m_submeshes[0]->getBoundingBox();
-
 			for ( auto i = 1u; i < m_submeshes.size(); ++i )
-			{
 				m_box = m_box.getUnion( m_submeshes[i]->getBoundingBox() );
-			}
 
 			m_sphere.load( m_box );
 		}
@@ -523,46 +489,31 @@ namespace c3d
 	void Mesh::computeContainers()
 	{
 		for ( auto const & submesh : m_submeshes )
-		{
 			submesh->computeContainers();
-		}
-
 		updateContainers();
 	}
 
 	uint32_t Mesh::getFaceCount()const
 	{
-		uint32_t nbFaces = 0;
-
+		uint32_t result = 0;
 		for ( auto const & submesh : m_submeshes )
-		{
-			nbFaces += submesh->getFaceCount();
-		}
-
-		return nbFaces;
+			result += submesh->getFaceCount();
+		return result;
 	}
 
 	uint32_t Mesh::getVertexCount()const
 	{
-		uint32_t nbFaces = 0;
-
+		uint32_t result = 0;
 		for ( auto const & submesh : m_submeshes )
-		{
-			nbFaces += submesh->getPointsCount();
-		}
-
-		return nbFaces;
+			result += submesh->getPointsCount();
+		return result;
 	}
 
 	SubmeshRPtr Mesh::getSubmesh( uint32_t index )const
 	{
 		SubmeshRPtr result{};
-
 		if ( index < m_submeshes.size() )
-		{
 			result = m_submeshes[index].get();
-		}
-
 		return result;
 	}
 
@@ -585,25 +536,22 @@ namespace c3d
 
 	void Mesh::removeSubmesh( Submesh const & submesh )
 	{
-		auto it = std::find_if( m_submeshes.begin()
+		if ( auto it = std::find_if( m_submeshes.begin()
 			, m_submeshes.end()
 			, [&submesh]( SubmeshUPtr const & lookup )
 			{
 				return &submesh == lookup.get();
 			} );
-
-		if ( it != m_submeshes.end() )
+			it != m_submeshes.end() )
 		{
 			m_submeshes.erase( it );
 		}
 	}
 
-	void Mesh::computeNormals( bool reverted )
+	void Mesh::computeNormals( bool reverted )const
 	{
 		for ( auto const & submesh : m_submeshes )
-		{
 			submesh->computeNormals( reverted );
-		}
 	}
 
 	void Mesh::setSkeleton( SkeletonRPtr skeleton )
@@ -615,9 +563,7 @@ namespace c3d
 	MeshAnimation & Mesh::createAnimation( String const & name )
 	{
 		if ( !hasAnimation( name ) )
-		{
 			addAnimation( makeUniqueDerived< Animation, MeshAnimation >( *this, name ) );
-		}
 
 		return doGetAnimation< MeshAnimation >( name );
 	}
@@ -625,9 +571,7 @@ namespace c3d
 	void Mesh::removeAnimation( String const & name )
 	{
 		if ( hasAnimation( name ) )
-		{
 			doRemoveAnimation( name );
-		}
 	}
 
 	void Mesh::cloneInto( Mesh & output )const
@@ -637,9 +581,7 @@ namespace c3d
 		output.m_serialisable = m_serialisable;
 
 		for ( auto & submesh : m_submeshes )
-		{
 			submesh->cloneInto( *output.createSubmesh() );
-		}
 	}
 
 	void Mesh::addParsers( AttributeParsers & result )

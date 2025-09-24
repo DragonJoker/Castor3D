@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMapsModule.hpp"
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace c3d
@@ -17,24 +17,30 @@ namespace c3d
 	namespace shader
 	{
 		struct RsmConfigData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_RsmData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::FloatField< "intensity" >
+				, sdw::FloatField< "maxRadius" >
+				, sdw::UIntField< "sampleCount" >
+				, sdw::IntField< "index" > >
 		{
-			C3D_API RsmConfigData( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, RsmConfigData );
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			RsmConfigData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+				, intensity{ getMember< "intensity" >() }
+				, maxRadius{ getMember< "maxRadius" >() }
+				, sampleCount{ getMember< "sampleCount" >() }
+				, index{ getMember< "index" >() }
+			{
+			}
 
 			sdw::Float intensity;
 			sdw::Float maxRadius;
 			sdw::UInt32 sampleCount;
 			sdw::Int32 index;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
 		};
 	}
 
@@ -46,7 +52,7 @@ namespace c3d
 	public:
 		C3D_API RsmConfigUbo( RsmConfigUbo const & rhs ) = delete;
 		C3D_API RsmConfigUbo & operator=( RsmConfigUbo const & rhs ) = delete;
-		C3D_API RsmConfigUbo( RsmConfigUbo && rhs )noexcept = default;
+		C3D_API RsmConfigUbo( RsmConfigUbo && rhs )noexcept = delete;
 		C3D_API RsmConfigUbo & operator=( RsmConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit RsmConfigUbo( RenderDevice const & device );
 		C3D_API ~RsmConfigUbo()noexcept;
@@ -54,8 +60,9 @@ namespace c3d
 		C3D_API void cpuUpdate( RsmConfig const & rsmConfig
 			, uint32_t index );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			m_ubo.createPassBinding( pass, binding );
 		}

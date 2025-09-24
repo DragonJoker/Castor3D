@@ -516,7 +516,7 @@ namespace c3d
 		struct SwapchainBuffer
 		{
 			explicit SwapchainBuffer( ashes::ImageView view )
-				: view{ view }
+				: view{ c3d::move( view ) }
 			{
 			}
 

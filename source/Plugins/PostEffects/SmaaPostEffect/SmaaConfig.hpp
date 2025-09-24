@@ -112,11 +112,9 @@ namespace smaa
 				subsampleIndices[0] = c3d::Point4f{ 0, 0, 0, 0 };
 				maxSubsampleIndices = 1u;
 				break;
-
 			case Mode::eT2X:
 				parameters.get( cuT( "enableReprojection" ), data.enableReprojection );
 				[[fallthrough]];
-
 			case Mode::eS2X:
 				/***
 				* Sample positions (bottom-to-top y axis):
@@ -131,7 +129,6 @@ namespace smaa
 				// (it's 1 for the horizontal slot of S0 because horizontal
 				//  blending is reversed: positive numbers point to the right)
 				break;
-
 			case Mode::e4X:
 				parameters.get( cuT( "enableReprojection" ), data.enableReprojection );
 				/***
@@ -148,6 +145,8 @@ namespace smaa
 				subsampleIndices[3] = c3d::Point4f{ 6, 4, 2, 4 }; // S3
 				maxSubsampleIndices = 4u;
 				break;
+			default:
+				break;
 			}
 
 			switch ( data.mode )
@@ -156,15 +155,15 @@ namespace smaa
 			case Mode::eS2X:
 				jitters.emplace_back( 0.0, 0.0 );
 				break;
-
 			case Mode::eT2X:
 				jitters.emplace_back( 0.25, -0.25 );
 				jitters.emplace_back( -0.25, 0.25 );
 				break;
-
 			case Mode::e4X:
 				jitters.emplace_back( 0.125, -0.125 );
 				jitters.emplace_back( -0.125, 0.125 );
+				break;
+			default:
 				break;
 			}
 		}
@@ -198,6 +197,8 @@ namespace smaa
 				data.cornerRounding = 25;
 				break;
 			case Preset::eCustom:
+				break;
+			default:
 				break;
 			}
 		}

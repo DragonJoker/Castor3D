@@ -166,6 +166,181 @@ namespace c3d
 		//!\~english	The value.
 		//!\~french		La valeur.
 		T m_value;
+
+	private:
+		/**
+		 *\~english
+		 *\name Logic operators.
+		 *\~french
+		 *\name Opérateurs logiques.
+		 */
+		/**@{*/
+		friend bool operator==( RangedValue const & lhs
+			, T const & rhs )noexcept
+		{
+			if constexpr ( std::is_integral_v< T > )
+				return lhs.value() == rhs;
+			else
+				return std::abs( lhs.value() - rhs ) < std::numeric_limits< T >::epsilon();
+		}
+
+		friend bool operator>( RangedValue const & lhs
+			, T const & rhs )noexcept
+		{
+			return lhs.value() > rhs;
+		}
+
+		friend bool operator<( RangedValue const & lhs
+			, T const & rhs )noexcept
+		{
+			return lhs.value() < rhs;
+		}
+
+		friend bool operator>=( RangedValue const & lhs
+			, T const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		friend bool operator<=( RangedValue const & lhs
+			, T const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		friend bool operator==( T const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			if constexpr ( std::is_integral_v< T > )
+				return lhs == rhs.value();
+			else
+				return std::abs( lhs - rhs.value() ) < std::numeric_limits< T >::epsilon();
+		}
+
+		friend bool operator>( T const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return lhs > rhs.value();
+		}
+
+		friend bool operator<( T const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return lhs < rhs.value();
+		}
+
+		friend bool operator>=( T const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		friend bool operator<=( T const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		friend bool operator==( RangedValue const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			if constexpr ( std::is_integral_v< T > )
+				return lhs.value() == rhs.value();
+			else
+				return std::abs( lhs.value() - rhs.value() ) < std::numeric_limits< T >::epsilon();
+		}
+
+		friend bool operator>( RangedValue const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return lhs.value() > rhs.value();
+		}
+
+		friend bool operator<( RangedValue const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return lhs.value() < rhs.value();
+		}
+
+		friend bool operator>=( RangedValue const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		friend bool operator<=( RangedValue const & lhs
+			, RangedValue const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *\name Arithmetic operators.
+		 *\~french
+		 *\name Opérateurs arithmétiques.
+		 */
+		/**@{*/
+		friend T operator+( T const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs + rhs.value();
+		}
+
+		friend T operator-( T const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs - rhs.value();
+		}
+
+		friend T operator*( T const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs * rhs.value();
+		}
+
+		friend T operator/( T const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs / rhs.value();
+		}
+
+		friend T operator+( RangedValue const & lhs, T const & rhs )noexcept
+		{
+			return lhs.value() + rhs;
+		}
+
+		friend T operator-( RangedValue const & lhs, T const & rhs )noexcept
+		{
+			return lhs.value() - rhs;
+		}
+
+		friend T operator*( RangedValue const & lhs, T const & rhs )noexcept
+		{
+			return lhs.value() * rhs;
+		}
+
+		friend T operator/( RangedValue const & lhs, T const & rhs )noexcept
+		{
+			return lhs.value() / rhs;
+		}
+
+		friend T operator+( RangedValue const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs.value() + rhs.value();
+		}
+
+		friend T operator-( RangedValue const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs.value() - rhs.value();
+		}
+
+		friend T operator*( RangedValue const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs.value() * rhs.value();
+		}
+
+		friend T operator/( RangedValue const & lhs, RangedValue const & rhs )noexcept
+		{
+			return lhs.value() / rhs.value();
+		}
+		/**@}*/
 	};
 	/**
 	 *\~english
@@ -186,249 +361,6 @@ namespace c3d
 	{
 		return RangedValue< T >{ value, makeRange( min, max ) };
 	}
-	/**
-	 *\~english
-	 *\name Logic operators.
-	 *\~french
-	 *\name Opérateurs logiques.
-	 */
-	/**@{*/
-	namespace details
-	{
-		template< typename T >
-		struct Equal
-		{
-			bool operator()( RangedValue< T > const & lhs
-				, RangedValue< T > const & rhs )const noexcept
-			{
-				static constexpr auto eps = std::numeric_limits< T >::epsilon();
-				return std::abs( lhs.value() - rhs.value() ) < eps;
-			}
-		};
-
-		template<>
-		struct Equal< uint32_t >
-		{
-			bool operator()( RangedValue< uint32_t > const & lhs
-				, RangedValue< uint32_t > const & rhs )const noexcept
-			{
-				return lhs.value() == rhs.value();
-			}
-		};
-	}
-
-	template< typename T >
-	inline bool operator==( RangedValue< T > const & lhs
-		, T const & rhs )noexcept
-	{
-		static constexpr auto eps = std::numeric_limits< T >::epsilon();
-		return std::abs( lhs.value() - rhs ) < eps;
-	}
-
-	template< typename T >
-	inline bool operator!=( RangedValue< T > const & lhs
-		, T const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
-
-	template< typename T >
-	inline bool operator>( RangedValue< T > const & lhs
-		, T const & rhs )noexcept
-	{
-		return lhs.value() > rhs;
-	}
-
-	template< typename T >
-	inline bool operator<( RangedValue< T > const & lhs
-		, T const & rhs )noexcept
-	{
-		return lhs.value() < rhs;
-	}
-
-	template< typename T >
-	inline bool operator>=( RangedValue< T > const & lhs
-		, T const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-
-	template< typename T >
-	inline bool operator<=( RangedValue< T > const & lhs
-		, T const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-
-	template< typename T >
-	inline bool operator==( T const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		static constexpr auto eps = std::numeric_limits< T >::epsilon();
-		return std::abs( lhs - rhs.value() ) < eps;
-	}
-
-	template< typename T >
-	inline bool operator!=( T const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
-
-	template< typename T >
-	inline bool operator>( T const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs > rhs.value();
-	}
-
-	template< typename T >
-	inline bool operator<( T const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs < rhs.value();
-	}
-
-	template< typename T >
-	inline bool operator>=( T const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-
-	template< typename T >
-	inline bool operator<=( T const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-
-	template< typename T >
-	inline bool operator==( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		static const details::Equal< T > equals;
-		return equals( lhs, rhs );
-	}
-
-	template< typename T >
-	inline bool operator!=( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
-
-	template< typename T >
-	inline bool operator>( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs.value() > rhs.value();
-	}
-
-	template< typename T >
-	inline bool operator<( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs.value() < rhs.value();
-	}
-
-	template< typename T >
-	inline bool operator>=( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-
-	template< typename T >
-	inline bool operator<=( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-	/**@}*/
-	/**
-	 *\~english
-	 *\name Arithmetic operators.
-	 *\~french
-	 *\name Opérateurs arithmétiques.
-	 */
-	/**@{*/
-	template< typename T >
-	inline T operator+( T const & lhs, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs + rhs.value();
-	}
-
-	template< typename T >
-	inline T operator-( T const & lhs, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs - rhs.value();
-	}
-
-	template< typename T >
-	inline T operator*( T const & lhs, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs * rhs.value();
-	}
-
-	template< typename T >
-	inline T operator/( T const & lhs, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs / rhs.value();
-	}
-
-	template< typename T >
-	inline T operator+( RangedValue< T > const & lhs, T const & rhs )noexcept
-	{
-		return lhs.value() + rhs;
-	}
-
-	template< typename T >
-	inline T operator-( RangedValue< T > const & lhs, T const & rhs )noexcept
-	{
-		return lhs.value() - rhs;
-	}
-
-	template< typename T >
-	inline T operator*( RangedValue< T > const & lhs, T const & rhs )noexcept
-	{
-		return lhs.value() * rhs;
-	}
-
-	template< typename T >
-	inline T operator/( RangedValue< T > const & lhs, T const & rhs )noexcept
-	{
-		return lhs.value() / rhs;
-	}
-
-	template< typename T >
-	inline T operator+( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs.value() + rhs.value();
-	}
-
-	template< typename T >
-	inline T operator-( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs.value() - rhs.value();
-	}
-
-	template< typename T >
-	inline T operator*( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs.value() * rhs.value();
-	}
-
-	template< typename T >
-	inline T operator/( RangedValue< T > const & lhs
-		, RangedValue< T > const & rhs )noexcept
-	{
-		return lhs.value() / rhs.value();
-	}
-	/**@}*/
 	
 	template< typename T >
 	struct IsRangedValueT : std::false_type

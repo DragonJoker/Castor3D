@@ -31,7 +31,7 @@ namespace c3d
 {
 	namespace passgauss
 	{
-		enum Idx
+		enum class Bindings
 		{
 			GaussCfgIdx,
 			DifImgIdx,
@@ -62,13 +62,13 @@ namespace c3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			auto config = writer.declUniformBuffer( GaussianBlur::Config, GaussCfgIdx, 0u );
+			auto config = writer.declUniformBuffer( GaussianBlur::Config, Bindings::GaussCfgIdx, 0u );
 			auto c3d_textureSize = config.declMember< sdw::Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< sdw::UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< sdw::UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< sdw::Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
+			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", Bindings::DifImgIdx, 0u );
 
 			writer.implementEntryPointT< shader::PosUv2FT, TexcoordT >( []( sdw::VertexInT< shader::PosUv2FT > const & in
 				, sdw::VertexOutT< TexcoordT > out )
@@ -224,8 +224,8 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 				} );
-			m_blurUbo.createPassBinding( passX, passgauss::GaussCfgIdx );
-			passX.addInputSampled( m_source, passgauss::DifImgIdx );
+			m_blurUbo.createPassBinding( passX, passgauss::Bindings::GaussCfgIdx );
+			passX.addInputSampledT( m_source, passgauss::Bindings::DifImgIdx );
 			m_lastAttach = passX.addOutputColourTarget( m_intermediateView );
 		}
 		{
@@ -246,8 +246,8 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 				} );
-			m_blurUbo.createPassBinding( passY, passgauss::GaussCfgIdx );
-			passY.addInputSampled( *m_lastAttach, passgauss::DifImgIdx );
+			m_blurUbo.createPassBinding( passY, passgauss::Bindings::GaussCfgIdx );
+			passY.addInputSampledT( *m_lastAttach, passgauss::Bindings::DifImgIdx );
 			m_lastAttach = passY.addOutputColourTarget( m_source.view() );
 		}
 	}

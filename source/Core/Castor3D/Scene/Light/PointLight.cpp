@@ -5,6 +5,8 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
+CU_ImplementSmartPtr( c3d, PointLight )
+
 namespace c3d
 {
 	//*************************************************************************************************

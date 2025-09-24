@@ -240,18 +240,12 @@ namespace c3d
 		C3D_API String getDefaultSourceString()const;
 		C3D_API ashes::ImageView const & getDefaultSampledView()const noexcept;
 		C3D_API ashes::ImageView const & getDefaultTargetView()const noexcept;
-		C3D_API String getLayerCubeSourceString( size_t layer )const noexcept;
-		C3D_API ashes::ImageView const & getLayerCubeTargetView( size_t layer )const noexcept;
 		C3D_API String getLayerCubeFaceSourceString( size_t layer
 			, CubeMapFace face )const noexcept;
 		C3D_API ashes::ImageView const & getLayerCubeFaceTargetView( size_t layer
 			, CubeMapFace face )const noexcept;
 		C3D_API String getName()const;
 		C3D_API Path getPath()const;
-		C3D_API bool needsYInversion()const;
-		C3D_API bool needsXInversion()const;
-		C3D_API bool needsZInversion()const;
-		C3D_API bool hasBuffer()const;
 
 		uint32_t getLayersCount()const noexcept
 		{
@@ -358,6 +352,12 @@ namespace c3d
 			return getLayerCube( layer ).faces[size_t( face )];
 		}
 
+		friend OutputStream & operator<<( OutputStream & stream, TextureLayout const & rhs )
+		{
+			stream << rhs.getImage();
+			return stream;
+		}
+
 	private:
 		bool m_initialised{ false };
 		bool m_static{ false };
@@ -373,7 +373,7 @@ namespace c3d
 	};
 
 	inline ashes::ImagePtr makeImage( RenderDevice const & device
-		, ImageCreateInfo createInfo
+		, ImageCreateInfo const & createInfo
 		, MemoryPropertyFlags flags
 		, String const & name )
 	{

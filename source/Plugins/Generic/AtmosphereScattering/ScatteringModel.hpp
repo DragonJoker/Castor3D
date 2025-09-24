@@ -12,10 +12,6 @@ namespace atmosphere_scattering
 	{
 		struct Settings
 		{
-			Settings()
-			{
-			}
-
 			Settings & setColorTransmittance( bool v )
 			{
 				colorTransmittance = v;
@@ -70,12 +66,12 @@ namespace atmosphere_scattering
 		sdw::Vec4 gradSkyView( sdw::Vec2 const & coord
 			, sdw::Vec2 const & dPdx
 			, sdw::Vec2 const & dPdy )const;
-		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
+		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth )const;
 		c3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
-			, sdw::Vec4 & transmittance
-			, sdw::Vec4 & luminance );
+			, sdw::Vec4 const & outTransmittance
+			, sdw::Vec4 const & outLuminance );
 		sdw::RetVec3 getSkyRadiance( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V

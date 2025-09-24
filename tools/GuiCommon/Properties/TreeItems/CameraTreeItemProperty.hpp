@@ -31,7 +31,9 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	camera	La caméra cible
 		 */
-		CameraTreeItemProperty( bool editable, c3d::Camera & camera );
+		CameraTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
+			, c3d::Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Retrieves the camera

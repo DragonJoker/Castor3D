@@ -32,7 +32,7 @@ namespace c3d
 
 	namespace vxlscnd
 	{
-		enum IDs : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eVoxelBuffer,
 			eVoxelConfig,
@@ -42,16 +42,16 @@ namespace c3d
 
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelBuffer
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBindingT( Bindings::eVoxelBuffer
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, makeDescriptorSetLayoutBinding( eVoxelConfig
+				, makeDescriptorSetLayoutBindingT( Bindings::eVoxelConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, makeDescriptorSetLayoutBinding( eFirstBounce
+				, makeDescriptorSetLayoutBindingT( Bindings::eFirstBounce
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, makeDescriptorSetLayoutBinding( eResult
+				, makeDescriptorSetLayoutBindingT( Bindings::eResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 
@@ -63,10 +63,10 @@ namespace c3d
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			auto voxelsBuffer = pass.inouts.begin();
-			auto voxelsUbo = pass.uniforms.begin();
-			auto firstBounce = pass.sampled.begin();
-			auto secondBounce = pass.outputs.begin();
+			auto voxelsBuffer = pass.getInouts().begin();
+			auto voxelsUbo = pass.getUniforms().begin();
+			auto firstBounce = pass.getSampled().begin();
+			auto secondBounce = pass.getOutputs().begin();
 			ashes::WriteDescriptorSetArray writes;
 
 			auto write = graph.getDescriptorWrite( *voxelsBuffer->second, voxelsBuffer->first );
@@ -120,22 +120,23 @@ namespace c3d
 
 			// Inputs
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
-				, eVoxelBuffer
+				, Bindings::eVoxelBuffer
 				, 0u ) );
-			C3D_Voxelizer( writer, eVoxelConfig, 0u, true );
+			C3D_Voxelizer( writer, Bindings::eVoxelConfig, 0u, true );
 			auto firstBounce( writer.declCombinedImg< FImg3DRgba32 >( "firstBounce"
-				, eFirstBounce
+				, Bindings::eFirstBounce
 				, 0u ) );
 
 			// Outputs
 			auto output( writer.declStorageImg< RWFImg3DRgba32 >( "output"
-				, eResult
+				, Bindings::eResult
 				, 0u ) );
 
 			shader::Utils utils{ writer };
 			shader::GlobalIllumination indirect{ writer, utils };
 
-			writer.implementMainT< sdw::VoidT >( 64u, [&]( sdw::ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 64u, [&writer, &output, &voxels, &firstBounce, &c3d_voxelData
+				, &utils, &indirect, voxelGridSize]( sdw::ComputeIn const & in )
 				{
 					auto coord = writer.declLocale( "coord"
 						, ivec3( utils.unflatten( in.globalInvocationID.x()
@@ -193,36 +194,36 @@ namespace c3d
 			, graph
 			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, c3d::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, crg::ru::Config{ 1u, false }.implicitAction( pass.outputs.begin()->second->view()
-				, crg::RecordContext::clearAttachment( pass.outputs.begin()->second->view(), transparentBlackClearColor ) ) }
+			, crg::ru::Config{ 1u, false }.implicitAction( pass.getOutputs().begin()->second->view()
+				, crg::RecordContext::clearAttachment( pass.getOutputs().begin()->second->view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "VoxelSecondaryBounce" ), vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
 		, m_descriptorSetLayout{ vxlscnd::createDescriptorLayout( device ) }
 		, m_pipelineLayout{ vxlscnd::createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_pipeline{ vxlscnd::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ vxlscnd::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ vxlscnd::createDescriptorSet( getGraph(), *m_descriptorSetPool, getPass() ) }
 	{
 	}
 
-	void VoxelSecondaryBounce::accept( RenderTechniqueVisitor & visitor )
+	void VoxelSecondaryBounce::accept( RenderTechniqueVisitor & visitor )const
 	{
 		visitor.visit( m_shader );
 	}
 
 	void VoxelSecondaryBounce::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, uint32_t index )const
 	{
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.outputs.begin()->second->view( index );
+		auto view = getPass().getOutputs().begin()->second->view( index );
 		auto layoutState = getLayoutState( view );
-		auto image = m_graph.createImage( view.data->image );
+		auto image = getGraph().createImage( view.data->image );
 		auto color = convert( transparentBlackClearColor );
 		auto subresourceRange = convert( view.data->info.subresourceRange );
 
@@ -231,7 +232,7 @@ namespace c3d
 			, view
 			, ImageLayout::eUndefined
 			, makeLayoutState( ImageLayout::eTransferDst ) );
-		m_context.vkCmdClearColorImage( commandBuffer
+		context->vkCmdClearColorImage( commandBuffer
 			, image
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, &color
@@ -242,10 +243,10 @@ namespace c3d
 			, ImageLayout::eTransferDst
 			, layoutState );
 
-		m_context.vkCmdBindPipeline( commandBuffer
+		context->vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipeline );
-		m_context.vkCmdBindDescriptorSets( commandBuffer
+		context->vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelineLayout
 			, 0u
@@ -253,7 +254,7 @@ namespace c3d
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		m_context.vkCmdDispatch( commandBuffer, voxelGridSize * voxelGridSize * voxelGridSize / 64u, 1u, 1u );
+		context->vkCmdDispatch( commandBuffer, voxelGridSize * voxelGridSize * voxelGridSize / 64u, 1u, 1u );
 	}
 
 	bool VoxelSecondaryBounce::doIsComputePass()const

@@ -8,7 +8,6 @@ option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" ON )
 option( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP "Build HeightMapToNormalMap" ON )
 option( CASTOR_BUILD_TOOL_GUICOMMON "Build GuiCommon library (needs wxWidgets library)" TRUE )
 option( CASTOR_BUILD_TOOL_CASTOR_VIEWER "Build CastorViewer (needs GuiCommon library)" TRUE )
-option( CASTOR_TOOL_CASTOR_VIEWER_RECORDS "Allow video recording from CastorViewer" FALSE )
 
 function( ToolsInit )
 	set( GuiCmn "no (Not wanted)" PARENT_SCOPE )

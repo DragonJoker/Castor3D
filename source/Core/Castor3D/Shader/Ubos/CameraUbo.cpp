@@ -68,13 +68,13 @@ namespace c3d
 		}
 
 		sdw::Vec2 CameraData::viewToScreenUV( Utils & utils
-			, sdw::Vec4 vsPosition )const
+			, sdw::Vec4 const & vsPosition )const
 		{
 			return utils.clipToScreen( viewToProj( vsPosition ) ).xy();
 		}
 
 		sdw::Vec2 CameraData::worldToCurScreenUV( Utils & utils
-			, sdw::Vec4 wsPosition )const
+			, sdw::Vec4 const & wsPosition )const
 		{
 			return utils.clipToScreen( worldToCurProj( wsPosition ) ).xy();
 		}

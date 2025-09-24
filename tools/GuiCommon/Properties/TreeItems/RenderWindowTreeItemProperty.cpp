@@ -10,9 +10,10 @@
 
 namespace GuiCommon
 {
-	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool editable
+	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::RenderWindow & window )
-		: TreeItemProperty( window.getEngine(), editable )
+		: TreeItemProperty( window.getEngine(), imagesLoader, editable )
 		, m_window( window )
 	{
 		CreateTreeItemMenu();

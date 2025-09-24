@@ -24,7 +24,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	engine		Le moteur.
 		 */
-		StyleTreeItemProperty( bool editable
+		StyleTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::Engine * engine );
 
 		void setData( c3d::ControlStyle & data )noexcept

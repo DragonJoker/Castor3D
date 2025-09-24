@@ -59,7 +59,7 @@ namespace c3d
 		 *\param[in]	mesh		Le maillage.
 		 *\param[in]	reverted	Dit si l'espace tangent généré doit être inversé.
 		 */
-		C3D_API virtual void computeNormals( Mesh & mesh
+		C3D_API virtual void computeNormals( Mesh const & mesh
 			, bool reverted = false );
 
 	private:

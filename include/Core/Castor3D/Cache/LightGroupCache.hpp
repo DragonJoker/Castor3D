@@ -47,13 +47,11 @@ namespace c3d
 		C3D_API explicit ResourceCacheT( Scene & scene );
 		/**
 		 *\~english
-		 *\brief		Intialises GPU buffer.
-		 *\param[in]	device	The GPU device.
+		 *\brief		Intialises the elements.
 		 *\~french
-		 *\brief		Initialise le buffer GPU.
-		 *\param[in]	device	Le device GPU.
+		 *\brief		Initialise les éléments.
 		 */
-		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -80,7 +78,7 @@ namespace c3d
 
 	private:
 		void doRegisterLightGroup( LightGroup & light );
-		void doUnregisterLightGroup( LightGroup & light );
+		void doUnregisterLightGroup( LightGroup const & light );
 
 	private:
 		Scene & m_scene;

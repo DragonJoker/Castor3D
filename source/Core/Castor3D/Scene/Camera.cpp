@@ -53,13 +53,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserCameraPrimitive, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->primitiveType = VkPrimitiveTopology( params[0]->get< uint32_t >() );
-			}
 		}
 		CU_EndAttribute()
 
@@ -88,117 +84,81 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserViewportType, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateType( ViewportType( params[0]->get< uint32_t >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportLeft, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateLeft( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportRight, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateRight( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportTop, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateTop( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportBottom, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateBottom( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportNear, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateNear( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportFar, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateFar( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportFovY, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateFovY( Angle::fromDegrees( params[0]->get< float >() ) );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserViewportAspectRatio, CameraContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				blockContext->viewport->updateRatio( params[0]->get< float >() );
-			}
 		}
 		CU_EndAttribute()
 	}
@@ -285,7 +245,7 @@ namespace c3d
 
 	bool Camera::isVisible( Geometry const & geometry, Submesh const & submesh )const
 	{
-		auto & sceneNode = *geometry.getParent();
+		auto const & sceneNode = *geometry.getParent();
 		auto transform = geometry.getGlobalTransform();
 		auto result = m_frustum.isVisible( geometry.getBoundingSphere( submesh )
 				, transform

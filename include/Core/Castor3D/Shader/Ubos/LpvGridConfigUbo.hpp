@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 #include <CastorUtils/Graphics/Grid.hpp>
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace c3d
@@ -20,15 +20,31 @@ namespace c3d
 	namespace shader
 	{
 		struct LpvGridData
-			: public sdw::StructInstance
+			: sdw::StructInstanceHelperT< "C3D_LpvGridData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec3Field< "minVolumeCorner" >
+			, sdw::FloatField< "cellSize" >
+			, sdw::Vec3Field< "gridSize" >
+			, sdw::FloatField< "indirectAttenuation" >
+			, sdw::Vec3Field< "cameraPosition" >
+			, sdw::FloatField< "pad0" > >
 		{
-			C3D_API LpvGridData( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, LpvGridData );
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			LpvGridData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+				, minVolumeCorner{ StructInstanceHelperT::getMember< "minVolumeCorner" >() }
+				, gridSize{ StructInstanceHelperT::getMember< "gridSize" >() }
+				, cameraPos{ StructInstanceHelperT::getMember< "cameraPosition" >() }
+				, gridWidth{ gridSize.x() }
+				, gridHeight{ gridSize.y() }
+				, gridDepth{ gridSize.z() }
+				, m_cellSize{ StructInstanceHelperT::getMember< "cellSize" >() }
+				, m_indirectAttenuation{ StructInstanceHelperT::getMember< "indirectAttenuation" >() }
+			{
+			}
 
 			C3D_API sdw::IVec3 worldToGrid( sdw::Vec3 const & pos )const;
 			C3D_API sdw::IVec3 worldToGrid( sdw::Vec3 const & pos
@@ -48,20 +64,13 @@ namespace c3d
 				return m_indirectAttenuation;
 			}
 
-		private:
-			// Raw values
-			sdw::Vec4 minVolumeCornerSize;
-			sdw::Vec4 gridSizeAtt;
-			sdw::Vec4 cameraPos4;
-
 		public:
-			// Specific values
 			sdw::Vec3 minVolumeCorner;
+			sdw::Vec3 gridSize;
+			sdw::Vec3 cameraPos;
 			sdw::Float gridWidth;
 			sdw::Float gridHeight;
 			sdw::Float gridDepth;
-			sdw::Vec3 gridSize;
-			sdw::Vec3 cameraPos;
 
 		private:
 			using sdw::StructInstance::getMember;

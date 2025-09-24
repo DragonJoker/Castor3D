@@ -114,8 +114,8 @@ extern "C"
 	// C3DImage
 	C3D_CAPIMETHOD( c3dImage_delete )( C3DImage * object );
 	C3D_CAPIMETHOD( c3dImage_getBuffer )( C3DImage const * object, C3DPixelBuffer ** result );
-	C3D_CAPIMETHOD( c3dImage_resample )( C3DImage const * object, C3DSize * val );
-	C3D_CAPIMETHOD( c3dImage_fill )( C3DImage const * object, C3DRgbaColour * val );
+	C3D_CAPIMETHOD( c3dImage_resample )( C3DImage const * object, C3DSize const * val );
+	C3D_CAPIMETHOD( c3dImage_fill )( C3DImage const * object, C3DRgbaColour const * val );
 
 	// C3DLogger
 	C3D_CAPIMETHOD( c3dLogger_create )( C3D_LOG_TYPE level, C3DLogger ** result );
@@ -452,7 +452,7 @@ extern "C"
 	C3D_CAPIMETHOD( c3dScene_getMesh )( C3DScene const * object, C3DString name, C3DMesh ** result );
 	C3D_CAPIMETHOD( c3dScene_createNode )( C3DScene const * object, C3DString name, C3DSceneNode const * parent, C3DSceneNode ** result );
 	C3D_CAPIMETHOD( c3dScene_createGeometry )( C3DScene const * object, C3DString name, C3DMesh const * mesh, C3DSceneNode const * parent, C3DGeometry ** result );
-	C3D_CAPIMETHOD( c3dScene_createCamera )( C3DScene const * object, C3DString name, uint32_t ww, uint32_t wh, C3DSceneNode const * node, C3DCamera ** result );
+	C3D_CAPIMETHOD( c3dScene_createCamera )( C3DScene const * object, C3DString name, C3DSceneNode const * node, C3DCamera ** result );
 	C3D_CAPIMETHOD( c3dScene_createLight )( C3DScene const * object, C3DString name, C3DSceneNode const * node, C3D_LIGHT_TYPE type, C3DLight ** result );
 	C3D_CAPIMETHOD( c3dScene_createLightGroup )( C3DScene const * object, C3DString name, C3D_LIGHT_TYPE type, C3DLightGroup ** result );
 	C3D_CAPIMETHOD( c3dScene_createMesh )( C3DScene const * object, C3DString type, C3DString name, C3DMesh ** result );

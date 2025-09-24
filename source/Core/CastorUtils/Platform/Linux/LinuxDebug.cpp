@@ -24,27 +24,21 @@ namespace c3d::debug
 			size_t rindex = ret.find( "+" );
 
 			if ( lindex != MbString::npos && rindex != MbString::npos )
-			{
 				ret = ret.substr( lindex + 1, rindex - 1 - lindex );
-			}
 
 			int status;
 			auto real = abi::__cxa_demangle( ret.c_str(), nullptr, nullptr, &status );
 
 			if ( !status )
-			{
 				ret = ret.substr( 0, lindex + 1 ) + real + name.substr( rindex );
-			}
 			else
-			{
 				ret = toUtf8( name );
-			}
 
 			free( real );
 			return ret;
 		}
 
-		static void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
+		void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
 		{
 			stream << cuT( "CALL STACK:" ) << std::endl;
 			Vector< void * > backTrace( toCapture );
@@ -52,16 +46,14 @@ namespace c3d::debug
 			char ** fnStrings( ::backtrace_symbols( backTrace.data(), num ) );
 
 			for ( unsigned i = toSkip; i < num; ++i )
-			{
 				stream << "== " << makeString( demangleSymbol( fnStrings[i] ) ) << std::endl;
-			}
 
 			free( fnStrings );
 		}
 
 #else
 
-		static void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
+		void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
 		{
 		}
 
@@ -76,18 +68,12 @@ namespace c3d::debug
 	{
 	}
 
-	void loadModule( DynamicLibrary const & library )
+	void loadModule( [[maybe_unused]] DynamicLibrary const & library )
 	{
 	}
 
-	void unloadModule( DynamicLibrary const & library )
+	void unloadModule( [[maybe_unused]]  DynamicLibrary const & library )
 	{
-	}
-
-	OutputStream & operator<<( OutputStream & stream, Backtrace const & bt )
-	{
-		backtrace::showBacktrace( stream, bt.m_toCapture, bt.m_toSkip );
-		return stream;
 	}
 }
 

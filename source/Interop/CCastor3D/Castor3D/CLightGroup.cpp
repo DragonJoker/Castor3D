@@ -77,7 +77,7 @@ extern "C"
 		if ( !val->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_LIGHTGRPNODE );
 
-		//object->internal->removeInstance( *val->internal );
+		object->getInternal()->removeInstance( *val->getInternal() );
 
 		return C3D_OK;
 	}

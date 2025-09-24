@@ -150,6 +150,7 @@ namespace c3d
 	private:
 		void doUpdatePosSize();
 		void doUpdateProgress();
+		void doUpdateTitle();
 
 	private:
 		TextOverlayRPtr m_title{};

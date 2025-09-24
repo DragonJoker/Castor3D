@@ -53,7 +53,7 @@ namespace c3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
-		C3D_API VisibilityResolvePass( RenderTechnique * parent
+		C3D_API VisibilityResolvePass( RenderTechnique & parent
 			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
@@ -91,8 +91,8 @@ namespace c3d
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData
-			, uint32_t vertexStride )const override;
+			, SubmeshRenderData const * submeshData
+			, uint32_t vertexStride )const noexcept override;
 		/**
 		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
@@ -138,6 +138,11 @@ namespace c3d
 		ClustersConfig const * getClustersConfig()const noexcept override
 		{
 			return m_clustersConfig;
+		}
+
+		RenderTechnique const & getTechnique()const noexcept
+		{
+			return *m_parent;
 		}
 
 	private:

@@ -17,15 +17,17 @@ namespace c3d::shader
 			, sdw::UIntField< "colorMask" >
 			, sdw::UIntField< "normalMask" > >
 	{
+		SDW_DeclStructInstance( C3D_API, Voxel );
+
 		Voxel( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, c3d::move( expr ), isEnabled() }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
-		auto colorMask()const { return this->getMember< "colorMask" >(); }
-		auto normalMask()const { return this->getMember< "normalMask" >(); }
+		auto colorMask()const { return getMember< "colorMask" >(); }
+		auto normalMask()const { return getMember< "normalMask" >(); }
 
 		static uint32_t constexpr DataSize = 8u;
 

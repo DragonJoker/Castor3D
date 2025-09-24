@@ -132,6 +132,9 @@ namespace c3d
 		void doAdjustZIndex( uint32_t offset )override;
 
 	private:
+		void doUpdateTextAlign();
+
+	private:
 		U32String m_caption;
 		TextOverlayRPtr m_text{};
 	};

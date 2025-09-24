@@ -81,13 +81,22 @@ namespace c3d
 			, uint32_t gridSize
 			, BlendMode blendMode );
 		/**
-		 *\copydoc		RenderTechniquePass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 
 	protected:
 		C3D_API void doSubInitialise( uint32_t index );
-		C3D_API void doSubRecordInto( crg::RecordContext & context
+		C3D_API void doSubRecordInto( crg::RecordContext const & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 
@@ -104,7 +113,7 @@ namespace c3d
 
 			void initialise( VkRenderPass renderPass
 				, uint32_t index );
-			void recordInto( crg::RecordContext & context
+			void recordInto( crg::RecordContext const & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index );
 

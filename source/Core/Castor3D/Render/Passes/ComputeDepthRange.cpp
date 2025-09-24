@@ -44,13 +44,13 @@ namespace c3d
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto input = pass.inputs.begin();
+			auto input = pass.getInputs().begin();
 			auto write = graph.getDescriptorWrite( *input->second, input->first );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().imageInfo = write.imageInfo;
 
-			auto output = pass.outputs.begin();
+			auto output = pass.getOutputs().begin();
 			write = graph.getDescriptorWrite( *output->second, output->first );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
@@ -137,7 +137,7 @@ namespace c3d
 			, graph
 			, { crg::defaultV< InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); }
+				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
 				, crg::defaultV< GetPassIndexCallback >
 				, IsEnabledCallback( [&enabled](){ return enabled; } )
 				, IsComputePassCallback( [](){ return true; } ) }
@@ -148,7 +148,7 @@ namespace c3d
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeDepthRange" ), passcompdr::createShader( device ) }
 		, m_pipeline{ passcompdr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ passcompdr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ passcompdr::createDescriptorSet( getGraph(), *m_descriptorSetPool, getPass() ) }
 	{
 	}
 
@@ -157,16 +157,17 @@ namespace c3d
 		visitor.visit( m_shader );
 	}
 
-	void ComputeDepthRange::doRecordInto( VkCommandBuffer commandBuffer )const
+	void ComputeDepthRange::doRecordInto( crg::RecordContext const & context
+		, VkCommandBuffer commandBuffer )const
 	{
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.inputs.begin()->second->view();
+		auto view = getPass().getInputs().begin()->second->view();
 		auto extent = getExtent( view );
 
-		m_context.vkCmdBindPipeline( commandBuffer
+		context->vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipeline );
-		m_context.vkCmdBindDescriptorSets( commandBuffer
+		context->vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelineLayout
 			, 0u
@@ -174,7 +175,7 @@ namespace c3d
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		m_context.vkCmdDispatch( commandBuffer
+		context->vkCmdDispatch( commandBuffer
 			, extent.width / 32u + 1u
 			, extent.height / 32u + 1u
 			, 1u );

@@ -16,14 +16,16 @@ namespace c3d::shader
 	struct LightSurface
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( C3D_API, LightSurface );
+
 		C3D_API LightSurface( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
-		C3D_API LightSurface( sdw::Vec3 const eye
-			, DerivVec4 const world
-			, DerivVec3 const view
-			, sdw::Vec3 const clip
-			, DerivVec3 const normal
+		C3D_API LightSurface( sdw::Vec3 const & eye
+			, DerivVec4 const & world
+			, DerivVec3 const & view
+			, sdw::Vec3 const & clip
+			, DerivVec3 const & normal
 			, bool enableDotProducts );
 
 		C3D_API static sdw::type::BaseStructPtr makeType( ast::type::TypesCache & cache
@@ -35,31 +37,21 @@ namespace c3d::shader
 
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, MbString const & name
-			, sdw::Vec3 const eye
-			, DerivVec4 const world
-			, DerivVec3 const view
-			, sdw::Vec3 const clip
-			, DerivVec3 const normal
+			, sdw::Vec3 const & eye
+			, DerivVec4 const & world
+			, DerivVec3 const & view
+			, sdw::Vec3 const & clip
+			, DerivVec3 const & normal
 			, bool enableDotProducts = true );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, MbString const & name
-			, DerivVec4 const world
-			, sdw::Vec3 const clip
-			, DerivVec3 const normal
+			, DerivVec4 const & world
+			, sdw::Vec3 const & clip
+			, DerivVec3 const & normal
 			, bool enableDotProducts = false );
-		C3D_API static LightSurface create( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MbString const & name
-			, sdw::Vec3 const eye
-			, DerivVec4 const world
-			, DerivVec3 const view
-			, sdw::Vec3 const clip
-			, DerivVec3 const normal
-			, BlendComponents const & components
-			, bool enableDotProducts = true );
 
-		C3D_API void updateN( DerivVec3 const N )const;
-		C3D_API void updateL( DerivVec3 const VtoL )const;
+		C3D_API void updateN( DerivVec3 const & N )const;
+		C3D_API void updateL( DerivVec3 const & VtoL )const;
 		C3D_API void registerDebug( DebugOutputCategory const & debugOutput )const;
 
 		auto eyePosition()const { return m_eyePosition; }
@@ -102,11 +94,11 @@ namespace c3d::shader
 
 	private:
 		C3D_API static sdw::expr::ExprPtr makeInit( sdw::type::BaseStructPtr type
-			, sdw::Vec3 const eye
-			, DerivVec4 const world
-			, DerivVec3 const view
-			, sdw::Vec3 const clip
-			, DerivVec3 const normal
+			, sdw::Vec3 const & eye
+			, DerivVec4 const & world
+			, DerivVec3 const & view
+			, sdw::Vec3 const & clip
+			, DerivVec3 const & normal
 			, bool enableDotProducts );
 	};
 }

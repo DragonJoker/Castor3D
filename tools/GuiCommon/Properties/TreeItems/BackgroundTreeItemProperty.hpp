@@ -32,7 +32,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	scene		L'objet cible
 		 */
-		BackgroundTreeItemProperty( bool editable
+		BackgroundTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::SceneBackground & background );
 
 	private:

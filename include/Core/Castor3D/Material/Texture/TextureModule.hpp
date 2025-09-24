@@ -245,10 +245,6 @@ namespace c3d
 
 	// ARGB => 4 components => 4 channels per configuration.
 	using TextureFlagConfigurations = Array< TextureFlagConfiguration, 4u >;
-
-	OutputStream & operator<<( OutputStream & stream, ImageMemoryLayout const & rhs );
-	OutputStream & operator<<( OutputStream & stream, Image const & rhs );
-	OutputStream & operator<<( OutputStream & stream, TextureLayout const & layout );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -304,26 +300,10 @@ namespace c3d
 		C3D_API size_t operator()( TextureSourceInfo const & value )const noexcept;
 	};
 
-	C3D_API bool operator==( TextureSourceInfo const & lhs
-		, TextureSourceInfo const & rhs )noexcept;
-	inline bool operator!=( TextureSourceInfo const & lhs
-		, TextureSourceInfo const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
-
 	struct PassTextureConfigHasher
 	{
 		C3D_API size_t operator()( PassTextureConfig const & value )const noexcept;
 	};
-
-	C3D_API bool operator==( PassTextureConfig const & lhs
-		, PassTextureConfig const & rhs )noexcept;
-	inline bool operator!=( PassTextureConfig const & lhs
-		, PassTextureConfig const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
 
 	C3D_API Image & getBufferImage( Engine & engine
 		, String const & name

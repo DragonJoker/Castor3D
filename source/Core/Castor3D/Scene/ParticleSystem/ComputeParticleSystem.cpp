@@ -239,7 +239,7 @@ namespace c3d
 			, cuT( "ComputeParticleSystemParticles1" ) );
 		Particle particle{ m_inputs, m_parent.getDefaultValues() };
 
-		auto initialise = [this, &size, &particle]( Buffer & buffer )
+		auto initialise = [this, &size, &particle]( Buffer const & buffer )
 		{
 			if ( auto data = buffer.buffer->lock( 0u, size, 0u ) )
 			{

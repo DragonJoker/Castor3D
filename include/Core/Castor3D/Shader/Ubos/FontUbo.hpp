@@ -21,7 +21,8 @@ namespace c3d
 				, sdw::UIntField< "sdfFont" >
 				, sdw::FloatField< "pixelRange" > >
 		{
-		public:
+			SDW_DeclStructInstance( C3D_API, FontData );
+
 			FontData( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -41,7 +42,7 @@ namespace c3d
 		using Configuration = FontUboConfiguration;
 		C3D_API FontUbo( FontUbo const & rhs ) = delete;
 		C3D_API FontUbo & operator=( FontUbo const & rhs ) = delete;
-		C3D_API FontUbo( FontUbo && rhs )noexcept = default;
+		C3D_API FontUbo( FontUbo && rhs )noexcept = delete;
 		C3D_API FontUbo & operator=( FontUbo && rhs )noexcept = delete;
 		C3D_API explicit FontUbo( RenderDevice const & device );
 		C3D_API ~FontUbo()noexcept;

@@ -37,8 +37,10 @@ namespace CastorCom
 	inline C3DString bstrToC3DString( BSTR val )
 	{
 		C3DString result = nullptr;
+		if ( !val )
+			return "";
 
-		if ( int length = ::SysStringLen( val );
+		if ( auto length = int( ::SysStringLen( val ) );
 			int size = ::WideCharToMultiByte( CP_UTF8, 0, val, length, nullptr, 0, nullptr, nullptr ) )
 		{
 			std::vector< char > out( size, 0 );
@@ -67,8 +69,10 @@ namespace CastorCom
 	inline std::string bstrToString( BSTR val )
 	{
 		std::string result;
+		if ( !val )
+			return result;
 
-		if ( int length = ::SysStringLen( val );
+		if ( auto length = int( ::SysStringLen( val ) );
 			int size = ::WideCharToMultiByte( CP_UTF8, 0, val, length, nullptr, 0, nullptr, nullptr ) )
 		{
 			std::vector< char > out( size, 0 );
@@ -95,7 +99,7 @@ namespace CastorCom
 	{
 		BSTR result = nullptr;
 
-		if ( int length = int( val.size() );
+		if ( auto length = int( val.size() );
 			int size = MultiByteToWideChar( CP_UTF8, 0, &val[0], length, nullptr, 0 ) )
 		{
 			ATL::CComBSTR out( size );

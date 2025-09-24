@@ -64,8 +64,17 @@ namespace c3d
 			, Texture & gi
 			, Texture & nml );
 		/**
-		 *\copydoc		RenderTechniquePass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 		C3D_API void update( LightInstance const & light );
 

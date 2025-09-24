@@ -9,35 +9,6 @@ namespace fxaa
 {
 	//*********************************************************************************************
 
-	FxaaData::FxaaData( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
-		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
-		, subpixShift{ getMember< sdw::Float >( "subpixShift" ) }
-		, spanMax{ getMember< sdw::Float >( "spanMax" ) }
-		, reduceMul{ getMember< sdw::Float >( "reduceMul" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr FxaaData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-			, "C3D_FxaaData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "pixelSize", ast::type::Kind::eVec2F );
-			result->declMember( "subpixShift", ast::type::Kind::eFloat );
-			result->declMember( "spanMax", ast::type::Kind::eFloat );
-			result->declMember( "reduceMul", ast::type::Kind::eFloat );
-		}
-
-		return result;
-	}
-
-	//*********************************************************************************************
-
 	c3d::MbString const FxaaUbo::Buffer = "Fxaa";
 	c3d::MbString const FxaaUbo::Data = "c3d_fxaaData";
 

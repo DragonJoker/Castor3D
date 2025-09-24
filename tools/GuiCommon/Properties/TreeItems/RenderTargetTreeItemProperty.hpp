@@ -34,7 +34,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	target	L'objet cible
 		 */
-		RenderTargetTreeItemProperty( bool editable
+		RenderTargetTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::RenderTarget & target );
 		/**
 		 *\~english

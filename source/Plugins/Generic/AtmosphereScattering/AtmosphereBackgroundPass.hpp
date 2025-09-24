@@ -21,20 +21,20 @@ namespace atmosphere_scattering
 		ashes::PipelineShaderStageCreateInfoArray stages;
 	};
 
+	enum class AtmosphereBackgroundBindings : uint32_t
+	{
+		eScene,
+		eRenderConfig,
+		eClouds,
+		eCount,
+	};
+
 	class AtmosphereBackgroundPass
 		: public c3d::DataHolderT< Shaders >
 		, public c3d::BackgroundPassBase
 		, public crg::RenderQuad
 	{
 	public:
-		enum Bindings : uint32_t
-		{
-			eScene,
-			eRenderConfig,
-			eClouds,
-			eCount,
-		};
-
 	public:
 		AtmosphereBackgroundPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -48,7 +48,6 @@ namespace atmosphere_scattering
 		void doResetPipeline( uint32_t index )override;
 
 		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( c3d::RenderDevice const & device
-			, AtmosphereBackground & background
 			, c3d::Extent2D const & size
 			, uint32_t passIndex );
 	};

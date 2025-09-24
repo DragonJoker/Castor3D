@@ -199,8 +199,8 @@ namespace GuiCommon
 		: public wxClientData
 	{
 	public:
-		explicit ButtonData( ButtonEventMethod method );
-		void Call( wxVariant const & var );
+		explicit ButtonData( ButtonEventMethod const & method );
+		void Call( wxVariant const & var )const;
 
 	private:
 		ButtonEventMethod m_method;
@@ -312,7 +312,7 @@ namespace GuiCommon
 	uint32_t toBGRPacked( c3d::ColourWrapper const & colour );
 
 	template< typename PropertyType >
-	PropertyType * CreateProperty( wxString const & name, wxVariant && value, wxString const & help )
+	PropertyType * CreateProperty( wxString const & name, wxVariant const & value, wxString const & help )
 	{
 		auto result = new PropertyType( name );
 		result->SetValue( value );

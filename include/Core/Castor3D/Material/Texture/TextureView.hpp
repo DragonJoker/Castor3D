@@ -65,8 +65,7 @@ namespace c3d
 		 *\param[in]	baseMipLevel	Le miplevel de départ.
 		 *\param[in]	levelCount		Le nombre de miplevels.
 		 */
-		C3D_API void update( VkImage image
-			, uint32_t baseArrayLayer
+		C3D_API void update( uint32_t baseArrayLayer
 			, uint32_t layerCount
 			, uint32_t baseMipLevel
 			, uint32_t levelCount );
@@ -135,21 +134,6 @@ namespace c3d
 		bool isMipmapsGenerationNeeded()const
 		{
 			return m_needsMipmapsGeneration;
-		}
-
-		bool needsYInversion()const
-		{
-			return m_needsYInversion;
-		}
-
-		bool needsXInversion()const
-		{
-			return m_needsXInversion;
-		}
-
-		bool needsZInversion()const
-		{
-			return m_needsZInversion;
 		}
 
 		static ImageViewCreateInfo convertToSampledView( ImageViewCreateInfo createInfo );

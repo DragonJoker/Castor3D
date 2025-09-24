@@ -33,15 +33,15 @@ namespace PbrBloom
 			auto bloomStrength = constants.declMember< sdw::Float >( "bloomStrength" );
 			constants.end();
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour3FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour3FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour3FT >( [&writer, &filterRadius, &c3d_mapColor]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour3FT > const & out )
 				{
 					// The filter kernel is applied with a radius, specified in texture
 					// coordinates, so that the radius will vary across mip resolutions.
@@ -110,14 +110,14 @@ namespace PbrBloom
 			auto & pass = graph.createPass( "Upsample" + c3d::string::toMbString( index )
 				, [this, &device, enabled, dstExtent]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runGraph )
 				{
 					auto result = crg::RenderQuadBuilder{}
 						.enabled( enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 						.renderSize( dstExtent )
 						.texcoordConfig( {} )
-						.build( framePass, context, graph, crg::ru::Config{} );
+						.build( framePass, context, runGraph, crg::ru::Config{} );
 					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
@@ -129,7 +129,7 @@ namespace PbrBloom
 		}
 	}
 
-	void UpsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void UpsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

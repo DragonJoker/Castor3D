@@ -38,7 +38,7 @@ namespace c3d
 			} );
 			it == m_models.end() )
 		{
-			m_models.push_back( makeRawUnique< LightingModel >( baseName
+			m_models.emplace_back( makeRawUnique< LightingModel >( baseName
 				, create
 				, defaultDesc ) );
 		}

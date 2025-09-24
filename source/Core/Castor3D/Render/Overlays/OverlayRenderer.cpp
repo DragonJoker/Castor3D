@@ -63,6 +63,8 @@ namespace c3d
 		struct OverlayBlendComponents
 			: public shader::BlendComponents
 		{
+			SDW_DeclStructInstance( , OverlayBlendComponents );
+
 			OverlayBlendComponents( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
@@ -88,8 +90,6 @@ namespace c3d
 					, true }
 			{
 			}
-
-			SDW_DeclStructInstance( , OverlayBlendComponents );
 
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 				, shader::Materials const & materials
@@ -919,7 +919,9 @@ namespace c3d
 			// Vertex shader
 			writer.implementEntryPointT< sdw::VoidT, shader::OverlaySurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
-				, [&]( sdw::VertexIn const & in
+				, [&writer, &pipelineBaseIndex, &drawID, c3d_renderData, c3d_cameraData
+					, &c3d_overlaysIDs, &c3d_overlaysData, &c3d_overlaysSurfaces
+					, &engine]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shader::OverlaySurfaceT > out )
 				{
 					auto overlaySubID = writer.declLocale( "overlaySubID"
@@ -967,7 +969,9 @@ namespace c3d
 			// Pixel shader
 			writer.implementEntryPointT< shader::OverlaySurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
 				, sdw::FragmentOut{ writer }
-					, [&]( sdw::FragmentInT< shader::OverlaySurfaceT > const & in
+					, [&writer, &materials, &median, &screenPxRange, &c3d_renderData
+					, &hasTexture, &textureConfigs, &textureAnims, &c3d_maps, &passShaders, &outColour
+					, this, &textOverlay, &sdfFont, &texturesFlags]( sdw::FragmentInT< shader::OverlaySurfaceT > const & in
 						, sdw::FragmentOut const & )
 				{
 					auto material = writer.declLocale( "material"
@@ -1046,7 +1050,7 @@ namespace c3d
 			, 1.0f ) );
 	}
 
-	void OverlayRenderer::update( GpuUpdater & updater )
+	void OverlayRenderer::update( GpuUpdater const & updater )
 	{
 		if ( auto timerBlock = makeRawUnique< crg::FramePassTimerBlock >( m_timer.start() ) )
 		{

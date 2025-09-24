@@ -25,59 +25,59 @@ namespace GuiCommon
 		: public wxStyledTextCtrl
 	{
 	private:
-		typedef enum gcID
+		enum class gcID
 		{
-			gcID_PROPERTIES = wxID_HIGHEST,
-			gcID_INDENTINC,
-			gcID_INDENTRED,
-			gcID_FINDNEXT,
-			gcID_REPLACE,
-			gcID_REPLACENEXT,
-			gcID_BRACEMATCH,
-			gcID_GOTO,
-			gcID_PAGEACTIVE,
-			gcID_DISPLAYEOL,
-			gcID_INDENTGUIDE,
-			gcID_LINENUMBER,
-			gcID_LONGLINEON,
-			gcID_WHITESPACE,
-			gcID_FOLDTOGGLE,
-			gcID_OVERTYPE,
-			gcID_READONLY,
-			gcID_WRAPMODEON,
-			gcID_CHANGECASE,
-			gcID_CHANGELOWER,
-			gcID_CHANGEUPPER,
-			gcID_HILIGHTLANG,
-			gcID_HILIGHTFIRST,
-			gcID_HILIGHTLAST = gcID_HILIGHTFIRST + 99,
-			gcID_CONVERTEOL,
-			gcID_CONVERTCR,
-			gcID_CONVERTCRLF,
-			gcID_CONVERTLF,
-			gcID_USECHARSET,
-			gcID_CHARSETANSI,
-			gcID_CHARSETMAC,
-			gcID_PAGEPREV,
-			gcID_PAGENEXT,
-			gcID_SELECTLINE,
-			gcID_WINDOW_MINIMAL,
-			gcID_STATUSBAR,
-			gcID_TITLEBAR,
-			gcID_ABOUTTIMER,
-			gcID_UPDATETIMER,
-			gcID_DLG_FIND_TEXT,
-			gcID_PREFS_LANGUAGE,
-			gcID_PREFS_STYLETYPE,
-			gcID_PREFS_KEYWORDS,
-		}	gcID;
+			PROPERTIES = wxID_HIGHEST,
+			INDENTINC,
+			INDENTRED,
+			FINDNEXT,
+			REPLACE,
+			REPLACENEXT,
+			BRACEMATCH,
+			GOTO,
+			PAGEACTIVE,
+			DISPLAYEOL,
+			INDENTGUIDE,
+			LINENUMBER,
+			LONGLINEON,
+			WHITESPACE,
+			FOLDTOGGLE,
+			OVERTYPE,
+			READONLY,
+			WRAPMODEON,
+			CHANGECASE,
+			CHANGELOWER,
+			CHANGEUPPER,
+			HILIGHTLANG,
+			HILIGHTFIRST,
+			HILIGHTLAST = HILIGHTFIRST + 99,
+			CONVERTEOL,
+			CONVERTCR,
+			CONVERTCRLF,
+			CONVERTLF,
+			USECHARSET,
+			CHARSETANSI,
+			CHARSETMAC,
+			PAGEPREV,
+			PAGENEXT,
+			SELECTLINE,
+			WINDOW_MINIMAL,
+			STATUSBAR,
+			TITLEBAR,
+			ABOUTTIMER,
+			UPDATETIMER,
+			DLG_FIND_TEXT,
+			PREFS_LANGUAGE,
+			PREFS_STYLETYPE,
+			PREFS_KEYWORDS,
+		};
 
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 		class TextAutoCompleter
 			: public wxTextCompleter
 		{
 		public:
-			TextAutoCompleter( wxArrayString const & keywords );
+			explicit TextAutoCompleter( wxArrayString const & keywords );
 			bool Start( wxString const & prefix )override;
 			wxString GetNext()override;
 
@@ -101,21 +101,21 @@ namespace GuiCommon
 		bool saveFile();
 		bool saveFile( wxString const & filename );
 		void setText( wxString const & source );
-		bool isModified();
-		wxString determinePrefs( wxString const & filename );
+		bool isModified()const;
+		wxString determinePrefs( wxString const & filename )const;
 		bool initializePrefs( wxString const & filename );
 
-		inline wxString getFileName()
+		inline wxString const & getFileName()const
 		{
-			return m_filename;
+			return m_fileName;
 		}
 
 		inline void setFilename( wxString const & filename )
 		{
-			m_filename = filename;
+			m_fileName = filename;
 		}
 
-		inline LanguageInfoRPtr getLanguageInfo()
+		inline LanguageInfoRPtr getLanguageInfo()const
 		{
 			return m_language;
 		}
@@ -136,12 +136,7 @@ namespace GuiCommon
 		void onEditCut( wxCommandEvent & event );
 		void onEditCopy( wxCommandEvent & event );
 		void onEditPaste( wxCommandEvent & event );
-		void onFind( wxCommandEvent & event );
-		void onFindNext( wxCommandEvent & event );
-		void onReplace( wxCommandEvent & event );
-		void onReplaceNext( wxCommandEvent & event );
 		void onBraceMatch( wxCommandEvent & event );
-		void onGoto( wxCommandEvent & event );
 		void onEditIndentInc( wxCommandEvent & event );
 		void onEditIndentRed( wxCommandEvent & event );
 		void onEditSelectAll( wxCommandEvent & event );
@@ -161,10 +156,9 @@ namespace GuiCommon
 		void onConvertEOL( wxCommandEvent & event );
 		void onMarginClick( wxStyledTextEvent & event );
 		void onCharAdded( wxStyledTextEvent & event );
-		void onKey( wxStyledTextEvent & event );
 
 	private:
-		wxString m_filename;
+		wxString m_fileName;
 		wxString m_currentWord;
 		LanguageInfoRPtr m_language{};
 		StcContext & m_context;

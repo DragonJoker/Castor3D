@@ -12,7 +12,7 @@
 #	include <Windows.h>
 #	pragma warning( push )
 #	pragma warning( disable:4091 ) //'typedef ': ignored on left of '' when no variable is declared
-#	include <Dbghelp.h>
+#	include <DbgHelp.h>
 #	pragma warning( pop )
 #endif
 
@@ -22,6 +22,8 @@ namespace c3d::debug
 
 	namespace dbg
 	{
+		static bool constexpr loadPerModule = false;
+
 		struct DbgHelpContext
 		{
 			DbgHelpContext( DbgHelpContext const & ) = delete;
@@ -33,11 +35,8 @@ namespace c3d::debug
 			{
 				::SymSetOptions( SYMOPT_UNDNAME | SYMOPT_LOAD_LINES );
 				initialised = ( ::SymInitialize( process, nullptr, TRUE ) == TRUE );
-
 				if ( !initialised )
-				{
 					std::cerr << "SymInitialize failed: " << toUtf8( system::getLastErrorText() ) << std::endl;
-				}
 			}
 
 			~DbgHelpContext()noexcept
@@ -45,39 +44,33 @@ namespace c3d::debug
 				::SymCleanup( process );
 			}
 
-			void loadModule( CU_UnusedParam( DynamicLibrary const &, library ) )const
+			void loadModule( DynamicLibrary const & library )const
 			{
-/**
-				auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
-					, nullptr                                      // handle to image - not used
-					, library.getPath().c_str()                    // name of image file
-					, nullptr                                      // name of module - not required
-					, 0                                            // base address - not required
-					, 0                                            // size of image - not required
-					, nullptr                                      // MODLOAD_DATA used for special cases 
-					, 0 );                                         // flags - not required
+				if constexpr ( loadPerModule )
+				{
+					auto result = ::SymLoadModuleEx( process           // target process
+						, nullptr                                      // handle to image - not used
+						, library.getPath().c_str()                    // name of image file
+						, nullptr                                      // name of module - not required
+						, 0                                            // base address - not required
+						, 0                                            // size of image - not required
+						, nullptr                                      // MODLOAD_DATA used for special cases
+						, 0 );                                         // flags - not required
 
-				if ( !result )
-				{
-					std::cerr << "SymLoadModuleEx failed: " << system::getLastErrorText() << std::endl;
+					if ( !result )
+						std::cerr << "SymLoadModuleEx failed: " << system::getLastErrorText() << std::endl;
+					else
+						libraryBaseAddress[&library] = result;
 				}
-				else
-				{
-					libraryBaseAddress[&library] = result;
-				}
-*/
 			}
 
-			void unloadModule( CU_UnusedParam( DynamicLibrary const &, library ) )const
+			void unloadModule( DynamicLibrary const & library )const
 			{
-/**
-				auto address = libraryBaseAddress[&library];
-
-				if ( address )
+				if constexpr ( loadPerModule )
 				{
-					::SymUnloadModule64( doGetProcess(), address );
+					if ( auto address = libraryBaseAddress[&library] )
+						::SymUnloadModule64( process, address );
 				}
-*/
 			}
 
 			inline MbString demangle( MbString const & name )const
@@ -88,13 +81,11 @@ namespace c3d::debug
 				{
 					if ( Array< char, 2048 > real{};
 						::UnDecorateSymbolName( ret.c_str(), real.data(), DWORD( real.size() ), UNDNAME_COMPLETE ) )
-					{
 						ret = real.data();
-					}
 				}
 				catch ( ... )
 				{
-					// What to do...
+					std::cerr << "UnDecorateSymbolName failed: " << system::getLastErrorText() << std::endl;
 				}
 
 				return ret;
@@ -104,7 +95,7 @@ namespace c3d::debug
 			bool initialised{};
 
 		private:
-			Map< DynamicLibrary const *, DWORD64 > libraryBaseAddress;
+			mutable Map< DynamicLibrary const *, DWORD64 > libraryBaseAddress;
 		};
 
 		using DbgHelpContextPtr = c3d::RawUniquePtr< DbgHelpContext >;
@@ -128,10 +119,7 @@ namespace c3d::debug
 				line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
 
 				if ( ::SymGetLineFromAddr64( context.process, symbolInfo->Address, &displacement, &line ) )
-				{
 					stream << "(" << makeString( line.FileName ) << ":" << line.LineNumber << ":" << displacement << ")";
-				}
-
 				stream << std::endl;
 			}
 			else
@@ -139,15 +127,21 @@ namespace c3d::debug
 				stream << "== Symbol not found." << std::endl;
 			}
 		}
+	}
 
-		static void showBacktrace( OutputStream & stream
+	namespace backtrace
+	{
+		void showBacktrace( OutputStream & stream
 			, int toCapture
 			, int toSkip )
 		{
+			static std::locale const loc{ "C" };
+			auto oldLoc = stream.imbue( loc );
+
 			static c3d::Mutex mutex;
 			using LockType = c3d::UniqueLock< c3d::Mutex >;
 
-			if ( auto const & context = getContext();
+			if ( auto const & context = dbg::getContext();
 				context && context->initialised )
 			{
 				LockType lock{ makeUniqueLock( mutex ) };
@@ -169,12 +163,8 @@ namespace c3d::debug
 					memset( symbol, 0, size );
 					symbol->MaxNameLen = MaxFnNameLen;
 					symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
-
 					for ( unsigned int i = 0; i < num; ++i )
-					{
 						showSymbol( *context, DWORD64( backTrace[i] ), symbol, stream );
-					}
-
 					free( symbol );
 				}
 			}
@@ -182,6 +172,8 @@ namespace c3d::debug
 			{
 				stream << cuT( "== Unable to retrieve the call stack: " ) << system::getLastErrorText() << std::endl;
 			}
+
+			stream.imbue( oldLoc );
 		}
 	}
 
@@ -207,10 +199,9 @@ namespace c3d::debug
 
 #else
 
-	namespace dbg
+	namespace backtrace
 	{
-		template< typename CharT >
-		void showBacktrace( std::basic_ostream< CharT > &, int, int )
+		void showBacktrace( OutputStream &, int, int )
 		{
 		}
 	}
@@ -232,15 +223,6 @@ namespace c3d::debug
 	}
 
 #endif
-
-	OutputStream & operator<<( OutputStream & stream, Backtrace const & backtrace )
-	{
-		static std::locale const loc{ "C" };
-		auto oldLoc = stream.imbue( loc );
-		dbg::showBacktrace( stream, backtrace.m_toCapture, backtrace.m_toSkip );
-		stream.imbue( oldLoc );
-		return stream;
-	}
 }
 
 #endif

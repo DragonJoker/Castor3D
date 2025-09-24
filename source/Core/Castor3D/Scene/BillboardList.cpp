@@ -28,52 +28,23 @@ namespace c3d
 	{
 		struct Element
 		{
-			uint8_t * m_buffer;
-			Coords3f m_position;
+			ArrayView< uint8_t > m_buffer;
+			PointView3f m_position;
 			uint32_t m_stride;
 
+			Element( Element const & rhs ) = delete;
+			Element & operator=( Element const & rhs ) = delete;
+			Element( Element && rhs )noexcept = default;
+			Element & operator=( Element && rhs )noexcept = default;
 			~Element()noexcept = default;
 
 			Element( uint8_t * buffer
 				, uint32_t offset
-				, uint32_t stride )
-				: m_buffer{ buffer }
+				, uint32_t stride )noexcept
+				: m_buffer{ buffer, buffer + stride }
 				, m_position{ reinterpret_cast< float * >( buffer + offset ) }
 				, m_stride{ stride }
 			{
-			}
-
-			Element( Element const & rhs )
-				: m_buffer{ rhs.m_buffer }
-				, m_position{ rhs.m_position }
-				, m_stride{ rhs.m_stride }
-			{
-			}
-
-			Element( Element && rhs )noexcept
-				: m_buffer{ rhs.m_buffer }
-				, m_position{ c3d::move( rhs.m_position ) }
-				, m_stride{ rhs.m_stride }
-			{
-				rhs.m_buffer = nullptr;
-			}
-
-			Element & operator=( Element const & rhs )
-			{
-				std::memcpy( m_buffer, rhs.m_buffer, m_stride );
-				return *this;
-			}
-
-			Element & operator=( Element && rhs )noexcept
-			{
-				if ( &rhs != this )
-				{
-					m_buffer = rhs.m_buffer;
-					m_position = c3d::move( rhs.m_position );
-					m_stride = rhs.m_stride;
-					rhs.m_buffer = nullptr;
-				}
-				return *this;
 			}
 		};
 
@@ -234,7 +205,7 @@ namespace c3d
 	{
 	}
 
-	bool BillboardBase::initialise( RenderDevice const & device
+	bool BillboardBase::initialiseBase( RenderDevice const & device
 		, uint32_t count )
 	{
 		if ( !m_initialised )
@@ -314,7 +285,7 @@ namespace c3d
 		}
 	}
 
-	void BillboardBase::update( GpuUpdater & updater )
+	void BillboardBase::update( [[maybe_unused]] GpuUpdater const & updater )
 	{
 		if ( m_count && !m_gpuFilled )
 		{
@@ -344,7 +315,7 @@ namespace c3d
 
 				for ( auto const & element : elements )
 				{
-					std::memcpy( gpuBuffer, element.m_buffer, m_vertexStride );
+					std::memcpy( gpuBuffer, element.m_buffer.data(), m_vertexStride );
 					gpuBuffer += m_vertexStride;
 				}
 
@@ -504,7 +475,7 @@ namespace c3d
 			m_vertexBuffer.markDirty( VertexAttributeInputState );
 		}
 
-		return BillboardBase::initialise( device, uint32_t( m_arrayPositions.size() ) );
+		return initialiseBase( device, uint32_t( m_arrayPositions.size() ) );
 	}
 
 	void BillboardList::removePoint( uint32_t index )

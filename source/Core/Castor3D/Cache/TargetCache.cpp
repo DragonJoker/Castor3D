@@ -125,6 +125,6 @@ namespace c3d
 	void RenderTargetCache::registerToneMappingName( String const & name
 		, String fullName )
 	{
-		m_toneMappings[name] = fullName;
+		m_toneMappings[name] = c3d::move( fullName );
 	}
 }

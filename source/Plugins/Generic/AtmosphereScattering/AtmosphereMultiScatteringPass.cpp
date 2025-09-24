@@ -23,7 +23,7 @@ namespace atmosphere_scattering
 
 	namespace multiscatter
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eAtmosphere,
 			eTransmittance,
@@ -38,13 +38,13 @@ namespace atmosphere_scattering
 			sdw::ComputeWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_AtmosphereScattering( writer
-				, uint32_t( Bindings::eAtmosphere )
+				, Bindings::eAtmosphere
 				, 0u );
 			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
-				, uint32_t( Bindings::eTransmittance )
+				, Bindings::eTransmittance
 				, 0u );
 			auto outputTexture = writer.declStorageImg< sdw::WImage2DRgba16 >("outputTexture"
-				, uint32_t( Bindings::eOutput )
+				, Bindings::eOutput
 				, 0u );
 
 			auto multiScatAs1SharedMem = writer.declSharedVariable< sdw::Vec3 >( "multiScatAs1SharedMem", 64u );
@@ -73,7 +73,7 @@ namespace atmosphere_scattering
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
 			auto getSphericalDir = writer.implementFunction< sdw::Vec3 >( "getSphericalDir"
-				, [&]( sdw::Float const & theta
+				, [&writer]( sdw::Float const & theta
 					, sdw::Float const & phi )
 				{
 					auto cosPhi = writer.declLocale( "cosPhi"
@@ -91,7 +91,9 @@ namespace atmosphere_scattering
 				, sdw::InFloat{ writer, "phi" } );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 1u, 1u, 64u }
-				, [&]( sdw::ComputeIn in )
+				, [&multiScatteringLUTRes, &atmosphere, &planetRadiusOffset, &getSphericalDir, &lSharedMem
+					, &PI, &sampleCountIni, &depthBufferValue, &multiScatAs1SharedMem, &sphereSolidAngle, &isotropicPhase
+					, &writer, &outputTexture, &c3d_atmosphereData]( sdw::ComputeIn const & in )
 				{
 					auto pixPos = writer.declLocale( "pixPos"
 						, vec2( in.globalInvocationID.xy() ) + vec2( 0.5_f ) );
@@ -257,11 +259,11 @@ namespace atmosphere_scattering
 		auto & pass = graph.createPass( "MultiScatteringPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				auto result = c3d::makeRawUnique< crg::ComputePass >( framePass
 					, context
-					, graph
+					, runGraph
 					, crg::ru::Config{}
 					, crg::cp::Config{}
 						.groupCountX( renderSize.width )
@@ -272,10 +274,10 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		atmosphereUbo.createPassBinding( pass, multiscatter::eAtmosphere );
-		pass.addInputSampled( *transmittanceLut.getSampledLastAttach(), multiscatter::eTransmittance
+		atmosphereUbo.createPassBinding( pass, multiscatter::Bindings::eAtmosphere );
+		pass.addInputSampledT( *transmittanceLut.getSampledLastAttach(), multiscatter::Bindings::eTransmittance
 			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
-		result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), multiscatter::eOutput ) );
+		result.setLastAttach( pass.addOutputStorageImageT( result.getTargetViewId(), multiscatter::Bindings::eOutput ) );
 	}
 
 	void AtmosphereMultiScatteringPass::accept( c3d::ConfigurationVisitorBase & visitor )const

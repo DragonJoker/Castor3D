@@ -39,10 +39,11 @@ namespace c3d_assimp
 			if ( !skelNode )
 			{
 				skelNode = addNode( skeleton, bonesNodes, nodeName, name );
-				aiVector3D scaling, position;
+				aiVector3D scaling;
+				aiVector3D position;
 				aiQuaternion rotate;
 				aiNode.mTransformation.Decompose( scaling, rotate, position );
-				skelNode->setTransform( { fromAssimp( position )
+				skelNode->setTransform( c3d::NodeTransform{ fromAssimp( position )
 					, fromAssimp( scaling )
 					, fromAssimp( rotate ) } );
 				c3d::log::trace << "        Translation [" << skelNode->getTransform().translate << "]" << std::endl;

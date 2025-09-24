@@ -19,9 +19,10 @@
 
 namespace GuiCommon
 {
-	OverlayTreeItemProperty::OverlayTreeItemProperty( bool editable
+	OverlayTreeItemProperty::OverlayTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

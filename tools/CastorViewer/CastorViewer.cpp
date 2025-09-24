@@ -25,11 +25,11 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const bool isCastor3DThreaded = true;
+		const bool isCastor3DThreaded = true;
 #if defined( NDEBUG )
-		static const int wantedFPS = 1000;
+		const int wantedFPS = 1000;
 #else
-		static const int wantedFPS = 60;
+		const int wantedFPS = 60;
 #endif
 
 		c3d::Version getVersion()
@@ -50,19 +50,18 @@ namespace CastorViewer
 			, CastorViewer::getVersion()
 			, wantedFPS
 			, isCastor3DThreaded }
-		, m_mainFrame( nullptr )
 	{
 		wxSetAssertHandler( &CastorApplication::assertHandler );
 	}
 
 	void CastorViewerApp::doLoadAppImages()
 	{
-		GuiCommon::ImagesLoader::addBitmap( eBMP_SCENES, scene_blanc_xpm );
-		GuiCommon::ImagesLoader::addBitmap( eBMP_MATERIALS, mat_blanc_xpm );
-		GuiCommon::ImagesLoader::addBitmap( eBMP_EXPORT, export_xpm );
-		GuiCommon::ImagesLoader::addBitmap( eBMP_LOGS, log_xpm );
-		GuiCommon::ImagesLoader::addBitmap( eBMP_PROPERTIES, properties_xpm );
-		GuiCommon::ImagesLoader::addBitmap( eBMP_PRINTSCREEN, print_screen_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eScenes, scene_blanc_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eMaterials, mat_blanc_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eExport, export_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eLogs, log_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eProperties, properties_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePrintScreen, print_screen_xpm );
 	}
 
 	wxWindow * CastorViewerApp::doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )
@@ -78,14 +77,10 @@ namespace CastorViewer
 #endif
 
 		m_mainFrame = new MainFrame{ GuiCommon::make_wxString( m_displayName ) };
-		bool result = m_mainFrame->initialise( splashScreen );
-
-		if ( result )
+		if ( m_mainFrame->initialise( splashScreen ) )
 		{
 			if ( !getFileName().empty() )
-			{
 				m_mainFrame->loadScene( getFileName() );
-			}
 		}
 		else
 		{

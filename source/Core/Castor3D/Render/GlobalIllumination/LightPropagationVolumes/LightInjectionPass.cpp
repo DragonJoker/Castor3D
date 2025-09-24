@@ -54,6 +54,8 @@ namespace c3d
 		struct SurfaceT
 			: sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , SurfaceT );
+
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -63,8 +65,6 @@ namespace c3d
 				, rsmFlux{ getMember< sdw::Vec3 >( "rsmFlux" ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , SurfaceT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint
@@ -171,8 +171,10 @@ namespace c3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn const & in
-				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&writer, &lights, c3d_lpvGridData, &c3d_lpvLightData
+				, c3d_rsmPositionMap, c3d_rsmNormalMap, c3d_rsmFluxMap
+				, &rsmTexSize]( sdw::VertexIn const & in
+					, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lights.getDirectionalLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
@@ -238,8 +240,10 @@ namespace c3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn const & in
-				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&writer, &lights, c3d_lpvGridData, &c3d_lpvLightData
+				, c3d_rsmPositionMap, c3d_rsmNormalMap, c3d_rsmFluxMap
+				, &rsmTexSize, &face]( sdw::VertexIn const & in
+					, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lights.getPointLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
@@ -301,8 +305,10 @@ namespace c3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn const & in
-				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&writer, &lights, c3d_lpvGridData, &c3d_lpvLightData
+				, c3d_rsmPositionMap, c3d_rsmNormalMap, c3d_rsmFluxMap
+				, &rsmTexSize]( sdw::VertexIn const & in
+					, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lights.getSpotLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
@@ -362,7 +368,7 @@ namespace c3d
 
 			//Should I normalize the dir vector?
 			auto evalCosineLobeToDir = writer.implementFunction< sdw::Vec4 >( "evalCosineLobeToDir"
-				, [&]( sdw::Vec3 dir )
+				, [&writer , &SH_cosLobe_C0, &SH_cosLobe_C1]( sdw::Vec3 dir )
 				{
 					dir = normalize( dir );
 					//f00, f-11, f01, f11
@@ -375,7 +381,7 @@ namespace c3d
 
 			writer.implementEntryPointT< sdw::PointListT< lpvlgt::SurfaceT >, sdw::PointStreamT< lpvlgt::SurfaceT > >( sdw::PointListT< lpvlgt::SurfaceT >{ writer, false }
 				, sdw::PointStreamT< lpvlgt::SurfaceT >{ writer, 1u, true }
-				, [&]( sdw::GeometryIn const &
+				, []( sdw::GeometryIn const &
 					, sdw::PointListT< lpvlgt::SurfaceT > const & list
 					, sdw::PointStreamT< lpvlgt::SurfaceT > out )
 				{
@@ -392,7 +398,7 @@ namespace c3d
 
 			writer.implementEntryPointT< lpvlgt::SurfaceT, sdw::VoidT >( sdw::FragmentInT< lpvlgt::SurfaceT >{ writer, true }
 				, sdw::FragmentOut{ writer }
-				, [&]( sdw::FragmentInT< lpvlgt::SurfaceT > const & in
+				, [&writer, &evalCosineLobeToDir, &outLpvGridR, &outLpvGridG, &outLpvGridB]( sdw::FragmentInT< lpvlgt::SurfaceT > const & in
 					, sdw::FragmentOut const & )
 				{
 					auto lobeDir = writer.declLocale( "lobeDir"
@@ -476,7 +482,7 @@ namespace c3d
 		}
 	}
 
-	void LightInjectionPass::PipelineHolder::recordInto( crg::RecordContext & context
+	void LightInjectionPass::PipelineHolder::recordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
@@ -565,7 +571,7 @@ namespace c3d
 			, context
 			, graph
 			, { [this]( uint32_t index ){ doSubInitialise( index ); }
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
@@ -593,7 +599,7 @@ namespace c3d
 			, context
 			, graph
 			, { [this]( uint32_t index ){ doSubInitialise( index ); }
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
@@ -614,7 +620,7 @@ namespace c3d
 		m_holder.initialise( getRenderPass( index ), index );
 	}
 
-	void LightInjectionPass::doSubRecordInto( crg::RecordContext & context
+	void LightInjectionPass::doSubRecordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
@@ -622,11 +628,11 @@ namespace c3d
 		auto vplCount = m_rsmSize * m_rsmSize;
 		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
 		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer().getBuffer();
-		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
-		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
+		context->vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
+		context->vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
 
-	void LightInjectionPass::accept( ConfigurationVisitorBase & visitor )
+	void LightInjectionPass::accept( ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

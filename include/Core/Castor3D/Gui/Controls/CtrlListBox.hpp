@@ -180,7 +180,7 @@ namespace c3d
 
 		/** Recomputes the items positions, according to their position in the items array
 		 */
-		void doUpdateItems();
+		void doUpdateItems()const;
 
 		/** @copydoc Control::doCreate
 		 */
@@ -222,13 +222,13 @@ namespace c3d
 		 *\param[in]	control	The item
 		 *\param[in]	event		The mouse event
 		 */
-		void onItemMouseLButtonUp( ControlRPtr control, MouseEvent const & event );
+		void onItemMouseLButtonUp( Control const * control, MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	control		The control raising the event
 		 *\param[in]	event		The keyboard event
 		 */
-		void onItemKeyDown( ControlRPtr control, KeyboardEvent const & event );
+		void onItemKeyDown( Control const * control, KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	event		The keyboard event

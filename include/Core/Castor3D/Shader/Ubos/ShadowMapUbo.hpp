@@ -24,6 +24,8 @@ namespace c3d
 				, sdw::Vec4Field< "lightPosFarPlane" >
 				, sdw::UIntField< "lightOffset" > >
 		{
+			SDW_DeclStructInstance( C3D_API, ShadowMapData );
+
 			C3D_API ShadowMapData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -55,7 +57,7 @@ namespace c3d
 		C3D_API explicit ShadowMapUbo( RenderDevice const & device );
 		C3D_API ShadowMapUbo( ShadowMapUbo const & rhs ) = delete;
 		C3D_API ShadowMapUbo & operator=( ShadowMapUbo const & rhs ) = delete;
-		C3D_API ShadowMapUbo( ShadowMapUbo && rhs )noexcept = default;
+		C3D_API ShadowMapUbo( ShadowMapUbo && rhs )noexcept = delete;
 		C3D_API ShadowMapUbo & operator=( ShadowMapUbo && rhs )noexcept = delete;
 		C3D_API ~ShadowMapUbo()noexcept;
 		/**

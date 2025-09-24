@@ -45,37 +45,42 @@
 #	include <GuiCommon/xpms/stop.xpm>
 #endif
 
-#define CV_DefaultDebugPerspective 0
-
 namespace CastorViewer
 {
 	namespace main
 	{
-		static const int recordFPS = 30;
+#if defined( __WXOSX_COCOA__ )
+		static constexpr bool frameToolbar = false;
+#else
+		static constexpr bool frameToolbar = true;
+#endif
+
+		static constexpr bool defaultDebugPerspective = false;
+		static constexpr int recordFPS = 30;
 		static const wxString objWildcard = wxT( " (*.obj)|*.obj|" );
 
-		enum eID
+		enum class eID
 		{
-			eID_TOOL_EXIT,
-			eID_TOOL_LOAD_SCENE,
-			eID_TOOL_EXPORT_SCENE,
-			eID_TOOL_MATERIALS,
-			eID_TOOL_SHOW_LOGS,
-			eID_TOOL_SHOW_LISTS,
-			eID_TOOL_PRINT_SCREEN,
-			eID_TOOL_RECORD,
-			eID_TOOL_STOP,
-			eID_PANE_RENDER,
-			eID_PANE_LISTS,
-			eID_PANE_LOGS,
-			eID_RENDER_TIMER,
-			eID_MSGLOG_TIMER,
-			eID_ERRLOG_TIMER,
+			eTOOL_EXIT,
+			eTOOL_LOAD_SCENE,
+			eTOOL_EXPORT_SCENE,
+			eTOOL_MATERIALS,
+			eTOOL_SHOW_LOGS,
+			eTOOL_SHOW_LISTS,
+			eTOOL_PRINT_SCREEN,
+			eTOOL_RECORD,
+			eTOOL_STOP,
+			ePANE_RENDER,
+			ePANE_LISTS,
+			ePANE_LOGS,
+			eRENDER_TIMER,
+			eMSGLOG_TIMER,
+			eERRLOG_TIMER,
 #ifndef NDEBUG
-			eID_DBGLOG_TIMER,
+			eDBGLOG_TIMER,
 #endif
-			eID_FPS_TIMER,
-			eID_LOAD_END,
+			eFPS_TIMER,
+			eLOAD_END,
 		};
 
 		static void updateLog( LogContainer & log )
@@ -88,16 +93,12 @@ namespace CastorViewer
 
 			if ( !flush.empty() )
 			{
-				for ( auto const & message : flush )
+				for ( auto const & [message, insert] : flush )
 				{
-					if ( message.second )
-					{
-						log.listBox->Insert( message.first, 0 );
-					}
+					if ( insert )
+						log.listBox->Insert( message, 0 );
 					else
-					{
-						log.listBox->SetString( 0, message.first );
-					}
+						log.listBox->SetString( 0, message );
 				}
 			}
 		}
@@ -122,6 +123,26 @@ namespace CastorViewer
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
 		, m_recordFps{ main::recordFPS }
 	{
+		if ( main::frameToolbar )
+		{
+			Connect( int( main::eID::eTOOL_LOAD_SCENE ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onLoadScene ) );
+			Connect( int( main::eID::eTOOL_EXPORT_SCENE ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onExportScene ) );
+			Connect( int( main::eID::eTOOL_SHOW_LOGS ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onShowLogs ) );
+			Connect( int( main::eID::eTOOL_SHOW_LISTS ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onShowLists ) );
+			Connect( int( main::eID::eTOOL_PRINT_SCREEN ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onPrintScreen ) );
+			Connect( int( main::eID::eTOOL_RECORD ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onRecord ) );
+			Connect( int( main::eID::eTOOL_STOP ), wxEVT_TOOL, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onStop ) );
+		}
+		else
+		{
+			Connect( int( main::eID::eTOOL_LOAD_SCENE ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onLoadScene ) );
+			Connect( int( main::eID::eTOOL_EXPORT_SCENE ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onExportScene ) );
+			Connect( int( main::eID::eTOOL_SHOW_LOGS ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onShowLogs ) );
+			Connect( int( main::eID::eTOOL_SHOW_LISTS ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onShowLists ) );
+			Connect( int( main::eID::eTOOL_PRINT_SCREEN ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onPrintScreen ) );
+			Connect( int( main::eID::eTOOL_RECORD ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onRecord ) );
+			Connect( int( main::eID::eTOOL_STOP ), wxEVT_MENU, wxEVENT_HANDLER_CAST( wxCommandEventFunction, MainFrame::onStop ) );
+		}
 	}
 
 	MainFrame::~MainFrame()
@@ -136,21 +157,14 @@ namespace CastorViewer
 			{
 				doLogCallback( logText, logType, newLine );
 			}, this );
-		bool result = doInitialiseImages();
-
-		if ( result )
-		{
-			doPopulateStatusBar();
-			doPopulateToolBar( splashScreen );
-			wxIcon icon = wxIcon( castor_xpm );
-			SetIcon( icon );
-			doInitialiseGUI();
-			doInitialiseTimers();
-			doInitialisePerspectives();
-		}
-
-		Show( result );
-		return result;
+		doPopulateStatusBar();
+		doPopulateToolBar( splashScreen );
+		SetIcon( wxIcon{ castor_xpm } );
+		doInitialiseGUI();
+		doInitialiseTimers();
+		doInitialisePerspectives();
+		Show( true );
+		return true;
 	}
 
 	void MainFrame::loadScene( wxString const & fileName )
@@ -178,7 +192,7 @@ namespace CastorViewer
 						, m_filePath
 						, &window.getProgressBar()
 						, this
-						, main::eID_LOAD_END );
+						, int( main::eID::eLOAD_END ) );
 				}	
 				else
 				{
@@ -207,21 +221,18 @@ namespace CastorViewer
 		{
 			m_currentPerspective = m_auiManager.SavePerspective();
 
-#if CV_MainFrameToolbar
-			m_auiManager.GetPane( m_toolBar ).Hide();
-#endif
+			if ( main::frameToolbar )
+				m_auiManager.GetPane( m_toolBar ).Hide();
 			m_fullScreenPerspective = m_auiManager.SavePerspective();
 			m_auiManager.LoadPerspective( m_fullScreenPerspective );
-#if !CV_MainFrameToolbar
-			m_menuBar->Hide();
-#endif
+			if ( !main::frameToolbar )
+				m_menuBar->Hide();
 		}
 		else
 		{
 			m_auiManager.LoadPerspective( m_currentPerspective );
-#if !CV_MainFrameToolbar
-			m_menuBar->Show();
-#endif
+			if ( !main::frameToolbar )
+				m_menuBar->Show();
 		}
 	}
 
@@ -239,25 +250,25 @@ namespace CastorViewer
 		if ( auto engine = wxGetApp().getCastor();
 			!engine->isThreaded() && !m_timer )
 		{
-			m_timer = new wxTimer( this, main::eID_RENDER_TIMER );
+			m_timer = c3d::makeRawUnique< wxTimer >( this, int( main::eID::eRENDER_TIMER ) );
 			m_timer->Start( 1000 / int( engine->getRenderLoop().getWantedFps() ) );
 		}
 
 		if ( !m_timerMsg )
 		{
-			m_timerMsg = new wxTimer( this, main::eID_MSGLOG_TIMER );
+			m_timerMsg = c3d::makeRawUnique< wxTimer >( this, int( main::eID::eMSGLOG_TIMER ) );
 			m_timerMsg->Start( 100 );
 		}
 
 		if ( !m_timerErr )
 		{
-			m_timerErr = new wxTimer( this, main::eID_ERRLOG_TIMER );
+			m_timerErr = c3d::makeRawUnique< wxTimer >( this, int( main::eID::eERRLOG_TIMER ) );
 			m_timerErr->Start( 100 );
 		}
 
 		if ( !m_fpsTimer )
 		{
-			m_fpsTimer = new wxTimer( this, main::eID_FPS_TIMER );
+			m_fpsTimer = c3d::makeRawUnique< wxTimer >( this, int( main::eID::eFPS_TIMER ) );
 		}
 	}
 
@@ -277,10 +288,10 @@ namespace CastorViewer
 #endif
 
 		m_auiManager.SetArtProvider( new GuiCommon::AuiDockArt );
-		m_renderPanel = new RenderPanel( this, main::eID_PANE_RENDER, wxDefaultPosition, wxSize( size.x - m_propertiesWidth, size.y - m_logsHeight ) );
-		m_logTabsContainer = new wxAuiNotebook( this, main::eID_PANE_LOGS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_renderPanel = new RenderPanel( this, int( main::eID::ePANE_RENDER ), wxDefaultPosition, wxSize( size.x - m_propertiesWidth, size.y - m_logsHeight ) );
+		m_logTabsContainer = new wxAuiNotebook( this, int( main::eID::ePANE_LOGS ), wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_logTabsContainer->SetArtProvider( new GuiCommon::AuiTabArt );
-		m_sceneTabsContainer = new wxAuiNotebook( this, main::eID_PANE_LISTS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE );
+		m_sceneTabsContainer = new wxAuiNotebook( this, int( main::eID::ePANE_LISTS ), wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE );
 		m_sceneTabsContainer->SetBackgroundColour( GuiCommon::PANEL_BACKGROUND_COLOUR );
 		m_sceneTabsContainer->SetForegroundColour( GuiCommon::PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->SetArtProvider( new GuiCommon::AuiTabArt );
@@ -353,25 +364,24 @@ namespace CastorViewer
 #endif
 		m_logTabsContainer->ChangeSelection( 0u );
 
-		m_sceneTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_objectsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_materialsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		auto & imagesLoader = wxGetApp().getImagesLoader();
+		m_sceneTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_objectsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_materialsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ imagesLoader, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_sceneTabsContainer->AddPage( m_sceneTree, _( "Scene" ), true );
 
 		if ( m_objectsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_objectsTree, _( "Objects" ), false );
-			m_selectSubmesh = m_objectsTree->getList()->onSelectSubmesh.connect( [this]( c3d::Geometry * geometry
+			m_selectSubmesh = m_objectsTree->getList()->onSelectSubmesh.connect( [this]( c3d::Geometry const * geometry
 				, c3d::Submesh const * submesh )
 				{
 					if ( m_renderPanel )
-					{
 						m_renderPanel->select( geometry, submesh );
-					}
 				} );
 		}
 
@@ -381,45 +391,28 @@ namespace CastorViewer
 			m_selectNode = m_nodesTree->getList()->onSelectNode.connect( [this]( c3d::SceneNode * node )
 				{
 					if ( m_renderPanel )
-					{
 						m_renderPanel->select( node );
-					}
 				} );
 		}
 
 		if ( m_lightsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_lightsTree, _( "Lights" ), false );
-			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( c3d::LightInstance * light )
+			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( c3d::LightInstance const * light )
 				{
 					if ( m_renderPanel )
-					{
 						m_renderPanel->select( light );
-					}
 				} );
 		}
 
 		if ( m_materialsTree )
-		{
 			m_sceneTabsContainer->AddPage( m_materialsTree, _( "Materials" ), false );
-		}
-
 		if ( m_overlaysTree )
-		{
 			m_sceneTabsContainer->AddPage( m_overlaysTree, _( "Overlays" ), false );
-		}
-
 		if ( m_guiTree )
-		{
 			m_sceneTabsContainer->AddPage( m_guiTree, _( "GUI" ), false );
-		}
 
 		m_auiManager.Update();
-	}
-
-	bool MainFrame::doInitialiseImages()
-	{
-		return true;
 	}
 
 	void MainFrame::doPopulateStatusBar()
@@ -433,85 +426,85 @@ namespace CastorViewer
 	{
 		splashScreen.Step( _( "Loading toolbar" ), 1 );
 
-#if CV_MainFrameToolbar
+		if ( main::frameToolbar )
+		{
+			auto & imagesLoader = wxGetApp().getImagesLoader();
+			m_toolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_PLAIN_BACKGROUND | wxAUI_TB_HORIZONTAL );
+			m_toolBar->SetArtProvider( new GuiCommon::AuiToolBarArt );
+			m_toolBar->SetBackgroundColour( GuiCommon::PANEL_BACKGROUND_COLOUR );
+			m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
+			m_toolBar->AddTool( int( main::eID::eTOOL_LOAD_SCENE ), _( "Load Scene" ), imagesLoader.getBitmapT( eBMP::eScenes )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
+			splashScreen.Step( 1 );
+			m_toolBar->AddTool( int( main::eID::eTOOL_EXPORT_SCENE ), _( "Export Scene" ), imagesLoader.getBitmapT( eBMP::eExport )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
+			m_toolBar->EnableTool( int( main::eID::eTOOL_EXPORT_SCENE ), false );
+			splashScreen.Step( 1 );
+			m_toolBar->AddSeparator();
+			m_toolBar->AddTool( int( main::eID::eTOOL_SHOW_LOGS ), _( "Logs" ), imagesLoader.getBitmapT( eBMP::eLogs )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
+			splashScreen.Step( 1 );
+			m_toolBar->AddTool( int( main::eID::eTOOL_SHOW_LISTS ), _( "Lists" ), imagesLoader.getBitmapT( eBMP::eMaterials )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
+			splashScreen.Step( 1 );
+			m_toolBar->AddTool( int( main::eID::eTOOL_PRINT_SCREEN ), _( "Snapshot" ), imagesLoader.getBitmapT( eBMP::ePrintScreen )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
+			m_toolBar->EnableTool( int( main::eID::eTOOL_PRINT_SCREEN ), false );
+			splashScreen.Step( 1 );
 
-		m_toolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_PLAIN_BACKGROUND | wxAUI_TB_HORIZONTAL );
-		m_toolBar->SetArtProvider( new GuiCommon::AuiToolBarArt );
-		m_toolBar->SetBackgroundColour( GuiCommon::PANEL_BACKGROUND_COLOUR );
-		m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		m_toolBar->AddTool( main::eID_TOOL_LOAD_SCENE, _( "Load Scene" ), GuiCommon::ImagesLoader::getBitmap( eBMP_SCENES )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
-		splashScreen.Step( 1 );
-		m_toolBar->AddTool( main::eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), GuiCommon::ImagesLoader::getBitmap( eBMP_EXPORT )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
-		m_toolBar->EnableTool( main::eID_TOOL_EXPORT_SCENE, false );
-		splashScreen.Step( 1 );
-		m_toolBar->AddSeparator();
-		m_toolBar->AddTool( main::eID_TOOL_SHOW_LOGS, _( "Logs" ), GuiCommon::ImagesLoader::getBitmap( eBMP_LOGS )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
-		splashScreen.Step( 1 );
-		m_toolBar->AddTool( main::eID_TOOL_SHOW_LISTS, _( "Lists" ), GuiCommon::ImagesLoader::getBitmap( eBMP_MATERIALS )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
-		splashScreen.Step( 1 );
-		m_toolBar->AddTool( main::eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), GuiCommon::ImagesLoader::getBitmap( eBMP_PRINTSCREEN )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
-		m_toolBar->EnableTool( main::eID_TOOL_PRINT_SCREEN, false );
-		splashScreen.Step( 1 );
+#if defined( GUICOMMON_RECORDS )
 
-#	if defined( GUICOMMON_RECORDS )
-
-		wxImage imgRecord;
-		imgRecord.Create( record_xpm );
-		wxImage imgStop;
-		imgStop.Create( stop_xpm );
-		wxImage imgRecordDis = imgRecord.ConvertToGreyscale();
-		wxImage imgStopDis = imgStop.ConvertToGreyscale();
-		auto tool = m_toolBar->AddTool( main::eID_TOOL_RECORD, _( "Record" ), imgRecord.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Record a video" ) );
-		tool->SetDisabledBitmap( imgRecordDis.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
-		tool = m_toolBar->AddTool( main::eID_TOOL_STOP, _( "Stop" ), imgStop.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Stop recording" ) );
-		tool->SetDisabledBitmap( imgStopDis.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
-		m_toolBar->EnableTool( main::eID_TOOL_RECORD, false );
-		m_toolBar->EnableTool( main::eID_TOOL_STOP, false );
-
-#	endif
-
-		m_toolBar->Realize();
-		m_auiManager.AddPane( m_toolBar, wxAuiPaneInfo().Name( wxT( "MainToolBar" ) ).ToolbarPane().Top().Row( 1 ).Dockable( false ).Gripper( false ) );
-
-#else
-
-		m_fileMenu = new wxMenu;
-		m_fileMenu->Append( main::eID_TOOL_LOAD_SCENE, _( "Open a new scene" ) );
-		splashScreen.Step( 1 );
-		m_fileMenu->Append( main::eID_TOOL_EXPORT_SCENE, _( "Export the current scene" ) );
-		splashScreen.Step( 1 );
-		m_fileMenu->Enable( main::eID_TOOL_EXPORT_SCENE, false );
-		m_fileMenu->AppendSeparator();
-		m_fileMenu->Append( wxID_EXIT, _( "Exit" ) );
-
-		m_tabsMenu = new wxMenu;
-		m_tabsMenu->Append( main::eID_TOOL_SHOW_LOGS, _( "Display logs" ) );
-		splashScreen.Step( 1 );
-		m_tabsMenu->Append( main::eID_TOOL_SHOW_LISTS, _( "Display lists" ) );
-		splashScreen.Step( 1 );
-
-		m_captureMenu = new wxMenu;
-		m_captureMenu->Append( main::eID_TOOL_PRINT_SCREEN, _( "Take a snapshot" ) );
-		splashScreen.Step( 1 );
-		m_captureMenu->Enable( main::eID_TOOL_PRINT_SCREEN, false );
-
-#	if defined( GUICOMMON_RECORDS )
-
-		m_captureMenu->Append( main::eID_TOOL_RECORD, _( "Record a video" ) );
-		m_captureMenu->Enable( main::eID_TOOL_RECORD, false );
-		m_captureMenu->Append( main::eID_TOOL_STOP, _( "Stop recording" ) );
-		m_captureMenu->Enable( main::eID_TOOL_STOP, false );
-
-#	endif
-
-		m_menuBar = new wxMenuBar;
-		m_menuBar->Append( m_fileMenu, _( "File" ) );
-		m_menuBar->Append( m_tabsMenu, _( "Tabs" ) );
-		m_menuBar->Append( m_captureMenu, _( "Capture" ) );
-
-		SetMenuBar( m_menuBar );
+			wxImage imgRecord;
+			imgRecord.Create( record_xpm );
+			wxImage imgStop;
+			imgStop.Create( stop_xpm );
+			wxImage imgRecordDis = imgRecord.ConvertToGreyscale();
+			wxImage imgStopDis = imgStop.ConvertToGreyscale();
+			auto tool = m_toolBar->AddTool( int( main::eID::eTOOL_RECORD ), _( "Record" ), imgRecord.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Record a video" ) );
+			tool->SetDisabledBitmap( imgRecordDis.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
+			tool = m_toolBar->AddTool( int( main::eID::eTOOL_STOP ), _( "Stop" ), imgStop.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Stop recording" ) );
+			tool->SetDisabledBitmap( imgStopDis.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
+			m_toolBar->EnableTool( int( main::eID::eTOOL_RECORD ), false );
+			m_toolBar->EnableTool( int( main::eID::eTOOL_STOP ), false );
 
 #endif
+
+			m_toolBar->Realize();
+			m_auiManager.AddPane( m_toolBar, wxAuiPaneInfo().Name( wxT( "MainToolBar" ) ).ToolbarPane().Top().Row( 1 ).Dockable( false ).Gripper( false ) );
+		}
+		else
+		{
+			m_fileMenu = new wxMenu;
+			m_fileMenu->Append( int( main::eID::eTOOL_LOAD_SCENE ), _( "Open a new scene" ) );
+			splashScreen.Step( 1 );
+			m_fileMenu->Append( int( main::eID::eTOOL_EXPORT_SCENE ), _( "Export the current scene" ) );
+			splashScreen.Step( 1 );
+			m_fileMenu->Enable( int( main::eID::eTOOL_EXPORT_SCENE ), false );
+			m_fileMenu->AppendSeparator();
+			m_fileMenu->Append( wxID_EXIT, _( "Exit" ) );
+
+			m_tabsMenu = new wxMenu;
+			m_tabsMenu->Append( int( main::eID::eTOOL_SHOW_LOGS ), _( "Display logs" ) );
+			splashScreen.Step( 1 );
+			m_tabsMenu->Append( int( main::eID::eTOOL_SHOW_LISTS ), _( "Display lists" ) );
+			splashScreen.Step( 1 );
+
+			m_captureMenu = new wxMenu;
+			m_captureMenu->Append( int( main::eID::eTOOL_PRINT_SCREEN ), _( "Take a snapshot" ) );
+			splashScreen.Step( 1 );
+			m_captureMenu->Enable( int( main::eID::eTOOL_PRINT_SCREEN ), false );
+
+#if defined( GUICOMMON_RECORDS )
+
+			m_captureMenu->Append( int( main::eID::eTOOL_RECORD ), _( "Record a video" ) );
+			m_captureMenu->Enable( int( main::eID::eTOOL_RECORD ), false );
+			m_captureMenu->Append( int( main::eID::eTOOL_STOP ), _( "Stop recording" ) );
+			m_captureMenu->Enable( int( main::eID::eTOOL_STOP ), false );
+
+#endif
+
+			m_menuBar = new wxMenuBar;
+			m_menuBar->Append( m_fileMenu, _( "File" ) );
+			m_menuBar->Append( m_tabsMenu, _( "Tabs" ) );
+			m_menuBar->Append( m_captureMenu, _( "Capture" ) );
+
+			SetMenuBar( m_menuBar );
+		}
 	}
 
 	void MainFrame::doInitialisePerspectives()
@@ -522,11 +515,10 @@ namespace CastorViewer
 		m_auiManager.GetPane( m_renderPanel ).Show();
 		m_debugPerspective = m_auiManager.SavePerspective();
 
-#if CV_DefaultDebugPerspective
-		m_auiManager.LoadPerspective( m_debugPerspective );
-#else
-		m_auiManager.LoadPerspective( m_currentPerspective );
-#endif
+		if constexpr ( main::defaultDebugPerspective )
+			m_auiManager.LoadPerspective( m_debugPerspective );
+		else
+			m_auiManager.LoadPerspective( m_currentPerspective );
 	}
 
 	void MainFrame::doLogCallback( c3d::MbString const & log, c3d::LogType logType, bool newLine )
@@ -571,56 +563,32 @@ namespace CastorViewer
 			auto engine = wxGetApp().getCastor();
 
 			if ( m_sceneTree )
-			{
 				m_sceneTree->getList()->unloadScene();
-			}
-
 			if ( m_objectsTree )
-			{
 				m_objectsTree->getList()->unloadScene();
-			}
-
 			if ( m_nodesTree )
-			{
 				m_nodesTree->getList()->unloadScene();
-			}
-
 			if ( m_lightsTree )
-			{
 				m_lightsTree->getList()->unloadScene();
-			}
-
 			if ( m_materialsTree )
-			{
 				m_materialsTree->getList()->unloadScene();
-			}
-
 			if ( m_overlaysTree )
-			{
 				m_overlaysTree->getList()->unloadScene();
-			}
-
 			if ( m_guiTree )
-			{
 				m_guiTree->getList()->unloadScene();
-			}
 
 			m_mainCamera = {};
 			m_sceneNode = {};
 
 			if ( engine->isThreaded() )
-			{
 				engine->getRenderLoop().pause();
-			}
 
 			m_renderPanel->reset();
 			engine->getRenderLoop().renderSyncFrame();
 			m_mainScene->cleanup();
 			engine->getRenderLoop().renderSyncFrame();
 
-			auto target = m_renderPanel->getRenderWindow().getRenderTarget();
-
-			if ( target )
+			if ( auto target = m_renderPanel->getRenderWindow().getRenderTarget() )
 			{
 				engine->getRenderTargetCache().remove( target );
 			}
@@ -643,9 +611,9 @@ namespace CastorViewer
 		if ( m_renderPanel )
 		{
 			wxBitmap bitmap;
-			auto & castor = *wxGetApp().getCastor();
+			auto const & castor = *wxGetApp().getCastor();
 
-			if ( castor.isThreaded() && !m_recorder.IsRecording() )
+			if ( castor.isThreaded() && !m_recorder.isRecording() )
 			{
 				castor.getRenderLoop().pause();
 			}
@@ -664,15 +632,15 @@ namespace CastorViewer
 			main::addWildcard( strWildcard, _( "GIF image" ), wxT( "*.gif" ) );
 			main::addWildcard( strWildcard, _( "JPEG image" ), wxT( "*.jpg" ) );
 			main::addWildcard( strWildcard, _( "PNG image" ), wxT( "*.png" ) );
-			wxFileDialog dialog( this, _( "Please choose an image file name" ), wxEmptyString, wxEmptyString, strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-			if ( dialog.ShowModal() == wxID_OK )
+			if ( wxFileDialog dialog( this, _( "Please choose an image file name" ), wxEmptyString, wxEmptyString, strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+				dialog.ShowModal() == wxID_OK )
 			{
 				auto image = bitmap.ConvertToImage();
 				image.SaveFile( dialog.GetPath() );
 			}
 
-			if ( castor.isThreaded() && !m_recorder.IsRecording() )
+			if ( castor.isThreaded() && !m_recorder.isRecording() )
 			{
 				castor.getRenderLoop().resume();
 			}
@@ -694,8 +662,8 @@ namespace CastorViewer
 				auto time = wxGetApp().getCastor()->getRenderLoop().getLastFrameTime();
 				recordFps = std::min( m_recordFps
 					, std::max( 1
-						, int( 1000.0f / std::chrono::duration_cast< std::chrono::milliseconds >( time ).count() ) ) );
-				result = m_recorder.StartRecord( m_renderPanel->getRenderWindow().getRenderTarget()->getSize()
+						, int( 1000.0f / float( std::chrono::duration_cast< std::chrono::milliseconds >( time ).count() ) ) ) );
+				result = m_recorder.startRecord( m_renderPanel->getRenderWindow().getRenderTarget()->getRenderSize()
 					, recordFps );
 			}
 			catch ( std::exception & exc )
@@ -707,9 +675,9 @@ namespace CastorViewer
 
 		if ( result )
 		{
-			if ( isCastor3DThreaded )
+			if ( wxGetApp().getCastor()->isThreaded() )
 			{
-				m_timer = new wxTimer( this, main::eID_RENDER_TIMER );
+				m_timer = c3d::makeRawUnique< wxTimer >( this, int( main::eID::eRENDER_TIMER ) );
 				wxGetApp().getCastor()->getRenderLoop().pause();
 			}
 
@@ -726,14 +694,14 @@ namespace CastorViewer
 	{
 #if defined( GUICOMMON_RECORDS )
 
-		auto & castor = *wxGetApp().getCastor();
+		auto const & castor = *wxGetApp().getCastor();
 		m_renderPanel->getRenderWindow().enableSaveFrame();
 		castor.getRenderLoop().renderSyncFrame();
 		auto buffer = m_renderPanel->getRenderWindow().getSavedFrame();
 
 		try
 		{
-			m_recorder.RecordFrame( buffer );
+			m_recorder.recordFrame( buffer );
 		}
 		catch ( std::exception & exc )
 		{
@@ -749,15 +717,18 @@ namespace CastorViewer
 #if defined( GUICOMMON_RECORDS )
 
 		auto engine = wxGetApp().getCastor();
-		m_recorder.StopRecord();
+		m_recorder.stopRecord();
 
-#	if CV_MainFrameToolbar
-		m_toolBar->EnableTool( main::eID_TOOL_STOP, false );
-		m_toolBar->EnableTool( main::eID_TOOL_RECORD, true );
-#	else
-		m_captureMenu->Enable( main::eID_TOOL_STOP, false );
-		m_captureMenu->Enable( main::eID_TOOL_RECORD, true );
-#	endif
+		if ( main::frameToolbar )
+		{
+			m_toolBar->EnableTool( int( main::eID::eTOOL_STOP ), false );
+			m_toolBar->EnableTool( int( main::eID::eTOOL_RECORD ), true );
+		}
+		else
+		{
+			m_captureMenu->Enable( int( main::eID::eTOOL_STOP ), false );
+			m_captureMenu->Enable( int( main::eID::eTOOL_RECORD ), true );
+		}
 
 		if ( m_timer )
 		{
@@ -765,13 +736,12 @@ namespace CastorViewer
 			{
 				engine->getRenderLoop().resume();
 				m_timer->Stop();
-				delete m_timer;
-				m_timer = nullptr;
+				m_timer = {};
 			}
 			else
 			{
 				m_timer->Stop();
-				m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
+				m_timer->Start( int( 1000.0f / float( engine->getRenderLoop().getWantedFps() ) ) );
 			}
 		}
 
@@ -811,56 +781,38 @@ namespace CastorViewer
 		if ( m_mainScene )
 		{
 			if ( m_sceneTree )
-			{
 				m_sceneTree->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), m_mainScene );
-			}
-
 			if ( m_objectsTree )
-			{
 				m_objectsTree->getList()->loadSceneObjects( engine, m_mainScene );
-			}
-
 			if ( m_nodesTree )
-			{
 				m_nodesTree->getList()->loadSceneNodes( engine, m_mainScene );
-			}
-
 			if ( m_lightsTree )
-			{
 				m_lightsTree->getList()->loadSceneLights( engine, m_mainScene );
-			}
-
 			if ( m_materialsTree )
-			{
 				m_materialsTree->getList()->loadSceneMaterials( engine, m_mainScene );
-			}
-
 			if ( m_overlaysTree )
-			{
 				m_overlaysTree->getList()->loadSceneOverlays( engine, m_mainScene );
-			}
-
 			if ( m_guiTree )
-			{
 				m_guiTree->getList()->loadSceneGui( engine, m_mainScene );
-			}
 		}
 
-#if CV_MainFrameToolbar
-		m_toolBar->EnableTool( main::eID_TOOL_PRINT_SCREEN, true );
-		m_toolBar->EnableTool( main::eID_TOOL_EXPORT_SCENE, true );
-#else
-		m_fileMenu->Enable( main::eID_TOOL_EXPORT_SCENE, true );
-		m_captureMenu->Enable( main::eID_TOOL_PRINT_SCREEN, true );
-#endif
-
+		if ( main::frameToolbar )
+		{
+			m_toolBar->EnableTool( int( main::eID::eTOOL_PRINT_SCREEN ), true );
+			m_toolBar->EnableTool( int( main::eID::eTOOL_EXPORT_SCENE ), true );
 #if defined( GUICOMMON_RECORDS )
-#	if CV_MainFrameToolbar
-		m_toolBar->EnableTool( main::eID_TOOL_RECORD, true );
-#	else
-		m_captureMenu->Enable( main::eID_TOOL_RECORD, true );
-#	endif
+			m_toolBar->EnableTool( int( main::eID::eTOOL_RECORD ), true );
 #endif
+		}
+		else
+		{
+			m_fileMenu->Enable( int( main::eID::eTOOL_EXPORT_SCENE ), true );
+			m_captureMenu->Enable( int( main::eID::eTOOL_PRINT_SCREEN ), true );
+#if defined( GUICOMMON_RECORDS )
+			m_captureMenu->Enable( int( main::eID::eTOOL_RECORD ), true );
+#endif
+		}
+
 		m_title = wxT( "Castor Viewer - " )
 			+ GuiCommon::make_wxString( target->getEngine()->getRenderSystem()->getRendererType() )
 			+ wxT( " - " )
@@ -872,35 +824,17 @@ namespace CastorViewer
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
-		EVT_TIMER( main::eID_RENDER_TIMER, MainFrame::onRenderTimer )
-		EVT_TIMER( main::eID_MSGLOG_TIMER, MainFrame::onTimer )
-		EVT_TIMER( main::eID_ERRLOG_TIMER, MainFrame::onTimer )
-		EVT_TIMER( main::eID_FPS_TIMER, MainFrame::onFpsTimer )
-		EVT_THREAD( main::eID_LOAD_END, MainFrame::onSceneLoadEnd )
+		EVT_TIMER( int( main::eID::eRENDER_TIMER ), MainFrame::onRenderTimer )
+		EVT_TIMER( int( main::eID::eMSGLOG_TIMER ), MainFrame::onTimer )
+		EVT_TIMER( int( main::eID::eERRLOG_TIMER ), MainFrame::onTimer )
+		EVT_TIMER( int( main::eID::eFPS_TIMER ), MainFrame::onFpsTimer )
+		EVT_THREAD( int( main::eID::eLOAD_END ), MainFrame::onSceneLoadEnd )
 		EVT_PAINT( MainFrame::onPaint )
-		EVT_INIT_DIALOG( MainFrame::onInit )
 		EVT_CLOSE( MainFrame::onClose )
 		EVT_ENTER_WINDOW( MainFrame::onEnterWindow )
 		EVT_LEAVE_WINDOW( MainFrame::onLeaveWindow )
 		EVT_ERASE_BACKGROUND( MainFrame::onEraseBackground )
 		EVT_KEY_UP( MainFrame::onKeyUp )
-#if CV_MainFrameToolbar
-		EVT_TOOL( main::eID_TOOL_LOAD_SCENE, MainFrame::onLoadScene )
-		EVT_TOOL( main::eID_TOOL_EXPORT_SCENE, MainFrame::onExportScene )
-		EVT_TOOL( main::eID_TOOL_SHOW_LOGS, MainFrame::onShowLogs )
-		EVT_TOOL( main::eID_TOOL_SHOW_LISTS, MainFrame::onShowLists )
-		EVT_TOOL( main::eID_TOOL_PRINT_SCREEN, MainFrame::onPrintScreen )
-		EVT_TOOL( main::eID_TOOL_RECORD, MainFrame::onRecord )
-		EVT_TOOL( main::eID_TOOL_STOP, MainFrame::onStop )
-#else
-		EVT_MENU( main::eID_TOOL_LOAD_SCENE, MainFrame::onLoadScene )
-		EVT_MENU( main::eID_TOOL_EXPORT_SCENE, MainFrame::onExportScene )
-		EVT_MENU( main::eID_TOOL_SHOW_LOGS, MainFrame::onShowLogs )
-		EVT_MENU( main::eID_TOOL_SHOW_LISTS, MainFrame::onShowLists )
-		EVT_MENU( main::eID_TOOL_PRINT_SCREEN, MainFrame::onPrintScreen )
-		EVT_MENU( main::eID_TOOL_RECORD, MainFrame::onRecord )
-		EVT_MENU( main::eID_TOOL_STOP, MainFrame::onStop )
-#endif
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
@@ -912,64 +846,56 @@ namespace CastorViewer
 
 	void MainFrame::onRenderTimer( wxTimerEvent & event )
 	{
-		auto castor = wxGetApp().getCastor();
-
-		if ( castor )
+		if ( auto castor = wxGetApp().getCastor();
+			!castor->isCleaned() )
 		{
-			if ( !castor->isCleaned() )
+			if ( m_renderPanel && m_recorder.isRecording() && m_recorder.updateTime() )
 			{
-				if ( m_renderPanel && m_recorder.IsRecording() && m_recorder.UpdateTime() )
-				{
-					doRecordFrame();
-				}
-				else if ( !castor->isThreaded() )
-				{
-					auto wanted = c3d::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() };
-					castor->getRenderLoop().renderSyncFrame( wanted );
-					auto frame = std::chrono::duration_cast< c3d::Milliseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
+				doRecordFrame();
+			}
+			else if ( !castor->isThreaded() )
+			{
+				auto wanted = c3d::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() };
+				castor->getRenderLoop().renderSyncFrame( wanted );
+				auto frame = std::chrono::duration_cast< c3d::Milliseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
 
-					if ( frame.count() >= m_timer->GetInterval() )
+				if ( frame.count() >= m_timer->GetInterval() )
+				{
+					m_minCount = 0u;
+
+					if ( m_maxCount++ >= 100 )
 					{
-						m_minCount = 0u;
-
-						if ( m_maxCount++ >= 100 )
-						{
-							m_maxCount = 0;
-							m_timer->Stop();
-							m_timer->Start( m_timer->GetInterval() * 2 );
-						}
+						m_maxCount = 0;
+						m_timer->Stop();
+						m_timer->Start( m_timer->GetInterval() * 2 );
 					}
-					else if ( frame.count() < m_timer->GetInterval() / 2 )
-					{
-						m_maxCount = 0u;
+				}
+				else if ( frame.count() < m_timer->GetInterval() / 2 )
+				{
+					m_maxCount = 0u;
 
-						if ( m_minCount++ >= 100 )
-						{
-							m_minCount = 0;
-							m_timer->Stop();
-							m_timer->Start( m_timer->GetInterval() / 2 );
-						}
+					if ( m_minCount++ >= 100 )
+					{
+						m_minCount = 0;
+						m_timer->Stop();
+						m_timer->Start( m_timer->GetInterval() / 2 );
 					}
 				}
 			}
 		}
+
+		event.Skip();
 	}
 
 	void MainFrame::onTimer( wxTimerEvent & event )
 	{
-		if ( event.GetId() == main::eID_MSGLOG_TIMER && m_messageLog.listBox )
-		{
+		if ( event.GetId() == int( main::eID::eMSGLOG_TIMER ) && m_messageLog.listBox )
 			main::updateLog( m_messageLog );
-		}
-		else if ( event.GetId() == main::eID_ERRLOG_TIMER && m_errorLog.listBox )
-		{
+		else if ( event.GetId() == int( main::eID::eERRLOG_TIMER ) && m_errorLog.listBox )
 			main::updateLog( m_errorLog );
-		}
 #ifndef NDEBUG
-		else if ( event.GetId() == main::eID_DBGLOG_TIMER && m_debugLog.listBox )
-		{
+		else if ( event.GetId() == main::eID::eDBGLOG_TIMER && m_debugLog.listBox )
 			main::updateLog( m_debugLog );
-		}
 #endif
 
 		event.Skip();
@@ -990,10 +916,7 @@ namespace CastorViewer
 					, float( time.count() ) / 1000.0f ) );
 			}
 		}
-	}
-
-	void MainFrame::onInit( wxInitDialogEvent & event )
-	{
+		event.Skip();
 	}
 
 	void MainFrame::onClose( wxCloseEvent & event )
@@ -1006,43 +929,37 @@ namespace CastorViewer
 #if CV_MainFrameToolbar
 		m_auiManager.DetachPane( m_toolBar );
 #endif
-		m_messageLog.listBox = nullptr;
-		m_errorLog.listBox = nullptr;
+		m_messageLog.listBox = {};
+		m_errorLog.listBox = {};
 #ifndef NDEBUG
-		m_debugLog.listBox = nullptr;
+		m_debugLog.listBox = {};
 #endif
 
 		if ( m_renderPanel )
-		{
 			m_renderPanel->disableWindowResize();
-		}
 
 		if ( m_fpsTimer )
 		{
 			m_fpsTimer->Stop();
-			delete m_fpsTimer;
-			m_fpsTimer = nullptr;
+			m_fpsTimer = {};
 		}
 
 		if ( m_timer )
 		{
 			m_timer->Stop();
-			delete m_timer;
-			m_timer = nullptr;
+			m_timer = {};
 		}
 
 		if ( m_timerMsg )
 		{
 			m_timerMsg->Stop();
-			delete m_timerMsg;
-			m_timerMsg = nullptr;
+			m_timerMsg = {};
 		}
 
 		if ( m_timerErr )
 		{
 			m_timerErr->Stop();
-			delete m_timerErr;
-			m_timerErr = nullptr;
+			m_timerErr = {};
 		}
 
 		m_mainScene = {};
@@ -1051,25 +968,20 @@ namespace CastorViewer
 
 		if ( m_renderPanel )
 		{
-			if ( castor->isThreaded() )
-			{
+			if ( castor && castor->isThreaded() )
 				castor->getRenderLoop().pause();
-			}
-
 			m_renderPanel->reset();
-
-			if ( castor->isThreaded() )
-			{
+			if ( castor && castor->isThreaded() )
 				castor->getRenderLoop().resume();
-			}
 		}
 
-		castor->cleanup();
+		if ( castor )
+			castor->cleanup();
 
 		if ( m_renderPanel )
 		{
 			m_renderPanel->Close( true );
-			m_renderPanel = nullptr;
+			m_renderPanel = {};
 		}
 
 		DestroyChildren();
@@ -1096,13 +1008,9 @@ namespace CastorViewer
 	void MainFrame::onKeyUp( wxKeyEvent & event )
 	{
 		if ( m_renderPanel )
-		{
 			m_renderPanel->onKeyUp( event );
-		}
 		else
-		{
 			event.Skip();
-		}
 	}
 
 	void MainFrame::onLoadScene( wxCommandEvent & event )
@@ -1114,9 +1022,9 @@ namespace CastorViewer
 		wildcard << _( "Zip archive" );
 		wildcard << GuiCommon::ZIP_WILDCARD;
 		wildcard << wxT( "|" );
-		wxFileDialog fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, wildcard );
 
-		if ( fileDialog.ShowModal() == wxID_OK )
+		if ( wxFileDialog fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, wildcard );
+			fileDialog.ShowModal() == wxID_OK )
 		{
 			loadScene( fileDialog.GetPath() );
 		}
@@ -1127,11 +1035,11 @@ namespace CastorViewer
 	void MainFrame::onExportScene( wxCommandEvent & event )
 	{
 		c3d::exporter::ExportOptions options;
-		GuiCommon::PropertiesDialog dialog{ this
-			, _( "Export" )
-			, c3d::makeUniqueDerived< GuiCommon::TreeItemProperty, GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
 
-		if ( dialog.ShowModal() == wxID_CANCEL )
+		if ( GuiCommon::PropertiesDialog dialog{ this
+			, _( "Export" )
+			, c3d::makeUniqueDerived< GuiCommon::TreeItemProperty, GuiCommon::ExportOptionsTreeItemProperty >( wxGetApp().getImagesLoader(), true, options ) };
+			dialog.ShowModal() == wxID_CANCEL )
 		{
 			return;
 		}
@@ -1141,9 +1049,9 @@ namespace CastorViewer
 			wxString wildcard = _( "Castor3D scene" );
 			wildcard += GuiCommon::CSCN_WILDCARD;
 			wildcard += wxT( "|" );
-			wxFileDialog fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-			if ( fileDialog.ShowModal() == wxID_OK )
+			if ( wxFileDialog fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+				fileDialog.ShowModal() == wxID_OK )
 			{
 				try
 				{
@@ -1159,7 +1067,9 @@ namespace CastorViewer
 					}
 					else
 					{
-						throw std::runtime_error{ "See CastorViewer.log for more details." };
+						wxMessageBox( _( "Scene export failed:\nSee CastorViewer.log for more details." )
+							, _( "Error" )
+							, wxOK | wxCENTRE | wxICON_ERROR );
 					}
 				}
 				catch ( std::exception & exc )
@@ -1194,10 +1104,7 @@ namespace CastorViewer
 	void MainFrame::onShowLists( wxCommandEvent & event )
 	{
 		if ( !m_sceneTabsContainer->IsShown() )
-		{
 			m_auiManager.GetPane( m_sceneTabsContainer ).Show();
-		}
-
 		m_auiManager.Update();
 		event.Skip();
 	}
@@ -1214,13 +1121,16 @@ namespace CastorViewer
 
 		if ( doStartRecord() )
 		{
-#	if CV_MainFrameToolbar
-			m_toolBar->EnableTool( eID_TOOL_STOP, true );
-			m_toolBar->EnableTool( eID_TOOL_RECORD, false );
-#	else
-			m_captureMenu->Enable( eID_TOOL_STOP, true );
-			m_captureMenu->Enable( eID_TOOL_RECORD, false );
-#	endif
+			if ( main::frameToolbar )
+			{
+				m_toolBar->EnableTool( int( main::eID::eTOOL_STOP ), true );
+				m_toolBar->EnableTool( int( main::eID::eTOOL_RECORD ), false );
+			}
+			else
+			{
+				m_captureMenu->Enable( int( main::eID::eTOOL_STOP ), true );
+				m_captureMenu->Enable( int( main::eID::eTOOL_RECORD ), false );
+			}
 		}
 
 #endif
@@ -1236,9 +1146,7 @@ namespace CastorViewer
 	void MainFrame::onSceneLoadEnd( wxThreadEvent & event )
 	{
 		if ( !event.GetEventObject() )
-		{
 			return;
-		}
 
 		auto var = static_cast< wxVariant * >( event.GetEventObject() );
 		auto rawTarget = static_cast< c3d::RenderWindowDesc * >( var->GetVoidPtr() );
@@ -1249,5 +1157,7 @@ namespace CastorViewer
 			doSceneLoadEnd( *rawTarget );
 			delete rawTarget;
 		}
+
+		event.Skip();
 	}
 }

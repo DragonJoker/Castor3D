@@ -17,6 +17,8 @@ namespace c3d::shader
 	struct MeshVertexBase
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( C3D_API, MeshVertexBase );
+
 		C3D_API MeshVertexBase( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -49,12 +51,12 @@ namespace c3d::shader
 	struct MeshVertexT
 		: public MeshVertexBase
 	{
+		SDW_DeclStructInstance( , MeshVertexT );
+
 		MeshVertexT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
 
-		SDW_DeclStructInstance( , MeshVertexT );
-		
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint
 			, SubmeshShaders const & submeshShaders );
@@ -65,6 +67,8 @@ namespace c3d::shader
 	struct MeshPosition
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( , MeshPosition );
+
 		MeshPosition( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
@@ -73,8 +77,6 @@ namespace c3d::shader
 			, fill{ getMemberArray< sdw::Vec4 >( "fill", true ) }
 		{
 		}
-
-		SDW_DeclStructInstance( , MeshPosition );
 
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
 			, uint32_t stride )

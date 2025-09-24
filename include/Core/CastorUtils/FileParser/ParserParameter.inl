@@ -180,7 +180,7 @@ namespace c3d
 	template< typename T, uint32_t Count >
 	inline bool parseValues( LoggerInstance & logger
 		, String & params
-		, Coords< T, Count > & value )
+		, PointView< T, Count > & value )
 	{
 		return parseValues( logger
 			, params

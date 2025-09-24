@@ -62,8 +62,8 @@ namespace c3d
 		if ( !m_directional )
 		{
 			m_directional = m_writer.implementFunction< sdw::Vec3 >( "reflectiveShadowMapping"
-				, [&]( shader::DirectionalShadowData const & shadowData
-					, sdw::Vec3 const & viewPosition
+				, [this]( shader::DirectionalShadowData const & shadowData
+					, [[maybe_unused]] sdw::Vec3 const & viewPosition
 					, sdw::Vec3 const & worldPosition
 					, sdw::Vec3 const & worldNormal
 					, shader::RsmConfigData const & rsmData )
@@ -124,8 +124,7 @@ namespace c3d
 			, prsmData );
 	}
 
-	sdw::Vec3 ReflectiveShadowMapping::point( shader::PointShadowData const & pshadowData
-		, sdw::Vec3 const & plightPosition
+	sdw::Vec3 ReflectiveShadowMapping::point( sdw::Vec3 const & plightPosition
 		, sdw::Vec3 const & pworldPosition
 		, sdw::Vec3 const & pworldNormal
 		, shader::RsmConfigData const & prsmData )
@@ -133,8 +132,7 @@ namespace c3d
 		if ( !m_point )
 		{
 			m_point = m_writer.implementFunction< sdw::Vec3 >( "reflectiveShadowMapping"
-				, [&]( shader::PointShadowData const & shadowData
-					, sdw::Vec3 const & lightPosition
+				, [this]( sdw::Vec3 const & lightPosition
 					, sdw::Vec3 const & worldPosition
 					, sdw::Vec3 const & worldNormal
 					, shader::RsmConfigData const & rsmData )
@@ -172,15 +170,13 @@ namespace c3d
 						, vec3( 0.0_f )
 						, vec3( 1.0_f ) ) );
 				}
-				, shader::InPointShadowData{ m_writer, "shadowData" }
 				, sdw::InVec3{ m_writer, "lightPosition" }
 				, sdw::InVec3{ m_writer, "worldPosition" }
 				, sdw::InVec3{ m_writer, "worldNormal" }
 				, shader::InRsmConfigData{ m_writer, "rsmData" } );
 		}
 
-		return m_point( pshadowData
-			, plightPosition
+		return m_point( plightPosition
 			, pworldPosition
 			, pworldNormal
 			, prsmData );
@@ -194,7 +190,7 @@ namespace c3d
 		if ( !m_spot )
 		{
 			m_spot = m_writer.implementFunction< sdw::Vec3 >( "reflectiveShadowMapping"
-				, [&]( shader::SpotShadowData const & shadowData
+				, [this]( shader::SpotShadowData const & shadowData
 					, sdw::Vec3 const & worldPosition
 					, sdw::Vec3 const & worldNormal
 					, shader::RsmConfigData const & rsmData )

@@ -154,10 +154,10 @@ namespace c3d
 	template< typename DataT >
 	using StringMap = Map< String, DataT >;
 	template< typename DataT >
-	using HashStringMap = std::unordered_map< String, DataT, StringHash, std::equal_to<> >;
+	using HashStringMap = HashMap< String, DataT, StringHash, std::equal_to<> >;
 
-	using StringSet = std::set< String >;
-	using HashStringSet = std::unordered_set< String, StringHash, std::equal_to<> >;
+	using StringSet = Set< String >;
+	using HashStringSet = HashSet< String, StringHash, std::equal_to<> >;
 
 	using Seconds = std::chrono::seconds;
 	using Milliseconds = std::chrono::milliseconds;

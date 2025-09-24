@@ -122,6 +122,18 @@ namespace c3d
 			, uint32_t binding )const;
 		/**
 		 *\~english
+		 *\brief		Creates a frame pass binding.
+		 *\~french
+		 *\brief		Crée une attache de frame pass.
+		 */
+		template< typename BindingT >
+		void createPassBindingT( crg::FramePass & pass
+			, BindingT binding )const
+		{
+			createPassBinding( pass, uint32_t( binding ) );
+		}
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
 		 *\param[in]	stages	The impacted shader stages.
 		 *\param[in]	index	The binding point index.

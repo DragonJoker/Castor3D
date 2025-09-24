@@ -31,17 +31,13 @@ namespace c3d
 		mesh.computeContainers();
 
 		for ( auto & submesh : mesh )
-		{
 			mesh.getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
-		}
 	}
 
-	void MeshGenerator::computeNormals( Mesh & mesh, bool reverted )
+	void MeshGenerator::computeNormals( Mesh const & mesh, bool reverted )
 	{
-		for ( auto & submesh : mesh )
-		{
+		for ( auto const & submesh : mesh )
 			submesh->computeNormals( reverted );
-		}
 	}
 
 	void MeshGenerator::doGenerate( CU_UnusedParam( Mesh &, mesh ), CU_UnusedParam( Parameters const &, parameters ) )

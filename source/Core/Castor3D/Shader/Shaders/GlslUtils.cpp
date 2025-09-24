@@ -27,132 +27,132 @@ namespace c3d::shader
 	{
 	}
 
-	sdw::Float Utils::saturate( sdw::Float const v )
+	sdw::Float Utils::saturate( sdw::Float const & v )const
 	{
 		return clamp( v, 0.0_f, 1.0_f );
 	}
 
-	sdw::Vec3 Utils::saturate( sdw::Vec3 const v )
+	sdw::Vec3 Utils::saturate( sdw::Vec3 const & v )const
 	{
 		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
 	}
 	
-	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const v )
+	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & v )const
 	{
 		return vec2( v.x(), 1.0_f - v.y() );
 	}
 
-	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const v )
+	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & v )const
 	{
 		return vec3( v.x(), 1.0_f - v.y(), v.z() );
 	}
 
-	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const v )
+	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & v )const
 	{
 		return vec4( v.x(), 1.0_f - v.y(), v.z(), v.w() );
 	}
 
-	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const v )
+	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & v )const
 	{
 		return vec2( v.x(), -v.y() );
 	}
 
-	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const v )
+	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & v )const
 	{
 		return vec3( v.x(), -v.y(), v.z() );
 	}
 
-	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const v )
+	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & v )const
 	{
 		return vec4( v.x(), -v.y(), v.z(), v.w() );
 	}
 
-	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const renderPos
-			, sdw::Vec2 const renderSize )
+	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const & renderPos
+			, sdw::Vec2 const & renderSize )const
 	{
 		return renderPos / renderSize;
 	}
 	
-	sdw::Vec3 Utils::applyGamma( sdw::Float const gamma
-		, sdw::Vec3 const hdr )
+	sdw::Vec3 Utils::applyGamma( sdw::Float const & gamma
+		, sdw::Vec3 const & hdr )const
 	{
 		return pow( max( hdr, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( 1.0_f / gamma ) );
 	}
 
-	sdw::Vec3 Utils::removeGamma( sdw::Float const gamma
-		, sdw::Vec3 const srgb )
+	sdw::Vec3 Utils::removeGamma( sdw::Float const & gamma
+		, sdw::Vec3 const & srgb )const
 	{
 		return pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) );
 	}
 
-	sdw::Float Utils::remap( sdw::Float const originalValue
-		, sdw::Float const originalMin
-		, sdw::Float const originalMax
-		, sdw::Float const newMin
-		, sdw::Float const newMax )
+	sdw::Float Utils::remap( sdw::Float const & originalValue
+		, sdw::Float const & originalMin
+		, sdw::Float const & originalMax
+		, sdw::Float const & newMin
+		, sdw::Float const & newMax )const
 	{
 		return newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) );
 	}
 
-	sdw::Float Utils::threshold( sdw::Float const v
-		, sdw::Float const t )
+	sdw::Float Utils::threshold( sdw::Float const & v
+		, sdw::Float const & t )const
 	{
 		return m_writer.ternary( v > t, v, 0.0_f );
 	}
 
-	sdw::Float Utils::beer( sdw::Float const d )
+	sdw::Float Utils::beer( sdw::Float const & d )const
 	{
 		return exp( -d );
 	}
 
-	sdw::Float Utils::powder( sdw::Float const d )
+	sdw::Float Utils::powder( sdw::Float const & d )const
 	{
 		return 1.0_f - exp( -2.0_f * d );
 	}
 
-	sdw::Float Utils::powder( sdw::Float const d
-		, sdw::Float const cosTheta )
+	sdw::Float Utils::powder( sdw::Float const & d
+		, sdw::Float const & cosTheta )const
 	{
 		return mix( 1.0_f
 			, powder( d )
 			, clamp( fma( cosTheta, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) );
 	}
 
-	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
-		, sdw::Vec2 const texCoords )
+	sdw::RetVec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec2 const & texCoords )const
 	{
 		return map.sample( texCoords );
 	}
 
-	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
-		, sdw::Vec3 const texCoords )
+	sdw::RetVec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec3 const & texCoords )const
 	{
 		return map.sample( texCoords.xy() );
 	}
 
-	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
-		, sdw::Vec2 const texCoords
-		, sdw::Float const lod )
+	sdw::RetVec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec2 const & texCoords
+		, sdw::Float const & lod )const
 	{
 		return map.sample( texCoords, lod );
 	}
 
-	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
-		, sdw::Vec3 const texCoords
-		, sdw::Float const lod )
+	sdw::RetVec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec3 const & texCoords
+		, sdw::Float const & lod )const
 	{
 		return map.sample( texCoords.xy(), lod );
 	}
 
-	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
-		, DerivTex const texCoords )
+	sdw::RetVec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const & map
+		, DerivTex const & texCoords )const
 	{
 		return map.grad( texCoords.value(), texCoords.dPdx(), texCoords.dPdy() );
 	}
 
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
 		, TextureTransformData const & panim
-		, sdw::Vec2 const puv )
+		, sdw::Vec2 const & puv )
 	{
 		if ( !m_transformUV )
 		{
@@ -199,7 +199,7 @@ namespace c3d::shader
 
 	sdw::RetVec3 Utils::transformUVW( TextureConfigData const & pconfig
 		, TextureTransformData const & panim
-		, sdw::Vec3 const puvw )
+		, sdw::Vec3 const & puvw )
 	{
 		if ( !m_transformUVW )
 		{
@@ -234,7 +234,7 @@ namespace c3d::shader
 		return m_transformUVW( pconfig, panim, puvw );
 	}
 
-	void Utils::swap( sdw::Float const pA
+	void Utils::swap( sdw::Float const & pA
 		, sdw::Float const & pB )
 	{
 		if ( !m_swap1F )
@@ -254,7 +254,7 @@ namespace c3d::shader
 		m_swap1F( pA, pB );
 	}
 
-	sdw::RetFloat Utils::distanceSquared( sdw::Vec2 const pA
+	sdw::RetFloat Utils::distanceSquared( sdw::Vec2 const & pA
 		, sdw::Vec2 const & pB )
 	{
 		if ( !m_distanceSquared2F )
@@ -273,7 +273,7 @@ namespace c3d::shader
 		return m_distanceSquared2F( pA, pB );
 	}
 
-	sdw::RetFloat Utils::distanceSquared( sdw::Vec3 const pA
+	sdw::RetFloat Utils::distanceSquared( sdw::Vec3 const & pA
 		, sdw::Vec3 const & pB )
 	{
 		if ( !m_distanceSquared3F )
@@ -673,7 +673,7 @@ namespace c3d::shader
 	}
 
 	sdw::RetFloat Utils::reconstructCSZ( sdw::Float const & pdepth
-		, sdw::Vec3 const pclipInfo )
+		, sdw::Vec3 const & pclipInfo )
 	{
 		if ( !m_reconstructCSZ )
 		{

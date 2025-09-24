@@ -126,21 +126,20 @@ namespace c3d
 			, std::max( m_minSize->y, value->y ) };
 	}
 
-	void FrameCtrl::doSetPosition( Position const & value )
+	void FrameCtrl::doSetPosition( [[maybe_unused]] Position const & value )
 	{
 		doUpdatePositions();
 	}
 
-	void FrameCtrl::doSetSize( Size const & value )
+	void FrameCtrl::doSetSize( [[maybe_unused]] Size const & value )
 	{
 		doUpdatePositions();
 		doUpdateSizes();
 	}
 
-	void FrameCtrl::doSetBorderSize( Point4ui const & value )
+	void FrameCtrl::doSetBorderSize( [[maybe_unused]] Point4ui const & value )
 	{
-		doUpdatePositions();
-		doUpdateSizes();
+		doSetSize( {} );
 	}
 
 	bool FrameCtrl::doCatchesMouseEvents()const

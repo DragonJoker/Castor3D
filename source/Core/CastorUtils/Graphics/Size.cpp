@@ -78,14 +78,4 @@ namespace c3d
 			getData().size.y += cy;
 		}
 	}
-
-	bool operator==( Size const & lhs, Size const & rhs )noexcept
-	{
-		return lhs.getWidth() == rhs.getWidth() && lhs.getHeight() == rhs.getHeight();
-	}
-
-	bool operator!=( Size const & lhs, Size const & rhs )noexcept
-	{
-		return lhs.getWidth() != rhs.getWidth() || lhs.getHeight() != rhs.getHeight();
-	}
 }

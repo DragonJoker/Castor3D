@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec2.hpp>
 
 namespace light_streaks
@@ -30,17 +30,29 @@ namespace light_streaks
 	};
 
 	struct KawaseData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_KawaseData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec2Field< "pixelSize" >
+			, sdw::Vec2Field< "direction" >
+			, sdw::IntField< "samples" >
+			, sdw::FloatField< "attenuation" >
+			, sdw::IntField< "pass" >
+			, sdw::IntField< "pad" > >
 	{
-	public:
-		KawaseData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
 		SDW_DeclStructInstance( , KawaseData );
 
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+		KawaseData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+			, pixelSize{ StructInstanceHelperT::getMember< "pixelSize" >() }
+			, direction{ StructInstanceHelperT::getMember< "direction" >() }
+			, samples{ StructInstanceHelperT::getMember< "samples" >() }
+			, attenuation{ StructInstanceHelperT::getMember< "attenuation" >() }
+			, pass{ StructInstanceHelperT::getMember< "pass" >() }
+		{
+		}
 
-	public:
 		sdw::Vec2 pixelSize;
 		sdw::Vec2 direction;
 		sdw::Int samples;
@@ -56,6 +68,10 @@ namespace light_streaks
 	{
 	public:
 		using Configuration = KawaseUboConfiguration;
+		KawaseUbo( KawaseUbo const & ) = delete;
+		KawaseUbo & operator=( KawaseUbo const & ) = delete;
+		KawaseUbo( KawaseUbo && )noexcept = delete;
+		KawaseUbo & operator=( KawaseUbo && )noexcept = delete;
 
 	public:
 		explicit KawaseUbo( c3d::RenderDevice const & device );
@@ -83,8 +99,9 @@ namespace light_streaks
 			return m_ubo[index].createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding
+			, BindingT binding
 			, uint32_t index )const
 		{
 			return m_ubo[index].createPassBinding( pass, binding );
@@ -101,7 +118,7 @@ namespace light_streaks
 }
 
 #define C3D_Kawase( writer, binding, set )\
-	sdw::UniformBuffer kawase{ writer, KawaseUbo::Buffer, binding, set };\
+	sdw::UniformBuffer kawase{ writer, KawaseUbo::Buffer, uint32_t( binding ), uint32_t( set ) };\
 	auto c3d_kawaseData = kawase.declMember< KawaseData >( KawaseUbo::Data );\
 	kawase.end()
 

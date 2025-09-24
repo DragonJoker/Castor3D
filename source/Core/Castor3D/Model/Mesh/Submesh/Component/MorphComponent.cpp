@@ -262,6 +262,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserPositionsEnd, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -280,6 +281,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserNormalsEnd, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -298,6 +300,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserTangentsEnd, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -316,6 +319,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserBitangentsEnd, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -334,6 +338,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserTexcoords0End, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -352,6 +357,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserTexcoords1End, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -370,6 +376,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserTexcoords2End, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -388,6 +395,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserTexcoords3End, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 
@@ -406,6 +414,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserColoursEnd, MorphContext )
 		{
+			// Nothing to do
 		}
 		CU_EndAttributePop()
 

@@ -118,23 +118,23 @@ namespace c3d
 			, ElementObsT & created
 			, ParametersT && ... parameters )
 		{
-			auto ires = m_resources.emplace( name, ElementPtrT{} );
+			auto [it, inserted] = m_resources.try_emplace( name );
 
-			if ( ires.second )
+			if ( inserted )
 			{
-				ires.first->second = this->create( name
+				it->second = this->create( name
 					, c3d::forward< ParametersT >( parameters )... );
-				created = ElementCacheTraitsT::makeElementObs( ires.first->second );
+				created = ElementCacheTraitsT::makeElementObs( it->second );
 
 				if ( initialise
 					&& m_initialise
 					&& !ElementCacheTraitsT::isElementObsNull( created ) )
 				{
-					m_initialise( *ires.first->second );
+					m_initialise( *it->second );
 				}
 			}
 
-			return ElementCacheTraitsT::makeElementObs( ires.first->second );
+			return ElementCacheTraitsT::makeElementObs( it->second );
 		}
 
 	private:

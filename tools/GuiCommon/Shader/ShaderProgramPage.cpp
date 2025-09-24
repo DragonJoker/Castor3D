@@ -9,13 +9,14 @@ namespace GuiCommon
 {
 	namespace shader
 	{
-		typedef enum eID
+		enum class eID
 		{
-			eID_PAGES,
-		}	eID;
+			Pages,
+		};
 	}
 
 	ShaderProgramPage::ShaderProgramPage( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, bool canEdit
 		, StcContext & stcContext
 		, ShaderSource & source
@@ -24,14 +25,16 @@ namespace GuiCommon
 		, wxPoint const & position
 		, wxSize const & size )
 		: wxPanel( parent, wxID_ANY, position, size )
-		, m_engine( engine )
-		, m_source( source )
-		, m_stcContext( stcContext )
-		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
-		, m_canEdit( canEdit )
+		, m_engine{ engine }
+		, m_imagesLoader{ imagesLoader }
+		, m_source{ source }
+		, m_stcContext{ stcContext }
+		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
+		, m_canEdit{ canEdit }
+		, m_language{ language }
 	{
-		doInitialiseLayout( engine );
-		doLoadPages( language );
+		doInitialiseLayout();
+		doLoadPages( m_language );
 	}
 
 	ShaderProgramPage::~ShaderProgramPage()
@@ -40,7 +43,7 @@ namespace GuiCommon
 		m_auiManager.UnInit();
 	}
 
-	void ShaderProgramPage::loadLanguage( ShaderLanguage language )
+	void ShaderProgramPage::loadLanguage( ShaderLanguage language )const
 	{
 		for ( auto & page : m_pages )
 		{
@@ -48,11 +51,11 @@ namespace GuiCommon
 		}
 	}
 
-	void ShaderProgramPage::doInitialiseLayout( c3d::Engine * engine )
+	void ShaderProgramPage::doInitialiseLayout()
 	{
-		wxSize size = GetClientSize();
+		wxSize size = wxPanel::GetClientSize();
 		m_editors = new wxAuiNotebook( this
-			, shader::eID_PAGES
+			, int( shader::eID::Pages )
 			, wxDefaultPosition
 			, wxDefaultSize
 			, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH | wxAUI_NB_SCROLL_BUTTONS );
@@ -94,10 +97,11 @@ namespace GuiCommon
 			{ ast::EntryPoint::eRayMiss, _( "Ray Miss" ) },
 		};
 
-		for ( auto & source : m_source.sources )
+		for ( auto const & source : m_source.sources )
 		{
 			// The editor page
 			m_pages.push_back( new ShaderEditor{ m_engine
+				, m_imagesLoader
 				, m_canEdit
 				, m_stcContext
 				, source

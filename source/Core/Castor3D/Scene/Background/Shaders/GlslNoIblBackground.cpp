@@ -43,7 +43,7 @@ namespace c3d::shader
 	void NoIblBackgroundModel::computeReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec3 & preflectedDiffuse
 		, sdw::Vec3 & preflectedSpecular )
 	{
@@ -82,7 +82,7 @@ namespace c3d::shader
 	sdw::RetVec3 NoIblBackgroundModel::computeRefraction( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		if ( !m_computeRefraction )
 		{
@@ -113,7 +113,7 @@ namespace c3d::shader
 	}
 
 	sdw::RetVec3 NoIblBackgroundModel::computeDiffuse( sdw::Vec3 const & pwsDirection
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		if ( !m_computeDiffuse )
 		{

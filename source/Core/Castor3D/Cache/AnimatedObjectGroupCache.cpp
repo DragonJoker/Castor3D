@@ -256,7 +256,7 @@ namespace c3d
 						, [this, &pgroup, &mesh]( RenderDevice const & device
 							, QueueData const & )
 						{
-							for ( auto & submesh : mesh.getMesh() )
+							for ( auto const & submesh : mesh.getMesh() )
 							{
 								if ( submesh->getMorphTargetsCount() )
 								{
@@ -276,7 +276,7 @@ namespace c3d
 						, [this, &mesh]( RenderDevice const & device
 							, QueueData const & )
 						{
-							for ( auto & submesh : mesh.getMesh() )
+							for ( auto const & submesh : mesh.getMesh() )
 							{
 								if ( submesh->getMorphTargetsCount() )
 								{
@@ -313,7 +313,7 @@ namespace c3d
 				} ) );
 		m_textureRemovedConnections.try_emplace( &group
 			, group.onTextureRemoved.connect( [this]( AnimatedObjectGroup const &
-				, AnimatedTexture & texture )
+				, AnimatedTexture const & texture )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &texture]( RenderDevice const & device
@@ -328,7 +328,7 @@ namespace c3d
 	{
 		m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [this, &group]( RenderDevice const & device
-				, QueueData const & queueData )
+				, QueueData const & )
 			{
 				m_meshAddedConnections.erase( &group );
 				m_meshRemovedConnections.erase( &group );
@@ -336,7 +336,7 @@ namespace c3d
 				m_skeletonRemovedConnections.erase( &group );
 				m_textureRemovedConnections.erase( &group );
 
-				for ( auto & [name, object] : group.getObjects() )
+				for ( auto const & [name, object] : group.getObjects() )
 				{
 					switch ( object->getKind() )
 					{

@@ -67,6 +67,13 @@ namespace c3d
 		C3D_API void addInstance( SceneNode & node );
 		/**
 		 *\~english
+		 *\brief		Removes the instance for given scene node.
+		 *\~french
+		 *\brief		Supprime l'instance pour le noeud de scène donné.
+		 */
+		C3D_API void removeInstance( SceneNode const & node );
+		/**
+		 *\~english
 		 *\brief		Adds the object to dirty object list in the scene.
 		 *\~french
 		 *\brief		Ajout l'objet à la liste des objets à mettre à jour de la scène.

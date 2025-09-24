@@ -18,7 +18,7 @@ namespace c3d
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx : uint32_t
+		enum class Idx : uint32_t
 		{
 			SssProfilesIdx,
 			DiffusionProfileTexIdx,
@@ -28,8 +28,8 @@ namespace c3d
 		{
 			sdw::ComputeWriter writer{ &engine.getShaderAllocator() };
 
-			shader::SssProfiles sssProfiles{ writer, SssProfilesIdx, 0u };
-			auto c3d_mapDiffusionProfiles = writer.declStorageImg< WFImg1DArrayRgba16 >( "c3d_mapDiffusionProfiles", DiffusionProfileTexIdx, 0u );
+			shader::SssProfiles sssProfiles{ writer, uint32_t( Idx::SssProfilesIdx ), 0u };
+			auto c3d_mapDiffusionProfiles = writer.declStorageImg< WFImg1DArrayRgba16 >( "c3d_mapDiffusionProfiles", uint32_t( Idx::DiffusionProfileTexIdx ), 0u );
 
 			writer.implementMain( 32u, 32u, [&writer, &sssProfiles, c3d_mapDiffusionProfiles]( sdw::ComputeIn const & in )
 				{
@@ -112,7 +112,7 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )const
 			{
-				for ( auto const & [binding, attach] : m_pass.outputs )
+				for ( auto const & [binding, attach] : getPass().getOutputs() )
 				{
 					context.memoryBarrier( commandBuffer
 						, attach->view( index )
@@ -157,7 +157,7 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		buffer.createPassBinding( pass, difpfl::SssProfilesIdx );
-		result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), difpfl::DiffusionProfileTexIdx ) );
+		buffer.createPassBinding( pass, uint32_t( difpfl::Idx::SssProfilesIdx ) );
+		result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), uint32_t( difpfl::Idx::DiffusionProfileTexIdx ) ) );
 	}
 }

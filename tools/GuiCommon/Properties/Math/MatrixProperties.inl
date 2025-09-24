@@ -56,23 +56,23 @@ namespace GuiCommon
 	template< typename T, uint32_t Count > struct MatrixPropertyHelper
 	{
 		static void addChildren( MatrixProperty< T, Count > * prop
-			, wxString const * rowNames
-			, wxString const * colNames
+			, c3d::Array< wxString, Count > const & rowNames
+			, c3d::Array< wxString, Count > const & colNames
 			, c3d::SquareMatrix< T, Count > const & value )
 		{
 			for ( uint32_t i = 0; i < Count; ++i )
 			{
-				wxString names[Count];
+				c3d::Array< wxString, Count > names;
 
 				for ( uint32_t j = 0; j < Count; ++j )
 				{
 					names[j] << colNames[i] << wxT( "." ) << rowNames[j];
 				}
 
-				wxPGProperty * property = new PointProperty< T, Count >( names
+				wxPGProperty * property = new PointProperty< T, Count >{ names
 					, wxString() << _( "Col " ) << rowNames[i]
 					, wxPG_LABEL
-					, c3d::Point< T, Count >( value[i].constPtr() ) );
+					, c3d::Point< T, Count >( value[i].constPtr() ) };
 				property->Enable( false );
 				prop->AddPrivateChild( property );
 			}
@@ -104,44 +104,44 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< uint32_t Count > wxString const * getMatrixRowDefaultNames();
+	template< uint32_t Count > c3d::Array< wxString, Count > const & getMatrixRowDefaultNames();
 
 	template<>
-	inline wxString const * getMatrixRowDefaultNames< 2 >()
+	inline c3d::Array< wxString, 2 > const & getMatrixRowDefaultNames< 2 >()
 	{
 		return GC_POINT_12;
 	}
 
 	template<>
-	inline wxString const * getMatrixRowDefaultNames< 3 >()
+	inline c3d::Array< wxString, 3 > const & getMatrixRowDefaultNames< 3 >()
 	{
 		return GC_POINT_123;
 	}
 
 	template<>
-	inline wxString const * getMatrixRowDefaultNames< 4 >()
+	inline c3d::Array< wxString, 4 > const & getMatrixRowDefaultNames< 4 >()
 	{
 		return GC_POINT_1234;
 	}
 
 	//************************************************************************************************
 
-	template< uint32_t Count > wxString const * getMatrixColDefaultNames();
+	template< uint32_t Count > c3d::Array< wxString, Count > const & getMatrixColDefaultNames();
 
 	template<>
-	inline wxString const * getMatrixColDefaultNames< 2 >()
+	inline c3d::Array< wxString, 2 > const & getMatrixColDefaultNames< 2 >()
 	{
 		return GC_POINT_12;
 	}
 
 	template<>
-	inline wxString const * getMatrixColDefaultNames< 3 >()
+	inline c3d::Array< wxString, 3 > const & getMatrixColDefaultNames< 3 >()
 	{
 		return GC_POINT_123;
 	}
 
 	template<>
-	inline wxString const * getMatrixColDefaultNames< 4 >()
+	inline c3d::Array< wxString, 4 > const & getMatrixColDefaultNames< 4 >()
 	{
 		return GC_POINT_1234;
 	}

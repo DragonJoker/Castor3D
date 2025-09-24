@@ -14,58 +14,31 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
+	using ImageIdMap = c3d::Map< uint32_t, c3d::RawUniquePtr< wxImage > >;
+
 	class ImagesLoader
 	{
 	public:
-		ImagesLoader();
-		~ImagesLoader();
+		void cleanup()noexcept;
+		void addBitmap( uint32_t id, char const * const * pBits );
+		wxImage * getBitmap( uint32_t id );
+		void waitAsyncLoads();
 
-		static void cleanup();
-		static void addBitmap( uint32_t id, char const * const * pBits );
-		static wxImage * getBitmap( uint32_t id );
-		static void waitAsyncLoads();
-
-		static ImageIdMap const & getBitmaps()noexcept
+		template< typename IdT >
+		void addBitmapT( IdT id, char const * const * pBits )
 		{
-			return doGetInstance()->m_mapImages;
+			addBitmap( uint32_t( id ), pBits );
 		}
 
-	private:
-		void doCleanup();
-		void doAddBitmap( uint32_t id, char const * const * pBits );
-		wxImage * doGetBitmap( uint32_t id );
-		void doWaitAsyncLoads();
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\remarks		Throws an exception if the instance is already initialised.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\remarks		Lance une exception si l'instance est déjà initialisée.
-		 */
-		explicit ImagesLoader( ImagesLoader * pThis )
+		template< typename IdT >
+		wxImage * getBitmapT( IdT id )
 		{
-			if ( !doGetInstance() )
-			{
-				doGetInstance() = pThis;
-			}
-			else
-			{
-				CU_UnicityError( c3d::UnicityError::eAnInstance, typeid( ImagesLoader ).name() );
-			}
+			return getBitmap( uint32_t( id ) );
 		}
-		/**
-		 *\~english
-		 *\return		The unique instance, nullptr if none.
-		 *\~french
-		 *\return		L'instance unique, nullptr s'il n'y en a pas.
-		 */
-		static inline ImagesLoader *& doGetInstance()
+
+		ImageIdMap const & getBitmaps()const noexcept
 		{
-			static ImagesLoader * instance = nullptr;
-			return instance;
+			return m_mapImages;
 		}
 
 	private:

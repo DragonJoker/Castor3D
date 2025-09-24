@@ -17,53 +17,53 @@ namespace c3d::shader
 	public:
 		C3D_API explicit Utils( sdw::ShaderWriter & writer );
 
-		C3D_API sdw::Float saturate( sdw::Float const v );
-		C3D_API sdw::Vec3 saturate( sdw::Vec3 const v );
-		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const texCoord );
-		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const texCoord );
-		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const texCoord );
-		C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const texCoord );
-		C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const texCoord );
-		C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const texCoord );
-		C3D_API sdw::Vec2 calcTexCoord( sdw::Vec2 const renderPos
-			, sdw::Vec2 const renderSize );
-		C3D_API sdw::Vec3 applyGamma( sdw::Float const gamma
-			, sdw::Vec3 const HDR );
-		C3D_API sdw::Vec3 removeGamma( sdw::Float const gamma
-			, sdw::Vec3 const sRGB );
-		C3D_API sdw::Float remap( sdw::Float const originalValue
-			, sdw::Float const originalMin
-			, sdw::Float const originalMax
-			, sdw::Float const newMin
-			, sdw::Float const newMax );
-		C3D_API sdw::Float threshold( sdw::Float const v
-			, sdw::Float const t );
-		C3D_API sdw::Float beer( sdw::Float const d );
-		C3D_API sdw::Float powder( sdw::Float const d );
-		C3D_API sdw::Float powder( sdw::Float const d
-			, sdw::Float const cosTheta );
-		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec2 const texCoords );
-		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec3 const texCoords );
-		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec2 const texCoords
-			, sdw::Float const lod );
-		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec3 const texCoords
-			, sdw::Float const lod );
-		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
-			, DerivTex const texCoords );
+		C3D_API sdw::Float saturate( sdw::Float const & v )const;
+		C3D_API sdw::Vec3 saturate( sdw::Vec3 const & v )const;
+		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
+		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
+		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
+		C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const;
+		C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const & texCoord )const;
+		C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const & texCoord )const;
+		C3D_API sdw::Vec2 calcTexCoord( sdw::Vec2 const & renderPos
+			, sdw::Vec2 const & renderSize )const;
+		C3D_API sdw::Vec3 applyGamma( sdw::Float const & gamma
+			, sdw::Vec3 const & HDR )const;
+		C3D_API sdw::Vec3 removeGamma( sdw::Float const & gamma
+			, sdw::Vec3 const & sRGB )const;
+		C3D_API sdw::Float remap( sdw::Float const & originalValue
+			, sdw::Float const & originalMin
+			, sdw::Float const & originalMax
+			, sdw::Float const & newMin
+			, sdw::Float const & newMax )const;
+		C3D_API sdw::Float threshold( sdw::Float const & v
+			, sdw::Float const & t )const;
+		C3D_API sdw::Float beer( sdw::Float const & d )const;
+		C3D_API sdw::Float powder( sdw::Float const & d )const;
+		C3D_API sdw::Float powder( sdw::Float const & d
+			, sdw::Float const & cosTheta )const;
+		C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec2 const & texCoords )const;
+		C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 const & texCoords )const;
+		C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec2 const & texCoords
+			, sdw::Float const & lod )const;
+		C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 const & texCoords
+			, sdw::Float const & lod )const;
+		C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, DerivTex const & texCoords )const;
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
 			, TextureTransformData const & anim
-			, sdw::Vec2 const uv );
+			, sdw::Vec2 const & uv );
 		C3D_API sdw::RetVec3 transformUVW( TextureConfigData const & config
 			, TextureTransformData const & anim
-			, sdw::Vec3 const uv );
+			, sdw::Vec3 const & uv );
 
-		C3D_API void swap( sdw::Float const A, sdw::Float const & B );
-		C3D_API sdw::RetFloat distanceSquared( sdw::Vec2 const A, sdw::Vec2 const & B );
-		C3D_API sdw::RetFloat distanceSquared( sdw::Vec3 const A, sdw::Vec3 const & B );
+		C3D_API void swap( sdw::Float const & A, sdw::Float const & B );
+		C3D_API sdw::RetFloat distanceSquared( sdw::Vec2 const & A, sdw::Vec2 const & B );
+		C3D_API sdw::RetFloat distanceSquared( sdw::Vec3 const & A, sdw::Vec3 const & B );
 		C3D_API sdw::RetVec3 calcVSPosition( sdw::Vec2 const & uv
 			, sdw::Float const & depth
 			, sdw::Mat4 const & invProj );
@@ -108,7 +108,7 @@ namespace c3d::shader
 
 		C3D_API sdw::RetVec4 clipToScreen( sdw::Vec4 const & in );
 		C3D_API sdw::RetFloat reconstructCSZ( sdw::Float const & depth
-			, sdw::Vec3 const clipInfo );
+			, sdw::Vec3 const & clipInfo );
 
 		C3D_API sdw::RetBoolean isSaturated( sdw::Vec3 const & p );
 		C3D_API sdw::RetBoolean isSaturated( sdw::IVec3 const & p

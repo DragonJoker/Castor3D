@@ -30,7 +30,7 @@ namespace c3d::shader
 		C3D_API virtual void computeReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular );
 		C3D_API virtual sdw::RetVec3 computeDiffuseReflection( sdw::Vec3 const & wsNormal );
@@ -42,31 +42,31 @@ namespace c3d::shader
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::CombinedImage2DRgba32 const & brdf );
 
 		C3D_API virtual sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, BlendComponents & components );
+			, BlendComponents const & components );
 		C3D_API virtual sdw::RetVec3 computeSpecularRefraction( sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory const & debugOutput );
 
 		C3D_API virtual sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
-			, BlendComponents & components );
+			, BlendComponents const & components );
 
-		C3D_API virtual void applyVolume( sdw::Vec2 const fragCoord
-			, sdw::Float const linearDepth
-			, sdw::Vec2 const targetSize
-			, sdw::Vec2 const cameraPlanes
-			, sdw::Vec4 & output );
+		C3D_API virtual void applyVolume( sdw::Vec2 const & fragCoord
+			, sdw::Float const & linearDepth
+			, sdw::Vec2 const & targetSize
+			, sdw::Vec2 const & cameraPlanes
+			, sdw::Vec4 const & output );
 
 		C3D_API static sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
 			, sdw::Float const & NdotV

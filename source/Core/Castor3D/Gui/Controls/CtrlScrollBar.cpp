@@ -99,7 +99,7 @@ namespace c3d
 			, Size{} ) );
 		m_bar->setVisible( visible );
 		m_bar->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr, KeyboardEvent const & event )
+			, [this]( Control const *, KeyboardEvent const & event )
 			{
 				onNcKeyDown( event );
 			} );
@@ -114,22 +114,22 @@ namespace c3d
 		m_thumb->setVisible( visible );
 		m_thumb->setCatchesMouseEvents( true );
 		m_thumb->connectNC( MouseEventType::eMove
-			, [this]( ControlRPtr, MouseEvent const & event )
+			, [this]( Control const *, MouseEvent const & event )
 			{
 				onThumbMouseMove( event );
 			} );
 		m_thumb->connectNC( MouseEventType::ePushed
-			, [this]( ControlRPtr, MouseEvent const & event )
+			, [this]( Control const *, MouseEvent const & event )
 			{
 				onThumbMouseButtonDown( event );
 			} );
 		m_thumb->connectNC( MouseEventType::eReleased
-			, [this]( ControlRPtr, MouseEvent const & event )
+			, [this]( Control const *, MouseEvent const & event )
 			{
 				onThumbMouseButtonUp( event );
 			} );
 		m_thumb->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr, KeyboardEvent const & event )
+			, [this]( Control const *, KeyboardEvent const & event )
 			{
 				onNcKeyDown( event );
 			} );

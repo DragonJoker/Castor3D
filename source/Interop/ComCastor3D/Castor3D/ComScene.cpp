@@ -245,7 +245,7 @@ namespace CastorCom
 			, &static_cast< CGeometry * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::CreateCamera( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ UINT width, /*[in]*/ UINT height, /*[out, retval]*/ ICamera ** pRet )noexcept
+	STDMETHODIMP CScene::CreateCamera( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[out, retval]*/ ICamera ** pRet )noexcept
 	{
 		if ( !pRet || !name || !parent )
 			return E_POINTER;
@@ -256,7 +256,6 @@ namespace CastorCom
 
 		return convert( c3dScene_createCamera( m_internal
 			, bstrToString( name ).c_str()
-			, width, height
 			, static_cast< CSceneNode * >( parent )->getInternal()
 			, &static_cast< CCamera * >( *pRet )->getInternal() ) );
 	}

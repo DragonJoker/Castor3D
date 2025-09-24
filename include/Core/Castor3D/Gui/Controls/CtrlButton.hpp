@@ -120,7 +120,7 @@ namespace c3d
 
 		/** @copydoc Control::doUpdateStyle
 		*/
-		void doUpdateStyle()override;
+		void doUpdateStyle()final;
 
 		/** @copydoc Control::doSetCaption
 		*/

@@ -13,9 +13,9 @@ namespace Testing
 
 	void CastorUtilsSpeedTest::doRegisterTests()
 	{
-		doRegisterTest( "SpeedBasicTest", std::bind( &CastorUtilsSpeedTest::BasicTest, this ) );
-		doRegisterTest( "SpeedConversionTest", std::bind( &CastorUtilsSpeedTest::ConversionTest, this ) );
-		doRegisterTest( "SpeedAngleTest", std::bind( &CastorUtilsSpeedTest::AngleTest, this ) );
+		doRegisterTest( "SpeedBasicTest", [this](){ BasicTest(); } );
+		doRegisterTest( "SpeedConversionTest", [this](){ ConversionTest(); } );
+		doRegisterTest( "SpeedAngleTest", [this](){ AngleTest(); } );
 	}
 
 	void CastorUtilsSpeedTest::BasicTest()

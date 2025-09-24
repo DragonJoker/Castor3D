@@ -373,9 +373,9 @@ namespace c3d
 	}
 
 	void Submesh::record( crg::ResourcesCache & resources
-		, crg::FramePassGroup & graph )
+		, crg::FramePassGroup & graph )const
 	{
-		auto & device = *getParent().getOwner()->getRenderDevice();
+		auto const & device = *getParent().getOwner()->getRenderDevice();
 		for ( auto const & [_, component] : m_components )
 			if( auto data = component->getRenderData() )
 				data->record( device, resources, graph );
@@ -513,7 +513,7 @@ namespace c3d
 	}
 
 	int Submesh::isInMyPoints( Point3f const & vertex
-		, double precision )
+		, double precision )const
 	{
 		int result = -1;
 
@@ -521,15 +521,13 @@ namespace c3d
 		{
 			int index = 0;
 			auto & points = positions->getData().getData();
-
-			for ( auto it = points.begin(); it != points.end() && result == -1; ++it )
+			auto it = points.begin();
+			while( it != points.end() && result == -1 )
 			{
 				if ( point::distanceSquared( vertex, Point3f{ *it } ) < precision )
-				{
 					result = index;
-				}
-
-				index++;
+				++index;
+				++it;
 			}
 		}
 
@@ -943,7 +941,7 @@ namespace c3d
 		return m_components.emplace( id, c3d::move( component ) ).first->second.get();
 	}
 
-	void Submesh::setIndexCount( uint32_t value )
+	void Submesh::setIndexCount( uint32_t value )const
 	{
 		if ( auto indexMapping = getIndexMapping() )
 		{
@@ -1319,16 +1317,11 @@ namespace c3d
 		, Pass const & pass )const
 	{
 		if ( !isDynamic() )
-		{
 			return m_sourceBufferOffset;
-		}
 
-		auto it = m_finalBufferOffsets.find( geometry.getHash( pass, *this ) );
-
-		if ( it != m_finalBufferOffsets.end() )
-		{
+		if ( auto it = m_finalBufferOffsets.find( geometry.getHash( pass, *this ) );
+			it != m_finalBufferOffsets.end() )
 			return it->second;
-		}
 
 		log::error << "Couldn't find instance in final buffers" << std::endl;
 		CU_Failure( "Couldn't find instance in final buffers" );
@@ -1435,38 +1428,29 @@ namespace c3d
 	}
 
 	void Submesh::doInstantiate( Geometry const * geometry
-		, MaterialObs oldMaterial
-		, MaterialObs newMaterial
+		, Material const * oldMaterial
+		, Material * newMaterial
 		, bool update )
 	{
 		if ( newMaterial )
-		{
 			newMaterial->initialise();
-		}
 
-		if ( oldMaterial != newMaterial )
+		if ( oldMaterial != newMaterial
+			&& update
+			&& m_instantiation )
 		{
-			if ( update && m_instantiation )
-			{
-				auto & data = m_instantiation->getData();
-
-				data.unref( oldMaterial );
-
-				if ( data.ref( newMaterial ) )
-				{
-					m_geometryBuffers.clear();
-				}
-			}
+			auto & data = m_instantiation->getData();
+			data.unref( oldMaterial );
+			if ( data.ref( newMaterial ) )
+				m_geometryBuffers.clear();
 		}
 
 		if ( newMaterial && geometry && isDynamic() )
 		{
-			for ( auto & pass : *newMaterial )
+			for ( auto const & pass : *newMaterial )
 			{
 				if ( auto meshletComponent = getComponent< MeshletComponent >() )
-				{
 					meshletComponent->getData().instantiate( *geometry, *pass );
-				}
 
 				if ( auto it = m_finalBufferOffsets.try_emplace( geometry->getHash( *pass, *this ) ).first;
 					m_initialised && !it->second )
@@ -1478,8 +1462,8 @@ namespace c3d
 						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
 
 					auto combine = getComponentCombine();
-					auto & engine = *getOwner()->getEngine();
-					auto & components = engine.getSubmeshComponentsRegister();
+					auto const & engine = *getOwner()->getEngine();
+					auto const & components = engine.getSubmeshComponentsRegister();
 					remFlags( combine, components.getSkinFlag() );
 					RenderDevice & device = engine.getRenderSystem()->getRenderDevice();
 					it->second = device.geometryPools->getBuffer( getPointsCount()

@@ -137,7 +137,9 @@
 			"displayName": "Castor3D Developer Visual Studio Config, using vcpkg",
 			"description": "Build configuration using Visual Studio, for Castor3D developers, using vcpkg",
 			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;record;tools;vkfft",
 				"PROJECTS_UNITY_BUILD": false,
+				"CASTOR_TOOL_CASTOR_VIEWER_RECORDS": true,
 				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
 			}
 		},

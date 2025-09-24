@@ -24,7 +24,7 @@ extern "C"
 	C3D_ACESToneMapping_API void isDebug( int * value );
 	C3D_ACESToneMapping_API void getType( c3d::PluginType * type );
 	C3D_ACESToneMapping_API void getName( char const ** name );
-	C3D_ACESToneMapping_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_ACESToneMapping_API void onLoad( c3d::Engine * engine );
 	C3D_ACESToneMapping_API void onUnload( c3d::Engine * engine );
 
 	C3D_ACESToneMapping_API void getRequiredVersion( c3d::Version * version )
@@ -47,7 +47,7 @@ extern "C"
 		*name = aces::ToneMapping::Name.c_str();
 	}
 
-	C3D_ACESToneMapping_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
+	C3D_ACESToneMapping_API void onLoad( c3d::Engine * engine )
 	{
 		engine->getToneMappingFactory().registerType( aces::ToneMapping::Type
 			, &aces::ToneMapping::create );

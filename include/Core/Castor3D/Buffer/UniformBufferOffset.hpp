@@ -124,16 +124,17 @@ namespace c3d
 			return buffer->getAlignedSize( sizeof( DataT ) );
 		}
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
-			pass.addInputUniform( *attach, binding );
+			pass.addInputUniformT( *attach, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			auto & uniformBuffer = buffer->getBuffer();
+			auto const & uniformBuffer = buffer->getBuffer();
 			auto size = buffer->getAlignedSize();
 			descriptorSet.createBinding( layoutBinding
 				, *uniformBuffer.buffer
@@ -141,12 +142,13 @@ namespace c3d
 				, uint32_t( range * size ) );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
-			auto & uniformBuffer = buffer->getBuffer();
+			auto const & uniformBuffer = buffer->getBuffer();
 			auto size = buffer->getAlignedSize();
-			auto result = ashes::WriteDescriptorSet{ dstBinding
+			auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
 				, dstArrayElement
 				, 1u
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
@@ -177,7 +179,7 @@ namespace c3d
 	*	L'indice dans le tableau d'éléments.
 	*/
 	template< typename DataT >
-	ashes::WriteDescriptorSet makeDescriptorWrite( UniformBufferOffsetT< DataT > const & buffer
+	ashes::WriteDescriptorSet makeUniformBufferDescriptorWrite( UniformBufferOffsetT< DataT > const & buffer
 		, uint32_t dstBinding
 		, uint32_t dstArrayElement = 0u )
 	{

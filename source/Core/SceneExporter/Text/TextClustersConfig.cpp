@@ -12,7 +12,7 @@ namespace c3d
 	bool TextWriter< ClustersConfig >::operator()( ClustersConfig const & object
 		, StringStream & file )
 	{
-		static const String splitSchemes[uint32_t( ClusterSplitScheme::eCount )] =
+		static const Array< String, uint32_t( ClusterSplitScheme::eCount ) > splitSchemes =
 		{
 			getName( ClusterSplitScheme::eExponentialBase ),
 			getName( ClusterSplitScheme::eLinear ),

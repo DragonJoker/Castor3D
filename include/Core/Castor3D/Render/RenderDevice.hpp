@@ -504,21 +504,17 @@ namespace c3d
 			, {} };
 #endif
 #if VK_NV_mesh_shader
-#if C3D_UseMeshShaders
 		VkPhysicalDeviceMeshShaderFeaturesNV m_meshShaderFeaturesNV{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
 			, nullptr
 			, {} };
-#endif
 		VkPhysicalDeviceMeshShaderPropertiesNV m_meshShaderPropertiesNV{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
 			, nullptr
 			, {} };
 #endif
 #if VK_EXT_mesh_shader
-#if C3D_UseMeshShaders
 		VkPhysicalDeviceMeshShaderFeaturesEXT m_meshShaderFeaturesEXT{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_EXT
 			, nullptr
 			, {} };
-#endif
 		VkPhysicalDeviceMeshShaderPropertiesEXT m_meshShaderPropertiesEXT{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_EXT
 			, nullptr
 			, {} };

@@ -13,44 +13,6 @@ namespace c3d
 {
 	//*********************************************************************************************
 
-	namespace shader
-	{
-		LayeredLpvGridData::LayeredLpvGridData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, c3d::move( expr ), enabled }
-			, allMinVolumeCorners{ getMemberArray< sdw::Vec4 >( "allMinVolumeCorners" ) }
-			, allCellSizes{ getMember< sdw::Vec4 >( "allCellSizes" ) }
-			, gridSizesAtt{ getMember< sdw::Vec4 >( "gridSizesAtt" ) }
-			, gridSizes{ gridSizesAtt.xyz() }
-			, indirectAttenuation{ gridSizesAtt.w() }
-		{
-		}
-
-		ast::type::BaseStructPtr LayeredLpvGridData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_LayeredLpvGridData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "allMinVolumeCorners", ast::type::Kind::eVec4F, LpvMaxCascadesCount );
-				result->declMember( "allCellSizes", ast::type::Kind::eVec4F );
-				result->declMember( "gridSizesAtt", ast::type::Kind::eVec4F );
-			}
-
-			return result;
-		}
-
-		RawUniquePtr< sdw::Struct > LayeredLpvGridData::declare( sdw::ShaderWriter & writer )
-		{
-			return makeRawUnique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }

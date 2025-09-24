@@ -49,27 +49,27 @@ namespace GuiCommon
 
 		enum class ObjectType : uint8_t
 		{
-			eTreeItemProp,
-			eMaterial,
-			ePass,
-			eTexture,
-			eSceneNode,
-			eLight,
-			eLightGroup,
-			eGroupLight,
-			eOverlay,
-			eStyle,
-			eControl,
-			eAnimatedObjectGroup,
-			eAnimation,
-			eGeometry,
-			eBillboards,
-			eParticleSystem,
-			eSubmesh,
-			eSkeleton,
-			eSkeletonBone,
-			eSkeletonNode,
-			eSkeletonAnimation,
+			TreeItemProperty,
+			Material,
+			Pass,
+			Texture,
+			SceneNode,
+			Light,
+			LightGroup,
+			LightInstance,
+			OverlayCategory,
+			ControlStyle,
+			Control,
+			AnimatedObjectGroup,
+			Animation,
+			Geometry,
+			BillboardList,
+			ParticleSystem,
+			Submesh,
+			Skeleton,
+			BoneNode,
+			SkeletonNode,
+			SkeletonAnimation,
 		};
 
 		class DataType
@@ -80,46 +80,157 @@ namespace GuiCommon
 			using AnimationData = std::tuple< c3d::AnimatedObjectGroup *, c3d::GroupAnimation >;
 			using SubmeshData = std::tuple< c3d::Geometry *, c3d::Submesh * >;
 
+			using Object = std::variant< std::unique_ptr< TreeItemProperty >
+				, c3d::Material *
+				, c3d::Pass *
+				, std::unique_ptr< PassTexture >
+				, c3d::SceneNode *
+				, c3d::Light *
+				, c3d::LightGroup *
+				, c3d::LightInstance *
+				, c3d::OverlayCategory *
+				, c3d::ControlStyle *
+				, c3d::Control *
+				, c3d::AnimatedObjectGroup *
+				, c3d::Animation *
+				, c3d::Geometry *
+				, c3d::BillboardList *
+				, c3d::ParticleSystem *
+				, c3d::Submesh *
+				, c3d::Skeleton *
+				, c3d::BoneNode *
+				, c3d::SkeletonNode *
+				, c3d::SkeletonAnimation * >;
+
 		public:
-			explicit DataType( ObjectType type
-				, void * object )
-				: m_type{ type }
+			explicit DataType( std::unique_ptr< TreeItemProperty > prop )
+				: m_type{ ObjectType::TreeItemProperty }
+				, m_prop{ std::move( prop ) }
+			{
+			}
+
+			explicit DataType( c3d::MaterialObs object )
+				: m_type{ ObjectType::Material }
 				, m_object{ object }
 			{
 			}
 
-			explicit DataType( std::unique_ptr< TreeItemProperty > prop )
-				: m_type{ ObjectType::eTreeItemProp }
-				, m_prop{ std::move( prop ) }
+			explicit DataType( c3d::Pass * object )
+				: m_type{ ObjectType::Pass }
+				, m_object{ object }
 			{
 			}
 
 			explicit DataType( c3d::Pass & pass
 				, c3d::TextureUnit & texture )
-				: m_type{ ObjectType::eTexture }
+				: m_type{ ObjectType::Texture }
 				, m_passTexture{ std::make_unique< PassTexture >( &pass, &texture ) }
+			{
+			}
+
+			explicit DataType( c3d::SceneNode * object )
+				: m_type{ ObjectType::SceneNode }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::Light * object )
+				: m_type{ ObjectType::Light }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::LightGroup * object )
+				: m_type{ ObjectType::LightGroup }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::LightInstance * object )
+				: m_type{ ObjectType::LightInstance }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::OverlayCategory * object )
+				: m_type{ ObjectType::OverlayCategory }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::ControlStyle * object )
+				: m_type{ ObjectType::ControlStyle }
+				, m_object{ object }
 			{
 			}
 
 			explicit DataType( c3d::Control & control
 				, bool full
 				, bool inLayout )
-				: m_type{ ObjectType::eControl }
+				: m_type{ ObjectType::Control }
 				, m_controlData{ std::make_unique< ControlData >( &control, full, inLayout ) }
+			{
+			}
+
+			explicit DataType( c3d::AnimatedObjectGroup * object )
+				: m_type{ ObjectType::AnimatedObjectGroup }
+				, m_object{ object }
 			{
 			}
 
 			explicit DataType( c3d::AnimatedObjectGroup & group
 				, c3d::GroupAnimation anim )
-				: m_type{ ObjectType::eAnimation }
+				: m_type{ ObjectType::Animation }
 				, m_animationlData{ std::make_unique< AnimationData >( &group, std::move( anim ) ) }
+			{
+			}
+
+			explicit DataType( c3d::Geometry * object )
+				: m_type{ ObjectType::Geometry }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::BillboardList * object )
+				: m_type{ ObjectType::BillboardList }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::ParticleSystem * object )
+				: m_type{ ObjectType::ParticleSystem }
+				, m_object{ object }
 			{
 			}
 
 			explicit DataType( c3d::Geometry & geometry
 				, c3d::Submesh & submesh )
-				: m_type{ ObjectType::eSubmesh }
+				: m_type{ ObjectType::Submesh }
 				, m_submeshData{ std::make_unique< SubmeshData >( &geometry, &submesh ) }
+			{
+			}
+
+			explicit DataType( c3d::Skeleton * object )
+				: m_type{ ObjectType::Skeleton }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::BoneNode * object )
+				: m_type{ ObjectType::BoneNode }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::SkeletonNode * object )
+				: m_type{ ObjectType::SkeletonNode }
+				, m_object{ object }
+			{
+			}
+
+			explicit DataType( c3d::SkeletonAnimation * object )
+				: m_type{ ObjectType::SkeletonAnimation }
+				, m_object{ object }
 			{
 			}
 
@@ -153,15 +264,15 @@ namespace GuiCommon
 				return *m_submeshData;
 			}
 
-			template< typename ObjectT >
-			ObjectT & getObject()const noexcept
+			template< ObjectType TypeT >
+			auto & getObject()const noexcept
 			{
-				return *static_cast< ObjectT * >( m_object );
+				return *std::get< uint32_t( TypeT ) >( m_object );
 			}
 
 		private:
 			ObjectType m_type;
-			void * m_object{};
+			Object m_object{};
 			std::unique_ptr< TreeItemProperty > m_prop;
 			std::unique_ptr< PassTexture > m_passTexture;
 			std::unique_ptr< ControlData > m_controlData;
@@ -175,7 +286,8 @@ namespace GuiCommon
 		using MaterialIdMap = c3d::Map< c3d::MaterialRPtr, wxTreeItemId >;
 
 	public:
-		SceneObjectsTree( PropertiesContainer * propertiesHolder
+		SceneObjectsTree( ImagesLoader & imagesLoader
+			, PropertiesContainer * propertiesHolder
 			, wxWindow * parent
 			, wxPoint const & ptPos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
@@ -203,6 +315,29 @@ namespace GuiCommon
 		SelectLightSignal onSelectLight;
 		SelectSubmeshSignal onSelectSubmesh;
 		SelectNodeSignal onSelectNode;
+
+		ImagesLoader & getImagesLoader()const noexcept
+		{
+			return m_imagesLoader;
+		}
+
+
+		template< typename IdT >
+		wxTreeItemId AddRootT( const wxString & text,
+			IdT image, IdT selectedImage,
+			wxTreeItemData * data = NULL )
+		{
+			return AddRoot( text, int( image ), int( selectedImage ), data );
+		}
+
+		template< typename IdT >
+		wxTreeItemId AppendItemT( const wxTreeItemId & parent,
+			const wxString & text,
+			IdT image, IdT selImage,
+			wxTreeItemData * data = NULL )
+		{
+			return AppendItem( parent, text, int( image ), int( selImage ), data );
+		}
 
 	private:
 		void doAddSubmesh( wxTreeItemId id
@@ -248,13 +383,13 @@ namespace GuiCommon
 		void doLoadSceneLights( wxTreeItemId id
 			, wxString const & name
 			, c3d::LightType type
-			, int icon
-			, int iconSel );
+			, eBMP icon
+			, eBMP iconSel );
 		void doLoadSceneLightGroups( wxTreeItemId id
 			, wxString const & name
 			, c3d::LightType type
-			, int icon
-			, int iconSel );
+			, eBMP icon
+			, eBMP iconSel );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
@@ -266,6 +401,7 @@ namespace GuiCommon
 	private:
 		c3d::SceneRPtr m_scene{};
 		c3d::Engine * m_engine{};
+		ImagesLoader & m_imagesLoader;
 		PropertiesContainer * m_propertiesHolder{};
 		wxImageList m_images{};
 		GeometrySubmeshIdMap m_objects{};

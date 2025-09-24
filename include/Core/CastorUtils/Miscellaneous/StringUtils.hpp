@@ -1020,34 +1020,6 @@ namespace c3d::string
 			char32_t operator*()const;
 			/**
 			 *\~english
-			 *\brief		Equality operator.
-			 *\~french
-			 *\brief		Opérateur d'égalité.
-			 */
-			bool operator==( const iterator & it )const;
-			/**
-			 *\~english
-			 *\brief		Equality operator.
-			 *\~french
-			 *\brief		Opérateur d'égalité.
-			 */
-			bool operator==( const iterator_type & it )const;
-			/**
-			 *\~english
-			 *\brief		Difference operator.
-			 *\~french
-			 *\brief		Opérateur de différence.
-			 */
-			bool operator!=( const iterator & it )const;
-			/**
-			 *\~english
-			 *\brief		Difference operator.
-			 *\~french
-			 *\brief		Opérateur de différence.
-			 */
-			bool operator!=( const iterator_type & it )const;
-			/**
-			 *\~english
 			 *\brief		Retrieves the internal iterator.
 			 *\~french
 			 *\brief		Récupère la'itérateur interne.
@@ -1062,6 +1034,62 @@ namespace c3d::string
 			 *\brief		Calcule la valeur UTF-8 cachée.
 			 */
 			void doCalculateCurrentCodePoint()const;
+			/**
+			 *\~english
+			 *\brief		Equality operator.
+			 *\~french
+			 *\brief		Opérateur d'égalité.
+			 */
+			friend bool operator==( iterator const & lhs, iterator const & rhs )noexcept
+			{
+				return lhs.m_it == rhs.m_it;
+			}
+			/**
+			 *\~english
+			 *\brief		Equality operator.
+			 *\~french
+			 *\brief		Opérateur d'égalité.
+			 */
+			friend bool operator==( iterator const & lhs, const iterator_type & rhs )noexcept
+			{
+				return lhs.m_it == rhs;
+			}
+			/**
+			 *\~english
+			 *\brief		addition operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to add.
+			 *\return		A reference to this object.
+			 *\~french
+			 *\brief		Addition operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to add.
+			 *\return		A reference to this object.
+			 */
+			friend iterator operator+( iterator lhs, size_t rhs )
+			{
+				iterator it( lhs );
+				it += rhs;
+				return it;
+			}
+			/**
+			 *\~english
+			 *\brief		Subtraction operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to subtract.
+			 *\return		A reference to this object.
+			 *\~french
+			 *\brief		Subtraction operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to subtract.
+			 *\return		A reference to this object.
+			 */
+			friend iterator operator-( iterator lhs, size_t rhs )
+			{
+				iterator it( lhs );
+				it -= rhs;
+				return it;
+			}
 
 		private:
 			//!\~english The internal iterator.
@@ -1071,34 +1099,6 @@ namespace c3d::string
 			//!\~english Tells the codepoint needs recomputing.
 			mutable bool m_dirty;
 		};
-		/**
-		 *\~english
-		 *\brief		addition operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to add.
-		 *\return		A reference to this object.
-		 *\~french
-		 *\brief		Addition operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to add.
-		 *\return		A reference to this object.
-		 */
-		template< typename CharT, typename StringT >
-		inline iterator< CharT, StringT > operator+( iterator< CharT, StringT > it, size_t offset );
-		/**
-		 *\~english
-		 *\brief		Subtraction operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to subtract.
-		 *\return		A reference to this object.
-		 *\~french
-		 *\brief		Subtraction operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to subtract.
-		 *\return		A reference to this object.
-		 */
-		template< typename CharT, typename StringT >
-		inline iterator< CharT, StringT > operator-( iterator< CharT, StringT > it, size_t offset );
 
 		template< typename CharT >
 		inline iterator< CharT, std::basic_string< CharT > > begin( std::basic_string< CharT > const & str )
@@ -1231,34 +1231,6 @@ namespace c3d::string
 			char32_t operator*()const;
 			/**
 			 *\~english
-			 *\brief		Equality operator.
-			 *\~french
-			 *\brief		Opérateur d'égalité.
-			 */
-			bool operator==( const const_iterator & it )const;
-			/**
-			 *\~english
-			 *\brief		Equality operator.
-			 *\~french
-			 *\brief		Opérateur d'égalité.
-			 */
-			bool operator==( const iterator_type & it )const;
-			/**
-			 *\~english
-			 *\brief		Difference operator.
-			 *\~french
-			 *\brief		Opérateur de différence.
-			 */
-			bool operator!=( const const_iterator & it )const;
-			/**
-			 *\~english
-			 *\brief		Difference operator.
-			 *\~french
-			 *\brief		Opérateur de différence.
-			 */
-			bool operator!=( const iterator_type & it )const;
-			/**
-			 *\~english
 			 *\brief		Retrieves the internal iterator.
 			 *\~french
 			 *\brief		Récupère la'itérateur interne.
@@ -1273,6 +1245,62 @@ namespace c3d::string
 			 *\brief		Calcule la valeur UTF-8 cachée.
 			 */
 			void doCalculateCurrentCodePoint()const;
+			/**
+			 *\~english
+			 *\brief		Equality operator.
+			 *\~french
+			 *\brief		Opérateur d'égalité.
+			 */
+			friend bool operator==( const_iterator const & lhs, const_iterator const & rhs )noexcept
+			{
+				return lhs.m_it == rhs.m_it;
+			}
+			/**
+			 *\~english
+			 *\brief		Equality operator.
+			 *\~french
+			 *\brief		Opérateur d'égalité.
+			 */
+			friend bool operator==( const_iterator const & lhs, const iterator_type & rhs )noexcept
+			{
+				return lhs.m_it == rhs;
+			}
+			/**
+			 *\~english
+			 *\brief		addition operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to add.
+			 \return		A reference to this object.
+			 *\~french
+			 *\brief		Addition operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to add.
+			 *\return		A reference to this object.
+			 */
+			friend const_iterator operator+( const_iterator lhs, size_t rhs )
+			{
+				const_iterator it( lhs );
+				it += rhs;
+				return it;
+			}
+			/**
+			 *\~english
+			 *\brief		Subtraction operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to subtract.
+			 *\return		A reference to this object.
+			 *\~french
+			 *\brief		Subtraction operator.
+			 *\param[in]	lhs	The iterator.
+			 *\param[in]	rhs	The offset to subtract.
+			 *\return		A reference to this object.
+			 */
+			friend const_iterator operator-( const_iterator lhs, size_t rhs )
+			{
+				const_iterator it( lhs );
+				it -= rhs;
+				return it;
+			}
 
 		private:
 			//!\~english The internal iterator.
@@ -1282,34 +1310,6 @@ namespace c3d::string
 			//!\~english Tells the codepoint needs recomputing.
 			mutable bool m_dirty;
 		};
-		/**
-		 *\~english
-		 *\brief		addition operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to add.
-		 \return		A reference to this object.
-		 *\~french
-		 *\brief		Addition operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to add.
-		 *\return		A reference to this object.
-		 */
-		template< typename CharT, typename StringT >
-		inline const_iterator< CharT, StringT > operator+( const_iterator< CharT, StringT > it, size_t offset );
-		/**
-		 *\~english
-		 *\brief		Subtraction operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to subtract.
-		 *\return		A reference to this object.
-		 *\~french
-		 *\brief		Subtraction operator.
-		 *\param[in]	it		The iterator.
-		 *\param[in]	offset	The offset to subtract.
-		 *\return		A reference to this object.
-		 */
-		template< typename CharT, typename StringT >
-		inline const_iterator< CharT, StringT > operator-( const_iterator< CharT, StringT > it, size_t offset );
 
 		template< typename CharT >
 		inline const_iterator< CharT, std::basic_string< CharT > > cbegin( std::basic_string< CharT > const & str )

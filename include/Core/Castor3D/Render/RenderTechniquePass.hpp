@@ -141,23 +141,14 @@ namespace c3d
 		 *\param[in]	outputScattering	Définit si la passe sort des données de scattering.
 		 */
 		C3D_API RenderTechniquePass( RenderTechnique * parent
-			, Scene const & scene
+			, Scene & scene
 			, bool outputScattering );
 
 	public:
 		C3D_API virtual ~RenderTechniquePass()noexcept = default;
 		/**
-		*\~english
-		*\brief
-		*	Visitor acceptance function.
-		*\param visitor
-		*	The ... visitor.
-		*\~french
-		*\brief
-		*	Fonction d'acceptation de visiteur.
-		*\param visitor
-		*	Le ... visiteur.
-		*/
+		 *\copydoc	RenderNodesPass::accept
+		 */
 		C3D_API virtual void accept( RenderTechniqueVisitor & visitor )
 		{
 			doAccept( visitor );
@@ -187,8 +178,8 @@ namespace c3d
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData
-			, uint32_t vertexStride )const = 0;
+			, SubmeshRenderData const * submeshData
+			, uint32_t vertexStride )const noexcept = 0;
 		/**
 		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
@@ -214,26 +205,16 @@ namespace c3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Engine * getEngine()const noexcept;
+		C3D_API virtual Engine * getEngine()const noexcept;
 		C3D_API IndirectLightingData const & getIndirectLighting()const noexcept;
 		C3D_API DebugConfig & getDebugConfig()const noexcept;
-		C3D_API bool areDebugTargetsEnabled()const noexcept;
+		C3D_API virtual bool areDebugTargetsEnabled()const noexcept;
 		C3D_API virtual ClustersConfig const * getClustersConfig()const noexcept = 0;
 		C3D_API virtual bool hasSsao()const noexcept = 0;
 
-		Scene const & getScene()noexcept
+		virtual Scene & getScene()const noexcept
 		{
 			return m_scene;
-		}
-
-		Scene const & getScene()const noexcept
-		{
-			return m_scene;
-		}
-
-		RenderTechnique const & getTechnique()const noexcept
-		{
-			return *m_parent;
 		}
 		/**@}*/
 
@@ -245,7 +226,7 @@ namespace c3d
 
 	protected:
 		RenderTechnique * m_parent{};
-		Scene const & m_scene;
+		Scene & m_scene;
 		uint32_t m_drawCalls{};
 		bool m_outputScattering{};
 	};
@@ -294,7 +275,7 @@ namespace c3d
 
 	public:
 		/**
-		 *\copydoc	RenderTechniquePass::accept
+		 *\copydoc	RenderNodesPass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
@@ -320,8 +301,8 @@ namespace c3d
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData
-			, uint32_t vertexStride )const override;
+			, SubmeshRenderData const * submeshData
+			, uint32_t vertexStride )const noexcept override;
 		/**
 		 *\copydoc	RenderNodesPass::getShaderFlags
 		 */
@@ -359,24 +340,14 @@ namespace c3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Engine * getEngine()const noexcept
+		Engine * getEngine()const noexcept override
 		{
 			return RenderTechniquePass::getEngine();
 		}
 
-		Scene const & getScene()const noexcept
+		Scene & getScene()const noexcept override
 		{
 			return RenderTechniquePass::getScene();
-		}
-
-		RenderTechnique const & getTechnique()const noexcept
-		{
-			return RenderTechniquePass::getTechnique();
-		}
-
-		DebugConfig & getDebugConfig()const noexcept
-		{
-			return RenderTechniquePass::getDebugConfig();
 		}
 
 		ClustersConfig const * getClustersConfig()const noexcept override

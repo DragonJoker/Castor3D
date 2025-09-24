@@ -28,19 +28,19 @@ namespace GuiCommon
 		void SubStatus( wxString const & strText );
 
 	protected:
-		void doDraw( wxDC * pDC );
+		void doDraw( wxDC * pDC )const;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
 #pragma clang diagnostic pop
-		void OnPaint( wxPaintEvent & event );
-		void OnEraseBackground( wxEraseEvent & event );
+		void onPaint( wxPaintEvent & event );
+		void onEraseBackground( wxEraseEvent & event );
 
 	private:
 		wxBitmap m_bmpSplash;
-		wxPanel * m_pPanelBmp;
-		wxGauge * m_pGauge;
+		wxPanel * m_pPanelBmp{};
+		wxGauge * m_pGauge{};
 		wxPoint m_ptTitlePosition;
 		wxPoint m_ptCopyrightPosition;
 		wxPoint m_ptVersionPosition;
@@ -49,6 +49,7 @@ namespace GuiCommon
 		wxString m_strEngineVersion;
 		wxString m_strStatus;
 		wxString m_strSubStatus;
+		int m_range;
 	};
 }
 

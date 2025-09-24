@@ -31,7 +31,7 @@ namespace c3d
 
 			if ( !image->hasBuffer() )
 			{
-				**image = *engine.createImage( name, createParams );
+				**image = **engine.createImage( name, createParams );
 
 				if ( image )
 				{
@@ -45,29 +45,6 @@ namespace c3d
 			}
 
 			return *image;
-		}
-
-		static String getImageViewTypeName( ImageViewType t )
-		{
-			switch ( t )
-			{
-			case ImageViewType::e1D:
-				return cuT( "1D" );
-			case ImageViewType::e2D:
-				return cuT( "2D" );
-			case ImageViewType::e3D:
-				return cuT( "3D" );
-			case ImageViewType::eCube:
-				return cuT( "Cube" );
-			case ImageViewType::e1DArray:
-				return cuT( "1DArray" );
-			case ImageViewType::e2DArray:
-				return cuT( "2DArray" );
-			case ImageViewType::eCubeArray:
-				return cuT( "CubeArray" );
-			default:
-				return cuT( "UnknownImageType" );
-			}
 		}
 	}
 
@@ -160,40 +137,6 @@ namespace c3d
 			CU_Failure( "Unsupported CubeMapFace" );
 			return cuEmptyString;
 		}
-	}
-
-	//*********************************************************************************************
-
-	OutputStream & operator<<( OutputStream & stream, ImageMemoryLayout const & rhs )
-	{
-		stream << texmod::getImageViewTypeName( rhs.type )
-			<< cuT( ", " ) << makeString( ashes::getName( convert( rhs.format ) ) )
-			<< cuT( ", " ) << rhs.extent->x
-			<< cuT( "x" ) << rhs.extent->y;
-
-		if ( rhs.extent->z > 1 )
-		{
-			stream << ", " << rhs.extent << " slices";
-		}
-		else
-		{
-			stream << ", " << rhs.layers << " layers";
-		}
-
-		stream << ", " << rhs.levels << " miplevels";
-		return stream;
-	}
-
-	OutputStream & operator<<( OutputStream & stream, Image const & rhs )
-	{
-		stream << rhs.getLayout();
-		return stream;
-	}
-
-	OutputStream & operator<<( OutputStream & stream, TextureLayout const & rhs )
-	{
-		stream << rhs.getImage();
-		return stream;
 	}
 
 	//*********************************************************************************************

@@ -177,8 +177,8 @@ namespace c3d
 	}
 
 	void addDebugDrawable( DebugDrawer & drawer
-		, DebugVertexBuffers vertexBuffers
-		, DebugIndexBuffer indexBuffer
+		, DebugVertexBuffers const & vertexBuffers
+		, DebugIndexBuffer const & indexBuffer
 		, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
 		, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
 		, ashes::VkDescriptorSetLayoutBindingArray const & bindings
@@ -188,7 +188,7 @@ namespace c3d
 		, bool enableDepthTest )
 	{
 		drawer.addDrawable( vertexBuffers, indexBuffer
-			, std::move( vertexAttributes ), std::move( vertexBindings )
+			, vertexAttributes, vertexBindings
 			, bindings, writes, count, shader, enableDepthTest );
 	}
 
@@ -221,7 +221,7 @@ namespace c3d
 			, context
 			, graph
 			, { crg::defaultV< InitialiseCallback >
-				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( recContext, cb ); }
+				, [this]( crg::RecordContext const & recContext, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( recContext, cb ); }
 				, crg::defaultV< GetSubpassContentsCallback >
 				, GetPassIndexCallback( [passIndex](){ return *passIndex; } )
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
@@ -319,7 +319,7 @@ namespace c3d
 
 		if ( res )
 		{
-			auto name = toUtf8( m_pass.getName() ) + "/AABB/" + string::toMbString( hash );
+			auto name = toUtf8( getPass().getName() ) + "/AABB/" + string::toMbString( hash );
 			auto & extent = doGetHolder().getRenderSize();
 			ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 				, vertexBindings
@@ -352,7 +352,7 @@ namespace c3d
 
 		if ( ires )
 		{
-			auto name = toUtf8( m_pass.getName() ) + "/AABB/" + string::toMbString( hash ) + "/" + string::toMbString( ihash );
+			auto name = toUtf8( getPass().getName() ) + "/AABB/" + string::toMbString( hash ) + "/" + string::toMbString( ihash );
 			iit->second.descriptorPool = it->second->descriptorLayout->createPool( name, 1U );
 			iit->second.descriptorSet = iit->second.descriptorPool->createDescriptorSet( name );
 			iit->second.descriptorSet->setBindings( writes );
@@ -443,8 +443,8 @@ namespace c3d
 		}
 	}
 
-	void DebugDrawer::addDrawable( DebugVertexBuffers vertexBuffers
-		, DebugIndexBuffer indexBuffer
+	void DebugDrawer::addDrawable( DebugVertexBuffers const & vertexBuffers
+		, DebugIndexBuffer const & indexBuffer
 		, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
 		, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
 		, ashes::VkDescriptorSetLayoutBindingArray const & bindings
@@ -456,7 +456,7 @@ namespace c3d
 		if ( m_framePass && instanceCount > 0u )
 		{
 			m_framePass->addDrawable( vertexBuffers, indexBuffer
-				, std::move( vertexAttributes ), std::move( vertexBindings )
+				, vertexAttributes, vertexBindings
 				, bindings, writes, instanceCount, shader, enableDepthTest );
 		}
 	}

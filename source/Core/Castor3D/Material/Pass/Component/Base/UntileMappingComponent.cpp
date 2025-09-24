@@ -56,7 +56,7 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	sdw::Vec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+	sdw::RetVec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 const & texCoords
 		, shader::BlendComponents const & components )const
 	{
@@ -66,7 +66,7 @@ namespace c3d
 			, dFdy( texCoords.xy() ) );
 	}
 
-	sdw::Vec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+	sdw::RetVec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
 		, shader::DerivTex const & texCoords
 		, shader::BlendComponents const & components )const
 	{

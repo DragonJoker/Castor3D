@@ -384,7 +384,7 @@ namespace c3d
 
 	private:
 		void doComputeMatrix();
-		void doUpdateChildsDerivedTransform();
+		void doUpdateChildsDerivedTransform()const;
 		void doAttachTo( SceneNode & node );
 		void doDetach()noexcept;
 		void doAddChild( SceneNode & child );
@@ -435,9 +435,9 @@ namespace c3d
 
 		void operator()( ElementT & element
 			, SceneNode & parent
-			, SceneNodeRPtr rootNode
-			, SceneNodeRPtr rootCameraNode
-			, SceneNodeRPtr rootObjectNode )
+			, [[maybe_unused]] SceneNode const * rootNode
+			, [[maybe_unused]] SceneNode const * rootCameraNode
+			, [[maybe_unused]] SceneNode const * rootObjectNode )const
 		{
 			element.attachTo( parent );
 		}
@@ -464,7 +464,7 @@ namespace c3d
 		{
 		}
 
-		void operator()( typename CacheT::ElementObjectCacheT const & source
+		void operator()( [[maybe_unused]] typename CacheT::ElementObjectCacheT const & source
 			, typename CacheT::ElementContT & destination
 			, typename CacheT::ElementPtrT element
 			, SceneNodeRPtr rootCameraNode

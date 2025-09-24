@@ -16,8 +16,16 @@ namespace GuiCommon
 	struct TreeItemConfigurationBuilder
 		: public c3d::ConfigurationVisitor
 	{
-	private:
-		explicit TreeItemConfigurationBuilder( wxPropertyGrid * grid
+		struct Token
+		{
+		private:
+			friend struct TreeItemConfigurationBuilder;
+			explicit Token()noexcept = default;
+		};
+
+	public:
+		explicit TreeItemConfigurationBuilder( [[maybe_unused]] Token token
+			, wxPropertyGrid * grid
 			, TreeItemProperty & prop
 			, wxPGProperty * subgrid = nullptr )
 			: c3d::ConfigurationVisitor{}
@@ -27,14 +35,13 @@ namespace GuiCommon
 		{
 		}
 
-	public:
 		template< typename ConfigT, typename ... ParamsT >
 		static void submit( wxPropertyGrid * grid
 			, TreeItemProperty & prop
 			, ConfigT & config
 			, ParamsT && ... params )
 		{
-			TreeItemConfigurationBuilder vis{ grid, prop };
+			TreeItemConfigurationBuilder vis{ Token{}, grid, prop };
 			config.accept( vis, c3d::forward< ParamsT >( params )... );
 		}
 
@@ -78,11 +85,11 @@ namespace GuiCommon
 		{
 			if ( m_subgrid )
 			{
-				m_prop.addPropertyET( m_subgrid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), onChange );
+				m_prop.addPropertyET( m_subgrid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), c3d::move( onChange ) );
 			}
 			else
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), c3d::move( onChange ) );
 			}
 		}
 
@@ -274,7 +281,7 @@ namespace GuiCommon
 			, OnSEnumValueChange onChange
 			, ControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
+			doVisit( name, enumValue, enumNames, c3d::move( onChange ), c3d::move( controls ) );
 		}
 
 		void visit( c3d::String const & name
@@ -283,7 +290,7 @@ namespace GuiCommon
 			, OnUEnumValueChange onChange
 			, ControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
+			doVisit( name, enumValue, enumNames, c3d::move( onChange ), c3d::move( controls ) );
 		}
 
 		void visit( c3d::String const & name
@@ -474,7 +481,7 @@ namespace GuiCommon
 			, OnSEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
+			doVisit( name, enumValue, enumNames, c3d::move( onChange ), c3d::move( controls ) );
 		}
 
 		void visit( c3d::String const & name
@@ -483,17 +490,17 @@ namespace GuiCommon
 			, OnUEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
+			doVisit( name, enumValue, enumNames, c3d::move( onChange ), c3d::move( controls ) );
 		}
 
 	private:
 		c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 		{
-			return c3d::RawUniquePtr< ConfigurationVisitorBase >( new TreeItemConfigurationBuilder{ m_grid
-				, m_prop
+			return c3d::makeRawUnique< TreeItemConfigurationBuilder >( Token{}
+				, m_grid, m_prop
 				, ( m_subgrid
 					? m_prop.addProperty( m_subgrid, category )
-					: m_prop.addProperty( m_grid, category ) ) } );
+					: m_prop.addProperty( m_grid, category ) ) );
 		}
 
 	private:

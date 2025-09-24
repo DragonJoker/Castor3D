@@ -37,11 +37,11 @@ namespace GuiCommon
 				, TreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, wxPGProperty * mainContainer
-				, onEnabledChange onEnabled )
+				, onEnabledChange const & onEnabled )
 			{
 				PassTreeItemProperty::PropertiesArray result;
 				PassTreeGatherer vis{ pass, properties, grid, onEnabled };
-				auto & compsRegister = pass.getOwner()->getEngine()->getPassComponentsRegister();
+				auto const & compsRegister = pass.getOwner()->getEngine()->getPassComponentsRegister();
 
 				for ( auto & componentDesc : compsRegister )
 				{
@@ -90,11 +90,10 @@ namespace GuiCommon
 				return result;
 			}
 
-		private:
 			PassTreeGatherer( c3d::Pass & pass
 				, TreeItemProperty * properties
 				, wxPropertyGrid * grid
-				, onEnabledChange onEnabled )
+				, onEnabledChange const & onEnabled )
 				: c3d::ConfigurationVisitor{}
 				, m_pass{ pass }
 				, m_properties{ properties }
@@ -103,6 +102,7 @@ namespace GuiCommon
 			{
 			}
 
+		private:
 			void visit( c3d::String const & name
 				, bool & value
 				, c3d::ConfigurationVisitor::ControlsList controls )override
@@ -247,7 +247,7 @@ namespace GuiCommon
 					, make_wxArrayString( enumNames )
 					, &enumValue
 					, c3d::move( controls )
-					, onChange ) );
+					, c3d::move( onChange ) ) );
 			}
 
 			void visit( c3d::String const & name
@@ -261,7 +261,7 @@ namespace GuiCommon
 					, make_wxArrayString( enumNames )
 					, &enumValue
 					, c3d::move( controls )
-					, onChange ) );
+					, c3d::move( onChange ) ) );
 			}
 
 			void visit( c3d::String const & name
@@ -387,7 +387,7 @@ namespace GuiCommon
 					, make_wxArrayString( enumNames )
 					, &enumValue
 					, c3d::move( controls )
-					, onChange ) );
+					, c3d::move( onChange ) ) );
 			}
 
 			void visit( c3d::String const & name
@@ -401,17 +401,17 @@ namespace GuiCommon
 					, make_wxArrayString( enumNames )
 					, &enumValue
 					, c3d::move( controls )
-					, onChange ) );
+					, c3d::move( onChange ) ) );
 			}
 
 		private:
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
 				doVisit( category );
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new PassTreeGatherer{ m_pass
+				return c3d::makeRawUnique< PassTreeGatherer >( m_pass
 					, m_properties
 					, m_grid
-					, m_onEnabled } );
+					, m_onEnabled );
 			}
 
 			void doVisit( c3d::String const & name )
@@ -444,7 +444,7 @@ namespace GuiCommon
 		class PassShaderGatherer
 			: public c3d::RenderTechniqueVisitor
 		{
-		private:
+		public:
 			PassShaderGatherer( c3d::PipelineFlags flags
 				, c3d::Scene const & scene
 				, ShaderSources & sources )
@@ -453,7 +453,6 @@ namespace GuiCommon
 			{
 			}
 
-		public:
 			static ShaderSources submit( c3d::Pass const & pass
 				, c3d::Scene const & scene )
 			{
@@ -499,9 +498,9 @@ namespace GuiCommon
 					return;
 				}
 
-				doGetSource( shaderModule.name ).sources.push_back( { shaderModule.shader.get()
+				doGetSource( shaderModule.name ).sources.emplace_back( shaderModule.shader.get()
 					, shaderModule.compiled
-					, c3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), shaderModule.stage ) } );
+					, c3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), shaderModule.stage ) );
 			}
 
 			void visit( c3d::ProgramModule const & shaderModule
@@ -518,22 +517,21 @@ namespace GuiCommon
 					return;
 				}
 
-				doGetSource( shaderModule.name ).sources.push_back( { shaderModule.shader.get()
+				doGetSource( shaderModule.name ).sources.emplace_back( shaderModule.shader.get()
 					, it->second
-					, entryPoint } );
+					, entryPoint );
 			}
 
 		private:
 			ShaderSource & doGetSource( c3d::String const & name )
 			{
-				auto it = std::find_if( m_sources.begin()
+				if ( auto it = std::find_if( m_sources.begin()
 					, m_sources.end()
 					, [&name]( ShaderSource const & lookup )
 					{
 						return lookup.name == name;
 					} );
-
-				if ( it != m_sources.end() )
+					it != m_sources.end() )
 				{
 					return *it;
 				}
@@ -546,7 +544,7 @@ namespace GuiCommon
 		private:
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new PassShaderGatherer{ getFlags(), getScene(), m_sources } );
+				return c3d::makeRawUnique< PassShaderGatherer >( getFlags(), getScene(), m_sources );
 			}
 
 		private:
@@ -554,10 +552,11 @@ namespace GuiCommon
 		};
 	}
 
-	PassTreeItemProperty::PassTreeItemProperty( bool editable
+	PassTreeItemProperty::PassTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Scene & scene
 		, wxWindow * parent )
-		: TreeItemProperty{ scene.getEngine(), editable }
+		: TreeItemProperty{ scene.getEngine(), imagesLoader, editable }
 		, m_scene{ scene }
 		, m_parent{ parent }
 	{
@@ -579,14 +578,15 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( m_pass->getOwner()->getName() ) );
 		auto mainContainer = addProperty( grid, PROPERTY_CATEGORY_BASE );
 		addProperty( grid, PROPERTY_PASS_SHADER
-			, [this]( wxVariant const & var )
+			, [this]( wxVariant const & )
 			{
 				auto sources = passtp::PassShaderGatherer::submit( *m_pass, m_scene );
-				auto editor = new ShaderDialog{ m_pass->getOwner()->getEngine()
+				ShaderDialog editor{ m_pass->getOwner()->getEngine()
+					, m_imagesLoader
 					, c3d::move( sources )
 					, m_pass->getOwner()->getName() + c3d::string::toString( m_pass->getId() )
 					, m_parent };
-				editor->Show();
+				editor.Show();
 			} );
 		m_properties = passtp::PassTreeGatherer::submit( *m_pass
 			, this
@@ -644,7 +644,7 @@ namespace GuiCommon
 	{
 		auto & pass = *component->getOwner();
 
-		for ( auto dep : component->getDependencies() )
+		for ( auto const & dep : component->getDependencies() )
 		{
 			auto it = std::find_if( m_properties.begin()
 				, m_properties.end()

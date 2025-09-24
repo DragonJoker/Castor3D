@@ -29,22 +29,22 @@ namespace ocean_fft
 	{
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eConfig
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBindingT( BakeHeightGradientPass::Bindings::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eHeight
+				, c3d::makeDescriptorSetLayoutBindingT( BakeHeightGradientPass::Bindings::eHeight
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eDisplacement
+				, c3d::makeDescriptorSetLayoutBindingT( BakeHeightGradientPass::Bindings::eDisplacement
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eHeightDisplacement
+				, c3d::makeDescriptorSetLayoutBindingT( BakeHeightGradientPass::Bindings::eHeightDisplacement
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eGradientJacobian
+				, c3d::makeDescriptorSetLayoutBindingT( BakeHeightGradientPass::Bindings::eGradientJacobian
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
-			return device->createDescriptorSetLayout( BakeHeightGradientPass::Name 
+			return device->createDescriptorSetLayout( BakeHeightGradientPass::Name
 				, c3d::move( bindings ) );
 		}
 
@@ -54,25 +54,25 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = graph.getDescriptorWrite( *pass.uniforms.begin()->second
-				, BakeHeightGradientPass::eConfig );
+			auto write = graph.getDescriptorWriteT( *pass.getUniforms().begin()->second
+				, BakeHeightGradientPass::Bindings::eConfig );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getDescriptorWrite( *pass.inputs.find( BakeHeightGradientPass::eHeight )->second
-				, BakeHeightGradientPass::eHeight );
+			write = graph.getDescriptorWriteT( *pass.getInputs().find( uint32_t( BakeHeightGradientPass::Bindings::eHeight ) )->second
+				, BakeHeightGradientPass::Bindings::eHeight );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getDescriptorWrite( *pass.inputs.find( BakeHeightGradientPass::eDisplacement )->second
-				, BakeHeightGradientPass::eDisplacement );
+			write = graph.getDescriptorWriteT( *pass.getInputs().find( uint32_t( BakeHeightGradientPass::Bindings::eDisplacement ) )->second
+				, BakeHeightGradientPass::Bindings::eDisplacement );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			auto out1 = pass.outputs.begin();
+			auto out1 = pass.getOutputs().begin();
 			writes.push_back( ashes::WriteDescriptorSet{ out1->first
 				, 0u
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
@@ -80,7 +80,7 @@ namespace ocean_fft
 					, graph.createImageView( out1->second->view() )
 					, VK_IMAGE_LAYOUT_GENERAL } } } );
 
-			auto out2 = pass.outputs.rbegin();
+			auto out2 = pass.getOutputs().rbegin();
 			writes.push_back( ashes::WriteDescriptorSet{ out2->first
 				, 0u
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
@@ -122,21 +122,21 @@ namespace ocean_fft
 			auto scale = pcb.declMember< sdw::Vec4 >( "scale" );
 			pcb.end();
 
-			C3D_FftOcean( writer, BakeHeightGradientPass::eConfig, 0u );
+			C3D_FftOcean( writer, BakeHeightGradientPass::Bindings::eConfig, 0u );
 
-			auto hgt = writer.declStorageBuffer( "Height", BakeHeightGradientPass::eHeight, 0u );
+			auto hgt = writer.declStorageBuffer( "Height", uint32_t( BakeHeightGradientPass::Bindings::eHeight ), 0u );
 			auto heights = hgt.declMemberArray< sdw::Vec2 >( "heights" );
 			hgt.end();
 
-			auto disp = writer.declStorageBuffer( "Displacement", BakeHeightGradientPass::eDisplacement, 0u );
+			auto disp = writer.declStorageBuffer( "Displacement", uint32_t( BakeHeightGradientPass::Bindings::eDisplacement ), 0u );
 			auto displacements = disp.declMemberArray< sdw::Vec2 >( "displacements" );
 			disp.end();
 
-			auto heightDisplacement = writer.declStorageImg< sdw::WImage2DRgba16 >( "heightDisplacement", BakeHeightGradientPass::eHeightDisplacement, 0u );
-			auto gradJacobian = writer.declStorageImg< sdw::WImage2DRgba16 >( "gradJacobian", BakeHeightGradientPass::eGradientJacobian, 0u );
+			auto heightDisplacement = writer.declStorageImg< sdw::WImage2DRgba16 >( "heightDisplacement", uint32_t( BakeHeightGradientPass::Bindings::eHeightDisplacement ), 0u );
+			auto gradJacobian = writer.declStorageImg< sdw::WImage2DRgba16 >( "gradJacobian", uint32_t( BakeHeightGradientPass::Bindings::eGradientJacobian ), 0u );
 
 			auto normalizeCoord = writer.implementFunction< sdw::Int >( "normalizeCoord"
-				, [&]( sdw::Int c, sdw::Int s )
+				, [&writer]( sdw::Int const & c, sdw::Int const & s )
 				{
 					writer.returnStmt( writer.ternary( c < 0_i
 						, c + s
@@ -146,7 +146,7 @@ namespace ocean_fft
 				, sdw::InInt{ writer, "s" } );
 
 			auto getHgtIndex = writer.implementFunction< sdw::Int >( "getHgtIndex"
-				, [&]( sdw::IVec2 i )
+				, [&writer, &c3d_oceanData, &normalizeCoord]( sdw::IVec2 const & i )
 				{
 					writer.returnStmt( normalizeCoord( i.y(), writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().y() ) )
 						* writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().x() )
@@ -155,7 +155,7 @@ namespace ocean_fft
 				, sdw::InIVec2{ writer, "i" } );
 
 			auto getDspIndex = writer.implementFunction< sdw::Int >( "getDspIndex"
-				, [&]( sdw::IVec2 i )
+				, [&writer, &normalizeCoord, &c3d_oceanData]( sdw::IVec2 const & i )
 				{
 					writer.returnStmt( ( normalizeCoord( i.y(), writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().y() ) ) >> c3d_oceanData.displacementDownsample() )
 						* ( writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().x() ) >> c3d_oceanData.displacementDownsample() )
@@ -164,7 +164,7 @@ namespace ocean_fft
 				, sdw::InIVec2{ writer, "i" } );
 
 			auto jacobian = writer.implementFunction< sdw::Float >( "jacobian"
-				, [&]( sdw::Vec2 const & dDdx
+				, [&writer]( sdw::Vec2 const & dDdx
 					, sdw::Vec2 const & dDdy )
 				{
 					writer.returnStmt( ( 1.0_f + dDdx.x() ) * ( 1.0_f + dDdx.y() )
@@ -174,7 +174,8 @@ namespace ocean_fft
 				, sdw::InVec2{ writer, "dDdy" } );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 8u, 8u, 1u }
-				, [&]( sdw::ComputeIn in )
+				, [&writer, &getHgtIndex, &getDspIndex, &jacobian, &heights, &scale, &displacements
+					, &heightDisplacement, &gradJacobian]( sdw::ComputeIn const & in )
 				{
 					auto i = writer.declLocale( "i"
 						, ivec2( in.globalInvocationID.xy() ) );
@@ -234,13 +235,13 @@ namespace ocean_fft
 		, c3d::Extent2D const & extent
 		, c3d::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { []( uint32_t ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+				, [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
@@ -251,7 +252,7 @@ namespace ocean_fft
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), bakehg::createShader( device ) }
 		, m_pipeline{ bakehg::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ bakehg::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ bakehg::createDescriptorSet( getGraph(), *m_descriptorSetPool, getPass() ) }
 		, m_extent{ extent }
 		, m_heightMapSize{ heightMapSize }
 		, m_displacementDownsample{ displacementDownsample }
@@ -263,9 +264,9 @@ namespace ocean_fft
 		visitor.visit( m_shader );
 	}
 
-	void BakeHeightGradientPass::doRecordInto( crg::RecordContext & context
+	void BakeHeightGradientPass::doRecordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, [[maybe_unused]] uint32_t index )
 	{
 		uint32_t Nx = m_extent.width;
 		uint32_t Ny = m_extent.height;
@@ -278,16 +279,16 @@ namespace ocean_fft
 			, float( Nx >> m_displacementDownsample ) / m_heightMapSize->x
 			, float( Ny >> m_displacementDownsample ) / m_heightMapSize->y };
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		m_context.vkCmdBindPipeline( commandBuffer
+		context->vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipeline );
-		m_context.vkCmdPushConstants( commandBuffer
+		context->vkCmdPushConstants( commandBuffer
 			, *m_pipelineLayout
 			, VK_SHADER_STAGE_COMPUTE_BIT
 			, 0u
 			, uint32_t( sizeof( BakeHeightGradientPass::Data ) )
 			, &m_data );
-		m_context.vkCmdBindDescriptorSets( commandBuffer
+		context->vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelineLayout
 			, 0u
@@ -295,7 +296,7 @@ namespace ocean_fft
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		m_context.vkCmdDispatch( commandBuffer
+		context->vkCmdDispatch( commandBuffer
 			, m_extent.width / 8u
 			, m_extent.height / 8u
 			, 1u );
@@ -342,15 +343,15 @@ namespace ocean_fft
 				return res;
 			} );
 		ubo.createPassBinding( pass
-			, BakeHeightGradientPass::eConfig );
-		pass.addInputStorage( *height.getLastAttach()
-			, BakeHeightGradientPass::eHeight );
-		pass.addInputStorage( *displacement.getLastAttach()
-			, BakeHeightGradientPass::eDisplacement );
-		heightDisp.front().setLastAttach( pass.addOutputStorageImage( heightDisp.front().getTargetViewId()
-			, BakeHeightGradientPass::eHeightDisplacement ) );
-		gradJacob.front().setLastAttach( pass.addOutputStorageImage( gradJacob.front().getTargetViewId()
-			, BakeHeightGradientPass::eGradientJacobian ) );
+			, BakeHeightGradientPass::Bindings::eConfig );
+		pass.addInputStorageT( *height.getLastAttach()
+			, BakeHeightGradientPass::Bindings::eHeight );
+		pass.addInputStorageT( *displacement.getLastAttach()
+			, BakeHeightGradientPass::Bindings::eDisplacement );
+		heightDisp.front().setLastAttach( pass.addOutputStorageImageT( heightDisp.front().getTargetViewId()
+			, BakeHeightGradientPass::Bindings::eHeightDisplacement ) );
+		gradJacob.front().setLastAttach( pass.addOutputStorageImageT( gradJacob.front().getTargetViewId()
+			, BakeHeightGradientPass::Bindings::eGradientJacobian ) );
 	}
 
 	//************************************************************************************************

@@ -21,7 +21,7 @@ namespace light_streaks
 			, c3d::Extent2D const & size
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	public:
 		static c3d::MbString const CombineMapScene;

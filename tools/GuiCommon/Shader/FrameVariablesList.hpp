@@ -15,6 +15,7 @@ namespace GuiCommon
 	{
 	public:
 		FrameVariablesList( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, PropertiesContainer * propertiesHolder
 			, wxWindow * parent
 			, wxPoint const & ptPos = wxDefaultPosition
@@ -41,6 +42,7 @@ namespace GuiCommon
 
 	private:
 		c3d::Engine * m_engine;
+		ImagesLoader & m_imagesLoader;
 		PropertiesContainer * m_propertiesHolder;
 	};
 }

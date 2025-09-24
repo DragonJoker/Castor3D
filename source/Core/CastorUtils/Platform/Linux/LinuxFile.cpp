@@ -146,9 +146,9 @@ namespace c3d
 	Path File::getExecutableDirectory()
 	{
 		Path pathReturn;
-		char path[FILENAME_MAX];
-		char buffer[32];
-		sprintf( buffer, "/proc/%d/exe", getpid() );
+		char path[FILENAME_MAX] = {};
+		char buffer[32] = {};
+		snprintf( buffer, 32, "/proc/%d/exe", getpid() );
 		int bytes = std::min( int( readlink( buffer, path, sizeof( path ) ) ), int( sizeof( path ) ) - 1 );
 
 		if ( bytes > 0 )

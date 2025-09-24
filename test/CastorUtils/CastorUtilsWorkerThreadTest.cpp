@@ -13,9 +13,9 @@ namespace Testing
 
 	void CastorUtilsWorkerThreadTest::doRegisterTests()
 	{
-		doRegisterTest( "CastorUtilsWorkerThreadTest::SingleThread", std::bind( &CastorUtilsWorkerThreadTest::SingleThread, this ) );
-		doRegisterTest( "CastorUtilsWorkerThreadTest::ProducerConsumer", std::bind( &CastorUtilsWorkerThreadTest::ProducerConsumer, this ) );
-		doRegisterTest( "CastorUtilsWorkerThreadTest::MultipleSameTask", std::bind( &CastorUtilsWorkerThreadTest::MultipleSameTask, this ) );
+		doRegisterTest( "SingleThread", [this](){ SingleThread(); } );
+		doRegisterTest( "ProducerConsumer", [this](){ ProducerConsumer(); } );
+		doRegisterTest( "MultipleSameTask", [this](){ MultipleSameTask(); } );
 	}
 
 	void CastorUtilsWorkerThreadTest::SingleThread()

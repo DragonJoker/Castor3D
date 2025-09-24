@@ -164,10 +164,6 @@ namespace c3d
 			case PixelFormat::e##name:\
 				return generateMipmapsT< PixelFormat::e##name, KernelBoxFilterT >( extent, buffer, align, dstLevels );\
 				break;
-//#define RGPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
-//			case PixelFormat::e##name:\
-//				return generateMipmapsT< PixelFormat::e##name, KernelLanczosFilterT >( extent, buffer, align, dstLevels );\
-//				break;
 #include <RenderGraph/PixelFormat.inl>
 			default:
 				CU_Failure( "Unsupported format type for CPU mipmaps generation" );
@@ -443,7 +439,7 @@ namespace c3d
 		return result;
 	}
 
-	uint32_t PxBufferConvertOptions::getAdditionalAlign( PixelFormat format )const
+	uint32_t PxBufferConvertOptions::getAdditionalAlign( [[maybe_unused]] PixelFormat format )const
 	{
 #if CU_UseCVTT
 		switch ( format )

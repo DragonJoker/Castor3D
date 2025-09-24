@@ -81,7 +81,6 @@ See LICENSE file in root folder
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Vertex.hpp>
-#include <Castor3D/Render/Ray.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>

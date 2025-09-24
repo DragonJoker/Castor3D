@@ -26,7 +26,7 @@ namespace c3d
 	{
 		template< typename FuncT, typename ParamT >
 		static bool applyAnimationFunc( GroupAnimationMap & animations
-			, AnimatedObjectGroup::AnimatedObjectMap & objects
+			, AnimatedObjectGroup::AnimatedObjectMap const & objects
 			, String const & name
 			, FuncT func
 			, ParamT const & value
@@ -509,7 +509,7 @@ namespace c3d
 				{
 					group.totalTime = animation.getAnimation().getLength();
 
-					for ( auto & [_, groupObject] : m_objects )
+					for ( auto const & [_, groupObject] : m_objects )
 					{
 						groupObject->getAnimation( nm ).setTotalLength( group.totalTime );
 					}
@@ -520,7 +520,7 @@ namespace c3d
 		return result;
 	}
 
-	AnimatedObject * AnimatedObjectGroup::findObject( String const & name )const
+	AnimatedObject * AnimatedObjectGroup::findObject( StringView name )const
 	{
 		for ( auto const & [nm, obj] : m_objects )
 		{
@@ -606,7 +606,7 @@ namespace c3d
 			, offsetof( GroupAnimation, interpolation ) );
 	}
 
-	void AnimatedObjectGroup::update( [[maybe_unused]] CpuUpdater & updater )
+	void AnimatedObjectGroup::update( [[maybe_unused]] CpuUpdater const & updater )
 	{
 #if defined( NDEBUG )
 

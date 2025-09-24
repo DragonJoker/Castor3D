@@ -33,7 +33,10 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	viewport	Le viewport cible
 		 */
-		ViewportTreeItemProperty( bool editable, c3d::Engine & engine, c3d::Viewport & viewport );
+		ViewportTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
+			, c3d::Engine & engine
+			, c3d::Viewport & viewport );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport

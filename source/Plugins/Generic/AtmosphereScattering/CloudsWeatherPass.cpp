@@ -22,7 +22,7 @@ namespace atmosphere_scattering
 
 	namespace weather
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eWeather,
 			eOutput,
@@ -42,14 +42,14 @@ namespace atmosphere_scattering
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
 			{
-				writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+				writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 						, sdw::VertexOut out )
 					{
 						out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 					} );
 
-				writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
-					, sdw::FragmentOutT< c3ds::Colour4FT > out )
+				writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &func]( sdw::FragmentIn const & in
+					, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, ivec2( in.fragCoord.xy() ) );
@@ -71,7 +71,7 @@ namespace atmosphere_scattering
 					, 0u );
 
 				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 8u, 8u, 1u }
-					, [&]( sdw::ComputeIn in )
+					, [&writer, &func, &outputTexture]( sdw::ComputeIn const & in )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, ivec2( in.globalInvocationID.xy() ) );
@@ -90,7 +90,7 @@ namespace atmosphere_scattering
 				, 0u );
 
 			auto random2D = writer.implementFunction< sdw::Float >( "random2D"
-				, [&]( sdw::Vec2 const & st )
+				, [&writer]( sdw::Vec2 const & st )
 				{
 					auto vRes = dvec2( 12.9898_d, 78.233_d );
 					auto dRes = writer.cast< sdw::Float >( dot( dvec2( st ), vRes ) );
@@ -100,7 +100,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "st" } );
 
 			auto noiseInterpolation = writer.implementFunction< sdw::Float >( "noiseInterpolation"
-				, [&]( sdw::Vec2 const & coord
+				, [&writer, &random2D]( sdw::Vec2 const & coord
 					, sdw::Float const & size )
 				{
 					auto grid = writer.declLocale( "grid"
@@ -131,7 +131,7 @@ namespace atmosphere_scattering
 				, sdw::InFloat{ writer, "size" } );
 
 			auto perlinNoise = writer.implementFunction< sdw::Float >( "perlinNoise"
-				, [&]( sdw::Vec2 const & coord
+				, [&writer, &noiseInterpolation]( sdw::Vec2 const & coord
 					, sdw::Float const & scale
 					, sdw::Float const & frequency
 					, sdw::Float const & amplitude
@@ -162,7 +162,7 @@ namespace atmosphere_scattering
 				, sdw::InUInt{ writer, "octaves" } );
 
 			ShaderWriter< useCompute >::implementMain( writer
-				, [&]( sdw::IVec2 const & pixel )
+				, [&writer, &perlinNoise, &c3d_weatherData, &dimension]( sdw::IVec2 const & pixel )
 				{
 					auto uv = writer.declLocale( "uv"
 						, vec2( ( writer.cast< sdw::Float >( pixel.x() ) ) / float( dimension )
@@ -233,11 +233,11 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		weatherUbo.createPassBinding( pass, weather::eWeather );
+		weatherUbo.createPassBinding( pass, weather::Bindings::eWeather );
 
 		if constexpr ( weather::useCompute )
 		{
-			result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), weather::eOutput ) );
+			result.setLastAttach( pass.addOutputStorageImageT( result.getTargetViewId(), weather::Bindings::eOutput ) );
 		}
 		else
 		{

@@ -23,10 +23,9 @@ namespace c3d
 		*	Construction/Destruction.
 		*/
 		/**@{*/
-		DynamicBitsetT();
+		DynamicBitsetT()noexcept;
 		explicit DynamicBitsetT( size_t size, bool value = false );
-		explicit DynamicBitsetT( MbString const & bits );
-		explicit DynamicBitsetT( char const * bits );
+		explicit DynamicBitsetT( MbStringView bits );
 		DynamicBitsetT( char const * bits, size_t size );
 		/**@}*/
 		/**
@@ -38,16 +37,16 @@ namespace c3d
 		*	Fonctions d'ensemble de bits.
 		*/
 		/**@{*/
-		void set( size_t bit, bool value = true );
-		bool get( size_t bit )const;
-		BlockTypeT getBlock( size_t index )const;
-		void reset();
+		void set( size_t bit, bool value = true )noexcept;
+		bool get( size_t bit )const noexcept;
+		BlockTypeT getBlock( size_t index )const noexcept;
+		void reset()noexcept;
 		void resize( size_t size, bool value );
-		size_t getSize()const;
-		size_t getBlockCount()const;
-		bool none()const;
-		bool any()const;
-		bool all()const;
+		size_t getSize()const noexcept;
+		size_t getBlockCount()const noexcept;
+		bool none()const noexcept;
+		bool any()const noexcept;
+		bool all()const noexcept;
 		/**@}*/
 		/**
 		*\~english
@@ -58,8 +57,8 @@ namespace c3d
 		*	Accès de tableau.
 		*/
 		/**@{*/
-		Bit operator[]( size_t index );
-		bool operator[]( size_t index )const;
+		Bit operator[]( size_t index )noexcept;
+		bool operator[]( size_t index )const noexcept;
 		/**@}*/
 		/**
 		*\~english
@@ -70,12 +69,12 @@ namespace c3d
 		*	Opérations bit à bit.
 		*/
 		/**@{*/
-		DynamicBitsetT & operator<<=( int value );
-		DynamicBitsetT & operator>>=( int value );
-		DynamicBitsetT & operator&=( DynamicBitsetT const & value );
-		DynamicBitsetT & operator|=( DynamicBitsetT const & value );
-		DynamicBitsetT & operator^=( DynamicBitsetT const & value );
-		DynamicBitsetT operator~()const;
+		DynamicBitsetT & operator<<=( int value )noexcept;
+		DynamicBitsetT & operator>>=( int value )noexcept;
+		DynamicBitsetT & operator&=( DynamicBitsetT const & value )noexcept;
+		DynamicBitsetT & operator|=( DynamicBitsetT const & value )noexcept;
+		DynamicBitsetT & operator^=( DynamicBitsetT const & value )noexcept;
+		DynamicBitsetT operator~()const noexcept;
 		/**@}*/
 		String toString()const;
 
@@ -84,8 +83,8 @@ namespace c3d
 		static constexpr size_t bitsPerBlock = sizeof( BlockTypeT ) * 8u;
 
 	private:
-		void doResetExtraBits();
-		BlockTypeT doGetLastBlockMask()const;
+		void doResetExtraBits()noexcept;
+		BlockTypeT doGetLastBlockMask()const noexcept;
 
 	private:
 		Vector< BlockTypeT > m_blocks;
@@ -102,10 +101,10 @@ namespace c3d
 	/**@{*/
 	template< typename BlockTypeT >
 	inline bool operator==( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs );
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept;
 	template< typename BlockTypeT >
 	inline bool operator!=( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs );
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept;
 	/**@}*/
 	/**
 	*\~english
@@ -118,19 +117,19 @@ namespace c3d
 	/**@{*/
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator<<( DynamicBitsetT< BlockTypeT > const & lhs
-		, int rhs );
+		, int rhs )noexcept;
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator>>( DynamicBitsetT< BlockTypeT > const & lhs
-		, int rhs );
+		, int rhs )noexcept;
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator&( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs );
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept;
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator|( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs );
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept;
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > operator^( DynamicBitsetT< BlockTypeT > const & lhs
-		, DynamicBitsetT< BlockTypeT > const & rhs );
+		, DynamicBitsetT< BlockTypeT > const & rhs )noexcept;
 	/**@}*/
 	/**
 	*\~english
@@ -150,7 +149,7 @@ namespace c3d
 		Bit( Bit const & bit ) = delete;
 		Bit( Bit && bit )noexcept = delete;
 		Bit( BlockTypeT & block
-			, BlockTypeT mask )
+			, BlockTypeT mask )noexcept
 			: m_block{ block }
 			, m_mask{ mask }
 		{
@@ -158,20 +157,24 @@ namespace c3d
 
 	public:
 		~Bit()noexcept = default;
-		Bit & operator=( bool val );
-		Bit & operator=( Bit const & bit );
+		Bit & operator=( bool val )noexcept;
+		Bit & operator=( Bit const & bit )noexcept;
 		Bit & operator=( Bit && bit )noexcept;
 
-		void set( bool val = true );
+		void set( bool val = true )noexcept;
 
 		template< bool BadCall = true >
-		void * operator&()const;
+		Bit * operator&()const noexcept
+		{
+			static_assert( !BadCall, "Taking the address of a bit in a bitset is impossible." );
+			return nullptr;
+		}
 
-		explicit operator bool()const;
+		explicit operator bool()const noexcept;
 
-		Bit & operator|=( bool value );
-		Bit & operator&=( bool value );
-		Bit & operator^=( bool value );
+		Bit & operator|=( bool value )noexcept;
+		Bit & operator&=( bool value )noexcept;
+		Bit & operator^=( bool value )noexcept;
 
 	private:
 		BlockTypeT & m_block;
@@ -188,10 +191,10 @@ namespace c3d
 	/**@{*/
 	template< typename BlockTypeT >
 	inline bool operator==( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs );
+		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs )noexcept;
 	template< typename BlockTypeT >
 	inline bool operator!=( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs );
+		, typename DynamicBitsetT< BlockTypeT >::Bit const & rhs )noexcept;
 	/**@}*/
 	/**
 	*\~english
@@ -204,13 +207,13 @@ namespace c3d
 	/**@{*/
 	template< typename BlockTypeT >
 	typename DynamicBitsetT< BlockTypeT >::Bit operator|( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, bool rhs );
+		, bool rhs )noexcept;
 	template< typename BlockTypeT >
 	typename DynamicBitsetT< BlockTypeT >::Bit operator&( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, bool rhs );
+		, bool rhs )noexcept;
 	template< typename BlockTypeT >
 	typename DynamicBitsetT< BlockTypeT >::Bit operator^( typename DynamicBitsetT< BlockTypeT >::Bit const & lhs
-		, bool rhs );
+		, bool rhs )noexcept;
 	/**@}*/
 }
 

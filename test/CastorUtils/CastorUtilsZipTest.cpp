@@ -15,7 +15,7 @@ namespace Testing
 
 	void CastorUtilsZipTest::doRegisterTests()
 	{
-		doRegisterTest( "ZipFile", std::bind( &CastorUtilsZipTest::ZipFile, this ) );
+		doRegisterTest( "ZipFile", [this](){ ZipFile(); } );
 	}
 
 	void CastorUtilsZipTest::ZipFile()
@@ -23,12 +23,12 @@ namespace Testing
 		c3d::Path folder1{ cuT( "test1" ) };
 		c3d::Path folder2{ folder1 / cuT( "test2" ) };
 
-		std::cout << "	First folder creation" << std::endl;
+		std::cout << "\tFirst folder creation" << std::endl;
 
 		if ( c3d::File::directoryExists( folder1 )
 			|| c3d::File::directoryCreate( folder1 ) )
 		{
-			std::cout << "	Second folder creation" << std::endl;
+			std::cout << "\tSecond folder creation" << std::endl;
 
 			if ( c3d::File::directoryExists( folder2 )
 				|| c3d::File::directoryCreate( folder2 ) )
@@ -42,20 +42,20 @@ namespace Testing
 
 				if ( !c3d::File::fileExists( binName ) )
 				{
-					std::cout << "	Binary file creation" << std::endl;
+					std::cout << "\tBinary file creation" << std::endl;
 					c3d::BinaryFile binary( binName, c3d::File::OpenMode::eWrite );
 					binary.writeArray( inBinData.data(), inBinData.size() );
 				}
 
 				if ( !c3d::File::fileExists( txtName ) )
 				{
-					std::cout << "	Text file creation" << std::endl;
+					std::cout << "\tText file creation" << std::endl;
 					c3d::TextFile text( txtName, c3d::File::OpenMode::eWrite );
 					text.writeText( inTxtData );
 				}
 
 				{
-					std::cout << "	deflate the archive" << std::endl;
+					std::cout << "\tdeflate the archive" << std::endl;
 					c3d::ZipArchive def( zipName, c3d::File::OpenMode::eWrite );
 					def.addFile( binName );
 					def.addFile( txtName );
@@ -63,11 +63,10 @@ namespace Testing
 				}
 
 				{
-					std::cout << "	inflate the archive" << std::endl;
-					c3d::Path folder( cuT( "inflated" ) );
-
-					if ( c3d::File::directoryExists( folder )
-						|| c3d::File::directoryCreate( folder ) )
+					std::cout << "\tinflate the archive" << std::endl;
+					if ( c3d::Path folder( cuT( "inflated" ) );
+						c3d::File::directoryExists( folder )
+							|| c3d::File::directoryCreate( folder ) )
 					{
 						c3d::ZipArchive inf( zipName, c3d::File::OpenMode::eRead );
 						inf.inflate( folder );
@@ -75,7 +74,7 @@ namespace Testing
 						c3d::String outTxtData;
 
 						{
-							std::cout << "	Check binary file content" << std::endl;
+							std::cout << "\tCheck binary file content" << std::endl;
 							c3d::BinaryFile binary( folder / binName, c3d::File::OpenMode::eRead );
 							c3d::Vector< uint8_t > outBinData( size_t( binary.getLength() ) );
 							binary.readArray( outBinData.data(), outBinData.size() );
@@ -84,7 +83,7 @@ namespace Testing
 						}
 
 						{
-							std::cout << "	Check text file content" << std::endl;
+							std::cout << "\tCheck text file content" << std::endl;
 							c3d::TextFile text( folder / txtName, c3d::File::OpenMode::eRead );
 							text.readLine( outTxtData, inTxtData.size() * sizeof( c3d::xchar ) );
 							CT_EQUAL( outTxtData, inTxtData );
@@ -110,12 +109,12 @@ namespace Testing
 			}
 			else
 			{
-				std::cout << "	Couldn't create second folder" << std::endl;
+				std::cout << "\tCouldn't create second folder" << std::endl;
 			}
 		}
 		else
 		{
-			std::cout << "	Couldn't create first folder" << std::endl;
+			std::cout << "\tCouldn't create first folder" << std::endl;
 		}
 	}
 }

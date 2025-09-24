@@ -224,9 +224,14 @@ namespace c3d
 		TextureCombineID baseId{};
 		uint32_t configCount{};
 		TextureFlagsSet flags{};
-	};
 
-	C3D_API bool operator==( TextureCombine const & lhs, TextureCombine const & rhs );
+	private:
+		friend bool operator==( TextureCombine const & lhs, TextureCombine const & rhs )noexcept
+		{
+			return lhs.configCount == rhs.configCount
+				&& lhs.flags == rhs.flags;
+		}
+	};
 
 	C3D_API TextureFlagsSet::const_iterator checkFlag( TextureCombine const & lhs
 		, PassComponentTextureFlag rhs );

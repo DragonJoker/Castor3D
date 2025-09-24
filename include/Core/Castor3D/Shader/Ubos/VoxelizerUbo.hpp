@@ -34,6 +34,8 @@ namespace c3d
 				, sdw::UInt32Field< "enableOcclusion" >
 				, sdw::UInt32Field< "enableSecondaryBounce" > >
 		{
+			SDW_DeclStructInstance( C3D_API, VoxelData );
+
 			VoxelData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -127,7 +129,7 @@ namespace c3d
 	public:
 		C3D_API VoxelizerUbo( VoxelizerUbo const & rhs ) = delete;
 		C3D_API VoxelizerUbo & operator=( VoxelizerUbo const & rhs ) = delete;
-		C3D_API VoxelizerUbo( VoxelizerUbo && rhs )noexcept = default;
+		C3D_API VoxelizerUbo( VoxelizerUbo && rhs )noexcept = delete;
 		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && rhs )noexcept = delete;
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
 		C3D_API ~VoxelizerUbo()noexcept;

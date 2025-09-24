@@ -216,88 +216,60 @@ namespace c3d
 		void doNormalise();
 		void doUpdateInternal();
 
+		CU_API friend Path operator/( Path const & lhs, Path const & rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
+		CU_API friend Path operator/( Path const & lhs, String const & rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
+		CU_API friend Path operator/( Path const & lhs, char const * rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
+		CU_API friend Path operator/( Path const & lhs, wchar_t const * rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
+		CU_API friend Path operator/( String const & lhs, Path const & rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
+		CU_API friend Path operator/( char const * lhs, Path const & rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
+		CU_API friend Path operator/( wchar_t const * lhs, Path const & rhs )
+		{
+			Path path{ lhs };
+			path /= rhs;
+			return path;
+		}
+
 	private:
 		StringView m_path;
 		StringView m_fileName;
 		StringView m_extension;
 	};
-	/**
-	 *\~english
-	 *\brief		Appends 2 paths. adds the separator if needed
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	The second path to add
-	 *\~french
-	 *\brief		Concatène 2 chemins. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	Le premier chemin à concaténer
-	 *\param[in]	rhs	Le second chemin à concaténer
-	 */
-	CU_API Path operator/( Path const & lhs, Path const & rhs );
-	/**
-	 *\~english
-	 *\brief		adds a string to a path. Adds the separator if needed
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	The path to add
-	 *\~french
-	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	La chaîne de caractères à concaténer
-	 */
-	CU_API Path operator/( Path const & lhs, String const & rhs );
-	/**
-	 *\~english
-	 *\brief		adds a string to a path. Adds the separator if needed
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	The path to add
-	 *\~french
-	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	La chaîne de caractères à concaténer
-	 */
-	CU_API Path operator/( Path const & lhs, char const * rhs );
-	/**
-	 *\~english
-	 *\brief		adds a string to a path. Adds the separator if needed
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	The path to add
-	 *\~french
-	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	The first path to add
-	 *\param[in]	rhs	La chaîne de caractères à concaténer
-	 */
-	CU_API Path operator/( Path const & lhs, wchar_t const * rhs );
-	/**
-	 *\~english
-	 *\brief		adds a string to a path. Adds the separator if needed
-	 *\param[in]	lhs	The path to add
-	 *\param[in]	rhs	The first path to add
-	 *\~french
-	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	La chaîne de caractères à concaténer
-	 *\param[in]	rhs	The first path to add
-	 */
-	CU_API Path operator/( String const & lhs, Path const & rhs );
-	/**
-	 *\~english
-	 *\brief		adds a string to a path. Adds the separator if needed
-	 *\param[in]	lhs	The path to add
-	 *\param[in]	rhs	The first path to add
-	 *\~french
-	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	La chaîne de caractères à concaténer
-	 *\param[in]	rhs	The first path to add
-	 */
-	CU_API Path operator/( char const * lhs, Path const & rhs );
-	/**
-	 *\~english
-	 *\brief		adds a string to a path. Adds the separator if needed
-	 *\param[in]	lhs	The path to add
-	 *\param[in]	rhs	The first path to add
-	 *\~french
-	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	lhs	La chaîne de caractères à concaténer
-	 *\param[in]	rhs	The first path to add
-	 */
-	CU_API Path operator/( wchar_t const * lhs, Path const & rhs );
 
 	CU_API std::filesystem::path makePath( StringView str );
 }

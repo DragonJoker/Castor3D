@@ -121,16 +121,6 @@ namespace c3d
 			return m_pixel;
 		}
 
-		bool operator==( ConstPixelIterator const & it )const
-		{
-			return m_current == it.m_current;
-		}
-
-		bool operator!=( ConstPixelIterator const & it )const
-		{
-			return !( *this == it );
-		}
-
 		static difference_type diffIt( ConstPixelIterator const & lhs
 			, ConstPixelIterator const & rhs )
 		{
@@ -161,51 +151,46 @@ namespace c3d
 			}
 		}
 
+		friend bool operator==( ConstPixelIterator const & lhs, ConstPixelIterator const & rhs )noexcept
+		{
+			return lhs.m_current == rhs.m_current;
+		}
+
+		friend ConstPixelIterator operator+( ConstPixelIterator const & it, size_t offset )
+		{
+			ConstPixelIterator result{ it };
+			result += offset;
+			return result;
+		}
+
+		friend ConstPixelIterator operator-( ConstPixelIterator const & it, size_t offset )
+		{
+			ConstPixelIterator result{ it };
+			result -= offset;
+			return result;
+		}
+
+		friend difference_type operator-( ConstPixelIterator const & lhs, ConstPixelIterator const & rhs )
+		{
+			return ConstPixelIterator::diffIt( lhs, rhs );
+		}
+
+		friend difference_type operator-( PixelIterator< PF > const & lhs, ConstPixelIterator const & rhs )
+		{
+			return ConstPixelIterator::diffIt( lhs, rhs );
+		}
+
+		friend difference_type operator-( ConstPixelIterator const & lhs, PixelIterator< PF > const & rhs )
+		{
+			return ConstPixelIterator::diffIt( lhs, rhs );
+		}
+
 	private:
 		static uint8_t const size = PixelDefinitionsT< PF >::Size;
 		internal_type m_current;
 		internal_type m_end;
 		pixel_type m_pixel;
 	};
-
-	template< PixelFormat PF >
-	inline ConstPixelIterator< PF > operator+( ConstPixelIterator< PF > const & it
-		, size_t offset )
-	{
-		ConstPixelIterator< PF > result{ it };
-		result += offset;
-		return result;
-	}
-
-	template< PixelFormat PF >
-	inline ConstPixelIterator< PF > operator-( ConstPixelIterator< PF > const & it
-		, size_t offset )
-	{
-		ConstPixelIterator< PF > result{ it };
-		result -= offset;
-		return result;
-	}
-
-	template< PixelFormat PF >
-	inline typename ConstPixelIterator< PF >::difference_type operator-( ConstPixelIterator< PF > const & lhs
-		, ConstPixelIterator< PF > const & rhs )
-	{
-		return ConstPixelIterator< PF >::diffIt( lhs, rhs );
-	}
-
-	template< PixelFormat PF >
-	inline typename ConstPixelIterator< PF >::difference_type operator-( PixelIterator< PF > const & lhs
-		, ConstPixelIterator< PF > const & rhs )
-	{
-		return ConstPixelIterator< PF >::diffIt( lhs, rhs );
-	}
-
-	template< PixelFormat PF >
-	inline typename ConstPixelIterator< PF >::difference_type operator-( ConstPixelIterator< PF > const & lhs
-		, PixelIterator< PF > const & rhs )
-	{
-		return ConstPixelIterator< PF >::diffIt( lhs, rhs );
-	}
 }
 
 #endif

@@ -27,7 +27,7 @@ namespace draw_edges
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eMaterials,
 			eModels,
@@ -47,17 +47,14 @@ namespace draw_edges
 				, c3d::ComponentModeFlag::eNone
 				, utils };
 
-			auto specifics = uint32_t( eSpecifics );
-			c3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
-			C3D_ModelsData( writer, eModels, 0u );
-			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
-
-			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
+			auto specifics = uint32_t( Bindings::eSpecifics );
+			c3d::shader::Materials materials{ engine, writer, passShaders, uint32_t( Bindings::eMaterials ), 0u, specifics };
+			C3D_ModelsData( writer, Bindings::eModels, 0u );
+			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", Bindings::eDepthObj, 0u );
 
 			auto computeContour = writer.implementFunction< sdw::Float >( "c3d_computeContour"
-				, [&]( sdw::IVec2 const & texelCoord
-					, sdw::Int const & X
-					, sdw::Float const & edgeWidth )
+				, [&writer, &c3d_depthObj, contourMethod]( sdw::IVec2 const & texelCoord
+					, sdw::Int const & X )
 				{
 					auto w = 1_i;
 					auto h = 1_i;
@@ -103,25 +100,27 @@ namespace draw_edges
 								+ writer.cast< sdw::Int >( X != D )
 								+ writer.cast< sdw::Int >( X != E )
 								+ writer.cast< sdw::Int >( X != G ) ) * sdw::Float{ 1.0f / 3.0f } );
-
+						break;
+					default:
 						break;
 					}
-
 					writer.returnStmt( 0.0_f );
 				}
 				, sdw::InIVec2{ writer, "texelCoord" }
-				, sdw::InInt{ writer, "X" }
-				, sdw::InFloat{ writer, "edgeWidth" } );
+				, sdw::InInt{ writer, "X" } );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 					out.uv() = in.uv();
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, sdw::VoidT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOut out )
+			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
+
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour1FT >( [&writer, &c3d_depthObj, c3d_modelsData, &materials, &computeContour
+				, &extent]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour1FT > const & out )
 				{
 					auto size = writer.declLocale( "size"
 						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );
@@ -150,9 +149,8 @@ namespace draw_edges
 					}
 					sdwFI
 
-					outColour = toonProfile.objectFactor() * computeContour( texelCoord
-						, writer.cast< sdw::Int >( X.z() )
-						, toonProfile.edgeWidth() );
+					out.colour() = toonProfile.objectFactor() * computeContour( texelCoord
+						, writer.cast< sdw::Int >( X.z() ) );
 
 				} );
 			return writer.getBuilder().releaseShader();
@@ -201,10 +199,10 @@ namespace draw_edges
 				return result;
 			} );
 		auto & modelBuffer = renderTarget.getScene()->getModelBuffer();
-		passBuffer.createPassBinding( pass, oied::eMaterials );
-		pass.addInputStorage( *modelBuffer.getLastAttach(), oied::eModels );
-		pass.addInputSampled( *depthObj.getSampledLastAttach(), oied::eDepthObj );
-		auto index = uint32_t( oied::eSpecifics );
+		passBuffer.createPassBinding( pass, oied::Bindings::eMaterials );
+		pass.addInputStorageT( *modelBuffer.getLastAttach(), oied::Bindings::eModels );
+		pass.addInputSampledT( *depthObj.getSampledLastAttach(), oied::Bindings::eDepthObj );
+		auto index = uint32_t( oied::Bindings::eSpecifics );
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), c3d::transparentBlackClearColor ) );
 		m_result.create();
@@ -215,7 +213,7 @@ namespace draw_edges
 		m_result.destroy();
 	}
 
-	void ObjectIDEdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )
+	void ObjectIDEdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Object ID Edge Detection" )

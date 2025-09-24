@@ -10,8 +10,8 @@ namespace c3d::shader
 {
 	DebugOutput::DebugOutput( DebugConfig & config
 		, String category
-		, sdw::UInt const index
-		, sdw::Vec4 const output
+		, sdw::UInt const & index
+		, sdw::Vec4 const & output
 		, bool enable )
 		: m_config{ config }
 		, m_categories{ c3d::move( category ) }
@@ -38,17 +38,17 @@ namespace c3d::shader
 		}
 	}
 
-	void DebugOutput::registerOutput( String category
-		, String name
-		, sdw::Vec4 const value )
+	void DebugOutput::registerOutput( String const & category
+		, String const & name
+		, sdw::Vec4 const & value )
 	{
 		if ( m_enable )
 			registerOutput( category, name, value.xyz() );
 	}
 
-	void DebugOutput::registerOutput( String category
-		, String name
-		, sdw::Vec3 const value )
+	void DebugOutput::registerOutput( String const & category
+		, String const & name
+		, sdw::Vec3 const & value )
 	{
 		if ( m_enable )
 		{
@@ -64,17 +64,17 @@ namespace c3d::shader
 		}
 	}
 
-	void DebugOutput::registerOutput( String category
-		, String name
-		, sdw::Vec2 const value )
+	void DebugOutput::registerOutput( String const & category
+		, String const & name
+		, sdw::Vec2 const & value )
 	{
 		if ( m_enable )
 			registerOutput( category, name, vec3( value, 0.0_f ) );
 	}
 
-	void DebugOutput::registerOutput( String category
-		, String name
-		, sdw::Float const value )
+	void DebugOutput::registerOutput( String const & category
+		, String const & name
+		, sdw::Float const & value )
 	{
 		if ( m_enable )
 			registerOutput( category, name, vec3( value ) );

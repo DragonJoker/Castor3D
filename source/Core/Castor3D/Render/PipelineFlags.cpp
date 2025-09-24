@@ -196,7 +196,7 @@ namespace c3d
 			offset += lo::maxMorphTargetOffsetSize;
 			result.submeshData = submeshComponents.getRenderData( uint16_t( ( loHash >> offset ) & lo::maxSubmeshDataMask ) );
 			offset += lo::maxSubmeshDataSize;
-			result.vertexStride = VkDeviceSize( ( loHash >> offset ) & lo::maxSubmeshStrideMask );
+			result.vertexStride = uint32_t( ( loHash >> offset ) & lo::maxSubmeshStrideMask );
 
 			return result;
 		}
@@ -229,41 +229,6 @@ namespace c3d
 				|| submeshData == SubmeshData::eTexcoords2
 				|| submeshData == SubmeshData::eTexcoords3;
 		}
-	}
-
-	//*********************************************************************************************
-
-	bool operator<( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs )noexcept
-	{
-		return lhs.hi < rhs.hi
-			|| ( ( lhs.hi == rhs.hi )
-				&& ( lhs.lo < rhs.lo ) );
-	}
-
-	//*********************************************************************************************
-
-	bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs )noexcept
-	{
-		return lhs.pass == rhs.pass
-			&& lhs.submesh == rhs.submesh
-			&& lhs.textures == rhs.textures
-			&& lhs.lightingModelId == rhs.lightingModelId
-			&& lhs.backgroundModelId == rhs.backgroundModelId
-			&& lhs.alphaFunc == rhs.alphaFunc
-			&& lhs.passLayerIndex == rhs.passLayerIndex
-			&& lhs.submeshDataBindings == rhs.submeshDataBindings
-			&& lhs.topology == rhs.topology
-			&& lhs.isStatic == rhs.isStatic
-			&& lhs.m_programFlags == rhs.m_programFlags
-			&& lhs.m_shaderFlags == rhs.m_shaderFlags;
-	}
-
-	//*********************************************************************************************
-
-	bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )noexcept
-	{
-		return lhs.morphTargetsOffset == rhs.morphTargetsOffset;
 	}
 
 	//*********************************************************************************************
@@ -456,19 +421,6 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )noexcept
-	{
-		return static_cast< PipelineHiHashDetails const & >( lhs ) == static_cast< PipelineHiHashDetails const & >( rhs )
-			&& static_cast< PipelineLoHashDetails const & >( lhs ) == static_cast< PipelineLoHashDetails const & >( rhs )
-			&& lhs.m_sceneFlags == rhs.m_sceneFlags
-			&& lhs.colourBlendMode == rhs.colourBlendMode
-			&& lhs.alphaBlendMode == rhs.alphaBlendMode
-			&& lhs.renderPassType == rhs.renderPassType
-			&& lhs.patchVertices == rhs.patchVertices;
-	}
-
-	//*********************************************************************************************
-
 	PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
 		, SubmeshComponentRegister const & submeshComponents
 		, PipelineFlags const & flags )noexcept
@@ -487,13 +439,21 @@ namespace c3d
 		auto const & submeshComponents = renderPass.getEngine()->getSubmeshComponentsRegister();
 		return getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
 			, submeshComponents
-			, renderPass.createPipelineFlags( pass
-				, pass.getTexturesMask()
+			, renderPass.createPipelineFlags( pass.getPassFlags()
 				, submeshComponents.getSubmeshComponentCombine( data.getComponentCombineID() )
+				, pass.getColourBlendMode()
+				, pass.getAlphaBlendMode()
+				, pass.getRenderPassTypeId()
+				, pass.getLightingModelId()
+				, renderPass.getScene().getBackgroundModelId()
+				, pass.getAlphaFunc()
+				, pass.getBlendAlphaFunc()
+				, pass.getTexturesMask()
 				, data.getProgramFlags( pass )
 				, SceneFlag::eNone
 				, data.getTopology()
 				, isFrontCulled
+				, pass.getIndex()
 				, {}
 				, data.hasRenderComponent() ? data.getRenderData() : nullptr
 				, 0u ) );
@@ -507,13 +467,21 @@ namespace c3d
 		auto const & submeshComponents = renderPass.getEngine()->getSubmeshComponentsRegister();
 		return getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
 			, submeshComponents
-			, renderPass.createPipelineFlags( pass
-				, pass.getTexturesMask()
+			, renderPass.createPipelineFlags( pass.getPassFlags()
 				, submeshComponents.getSubmeshComponentCombine( data.getComponentCombineID() )
+				, pass.getColourBlendMode()
+				, pass.getAlphaBlendMode()
+				, pass.getRenderPassTypeId()
+				, pass.getLightingModelId()
+				, renderPass.getScene().getBackgroundModelId()
+				, pass.getAlphaFunc()
+				, pass.getBlendAlphaFunc()
+				, pass.getTexturesMask()
 				, data.getProgramFlags()
 				, SceneFlag::eNone
 				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 				, isFrontCulled
+				, pass.getIndex()
 				, {}
 				, nullptr
 				, data.getVertexStride() ) );

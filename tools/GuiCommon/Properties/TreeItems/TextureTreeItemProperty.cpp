@@ -48,6 +48,8 @@ namespace GuiCommon
 					case 3:
 						result = 0xFF000000;
 						break;
+					default:
+						break;
 					}
 				}
 				else if ( componentsCount == 2u )
@@ -63,6 +65,8 @@ namespace GuiCommon
 					case 2:
 						result = 0xFFFF0000;
 						break;
+					default:
+						break;
 					}
 				}
 				else
@@ -74,6 +78,8 @@ namespace GuiCommon
 						break;
 					case 1:
 						result = 0xFFFFFF00;
+						break;
+					default:
 						break;
 					}
 				}
@@ -94,17 +100,17 @@ namespace GuiCommon
 		{
 		public:
 			static TextureTreeItemProperty::PropertiesArray submit( c3d::Pass & pass
-				, c3d::TextureConfiguration & config
+				, c3d::TextureConfiguration const & config
 				, c3d::PixelFormat format
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, wxPGProperty * mainContainer
-				, onEnabledChange onEnabled
-				, onMaskChange onChange )
+				, onEnabledChange const & onEnabled
+				, onMaskChange const & onChange )
 			{
 				TextureTreeItemProperty::PropertiesArray result;
 				UnitTreeGatherer vis{ pass, format, properties, grid, onEnabled, onChange };
-				auto & compsRegister = pass.getOwner()->getEngine()->getPassComponentsRegister();
+				auto const & compsRegister = pass.getOwner()->getEngine()->getPassComponentsRegister();
 
 				for ( auto & componentDesc : compsRegister )
 				{
@@ -165,13 +171,12 @@ namespace GuiCommon
 				return result;
 			}
 
-		private:
 			UnitTreeGatherer( c3d::Pass & pass
 				, c3d::PixelFormat format
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
-				, onEnabledChange onEnabled
-				, onMaskChange onChange )
+				, onEnabledChange const & onEnabled
+				, onMaskChange const & onChange )
 				: c3d::ConfigurationVisitor{}
 				, m_pass{ pass }
 				, m_format{ format }
@@ -182,6 +187,7 @@ namespace GuiCommon
 			{
 			}
 
+		private:
 			void visit( c3d::String const & name
 				, bool & value
 				, ConfigurationVisitor::ControlsList controls )override
@@ -307,9 +313,8 @@ namespace GuiCommon
 				, uint32_t componentsCount
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				doAddProperty( name
-					, name + _( " Map" )
-					, name + _( " Component" )
+				doSink( c3d::move( controls ) );
+				doAddProperty( name + _( " Component" )
 					, textureFlag
 					, configuration
 					, componentsCount );
@@ -319,12 +324,12 @@ namespace GuiCommon
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
 				doVisit( category );
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new UnitTreeGatherer{ m_pass
+				return c3d::makeRawUnique< UnitTreeGatherer >( m_pass
 					, m_format
 					, m_properties
 					, m_grid
 					, m_onEnabled
-					, m_onChange } );
+					, m_onChange );
 			}
 
 			void doVisit( wxString const & name )
@@ -344,9 +349,7 @@ namespace GuiCommon
 				m_compProps->isEnabled->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
 			}
 
-			void doAddProperty( wxString const & flagName
-				, wxString const & isName
-				, wxString const & compName
+			void doAddProperty( wxString const & compName
 				, c3d::PassComponentTextureFlag flag
 				, c3d::TextureFlagConfiguration const & configuration
 				, uint32_t componentsCount )
@@ -493,9 +496,10 @@ namespace GuiCommon
 
 	//*********************************************************************************************
 
-	TextureTreeItemProperty::TextureTreeItemProperty( bool editable
+	TextureTreeItemProperty::TextureTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -650,9 +654,8 @@ namespace GuiCommon
 				}
 				else if ( pass.hasComponent( compProps.component->getType() ) )
 				{
-					auto removed = pass.removeComponent( compProps.component->getType() );
-
-					if ( !removed.empty() )
+					if ( auto removed = pass.removeComponent( compProps.component->getType() );
+						!removed.empty() )
 					{
 						compProps.ownComponent = c3d::ptrRefCast< c3d::PassMapComponent >( removed.back() );
 						removeFlagConfiguration( m_configuration, compProps.configuration );
@@ -671,7 +674,7 @@ namespace GuiCommon
 				}
 
 			}
-			, [this]( wxVariant const & var
+			, [this]( wxVariant const &
 				, c3d::PassComponentTextureFlag flag
 				, uint32_t componentsCount )
 			{
@@ -682,7 +685,7 @@ namespace GuiCommon
 						return lookup->flag == flag;
 					} );
 				CU_Require( it != m_properties.end() );
-				auto & props = *it;
+				auto const & props = *it;
 				bool isEnabled = props->isEnabled->GetValue();
 				long components = props->components->GetValue();
 				props->configuration.componentsMask = textp::getMask( isEnabled, components, componentsCount );
@@ -700,7 +703,7 @@ namespace GuiCommon
 	{
 		auto & pass = *component->getOwner();
 
-		for ( auto dep : component->getDependencies() )
+		for ( auto const & dep : component->getDependencies() )
 		{
 			auto it = std::find_if( m_properties.begin()
 				, m_properties.end()

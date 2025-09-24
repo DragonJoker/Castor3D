@@ -15,7 +15,7 @@ namespace c3d
 		, String const & name
 		, ImageCreateParams const & params )
 	{
-		if ( params.mode == ImageCreateParams::eParam )
+		if ( params.mode == ImageCreateParams::Mode::eParam )
 		{
 			return makeResource< Image, String >( name
 				, Path{}
@@ -25,7 +25,7 @@ namespace c3d
 
 		auto & realCache = static_cast< ResourceCacheT< Image, String, ResourceCacheTraitsT< Image, String > > const & >( cache );
 
-		if ( params.mode == ImageCreateParams::eBuffer )
+		if ( params.mode == ImageCreateParams::Mode::eBuffer )
 		{
 			return makeResource< Image, String >( realCache.getLoader().load( name
 				, params.type

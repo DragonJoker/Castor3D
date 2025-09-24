@@ -29,7 +29,7 @@ namespace atmosphere_scattering
 
 	namespace cloudsres
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eCamera,
 			eAtmosphere,
@@ -48,22 +48,22 @@ namespace atmosphere_scattering
 			c3d::shader::Utils utils{ writer };
 
 			ATM_Camera( writer
-				, uint32_t( Bindings::eCamera )
+				, Bindings::eCamera
 				, 0u );
 			C3D_AtmosphereScattering( writer
-				, uint32_t( Bindings::eAtmosphere )
+				, Bindings::eAtmosphere
 				, 0u );
 			C3D_Clouds( writer
-				, uint32_t( Bindings::eClouds )
+				, Bindings::eClouds
 				, 0u );
 			auto skyMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("skyMap"
-				, uint32_t( Bindings::eMapSky )
+				, Bindings::eMapSky
 				, 0u );
 			auto sunMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("sunMap"
-				, uint32_t( Bindings::eMapSun )
+				, Bindings::eMapSun
 				, 0u );
 			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
-				, uint32_t( Bindings::eMapClouds )
+				, Bindings::eMapClouds
 				, 0u );
 
 			AtmosphereModel atmosphere{ writer
@@ -91,7 +91,7 @@ namespace atmosphere_scattering
 					, vec2( offsetX, -offsetY ) };  // bottom-right
 
 			auto gaussianBlur = writer.implementFunction< sdw::Vec4 >( "gaussianBlur"
-				, [&]( sdw::CombinedImage2DRgba32 const & tex
+				, [&writer, &kernel, &offsets]( sdw::CombinedImage2DRgba32 const & tex
 					, sdw::Vec2 const & uv )
 				{
 					auto col = writer.declLocale( "col"
@@ -108,10 +108,8 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "uv" } );
 
 			auto computeLighting = writer.implementFunction< sdw::Vec3 >( "computeLighting"
-				, [&]( c3d::shader::Ray const & ray
-					, sdw::Vec3 skyColor
-					, sdw::Vec3 sunColour
-					, sdw::Vec3 cloudsColor
+				, [&writer, &c3d_cloudsData]( sdw::Vec3 const & skyColor
+					, sdw::Vec3 const & cloudsColor
 					, sdw::Float const & skyBlendFactor
 					, sdw::Float const & cloudsDensity )
 				{
@@ -121,24 +119,23 @@ namespace atmosphere_scattering
 							, c3d_cloudsData.bottomColor()
 							, vec3( c3d_cloudsData.coverage() ) ) );
 					writer.returnStmt( mix( skyColor
-						, cloudsColor + ( skyBlendFactor * ( blendSkyColor ) )
+						, cloudsColor + ( skyBlendFactor * blendSkyColor )
 						, vec3( cloudsDensity ) ) );
 				}
-				, c3d::shader::InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "skyColor" }
-				, sdw::InVec3{ writer, "sunColour" }
 				, sdw::InVec3{ writer, "cloudsColor" }
 				, sdw::InFloat{ writer, "skyBlendFactor" }
 				, sdw::InFloat{ writer, "cloudsDensity" } );
 
-			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &skyMap, &sunMap, &atmosphere, &gaussianBlur, &targetSize
+				, &cloudsMap, &computeLighting, &c3d_cloudsData]( sdw::FragmentIn const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto texCoords = writer.declLocale( "texCoords"
 						, vec2( in.fragCoord.xy() ) / targetSize );
@@ -155,9 +152,7 @@ namespace atmosphere_scattering
 							, atmosphere.castRay( texCoords ) );
 						auto clouds = writer.declLocale( "clouds"
 							, gaussianBlur( cloudsMap, texCoords ) );
-						out.colour() = vec4( computeLighting( ray
-								, sky.rgb()
-								, sun.rgb()
+						out.colour() = vec4( computeLighting( sky.rgb()
 								, clouds.rgb()
 								, sky.a()
 								, clouds.a() )
@@ -204,12 +199,12 @@ namespace atmosphere_scattering
 					, runPass->getTimer() );
 				return runPass;
 			} );
-		cameraUbo.createPassBinding( pass, cloudsres::eCamera );
-		atmosphereUbo.createPassBinding( pass, cloudsres::eAtmosphere );
-		cloudsUbo.createPassBinding( pass, cloudsres::eClouds );
-		pass.addInputSampled( *sky.getSampledLastAttach(), cloudsres::eMapSky );
-		pass.addInputSampled( *sun.getSampledLastAttach(), cloudsres::eMapSun );
-		pass.addInputSampled( *clouds.getSampledLastAttach(), cloudsres::eMapClouds );
+		cameraUbo.createPassBinding( pass, cloudsres::Bindings::eCamera );
+		atmosphereUbo.createPassBinding( pass, cloudsres::Bindings::eAtmosphere );
+		cloudsUbo.createPassBinding( pass, cloudsres::Bindings::eClouds );
+		pass.addInputSampledT( *sky.getSampledLastAttach(), cloudsres::Bindings::eMapSky );
+		pass.addInputSampledT( *sun.getSampledLastAttach(), cloudsres::Bindings::eMapSun );
+		pass.addInputSampledT( *clouds.getSampledLastAttach(), cloudsres::Bindings::eMapClouds );
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 

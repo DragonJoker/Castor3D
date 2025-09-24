@@ -22,7 +22,6 @@ namespace ocean_fft
 	class GenerateNormalPass;
 	class OceanFFT;
 	class OceanUbo;
-	class ProcessFFTPass;
 
 	template< typename DistributionPassT, typename FrequencyPassT >
 	struct GenerateFFTPassT;
@@ -31,8 +30,7 @@ namespace ocean_fft
 
 	struct VkFFTConfig
 	{
-		VkFFTConfig( c3d::RenderDevice const & device
-			, c3d::Extent2D const & dimensions );
+		VkFFTConfig( c3d::RenderDevice const & device );
 
 		c3d::RenderDevice const & device;
 		ashes::FencePtr fence;

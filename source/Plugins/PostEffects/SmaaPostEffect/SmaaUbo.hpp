@@ -12,12 +12,12 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace smaa
 {
-	enum Idx : uint32_t
+	enum class Bindings : uint32_t
 	{
 		SmaaUboIdx,
 	};
@@ -35,32 +35,44 @@ namespace smaa
 	};
 
 	struct SmaaData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_SmaaData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec4Field< "rtMetrics" >
+			, sdw::FloatField< "threshold" >
+			, sdw::FloatField< "predicationThreshold" >
+			, sdw::FloatField< "predicationScale" >
+			, sdw::FloatField< "predicationStrength" >
+			, sdw::Vec4Field< "subsampleIndices" >
+			, sdw::Vec2Field< "searchTexSize" >
+			, sdw::Vec2Field< "searchTexPackedSize" >
+			, sdw::Vec2Field< "areaTexPixelSize" >
+			, sdw::FloatField< "localContrastAdaptationFactor" >
+			, sdw::IntField< "cornerRounding" >
+			, sdw::FloatField< "areaTexMaxDistance" >
+			, sdw::FloatField< "areaTexMaxDistanceDiag" >
+			, sdw::FloatField< "areaTexSubtexSize" >
+			, sdw::FloatField< "reprojectionWeightScale" >
+			, sdw::IntField< "maxSearchSteps" >
+			, sdw::IntField< "maxSearchStepsDiag" >
+			, sdw::IntField< "pad0" >
+			, sdw::IntField< "pad1" >
+			, sdw::IntField< "disableCornerDetection" >
+			, sdw::IntField< "disableDiagonalDetection" >
+			, sdw::IntField< "enableReprojection" >
+			, sdw::IntField< "pad2" > >
 	{
-	public:
+		SDW_DeclStructInstance( , SmaaData );
+
 		SmaaData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
-		SDW_DeclStructInstance( , SmaaData );
 
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	public:
-		// Struct members
 		sdw::Vec4 rtMetrics;
-		sdw::Vec4 predication;
-		sdw::Vec4 subsampleIndices;
-		sdw::Vec4 searchSizes;
-		sdw::Vec4 areaTexPixelSizeAndLocalContrast;
-		sdw::Vec4 areaTexSizesReprojWS;
-		sdw::IVec4 maxsSearchSteps;
-		sdw::IVec4 tweaks;
-
-		// Computed from members
 		sdw::Float threshold;
 		sdw::Float predicationThreshold;
 		sdw::Float predicationScale;
 		sdw::Float predicationStrength;
+		sdw::Vec4 subsampleIndices;
 		sdw::Vec2 searchTexSize;
 		sdw::Vec2 searchTexPackedSize;
 		sdw::Vec2 areaTexPixelSize;
@@ -77,10 +89,6 @@ namespace smaa
 		sdw::Int enableReprojection;
 		sdw::Float cornerRoundingNorm;
 		sdw::Float depthThreshold;
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
 	};
 
 	class SmaaUbo
@@ -99,8 +107,9 @@ namespace smaa
 		void cpuUpdate( c3d::Size const & renderSize
 			, SmaaConfig const & config );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			return m_ubo.createPassBinding( pass, binding );
 		}
@@ -129,7 +138,7 @@ namespace smaa
 #define C3D_Smaa( writer, binding, set )\
 	sdw::UniformBuffer smaaBuffer{ writer\
 		, smaa::SmaaUbo::Buffer\
-		, binding\
+		, uint32_t( binding )\
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\

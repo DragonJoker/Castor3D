@@ -402,8 +402,57 @@ namespace c3d
 		//!\~english The angle value	\~french La valeur de l'angle
 		Type m_radians;
 
-		template< typename T >
-		friend bool operator==( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
+		friend bool operator==( AngleT const & lhs, AngleT const & rhs )noexcept
+		{
+			return std::abs( lhs.radians() - rhs.radians() ) < std::numeric_limits< Type >::epsilon();
+		}
+
+		friend auto operator<=>( AngleT const & lhs, AngleT const & rhs )noexcept
+		{
+			return lhs.radians() <=> rhs.radians();
+		}
+
+		friend AngleT operator+( AngleT const & lhs, AngleT const & rhs )noexcept
+		{
+			AngleT result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		friend AngleT operator-( AngleT const & lhs, AngleT const & rhs )noexcept
+		{
+			AngleT result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		friend AngleT operator*( AngleT const & lhs, AngleT const & rhs )noexcept
+		{
+			AngleT result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		friend AngleT operator/( AngleT const & lhs, AngleT const & rhs )noexcept
+		{
+			AngleT result( lhs );
+			result /= rhs;
+			return result;
+		}
+
+		friend AngleT operator*( AngleT const & lhs, double rhs )noexcept
+		{
+			AngleT result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		friend AngleT operator/( AngleT const & lhs, double rhs )noexcept
+		{
+			AngleT result( lhs );
+			result /= rhs;
+			return result;
+		}
 	};
 	/**
 	 *\~english
@@ -517,44 +566,6 @@ namespace c3d
 	 *\param[in]	y, x	Les valeurs de la tangente
 	 */
 	static inline AngleT< double > atan2d( double y, double x );
-	/**
-	 *\~english
-	 *\name Comparison operators.
-	 *\~french
-	 *\name Opérateurs de comparaison.
-	 **/
-	/**@{*/
-	template< typename Type >
-	inline bool operator==( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return std::abs( lhs.radians() - rhs.radians() ) < std::numeric_limits< Type >::epsilon();
-	}
-
-	template< typename Type >
-	inline auto operator<=>( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return lhs.radians() <=> rhs.radians();
-	}
-	/**@}*/
-	/**
-	 *\~english
-	 *\name Arihmetic operators.
-	 *\~french
-	 *\name Opérateurs arithmétiques.
-	 **/
-	/**@{*/
-	template< typename Type >
-	inline AngleT< Type > operator+( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	template< typename Type >
-	inline AngleT< Type > operator-( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	template< typename Type >
-	inline AngleT< Type > operator*( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	template< typename Type >
-	inline AngleT< Type > operator/( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	template< typename Type >
-	inline AngleT< Type > operator*( AngleT< Type > const & lhs, double rhs )noexcept;
-	template< typename Type >
-	inline AngleT< Type > operator/( AngleT< Type > const & lhs, double rhs )noexcept;
 	/**@}*/
 
 	using Angle = AngleT< float >;

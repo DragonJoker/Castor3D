@@ -26,7 +26,7 @@ namespace CastorViewer
 		wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )override;
 
 	private:
-		MainFrame * m_mainFrame;
+		MainFrame * m_mainFrame{};
 		c3d::RawUniquePtr< wxLocale > m_locale;
 	};
 }

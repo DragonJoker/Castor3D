@@ -14,11 +14,11 @@ namespace c3d::shader
 	struct PrepassOutputT
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( , PrepassOutputT );
+
 		PrepassOutputT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
-
-		SDW_DeclStructInstance( , PrepassOutputT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint
@@ -35,11 +35,11 @@ namespace c3d::shader
 	struct ShadowsOutputT
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( , ShadowsOutputT );
+
 		ShadowsOutputT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
-
-		SDW_DeclStructInstance( , ShadowsOutputT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint

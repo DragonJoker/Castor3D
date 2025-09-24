@@ -29,7 +29,7 @@ namespace c3d
 		void doInitialise( uint32_t index );
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+			, uint32_t index )const;
 		uint32_t doGetPassIndex()const;
 		bool doIsEnabled()const;
 

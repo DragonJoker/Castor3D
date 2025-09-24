@@ -20,13 +20,15 @@ namespace c3d::shader
 		, sdw::UIntField< "skinningId" >
 		, sdw::UIntField< "pad" > >
 	{
+		SDW_DeclStructInstance( C3D_API, ObjectIds );
+
 		ObjectIds( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
-		
+
 		auto nodeId()const { return getMember< "nodeId" >(); }
 		auto morphingId()const { return getMember< "morphingId" >(); }
 		auto skinningId()const { return getMember< "skinningId" >(); }

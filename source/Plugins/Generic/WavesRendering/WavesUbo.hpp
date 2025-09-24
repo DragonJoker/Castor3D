@@ -25,7 +25,6 @@ namespace waves
 			, float pamplitude = {}
 			, float pspeed = {} )
 			: direction{ pdirection }
-			, pad0{}
 			, steepness{ psteepness }
 			, length{ plength }
 			, amplitude{ pamplitude }
@@ -33,12 +32,12 @@ namespace waves
 		{
 		}
 
-		c3d::Point3f direction;
-		float pad0;
-		float steepness;
-		float length;
-		float amplitude;
-		float speed;
+		c3d::Point3f direction{};
+		float pad0{};
+		float steepness{};
+		float length{};
+		float amplitude{};
+		float speed{};
 	};
 
 	struct WavesConfiguration
@@ -68,6 +67,8 @@ namespace waves
 			, sdw::FloatField< "amplitude" >
 			, sdw::FloatField< "speed" > >
 	{
+		SDW_DeclStructInstance( , Wave );
+
 		Wave( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
@@ -93,6 +94,8 @@ namespace waves
 			, sdw::FloatField< "dampeningFactor" >
 			, sdw::StructFieldArrayT< Wave, "waves", MaxWaves > >
 	{
+		SDW_DeclStructInstance( , WavesData );
+
 		WavesData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -111,6 +114,10 @@ namespace waves
 	{
 	private:
 		using Configuration = WavesConfiguration;
+		WavesUbo( WavesUbo const & ) = delete;
+		WavesUbo & operator=( WavesUbo const & ) = delete;
+		WavesUbo( WavesUbo && )noexcept = delete;
+		WavesUbo & operator=( WavesUbo && )noexcept = delete;
 
 	public:
 		explicit WavesUbo( c3d::RenderDevice const & device );

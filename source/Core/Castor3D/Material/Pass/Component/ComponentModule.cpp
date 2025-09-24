@@ -5,12 +5,6 @@
 
 namespace c3d
 {
-	bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept
-	{
-		return lhs.baseId == rhs.baseId
-			&& lhs.flags == rhs.flags;
-	}
-
 	bool hasAny( PassComponentCombine const & lhs
 		, PassComponentFlag rhs )noexcept
 	{

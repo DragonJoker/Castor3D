@@ -16,6 +16,7 @@ namespace GuiCommon
 	{
 	public:
 		ShaderEditor( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, bool canEdit
 			, StcContext & stcContext
 			, ShaderEntryPoint const & shader
@@ -29,7 +30,8 @@ namespace GuiCommon
 		void loadLanguage( ShaderLanguage language );
 
 	private:
-		void doInitialiseLayout( c3d::Engine * engine );
+		void doInitialiseLayout( c3d::Engine * engine
+			, ImagesLoader & imagesLoader );
 		void doCleanup();
 		void doListAvailableLanguages();
 

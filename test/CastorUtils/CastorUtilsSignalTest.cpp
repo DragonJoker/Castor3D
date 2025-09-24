@@ -16,9 +16,9 @@ namespace Testing
 
 	void CastorUtilsSignalTest::doRegisterTests()
 	{
-		doRegisterTest( "Creation", std::bind( &CastorUtilsSignalTest::Creation, this ) );
-		doRegisterTest( "Assignment", std::bind( &CastorUtilsSignalTest::Assignment, this ) );
-		doRegisterTest( "MultipleSignalConnectionAssignment", std::bind( &CastorUtilsSignalTest::MultipleSignalConnectionAssignment, this ) );
+		doRegisterTest( "Creation", [this](){ Creation(); } );
+		doRegisterTest( "Assignment", [this](){ Assignment(); } );
+		doRegisterTest( "MultipleSignalConnectionAssignment", [this](){ MultipleSignalConnectionAssignment(); } );
 	}
 
 	void CastorUtilsSignalTest::Creation()

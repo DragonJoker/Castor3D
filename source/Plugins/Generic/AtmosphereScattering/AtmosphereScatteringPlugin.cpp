@@ -29,7 +29,7 @@ extern "C"
 	C3D_AtmosphereScattering_API void getType( c3d::PluginType * type );
 	C3D_AtmosphereScattering_API void isDebug( int * value );
 	C3D_AtmosphereScattering_API void getName( char const ** name );
-	C3D_AtmosphereScattering_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_AtmosphereScattering_API void onLoad( c3d::Engine * engine );
 	C3D_AtmosphereScattering_API void onUnload( c3d::Engine * engine );
 
 	C3D_AtmosphereScattering_API void getRequiredVersion( c3d::Version * version )
@@ -52,7 +52,7 @@ extern "C"
 		*name = atmosphere_scattering::AtmosphereBackgroundModel::PluginName.c_str();
 	}
 
-	C3D_AtmosphereScattering_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
+	C3D_AtmosphereScattering_API void onLoad( c3d::Engine * engine )
 	{
 		engine->registerScatteringModel( { c3d::String{ atmosphere_scattering::AtmosphereScatteringModel::Name }
 			, atmosphere_scattering::AtmosphereScatteringModel::create } );

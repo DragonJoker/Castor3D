@@ -34,6 +34,8 @@ namespace c3d
 				, sdw::FloatField< "pad1" >
 				, sdw::FloatField< "pad2" > >
 		{
+			SDW_DeclStructInstance( C3D_API, ClustersData );
+
 			ClustersData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -97,7 +99,7 @@ namespace c3d
 		using Configuration = ClustersUboConfiguration;
 		C3D_API ClustersUbo( ClustersUbo const & rhs ) = delete;
 		C3D_API ClustersUbo & operator=( ClustersUbo const & rhs ) = delete;
-		C3D_API ClustersUbo( ClustersUbo && rhs )noexcept = default;
+		C3D_API ClustersUbo( ClustersUbo && rhs )noexcept = delete;
 		C3D_API ClustersUbo & operator=( ClustersUbo && rhs )noexcept = delete;
 
 		C3D_API explicit ClustersUbo( RenderDevice const & device );
@@ -113,8 +115,9 @@ namespace c3d
 			, float minDistance
 			, bool enableWaveIntrinsics );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			return m_ubo.createPassBinding( pass, binding );
 		}

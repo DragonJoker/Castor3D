@@ -67,7 +67,7 @@ namespace castortd
 				, *node
 				, game.getEnemyMesh() );
 
-			for ( auto & submesh : *geometry->getMesh() )
+			for ( auto const & submesh : *geometry->getMesh() )
 			{
 				geometry->setMaterial( *submesh, game.getEnemyMaterial() );
 			}
@@ -96,7 +96,7 @@ namespace castortd
 		return result;
 	}
 
-	void EnemySpawner::killEnemy( Game & game, EnemyPtr && enemy )
+	void EnemySpawner::killEnemy( EnemyPtr enemy )
 	{
 		enemy->getNode().setPosition( c3d::Point3f{ 0, -1000, 0 } );
 		m_enemiesCache.push_back( c3d::move( enemy ) );

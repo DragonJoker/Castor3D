@@ -17,16 +17,16 @@ namespace c3d
 		Matrix4x4f projMatrix;
 		Matrix4x4f viewProjMatrix;
 		Point2f splitDepthScale;
+
+	private:
+		friend bool operator==( DirectionalLightCascade const & lhs
+			, DirectionalLightCascade  const & rhs )noexcept
+		{
+			return lhs.viewMatrix == rhs.viewMatrix
+				&& lhs.projMatrix == rhs.projMatrix
+				&& lhs.splitDepthScale == rhs.splitDepthScale;
+		}
 	};
-
-	C3D_API bool operator==( DirectionalLightCascade const & lhs
-		, DirectionalLightCascade  const & rhs );
-
-	inline bool operator!=( DirectionalLightCascade const & lhs
-		, DirectionalLightCascade  const & rhs )
-	{
-		return !( lhs == rhs );
-	}
 
 	class DirectionalLight
 		: public LightCategory

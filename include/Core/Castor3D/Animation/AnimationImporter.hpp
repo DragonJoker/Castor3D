@@ -132,7 +132,7 @@ namespace c3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool importData( SceneNodeAnimation & animation
+		C3D_API static bool importData( SceneNodeAnimation & animation
 			, Path const & pathFile
 			, Parameters const & parameters );
 		/**
@@ -166,7 +166,7 @@ namespace c3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool importData( TextureAnimation & animation
+		C3D_API static bool importData( TextureAnimation & animation
 			, Path const & pathFile
 			, Parameters const & parameters );
 

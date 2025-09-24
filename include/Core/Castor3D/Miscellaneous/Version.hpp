@@ -79,80 +79,45 @@ namespace c3d
 		uint16_t m_major;
 		uint16_t m_minor;
 		uint16_t m_build;
-	};
-	/**
-	 *\~english
-	 *\brief		Equality operator.
-	 *\param[in]	a, b	The versions to compare.
-	 *\return		false if one version number is different from a to b.
-	 *\~french
-	 *\brief		Opérateur d'égalité.
-	 *\param[in]	a, b	Les versions à comparer.
-	 *\return		false si un numéro de version est différent entre a et b.
-	 */
-	C3D_API bool operator==( Version const & a, Version const & b );
-	/**
-	 *\~english
-	 *\brief		Difference operator.
-	 *\param[in]	a, b	The versions to compare.
-	 *\return		true if one version number is different from a to b.
-	 *\~french
-	 *\brief		Opérateur de différence.
-	 *\param[in]	a, b	Les versions à comparer.
-	 *\return		true si un numéro de version est différent entre a et b.
-	 */
-	C3D_API bool operator!=( Version const & a, Version const & b );
-	/**
-	 *\~english
-	 *\brief		Less than operator.
-	 *\param[in]	a, b	The versions to compare.
-	 *\return		true if a.major is less than b.major or if they are equal and a.minor is less than b.minor or if majors and minors are equal and a.build is less than b.build.
-	 *\~french
-	 *\brief		Opérateur inférieur.
-	 *\param[in]	a, b	Les versions à comparer.
-	 *\return		true si a.major est inférieur à b.major ou s'ils sont égaux et a.minor est inférieur à b.minor ou si majors et minors sont égaux et a.build est inférieur à b.build.
-	 */
-	C3D_API bool operator<( Version const & a, Version const & b );
-	/**
-	 *\~english
-	 *\brief		Less than operator.
-	 *\param[in]	a, b	The versions to compare.
-	 *\return		true if a.major is greater than b.major or if they are equal and a.minor is greater than b.minor or if majors and minors are equal and a.build is greater than b.build.
-	 *\~french
-	 *\brief		Opérateur inférieur.
-	 *\param[in]	a, b	Les versions à comparer.
-	 *\return		true si a.major est supérieur à b.major ou s'ils sont égaux et a.minor est supérieur à b.minor ou si majors et minors sont égaux et a.build est supérieur à b.build.
-	 */
-	C3D_API bool operator>( Version const & a, Version const & b );
-	/**
-	 *\~english
-	 *\brief		Less than operator.
-	 *\param[in]	a, b	The versions to compare.
-	 *\return		false if a.major is greater than b.major or if they are equal and a.minor is greater than b.minor or if majors and minors are equal and a.build is greater than b.build.
-	 *\~french
-	 *\brief		Opérateur inférieur.
-	 *\param[in]	a, b	Les versions à comparer.
-	 *\return		false si a.major est supérieur à b.major ou s'ils sont égaux et a.minor est supérieur à b.minor ou si majors et minors sont égaux et a.build est supérieur à b.build.
-	 */
-	C3D_API bool operator<=( Version const & a, Version const & b );
-	/**
-	 *\~english
-	 *\brief		Less than operator.
-	 *\param[in]	a, b	The versions to compare.
-	 *\return		false if a.major is less than b.major or if they are equal and a.minor is less than b.minor or if majors and minors are equal and a.build is less than b.build.
-	 *\~french
-	 *\brief		Opérateur inférieur.
-	 *\param[in]	a, b	Les versions à comparer.
-	 *\return		false si a.major est inférieur à b.major ou s'ils sont égaux et a.minor est inférieur à b.minor ou si majors et minors sont égaux et a.build est inférieur à b.build.
-	 */
-	C3D_API bool operator>=( Version const & a, Version const & b );
 
-	template< typename CharT >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Version const & version )
-	{
-		stream << version.getMajor() << "." << version.getMinor() << "." << version.getBuild();
-		return stream;
-	}
+		friend bool operator==( Version const & lhs, Version const & rhs )noexcept
+		{
+			return lhs.getMajor() == rhs.getMajor()
+				&& lhs.getMinor() == rhs.getMinor()
+				&& lhs.getBuild() == rhs.getBuild();
+		}
+
+		friend bool operator<( Version const & lhs, Version const & rhs )noexcept
+		{
+			return	lhs.getMajor() < rhs.getMajor()
+				|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() < rhs.getMinor() )
+				|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() == rhs.getMinor() && lhs.getBuild() < rhs.getBuild() );
+		}
+
+		friend bool operator>( Version const & lhs, Version const & rhs )noexcept
+		{
+			return	lhs.getMajor() > rhs.getMajor()
+				|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() > rhs.getMinor() )
+				|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() == rhs.getMinor() && lhs.getBuild() < rhs.getBuild() );
+		}
+
+		friend bool operator<=( Version const & lhs, Version const & rhs )noexcept
+		{
+			return !( lhs > rhs );
+		}
+
+		friend bool operator>=( Version const & lhs, Version const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		template< typename CharT >
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Version const & version )
+		{
+			stream << version.getMajor() << "." << version.getMinor() << "." << version.getBuild();
+			return stream;
+		}
+	};
 }
 
 #endif

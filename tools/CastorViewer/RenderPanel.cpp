@@ -68,14 +68,14 @@ namespace CastorViewer
 			return result;
 		}
 
-		static c3d::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > createTimers( wxWindow * window )
+		static c3d::Array< c3d::RawUniquePtr< wxTimer >, size_t( eTIMER_ID::COUNT ) > createTimers( wxWindow * window )
 		{
-			c3d::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > result;
+			c3d::Array< c3d::RawUniquePtr< wxTimer >, size_t( eTIMER_ID::COUNT ) > result;
 			result[0] = nullptr;
 
 			for ( int i = 1; i < int( eTIMER_ID::COUNT ); i++ )
 			{
-				result[size_t( i )] = new wxTimer( window, i );
+				result[size_t( i )] = c3d::makeRawUnique< wxTimer >( window, i );
 			}
 
 			return result;
@@ -160,16 +160,21 @@ namespace CastorViewer
 			} );
 		m_3dController = GuiCommon::I3DController::create( wxGetApp().getInternalName()
 			, listener->getFrameListener() );
+		if ( m_3dController )
+			m_3dController->initialise();
 	}
 
 	RenderPanel::~RenderPanel()
 	{
-		m_3dController.reset();
+		if ( m_3dController )
+		{
+			m_3dController->cleanup();
+			m_3dController.reset();
+		}
 
 		for ( size_t i = 1; i <= size_t( eTIMER_ID::MOVEMENT ); i++ )
 		{
-			delete m_timers[i];
-			m_timers[i] = nullptr;
+			m_timers[i].reset();
 		}
 
 		m_renderWindow.reset();
@@ -190,7 +195,7 @@ namespace CastorViewer
 			m_3dController->setCamera( nullptr );
 		}
 
-		for ( auto & [_, nodeState] : m_nodesStates )
+		for ( auto const & [_, nodeState] : m_nodesStates )
 			nodeState->stop();
 		m_nodesStates.clear();
 		m_camera = {};
@@ -202,7 +207,7 @@ namespace CastorViewer
 		c3d::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 
-	void RenderPanel::select( c3d::Geometry * geometry, c3d::Submesh const * submesh )
+	void RenderPanel::select( c3d::Geometry const * geometry, c3d::Submesh const * submesh )
 	{
 		if ( m_debugMeshManager )
 		{
@@ -210,7 +215,7 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::select( c3d::LightInstance * light )
+	void RenderPanel::select( c3d::LightInstance const * light )
 	{
 		if ( m_debugMeshManager )
 		{
@@ -448,7 +453,7 @@ namespace CastorViewer
 		wxGetApp().getMainFrame()->loadScene();
 	}
 
-	float RenderPanel::doTransformX( int x )
+	float RenderPanel::doTransformX( int x )const
 	{
 		auto result = float( x );
 		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
@@ -456,7 +461,7 @@ namespace CastorViewer
 		return result;
 	}
 
-	float RenderPanel::doTransformY( int y )
+	float RenderPanel::doTransformY( int y )const
 	{
 		auto result = float( y );
 		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
@@ -464,7 +469,7 @@ namespace CastorViewer
 		return result;
 	}
 
-	int RenderPanel::doTransformX( float x )
+	int RenderPanel::doTransformX( float x )const
 	{
 		auto result = int( x );
 		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
@@ -472,7 +477,7 @@ namespace CastorViewer
 		return result;
 	}
 
-	int RenderPanel::doTransformY( float y )
+	int RenderPanel::doTransformY( float y )const
 	{
 		auto result = int( y );
 		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
@@ -504,16 +509,14 @@ namespace CastorViewer
 			m_selectedGeometry = geometry;
 		}
 
-		if ( oldSubmesh != submesh )
+		if ( oldSubmesh != submesh
+			&& submesh )
 		{
-			if ( submesh )
-			{
-				m_selectedSubmesh = submesh;
+			m_selectedSubmesh = submesh;
 
-				if ( forwardToMain )
-				{
-					wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
-				}
+			if ( forwardToMain )
+			{
+				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
 			}
 		}
 
@@ -1069,31 +1072,29 @@ namespace CastorViewer
 		m_y = doTransformY( event.GetY() );
 
 		if ( !wxGetApp().getCastor()->fireMouseMove( c3d::Position{ int32_t( m_x ), int32_t( m_y ) }
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() )
+			&& m_currentState )
 		{
-			if ( m_currentState )
+			static float constexpr mult = 0.01f;
+			float deltaX = ( m_oldX - m_x ) * mult;
+			float deltaY = ( m_oldY - m_y ) * mult;
+
+			if ( event.ControlDown() )
 			{
-				static float constexpr mult = 0.01f;
-				float deltaX = ( m_oldX - m_x ) * mult;
-				float deltaY = ( m_oldY - m_y ) * mult;
+				deltaX = 0;
+			}
+			else if ( event.ShiftDown() )
+			{
+				deltaY = 0;
+			}
 
-				if ( event.ControlDown() )
-				{
-					deltaX = 0;
-				}
-				else if ( event.ShiftDown() )
-				{
-					deltaY = 0;
-				}
-
-				if ( m_mouseLeftDown )
-				{
-					m_currentState->addAngularVelocity( c3d::Point2f{ -deltaY, deltaX } );
-				}
-				else if ( m_mouseRightDown )
-				{
-					m_currentState->addScalarVelocity( c3d::Point3f{ deltaX, -deltaY, 0.0f } );
-				}
+			if ( m_mouseLeftDown )
+			{
+				m_currentState->addAngularVelocity( c3d::Point2f{ -deltaY, deltaX } );
+			}
+			else if ( m_mouseRightDown )
+			{
+				m_currentState->addScalarVelocity( c3d::Point3f{ deltaX, -deltaY, 0.0f } );
 			}
 		}
 

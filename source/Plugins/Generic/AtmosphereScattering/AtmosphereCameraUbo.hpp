@@ -42,6 +42,8 @@ namespace atmosphere_scattering
 			, sdw::IntField< "pad1" >
 			, sdw::IntField< "pad2" > >
 	{
+		SDW_DeclStructInstance( , CameraData );
+
 		CameraData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
@@ -60,6 +62,10 @@ namespace atmosphere_scattering
 	{
 	private:
 		using Configuration = CameraConfig;
+		CameraUbo( CameraUbo const & ) = delete;
+		CameraUbo & operator=( CameraUbo const & ) = delete;
+		CameraUbo( CameraUbo && )noexcept = delete;
+		CameraUbo & operator=( CameraUbo && )noexcept = delete;
 
 	public:
 		explicit CameraUbo( c3d::RenderDevice const & device
@@ -71,8 +77,9 @@ namespace atmosphere_scattering
 			, c3d::Point3f const & sunDirection
 			, c3d::Vector3f const & planetPosition );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			m_ubo.createPassBinding( pass, binding );
 		}
@@ -83,7 +90,8 @@ namespace atmosphere_scattering
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );

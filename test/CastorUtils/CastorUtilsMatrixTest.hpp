@@ -21,22 +21,22 @@ namespace Testing
 
 	private:
 		void doRegisterTests() override;
-		bool compare( c3d::Matrix3x3f const & lhs, c3d::Matrix3x3f const & rhs );
-		bool compare( c3d::Matrix3x3d const & lhs, c3d::Matrix3x3d const & rhs );
-		bool compare( c3d::Matrix4x4f const & lhs, c3d::Matrix4x4f const & rhs );
-		bool compare( c3d::Matrix4x4d const & lhs, c3d::Matrix4x4d const & rhs );
-		bool compare( c3d::Point3d const & lhs, c3d::Point3d const & rhs );
-		bool compare( c3d::Point3f const & lhs, c3d::Point3f const & rhs );
-		bool compare( c3d::Quaternion const & lhs, c3d::Quaternion const & rhs );
+		bool compare( c3d::Matrix3x3f const & lhs, c3d::Matrix3x3f const & rhs )const;
+		bool compare( c3d::Matrix3x3d const & lhs, c3d::Matrix3x3d const & rhs )const;
+		bool compare( c3d::Matrix4x4f const & lhs, c3d::Matrix4x4f const & rhs )const;
+		bool compare( c3d::Matrix4x4d const & lhs, c3d::Matrix4x4d const & rhs )const;
+		bool compare( c3d::Point3d const & lhs, c3d::Point3d const & rhs )const;
+		bool compare( c3d::Point3f const & lhs, c3d::Point3f const & rhs )const;
+		bool compare( c3d::Quaternion const & lhs, c3d::Quaternion const & rhs )const;
 
 #if defined( CASTOR_USE_GLM )
 
-		bool compare( c3d::Matrix4x4f const & lhs, glm::mat4x4 const & rhs );
-		bool compare( c3d::Matrix4x4d const & lhs, glm::mat4x4 const & rhs );
-		bool compare( c3d::Matrix3x3f const & lhs, glm::mat3x3 const & rhs );
-		bool compare( c3d::Matrix3x3d const & lhs, glm::mat3x3 const & rhs );
-		bool compare( c3d::Matrix2x2f const & lhs, glm::mat2x2 const & rhs );
-		bool compare( c3d::Matrix2x2d const & lhs, glm::mat2x2 const & rhs );
+		bool compare( c3d::Matrix4x4f const & lhs, glm::mat4x4 const & rhs )const;
+		bool compare( c3d::Matrix4x4d const & lhs, glm::mat4x4 const & rhs )const;
+		bool compare( c3d::Matrix3x3f const & lhs, glm::mat3x3 const & rhs )const;
+		bool compare( c3d::Matrix3x3d const & lhs, glm::mat3x3 const & rhs )const;
+		bool compare( c3d::Matrix2x2f const & lhs, glm::mat2x2 const & rhs )const;
+		bool compare( c3d::Matrix2x2d const & lhs, glm::mat2x2 const & rhs )const;
 
 #endif
 
@@ -70,10 +70,10 @@ namespace Testing
 		void Execute()override;
 
 	private:
-		void MatrixMultiplicationsCastor();
-		void MatrixMultiplicationsGlm();
-		void MatrixInversionCastor();
-		void MatrixInversionGlm();
+		void MatrixMultiplicationsCastor()const;
+		void MatrixMultiplicationsGlm()const;
+		void MatrixInversionCastor()const;
+		void MatrixInversionGlm()const;
 		void MatrixCopyCastor();
 		void MatrixCopyGlm();
 

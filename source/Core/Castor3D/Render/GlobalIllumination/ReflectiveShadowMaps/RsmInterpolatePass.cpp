@@ -35,7 +35,7 @@ namespace c3d
 {
 	namespace rsminterp
 	{
-		enum Idx : uint32_t
+		enum class Idx : uint32_t
 		{
 			RsmCfgUboIdx,
 			RsmSamplesIdx,
@@ -61,7 +61,7 @@ namespace c3d
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< sdw::Vec2 >( "vtx_texture", 0u );
 
-			writer.implementMain( [&]( sdw::VertexIn in
+			writer.implementMain( [&vtx_texture, &uv, &position]( sdw::VertexIn const &
 				, sdw::VertexOut out )
 				{
 					vtx_texture = uv;
@@ -72,28 +72,27 @@ namespace c3d
 
 		static ShaderPtr getDirectionalPixelShaderSource( LightType lightType
 			, uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+			, uint32_t height )
 		{
 			sdw::FragmentWriter writer;
 
 			// Shader inputs
-			C3D_RsmConfig( writer, RsmCfgUboIdx, 0u );
+			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
 			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
 				, "c3d_rsmSamples"
 				, writer.getTypesCache().getVec4F()
 				, sdw::type::MemoryLayout::eStd430
-				, RsmSamplesIdx
+				, uint32_t( Idx::RsmSamplesIdx )
 				, 0u
 				, true };
-			C3D_Camera( writer, CameraIdx, 0u );
-			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", GiMapIdx, 0u );
-			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", NmlMapIdx, 0u );
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
-			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", NmlOccMapIdx, 0u );
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eNormal ), RsmNormalsIdx, 0u );
-			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), RsmPositionIdx, 0u );
-			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), RsmFluxIdx, 0u );
+			C3D_Camera( writer, Idx::CameraIdx, 0u );
+			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", Idx::GiMapIdx, 0u );
+			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", Idx::NmlMapIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", Idx::DepthMapIdx, 0u );
+			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", Idx::NmlOccMapIdx, 0u );
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eNormal ), Idx::RsmNormalsIdx, 0u );
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), Idx::RsmPositionIdx, 0u );
+			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), Idx::RsmFluxIdx, 0u );
 
 			auto vtx_texture = writer.declInput< sdw::Vec2 >( "vtx_texture", 0u );
 
@@ -109,8 +108,8 @@ namespace c3d
 			ReflectiveShadowMapping rsm{ writer
 				, c3d_rsmSamples };
 
-			writer.implementMain( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementMain( [&]( sdw::FragmentIn const &
+				, sdw::FragmentOut const & )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -165,28 +164,27 @@ namespace c3d
 
 		static ShaderPtr getSpotPixelShaderSource( LightType lightType
 			, uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+			, uint32_t height )
 		{
 			sdw::FragmentWriter writer;
 
 			// Shader inputs
-			C3D_RsmConfig( writer, RsmCfgUboIdx, 0u );
+			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
 			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
 				, "c3d_rsmSamples"
 				, writer.getTypesCache().getVec4F()
 				, sdw::type::MemoryLayout::eStd430
-				, RsmSamplesIdx
+				, uint32_t( Idx::RsmSamplesIdx )
 				, 0u
 				, true };
-			C3D_Camera( writer, CameraIdx, 0u );
-			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", GiMapIdx, 0u );
-			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", NmlMapIdx, 0u );
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
-			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", NmlOccMapIdx, 0u );
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eNormal ), RsmNormalsIdx, 0u );
-			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), RsmPositionIdx, 0u );
-			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), RsmFluxIdx, 0u );
+			C3D_Camera( writer, Idx::CameraIdx, 0u );
+			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", Idx::GiMapIdx, 0u );
+			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", Idx::NmlMapIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", Idx::DepthMapIdx, 0u );
+			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", Idx::NmlOccMapIdx, 0u );
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eNormal ), Idx::RsmNormalsIdx, 0u );
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), Idx::RsmPositionIdx, 0u );
+			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), Idx::RsmFluxIdx, 0u );
 
 			auto vtx_texture = writer.declInput< sdw::Vec2 >( "vtx_texture", 0u );
 
@@ -197,13 +195,13 @@ namespace c3d
 			shader::Utils utils{ writer };
 
 			shader::ShadowsBuffer shadows{ writer
-				, Idx::ShadowsIdx
+				, uint32_t( Idx::ShadowsIdx )
 				, 0u };
 			ReflectiveShadowMapping rsm{ writer
 				, c3d_rsmSamples };
 
-			writer.implementMain( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementMain( [&]( sdw::FragmentIn const &
+				, sdw::FragmentOut const & )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -260,28 +258,27 @@ namespace c3d
 
 		static ShaderPtr getPointPixelShaderSource( LightType lightType
 			, uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+			, uint32_t height )
 		{
 			sdw::FragmentWriter writer;
 
 			// Shader inputs
-			C3D_RsmConfig( writer, RsmCfgUboIdx, 0u );
+			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
 			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
 				, "c3d_rsmSamples"
 				, writer.getTypesCache().getVec4F()
 				, sdw::type::MemoryLayout::eStd430
-				, RsmSamplesIdx
+				, uint32_t( Idx::RsmSamplesIdx )
 				, 0u
 				, true };
-			C3D_Camera( writer, CameraIdx, 0u );
-			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", GiMapIdx, 0u );
-			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", NmlMapIdx, 0u );
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
-			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", NmlOccMapIdx, 0u );
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImgCubeArrayRgba32 >( getTextureName( lightType, SmTexture::eNormal ), RsmNormalsIdx, 0u );
-			auto c3d_rsmPositionMap = writer.declCombinedImg< FImgCubeArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), RsmPositionIdx, 0u );
-			auto c3d_rsmFluxMap = writer.declCombinedImg< FImgCubeArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), RsmFluxIdx, 0u );
+			C3D_Camera( writer, Idx::CameraIdx, 0u );
+			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", uint32_t( Idx::GiMapIdx ), 0u );
+			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", uint32_t( Idx::NmlMapIdx ), 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( Idx::DepthMapIdx ), 0u );
+			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", uint32_t( Idx::NmlOccMapIdx ), 0u );
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImgCubeArrayRgba32 >( getTextureName( lightType, SmTexture::eNormal ), uint32_t( Idx::RsmNormalsIdx ), 0u );
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImgCubeArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), uint32_t( Idx::RsmPositionIdx ), 0u );
+			auto c3d_rsmFluxMap = writer.declCombinedImg< FImgCubeArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), uint32_t( Idx::RsmFluxIdx ), 0u );
 
 			auto vtx_texture = writer.declInput< sdw::Vec2 >( "vtx_texture", 0u );
 
@@ -297,8 +294,8 @@ namespace c3d
 			ReflectiveShadowMapping rsm{ writer
 				, c3d_rsmSamples };
 
-			writer.implementMain( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementMain( [&]( sdw::FragmentIn const &
+				, sdw::FragmentOut const & )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -331,8 +328,7 @@ namespace c3d
 					{
 						auto shadowData = writer.declLocale( "shadowData"
 							, shadows.getPointShadows( 0_i ) );
-						pxl_rsmGI = rsm.point( shadowData
-							, shadowData.position().xyz()
+						pxl_rsmGI = rsm.point( shadowData.position().xyz()
 							, wsPosition
 							, wsNormal
 							, c3d_rsmConfigData );
@@ -345,17 +341,16 @@ namespace c3d
 
 		static std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType
 			, uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+			, uint32_t height )
 		{
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return getDirectionalPixelShaderSource( lightType, width, height, renderSystem );
+				return getDirectionalPixelShaderSource( lightType, width, height );
 			case LightType::eSpot:
-				return getSpotPixelShaderSource( lightType, width, height, renderSystem );
+				return getSpotPixelShaderSource( lightType, width, height );
 			case LightType::ePoint:
-				return getPointPixelShaderSource( lightType, width, height, renderSystem );
+				return getPointPixelShaderSource( lightType, width, height );
 			default:
 				CU_Failure( "Unexpected LightType" );
 				return nullptr;
@@ -391,36 +386,36 @@ namespace c3d
 		, Texture & dst )
 		: Named{ "RsmInterpolate" }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rsminterp::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsminterp::getPixelProgram( lightType, gi.getExtent().width, gi.getExtent().height , device.renderSystem) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsminterp::getPixelProgram( lightType, gi.getExtent().width, gi.getExtent().height ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
 		auto & pass = graph.createPass( getName()
-			, [this, &device, size]( crg::FramePass const & pass
+			, [this, &device, size]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
-				auto result = makeRawUnique< crg::RenderQuad >( pass
+				auto result = makeRawUnique< crg::RenderQuad >( framePass
 					, context
-					, graph
+					, runGraph
 					, crg::ru::Config{ 1u, false }
 					, rsminterp::getConfig( { size.width, size.height }
 						, m_stages ) );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/RsmInterpolate"
+				device.renderSystem.getEngine()->registerTimer( runGraph.getName() + "/RsmInterpolate"
 					, result->getTimer() );
 				return result;
 			} );
-		rsmConfigUbo.createPassBinding( pass, rsminterp::RsmCfgUboIdx );
-		pass.addInputStorageBuffer( rsmSamplesSsbo.getBuffer().bufferViewId, rsminterp::RsmSamplesIdx );
-		cameraUbo.createPassBinding( pass, rsminterp::CameraIdx );
-		shadowBuffer.createPassBinding( pass, rsminterp::ShadowsIdx );
-		pass.addInputSampled( *gi.getSampledLastAttach(), rsminterp::GiMapIdx );
-		pass.addInputSampled( *nml.getSampledLastAttach(), rsminterp::NmlMapIdx );
-		pass.addInputSampledImage( depthObj.getSampledViewId(), rsminterp::DepthMapIdx );
-		pass.addInputSampledImage( nmlOcc.getSampledViewId(), rsminterp::NmlOccMapIdx );
-		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eNormal ), rsminterp::RsmNormalsIdx );
-		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::ePosition ), rsminterp::RsmPositionIdx );
-		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eFlux ), rsminterp::RsmFluxIdx );
+		rsmConfigUbo.createPassBinding( pass, rsminterp::Idx::RsmCfgUboIdx );
+		pass.addInputStorageBufferT( rsmSamplesSsbo.getBuffer().bufferViewId, rsminterp::Idx::RsmSamplesIdx );
+		cameraUbo.createPassBinding( pass, rsminterp::Idx::CameraIdx );
+		shadowBuffer.createPassBinding( pass, rsminterp::Idx::ShadowsIdx );
+		pass.addInputSampledT( *gi.getSampledLastAttach(), rsminterp::Idx::GiMapIdx );
+		pass.addInputSampledT( *nml.getSampledLastAttach(), rsminterp::Idx::NmlMapIdx );
+		pass.addInputSampledImageT( depthObj.getSampledViewId(), rsminterp::Idx::DepthMapIdx );
+		pass.addInputSampledImageT( nmlOcc.getSampledViewId(), rsminterp::Idx::NmlOccMapIdx );
+		pass.addInputSampledImageT( smResult.getSampledViewId( SmTexture::eNormal ), rsminterp::Idx::RsmNormalsIdx );
+		pass.addInputSampledImageT( smResult.getSampledViewId( SmTexture::ePosition ), rsminterp::Idx::RsmPositionIdx );
+		pass.addInputSampledImageT( smResult.getSampledViewId( SmTexture::eFlux ), rsminterp::Idx::RsmFluxIdx );
 		dst.setLastAttach( pass.addInOutColourTarget( *dst.getLastAttach()
 			, crg::PipelineColorBlendAttachmentState{ VK_TRUE
 			, BlendFactor::eOne, BlendFactor::eOne, BlendOp::eAdd
@@ -428,7 +423,7 @@ namespace c3d
 			, ColorComponentFlags::eR | ColorComponentFlags::eG | ColorComponentFlags::eB | ColorComponentFlags::eA } ) );
 	}
 
-	void RsmInterpolatePass::accept( ConfigurationVisitorBase & visitor )
+	void RsmInterpolatePass::accept( ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

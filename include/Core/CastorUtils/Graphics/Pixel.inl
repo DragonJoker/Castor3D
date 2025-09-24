@@ -10,7 +10,7 @@ namespace c3d
 	{
 		using LhsPixel = Pixel< FT >;
 
-		static void add( LhsPixel & lhs, LhsPixel const & rhs )
+		static void add( LhsPixel & lhs, LhsPixel const & rhs )noexcept
 		{
 			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
@@ -18,14 +18,14 @@ namespace c3d
 			}
 		}
 
-		static void subtract( LhsPixel & lhs, LhsPixel const & rhs )
+		static void subtract( LhsPixel & lhs, LhsPixel const & rhs )noexcept
 		{
 			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				lhs[i] -= rhs[i];
 			}
 		}
-		static void multiply( LhsPixel & lhs, LhsPixel const & rhs )
+		static void multiply( LhsPixel & lhs, LhsPixel const & rhs )noexcept
 		{
 			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
@@ -33,7 +33,7 @@ namespace c3d
 			}
 		}
 
-		static void divide( LhsPixel & lhs, LhsPixel const & rhs )
+		static void divide( LhsPixel & lhs, LhsPixel const & rhs )noexcept
 		{
 			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
@@ -41,7 +41,7 @@ namespace c3d
 			}
 		}
 
-		static void assign( LhsPixel & lhs, LhsPixel const & rhs )
+		static void assign( LhsPixel & lhs, LhsPixel const & rhs )noexcept
 		{
 			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
@@ -49,7 +49,7 @@ namespace c3d
 			}
 		}
 
-		static bool equals( LhsPixel const & lhs, LhsPixel const & rhs )
+		static bool equals( LhsPixel const & lhs, LhsPixel const & rhs )noexcept
 		{
 			bool result = true;
 
@@ -68,37 +68,37 @@ namespace c3d
 		using LhsPixel = Pixel< FT >;
 		using RhsPixel = Pixel< FU >;
 
-		static void add( LhsPixel & lhs, RhsPixel const & rhs )
+		static void add( LhsPixel & lhs, RhsPixel const & rhs )noexcept
 		{
 			LhsPixel lhsTRhs{ rhs };
 			PxOperators< FT, FT >::add( lhs, lhsTRhs );
 		}
 
-		static void subtract( LhsPixel & lhs, RhsPixel const & rhs )
+		static void subtract( LhsPixel & lhs, RhsPixel const & rhs )noexcept
 		{
 			LhsPixel lhsTRhs{ rhs };
 			PxOperators< FT, FT >::subtract( lhs, lhsTRhs );
 		}
 
-		static void multiply( LhsPixel & lhs, RhsPixel const & rhs )
+		static void multiply( LhsPixel & lhs, RhsPixel const & rhs )noexcept
 		{
 			LhsPixel lhsTRhs{ rhs };
 			PxOperators< FT, FT >::multiply( lhs, lhsTRhs );
 		}
 
-		static void divide( LhsPixel & lhs, RhsPixel const & rhs )
+		static void divide( LhsPixel & lhs, RhsPixel const & rhs )noexcept
 		{
 			LhsPixel lhsTRhs{ rhs };
 			PxOperators< FT, FT >::divide( lhs, lhsTRhs );
 		}
 
-		static void assign( LhsPixel & lhs, RhsPixel const & rhs )
+		static void assign( LhsPixel & lhs, RhsPixel const & rhs )noexcept
 		{
 			LhsPixel lhsTRhs{ rhs };
 			PxOperators< FT, FT >::assign( lhs, lhsTRhs );
 		}
 
-		static bool equals( LhsPixel const & lhs, RhsPixel const & rhs )
+		static bool equals( LhsPixel const & lhs, RhsPixel const & rhs )noexcept
 		{
 			LhsPixel lhsTRhs{ rhs };
 			return PxOperators< FT, FT >::equals( lhs, lhsTRhs );
@@ -226,7 +226,7 @@ namespace c3d
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT > & Pixel< FT >::operator+=( Pixel< FU > const & rhs )
+	Pixel< FT > & Pixel< FT >::operator+=( Pixel< FU > const & rhs )noexcept
 	{
 		PxOperators< FT, FU >::add( *this, rhs );
 		return *this;
@@ -234,7 +234,7 @@ namespace c3d
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT > & Pixel< FT >::operator-=( Pixel< FU > const & rhs )
+	Pixel< FT > & Pixel< FT >::operator-=( Pixel< FU > const & rhs )noexcept
 	{
 		PxOperators< FT, FU >::subtract( *this, rhs );
 		return *this;
@@ -242,7 +242,7 @@ namespace c3d
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT > & Pixel< FT >::operator/=( Pixel< FU > const & rhs )
+	Pixel< FT > & Pixel< FT >::operator/=( Pixel< FU > const & rhs )noexcept
 	{
 		PxOperators< FT, FU >::divide( *this, rhs );
 		return *this;
@@ -250,7 +250,7 @@ namespace c3d
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT > & Pixel< FT >::operator*=( Pixel< FU > const & rhs )
+	Pixel< FT > & Pixel< FT >::operator*=( Pixel< FU > const & rhs )noexcept
 	{
 		PxOperators< FT, FU >::multiply( *this, rhs );
 		return *this;
@@ -337,41 +337,9 @@ namespace c3d
 	//*********************************************************************************************
 
 	template < PixelFormat FT, PixelFormat FU >
-	bool operator==( Pixel< FT > const & lhs, Pixel< FU > const & rhs )
+	bool operator==( Pixel< FT > const & lhs, Pixel< FU > const & rhs )noexcept
 	{
 		return PxOperators< FT, FU >::equals( lhs, rhs );
-	}
-
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator+( Pixel< FT > const & lhs, Pixel< FU > const & rhs )
-	{
-		Pixel< FT > result{ lhs };
-		result += rhs;
-		return result;
-	}
-
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator-( Pixel< FT > const & lhs, Pixel< FU > const & rhs )
-	{
-		Pixel< FT > result{ lhs };
-		result -= rhs;
-		return result;
-	}
-
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator/( Pixel< FT > const & lhs, Pixel< FU > const & rhs )
-	{
-		Pixel< FT > result{ lhs };
-		result /= rhs;
-		return result;
-	}
-
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator*( Pixel< FT > const & lhs, Pixel< FU > const & rhs )
-	{
-		Pixel< FT > result{ lhs };
-		result *= rhs;
-		return result;
 	}
 
 	//*********************************************************************************************

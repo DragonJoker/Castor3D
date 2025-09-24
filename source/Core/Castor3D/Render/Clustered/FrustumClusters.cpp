@@ -7,11 +7,9 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/AssignLightsToClusters.hpp"
 #include "Castor3D/Render/Clustered/BuildLightsBVH.hpp"
-#include "Castor3D/Render/Clustered/ClustersMask.hpp"
 #include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
-#include "Castor3D/Render/Clustered/FindUniqueClusters.hpp"
 #include "Castor3D/Render/Clustered/MergeSortLights.hpp"
 #include "Castor3D/Render/Clustered/BucketSortLights.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
@@ -165,7 +163,6 @@ namespace c3d
 		: m_device{ device }
 		, m_camera{ camera }
 		, m_config{ config }
-		, m_dimensions{ 32u, 16u, 64u }
 		, m_clusterSize{ m_clustersDirty, Point2ui{} }
 		, m_cameraProjection{ m_clustersDirty, Matrix4x4f{} }
 		, m_cameraView{ m_clustersDirty, Matrix4x4f{} }
@@ -249,7 +246,7 @@ namespace c3d
 		}
 	}
 
-	void FrustumClusters::updateDebug( DebugDrawer & drawer )
+	void FrustumClusters::updateDebug( DebugDrawer & drawer )const
 	{
 		if ( m_config.debugDisplay.value() == ClusterDebugDisplay::eClustersAABB )
 		{
@@ -300,7 +297,6 @@ namespace c3d
 	}
 
 	void FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph
-		, RenderTechnique & technique
 		, RenderUbo const & renderUbo )
 	{
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
@@ -342,7 +338,7 @@ namespace c3d
 
 		if ( m_displayLightsAABBProgram.empty() )
 		{
-			createDisplayLightsAABBProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+			createDisplayLightsAABBProgram( m_device, cameraUbo, m_clustersCameraUbo
 				, m_displayLightsAABBProgram
 				, m_displayLightsAABBBindings
 				, m_displayLightsAABBWrites
@@ -351,7 +347,7 @@ namespace c3d
 
 		if ( m_displayPointLightsBVHProgram.empty() )
 		{
-			createDisplayPointLightsBVHProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+			createDisplayPointLightsBVHProgram( m_device, cameraUbo, m_clustersCameraUbo
 				, m_displayPointLightsBVHProgram
 				, m_displayPointLightsBVHBindings
 				, m_displayPointLightsBVHWrites
@@ -360,7 +356,7 @@ namespace c3d
 
 		if ( m_displaySpotLightsBVHProgram.empty() )
 		{
-			createDisplaySpotLightsBVHProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+			createDisplaySpotLightsBVHProgram( m_device, cameraUbo, m_clustersCameraUbo
 				, m_displaySpotLightsBVHProgram
 				, m_displaySpotLightsBVHBindings
 				, m_displaySpotLightsBVHWrites

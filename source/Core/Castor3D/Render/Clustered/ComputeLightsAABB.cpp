@@ -30,7 +30,7 @@ namespace c3d
 
 	namespace cptlgtb
 	{
-		enum BindingPoints
+		enum class Bindings
 		{
 			eCamera,
 			eClusters,
@@ -46,20 +46,20 @@ namespace c3d
 
 			// Inputs
 			C3D_Camera( writer
-				, eCamera
+				, Bindings::eCamera
 				, 0u );
 			C3D_Clusters( writer
-				, eClusters
+				, Bindings::eClusters
 				, 0u );
 			shader::LightsBuffer lights{ writer
-				, eLights
+				, uint32_t( Bindings::eLights )
 				, 0u };
 			C3D_AllLightsAABB( writer
-				, eAllLightsAABB
+				, Bindings::eAllLightsAABB
 				, 0u );
 
 			auto loadPointLightAABB = writer.implementFunction< shader::AABB >( "loadPointLightAABB"
-				, [&]( sdw::UInt const & lightIndex )
+				, [&writer, &lights, c3d_cameraData]( sdw::UInt const & lightIndex )
 				{
 					auto lightOffset = writer.declLocale( "lightOffset"
 						, lights.getDirectionalsEnd() + lightIndex * PointLightInstance::LightDataComponents );
@@ -86,7 +86,7 @@ namespace c3d
 				, sdw::InUInt{ writer, "lightIndex" } );
 
 			auto getConeAABB = writer.implementFunction< shader::AABB >( "getConeAABB"
-				, [&]( sdw::Vec3 const & vsApex
+				, [&writer]( sdw::Vec3 const & vsApex
 					, sdw::Vec3 const & vsBase
 					, sdw::Float const & fBaseRadius )
 				{
@@ -103,7 +103,7 @@ namespace c3d
 				, sdw::InFloat{ writer, "fBaseRadius" } );
 
 			auto loadSpotLightAABB = writer.implementFunction< shader::AABB >( "loadSpotLightAABB"
-				, [&]( sdw::UInt const & lightIndex )
+				, [&writer, &lights, &c3d_cameraData, &getConeAABB]( sdw::UInt const & lightIndex )
 				{
 					auto lightOffset = writer.declLocale( "lightOffset"
 						, lights.getPointsEnd() + lightIndex * SpotLightInstance::LightDataComponents );
@@ -167,7 +167,7 @@ namespace c3d
 				, sdw::InUInt{ writer, "lightIndex" } );
 
 			writer.implementMainT< sdw::VoidT >( 1024u, 1u, 1u
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &loadPointLightAABB, &c3d_allLightsAABB, &loadSpotLightAABB, &c3d_clustersData]( sdw::ComputeIn const & in )
 				{
 					// First compute point lights AABB.
 					sdwIF( writer, in.globalInvocationID.x() < c3d_clustersData.pointLightCount() )
@@ -198,8 +198,7 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, crg::cp::Config config
-				, ClustersConfig const & clustersConfig )
+				, crg::cp::Config config )
 				: crg::ComputePass{framePass
 					, context
 					, graph
@@ -241,7 +240,7 @@ namespace c3d
 
 	namespace dsplgtb
 	{
-		enum BindingPoints
+		enum class Bindings
 		{
 			eMainCamera,
 			eClustersCamera,
@@ -254,14 +253,14 @@ namespace c3d
 
 			C3D_CameraNamed( writer
 				, Main
-				, eMainCamera
+				, Bindings::eMainCamera
 				, 0u );
 			C3D_CameraNamed( writer
 				, Clusters
-				, eClustersCamera
+				, Bindings::eClustersCamera
 				, 0u );
 			C3D_AllLightsAABB( writer
-				, eLightsAABB
+				, Bindings::eLightsAABB
 				, 0u );
 
 			auto colorPalette = writer.declConstantArray( "colorPalette"
@@ -274,8 +273,9 @@ namespace c3d
 					, vec4( 1.00_f, 1.00_f, 0.25_f, 1.0_f )
 					, vec4( 1.00_f, 1.00_f, 1.00_f, 1.0_f ) } );
 
-			writer.implementEntryPointT< shader::Position4FT, shader::Colour4FT >( [&writer, &c3d_cameraDataMain, &c3d_cameraDataClusters, &c3d_allLightsAABB, &colorPalette]( sdw::VertexInT< shader::Position4FT > const & in
-				, sdw::VertexOutT< shader::Colour4FT > out )
+			writer.implementEntryPointT< shader::Position4FT, shader::Colour4FT >( [&writer, &c3d_cameraDataMain, &c3d_cameraDataClusters, &c3d_allLightsAABB
+				, &colorPalette]( sdw::VertexInT< shader::Position4FT > const & in
+					, sdw::VertexOutT< shader::Colour4FT > out )
 				{
 					auto aabb = writer.declLocale( "aabb"
 						, c3d_allLightsAABB[in.instanceIndex] );
@@ -319,21 +319,19 @@ namespace c3d
 				auto result = makeRawUnique< cptlgtb::FramePass >( framePass, context, runGraph, device
 					, crg::cp::Config{}
 						.groupCountX( MaxLightsCount / 1024u )
-						.enabled( &clusters.needsClustersUpdate() )
-					, clusters.getConfig() );
+						.enabled( &clusters.needsClustersUpdate() ) );
 				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		clustersCameraUbo.createPassBinding( pass, cptlgtb::eCamera );
-		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::eClusters );
+		clustersCameraUbo.createPassBinding( pass, cptlgtb::Bindings::eCamera );
+		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::Bindings::eClusters );
 		auto const & lights = clusters.getCamera().getScene()->getLightCache();
-		lights.createPassBinding( pass, cptlgtb::eLights );
-		allLightsAABBB.setLastAttach( pass.addClearableOutputStorageBuffer( allLightsAABBB.bufferViewId, uint32_t( cptlgtb::eAllLightsAABB ) ) );
+		lights.createPassBindingT( pass, cptlgtb::Bindings::eLights );
+		allLightsAABBB.setLastAttach( pass.addClearableOutputStorageBuffer( allLightsAABBB.bufferViewId, uint32_t( cptlgtb::Bindings::eAllLightsAABB ) ) );
 	}
 
 	void createDisplayLightsAABBProgram( RenderDevice const & device
-		, FrustumClusters const & clusters
 		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
@@ -344,15 +342,15 @@ namespace c3d
 		ProgramModule programModule{ "LightsAABB", dsplgtb::createDebugDisplayShader( device ) };
 		program = makeProgramStates( device, programModule );
 
-		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
-		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
-		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eLightsAABB, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		c3d::addDescriptorSetLayoutBindingT( bindings, dsplgtb::Bindings::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+		c3d::addDescriptorSetLayoutBindingT( bindings, dsplgtb::Bindings::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+		c3d::addDescriptorSetLayoutBindingT( bindings, dsplgtb::Bindings::eLightsAABB, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
 
-		writes.emplace_back( dsplgtb::eMainCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+		writes.emplace_back( uint32_t( dsplgtb::Bindings::eMainCamera ), 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
-		writes.emplace_back( dsplgtb::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+		writes.emplace_back( uint32_t( dsplgtb::Bindings::eClustersCamera ), 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
-		writes.emplace_back( dsplgtb::eLightsAABB, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+		writes.emplace_back( uint32_t( dsplgtb::Bindings::eLightsAABB ), 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ allLightsAABBB.getBuffer(), 0u, allLightsAABBB.getSize() } } );
 	}
 

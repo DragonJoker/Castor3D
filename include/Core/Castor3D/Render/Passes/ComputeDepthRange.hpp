@@ -51,7 +51,8 @@ namespace c3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		void doRecordInto( VkCommandBuffer commandBuffer )const;
+		void doRecordInto( crg::RecordContext const & context
+			, VkCommandBuffer commandBuffer )const;
 
 	private:
 		RenderDevice const & m_device;

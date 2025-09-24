@@ -13,9 +13,9 @@ namespace Testing
 
 	void CastorUtilsThreadPoolTest::doRegisterTests()
 	{
-		doRegisterTest( "CastorUtilsWorkerThreadTest::Underload", std::bind( &CastorUtilsThreadPoolTest::Underload, this ) );
-		doRegisterTest( "CastorUtilsWorkerThreadTest::Exactload", std::bind( &CastorUtilsThreadPoolTest::Exactload, this ) );
-		doRegisterTest( "CastorUtilsWorkerThreadTest::Overload", std::bind( &CastorUtilsThreadPoolTest::Overload, this ) );
+		doRegisterTest( "Underload", [this](){ Underload(); } );
+		doRegisterTest( "Exactload", [this](){ Exactload(); } );
+		doRegisterTest( "Overload", [this](){ Overload(); } );
 	}
 
 	void CastorUtilsThreadPoolTest::Underload()
@@ -91,7 +91,6 @@ namespace Testing
 		CT_CHECK( !pool.waitAll( std::chrono::milliseconds( 1 ) ) );
 
 		pool.pushJob( job );
-		//CT_CHECK( pool.isEmpty() );
 		CT_CHECK( !pool.waitAll( std::chrono::milliseconds( 1 ) ) );
 
 		CT_CHECK( pool.waitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );

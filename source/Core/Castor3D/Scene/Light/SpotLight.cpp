@@ -9,6 +9,8 @@
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+CU_ImplementSmartPtr( c3d, SpotLight )
+
 namespace c3d
 {
 	//*************************************************************************************************

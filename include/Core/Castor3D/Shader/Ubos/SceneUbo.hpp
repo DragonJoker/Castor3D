@@ -28,6 +28,8 @@ namespace c3d
 			friend class Fog;
 			friend class CommonFog;
 
+			SDW_DeclStructInstance( C3D_API, SceneData );
+
 			SceneData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -60,7 +62,7 @@ namespace c3d
 	public:
 		C3D_API SceneUbo( SceneUbo const & rhs ) = delete;
 		C3D_API SceneUbo & operator=( SceneUbo const & rhs ) = delete;
-		C3D_API SceneUbo( SceneUbo && rhs )noexcept = default;
+		C3D_API SceneUbo( SceneUbo && rhs )noexcept = delete;
 		C3D_API SceneUbo & operator=( SceneUbo && rhs )noexcept = delete;
 		C3D_API explicit SceneUbo( RenderDevice const & device );
 		C3D_API ~SceneUbo()noexcept;
@@ -83,8 +85,9 @@ namespace c3d
 		 */
 		C3D_API Configuration & cpuUpdate( Scene const & scene );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			return m_ubo.createPassBinding( pass, binding );
 		}
@@ -95,7 +98,8 @@ namespace c3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );

@@ -96,7 +96,7 @@ namespace c3d
 		 *\param[in]		viewport		Le viewport restreignant par la passe de rendu.
 		 *\param[in]		scissor			Le scissor restreignant par la passe de rendu.
 		 */
-		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+		C3D_API void update( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, VkViewport const & viewport
 			, VkRect2D const & scissor );
@@ -112,7 +112,7 @@ namespace c3d
 		 *\param[in]		shadowBuffer	Le buffer contenant les données de configuration des ombres.
 		 *\param[in]		scissor			Le scissor restreignant par la passe de rendu.
 		 */
-		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+		C3D_API void update( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, VkRect2D const & scissor );
 		/**
@@ -224,7 +224,7 @@ namespace c3d
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
-		RawUniquePtr< PassData > m_pass;
+		RawUniquePtr< PassData > m_pass{ makeRawUnique< PassData >() };
 		PassData * m_currentPass;
 		RawUniquePtr< PassData > m_toDelete;
 		bool m_culledChanged{};

@@ -19,6 +19,7 @@ namespace GuiCommon
 	{
 	public:
 		RendererSelector( c3d::Engine & engine
+			, ImagesLoader & imagesLoader
 			, wxWindow * parent
 			, wxString const & title );
 
@@ -28,7 +29,7 @@ namespace GuiCommon
 		wxListBox * doFillRenderers();
 		wxListBox * doInitialiseDevices();
 		void doFillDevices( c3d::Renderer const & renderer );
-		void doDraw( wxDC * dc );
+		void doDraw( wxDC * dc )const;
 		void doSelectRenderer( bool next );
 		void doSelectDevice( bool next);
 
@@ -46,10 +47,11 @@ namespace GuiCommon
 		void onSelectDevice( wxCommandEvent & event );
 
 	private:
-		wxImage * m_castorImg;
-		wxListBox * m_renderersList;
-		wxListBox * m_devicesList;
+		wxImage * m_castorImg{};
+		wxListBox * m_renderersList{};
+		wxListBox * m_devicesList{};
 		c3d::Engine & m_engine;
+		wxString m_title;
 		c3d::Vector< c3d::Renderer > m_renderers;
 		c3d::Renderer * m_currentRenderer{};
 	};

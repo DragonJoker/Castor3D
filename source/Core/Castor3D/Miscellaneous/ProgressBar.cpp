@@ -37,7 +37,7 @@ namespace c3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setTitle( String newTitle )
+	void ProgressBar::ProgressLabel::setTitle( StringView newTitle )
 	{
 		data.title = newTitle;
 
@@ -47,7 +47,7 @@ namespace c3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setLabel( String newLabel )
+	void ProgressBar::ProgressLabel::setLabel( StringView newLabel )
 	{
 		data.label = newLabel;
 
@@ -57,7 +57,7 @@ namespace c3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::step( String newLabel )
+	void ProgressBar::ProgressLabel::step( StringView newLabel )
 	{
 		data.label = newLabel;
 		++data.value;
@@ -78,7 +78,7 @@ namespace c3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setStep( String newLabel, int32_t newValue )
+	void ProgressBar::ProgressLabel::setStep( StringView newLabel, int32_t newValue )
 	{
 		data.label = newLabel;
 		setStep( newValue );
@@ -121,7 +121,7 @@ namespace c3d
 		return data.value;
 	}
 
-	void ProgressBar::ProgressLabel::set( String newLabel
+	void ProgressBar::ProgressLabel::set( StringView newLabel
 		, int32_t newRangeMax
 		, int32_t newValue )
 	{

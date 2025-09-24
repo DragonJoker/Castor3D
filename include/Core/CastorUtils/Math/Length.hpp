@@ -10,6 +10,118 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	namespace details
+	{
+		template< LengthUnit FromT >
+		struct LengthUnitConvertFactors;
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eKilometre >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 )
+				, double( 1000.0 )
+				, double( 100000.0 )
+				, double( 1000000.0 )
+				, double( 1.0 / 0.0009144 )
+				, double( 1.0 / 0.0003048 )
+				, double( 1.0 / 0.0000254 ) };
+		};
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eMetre >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000.0 )
+				, double( 1.0 )
+				, double( 100.0 )
+				, double( 1000.0 )
+				, double( 1.0 / 0.9144 )
+				, double( 1.0 / 0.3048 )
+				, double( 1.0 / 0.0254 ) };
+		};
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eCentimetre >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 100000.0 )
+				, double( 1.0 / 100.0 )
+				, double( 1.0 )
+				, double( 10.0 )
+				, double( 1.0 / 91.44 )
+				, double( 1.0 / 30.48 )
+				, double( 1.0 / 2.54 ) };
+		};
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eMillimetre >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000000.0 )
+				, double( 1.0 / 1000.0 )
+				, double( 1.0 / 10.0 )
+				, double( 1.0 )
+				, double( 1.0 / 914.4 )
+				, double( 1.0 / 304.8 )
+				, double( 1.0 / 25.4 ) };
+		};
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eYard >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0009144 )
+				, double( 0.9144 )
+				, double( 91.44 )
+				, double( 914.4 )
+				, double( 1.0 )
+				, double( 3.0 )
+				, double( 36.0 ) };
+		};
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eFoot >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0003048 )
+				, double( 0.3048 )
+				, double( 30.48 )
+				, double( 304.8 )
+				, double( 1.0 / 3.0 )
+				, double( 1.0 )
+				, double( 12.0 ) };
+		};
+
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eInch >
+		{
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0000254 )
+				, double( 0.0254 )
+				, double( 2.54 )
+				, double( 25.4 )
+				, double( 1.0 / 36.0 )
+				, double( 1.0 / 12.0 )
+				, double( 1.0 ) };
+		};
+
+		template< LengthUnit FromT, typename TypeT >
+		static constexpr TypeT convertTo( TypeT const & value
+			, LengthUnit to )noexcept
+		{
+			using ConvertFactors = LengthUnitConvertFactors< FromT >;
+
+			switch ( to )
+			{
+			case LengthUnit::eKilometre:
+			case LengthUnit::eMetre:
+			case LengthUnit::eCentimetre:
+			case LengthUnit::eMillimetre:
+			case LengthUnit::eYard:
+			case LengthUnit::eFoot:
+			case LengthUnit::eInch:
+				return TypeT( pointCast< double >( value ) * ConvertFactors::factors[size_t( to )] );
+			default:
+				CU_Failure( "Unsupported length unit for conversion" );
+				return value;
+			}
+		}
+	}
+
 	template< typename TypeT >
 	class LengthT
 	{
@@ -318,62 +430,134 @@ namespace c3d
 		TypeT m_value;
 		LengthUnit m_unit;
 
-		template< typename TypeU >
-		friend bool operator==( LengthT< TypeU > const & lhs, LengthT< TypeU > const & rhs )noexcept;
-		template< typename TypeU >
-		friend bool operator<( LengthT< TypeU > const & lhs, LengthT< TypeU > const & rhs )noexcept;
-		template< typename TypeU >
-		friend bool operator>( LengthT< TypeU > const & lhs, LengthT< TypeU > const & rhs )noexcept;
+	private:
+		static constexpr TypeT convert( TypeT const & value
+			, LengthUnit from
+			, LengthUnit to )noexcept
+		{
+			switch ( from )
+			{
+			case LengthUnit::eKilometre:
+				return details::convertTo< LengthUnit::eKilometre >( value, to );
+			case LengthUnit::eMetre:
+				return details::convertTo< LengthUnit::eMetre >( value, to );
+			case LengthUnit::eCentimetre:
+				return details::convertTo< LengthUnit::eCentimetre >( value, to );
+			case LengthUnit::eMillimetre:
+				return details::convertTo< LengthUnit::eMillimetre >( value, to );
+			case LengthUnit::eYard:
+				return details::convertTo< LengthUnit::eYard >( value, to );
+			case LengthUnit::eFoot:
+				return details::convertTo< LengthUnit::eFoot >( value, to );
+			case LengthUnit::eInch:
+				return details::convertTo< LengthUnit::eInch >( value, to );
+			default:
+				CU_Failure( "Unsupported length unit for conversion" );
+				return value;
+			}
+		}
+		/**
+		 *\~english
+		 *\name Logic operators.
+		 *\~french
+		 *\name Opérateurs logiques.
+		**/
+		/**@{*/
+		friend bool operator==( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			return std::abs( lhs.m_value - convert( rhs.m_value, rhs.m_unit, lhs.m_unit ) ) < std::numeric_limits< TypeT >::epsilon();
+		}
+
+		friend bool operator!=( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			return !( lhs == rhs );
+		}
+
+		friend bool operator<( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			return lhs.m_value < convert( rhs.m_value, rhs.m_unit, lhs.m_unit );
+		}
+
+		friend bool operator>=( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			return !( lhs < rhs );
+		}
+
+		friend bool operator>( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			return lhs.m_value > convert( rhs.m_value, rhs.m_unit, lhs.m_unit );
+		}
+
+		friend bool operator<=( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			return !( lhs > rhs );
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *\name Arithmetic operators.
+		 *\~french
+		 *\name Opérateurs arithmétiques.
+		**/
+		/**@{*/
+		friend LengthT operator+( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			LengthT result{ lhs };
+			result += rhs;
+			return result;
+		}
+
+		friend LengthT operator-( LengthT const & lhs, LengthT const & rhs )noexcept
+		{
+			LengthT result{ lhs };
+			result -= rhs;
+			return result;
+		}
+
+		friend LengthT operator+( TypeT const & lhs, LengthT const & rhs )noexcept
+		{
+			return LengthT::fromUnit( lhs, rhs.lengthUnit() ) + rhs;
+		}
+
+		friend LengthT operator-( TypeT const & lhs, LengthT const & rhs )noexcept
+		{
+			return LengthT::fromUnit( lhs, rhs.lengthUnit() ) - rhs;
+		}
+
+		friend LengthT operator+( LengthT const & lhs, TypeT const & rhs )noexcept
+		{
+			LengthT result{ lhs };
+			result += rhs;
+			return result;
+		}
+
+		friend LengthT operator-( LengthT const & lhs, TypeT const & rhs )noexcept
+		{
+			LengthT result{ lhs };
+			result -= rhs;
+			return result;
+		}
+
+		friend LengthT operator*( LengthT const & lhs, double rhs )noexcept
+		{
+			LengthT result{ lhs };
+			result *= rhs;
+			return result;
+		}
+
+		friend LengthT operator/( LengthT const & lhs, double rhs )noexcept
+		{
+			LengthT result{ lhs };
+			result /= rhs;
+			return result;
+		}
+		/**@}*/
 	};
 
 	template< typename TypeT >
 	static constexpr TypeT convert( TypeT const & value
 		, LengthUnit from
 		, LengthUnit to )noexcept;
-	/**
-	 *\~english
-	 *\name Logic operators.
-	 *\~french
-	 *\name Opérateurs logiques.
-	**/
-	/**@{*/
-	template< typename TypeT >
-	inline bool operator==( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline bool operator!=( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline bool operator<( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline bool operator>=( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline bool operator>( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline bool operator<=( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	/**@}*/
-	/**
-	 *\~english
-	 *\name Arithmetic operators.
-	 *\~french
-	 *\name Opérateurs arithmétiques.
-	**/
-	/**@{*/
-	template< typename TypeT >
-	inline LengthT< TypeT > operator+( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator-( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator+( TypeT const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator-( TypeT const & lhs, LengthT< TypeT > const & rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator+( LengthT< TypeT > const & lhs, TypeT const & rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator-( LengthT< TypeT > const & lhs, TypeT const & rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator*( LengthT< TypeT > const & lhs, double rhs )noexcept;
-	template< typename TypeT >
-	inline LengthT< TypeT > operator/( LengthT< TypeT > const & lhs, double rhs )noexcept;
-	/**@}*/
 }
 
 inline c3d::Length operator ""_km( long double value )

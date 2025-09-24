@@ -100,7 +100,7 @@ namespace c3d
 			setSpecular( RgbColour{ v, gamma } );
 		}
 
-		void setSpecular( Coords3f const & v )
+		void setSpecular( PointView3f const & v )
 		{
 			setSpecular( RgbColour{ v[0u], v[1u], v[2u] } );
 		}

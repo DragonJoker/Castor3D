@@ -55,39 +55,18 @@ namespace c3d
 		//!\~english	Instantiation attribute increment.
 		//!\~french		Incrément d'attribut d'instanciation.
 		uint32_t m_divisor{};
+
+	private:
+		friend bool operator==( ParticleElementDeclaration const & lhs
+			, ParticleElementDeclaration const & rhs )noexcept
+		{
+			return lhs.m_dataType == rhs.m_dataType
+				&& lhs.m_name == rhs.m_name
+				&& lhs.m_offset == rhs.m_offset
+				&& lhs.m_usages == rhs.m_usages
+				&& lhs.m_divisor == rhs.m_divisor;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Equality operator.
-	 *\param[in]	lhs, rhs	The 2 objects to compare.
-	 *\~french
-	 *\brief		Opérateur d'égalité.
-	 *\param[in]	lhs, rhs	Les 2 objets à comparer
-	 */
-	inline bool operator==( ParticleElementDeclaration const & lhs, ParticleElementDeclaration const & rhs )
-	{
-		return lhs.m_dataType == rhs.m_dataType
-			&& lhs.m_name == rhs.m_name
-			&& lhs.m_offset == rhs.m_offset
-			&& lhs.m_usages == rhs.m_usages
-			&& lhs.m_divisor == rhs.m_divisor;
-	}
-	/**
-	 *\~english
-	 *\brief		Equality operator.
-	 *\param[in]	lhs, rhs	The 2 objects to compare.
-	 *\~french
-	 *\brief		Opérateur d'égalité.
-	 *\param[in]	lhs, rhs	Les 2 objets à comparer
-	 */
-	inline bool operator!=( ParticleElementDeclaration const & lhs, ParticleElementDeclaration const & rhs )
-	{
-		return lhs.m_dataType != rhs.m_dataType
-			|| lhs.m_name != rhs.m_name
-			|| lhs.m_offset != rhs.m_offset
-			|| lhs.m_usages != rhs.m_usages
-			|| lhs.m_divisor != rhs.m_divisor;
-	}
 }
 
 #endif

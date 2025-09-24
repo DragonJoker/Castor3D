@@ -249,10 +249,10 @@ namespace c3d_gltf
 			, c3d::Set< c3d::Milliseconds > & allTimes
 			, CompressedBufferDataAdapter const & adapter )
 		{
-			for ( auto const & channelSampler : animChannels )
+			for ( auto const & [_, sampler] : animChannels )
 			{
 				iterateAccessor< float >( impAsset
-					, impAsset.accessors[channelSampler.second.inputAccessor]
+					, impAsset.accessors[sampler.inputAccessor]
 					, [&minTime, &maxTime, &allTimes]( float value )
 					{
 						auto timeIndex = c3d::Milliseconds{ uint64_t( value * 1000u ) };
@@ -268,18 +268,10 @@ namespace c3d_gltf
 			, size_t nodeIndex )
 		{
 			NodeAnimationChannelSampler result{};
-
-			for ( auto & itPath : animChannels )
-			{
-				for ( auto & itChannel : itPath.second )
-				{
+			for ( auto const & [_, sampler] : animChannels )
+				for ( auto const & itChannel : sampler )
 					if ( itChannel.first.nodeIndex == nodeIndex )
-					{
 						result.push_back( itChannel );
-					}
-				}
-			}
-
 			return result;
 		}
 
@@ -300,13 +292,10 @@ namespace c3d_gltf
 			c3d::Milliseconds minTime{ std::numeric_limits< int32_t >::max() };
 			c3d::Milliseconds maxTime{};
 			c3d::Set< c3d::Milliseconds > allTimes;
-			for ( auto const & channelSampler : animChannels )
+			for ( auto const & [_, sampler] : animChannels )
 			{
-				processAnimationNodeKeysTimes( impAsset
-					, channelSampler.second
-					, minTime
-					, maxTime
-					, allTimes
+				processAnimationNodeKeysTimes( impAsset, sampler
+					, minTime, maxTime, allTimes
 					, file.getAdapter() );
 			}
 
@@ -378,7 +367,8 @@ namespace c3d_gltf
 		{
 			size_t result{};
 			size_t meshIndex = file.getMeshIndex( name, submesh );
-			auto it = std::find_if( channelSamplers.begin()
+
+			if ( auto it = std::find_if( channelSamplers.begin()
 				, channelSamplers.end()
 				, [&result, meshIndex, &file]( AnimationChannelSamplers::value_type const & lookup )
 				{
@@ -386,7 +376,7 @@ namespace c3d_gltf
 						, lookup.second.end()
 						, [&result, meshIndex, &file]( AnimationChannelSampler const & channelSampler )
 						{
-							bool ret = bool( channelSampler.first.nodeIndex );
+							auto ret = bool( channelSampler.first.nodeIndex );
 
 							if ( ret )
 							{
@@ -402,8 +392,7 @@ namespace c3d_gltf
 							return ret;
 						} );
 				} );
-
-			if ( it == channelSamplers.end() )
+				it == channelSamplers.end() )
 			{
 				CU_LoaderError( "Couldn't find node index for animated submesh in animation channels" );
 			}
@@ -421,7 +410,7 @@ namespace c3d_gltf
 
 	bool GltfAnimationImporter::doImportSkeleton( c3d::SkeletonAnimation & animation )
 	{
-		auto & file = static_cast< GltfImporterFile & >( *m_file );
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto name = animation.getName();
 		auto & skeleton = static_cast< c3d::Skeleton const & >( *animation.getAnimable() );
 		auto animations = file.getSkinAnimations( skeleton );
@@ -447,7 +436,7 @@ namespace c3d_gltf
 			{
 				auto & objTransform = object->getNodeTransform();
 
-				for ( auto & [time, keyframe] : keyframes )
+				for ( auto const & [time, keyframe] : keyframes )
 				{
 					auto kfit = keyframe->find( *object );
 
@@ -478,7 +467,7 @@ namespace c3d_gltf
 
 	bool GltfAnimationImporter::doImportMesh( c3d::MeshAnimation & animation )
 	{
-		auto & file = static_cast< GltfImporterFile & >( *m_file );
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 		auto name = animation.getName();
 		auto & mesh = static_cast< c3d::Mesh const & >( *animation.getAnimable() );
@@ -493,16 +482,16 @@ namespace c3d_gltf
 				&& submesh->hasMorphComponent() )
 			{
 				c3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-				auto & animChannels = animIt->second;
+				auto const & animChannels = animIt->second;
 				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName(), *submesh );
 				auto impNodeAnim = anims::findNodeAnim( animChannels, nodeIndex );
 				bool hasKeyframes = false;
 
-				for ( AnimationChannelSampler & channelSampler : impNodeAnim )
+				for ( auto const & [_, sampler] : impNodeAnim )
 				{
 					c3d::Vector< float > times;
 					iterateAccessor< float >( impAsset
-						, impAsset.accessors[channelSampler.second.inputAccessor]
+						, impAsset.accessors[sampler.inputAccessor]
 						, [&times]( float value )
 						{
 							times.push_back( value );
@@ -510,7 +499,7 @@ namespace c3d_gltf
 						, file.getAdapter() );
 					c3d::Vector< float > values;
 					iterateAccessor< float >( impAsset
-						, impAsset.accessors[channelSampler.second.outputAccessor]
+						, impAsset.accessors[sampler.outputAccessor]
 						, [&values]( float value )
 						{
 							values.push_back( value );
@@ -518,11 +507,11 @@ namespace c3d_gltf
 						, file.getAdapter() );
 
 					// for AnimationInterpolation::CubicSpline can have more outputs
-					uint32_t weightStride = uint32_t( values.size() / times.size() );
-					uint32_t numMorphs = ( channelSampler.second.interpolation == fastgltf::AnimationInterpolation::CubicSpline )
+					auto weightStride = uint32_t( values.size() / times.size() );
+					uint32_t numMorphs = ( sampler.interpolation == fastgltf::AnimationInterpolation::CubicSpline )
 						? weightStride - 2
 						: weightStride;
-					uint32_t ii = ( channelSampler.second.interpolation == fastgltf::AnimationInterpolation::CubicSpline )
+					uint32_t ii = ( sampler.interpolation == fastgltf::AnimationInterpolation::CubicSpline )
 						? 1u
 						: 0u;
 
@@ -575,7 +564,7 @@ namespace c3d_gltf
 
 	bool GltfAnimationImporter::doImportNode( c3d::SceneNodeAnimation & animation )
 	{
-		auto & file = static_cast< GltfImporterFile & >( *m_file );
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto name = animation.getName();
 		auto & node = static_cast< c3d::SceneNode const & >( *animation.getAnimable() );
 		auto animations = file.getNodeAnimations( node );
@@ -587,7 +576,7 @@ namespace c3d_gltf
 		}
 
 		auto & impAsset = file.getAsset();
-		auto nodeName = node.getName();
+		auto const & nodeName = node.getName();
 		auto nodeIndex = file.getNodeIndex( nodeName );
 		auto impNodeAnim = anims::findNodeAnim( animIt->second, nodeIndex );
 		c3d::Milliseconds minTime{ std::numeric_limits< int32_t >::max() };
@@ -608,7 +597,7 @@ namespace c3d_gltf
 			, minTime
 			, maxTime
 			, allTimes
-			, { node.getPosition(), node.getScale(), node.getOrientation() }
+			, c3d::NodeTransform{ node.getPosition(), node.getScale(), node.getOrientation() }
 			, []( c3d::SceneNodeAnimationKeyFrame & keyframe
 				, c3d::Point3f const & position
 				, c3d::Quaternion const & orientation
@@ -620,9 +609,9 @@ namespace c3d_gltf
 
 		if ( !keyFrames.empty() )
 		{
-			for ( auto & keyFrame : keyFrames )
+			for ( auto & [_, keyFrame] : keyFrames )
 			{
-				animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame.second ) );
+				animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame ) );
 			}
 		}
 

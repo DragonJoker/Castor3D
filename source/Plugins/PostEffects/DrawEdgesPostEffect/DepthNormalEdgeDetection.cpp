@@ -35,7 +35,7 @@ namespace draw_edges
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, c3d::Extent3D const & extent )
 		{
-			auto & engine = *device.renderSystem.getEngine();
+			auto const & engine = *device.renderSystem.getEngine();
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			c3d::shader::Utils utils{ writer };
@@ -44,19 +44,19 @@ namespace draw_edges
 				, c3d::ComponentModeFlag::eNone
 				, utils };
 
-			auto specifics = uint32_t( DepthNormalEdgeDetection::eSpecifics );
-			c3d::shader::Materials materials{ engine, writer, passShaders, DepthNormalEdgeDetection::eMaterials, 0u, specifics };
-			C3D_ModelsData( writer, DepthNormalEdgeDetection::eModels, 0u );
-			auto depthObj( writer.declCombinedImg< FImg2DRgba32 >( "depthObj", DepthNormalEdgeDetection::eDepthObj, 0u ) );
-			auto nmlOcc( writer.declCombinedImg< FImg2DRgba32 >( "nmlOcc", DepthNormalEdgeDetection::eNmlOcc, 0u ) );
-			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
+			auto specifics = uint32_t( DepthNormalEdgeDetection::Bindings::eSpecifics );
+			c3d::shader::Materials materials{ engine, writer, passShaders, uint32_t( DepthNormalEdgeDetection::Bindings::eMaterials ), 0u, specifics };
+			C3D_ModelsData( writer, DepthNormalEdgeDetection::Bindings::eModels, 0u );
+			auto depthObj( writer.declCombinedImg< FImg2DRgba32 >( "depthObj", DepthNormalEdgeDetection::Bindings::eDepthObj, 0u ) );
+			auto nmlOcc( writer.declCombinedImg< FImg2DRgba32 >( "nmlOcc", DepthNormalEdgeDetection::Bindings::eNmlOcc, 0u ) );
+			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::Bindings::eDepthRange, 0u ) );
 			auto minmax = depthRangeBuffer.declMember< sdw::Int >( "minmax", 2u );
 			depthRangeBuffer.end();
 
 			auto output( writer.declOutput< sdw::Float >( "output", sdw::EntryPoint::eFragment, 0u ) );
 
 			auto Fdepth = writer.implementFunction< sdw::Float >( "Fdepth"
-				, [&]( sdw::Float const & z
+				, [&writer]( sdw::Float const & z
 					, sdw::Float const & zNear
 					, sdw::Float const & zFar )
 				{
@@ -67,11 +67,9 @@ namespace draw_edges
 				, sdw::InFloat{ writer, "zFar" } );
 
 			auto computeContour = writer.implementFunction< sdw::Float >( "c3d_computeContour"
-				, [&]( sdw::IVec2 const & texCoord
+				, [&writer, &nmlOcc, &depthObj, &Fdepth]( sdw::IVec2 const & texCoord
 					, sdw::Vec4 const & X
-					, sdw::Vec3 const & Xn
 					, sdw::Vec2 const & depthRange
-					, sdw::Float const & edgeWidth
 					, sdw::Float const & depthFactor
 					, sdw::Float const & normalFactor )
 				{
@@ -90,8 +88,8 @@ namespace draw_edges
 					// Normal Gradient
 					auto Ngrad = writer.declLocale( "Ngrad", 0.0_f );
 					// compute length of gradient using Sobel/Kroon operator
-					const float k0 = float( 17. / 23.75 );
-					const float k1 = float( 61. / 23.75 );
+					auto const k0 = float( 17. / 23.75 );
+					auto const k1 = float( 61. / 23.75 );
 					auto grad_y = writer.declLocale( "grad_y"
 						, k0 * An + k1 * Bn + k0 * Cn - k0 * Fn - k1 * Gn - k0 * Hn );
 					auto grad_x = writer.declLocale( "grad_x"
@@ -109,7 +107,7 @@ namespace draw_edges
 					auto Bd = writer.declLocale( "Bd", Fdepth( depthObj.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).y(), zNear, zFar ) );  //  | A | B | C |
 					auto Cd = writer.declLocale( "Cd", Fdepth( depthObj.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
 					auto Dd = writer.declLocale( "Dd", Fdepth( depthObj.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | D | X | E |
-					auto Xd = writer.declLocale( "Xd", Fdepth( X.y(), zNear, zFar ) );                             //  +---+---+---+
+					auto Xd = writer.declLocale( "Xd", Fdepth( X.y(), zNear, zFar ) );                                                      //  +---+---+---+
 					auto Ed = writer.declLocale( "Ed", Fdepth( depthObj.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | F | G | H |
 					auto Fd = writer.declLocale( "Fd", Fdepth( depthObj.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
 					auto Gd = writer.declLocale( "Gd", Fdepth( depthObj.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).y(), zNear, zFar ) );
@@ -126,21 +124,21 @@ namespace draw_edges
 				}
 				, sdw::InIVec2{ writer, "texCoord" }
 				, sdw::InVec4{ writer, "X" }
-				, sdw::InVec3{ writer, "Xn" }
 				, sdw::InVec2{ writer, "depthRange" }
-				, sdw::InFloat{ writer, "edgeWidth" }
 				, sdw::InFloat{ writer, "depthFactor" }
 				, sdw::InFloat{ writer, "normalFactor" } );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 					out.uv() = in.uv();
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, sdw::VoidT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< c3ds::Uv2FT, sdw::VoidT >( [&depthObj, &c3d_modelsData, &materials
+					, &nmlOcc, &output, &computeContour, &minmax
+					, &writer, &extent]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, [[maybe_unused]] sdw::FragmentOut const & out )
 				{
 					auto size = writer.declLocale( "size"
 						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );
@@ -178,9 +176,7 @@ namespace draw_edges
 
 					output = computeContour( texelCoord
 						, X
-						, Xn.xyz()
 						, depthRange
-						, toonProfile.edgeWidth()
 						, toonProfile.depthFactor()
 						, toonProfile.normalFactor() );
 				} );
@@ -237,12 +233,12 @@ namespace draw_edges
 				return result;
 			} );
 		auto & modelBuffer = renderTarget.getScene()->getModelBuffer();
-		passBuffer.createPassBinding( pass, eMaterials );
-		pass.addInputStorage( *modelBuffer.getLastAttach(), eModels );
-		pass.addInputSampled( *depthObj.getSampledLastAttach(), eDepthObj );
-		pass.addInputSampled( *nmlOcc.getSampledLastAttach(), eNmlOcc );
-		pass.addInputStorage( *depthRange.getLastAttach(), eDepthRange );
-		auto index = uint32_t( eSpecifics );
+		passBuffer.createPassBinding( pass, Bindings::eMaterials );
+		pass.addInputStorageT( *modelBuffer.getLastAttach(), Bindings::eModels );
+		pass.addInputSampledT( *depthObj.getSampledLastAttach(), Bindings::eDepthObj );
+		pass.addInputSampledT( *nmlOcc.getSampledLastAttach(), Bindings::eNmlOcc );
+		pass.addInputStorageT( *depthRange.getLastAttach(), Bindings::eDepthRange );
+		auto index = uint32_t( Bindings::eSpecifics );
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId()
 			, c3d::transparentBlackClearColor ) );
@@ -254,7 +250,7 @@ namespace draw_edges
 		m_result.destroy();
 	}
 
-	void DepthNormalEdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )
+	void DepthNormalEdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Depth Normal Edge Detection Result" )

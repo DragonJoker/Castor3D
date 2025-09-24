@@ -1112,14 +1112,14 @@ namespace c3d
 		}
 
 		template< typename ComponentT >
-		PassComponentID registerPassComponent( CreatePassComponentPlugin const & createPlugin = &ComponentT::createPlugin )
+		PassComponentID registerPassComponent( CreatePassComponentPlugin const & createPlugin = &ComponentT::createPlugin )const
 		{
 			return registerPassComponent( ComponentT::TypeName
 				, createPlugin( *m_passComponents ) );
 		}
 
 		template< typename ComponentT >
-		SubmeshComponentID registerSubmeshComponent( CreateSubmeshComponentPlugin const & createPlugin = &ComponentT::createPlugin )
+		SubmeshComponentID registerSubmeshComponent( CreateSubmeshComponentPlugin const & createPlugin = &ComponentT::createPlugin )const
 		{
 			return registerSubmeshComponent( ComponentT::TypeName
 				, createPlugin( *m_submeshComponents ) );

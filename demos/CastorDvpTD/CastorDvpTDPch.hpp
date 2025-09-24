@@ -18,7 +18,6 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Render/Ray.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Camera.hpp>

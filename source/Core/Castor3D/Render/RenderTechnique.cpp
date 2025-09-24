@@ -231,7 +231,7 @@ namespace c3d
 					, VkCommandBuffer commandBuffer
 					, uint32_t index )const
 				{
-					for ( auto [_, attach] : m_pass.outputs )
+					for ( auto [_, attach] : getPass().getOutputs() )
 						recContext.clearAttachment( commandBuffer, attach->view( index ), transparentBlackClearColor, ImageLayout::eUndefined );
 				}
 			};
@@ -422,7 +422,7 @@ namespace c3d
 			, progress
 			, visbuffer );
 		if ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled )
-			m_renderTarget.getFrustumClusters()->createFramePasses( m_graph, *this, getRenderUbo() );
+			m_renderTarget.getFrustumClusters()->createFramePasses( m_graph, getRenderUbo() );
 		m_background = doCreateBackgroundPass( progress );
 		createComputeDiffusionProfilesPass( m_graph
 			, m_device
@@ -435,7 +435,6 @@ namespace c3d
 		doCreateRenderPasses( TechniquePassEvent::eBeforeTransparent );
 		m_transparent = makeRawUnique< TransparentRendering >( *this
 			, m_device
-			, *m_opaque
 			, progress
 			, weightedBlended );
 		m_renderTarget.getFrustumClusters()->createDebugDisplayPrograms( getCameraUbo() );

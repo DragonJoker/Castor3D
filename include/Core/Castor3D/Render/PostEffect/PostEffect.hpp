@@ -154,7 +154,9 @@ namespace c3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		C3D_API virtual void setParameters( Parameters parameters ) = 0;
+		C3D_API virtual void setParameters( Parameters parameters )
+		{
+		}
 
 		bool isAfterToneMapping()const noexcept
 		{

@@ -28,13 +28,13 @@ namespace ocean_fft
 	{
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eConfig
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBindingT( GenerateHeightmapPass::Bindings::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eInput
+				, c3d::makeDescriptorSetLayoutBindingT( GenerateHeightmapPass::Bindings::eInput
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eOutput
+				, c3d::makeDescriptorSetLayoutBindingT( GenerateHeightmapPass::Bindings::eOutput
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( GenerateHeightmapPass::Name 
@@ -47,28 +47,28 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto configBuffer = pass.uniforms.find( GenerateHeightmapPass::eConfig );
+			auto configBuffer = pass.getUniforms().find( uint32_t( GenerateHeightmapPass::Bindings::eConfig ) );
 			auto write = graph.getDescriptorWrite( *configBuffer->second, configBuffer->first );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
-				, write->descriptorType } );
+				, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			auto inputBuffer = pass.inputs.find( GenerateHeightmapPass::eInput );
+			auto inputBuffer = pass.getInputs().find( uint32_t( GenerateHeightmapPass::Bindings::eInput ) );
 			write = graph.getDescriptorWrite( *inputBuffer->second, inputBuffer->first );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
-				, write->descriptorType } );
+				, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			auto outputBuffer = pass.outputs.find( GenerateHeightmapPass::eOutput );
+			auto outputBuffer = pass.getOutputs().find( uint32_t( GenerateHeightmapPass::Bindings::eOutput ) );
 			write = graph.getDescriptorWrite( *outputBuffer->second, outputBuffer->first );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
-				, write->descriptorType } );
+				, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
 			auto descriptorSet = pool.createDescriptorSet( GenerateHeightmapPass::Name );
@@ -100,19 +100,19 @@ namespace ocean_fft
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
 
-			C3D_FftOcean( writer, GenerateHeightmapPass::eConfig, 0u );
+			C3D_FftOcean( writer, GenerateHeightmapPass::Bindings::eConfig, 0u );
 
-			auto distr = writer.declStorageBuffer( "Distribution", GenerateHeightmapPass::eInput, 0u );
+			auto distr = writer.declStorageBuffer( "Distribution", GenerateHeightmapPass::Bindings::eInput, 0u );
 			auto distribution = distr.declMemberArray< sdw::Vec2 >( "distribution" );
 			distr.end();
 
-			auto fft = writer.declStorageBuffer( "HeightmapFFT", GenerateHeightmapPass::eOutput, 0u );
+			auto fft = writer.declStorageBuffer( "HeightmapFFT", GenerateHeightmapPass::Bindings::eOutput, 0u );
 			auto heights = fft.declMemberArray< sdw::Vec2 >( "heights" );
 			fft.end();
 
 			auto alias = writer.implementFunction< sdw::Vec2 >( "alias"
-				, [&]( sdw::Vec2 i
-					, sdw::Vec2 N )
+				, [&writer]( sdw::Vec2 const & i
+					, sdw::Vec2 const & N )
 				{
 					writer.returnStmt( mix( i, i - N, vec2( greaterThan( i, 0.5_f * N ) ) ) );
 				}
@@ -120,7 +120,8 @@ namespace ocean_fft
 				, sdw::InVec2{ writer, "n" } );
 
 			auto cmul = writer.implementFunction< sdw::Vec2 >( "cmul"
-				, [&]( sdw::Vec2 a, sdw::Vec2 b )
+				, [&writer]( sdw::Vec2 const & a
+					, sdw::Vec2 const & b )
 				{
 					auto r3 = writer.declLocale( "r3", a.yx() );
 					auto r1 = writer.declLocale( "r1", b.xx() );
@@ -133,7 +134,7 @@ namespace ocean_fft
 				, sdw::InVec2{ writer, "b" } );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 64u, 1u, 1u }
-				, [&]( sdw::ComputeIn in )
+				, [&writer, &G, &alias, &cmul, &c3d_oceanData, &distribution, &heights]( sdw::ComputeIn const & in )
 				{
 					auto N = writer.declLocale( "N"
 						, c3d_oceanData.heightMapSamples() );
@@ -189,11 +190,11 @@ namespace ocean_fft
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { []( uint32_t ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, isEnabled
+				, c3d::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
@@ -202,7 +203,7 @@ namespace ocean_fft
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), genhgt::createShader( device ) }
 		, m_pipeline{ genhgt::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ genhgt::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ genhgt::createDescriptorSet( getGraph(), *m_descriptorSetPool, getPass() ) }
 		, m_extent{ extent }
 	{
 	}
@@ -212,15 +213,14 @@ namespace ocean_fft
 		visitor.visit( m_shader );
 	}
 
-	void GenerateHeightmapPass::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+	void GenerateHeightmapPass::doRecordInto( crg::RecordContext const & context
+		, VkCommandBuffer commandBuffer )const
 	{
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		m_context.vkCmdBindPipeline( commandBuffer
+		context->vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipeline );
-		m_context.vkCmdBindDescriptorSets( commandBuffer
+		context->vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelineLayout
 			, 0u
@@ -228,7 +228,7 @@ namespace ocean_fft
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		m_context.vkCmdDispatch( commandBuffer
+		context->vkCmdDispatch( commandBuffer
 			, m_extent.width / 64u
 			, m_extent.height
 			, 1u );

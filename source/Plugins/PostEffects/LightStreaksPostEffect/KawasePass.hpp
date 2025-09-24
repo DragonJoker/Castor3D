@@ -21,7 +21,7 @@ namespace light_streaks
 			, c3d::RenderDevice const & device
 			, c3d::Texture & hiViews
 			, c3d::Texture & kawaseViews
-			, KawaseUbo & kawaseUbo
+			, KawaseUbo const & kawaseUbo
 			, c3d::Extent2D dimensions
 			, bool const * enabled );
 		void accept( c3d::ConfigurationVisitorBase & visitor )const;
@@ -30,8 +30,6 @@ namespace light_streaks
 		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
-		c3d::RenderDevice const & m_device;
-		KawaseUbo & m_kawaseUbo;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 	};

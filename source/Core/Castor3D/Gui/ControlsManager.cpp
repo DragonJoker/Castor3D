@@ -353,7 +353,7 @@ namespace c3d
 		return it->second;
 	}
 
-	ControlRPtr ControlsManager::findControl( String const & name, SceneRPtr scene )const
+	ControlRPtr ControlsManager::findControl( String const & name, Scene const * scene )const
 	{
 		auto controls = doGetHandlers();
 		auto it = std::find_if( controls.begin()

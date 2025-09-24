@@ -13,7 +13,7 @@ namespace castortd
 		void startWave( uint32_t count );
 		bool canSpawn( c3d::Milliseconds const & elapsed );
 		EnemyPtr spawn( Game const & game, Path const & path );
-		void killEnemy( Game & game, EnemyPtr && enemy );
+		void killEnemy( EnemyPtr enemy );
 
 		uint32_t getWave()const
 		{
@@ -40,8 +40,8 @@ namespace castortd
 		uint32_t m_count{ 0 };
 		c3d::Milliseconds m_timeBetweenTwoSpawns{ 0u };
 		c3d::Milliseconds m_timeSinceLastSpawn{ 0u };
-		uint32_t m_totalsWaves{ 0ull };
-		uint32_t m_totalSpawned{ 0ull };
+		uint32_t m_totalsWaves{ 0u };
+		uint32_t m_totalSpawned{ 0u };
 		EnemyArray m_enemiesCache;
 	};
 }

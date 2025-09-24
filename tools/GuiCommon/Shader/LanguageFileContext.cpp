@@ -8,9 +8,8 @@ namespace GuiCommon
 {
 	LanguageFileContext::LanguageFileContext()
 	{
-
-		mapFoldFlags[cuT( "comment" )] = eSTC_FOLD_COMMENT;
-		mapFoldFlags[cuT( "compact" )] = eSTC_FOLD_COMPACT;
-		mapFoldFlags[cuT( "preprocessor" )] = eSTC_FOLD_PREPROC;
+		mapFoldFlags[cuT( "comment" )] = int( eSTC_FOLD::eCOMMENT );
+		mapFoldFlags[cuT( "compact" )] = int( eSTC_FOLD::eCOMPACT );
+		mapFoldFlags[cuT( "preprocessor" )] = int( eSTC_FOLD::ePREPROC );
 	}
 }

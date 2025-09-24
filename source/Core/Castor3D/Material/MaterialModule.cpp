@@ -7,12 +7,6 @@ namespace c3d
 		return ashes::getName( VkCompareOp( value ) );
 	}
 
-	bool operator==( TextureCombine const & lhs, TextureCombine const & rhs )
-	{
-		return lhs.configCount == rhs.configCount
-			&& lhs.flags == rhs.flags;
-	}
-
 	TextureFlagsSet::const_iterator checkFlag( TextureCombine const & lhs
 		, PassComponentTextureFlag rhs )
 	{

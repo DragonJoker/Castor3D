@@ -45,23 +45,24 @@ namespace c3d
 				: crg::RunnablePass{ pass, context, graph
 					, { crg::defaultV< InitialiseCallback >
 						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-						, RecordCallback( [this]( crg::RecordContext const &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); } ) } }
+						, RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } ) } }
 			{
 			}
 
 		protected:
-			void doRecordInto( VkCommandBuffer commandBuffer )
+			void doRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer )
 			{
 				auto clearValue = convert( transparentBlackClearColor );
 
-				for ( auto & [binding, attach] : m_pass.outputs )
+				for ( auto & [binding, attach] : getPass().getOutputs() )
 				{
 					auto view = attach->view();
-					auto image = m_graph.createImage( view.data->image );
+					auto image = getGraph().createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
 					subresourceRange.layerCount = view.data->image.data->info.arrayLayers;
 					assert( attach->isTransferOutputImageView() );
-					m_context.vkCmdClearColorImage( commandBuffer
+					context->vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, &clearValue

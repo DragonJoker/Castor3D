@@ -1022,7 +1022,7 @@ namespace c3d
 				}
 				else
 				{
-					blockContext->scrollable->getStyle().setVerticalStyle( *style );
+					blockContext->scrollable->getScrollableStyle().setVerticalStyle( *style );
 				}
 			}
 		}
@@ -1045,7 +1045,7 @@ namespace c3d
 				}
 				else
 				{
-					blockContext->scrollable->getStyle().setHorizontalStyle( *style );
+					blockContext->scrollable->getScrollableStyle().setHorizontalStyle( *style );
 				}
 			}
 		}

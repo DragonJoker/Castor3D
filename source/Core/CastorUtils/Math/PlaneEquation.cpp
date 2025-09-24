@@ -140,25 +140,4 @@ namespace c3d
 
 		return result;
 	}
-
-	bool operator==( PlaneEquation const & lhs
-		, PlaneEquation const & rhs )
-	{
-		bool result = false;
-
-		if ( lhs.isParallel( rhs ) )
-		{
-			auto ratioA = lhs.m_normal[0] / rhs.m_normal[0];
-			auto ratioD = lhs.m_d / rhs.m_d;
-			result = ratioA == ratioD;
-		}
-
-		return result;
-	}
-
-	bool operator!=( PlaneEquation const & lhs
-		, PlaneEquation const & rhs )
-	{
-		return ( !( lhs == rhs ) );
-	}
 }

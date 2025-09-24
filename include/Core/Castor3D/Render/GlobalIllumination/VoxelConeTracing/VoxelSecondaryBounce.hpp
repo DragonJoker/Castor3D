@@ -48,14 +48,23 @@ namespace c3d
 			, VctConfig const & voxelConfig
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		/**
-		 *\copydoc		RenderTechniquePass::accept
-		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
+		C3D_API void accept( RenderTechniqueVisitor & visitor )const;
 
 	private:
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+			, uint32_t index )const;
 		bool doIsComputePass()const;
 
 	private:

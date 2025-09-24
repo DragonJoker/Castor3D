@@ -23,7 +23,9 @@ namespace c3d::shader
 			, sdw::FloatField< "thicknessScale" >
 			, sdw::Vec4ArrayField< "transmittanceProfile", TransmittanceProfileSize > >
 	{
-		inline SssProfile( sdw::ShaderWriter & writer
+		SDW_DeclStructInstance( C3D_API, SssProfile );
+
+		SssProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }

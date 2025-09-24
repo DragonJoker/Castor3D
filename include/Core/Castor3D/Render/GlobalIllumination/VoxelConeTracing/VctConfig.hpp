@@ -36,21 +36,22 @@ namespace c3d
 		//!\~french		La taille d'un pas de rayon dans le voxel cone tracing.
 		float rayStepSize{ 0.75f };
 		float voxelSizeFactor{ 1.0f };
-	};
 
-	inline bool operator==( VctConfig const & lhs, VctConfig const & rhs )noexcept
-	{
-		return lhs.enabled == rhs.enabled
-			&& lhs.enableConservativeRasterization == rhs.enableConservativeRasterization
-			&& lhs.enableOcclusion == rhs.enableOcclusion
-			&& lhs.enableSecondaryBounce == rhs.enableSecondaryBounce
-			&& lhs.enableTemporalSmoothing == rhs.enableTemporalSmoothing
-			&& lhs.gridSize == rhs.gridSize
-			&& lhs.maxDistance == rhs.maxDistance
-			&& lhs.numCones == rhs.numCones
-			&& lhs.rayStepSize == rhs.rayStepSize
-			&& lhs.voxelSizeFactor == rhs.voxelSizeFactor;
-	}
+	private:
+		friend bool operator==( VctConfig const & lhs, VctConfig const & rhs )noexcept
+		{
+			return lhs.enabled == rhs.enabled
+				&& lhs.enableConservativeRasterization == rhs.enableConservativeRasterization
+				&& lhs.enableOcclusion == rhs.enableOcclusion
+				&& lhs.enableSecondaryBounce == rhs.enableSecondaryBounce
+				&& lhs.enableTemporalSmoothing == rhs.enableTemporalSmoothing
+				&& lhs.gridSize == rhs.gridSize
+				&& lhs.maxDistance == rhs.maxDistance
+				&& lhs.numCones == rhs.numCones
+				&& lhs.rayStepSize == rhs.rayStepSize
+				&& lhs.voxelSizeFactor == rhs.voxelSizeFactor;
+		}
+	};
 }
 
 #endif

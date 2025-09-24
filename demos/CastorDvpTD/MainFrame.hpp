@@ -22,20 +22,20 @@ namespace castortd
 #pragma clang diagnostic ignored "-Wsuggest-override"
 		DECLARE_EVENT_TABLE()
 #pragma clang diagnostic pop
-		void OnPaint( wxPaintEvent  & event );
-		void OnClose( wxCloseEvent  & event );
-		void OnEraseBackground( wxEraseEvent & event );
-		void OnRenderTimer( wxTimerEvent & event );
+		void onPaint( wxPaintEvent  & event );
+		void onClose( wxCloseEvent  & event );
+		void onEraseBackground( wxEraseEvent & event );
+		void onRenderTimer( wxTimerEvent & event );
 		void onKeyDown( wxKeyEvent & event );
 		void onKeyUp( wxKeyEvent & event );
-		void OnMouseLdown( wxMouseEvent & event );
-		void OnMouseLUp( wxMouseEvent & event );
-		void OnMouseRUp( wxMouseEvent & event );
-		void OnMouseWheel( wxMouseEvent & event );
+		void onMouseLDown( wxMouseEvent & event );
+		void onMouseLUp( wxMouseEvent & event );
+		void onMouseRUp( wxMouseEvent & event );
+		void onMouseWheel( wxMouseEvent & event );
 
 	private:
 		wxWindowPtr< RenderPanel > m_panel;
 		c3d::RawUniquePtr< Game > m_game;
-		wxTimer * m_timer{ nullptr };
+		c3d::RawUniquePtr< wxTimer > m_timer{};
 	};
 }

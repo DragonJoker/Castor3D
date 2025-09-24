@@ -20,14 +20,12 @@ namespace c3d
 		static bool constexpr displaySkinningDetail = false;
 
 		static void transformMesh( Matrix4x4f const & transform
-			, Mesh & mesh )
+			, Mesh const & mesh )
 		{
-			for ( auto & submesh : mesh )
+			for ( auto const & submesh : mesh )
 			{
 				for ( auto & vertex : submesh->getPositions() )
-				{
 					vertex = transform * vertex;
-				}
 
 				SubmeshUtils::computeNormals( submesh->getPositions()
 					, submesh->getNormals()
@@ -39,14 +37,9 @@ namespace c3d
 				Point3fArray const * texcoords = &tex;
 
 				if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
-				{
 					tangents = &tanComp->getData().getData();
-				}
-
 				if ( auto texComp = submesh->getComponent< Texcoords0Component >() )
-				{
 					texcoords = &texComp->getData().getData();
-				}
 
 				SubmeshUtils::computeTangentsFromNormals( submesh->getPositions()
 					, *texcoords
@@ -65,13 +58,9 @@ namespace c3d
 
 			if ( uint32_t index = 0;
 				parameters.get( cuT( "submesh" ), index ) )
-			{
 				submesh = index;
-			}
 			else
-			{
 				submesh = 0xFFFFFFFFu;
-			}
 
 			return needsTransform;
 		}
@@ -91,12 +80,9 @@ namespace c3d
 		, bool forceImport )
 	{
 		if ( !m_file )
-		{
 			m_file = file;
-		}
 
 		auto result = doCreateMesh( name, scene );
-
 		if ( !result
 			|| !importData( *result, file, parameters, forceImport ) )
 		{
@@ -138,12 +124,10 @@ namespace c3d
 				if ( bool invertNormals{};
 					parameters.get( cuT( "invert_normals" ), invertNormals ) && invertNormals )
 				{
-					for ( auto & submesh : mesh )
+					for ( auto const & submesh : mesh )
 					{
 						for ( auto & n : submesh->getNormals() )
-						{
 							n = -n;
-						}
 					}
 				}
 
@@ -151,9 +135,7 @@ namespace c3d
 
 				if ( auto found = parameters.get( cuT( "no_optimisations" ), noOptim );
 					!found || !noOptim )
-				{
 					MeshPreparer::prepare( mesh, parameters );
-				}
 
 				mesh.computeContainers();
 				log::info << getPrefix() << cuT( "Loaded Mesh [" ) << mesh.getName() << cuT( "]" )
@@ -170,18 +152,16 @@ namespace c3d
 						<< cuT( ", " ) << mesh.getFaceCount() << cuT( " faces" )
 						<< cuT( ", " ) << mesh.getSubmeshCount() << cuT( " submeshes" ) << std::endl;
 
-					for ( auto & submesh : mesh )
+					for ( auto const & submesh : mesh )
 					{
 						log::debug << "  Submesh " << submesh->getId() << std::endl;
 
 						if ( auto skin = submesh->getComponent< SkinComponent >() )
 						{
-							for ( auto & s : skin->getData().getData() )
-							{
+							for ( auto const & s : skin->getData().getData() )
 								log::debug << "    " << s.m_ids[0] << " " << s.m_ids[1] << " " << s.m_ids[2] << " " << s.m_ids[3]
 									<< "    " << s.m_weights[0] << " " << s.m_weights[1] << " " << s.m_weights[2] << " " << s.m_weights[3]
 									<< std::endl;
-							}
 						}
 					}
 				}
@@ -193,10 +173,8 @@ namespace c3d
 		}
 		else
 		{
-			for ( auto & submesh : mesh )
-			{
+			for ( auto const & submesh : mesh )
 				submesh->instantiate( {}, submesh->getDefaultMaterial(), false );
-			}
 		}
 
 		return result;

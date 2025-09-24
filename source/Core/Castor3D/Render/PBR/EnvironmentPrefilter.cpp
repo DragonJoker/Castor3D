@@ -113,7 +113,7 @@ namespace c3d
 
 				shader::BRDFHelpers brdf{ writer };
 
-				auto matrix = writer.declUniformBuffer( "Matrix", { 0u, 0u } );
+				auto matrix = writer.declUniformBuffer( "Matrix", 0u, 0u );
 				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 

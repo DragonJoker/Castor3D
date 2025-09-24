@@ -13,7 +13,7 @@ if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 endif ()
 
 if ( CASTOR_TOOL_CASTOR_VIEWER_RECORDS )
-	find_package( FFMPEG QUIET COMPONENTS avcodec avformat avutil swscale swresample )
+	find_package( FFMPEG REQUIRED COMPONENTS avcodec avformat avutil swscale swresample )
 endif ()
 
 find_package( TDxWare_SDK CONFIG QUIET )
@@ -154,7 +154,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/SkeletonAnimationTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonNodeTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonTreeItemProperty.cpp
-	Properties/TreeItems/SsaoConfigTreeItemProperty.cpp
 	Properties/TreeItems/StyleTreeItemProperty.cpp
 	Properties/TreeItems/SubmeshTreeItemProperty.cpp
 	Properties/TreeItems/TextureTreeItemProperty.cpp
@@ -345,8 +344,6 @@ target_link_libraries( ${PROJECT_NAME}
 		${GTK_LIBRARIES}
 		${X11_LIBRARIES}
 		sdw::CompilerSpirV
-	PRIVATE
-		${FFMPEG_LIBRARIES}
 )
 target_compile_definitions( ${PROJECT_NAME}
 	PUBLIC
@@ -357,6 +354,18 @@ if( CASTOR_TOOL_CASTOR_VIEWER_RECORDS AND FFMPEG_FOUND )
 		PUBLIC
 			GUICOMMON_RECORDS
 			GUICOMMON_FFMPEG
+	)
+	target_include_directories( ${PROJECT_NAME}
+		PRIVATE
+			${FFMPEG_INCLUDE_DIRS}
+	)
+	target_link_directories( ${PROJECT_NAME}
+		PRIVATE
+			${FFMPEG_LIBRARY_DIRS}
+	)
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			${FFMPEG_LIBRARIES}
 	)
 endif()
 if ( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS )

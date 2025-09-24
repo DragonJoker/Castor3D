@@ -32,6 +32,8 @@ namespace c3d::shader
 		friend struct PointShadowData;
 		friend struct SpotShadowData;
 
+		SDW_DeclStructInstance( C3D_API, ShadowData );
+
 		ShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -63,13 +65,15 @@ namespace c3d::shader
 		, sdw::Vec4ArrayField< "splitScales", ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) / 4u >
 		, sdw::Mat4ArrayField< "transforms", MaxDirectionalCascadesCount > >
 	{
+		SDW_DeclStructInstance( C3D_API, DirectionalShadowData );
+
 		DirectionalShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
-		
+
 		auto base()const { return getMember< "base" >(); }
 		auto cascadeCount()const { return base().cascadeCount(); }
 		auto splitDepths()const { return getMember< "splitDepths" >(); }
@@ -83,13 +87,15 @@ namespace c3d::shader
 		, sdw::StructFieldT< ShadowData, "base" >
 		, sdw::Vec4Field< "position" > >
 	{
+		SDW_DeclStructInstance( C3D_API, PointShadowData );
+
 		PointShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
-		
+
 		auto base()const { return getMember< "base" >(); }
 		auto position()const { return getMember< "position" >(); }
 	};
@@ -100,6 +106,8 @@ namespace c3d::shader
 		, sdw::StructFieldT< ShadowData, "base" >
 		, sdw::Mat4Field< "transform" > >
 	{
+		SDW_DeclStructInstance( C3D_API, SpotShadowData );
+
 		SpotShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -118,6 +126,8 @@ namespace c3d::shader
 		, sdw::StructFieldArrayT< PointShadowData, "point", MaxPointShadowMapCount >
 		, sdw::StructFieldArrayT< SpotShadowData, "spot", MaxSpotShadowMapCount > >
 	{
+		SDW_DeclStructInstance( C3D_API, AllShadowData );
+
 		AllShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -133,10 +143,22 @@ namespace c3d::shader
 	class ShadowsBuffer
 	{
 	public:
-		C3D_API ShadowsBuffer( sdw::ShaderWriter & writer
-			, uint32_t binding
-			, uint32_t set
-			, bool enable = true );
+		template< typename BindingT, typename SetT >
+		ShadowsBuffer( sdw::ShaderWriter & writer
+			, BindingT binding
+			, SetT set
+			, bool enable = true )
+		{
+			sdw::UniformBuffer buffer{ writer
+				, "C3D_ShadowsBuffer"
+				, "c3d_shadows"
+				, uint32_t( binding )
+				, uint32_t( set )
+				, sdw::type::MemoryLayout::eStd140
+				, enable };
+			m_data = makeRawUnique< AllShadowData >( buffer.declMember< AllShadowData >( "s", enable ) );
+			buffer.end();
+		}
 
 		C3D_API DirectionalShadowData getDirectionalShadows()const;
 		C3D_API PointShadowData getPointShadows( sdw::Int const & index )const;

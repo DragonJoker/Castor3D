@@ -95,7 +95,7 @@ namespace smaa
 			} ) }
 	{
 		ubo.createPassBinding( m_pass
-			, SmaaUboIdx );
+			, smaa::Bindings::SmaaUboIdx );
 		m_outDepth.setLastAttach( m_pass.addOutputStencilTarget( m_outStencilView
 			, c3d::defaultClearDepthStencil ) );
 		m_outColour.setLastAttach( m_pass.addOutputColourTarget( m_outColour.getTargetViewId()
@@ -110,7 +110,7 @@ namespace smaa
 		m_outDepth.destroy();
 	}
 
-	void EdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )
+	void EdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA EdgeDetection Colour Result" )
@@ -125,8 +125,8 @@ namespace smaa
 		namespace c3ds = c3d::shader;
 
 		auto SMAAEdgeDetectionVS = writer.implementFunction< sdw::Void >( "SMAAEdgeDetectionVS"
-			, [&]( sdw::Vec2 const & texCoord
-				, sdw::Vec4Array offset )
+			, [&smaaData]( sdw::Vec2 const & texCoord
+				, sdw::Vec4Array const & offset )
 			{
 				offset[0] = fma( smaaData.rtMetrics.xyxy(), vec4( sdw::Float{ -1.0f }, 0.0_f, 0.0_f, sdw::Float{ -1.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
 				offset[1] = fma( smaaData.rtMetrics.xyxy(), vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f ), vec4( texCoord.xy(), texCoord.xy() ) );
@@ -135,7 +135,7 @@ namespace smaa
 			, sdw::InVec2{ writer, "texCoord" }
 			, sdw::OutVec4Array{ writer, "offset", 3u } );
 
-		writer.implementEntryPointT< c3ds::PosUv2FT, EDVertexT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+		writer.implementEntryPointT< c3ds::PosUv2FT, EDVertexT >( [&SMAAEdgeDetectionVS]( sdw::VertexInT< c3ds::PosUv2FT > const & in
 			, sdw::VertexOutT< EDVertexT > out )
 			{
 				out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );

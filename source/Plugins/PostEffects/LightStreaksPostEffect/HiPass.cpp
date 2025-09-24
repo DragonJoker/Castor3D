@@ -25,7 +25,7 @@ namespace light_streaks
 		namespace c3ds = c3d::shader;
 
 		template< typename T >
-		inline constexpr T getSubresourceDimension( T const & extent
+		constexpr T getSubresourceDimension( T const & extent
 			, uint32_t mipLevel )noexcept
 		{
 			return std::max( T( 1 ), T( extent >> mipLevel ) );
@@ -37,15 +37,15 @@ namespace light_streaks
 
 			auto c3d_mapColor = writer.declCombinedImg< Img2DRgba >( "c3d_mapColor", 0u, 0u );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer , &c3d_mapColor]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = vec4( c3d_mapColor.sample( in.uv(), 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
@@ -122,7 +122,7 @@ namespace light_streaks
 			result.setLastAttach( i, pass.addOutputTransferImage( result.getTargetViewId( i ) ) );
 	}
 
-	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

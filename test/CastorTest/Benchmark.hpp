@@ -14,7 +14,7 @@ namespace Testing
 	/// From Andrei Alexandrescu
 	///
 	template< class T >
-	static inline void doNotOptimizeAway( T && datum )
+	static inline void doNotOptimizeAway( T const & datum )
 	{
 #if defined( _WIN32 )
 
@@ -30,11 +30,11 @@ namespace Testing
 
 	class BenchCase
 	{
-		typedef std::function< void() > CallbackBench;
+		using CallbackBench = std::function< void() >;
 
 	public:
 		explicit BenchCase( std::string const & name );
-		virtual ~BenchCase();
+		virtual ~BenchCase()noexcept = default;
 		virtual void Execute() = 0;
 		inline std::string const & getSummary()const
 		{
@@ -42,15 +42,15 @@ namespace Testing
 		}
 
 	protected:
-		void doBench( std::string name, CallbackBench bench, uint64_t ui64Calls );
+		void doBench( std::string const & name, CallbackBench const & bench, uint64_t ui64Calls );
 
 	private:
 		using clock = std::chrono::high_resolution_clock;
-		clock::time_point m_saved;
-		std::string m_name;
+		clock::time_point m_saved{};
+		std::string m_name{};
 		std::chrono::nanoseconds m_cumulativeTimes{};
-		uint64_t m_totalExecutions;
-		std::string m_summary;
+		uint64_t m_totalExecutions{};
+		std::string m_summary{};
 	};
 
 #	define BENCHMARK( Name, Calls ) doBench( #Name, [&](){ Name(); }, Calls )

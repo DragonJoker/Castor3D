@@ -270,7 +270,7 @@ namespace c3d
 					, blockContext->objectTransform.translate, blockContext->objectTransform.rotate, blockContext->objectTransform.scale );
 				blockContext->objectType = {};
 				blockContext->objectName = {};
-				blockContext->objectTransform = {};
+				blockContext->objectTransform = NodeTransform{};
 			}
 		}
 		CU_EndAttributePop()

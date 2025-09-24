@@ -16,36 +16,13 @@ namespace c3d
 	{
 	public:
 		//! The basic integer type.
-		using BaseType = typename std::underlying_type< FlagTypeT >::type;
+		using BaseType = typename std::underlying_type_t< FlagTypeT >;
 
 	public:
-		constexpr FlagIterator( FlagIterator && value )noexcept
-			: m_initialValue{ value.m_initialValue }
-			, m_index{ value.m_index }
-			, m_value{ value.m_value }
-		{
-		}
-
-		constexpr FlagIterator( FlagIterator const & value )
-			: m_initialValue{ value.m_initialValue }
-			, m_index{ value.m_index }
-			, m_value{ value.m_value }
-		{
-		}
-
-		constexpr FlagIterator & operator=( FlagIterator && value )noexcept
-		{
-			m_initialValue = value.m_initialValue;
-			m_index = value.m_index;
-			m_value = value.m_value;
-		}
-
-		constexpr FlagIterator & operator=( FlagIterator const & value )
-		{
-			m_initialValue = value.m_initialValue;
-			m_index = value.m_index;
-			m_value = value.m_value;
-		}
+		constexpr FlagIterator( FlagIterator && value )noexcept = default;
+		constexpr FlagIterator( FlagIterator const & value ) = default;
+		constexpr FlagIterator & operator=( FlagIterator && value )noexcept = default;
+		constexpr FlagIterator & operator=( FlagIterator const & value ) = default;
 		/**
 		* Begin ctor.
 		*/
@@ -101,32 +78,19 @@ namespace c3d
 		size_t m_index{ 0u };
 		FlagTypeT m_value;
 
-		template< typename FlagType, typename IteratorTraits >
-		friend constexpr bool operator==( FlagIterator< FlagType, IteratorTraits > const & lhs
-			, FlagIterator< FlagType, IteratorTraits > const & rhs );
+		friend bool operator==( FlagIterator const & lhs, FlagIterator const & rhs )noexcept
+		{
+			return lhs.m_index == rhs.m_index
+				&& lhs.m_initialValue == rhs.m_initialValue;
+		}
 	};
-
-	template< typename FlagTypeT, typename IteratorTraitsT >
-	constexpr bool operator==( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
-		, FlagIterator< FlagTypeT, IteratorTraitsT > const & rhs )
-	{
-		return lhs.m_index == rhs.m_index
-			&& lhs.m_initialValue == rhs.m_initialValue;
-	}
-
-	template< typename FlagTypeT, typename IteratorTraitsT >
-	constexpr bool operator!=( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
-		, FlagIterator< FlagTypeT, IteratorTraitsT > const & rhs )
-	{
-		return !( lhs == rhs );
-	}
 
 	template< typename FlagType >
 	class FlagCombination
 	{
 	public:
 		//! The basic integer type.
-		using BaseType = typename std::underlying_type< FlagType >::type;
+		using BaseType = typename std::underlying_type_t< FlagType >;
 		/**
 		*\~english
 		*\name
@@ -277,137 +241,107 @@ namespace c3d
 
 	private:
 		BaseType m_value;
+
+		friend bool operator==( FlagCombination const & lhs, FlagCombination const & rhs )noexcept
+		{
+			return BaseType( lhs ) == BaseType( rhs );
+		}
+
+		friend bool operator==( FlagCombination const & lhs, FlagType const & rhs )noexcept
+		{
+			return BaseType( lhs ) == BaseType( rhs );
+		}
+
+		friend constexpr FlagCombination operator&( FlagCombination const & lhs, FlagType const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result &= rhs;
+		}
+
+		friend constexpr FlagCombination operator|( FlagCombination const & lhs, FlagType const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result |= rhs;
+		}
+
+		friend constexpr FlagCombination operator^( FlagCombination const & lhs, FlagType const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result ^= rhs;
+		}
+
+		friend constexpr FlagCombination operator&( FlagCombination const & lhs, BaseType const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result &= rhs;
+		}
+
+		friend constexpr FlagCombination operator|( FlagCombination const & lhs, BaseType const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result |= rhs;
+		}
+
+		friend constexpr FlagCombination operator^( FlagCombination const & lhs, BaseType const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result ^= rhs;
+		}
+
+		friend constexpr FlagCombination operator&( FlagCombination const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result &= rhs;
+		}
+
+		friend constexpr FlagCombination operator|( FlagCombination const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result |= rhs;
+		}
+
+		friend constexpr FlagCombination operator^( FlagCombination const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result ^= rhs;
+		}
+
+		friend constexpr FlagCombination operator&( FlagType const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result &= rhs;
+		}
+
+		friend constexpr FlagCombination operator|( FlagType const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result |= rhs;
+		}
+
+		friend constexpr FlagCombination operator^( FlagType const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result ^= rhs;
+		}
+
+		friend constexpr FlagCombination operator&( BaseType const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result &= rhs;
+		}
+
+		friend constexpr FlagCombination operator|( BaseType const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result |= rhs;
+		}
+
+		friend constexpr FlagCombination operator^( BaseType const & lhs, FlagCombination const & rhs )noexcept
+		{
+			FlagCombination result{ lhs };
+			return result ^= rhs;
+		}
 	};
-	/**
-	*\~english
-	*\name
-	*	Comparison operators.
-	*\~french
-	*\name
-	*	Opérateurs de comparaison.
-	**/
-	/**\{*/
-	template< typename FlagType >
-	constexpr bool operator==( FlagCombination< FlagType > const & lhs
-		, FlagCombination< FlagType > const & rhs )noexcept
-	{
-		using Type = typename FlagCombination< FlagType >::BaseType;
-		return Type( lhs ) == Type( rhs );
-	}
-
-	template< typename FlagType >
-	constexpr bool operator==( FlagCombination< FlagType > const & lhs
-		, FlagType const & rhs )noexcept
-	{
-		using Type = typename FlagCombination< FlagType >::BaseType;
-		return Type( lhs ) == Type( rhs );
-	}
-
-	template< typename FlagType >
-	constexpr bool operator!=( FlagCombination< FlagType > const & lhs
-		, FlagCombination< FlagType > const & rhs )noexcept
-	{
-		using Type = typename FlagCombination< FlagType >::BaseType;
-		return Type( lhs ) != Type( rhs );
-	}
-
-	template< typename FlagType >
-	constexpr bool operator!=( FlagCombination< FlagType > const & lhs
-		, FlagType const & rhs )noexcept
-	{
-		using Type = typename FlagCombination< FlagType >::BaseType;
-		return Type( lhs ) != Type( rhs );
-	}
-	/**
-	*\~english
-	*\name
-	*	Binary operators.
-	*\~french
-	*\name
-	*	Opérateurs binaires.
-	**/
-	/**\{*/
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator&
-		( FlagCombination< FlagType > const & lhs
-		, FlagType const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result &= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator|
-		( FlagCombination< FlagType > const & lhs
-		, FlagType const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result |= rhs;
-	}
-	
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator^
-		( FlagCombination< FlagType > const & lhs
-		, FlagType const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result ^= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator&
-		( FlagCombination< FlagType > const & lhs
-		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result &= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator|
-		( FlagCombination< FlagType > const & lhs
-		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result |= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator^
-		( FlagCombination< FlagType > const & lhs
-		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result ^= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator&
-		( FlagCombination< FlagType > const & lhs
-		, FlagCombination< FlagType > const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result &= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator|
-		( FlagCombination< FlagType > const & lhs
-		, FlagCombination< FlagType > const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result |= rhs;
-	}
-
-	template< typename FlagType >
-	constexpr FlagCombination< FlagType > operator^
-		( FlagCombination< FlagType > const & lhs
-		, FlagCombination< FlagType > const & rhs )noexcept
-	{
-		FlagCombination< FlagType > result{ lhs };
-		return result ^= rhs;
-	}
-	/**\}*/
 	/**
 	 *\~english
 	 *\param[in]	value	The value.

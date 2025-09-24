@@ -17,6 +17,8 @@ namespace c3d::shader
 			, sdw::Vec3Field< "normal" >
 			, sdw::FloatField< "distance" > >
 	{
+		SDW_DeclStructInstance( C3D_API, Plane );
+
 		Plane( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
@@ -42,6 +44,8 @@ namespace c3d::shader
 			, sdw::FloatField< "apertureSin" >
 			, sdw::FloatField< "apertureTan" > >
 	{
+		SDW_DeclStructInstance( C3D_API, Cone );
+
 		Cone( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
@@ -71,6 +75,8 @@ namespace c3d::shader
 			, sdw::Vec4Field< "bmin" >
 			, sdw::Vec4Field< "bmax" > >
 	{
+		SDW_DeclStructInstance( C3D_API, AABB );
+
 		AABB( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )

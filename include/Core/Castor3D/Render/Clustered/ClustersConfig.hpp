@@ -50,9 +50,16 @@ namespace c3d
 		//!\~english	The hybrid split scheme minimal threshold distance.
 		//!\~french		La distance minimale en mode de découpage hybride.
 		GroupChangeTracked< float > minDistance;
-	};
 
-	C3D_API bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs );
+	private:
+		friend bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs )noexcept
+		{
+			return lhs.enabled == rhs.enabled
+				&& lhs.enableReduceWarpOptimisation == rhs.enableReduceWarpOptimisation
+				&& lhs.splitScheme == rhs.splitScheme
+				&& lhs.minDistance == rhs.minDistance;
+		}
+	};
 }
 
 #endif

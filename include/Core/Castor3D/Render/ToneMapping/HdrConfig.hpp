@@ -23,13 +23,14 @@ namespace c3d
 		//!\~english	The gamma correction value.
 		//!\~french		La valeur de correction gamma.
 		float gamma{ 2.2f };
-	};
 
-	inline bool operator==( HdrConfig const & lhs, HdrConfig const & rhs )noexcept
-	{
-		return lhs.exposure == rhs.exposure
-			&& lhs.gamma == rhs.gamma;
-	}
+	private:
+		friend bool operator==( HdrConfig const & lhs, HdrConfig const & rhs )noexcept
+		{
+			return lhs.exposure == rhs.exposure
+				&& lhs.gamma == rhs.gamma;
+		}
+	};
 }
 
 #endif

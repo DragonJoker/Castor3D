@@ -467,7 +467,7 @@ namespace c3d
 		 *\param[in]	submeshData			Les données de rendu du submesh, s'il en a.
 		 *\param[in]	vertexStride		Le nombre d'octets entre deux attributs position du vertex buffer.
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
+		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
 			, SubmeshComponentCombine const & submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
@@ -482,42 +482,6 @@ namespace c3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< Point4f > const & morphTargets
-			, SubmeshRenderData const * submeshData
-			, uint32_t vertexStride )const noexcept;
-		/**
-		 *\~english
-		 *\brief		Creates the pipeline flags for given configuration.
-		 *\param[in]	pass				The pass for which the pipeline is created.
-		 *\param[in]	textures			The textures configuration.
-		 *\param[in]	submeshComponents	The submesh components combination.
-		 *\param[in]	programFlags		A combination of ProgramFlag.
-		 *\param[in]	sceneFlags			Scene related flags.
-		 *\param[in]	topology			The render topology.
-		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
-		 *\param[in]	morphTargets		The morph targets buffer.
-		 *\param[in]	submeshData			The submesh render data, if any.
-		 *\param[in]	vertexStride		The number of byytes between two position attributes inside the vertex buffer.
-		 *\~french
-		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
-		 *\param[in]	pass				La passe pour laquelle le pipeline est créé.
-		 *\param[in]	textures			La configuration des textures.
-		 *\param[in]	submeshComponents	La combinaison de composants de submesh.
-		 *\param[in]	programFlags		Une combinaison de ProgramFlag.
-		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
-		 *\param[in]	topology			La topologie de rendu.
-		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
-		 *\param[in]	morphTargets		Le buffer de morph targets.
-		 *\param[in]	submeshData			Les données de rendu du submesh, s'il en a.
-		 *\param[in]	vertexStride		Le nombre d'octets entre deux attributs position du vertex buffer.
-		 */
-		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
-			, TextureCombine const & textures
-			, SubmeshComponentCombine const & submeshComponents
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags
-			, VkPrimitiveTopology topology
-			, bool isFrontCulled
 			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, SubmeshRenderData const * submeshData
 			, uint32_t vertexStride )const noexcept;
@@ -563,7 +527,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Nettoie tous les pipelines des listes.
 		 */
-		C3D_API void cleanupPipelines();
+		C3D_API void cleanupPipelines()const;
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set.
@@ -589,7 +553,7 @@ namespace c3d
 		 *\remarks		Tous les objets liés à ce noued seront ignorés lors du rendu.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API void setIgnoredNode( SceneNode const & node );
+		C3D_API void setIgnoredNode( SceneNode const & node )const;
 		/**
 		 *\~english
 		 *\brief			Registers nodes counts to given RenderInfo.
@@ -598,7 +562,7 @@ namespace c3d
 		 *\brief			Enregistre les comptes de noeuds dans le RenderInfo donné.
 		 *\param[in,out]	info	Reçoit les comptes.
 		 */
-		C3D_API void countNodes( RenderInfo & info )const noexcept;
+		C3D_API virtual void countNodes( RenderInfo & info )const noexcept;
 		/**
 		 *\~english
 		 *\param[in]	colourBlendMode	The colour blend mode.
@@ -628,7 +592,7 @@ namespace c3d
 		C3D_API virtual bool areDebugTargetsEnabled()const noexcept;
 		C3D_API bool allowClusteredLighting( ClustersConfig const & config )const noexcept;
 		C3D_API bool hasNodes()const noexcept;
-		C3D_API Scene & getScene()const noexcept;
+		C3D_API virtual Scene & getScene()const noexcept;
 		C3D_API SceneNode const * getIgnoredNode()const noexcept;
 		C3D_API bool isMeshShading()const noexcept;
 		C3D_API PipelinesNodesT< SubmeshRenderNode > const & getSubmeshNodes()const;
@@ -681,7 +645,8 @@ namespace c3d
 
 	private:
 		void doSubInitialise()const;
-		void doSubRecordInto( VkCommandBuffer commandBuffer )const;
+		void doSubRecordInto( crg::RecordContext const & context
+			, VkCommandBuffer commandBuffer )const;
 
 	protected:
 		/**

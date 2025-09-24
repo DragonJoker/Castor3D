@@ -95,16 +95,7 @@ namespace c3d
 			: public FilteredPreprocessedFile
 		{
 		public:
-			explicit FinalSceneFinder( FileParser & parser )
-				: FilteredPreprocessedFile{ parser }
-			{
-			}
-
-			FinalSceneFinder( FileParser & parser
-				, FileParserContextUPtr context )
-				: FilteredPreprocessedFile{ parser, c3d::move( context ) }
-			{
-			}
+			using FilteredPreprocessedFile::FilteredPreprocessedFile;
 
 			String const & getMainScene()const noexcept
 			{
@@ -436,8 +427,8 @@ namespace c3d
 
 			auto index = incProgressBarGlobalRange( progress
 				, uint32_t( imprt::PreprocessedSceneFile::Category::eCount ) );
-			auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( SectionId section
-				, PreprocessedFile::Action const & action )
+			auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( [[maybe_unused]] SectionId section
+				, [[maybe_unused]] PreprocessedFile::Action const & action )
 				{
 					auto category = preprocessed.getCategory();
 					auto status = preprocessed.incCategoryActions( category );

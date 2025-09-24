@@ -12,14 +12,12 @@ namespace c3d
 
 	namespace btnwrtr
 	{
-		static bool isWritableMaterial( MaterialObs material )
+		static bool isWritableMaterial( Material const * material )
 		{
 			if ( !material )
-			{
 				return false;
-			}
 
-			auto name = material->getName();
+			c3d::StringView name = material->getName();
 			return !string::endsWith( name, cuT( "_THG" ) )
 				&& !string::endsWith( name, cuT( "_BHG" ) )
 				&& !string::endsWith( name, cuT( "_FHG" ) )

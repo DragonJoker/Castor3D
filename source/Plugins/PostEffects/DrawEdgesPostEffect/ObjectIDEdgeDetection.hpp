@@ -24,7 +24,7 @@ namespace draw_edges
 			, bool const * enabled );
 		~ObjectIDEdgeDetection();
 
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		c3d::Texture const & getResult()const
 		{

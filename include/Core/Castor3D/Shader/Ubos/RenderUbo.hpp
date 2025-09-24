@@ -27,6 +27,8 @@ namespace c3d
 			, sdw::UInt32Field< "debugIndex" >
 			, sdw::FloatField< "pad" > >
 		{
+			SDW_DeclStructInstance( C3D_API, RenderData );
+
 			RenderData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -87,8 +89,9 @@ namespace c3d
 			, Size const & renderSize, bool safeBanded
 			, uint32_t debugIndex );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			return m_ubo.createPassBinding( pass, binding );
 		}
@@ -99,7 +102,8 @@ namespace c3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
