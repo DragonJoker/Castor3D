@@ -89,7 +89,6 @@ namespace c3d
 		using RenderPasses = Array< RenderPass, 6 >;
 
 		Texture m_result;
-		SamplerObs m_sampler{};
 		Texture const & m_srcView;
 		ashes::Image * m_srcImage;
 		ashes::ImageView m_srcImageView;

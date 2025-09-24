@@ -525,146 +525,93 @@ namespace c3d
 
 	private:
 		float m_component{};
+
+		friend bool operator ==( ColourComponentValue const & lhs, ColourComponentValue const & rhs )
+		{
+			uint8_t uiA;
+			uint8_t uiB;
+			lhs.convertTo( uiA );
+			rhs.convertTo( uiB );
+			return uiA == uiB;
+		}
+
+		friend float operator+( ColourComponentValue const & lhs, ColourComponentValue const & rhs )
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			ColourComponentValue cpnt( fValue );
+			cpnt += rhs;
+			return cpnt;
+		}
+
+		friend float operator-( ColourComponentValue const & lhs, ColourComponentValue const & rhs )
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			ColourComponentValue cpnt( fValue );
+			cpnt -= rhs;
+			return cpnt;
+		}
+
+		friend float operator*( ColourComponentValue const & lhs, ColourComponentValue const & rhs )
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			ColourComponentValue cpnt( fValue );
+			cpnt *= rhs;
+			return cpnt;
+		}
+
+		friend float operator/( ColourComponentValue const & lhs, ColourComponentValue const & rhs )
+		{
+			float fValue;
+			lhs.convertTo( fValue );
+			ColourComponentValue cpnt( fValue );
+			cpnt /= rhs;
+			return cpnt;
+		}
+
+		template< typename T >
+		friend float operator+( ColourComponentValue const & lhs, T const & rhs )
+		{
+			float value;
+			lhs.convertTo( value );
+			ColourComponentValue cpnt{ value };
+			cpnt += rhs;
+			return value;
+		}
+
+		template< typename T >
+		friend float operator-( ColourComponentValue const & lhs, T const & rhs )
+		{
+			float value;
+			lhs.convertTo( value );
+			ColourComponentValue cpnt{ value };
+			cpnt -= rhs;
+			return value;
+		}
+
+		template< typename T >
+		friend float operator/( ColourComponentValue const & lhs, T const & rhs )
+		{
+			float value;
+			lhs.convertTo( value );
+			ColourComponentValue cpnt{ value };
+			cpnt /= rhs;
+			return value;
+		}
+
+		template< typename T >
+		friend float operator*( ColourComponentValue const & lhs, T const & rhs )
+		{
+			float value;
+			lhs.convertTo( value );
+			ColourComponentValue cpnt{ value };
+			cpnt *= rhs;
+			return value;
+		}
 	};
 	static_assert( sizeof( ColourComponentValue ) == sizeof( float ) );
-	/**
-	 *\~english
-	 *\brief		Equality operator
-	 *\param[in]	lhs, rhs	The components to compare
-	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	lhs, rhs	Les composantes à comparer
-	 */
-	CU_API bool operator ==( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Inequality operator
-	 *\param[in]	lhs, rhs	The components to compare
-	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	lhs, rhs	Les composantes à comparer
-	 */
-	CU_API bool operator !=( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		addition assignment operator
-	 *\param[in]	lhs, rhs	The components to add
-	 *\return		Result of lhs + rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par addition
-	 *\param[in]	lhs, rhs	Les composantes à ajouter
-	 *\return		Resultat de lhs + rhs
-	 */
-	template< typename T >
-	float operator+( ColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		ColourComponentValue cpnt{ value };
-		cpnt += rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		Substraction assignment operator
-	 *\param[in]	lhs, rhs	The components to subtract
-	 *\return		Result of lhs - rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par soustraction
-	 *\param[in]	lhs, rhs	Les composantes à soustraire
-	 *\return		Resultat de lhs - rhs
-	 */
-	template< typename T >
-	float operator-( ColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		ColourComponentValue cpnt{ value };
-		cpnt -= rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		Division assignment operator
-	 *\param[in]	lhs, rhs	The components to divide
-	 *\return		Result of lhs / rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par division
-	 *\param[in]	lhs, rhs	Les composantes à diviser
-	 *\return		Resultat de lhs / rhs
-	 */
-	template< typename T >
-	float operator/( ColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		ColourComponentValue cpnt{ value };
-		cpnt /= rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		Multiplication assignment operator
-	 *\param[in]	lhs, rhs	The components to multiply
-	 *\return		Result of lhs * rhs
-	 *\~french
-	 *\brief		Opérateur d'affectation par multiplication
-	 *\param[in]	lhs, rhs	Les composantes à multiplier
-	 *\return		Resultat de lhs * rhs
-	 */
-	template< typename T >
-	float operator*( ColourComponentValue const & lhs, T const & rhs )
-	{
-		float value;
-		lhs.convertTo( value );
-		ColourComponentValue cpnt{ value };
-		cpnt *= rhs;
-		return value;
-	}
-	/**
-	 *\~english
-	 *\brief		addition operator
-	 *\param[in]	lhs, rhs	The components to add
-	 *\return		Result of lhs + rhs
-	 *\~french
-	 *\brief		Opérateur d'addition
-	 *\param[in]	lhs, rhs	Les composantes à ajouter
-	 *\return		Resultat de lhs + rhs
-	 */
-	CU_API float operator+( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Subtraction operator
-	 *\param[in]	lhs, rhs	The components to subtract
-	 *\return		Result of lhs - rhs
-	 *\~french
-	 *\brief		Opérateur de soustraction
-	 *\param[in]	lhs, rhs	Les composantes à soustraire
-	 *\return		Resultat de lhs - rhs
-	 */
-	CU_API float operator-( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs, rhs	The components to multiply
-	 *\return		Result of lhs * rhs
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs, rhs	Les composantes à multiplier
-	 *\return		Resultat de lhs * rhs
-	 */
-	CU_API float operator*( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
-	/**
-	 *\~english
-	 *\brief		Division operator
-	 *\param[in]	lhs, rhs	The components to divide
-	 *\return		Result of lhs / rhs
-	 *\~french
-	 *\brief		Opérateur de division
-	 *\param[in]	lhs, rhs	Les composantes à diviser
-	 *\return		Resultat de lhs / rhs
-	 */
-	CU_API float operator/( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 }
 
 #endif

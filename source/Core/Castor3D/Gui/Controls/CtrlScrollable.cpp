@@ -20,12 +20,13 @@ namespace c3d
 
 	namespace scrollable
 	{
+		template< typename FuncHasT, typename FuncGetT >
 		static void checkScrollBar( ScrollBarFlag flag
 			, Control & control
 			, String const & prefix
 			, ScrollableStyle const * style
-			, bool ( ScrollableStyle::* has )()const noexcept
-			, ScrollBarStyle & ( ScrollableStyle::* get )()const noexcept
+			, FuncHasT fnHas
+			, FuncGetT fnGet
 			, uint32_t rangeMax
 			, Size dim
 			, ScrollBarCtrlRPtr & scrollBar )
@@ -34,12 +35,17 @@ namespace c3d
 			{
 				if ( !scrollBar )
 				{
-					CU_Require( style && ( style->*has )() );
+					if ( !style || !fnHas( *style ) )
+					{
+						CU_Failure( "Expected a style" );
+						CU_Exception( "Expected a style" );
+					}
+
 					auto & manager = *control.getEngine().getControlsManager();
 					auto scene = control.hasScene() ? &control.getScene() : nullptr;
 					scrollBar = manager.registerControlT( makeUnique< ScrollBarCtrl >( scene
 						, cuT( "Scroll/" ) + prefix
-						, &( style->*get )()
+						, &fnGet( *style )
 						, &control
 						, makeRangedValue( 0.0f, 0.0f, float( rangeMax ) )
 						, Position{}
@@ -194,8 +200,8 @@ namespace c3d
 			, m_target
 			, cuT( "Vertic" )
 			, m_scrollableStyle
-			, &ScrollableStyle::hasVerticalStyle
-			, &ScrollableStyle::getVerticalStyle
+			, []( ScrollableStyle const & style ) { return style.hasVerticalStyle(); }
+			, []( ScrollableStyle const & style ) -> ScrollBarStyle & { return style.getVerticalStyle(); }
 			, m_target.getClientSize()->y
 			, { 20u, m_target.getClientSize()->y }
 			, m_verticalScrollBar );
@@ -203,8 +209,8 @@ namespace c3d
 			, m_target
 			, cuT( "Horiz" )
 			, m_scrollableStyle
-			, &ScrollableStyle::hasHorizontalStyle
-			, &ScrollableStyle::getHorizontalStyle
+			, []( ScrollableStyle const & style ) { return style.hasHorizontalStyle(); }
+			, []( ScrollableStyle const & style ) -> ScrollBarStyle & { return style.getHorizontalStyle(); }
 			, m_target.getClientSize()->x
 			, { m_target.getClientSize()->x, 20u }
 			, m_horizontalScrollBar );

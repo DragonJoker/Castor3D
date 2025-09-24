@@ -67,10 +67,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Log/LoggerInstance.hpp>
 #include <CastorUtils/Log/LoggerStream.hpp>
 #include <CastorUtils/Math/Angle.hpp>
-#include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Matrix.hpp>
 #include <CastorUtils/Math/PlaneEquation.hpp>
 #include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Math/PointView.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/Speed.hpp>

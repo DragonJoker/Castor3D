@@ -96,52 +96,33 @@ namespace c3d
 		inline Float4 & operator/=( Float4 const & rhs );
 
 	private:
+		friend Float4 operator+( Float4 const & lhs, Float4 const & rhs )
+		{
+			Float4 result{ lhs };
+			return result += rhs;
+		}
+
+		friend Float4 operator-( Float4 const & lhs, Float4 const & rhs )
+		{
+			Float4 result{ lhs };
+			return result -= rhs;
+		}
+
+		friend Float4 operator*( Float4 const & lhs, Float4 const & rhs )
+		{
+			Float4 result{ lhs };
+			return result *= rhs;
+		}
+
+		friend Float4 operator/( Float4 const & lhs, Float4 const & rhs )
+		{
+			Float4 result{ lhs };
+			return result /= rhs;
+		}
+
+	private:
 		__m128 m_value;
 	};
-	/**
-	 *\~english
-	 *\brief		addition operator.
-	 *\param[in]	lhs, rhs	The operands.
-	 *\return		The addition result.
-	 *\~french
-	 *\brief		Opérateur d'addition.
-	 *\param[in]	lhs, rhs	Les opérandes.
-	 *\return		Le résultat de l'addition.
-	 */
-	inline Float4 operator+( Float4 const & lhs, Float4 const & rhs );
-	/**
-	 *\~english
-	 *\brief		Subtraction operator.
-	 *\param[in]	lhs, rhs	The operands.
-	 *\return		The subtraction result.
-	 *\~french
-	 *\brief		Opérateur de soustraction.
-	 *\param[in]	lhs, rhs	Les opérandes.
-	 *\return		Le résultat de la soustraction.
-	 */
-	inline Float4 operator-( Float4 const & lhs, Float4 const & rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator.
-	 *\param[in]	lhs, rhs	The operands.
-	 *\return		The multiplication result.
-	 *\~french
-	 *\brief		Opérateur de multiplication.
-	 *\param[in]	lhs, rhs	Les opérandes.
-	 *\return		Le résultat de la multiplication.
-	 */
-	inline Float4 operator*( Float4 const & lhs, Float4 const & rhs );
-	/**
-	 *\~english
-	 *\brief		Division operator.
-	 *\param[in]	lhs, rhs	The operands.
-	 *\return		The division result.
-	 *\~french
-	 *\brief		Opérateur de division.
-	 *\param[in]	lhs, rhs	Les opérandes.
-	 *\return		Le résultat de la division.
-	 */
-	inline Float4 operator/( Float4 const & lhs, Float4 const & rhs );
 }
 
 #include "Simd.inl"

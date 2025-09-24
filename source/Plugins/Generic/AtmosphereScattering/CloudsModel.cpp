@@ -14,6 +14,16 @@ namespace atmosphere_scattering
 {
 	//************************************************************************************************
 
+	namespace details
+	{
+		static uint32_t getNextBinding( uint32_t & binding )
+		{
+			return binding++;
+		}
+	}
+
+	//************************************************************************************************
+
 	CloudsModel::CloudsModel( sdw::ShaderWriter & pwriter
 		, c3d::shader::Utils & putils
 		, AtmosphereModel & patmosphere
@@ -27,16 +37,16 @@ namespace atmosphere_scattering
 		, scattering{ pscattering }
 		, clouds{ pclouds }
 		, perlinWorleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "perlinWorleyNoiseMap"
-			, binding++
+			, details::getNextBinding( binding )
 			, set ) }
 		, worleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "worleyNoiseMap"
-			, binding++
+			, details::getNextBinding( binding )
 			, set ) }
 		, curlNoiseMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "curlNoiseMap"
-			, binding++
+			, details::getNextBinding( binding )
 			, set ) }
 		, weatherMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "weatherMap"
-			, binding++
+			, details::getNextBinding( binding )
 			, set ) }
 		, cloudsInnerRadius{ clouds.innerRadius() + atmosphere.getPlanetRadius() }
 		, cloudsOuterRadius{ clouds.outerRadius() + atmosphere.getPlanetRadius() }
@@ -48,18 +58,18 @@ namespace atmosphere_scattering
 		, sdw::Float const & pobjectId
 		, sdw::Float const & plinearDepth
 		, sdw::IVec2 const & pfragCoord
-		, sdw::Vec3 & psunLuminance
-		, sdw::Vec3 & pskyLuminance
-		, sdw::Float & pskyBlendFactor )
+		, sdw::Vec3 const & psunLuminance
+		, sdw::Vec3 const & pskyLuminance
+		, sdw::Float const & pskyBlendFactor )
 	{
 		if ( !m_applyClouds )
 		{
 			m_applyClouds = writer.implementFunction< sdw::Vec4 >( "clouds_apply"
-				, [&]( c3d::shader::Ray const & ray
+				, [this]( c3d::shader::Ray const & ray
 					, sdw::Float const & objectId
 					, sdw::Float const & linearDepth
 					, sdw::IVec2 const & fragCoord
-					, sdw::Vec3 sunLuminance
+					, sdw::Vec3 const & sunLuminance
 					, sdw::Vec3 skyLuminance
 					, sdw::Float skyBlendFactor )
 				{
@@ -225,8 +235,7 @@ namespace atmosphere_scattering
 					auto planetShadow0 = writer.declLocale( "planetShadow00"
 						, 0.0_f );
 					auto rayMarchResult = writer.declLocale( "rayMarchResult"
-						, raymarchToCloud( ray
-							, startPos0
+						, raymarchToCloud( startPos0
 							, endPos0
 							, fragCoord
 							, sunRadiance
@@ -255,8 +264,7 @@ namespace atmosphere_scattering
 						{
 							auto planetShadow1 = writer.declLocale( "planetShadow1"
 								, 0.0_f );
-							rayMarchResult = raymarchToCloud( ray
-								, startPos1
+							rayMarchResult = raymarchToCloud( startPos1
 								, endPos1
 								, fragCoord
 								, sunRadiance
@@ -312,7 +320,7 @@ namespace atmosphere_scattering
 		if ( !m_getHeightFraction )
 		{
 			m_getHeightFraction = writer.implementFunction< sdw::Float >( "clouds_getHeightFraction"
-				, [&]( sdw::Vec3 const & inPos )
+				, [this]( sdw::Vec3 const & inPos )
 				{
 					writer.returnStmt( ( length( inPos ) - cloudsInnerRadius ) / cloudsThickness );
 				}
@@ -328,7 +336,7 @@ namespace atmosphere_scattering
 		if ( !m_skewSamplePointWithWind )
 		{
 			m_skewSamplePointWithWind = writer.implementFunction< sdw::Vec3 >( "clouds_skewSamplePointWithWind"
-				, [&]( sdw::Vec3 point
+				, [this]( sdw::Vec3 point
 					, sdw::Float const & heightFraction )
 				{
 					//skew in wind direction
@@ -353,7 +361,7 @@ namespace atmosphere_scattering
 		if ( !m_getRelativeHeightInAtmosphere )
 		{
 			m_getRelativeHeightInAtmosphere = writer.implementFunction< sdw::Float >( "getRelativeHeightInAtmosphere"
-				, [&]( sdw::Vec3 const & point
+				, [this]( sdw::Vec3 const & point
 					, sdw::Vec3 const & startPosOnInnerShell
 					, Ray const & ray )
 				{
@@ -391,7 +399,7 @@ namespace atmosphere_scattering
 		if ( !m_getDensityHeightGradientForPoint )
 		{
 			m_getDensityHeightGradientForPoint = writer.implementFunction< sdw::Float >( "clouds_getDensityHeightGradientForPoint"
-				, [&]( sdw::Float const & heightFraction
+				, [this]( sdw::Float const & heightFraction
 					, sdw::Float const & cloudType )
 				{
 					auto stratusGradient = vec4( 0.0_f, 0.1_f, 0.2_f, 0.3_f );
@@ -430,7 +438,7 @@ namespace atmosphere_scattering
 		if ( !m_sampleLowFrequency )
 		{
 			m_sampleLowFrequency = writer.implementFunction< sdw::Float >( "clouds_sampleLowFrequency"
-				, [&]( sdw::Vec2 const & unskewedUV
+				, [this]( sdw::Vec2 const & unskewedUV
 					, sdw::Vec2 const & skewedUV
 					, sdw::Float const & heightFraction
 					, sdw::Float const & lod )
@@ -489,8 +497,8 @@ namespace atmosphere_scattering
 		if ( !m_erodeWithHighFrequency )
 		{
 			m_erodeWithHighFrequency = writer.implementFunction< sdw::Float >( "clouds_erodeWithHighFrequency"
-				, [&]( sdw::Float const & baseDensity
-					, sdw::Vec3 skewedSamplePoint
+				, [this]( sdw::Float const & baseDensity
+					, sdw::Vec3 const & skewedSamplePoint
 					, sdw::Vec2 const & skewedUV
 					, sdw::Float heightFraction
 					, sdw::Float const & lod )
@@ -541,7 +549,7 @@ namespace atmosphere_scattering
 		if ( !m_sampleCloudDensity )
 		{
 			m_sampleCloudDensity = writer.implementFunction< sdw::Float >( "clouds_sampleDensity"
-				, [&]( sdw::Vec3 const & samplePoint
+				, [this]( sdw::Vec3 const & samplePoint
 					, sdw::Boolean const & expensive
 					, sdw::Float const & heightFraction
 					, sdw::Float const & lod )
@@ -590,7 +598,7 @@ namespace atmosphere_scattering
 		if ( !m_raymarchToLight )
 		{
 			m_raymarchToLight = writer.implementFunction< sdw::Float >( "clouds_raymarchToLight"
-				, [&]( sdw::Vec3 const & viewDir
+				, [this]( sdw::Vec3 const & viewDir
 					, sdw::Vec3 pos
 					, sdw::Float const & stepSize
 					, sdw::Vec3 const & lightDir )
@@ -682,18 +690,16 @@ namespace atmosphere_scattering
 			, plightDir );
 	}
 
-	sdw::RetVec4 CloudsModel::raymarchToCloud( Ray const & pray
-		, sdw::Vec3 const & pstartPos
+	sdw::RetVec4 CloudsModel::raymarchToCloud( sdw::Vec3 const & pstartPos
 		, sdw::Vec3 const & pendPos
 		, sdw::IVec2 const & pfragCoord
 		, sdw::Vec3 const & psunColor
-		, sdw::Float & pplanetShadow )
+		, sdw::Float const & pplanetShadow )
 	{
 		if ( !m_raymarchToCloud )
 		{
 			m_raymarchToCloud = writer.implementFunction< sdw::Vec4 >( "clouds_raymarch"
-				, [&]( Ray const & ray
-					, sdw::Vec3 startPos
+				, [this]( sdw::Vec3 const & startPos
 					, sdw::Vec3 const & endPos
 					, sdw::IVec2 const & fragCoord
 					, sdw::Vec3 const & sunColor
@@ -787,7 +793,6 @@ namespace atmosphere_scattering
 					result.a() = accumDensity;
 					writer.returnStmt( result );
 				}
-				, InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "startPos" }
 				, sdw::InVec3{ writer, "endPos" }
 				, sdw::InIVec2{ writer, "fragCoord" }
@@ -795,8 +800,7 @@ namespace atmosphere_scattering
 				, sdw::OutFloat{ writer, "planetShadow" } );
 		}
 
-		return m_raymarchToCloud( pray
-			, pstartPos
+		return m_raymarchToCloud( pstartPos
 			, pendPos
 			, pfragCoord
 			, psunColor
@@ -811,7 +815,7 @@ namespace atmosphere_scattering
 		if ( !m_computeFogAmount )
 		{
 			m_computeFogAmount = writer.implementFunction< sdw::Float >( "clouds_computeFogAmount"
-				, [&]( sdw::Vec3 const & startPos
+				, [this]( sdw::Vec3 const & startPos
 					, sdw::Vec3 const & worldPos
 					, sdw::Float const & factor
 					, sdw::Float const & viewHeight )
@@ -840,7 +844,7 @@ namespace atmosphere_scattering
 		if ( !m_henyeyGreenstein )
 		{
 			m_henyeyGreenstein = writer.implementFunction< sdw::Float >( "clouds_henyeyGreenstein"
-				, [&]( sdw::Float const & g
+				, [this]( sdw::Float const & g
 					, sdw::Float const & cosTheta )
 				{
 					auto numer = writer.declLocale( "numer"
@@ -868,7 +872,7 @@ namespace atmosphere_scattering
 	sdw::RetVec4 CloudsModel::computeLighting( Ray const & pray
 		, sdw::Vec3 const & psunRadiance
 		, sdw::Vec3 const & psunLuminance
-		, sdw::Vec3 & pskyLuminance
+		, sdw::Vec3 const & pskyLuminance
 		, sdw::Float const & pfadeOut
 		, sdw::Float const & pplanetShadow
 		, sdw::Vec4 const & prayMarchResult )
@@ -876,9 +880,9 @@ namespace atmosphere_scattering
 		if ( !m_computeLighting )
 		{
 			m_computeLighting = writer.implementFunction< sdw::Vec4 >( "clouds_computeLighting"
-				, [&]( Ray const & ray
+				, [this]( Ray const & ray
 					, sdw::Vec3 const & sunRadiance
-					, sdw::Vec3  sunLuminance
+					, sdw::Vec3 const & sunLuminance
 					, sdw::Vec3 skyLuminance
 					, sdw::Float const & fadeOut
 					, sdw::Float const & planetShadow
@@ -934,7 +938,7 @@ namespace atmosphere_scattering
 			, prayMarchResult );
 	}
 
-	sdw::Float CloudsModel::getLightEnergy( sdw::Float cosTheta
+	sdw::Float CloudsModel::getLightEnergy( sdw::Float const & cosTheta
 		, sdw::Float const & coneDensity )
 	{
 		return utils.beer( coneDensity )

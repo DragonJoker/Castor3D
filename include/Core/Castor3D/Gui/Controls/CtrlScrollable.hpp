@@ -17,7 +17,7 @@ namespace c3d
 		C3D_API virtual ~ScrollableCtrl()noexcept;
 		C3D_API Position getScrollPosition()const;
 
-		ScrollableStyle & getStyle()const noexcept
+		ScrollableStyle & getScrollableStyle()const noexcept
 		{
 			return *m_scrollableStyle;
 		}

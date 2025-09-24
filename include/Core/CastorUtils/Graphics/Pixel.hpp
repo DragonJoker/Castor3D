@@ -215,7 +215,7 @@ namespace c3d
 		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
-		inline component_ref operator[]( uint8_t index )
+		inline component_ref operator[]( uint8_t index )noexcept
 		{
 			return m_components[index];
 		}
@@ -229,7 +229,7 @@ namespace c3d
 		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
-		inline component_const_ref operator[]( uint8_t index )const
+		inline component_const_ref operator[]( uint8_t index )const noexcept
 		{
 			return m_components[index];
 		}
@@ -241,7 +241,7 @@ namespace c3d
 		 *\brief		Récupère le pointeur sur les données constantes
 		 *\return		Les données
 		 */
-		inline component_const_ptr constPtr()const
+		inline component_const_ptr constPtr()const noexcept
 		{
 			return ( m_components ? & m_components[0] : nullptr );
 		}
@@ -253,7 +253,7 @@ namespace c3d
 		 *\brief		Récupère le pointeur sur les données
 		 *\return		Les données
 		 */
-		inline component_ptr ptr()
+		inline component_ptr ptr()noexcept
 		{
 			return ( m_components ? & m_components[0] : nullptr );
 		}
@@ -265,7 +265,7 @@ namespace c3d
 		 *\brief		Récupère un itérateur sur le premier élément
 		 *\return		L'itérateur
 		 */
-		inline iterator begin()
+		inline iterator begin()noexcept
 		{
 			return ( m_components ? & m_components[0] : nullptr );
 		}
@@ -277,7 +277,7 @@ namespace c3d
 		 *\brief		Récupère un itérateur constant sur le premier élément
 		 *\return		L'itérateur
 		 */
-		inline const_iterator begin()const
+		inline const_iterator begin()const noexcept
 		{
 			return ( m_components ? & m_components[0] : nullptr );
 		}
@@ -289,7 +289,7 @@ namespace c3d
 		 *\brief		Récupère un itérateur sur le dernier élément
 		 *\return		L'itérateur
 		 */
-		inline iterator end()
+		inline iterator end()noexcept
 		{
 			return ( m_components ? m_components + PixelDefinitionsT< FT >::Size : nullptr );
 		}
@@ -301,7 +301,7 @@ namespace c3d
 		 *\brief		Récupère un itérateur constant sur le dernier élément
 		 *\return		L'itérateur
 		 */
-		inline const_iterator end()const
+		inline const_iterator end()const noexcept
 		{
 			return ( m_components ? m_components + PixelDefinitionsT< FT >::Size : nullptr );
 		}
@@ -313,7 +313,7 @@ namespace c3d
 		 *\brief		Récupère le format du pixel
 		 *\return		Le format du pixel
 		 */
-		static PixelFormat getFormat()
+		static PixelFormat getFormat()noexcept
 		{
 			return PixelFormat( FT );
 		}
@@ -325,7 +325,7 @@ namespace c3d
 		 *\brief		Récupère la taille du pixel
 		 *\return		La taille
 		 */
-		static uint32_t getSize()
+		static uint32_t getSize()noexcept
 		{
 			return PixelDefinitionsT< FT >::Size;
 		}
@@ -337,18 +337,59 @@ namespace c3d
 		 */
 		/**@{*/
 		template< PixelFormat FU >
-		Pixel & operator+=( Pixel< FU > const & px );
+		Pixel & operator+=( Pixel< FU > const & px )noexcept;
 		template< PixelFormat FU >
-		Pixel & operator-=( Pixel< FU > const & px );
+		Pixel & operator-=( Pixel< FU > const & px )noexcept;
 		template< PixelFormat FU >
-		Pixel & operator*=( Pixel< FU > const & px );
+		Pixel & operator*=( Pixel< FU > const & px )noexcept;
 		template< PixelFormat FU >
-		Pixel & operator/=( Pixel< FU > const & px );
+		Pixel & operator/=( Pixel< FU > const & px )noexcept;
 		/**@}*/
 
 	private:
 		uint8_t * m_components{};
 		bool m_delete{};
+
+	private:
+		/**
+		 *\~english
+		 *\name Arithmetic operators.
+		 *\~french
+		 *\name Opérateurs arithmétiques.
+		 */
+		/**@{*/
+		template< PixelFormat FU >
+		friend Pixel operator+( Pixel const & lhs, Pixel< FU > const & rhs )noexcept
+		{
+			Pixel result{ lhs };
+			result += rhs;
+			return result;
+		}
+
+		template< PixelFormat FU >
+		friend Pixel operator-( Pixel const & lhs, Pixel< FU > const & rhs )noexcept
+		{
+			Pixel result{ lhs };
+			result -= rhs;
+			return result;
+		}
+
+		template< PixelFormat FU >
+		friend Pixel operator/( Pixel const & lhs, Pixel< FU > const & rhs )noexcept
+		{
+			Pixel result{ lhs };
+			result /= rhs;
+			return result;
+		}
+
+		template< PixelFormat FU >
+		friend Pixel operator*( Pixel const & lhs, Pixel< FU > const & rhs )noexcept
+		{
+			Pixel result{ lhs };
+			result *= rhs;
+			return result;
+		}
+		/**@}*/
 	};
 	/**
 	 *\~english
@@ -360,23 +401,8 @@ namespace c3d
 	 *\param[in]	lhs, rhs	Les pixels à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template < PixelFormat FT, PixelFormat FU >
-	bool operator==( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
-	/**
-	 *\~english
-	 *\name Arithmetic operators.
-	 *\~french
-	 *\name Opérateurs arithmétiques.
-	 */
-	/**@{*/
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator+( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator-( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator/( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
-	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator*( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
+	template< PixelFormat FT, PixelFormat FU >
+	bool operator==( Pixel< FT > const & lhs, Pixel< FU > const & rhs )noexcept;
 }
 
 #include "Pixel.inl"

@@ -200,25 +200,25 @@ namespace c3d
 	private:
 		ParticleElementDeclarationArray m_elements;
 		uint32_t m_stride;
+
+	private:
+		friend bool operator==( ParticleDeclaration const & lhs
+			, ParticleDeclaration const & rhs )noexcept
+		{
+			bool result = lhs.stride() == rhs.stride() && lhs.count() == rhs.count();
+			auto itl = lhs.begin();
+			auto itr = rhs.begin();
+
+			while ( result && itl != lhs.end() )
+			{
+				result = *itl++ == *itr++;
+				++itl;
+				++itr;
+			}
+
+			return result;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Equality operator.
-	 *\param[in]	lhs, rhs	The 2 objects to compare.
-	 *\~french
-	 *\brief		Opérateur d'égalité.
-	 *\param[in]	lhs, rhs	Les 2 objets à comparer
-	 */
-	C3D_API bool operator==( ParticleDeclaration const & lhs, ParticleDeclaration const & rhs );
-	/**
-	 *\~english
-	 *\brief		Equality operator.
-	 *\param[in]	lhs, rhs	The 2 objects to compare.
-	 *\~french
-	 *\brief		Opérateur d'égalité.
-	 *\param[in]	lhs, rhs	Les 2 objets à comparer
-	 */
-	C3D_API bool operator!=( ParticleDeclaration const & lhs, ParticleDeclaration const & rhs );
 }
 
 #endif

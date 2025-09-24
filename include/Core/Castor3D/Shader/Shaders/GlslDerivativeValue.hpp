@@ -24,6 +24,8 @@ namespace c3d::shader
 	struct DerivativeValueT
 		: public DerivativeValueHelperT< ValueT, StructNameT >
 	{
+		SDW_DeclStructInstance( , DerivativeValueT );
+
 		DerivativeValueT( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -95,141 +97,141 @@ namespace c3d::shader
 	//@}
 	/**@name Common functions overloads to use with Derivative values */
 	//@{
-	C3D_API RetDerivFloat dot( DerivVec3 const lhs, DerivVec3 const rhs );
-	C3D_API RetDerivVec3 cross( DerivVec3 const lhs, DerivVec3 const rhs );
-	C3D_API RetDerivVec3 normalize( DerivVec3 const v );
-	C3D_API RetDerivVec4 normalize( DerivVec4 const v );
-	C3D_API RetDerivVec3 refract( DerivVec3 const i, DerivVec3 const n, sdw::Float const ior );
-	C3D_API RetDerivFloat clamp( DerivFloat const v, sdw::Float const min, sdw::Float const max );
-	C3D_API RetDerivFloat length( DerivVec3 const v );
-	C3D_API RetDerivFloat max( DerivFloat const lhs, DerivFloat const rhs );
-	C3D_API RetDerivVec3 mix( DerivVec3 const a, DerivVec3 const b, DerivVec3 const c );
-	C3D_API RetDerivFloat fma( DerivFloat const a, DerivFloat const b, DerivFloat const c );
-	C3D_API RetDerivVec2 fma( DerivVec2 const a, DerivVec2 const b, DerivVec2 const c );
-	C3D_API RetDerivVec3 fma( DerivVec3 const a, DerivVec3 const b, DerivVec3 const c );
-	C3D_API RetDerivVec4 fma( DerivVec4 const a, DerivVec4 const b, DerivVec4 const c );
-	C3D_API RetDerivFloat fma( DerivFloat const a, sdw::Float const b, sdw::Float const c );
-	C3D_API RetDerivVec2 fma( DerivVec2 const a, sdw::Vec2 const b, sdw::Vec2 const c );
-	C3D_API RetDerivVec3 fma( DerivVec3 const a, sdw::Vec3 const b, sdw::Vec3 const c );
-	C3D_API RetDerivVec4 fma( DerivVec4 const a, sdw::Vec4 const b, sdw::Vec4 const c );
-	C3D_API sdw::Float fwidth( DerivFloat const a );
-	C3D_API sdw::Vec2 fwidth( DerivVec2 const a );
-	C3D_API sdw::Vec3 fwidth( DerivVec3 const a );
-	C3D_API sdw::Vec4 fwidth( DerivVec4 const a );
-	C3D_API DerivFloat negate( DerivFloat const a );
-	C3D_API DerivVec2 negate( DerivVec2 const a );
-	C3D_API DerivVec3 negate( DerivVec3 const a );
-	C3D_API DerivVec4 negate( DerivVec4 const a );
-	C3D_API DerivFloat abs( DerivFloat const a );
-	C3D_API DerivVec2 abs( DerivVec2 const a );
-	C3D_API DerivVec3 abs( DerivVec3 const a );
-	C3D_API DerivVec4 abs( DerivVec4 const a );
+	C3D_API RetDerivFloat dot( DerivVec3 const & lhs, DerivVec3 const & rhs );
+	C3D_API RetDerivVec3 cross( DerivVec3 const & lhs, DerivVec3 const & rhs );
+	C3D_API RetDerivVec3 normalize( DerivVec3 const & v );
+	C3D_API RetDerivVec4 normalize( DerivVec4 const & v );
+	C3D_API RetDerivVec3 refract( DerivVec3 const & i, DerivVec3 const & n, sdw::Float const & ior );
+	C3D_API RetDerivFloat clamp( DerivFloat const & v, sdw::Float const & min, sdw::Float const & max );
+	C3D_API RetDerivFloat length( DerivVec3 const & v );
+	C3D_API RetDerivFloat max( DerivFloat const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec3 mix( DerivVec3 const & a, DerivVec3 const & b, DerivVec3 const & c );
+	C3D_API RetDerivFloat fma( DerivFloat const & a, DerivFloat const & b, DerivFloat const & c );
+	C3D_API RetDerivVec2 fma( DerivVec2 const & a, DerivVec2 const & b, DerivVec2 const & c );
+	C3D_API RetDerivVec3 fma( DerivVec3 const & a, DerivVec3 const & b, DerivVec3 const & c );
+	C3D_API RetDerivVec4 fma( DerivVec4 const & a, DerivVec4 const & b, DerivVec4 const & c );
+	C3D_API RetDerivFloat fma( DerivFloat const & a, sdw::Float const & b, sdw::Float const & c );
+	C3D_API RetDerivVec2 fma( DerivVec2 const & a, sdw::Vec2 const & b, sdw::Vec2 const & c );
+	C3D_API RetDerivVec3 fma( DerivVec3 const & a, sdw::Vec3 const & b, sdw::Vec3 const & c );
+	C3D_API RetDerivVec4 fma( DerivVec4 const & a, sdw::Vec4 const & b, sdw::Vec4 const & c );
+	C3D_API sdw::Float fwidth( DerivFloat const & a );
+	C3D_API sdw::Vec2 fwidth( DerivVec2 const & a );
+	C3D_API sdw::Vec3 fwidth( DerivVec3 const & a );
+	C3D_API sdw::Vec4 fwidth( DerivVec4 const & a );
+	C3D_API RetDerivFloat negate( DerivFloat const & a );
+	C3D_API RetDerivVec2 negate( DerivVec2 const & a );
+	C3D_API RetDerivVec3 negate( DerivVec3 const & a );
+	C3D_API RetDerivVec4 negate( DerivVec4 const & a );
+	C3D_API RetDerivFloat abs( DerivFloat const & a );
+	C3D_API RetDerivVec2 abs( DerivVec2 const & a );
+	C3D_API RetDerivVec3 abs( DerivVec3 const & a );
+	C3D_API RetDerivVec4 abs( DerivVec4 const & a );
 	//@}
 	C3D_API sdw::Float computeMip( DerivVec2 const & uv
 		, sdw::Vec2 const & texSize );
 	//@}
 	/**@name Derivative value construction */
 	//@{
-	C3D_API DerivFloat derivFloat( sdw::Float const v );
-	C3D_API DerivFloat derivX( DerivVec2 const v );
-	C3D_API DerivFloat derivX( DerivVec3 const v );
-	C3D_API DerivFloat derivX( DerivVec4 const v );
-	C3D_API DerivFloat derivY( DerivVec2 const v );
-	C3D_API DerivFloat derivY( DerivVec3 const v );
-	C3D_API DerivFloat derivY( DerivVec4 const v );
-	C3D_API DerivFloat derivZ( DerivVec3 const v );
-	C3D_API DerivFloat derivZ( DerivVec4 const v );
-	C3D_API DerivFloat derivW( DerivVec4 const v );
-	C3D_API DerivVec2 derivVec2( sdw::Float const v );
-	C3D_API DerivVec2 derivVec2( sdw::Vec2 const v );
-	C3D_API DerivVec2 derivVec2( DerivFloat const v );
-	C3D_API DerivVec2 derivVec2( DerivVec3 const v );
-	C3D_API DerivVec2 derivVec2( DerivVec4 const v );
-	C3D_API DerivVec2 derivVec2( DerivFloat const v, sdw::Float const a );
-	C3D_API DerivVec3 derivVec3( sdw::Float const v );
-	C3D_API DerivVec3 derivVec3( sdw::Vec3 const v );
-	C3D_API DerivVec3 derivVec3( DerivFloat const v );
-	C3D_API DerivVec3 derivVec3( DerivVec4 const v );
-	C3D_API DerivVec4 derivVec4( sdw::Float const v );
-	C3D_API DerivVec4 derivVec4( sdw::Vec4 const v );
-	C3D_API DerivVec4 derivVec4( DerivFloat const v );
-	C3D_API DerivVec4 derivVec4( DerivVec3 const v, sdw::Float const a );
-	C3D_API DerivVec4 derivVec4( DerivVec3 const v, DerivFloat const a );
+	C3D_API DerivFloat derivFloat( sdw::Float const & v );
+	C3D_API RetDerivFloat derivX( DerivVec2 const & v );
+	C3D_API RetDerivFloat derivX( DerivVec3 const & v );
+	C3D_API RetDerivFloat derivX( DerivVec4 const & v );
+	C3D_API RetDerivFloat derivY( DerivVec2 const & v );
+	C3D_API RetDerivFloat derivY( DerivVec3 const & v );
+	C3D_API RetDerivFloat derivY( DerivVec4 const & v );
+	C3D_API RetDerivFloat derivZ( DerivVec3 const & v );
+	C3D_API RetDerivFloat derivZ( DerivVec4 const & v );
+	C3D_API RetDerivFloat derivW( DerivVec4 const & v );
+	C3D_API DerivVec2 derivVec2( sdw::Float const & v );
+	C3D_API DerivVec2 derivVec2( sdw::Vec2 const & v );
+	C3D_API DerivVec2 derivVec2( DerivFloat const & v );
+	C3D_API DerivVec2 derivVec2( DerivVec3 const & v );
+	C3D_API DerivVec2 derivVec2( DerivVec4 const & v );
+	C3D_API DerivVec2 derivVec2( DerivFloat const & v, sdw::Float const & a );
+	C3D_API DerivVec3 derivVec3( sdw::Float const & v );
+	C3D_API DerivVec3 derivVec3( sdw::Vec3 const & v );
+	C3D_API DerivVec3 derivVec3( DerivFloat const & v );
+	C3D_API DerivVec3 derivVec3( DerivVec4 const & v );
+	C3D_API DerivVec4 derivVec4( sdw::Float const & v );
+	C3D_API DerivVec4 derivVec4( sdw::Vec4 const & v );
+	C3D_API DerivVec4 derivVec4( DerivFloat const & v );
+	C3D_API DerivVec4 derivVec4( DerivVec3 const & v, sdw::Float const & a );
+	C3D_API DerivVec4 derivVec4( DerivVec3 const & v, DerivFloat const & a );
 	//@}
 	/**@name Functions to use seamlessly Derivative values or standard values */
 	//@{
-	C3D_API void negateXYZ( sdw::Vec4 in );
-	C3D_API void negateXYZ( DerivVec4 in );
-	C3D_API void mulXY( sdw::Vec4 in, sdw::Vec2 const mul );
-	C3D_API void mulXY( DerivVec4 in, sdw::Vec2 const mul );
-	C3D_API void addXYZ( sdw::Vec4 in, sdw::Vec3 const add );
-	C3D_API void addXYZ( DerivVec4 in, sdw::Vec3 const add );
-	C3D_API void addXYZ( DerivVec4 in, DerivVec3 const add );
-	C3D_API sdw::Vec3 getRaw( sdw::Vec3 const in );
-	C3D_API sdw::Vec3 getRaw( DerivVec3 const in );
-	C3D_API sdw::Vec4 getRaw( sdw::Vec4 const in );
-	C3D_API sdw::Vec4 getRaw( DerivVec4 const in );
-	C3D_API sdw::Vec3 getRawXYZ( sdw::Vec3 const in );
-	C3D_API sdw::Vec3 getRawXYZ( DerivVec3 const in );
-	C3D_API sdw::Vec3 getRawXYZ( sdw::Vec4 const in );
-	C3D_API sdw::Vec3 getRawXYZ( DerivVec4 const in );
-	C3D_API sdw::Vec3 getXYZ( sdw::Vec4 const in );
-	C3D_API DerivVec3 getXYZ( DerivVec4 const in );
-	C3D_API sdw::Vec3 getXYW( sdw::Vec4 const in );
-	C3D_API DerivVec3 getXYW( DerivVec4 const in );
-	C3D_API sdw::Float getW( sdw::Vec4 const in );
-	C3D_API DerivFloat getW( DerivVec4 const in );
+	C3D_API void negateXYZ( sdw::Vec4 const & in );
+	C3D_API void negateXYZ( DerivVec4 & in );
+	C3D_API void mulXY( sdw::Vec4 const & in, sdw::Vec2 const & mul );
+	C3D_API void mulXY( DerivVec4 & in, sdw::Vec2 const & mul );
+	C3D_API void addXYZ( sdw::Vec4 const & in, sdw::Vec3 const & add );
+	C3D_API void addXYZ( DerivVec4 const & in, sdw::Vec3 const & add );
+	C3D_API void addXYZ( DerivVec4 const & in, DerivVec3 const & add );
+	C3D_API sdw::Vec3 getRaw( sdw::Vec3 const & in );
+	C3D_API sdw::Vec3 getRaw( DerivVec3 const & in );
+	C3D_API sdw::Vec4 getRaw( sdw::Vec4 const & in );
+	C3D_API sdw::Vec4 getRaw( DerivVec4 const & in );
+	C3D_API sdw::Vec3 getRawXYZ( sdw::Vec3 const & in );
+	C3D_API sdw::Vec3 getRawXYZ( DerivVec3 const & in );
+	C3D_API sdw::RetVec3 getRawXYZ( sdw::Vec4 const & in );
+	C3D_API sdw::RetVec3 getRawXYZ( DerivVec4 const & in );
+	C3D_API sdw::RetVec3 getXYZ( sdw::Vec4 const & in );
+	C3D_API RetDerivVec3 getXYZ( DerivVec4 const & in );
+	C3D_API sdw::RetVec3 getXYW( sdw::Vec4 const & in );
+	C3D_API RetDerivVec3 getXYW( DerivVec4 const & in );
+	C3D_API sdw::RetFloat getW( sdw::Vec4 const & in );
+	C3D_API RetDerivFloat getW( DerivVec4 const & in );
 	//@}
 	/**@name Operator overloads to use with Derivative values */
 	//@{
-	C3D_API DerivVec4 operator*( sdw::Mat4 const lhs, DerivVec4 const rhs );
-	C3D_API DerivVec3 operator*( sdw::Mat3 const lhs, DerivVec3 const rhs );
+	C3D_API RetDerivVec4 operator*( sdw::Mat4 const & lhs, DerivVec4 const & rhs );
+	C3D_API RetDerivVec3 operator*( sdw::Mat3 const & lhs, DerivVec3 const & rhs );
 
-	C3D_API DerivFloat operator+( DerivFloat const lhs, DerivFloat const rhs );
-	C3D_API DerivFloat operator+( DerivFloat const lhs, sdw::Float const rhs );
-	C3D_API DerivFloat operator*( DerivFloat const lhs, DerivFloat const rhs );
-	C3D_API DerivFloat operator*( DerivFloat const lhs, sdw::Float const rhs );
-	C3D_API DerivFloat operator-( DerivFloat const lhs, DerivFloat const rhs );
-	C3D_API DerivFloat operator-( DerivFloat const lhs, sdw::Float const rhs );
+	C3D_API RetDerivFloat operator+( DerivFloat const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivFloat operator+( DerivFloat const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivFloat operator*( DerivFloat const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivFloat operator*( DerivFloat const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivFloat operator-( DerivFloat const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivFloat operator-( DerivFloat const & lhs, sdw::Float const & rhs );
 
-	C3D_API DerivVec2 operator+( DerivVec2 const lhs, DerivVec2 const rhs );
-	C3D_API DerivVec2 operator+( DerivVec2 const lhs, sdw::Vec2 const rhs );
-	C3D_API DerivVec2 operator+( DerivVec2 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec2 operator+( DerivVec2 const lhs, sdw::Float const rhs );
-	C3D_API DerivVec2 operator-( DerivVec2 const lhs, DerivVec2 const rhs );
-	C3D_API DerivVec2 operator-( DerivVec2 const lhs, sdw::Vec2 const rhs );
-	C3D_API DerivVec2 operator-( DerivVec2 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec2 operator-( DerivVec2 const lhs, sdw::Float const rhs );
-	C3D_API DerivVec2 operator*( DerivVec2 const lhs, DerivVec2 const rhs );
-	C3D_API DerivVec2 operator*( DerivVec2 const lhs, sdw::Vec2 const rhs );
-	C3D_API DerivVec2 operator*( DerivVec2 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec2 operator*( DerivVec2 const lhs, sdw::Float const rhs );
+	C3D_API RetDerivVec2 operator+( DerivVec2 const & lhs, DerivVec2 const & rhs );
+	C3D_API RetDerivVec2 operator+( DerivVec2 const & lhs, sdw::Vec2 const & rhs );
+	C3D_API RetDerivVec2 operator+( DerivVec2 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec2 operator+( DerivVec2 const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivVec2 operator-( DerivVec2 const & lhs, DerivVec2 const & rhs );
+	C3D_API RetDerivVec2 operator-( DerivVec2 const & lhs, sdw::Vec2 const & rhs );
+	C3D_API RetDerivVec2 operator-( DerivVec2 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec2 operator-( DerivVec2 const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivVec2 operator*( DerivVec2 const & lhs, DerivVec2 const & rhs );
+	C3D_API RetDerivVec2 operator*( DerivVec2 const & lhs, sdw::Vec2 const & rhs );
+	C3D_API RetDerivVec2 operator*( DerivVec2 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec2 operator*( DerivVec2 const & lhs, sdw::Float const & rhs );
 
-	C3D_API DerivVec3 operator+( DerivVec3 const lhs, DerivVec3 const rhs );
-	C3D_API DerivVec3 operator+( DerivVec3 const lhs, sdw::Vec3 const rhs );
-	C3D_API DerivVec3 operator+( DerivVec3 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec3 operator+( DerivVec3 const lhs, sdw::Float const rhs );
-	C3D_API DerivVec3 operator-( DerivVec3 const lhs, DerivVec3 const rhs );
-	C3D_API DerivVec3 operator-( DerivVec3 const lhs, sdw::Vec3 const rhs );
-	C3D_API DerivVec3 operator-( DerivVec3 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec3 operator-( DerivVec3 const lhs, sdw::Float const rhs );
-	C3D_API DerivVec3 operator*( DerivVec3 const lhs, DerivVec3 const rhs );
-	C3D_API DerivVec3 operator*( DerivVec3 const lhs, sdw::Vec3 const rhs );
-	C3D_API DerivVec3 operator*( DerivVec3 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec3 operator*( DerivVec3 const lhs, sdw::Float const rhs );
+	C3D_API RetDerivVec3 operator+( DerivVec3 const & lhs, DerivVec3 const & rhs );
+	C3D_API RetDerivVec3 operator+( DerivVec3 const & lhs, sdw::Vec3 const & rhs );
+	C3D_API RetDerivVec3 operator+( DerivVec3 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec3 operator+( DerivVec3 const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivVec3 operator-( DerivVec3 const & lhs, DerivVec3 const & rhs );
+	C3D_API RetDerivVec3 operator-( DerivVec3 const & lhs, sdw::Vec3 const & rhs );
+	C3D_API RetDerivVec3 operator-( DerivVec3 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec3 operator-( DerivVec3 const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivVec3 operator*( DerivVec3 const & lhs, DerivVec3 const & rhs );
+	C3D_API RetDerivVec3 operator*( DerivVec3 const & lhs, sdw::Vec3 const & rhs );
+	C3D_API RetDerivVec3 operator*( DerivVec3 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec3 operator*( DerivVec3 const & lhs, sdw::Float const & rhs );
 
-	C3D_API DerivVec4 operator+( DerivVec4 const lhs, DerivVec4 const rhs );
-	C3D_API DerivVec4 operator+( DerivVec4 const lhs, sdw::Vec4 const rhs );
-	C3D_API DerivVec4 operator+( DerivVec4 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec4 operator+( DerivVec4 const lhs, sdw::Float const rhs );
-	C3D_API DerivVec4 operator-( DerivVec4 const lhs, DerivVec4 const rhs );
-	C3D_API DerivVec4 operator-( DerivVec4 const lhs, sdw::Vec4 const rhs );
-	C3D_API DerivVec4 operator-( DerivVec4 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec4 operator-( DerivVec4 const lhs, sdw::Float const rhs );
-	C3D_API DerivVec4 operator*( DerivVec4 const lhs, DerivVec4 const rhs );
-	C3D_API DerivVec4 operator*( DerivVec4 const lhs, sdw::Vec4 const rhs );
-	C3D_API DerivVec4 operator*( DerivVec4 const lhs, DerivFloat const rhs );
-	C3D_API DerivVec4 operator*( DerivVec4 const lhs, sdw::Float const rhs );
+	C3D_API RetDerivVec4 operator+( DerivVec4 const & lhs, DerivVec4 const & rhs );
+	C3D_API RetDerivVec4 operator+( DerivVec4 const & lhs, sdw::Vec4 const & rhs );
+	C3D_API RetDerivVec4 operator+( DerivVec4 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec4 operator+( DerivVec4 const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivVec4 operator-( DerivVec4 const & lhs, DerivVec4 const & rhs );
+	C3D_API RetDerivVec4 operator-( DerivVec4 const & lhs, sdw::Vec4 const & rhs );
+	C3D_API RetDerivVec4 operator-( DerivVec4 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec4 operator-( DerivVec4 const & lhs, sdw::Float const & rhs );
+	C3D_API RetDerivVec4 operator*( DerivVec4 const & lhs, DerivVec4 const & rhs );
+	C3D_API RetDerivVec4 operator*( DerivVec4 const & lhs, sdw::Vec4 const & rhs );
+	C3D_API RetDerivVec4 operator*( DerivVec4 const & lhs, DerivFloat const & rhs );
+	C3D_API RetDerivVec4 operator*( DerivVec4 const & lhs, sdw::Float const & rhs );
 	//@}
 
 	//@}

@@ -590,7 +590,7 @@ namespace c3d
 	void SceneImporter::doCreateAnimationGroups( Scene & scene
 		, StringMap< AnimObjects > & anims )const
 	{
-		auto hasNodeAnim = [&anims]( SceneNode const & node, String const & animName )
+		auto hasNodeAnim = [&anims]( SceneNode const & node, StringView animName )
 			{
 				for ( auto & [currAnimName, animObjects] : anims )
 				{

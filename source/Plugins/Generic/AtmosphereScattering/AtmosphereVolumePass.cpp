@@ -23,7 +23,7 @@ namespace atmosphere_scattering
 
 	namespace volume
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eCamera,
 			eAtmosphere,
@@ -34,6 +34,8 @@ namespace atmosphere_scattering
 		struct SurfaceT
 			: sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , SurfaceT );
+
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -41,8 +43,6 @@ namespace atmosphere_scattering
 				, sliceId{ getMember< sdw::Int >( "sliceId" ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , SurfaceT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint )
@@ -57,7 +57,7 @@ namespace atmosphere_scattering
 					result->declMember( "sliceId"
 						, sdw::type::Kind::eInt
 						, sdw::type::NotArray
-						, index++ );
+						, index );
 				}
 
 				return result;
@@ -113,7 +113,7 @@ namespace atmosphere_scattering
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
 			auto aerialPerspectiveSliceToDepth = writer.implementFunction< sdw::Float >( "aerialPerspectiveSliceToDepth"
-				, [&]( sdw::Float const & slice )
+				, [&writer]( sdw::Float const & slice )
 				{
 					auto apKmPerSlice = writer.declConstant( "apKmPerSlice"
 						, 4.0_f );
@@ -122,8 +122,9 @@ namespace atmosphere_scattering
 				, sdw::InFloat{ writer, "slice" } );
 
 			auto process = writer.implementFunction< sdw::Vec4 >( "process"
-				, [&]( sdw::Vec2 pixPos
-					, sdw::Int sliceId )
+				, [&writer, &atmosphere, &apSliceCount, &depthBufferValue, &aerialPerspectiveSliceToDepth, &planetRadiusOffset, c3d_atmosphereData
+					, &renderSize]( sdw::Vec2 const & pixPos
+						, sdw::Int const & sliceId )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
@@ -207,7 +208,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "pixPos" }
 				, sdw::InInt{ writer, "sliceId" } );
 
-			writer.implementEntryPointT< c3ds::Position4FT, SurfaceT >( [&]( sdw::VertexInT< c3ds::Position4FT > in
+			writer.implementEntryPointT< c3ds::Position4FT, SurfaceT >( []( sdw::VertexInT< c3ds::Position4FT > const & in
 				, sdw::VertexOutT< SurfaceT > out )
 				{
 					out.vtx.position = vec4( in.position().xy(), 0.9999999, 1.0 );
@@ -216,8 +217,8 @@ namespace atmosphere_scattering
 
 			writer.implementEntryPointT< sdw::TriangleListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( sdw::TriangleListT< SurfaceT >{ writer }
 				, sdw::TriangleStreamT< SurfaceT >{ writer, 3u }
-				, [&]( sdw::GeometryIn in
-					, sdw::TriangleListT< SurfaceT > list
+				, [&writer]( sdw::GeometryIn const &
+					, sdw::TriangleListT< SurfaceT > const & list
 					, sdw::TriangleStreamT< SurfaceT > out )
 			{
 				sdwFOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
@@ -232,8 +233,8 @@ namespace atmosphere_scattering
 				out.restartStrip();
 			} );
 
-			writer.implementEntryPointT< SurfaceT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< SurfaceT, c3ds::Colour4FT >( [&process]( sdw::FragmentInT< SurfaceT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = process( in.fragCoord.xy(), in.sliceId );
 				} );
@@ -272,9 +273,9 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		cameraUbo.createPassBinding( pass, volume::eCamera );
-		atmosphereUbo.createPassBinding( pass, volume::eAtmosphere );
-		pass.addInputSampled( *transmittance.getSampledLastAttach(), volume::eTransmittance
+		cameraUbo.createPassBinding( pass, volume::Bindings::eCamera );
+		atmosphereUbo.createPassBinding( pass, volume::Bindings::eAtmosphere );
+		pass.addInputSampledT( *transmittance.getSampledLastAttach(), volume::Bindings::eTransmittance
 			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}

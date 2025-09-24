@@ -37,7 +37,7 @@ namespace c3d
 				}
 			}
 
-			MbString value( it + 2, &line[std::strlen( line )] );
+			MbString value( it + 2, &line[strnlen( line, 32 )] );
 			xpml::R8G8B8Pixel pixel{ true };
 
 			if ( value.find( '#' ) != MbString::npos )

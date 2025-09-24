@@ -35,6 +35,8 @@ namespace c3d::shader
 	struct C3D_API BlendComponents
 		: sdw::StructInstance
 	{
+		SDW_DeclStructInstance( , BlendComponents );
+
 		BlendComponents( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -54,8 +56,6 @@ namespace c3d::shader
 			, sdw::Vec4 const & clrCot );
 		explicit BlendComponents( Materials const & materials
 			, bool zeroInit = false );
-
-		SDW_DeclStructInstance( , BlendComponents );
 
 		void finish( PassShaders const & passShaders
 			, DerivSurfaceBase const & surface

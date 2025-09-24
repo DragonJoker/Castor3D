@@ -28,7 +28,7 @@ namespace smaa
 
 		enum class Idx : uint32_t
 		{
-			CurColTexIdx = SmaaUboIdx + 1,
+			CurColTexIdx = uint32_t( smaa::Bindings::SmaaUboIdx ) + 1u,
 			PrvColTexIdx,
 			VelocityTexIdx,
 		};
@@ -38,13 +38,13 @@ namespace smaa
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
 			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", uint32_t( Idx::CurColTexIdx ), 0u );
 			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", uint32_t( Idx::PrvColTexIdx ), 0u );
 			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", uint32_t( Idx::VelocityTexIdx ), 0u, reprojection );
 
 			auto SMAAResolvePS = writer.implementFunction< sdw::Vec4 >( "SMAAResolvePS"
-				, [&]( sdw::Vec2 const & texcoord
+				, [&writer, &c3d_velocityTex, &c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::CombinedImage2DRgba32 const & currentColorTex
 					, sdw::CombinedImage2DRgba32 const & previousColorTex )
 				{
@@ -87,14 +87,14 @@ namespace smaa
 				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }
 				, sdw::InCombinedImage2DRgba32{ writer, "previousColorTex" } );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > const & in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&SMAAResolvePS, &c3d_currentColourTex, &c3d_previousColourTex]( sdw::FragmentInT< c3ds::Uv2FT > const & in
 				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = SMAAResolvePS( in.uv(), c3d_currentColourTex, c3d_previousColourTex );
@@ -182,7 +182,7 @@ namespace smaa
 			, c3d::WrapMode::eClampToEdge
 			, c3d::WrapMode::eClampToEdge };
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId() ) );
-		ubo.createPassBinding( pass, SmaaUboIdx );
+		ubo.createPassBinding( pass, smaa::Bindings::SmaaUboIdx );
 		pass.addImplicit( neighbourResult, crg::ImageLayout::eShaderReadOnly );
 		pass.addInputSampledImage( currentColourViews, uint32_t( reproj::Idx::CurColTexIdx ), pointSampler );
 		pass.addInputSampledImage( previousColourViews, uint32_t( reproj::Idx::PrvColTexIdx ), pointSampler );
@@ -197,7 +197,7 @@ namespace smaa
 		m_result.destroy();
 	}
 
-	void Reproject::accept( c3d::ConfigurationVisitorBase & visitor )
+	void Reproject::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA Reprojection Result" )

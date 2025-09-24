@@ -27,11 +27,6 @@ namespace c3d
 			, stages );
 	}
 
-	void ShadowBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
-	{
-		return m_buffer.createPassBinding( pass, binding );
-	}
-
 	ashes::WriteDescriptorSet ShadowBuffer::getBinding( uint32_t binding )const
 	{
 		return m_buffer.getDescriptorWrite( binding, 0u );

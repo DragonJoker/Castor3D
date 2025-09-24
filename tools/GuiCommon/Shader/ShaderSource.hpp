@@ -213,7 +213,7 @@ namespace GuiCommon
 	public:
 		UniformValue( wxString const & name
 			, RefType & value
-			, bool isTracked )
+			, [[maybe_unused]] bool isTracked )
 			: UniformValueBase{ name, UniformTyper< ValueType >::value, IsTracked, IsRanged }
 			, m_value{ value }
 		{
@@ -346,17 +346,17 @@ namespace GuiCommon
 	template< typename ValueT, typename ControlT >
 	c3d::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
 		, ValueT & value
-		, c3d::ConfigurationVisitorBase::ControlsListT< ControlT > control )
+		, c3d::ConfigurationVisitorBase::ControlsListT< ControlT > const & )
 	{
 		return c3d::makeRawUnique< UniformValue< ValueT > >( name, value );
 	}
 
 	struct UniformBufferValues
 	{
-		explicit UniformBufferValues( c3d::String pname
+		explicit UniformBufferValues( c3d::String const & pname
 			, VkShaderStageFlags pstages = {}
 			, c3d::Vector< c3d::RawUniquePtr< UniformValueBase > > puniforms = {} )
-			: name{ c3d::move( pname ) }
+			: name{ pname }
 			, stages{ pstages }
 			, uniforms{ c3d::move( puniforms ) }
 		{
@@ -374,6 +374,15 @@ namespace GuiCommon
 
 	struct ShaderEntryPoint
 	{
+		ShaderEntryPoint( ast::Shader * shader
+			, c3d::SpirVShader source
+			, ast::EntryPoint entryPoint )
+			: shader{ shader }
+			, source{ c3d::move( source ) }
+			, entryPoint{ entryPoint }
+		{
+		}
+
 		ast::Shader * shader;
 		c3d::SpirVShader source;
 		ast::EntryPoint entryPoint;

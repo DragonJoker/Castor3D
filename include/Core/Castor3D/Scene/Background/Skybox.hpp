@@ -300,12 +300,10 @@ namespace c3d
 		Size m_equiSize;
 		Path m_crossTexturePath;
 
-		static ImageUPtr copyCrossImageFace( Engine & engine
-			, String faceName
+		static ImageUPtr copyCrossImageFace( StringView faceName
 			, Image const & lines
 			, uint32_t index );
-		static Array< ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
-			, Image const & cross );
+		static Array< ImageUPtr, 6u > splitCrossImageBuffer( Image const & cross );
 	};
 
 	struct SkyboxContext

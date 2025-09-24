@@ -5,24 +5,30 @@ See LICENSE file in root folder
 #define ___C3D_ObjectIdsUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslObjectIds.hpp"
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace c3d::shader
 {
 	struct ObjectsIds
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_ObjectsIdsData"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::U32Vec4ArrayField< "data", uint32_t( MaxNodesPerPipeline / 4u ) > >
 	{
-		C3D_API ObjectsIds( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
 		SDW_DeclStructInstance( C3D_API, ObjectsIds );
 
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+		ObjectsIds( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+			, m_data{ StructInstanceHelperT::getMember< "data" >() }
+		{
+		}
 
 		sdw::UInt getNodeId( sdw::UInt const & index )const
 		{
@@ -38,10 +44,10 @@ namespace c3d::shader
 	};
 
 	template< ast::var::Flag FlagT >
-	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+	static sdw::UInt getNodeId( sdw::ArrayStorageBufferT< shader::ObjectsIds > const & data
 		, shader::MeshVertexT< FlagT > const & surface
-		, sdw::UInt pipelineID
-		, sdw::UInt drawID
+		, sdw::UInt const & pipelineID
+		, sdw::UInt const & drawID
 		, PipelineFlags const & flags )
 	{
 		if ( flags.enableInstantiation() )
@@ -52,14 +58,14 @@ namespace c3d::shader
 		return data[pipelineID].getNodeId( drawID );
 	}
 
-	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
-		, sdw::UInt pipelineID
-		, sdw::UInt drawID );
+	C3D_API sdw::UInt getNodeId( sdw::ArrayStorageBufferT< shader::ObjectsIds > const & data
+		, sdw::UInt const & pipelineID
+		, sdw::UInt const & drawID );
 
-	inline sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+	inline sdw::UInt getNodeId( sdw::ArrayStorageBufferT< shader::ObjectsIds > const & data
 		, sdw::Array< sdw::UVec4 > const & instances
-		, sdw::UInt pipelineID
-		, sdw::UInt drawID
+		, sdw::UInt const & pipelineID
+		, sdw::UInt const & drawID
 		, PipelineFlags const & flags )
 	{
 		if ( flags.enableInstantiation() )
@@ -70,10 +76,10 @@ namespace c3d::shader
 		return getNodeId( data, pipelineID, drawID );
 	}
 
-	inline sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+	inline sdw::UInt getNodeId( sdw::ArrayStorageBufferT< shader::ObjectsIds > const & data
 		, sdw::Array< shader::ObjectIds > const & instances
-		, sdw::UInt pipelineID
-		, sdw::UInt drawID
+		, sdw::UInt const & pipelineID
+		, sdw::UInt const & drawID
 		, PipelineFlags const & flags )
 	{
 		if ( flags.enableInstantiation() )
@@ -86,15 +92,9 @@ namespace c3d::shader
 }
 
 #define C3D_ObjectIdsData( writer, flags, binding, set )\
-	sdw::StorageBuffer objectIdsDataBuffer{ writer\
-		, "C3D_ObjectsIds"\
-		, "c3d_objectsIds"\
+	auto c3d_objectIdsData = writer.declArrayStorageBuffer< c3d::shader::ObjectsIds >( "c3d_objectsIds"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, !flags.enableInstantiation() };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< c3d::shader::ObjectsIds >( "d"\
-		, !flags.enableInstantiation() );\
-	objectIdsDataBuffer.end()
+		, flags.enableInstantiation() )
 
 #endif

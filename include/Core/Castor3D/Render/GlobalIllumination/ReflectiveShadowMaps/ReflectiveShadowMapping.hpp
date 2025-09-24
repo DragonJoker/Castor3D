@@ -23,8 +23,7 @@ namespace c3d
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
 			, shader::RsmConfigData const & rsmData );
-		C3D_API sdw::Vec3 point( shader::PointShadowData const & shadowData
-			, sdw::Vec3 const & lightPosition
+		C3D_API sdw::Vec3 point( sdw::Vec3 const & lightPosition
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
 			, shader::RsmConfigData const & rsmData );
@@ -43,7 +42,6 @@ namespace c3d
 			, sdw::InVec3
 			, shader::InRsmConfigData > m_directional;
 		sdw::Function< sdw::Vec3
-			, shader::InPointShadowData
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3

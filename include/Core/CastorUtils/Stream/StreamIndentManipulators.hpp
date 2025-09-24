@@ -11,24 +11,6 @@ namespace c3d
 {
 	namespace format
 	{
-		struct Indent
-		{
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	i	The indentation value
-			 *\~french
-			 *\brief		Constructor
-			 *\param[in]	i	The indentation value
-			 */
-			explicit Indent( int i )
-				: m_indent( i )
-			{
-			}
-
-			//!\~english The indentation value	\~french La valeur d'indentation
-			int m_indent;
-		};
 		/**
 		 *\~english
 		 *\brief		Retrieves the indentation value for the given stream
@@ -119,33 +101,42 @@ namespace c3d
 				}
 			}
 		}
-	}
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\remarks		Initializes the stream in order to indent it
-	 *\param[in]	stream	The stream
-	 *\param[in]	ind		The indent
-	 *\~french
-	 *\brief		Opérateur de flux
-	 *\remarks		Initialise le flux afin de pouvoir l'indenter
-	 *\param[in]	stream	Le flux
-	 *\param[in]	ind		La valeur d'indentation
-	 */
-	template< typename CharT >
-	inline std::basic_ostream< CharT > & operator <<( std::basic_ostream< CharT > & stream, format::Indent const & ind )
-	{
-		auto * sbuf = dynamic_cast< format::BasicIndentBufferT< CharT > * >( stream.rdbuf() );
 
-		if ( !sbuf )
+		struct Indent
 		{
-			sbuf = format::installIndentBuffer( stream );
-			stream.register_callback( format::callback< CharT >, 0 );
-		}
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\param[in]	i	The indentation value
+			 *\~french
+			 *\brief		Constructor
+			 *\param[in]	i	The indentation value
+			 */
+			explicit Indent( int i )
+				: m_indent( i )
+			{
+			}
 
-		format::setIndent( stream, ind.m_indent );
-		sbuf->indent( ind.m_indent );
-		return stream;
+			//!\~english The indentation value	\~french La valeur d'indentation
+			int m_indent;
+
+		private:
+			template< typename CharT >
+			friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Indent const & ind )
+			{
+				auto * sbuf = dynamic_cast< BasicIndentBufferT< CharT > * >( stream.rdbuf() );
+
+				if ( !sbuf )
+				{
+					sbuf = format::installIndentBuffer( stream );
+					stream.register_callback( format::callback< CharT >, 0 );
+				}
+
+				format::setIndent( stream, ind.m_indent );
+				sbuf->indent( ind.m_indent );
+				return stream;
+			}
+		};
 	}
 }
 

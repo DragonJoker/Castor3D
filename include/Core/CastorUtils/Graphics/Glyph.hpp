@@ -11,7 +11,14 @@ namespace c3d
 {
 	class Glyph
 	{
+	private:
+		Glyph( Glyph const & ) = delete;
+		Glyph & operator=( Glyph const & ) = delete;
+
 	public:
+		CU_API Glyph( Glyph && )noexcept = default;
+		CU_API Glyph & operator=( Glyph && )noexcept = default;
+		CU_API ~Glyph()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -31,16 +38,16 @@ namespace c3d
 		 *\param[in]	bitmap		L'image de la glyphe.
 		 */
 		Glyph( char32_t c
-			, Point2f const & size
-			, Point2f const & bearing
+			, Point2f size
+			, Point2f bearing
 			, float advance
-			, Size const & bitmapSize
-			, ByteArray const & bitmap )
-			: m_bearing{ bearing }
-			, m_size{ size }
+			, Size bitmapSize
+			, ByteArray bitmap )
+			: m_bearing{ c3d::move( bearing ) }
+			, m_size{ c3d::move( size ) }
 			, m_advance{ advance }
-			, m_bitmapSize{ bitmapSize }
-			, m_bitmap{ bitmap }
+			, m_bitmapSize{ c3d::move( bitmapSize ) }
+			, m_bitmap{ c3d::move( bitmap ) }
 			, m_character{ c }
 		{
 		}
@@ -50,7 +57,7 @@ namespace c3d
 		 *\~french
 		 *\return		Le caractère de la glyphe.
 		 */
-		char32_t getCharacter()const
+		char32_t getCharacter()const noexcept
 		{
 			return m_character;
 		}
@@ -60,7 +67,7 @@ namespace c3d
 		 *\~french
 		 *\return		Les dimensions de la glyphe.
 		 */
-		Point2f const & getSize()const
+		Point2f const & getSize()const noexcept
 		{
 			return m_size;
 		}
@@ -70,7 +77,7 @@ namespace c3d
 		 *\~french
 		 *\return		La position de la glyphe par rapport au curseur.
 		 */
-		Point2f const & getBearing()const
+		Point2f const & getBearing()const noexcept
 		{
 			return m_bearing;
 		}
@@ -80,7 +87,7 @@ namespace c3d
 		 *\~french
 		 *\return		Le nombre de pixels pour place la prchaine glyphe.
 		 */
-		float getAdvance()const
+		float getAdvance()const noexcept
 		{
 			return m_advance;
 		}
@@ -90,7 +97,7 @@ namespace c3d
 		 *\~french
 		 *\return		L'image de la glyphe.
 		 */
-		ByteArray const & getBitmap()const
+		ByteArray const & getBitmap()const noexcept
 		{
 			return m_bitmap;
 		}
@@ -100,56 +107,44 @@ namespace c3d
 		 *\~french
 		 *\return		Les dimensions de l'image de la glyphe.
 		 */
-		Size const & getBitmapSize()const
+		Size const & getBitmapSize()const noexcept
 		{
 			return m_bitmapSize;
 		}
 
 	private:
-		Point2f const m_bearing;
-		Point2f const m_size;
+		Point2f m_bearing;
+		Point2f m_size;
 		float m_advance;
-		Size const m_bitmapSize;
-		ByteArray const m_bitmap;
-		char32_t const m_character;
+		Size m_bitmapSize;
+		ByteArray m_bitmap;
+		char32_t m_character;
+
+		friend bool operator==( Glyph const & lhs, Glyph const & rhs )noexcept
+		{
+			return lhs.getCharacter() == rhs.getCharacter();
+		}
+
+		friend bool operator<( Glyph const & lhs, Glyph const & rhs )noexcept
+		{
+			return lhs.getCharacter() < rhs.getCharacter();
+		}
+
+		friend bool operator>( Glyph const & lhs, Glyph const & rhs )noexcept
+		{
+			return lhs.getCharacter() > rhs.getCharacter();
+		}
+
+		friend bool operator<=( Glyph const & lhs, Glyph const & rhs )noexcept
+		{
+			return lhs.getCharacter() <= rhs.getCharacter();
+		}
+
+		friend bool operator>=( Glyph const & lhs, Glyph const & rhs )noexcept
+		{
+			return lhs.getCharacter() >= rhs.getCharacter();
+		}
 	};
-	/**
-	 *\~english
-	 *\name		Comparison operators.
-	 *\~french
-	 *\name		Opérateurs de comparaison.
-	 */
-	/*@{*/
-	inline bool operator==( Glyph const & lhs, Glyph const & rhs )
-	{
-		return lhs.getCharacter() == rhs.getCharacter();
-	}
-
-	inline bool operator!=( Glyph const & lhs, Glyph const & rhs )
-	{
-		return lhs.getCharacter() != rhs.getCharacter();
-	}
-
-	inline bool operator<( Glyph const & lhs, Glyph const & rhs )
-	{
-		return lhs.getCharacter() < rhs.getCharacter();
-	}
-
-	inline bool operator>( Glyph const & lhs, Glyph const & rhs )
-	{
-		return lhs.getCharacter() > rhs.getCharacter();
-	}
-
-	inline bool operator<=( Glyph const & lhs, Glyph const & rhs )
-	{
-		return lhs.getCharacter() <= rhs.getCharacter();
-	}
-
-	inline bool operator>=( Glyph const & lhs, Glyph const & rhs )
-	{
-		return lhs.getCharacter() >= rhs.getCharacter();
-	}
-	/*@}*/
 }
 
 #endif

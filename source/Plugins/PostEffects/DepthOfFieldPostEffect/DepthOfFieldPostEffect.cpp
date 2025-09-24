@@ -39,7 +39,7 @@ namespace dof
 			, params }
 		, m_ubo{ renderSystem.getRenderDevice() }
 	{
-		setParameters( params );
+		this->setParameters( params );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget

@@ -29,70 +29,32 @@ namespace c3d
 			String result;
 
 			if ( isGpuComputed )
-			{
 				result += cuT( "G" );
-			}
-			
 			if ( components.hasTriangleIndexFlag
 				|| components.hasLineIndexFlag )
-			{
 				result += cuT( "I" );
-			}
-
 			if ( components.hasPositionFlag )
-			{
 				result += cuT( "P" );
-			}
-
 			if ( components.hasTangentFlag )
-			{
 				result += cuT( "T" );
-			}
-
 			if ( components.hasBitangentFlag )
-			{
 				result += cuT( "B" );
-			}
-
 			if ( components.hasNormalFlag )
-			{
 				result += cuT( "N" );
-			}
-
 			if ( components.hasTexcoord0Flag )
-			{
 				result += cuT( "T0" );
-			}
-
 			if ( components.hasTexcoord1Flag )
-			{
 				result += cuT( "T1" );
-			}
-
 			if ( components.hasTexcoord2Flag )
-			{
 				result += cuT( "T2" );
-			}
-
 			if ( components.hasTexcoord3Flag )
-			{
 				result += cuT( "T3" );
-			}
-
 			if ( components.hasColourFlag )
-			{
 				result += cuT( "C" );
-			}
-
 			if ( components.hasSkinFlag )
-			{
 				result += cuT( "S" );
-			}
-
 			if ( components.hasPassMaskFlag )
-			{
 				result += cuT( "M" );
-			}
 
 			return result;
 		}
@@ -274,13 +236,9 @@ namespace c3d
 		, SubmeshComponentCombine const & components )
 	{
 		auto result = doGetBuffer( vertexCount, indexCount, meshletCount, components, false );
-
 		if ( indexCount && vertexCount )
-		{
 			m_indexBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
 				, &result.getBuffer( SubmeshData::eIndex ) );
-		}
-
 		return result;
 	}
 
@@ -289,13 +247,9 @@ namespace c3d
 		, SubmeshComponentCombine const & components )
 	{
 		auto result = doGetBuffer( vertexCount, 0u, 0u, components, true );
-
 		if ( indexBuffer )
-		{
 			m_indexBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
 				, indexBuffer );
-		}
-
 		return result;
 	}
 
@@ -332,12 +286,8 @@ namespace c3d
 	BufferBase const & ObjectBufferPool::getIndexBuffer( BufferBase const & buffer )
 	{
 		auto it = m_indexBuffers.find( &buffer );
-
 		if ( it == m_indexBuffers.end() )
-		{
 			CU_Exception( "Couldn't find the index buffer linked to positions buffer." );
-		}
-
 		return *it->second;
 	}
 
@@ -355,9 +305,7 @@ namespace c3d
 				for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
 				{
 					if ( result && lookup.buffers[i] && bufferOffset.buffers[i].buffer )
-					{
 						result = &lookup.buffers[i]->getBuffer() == &bufferOffset.buffers[i].getBuffer();
-					}
 				}
 
 				return result;
@@ -406,7 +354,6 @@ namespace c3d
 				if ( data == SubmeshData::eIndex )
 				{
 					if ( indexCount )
-					{
 						modelBuffers.buffers[index] = details::createBaseBuffer< uint32_t >( m_device
 							, m_resources
 							, indexCount
@@ -414,12 +361,10 @@ namespace c3d
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
-					}
 				}
 				else if ( data == SubmeshData::eMeshlets )
 				{
 					if ( meshletCount )
-					{
 						modelBuffers.buffers[index] = details::createBaseBuffer< Meshlet >( m_device
 							, m_resources
 							, meshletCount
@@ -427,7 +372,6 @@ namespace c3d
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
-					}
 				}
 				else if ( data < SubmeshData::eCount && vertexCount )
 				{
@@ -513,20 +457,16 @@ namespace c3d
 					, lookup.buffers.end()
 					, [vertexCount, indexCount, meshletCount, &index]( GpuPackedBaseBufferUPtr const & buffer )
 					{
-						if ( index == uint32_t( SubmeshData::eIndex ) )
-						{
-							return buffer
-								&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * indexCount );
-						}
+						auto current = index;
+						++index;
 
-						if ( index == uint32_t( SubmeshData::eMeshlets ) )
-						{
-							return buffer
-								&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * meshletCount );
-						}
+						if ( current == uint32_t( SubmeshData::eIndex ) )
+							return buffer && !buffer->hasAvailable( getSize( SubmeshData( current ) ) * indexCount );
 
-						return buffer
-							&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * vertexCount );
+						if ( current == uint32_t( SubmeshData::eMeshlets ) )
+							return buffer && !buffer->hasAvailable( getSize( SubmeshData( current ) ) * meshletCount );
+
+						return buffer && !buffer->hasAvailable( getSize( SubmeshData( current ) ) * vertexCount );
 					} );
 			} );
 	}

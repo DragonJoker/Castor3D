@@ -21,10 +21,10 @@ namespace c3d
 		{
 			using shader::PassComponentsShader::PassComponentsShader;
 
-			C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 const & texCoords
 				, shader::BlendComponents const & components )const override;
-			C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			C3D_API sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, shader::DerivTex const & texCoords
 				, shader::BlendComponents const & components )const override;
 

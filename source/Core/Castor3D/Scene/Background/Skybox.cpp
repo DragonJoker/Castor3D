@@ -528,11 +528,10 @@ namespace c3d
 		, Path const & relative )
 	{
 		m_crossTexturePath = folder / relative;
-		m_layerTexture = splitCrossImageBuffer( *getScene().getEngine()
-			, getFileImage( *getScene().getEngine()
-				, cuT( "SkyboxBackgroundCross" )
-				, folder
-				, relative ) );
+		m_layerTexture = splitCrossImageBuffer( getFileImage( *getScene().getEngine()
+			, cuT( "SkyboxBackgroundCross" )
+			, folder
+			, relative ) );
 		notifyChanged();
 	}
 
@@ -729,8 +728,7 @@ namespace c3d
 		m_equiTexture->cleanup();
 	}
 
-	ImageUPtr SkyboxBackground::copyCrossImageFace( Engine & engine
-		, String faceName
+	ImageUPtr SkyboxBackground::copyCrossImageFace( StringView faceName
 		, Image const & lines
 		, uint32_t index )
 	{
@@ -765,8 +763,7 @@ namespace c3d
 			, c3d::move( buffer ) );
 	}
 
-	Array< ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Engine & engine
-		, Image const & cross )
+	Array< ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Image const & cross )
 	{
 		auto height = cross.getHeight() / 3u;
 		CU_Require( cross.getWidth() / 4u == height );
@@ -780,11 +777,11 @@ namespace c3d
 			makeUnique< Image >( cross.getName(), cross.getPath(), Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 2 ), cross.getPixelFormat() ) };
 
 		// Then split horizontally
-		return { copyCrossImageFace( engine, cuT( "/Face/Left" ), *lines[1], 2u )
-			, copyCrossImageFace( engine, cuT( "/Face/Right" ), *lines[1], 0u )
-			, copyCrossImageFace( engine, cuT( "/Face/Top" ), *lines[0], 1u )
-			, copyCrossImageFace( engine, cuT( "/Face/Bottom" ), *lines[2], 1u )
-			, copyCrossImageFace( engine, cuT( "/Face/Front" ), *lines[1], 1u )
-			, copyCrossImageFace( engine, cuT( "/Face/Back" ), *lines[1], 3u ) };
+		return { copyCrossImageFace( cuT( "/Face/Left" ), *lines[1], 2u )
+			, copyCrossImageFace( cuT( "/Face/Right" ), *lines[1], 0u )
+			, copyCrossImageFace( cuT( "/Face/Top" ), *lines[0], 1u )
+			, copyCrossImageFace( cuT( "/Face/Bottom" ), *lines[2], 1u )
+			, copyCrossImageFace( cuT( "/Face/Front" ), *lines[1], 1u )
+			, copyCrossImageFace( cuT( "/Face/Back" ), *lines[1], 3u ) };
 	}
 }

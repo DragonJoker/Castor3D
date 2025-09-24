@@ -23,7 +23,7 @@ namespace PbrBloom
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx
+		enum class Idx
 		{
 			SceneMapIdx,
 			BlurredMapIdx,
@@ -34,9 +34,9 @@ namespace PbrBloom
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto c3d_mapScene = writer.declCombinedImg< Img2DRgba >( CombinePass::CombineMapScene, SceneMapIdx, 0u );
-			auto c3d_mapPasses = writer.declCombinedImg< Img2DRgba >( CombinePass::CombineMapPasses, BlurredMapIdx, 0u );
-			auto constants = writer.declUniformBuffer( "Constants", ConstantsIdx, 0u );
+			auto c3d_mapScene = writer.declCombinedImg< Img2DRgba >( CombinePass::CombineMapScene, uint32_t( Idx::SceneMapIdx ), 0u );
+			auto c3d_mapPasses = writer.declCombinedImg< Img2DRgba >( CombinePass::CombineMapPasses, uint32_t( Idx::BlurredMapIdx ), 0u );
+			auto constants = writer.declUniformBuffer( "Constants", uint32_t( Idx::ConstantsIdx ), 0u );
 			auto filterRadius = constants.declMember< sdw::Float >( "filterRadius" );
 			auto bloomStrength = constants.declMember< sdw::Float >( "bloomStrength" );
 			constants.end();
@@ -80,7 +80,7 @@ namespace PbrBloom
 		auto & pass = graph.createPass( "Combine"
 			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
@@ -88,22 +88,20 @@ namespace PbrBloom
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
 					.passIndex( passIndex )
-					.build( framePass
-						, context
-						, graph
+					.build( framePass, context, runGraph
 						, crg::ru::Config{ 2u } );
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 				return result;
 			} );
-		pass.addInputSampled( *sceneView.getSampledLastAttach(), combine::SceneMapIdx
+		pass.addInputSampled( *sceneView.getSampledLastAttach(), uint32_t( combine::Idx::SceneMapIdx )
 			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
-		pass.addInputSampled( *blurredView.getSampledLastAttach(), combine::BlurredMapIdx );
-		ubo.createPassBinding( pass, combine::ConstantsIdx );
+		pass.addInputSampled( *blurredView.getSampledLastAttach(), uint32_t( combine::Idx::BlurredMapIdx ) );
+		ubo.createPassBinding( pass, uint32_t( combine::Idx::ConstantsIdx ) );
 		resultView.setLastAttach( pass.addOutputColourTarget( { resultView.getTargetViewId(), sceneView.getTargetViewId() } ) );
 	}
 
-	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

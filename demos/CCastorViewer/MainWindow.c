@@ -328,7 +328,7 @@ static C3D_KEYBOARD_KEY doConvertScanCode( int scancode )
 
 void onWindowResized( GLFWwindow * glfwWindow, int width, int height )
 {
-	MainWindow * window = ( MainWindow * )glfwGetWindowUserPointer( glfwWindow );
+	MainWindow const * window = ( MainWindow const * )glfwGetWindowUserPointer( glfwWindow );
 	C3DSize size;
 
 	if ( window && window->renderTarget )

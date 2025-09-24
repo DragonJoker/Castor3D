@@ -33,8 +33,7 @@ See LICENSE file in root folder
 namespace ocean_fft
 {
 	template< typename GeneratePassT >
-	void createGenerateFrequencyPassT( c3d::String const & prefix
-		, c3d::String const & name
+	void createGenerateFrequencyPassT( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, c3d::Extent2D const & extent
@@ -58,9 +57,9 @@ namespace ocean_fft
 					, res->getTimer() );
 				return res;
 			} );
-		ubo.createPassBinding( pass, GeneratePassT::eConfig );
-		pass.addInputStorage( *input.getLastAttach(), GeneratePassT::eInput );
-		output.setLastAttach( pass.addOutputStorageBuffer( output.bufferViewId, GeneratePassT::eOutput ) );
+		ubo.createPassBinding( pass, GeneratePassT::Bindings::eConfig );
+		pass.addInputStorageT( *input.getLastAttach(), GeneratePassT::Bindings::eInput );
+		output.setLastAttach( pass.addOutputStorageBufferT( output.bufferViewId, GeneratePassT::Bindings::eOutput ) );
 	}
 
 	template< typename DistributionPassT, typename FrequencyPassT >
@@ -72,8 +71,7 @@ namespace ocean_fft
 			, OceanUbo const & ubo
 			, c3d::Extent2D dimensions
 			, VkFFTConfig const & pfftConfig
-			, c3d::BufferT< cfloat > const & distribution
-			, FFTMode mode )
+			, c3d::BufferT< cfloat > const & distribution )
 			: fftConfig{ pfftConfig }
 			, frequency{ c3d::makeBuffer< cfloat >( fftConfig.device
 					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
@@ -94,7 +92,7 @@ namespace ocean_fft
 					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Result1" ) ) }
 		{
-			createGenerateFrequencyPassT< FrequencyPassT >( prefix, name, fftConfig.device, graph, dimensions
+			createGenerateFrequencyPassT< FrequencyPassT >( name, fftConfig.device, graph, dimensions
 				, ubo, distribution, *frequency );
 			createProcessFFTPass( name, fftConfig.device, graph, dimensions, fftConfig
 				, *frequency, result );
@@ -159,7 +157,7 @@ namespace ocean_fft
 		static c3d::String const Name;
 
 	private:
-		void generateDistributionSeeds( c3d::BufferT< cfloat > & distribBuffer );
+		void generateDistributionSeeds( c3d::BufferT< cfloat > const & distribBuffer );
 
 	private:
 		c3d::RenderDevice const & m_device;

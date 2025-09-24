@@ -137,17 +137,6 @@ namespace c3d
 		}
 	}
 
-	VkDescriptorSetLayoutBinding TextureConfigurationBuffer::createLayoutBinding( uint32_t binding
-		, VkShaderStageFlags stages )const
-	{
-		return m_buffer.createLayoutBinding( binding, stages );
-	}
-
-	ashes::WriteDescriptorSet TextureConfigurationBuffer::getBinding( uint32_t binding )const
-	{
-		return m_buffer.getBinding( binding );
-	}
-
 	void TextureConfigurationBuffer::createBinding( ashes::DescriptorSet & descriptorSet
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{

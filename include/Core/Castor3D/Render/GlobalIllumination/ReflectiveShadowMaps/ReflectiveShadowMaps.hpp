@@ -38,7 +38,7 @@ namespace c3d
 		C3D_API void initialise();
 		C3D_API void cleanup();
 		C3D_API void registerLight( LightInstance * light );
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater )const;
 		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		C3D_API void accept( ConfigurationVisitorBase & visitor );

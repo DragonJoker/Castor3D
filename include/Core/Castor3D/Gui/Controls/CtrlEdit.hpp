@@ -328,6 +328,8 @@ namespace c3d
 
 		void doScrollContent( Position const & position );
 
+		void doUpdateTextAlign();
+
 		bool hasSelection()const noexcept
 		{
 			return m_hasSelection;

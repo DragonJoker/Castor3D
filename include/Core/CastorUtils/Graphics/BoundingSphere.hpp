@@ -90,20 +90,13 @@ namespace c3d
 		//!\~english	The radius of the sphere.
 		//!\~french		Le rayon de la sphère.
 		float m_radius{};
+
+		friend bool operator==( BoundingSphere const & lhs, BoundingSphere const & rhs )noexcept
+		{
+			return lhs.getCenter() == rhs.getCenter()
+				&& lhs.getRadius() == rhs.getRadius();
+		}
 	};
-
-	inline bool operator==( BoundingSphere const & lhs
-		, BoundingSphere const & rhs )
-	{
-		return lhs.getCenter() == rhs.getCenter()
-			&& lhs.getRadius() == rhs.getRadius();
-	}
-
-	inline bool operator!=( BoundingSphere const & lhs
-		, BoundingSphere const & rhs )
-	{
-		return !( lhs == rhs );
-	}
 }
 
 #endif

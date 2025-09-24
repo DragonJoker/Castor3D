@@ -22,7 +22,7 @@ namespace c3d
 	{
 		static TextureLayoutUPtr createTexture( Engine const & engine
 			, FontResPtr font
-			, String suffix )
+			, String const & suffix )
 		{
 			if ( !font )
 			{
@@ -60,13 +60,13 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	void postPreRenderGpuEvent( Engine & engine
+	void postPreRenderGpuEvent( Engine const & engine
 		, Function< void( RenderDevice const &, QueueData const & ) > event )
 	{
 		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, c3d::move( event ) ) );
 	}
 
-	void postQueueRenderCpuEvent( Engine & engine
+	void postQueueRenderCpuEvent( Engine const & engine
 		, Function< void() > event )
 	{
 		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, c3d::move( event ) ) );
@@ -78,7 +78,7 @@ namespace c3d
 		: DoubleBufferedTextureLayout{ engine
 			, fonttex::createTexture( engine, font, "_0" )
 			, fonttex::createTexture( engine, font, "_1" ) }
-		, m_font( font )
+		, m_font{ font }
 		, m_ubo{ makeUnique< FontUbo >( *engine.getRenderDevice() ) }
 	{
 		if ( !m_font )
@@ -202,15 +202,16 @@ namespace c3d
 			auto it = font->begin();
 			Size const & sizeImg = size;
 			uint32_t const imgLineSize = sizeImg.getWidth();
-			uint32_t offY = sizeImg.getHeight() - maxHeight;
 			auto buffer = image.getBuffer();
 			uint8_t * dstBuffer = buffer.data();
 
-			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
+			uint32_t offY = sizeImg.getHeight() - maxHeight;
+			uint32_t y = 0;
+			while ( y < count && it != font->end() )
 			{
 				uint32_t offX = 0;
-
-				for ( uint32_t x = 0; x < 16 && it != font->end(); ++x )
+				uint32_t x = 0;
+				while ( x < 16 && it != font->end() )
 				{
 					Glyph const & glyph = *it;
 					auto const glyphSize = font->isSDF()
@@ -231,12 +232,14 @@ namespace c3d
 
 					glyphPositions[glyph.getCharacter()] = Position( int32_t( offX ), int32_t( offY ) );
 					offX += maxWidth;
+					++x;
 					++it;
 
 					m_charIndices.try_emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) );
 				}
 
 				offY -= maxHeight;
+				++y;
 			}
 
 			resource.needsUpload = true;

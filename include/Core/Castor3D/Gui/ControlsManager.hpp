@@ -230,7 +230,7 @@ namespace c3d
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlRPtr findControl( String const & name, SceneRPtr scene )const;
+		C3D_API ControlRPtr findControl( String const & name, Scene const * scene )const;
 
 		/** \return
 		*	The root controls.

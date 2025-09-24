@@ -9,56 +9,42 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace c3d
+namespace c3d::shader
 {
-	namespace shader
+	struct BillboardData
+		: public sdw::StructInstanceHelperT< "C3D_BillboardData"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec2Field< "dimensions" >
+			, sdw::UIntField< "isSpherical" >
+			, sdw::UIntField< "isFixedSize" > >
 	{
-		struct BillboardData
-			: public sdw::StructInstanceHelperT< "C3D_BillboardData"
-				, sdw::type::MemoryLayout::eStd430
-				, sdw::Vec2Field< "dimensions" >
-				, sdw::UIntField< "isSpherical" >
-				, sdw::UIntField< "isFixedSize" > >
+		SDW_DeclStructInstance( C3D_API, BillboardData );
+
+		BillboardData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
-			BillboardData( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled )
-				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
-			{
-			}
+		}
 
-			C3D_API sdw::Vec3 getCameraRight( CameraData const & cameraData )const;
-			C3D_API sdw::Vec3 getCameraUp( CameraData const & cameraData )const;
-			C3D_API sdw::Float getWidth( RenderData const & renderData )const;
-			C3D_API sdw::Float getHeight( RenderData const & renderData )const;
+		C3D_API sdw::Vec3 getCameraRight( CameraData const & cameraData )const;
+		C3D_API sdw::Vec3 getCameraUp( CameraData const & cameraData )const;
+		C3D_API sdw::Float getWidth( RenderData const & renderData )const;
+		C3D_API sdw::Float getHeight( RenderData const & renderData )const;
 
-			auto dimensions()const { return getMember< "dimensions" >(); }
-			auto isSpherical()const { return getMember< "isSpherical" >(); }
-			auto isFixedSize()const { return getMember< "isFixedSize" >(); }
-		};
-	}
+		auto dimensions()const { return getMember< "dimensions" >(); }
+		auto isSpherical()const { return getMember< "isSpherical" >(); }
+		auto isFixedSize()const { return getMember< "isFixedSize" >(); }
+	};
 }
 
-#define C3D_Billboard( writer, binding, set )\
-	sdw::StorageBuffer billboard{ writer\
-		, "C3D_Billboard"\
-		, "c3d_billboard"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_billboardData = billboard.declMemberArray< c3d::shader::BillboardData >( "d" );\
-	billboard.end()
-
 #define C3D_BillboardOpt( writer, binding, set, enable )\
-	sdw::StorageBuffer billboard{ writer\
-		, "C3D_Billboard"\
-		, "c3d_billboard"\
+	auto c3d_billboardData = writer.declArrayStorageBuffer< c3d::shader::BillboardData >( "c3d_billboard"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, enable };\
-	auto c3d_billboardData = billboard.declMemberArray< c3d::shader::BillboardData >( "d", enable );\
-	billboard.end()
+		, enable )
+
+#define C3D_Billboard( writer, binding, set )\
+	C3D_BillboardOpt( writer, binding, set, true )
 
 #endif

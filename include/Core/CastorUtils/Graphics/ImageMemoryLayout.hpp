@@ -13,6 +13,29 @@ namespace c3d
 {
 	using crg::ImageViewType;
 
+	static String getName( ImageViewType t )
+	{
+		switch ( t )
+		{
+		case ImageViewType::e1D:
+			return cuT( "1D" );
+		case ImageViewType::e2D:
+			return cuT( "2D" );
+		case ImageViewType::e3D:
+			return cuT( "3D" );
+		case ImageViewType::eCube:
+			return cuT( "Cube" );
+		case ImageViewType::e1DArray:
+			return cuT( "1DArray" );
+		case ImageViewType::e2DArray:
+			return cuT( "2DArray" );
+		case ImageViewType::eCubeArray:
+			return cuT( "CubeArray" );
+		default:
+			return cuT( "UnknownImageType" );
+		}
+	}
+
 	struct ImageMemoryLayout
 	{
 		using Buffer = ByteArrayView;
@@ -182,6 +205,27 @@ namespace c3d
 		uint32_t baseLevel;
 		uint32_t levels;
 		uint32_t alignment;
+
+	private:
+		friend OutputStream & operator<<( OutputStream & stream, ImageMemoryLayout const & rhs )
+		{
+			stream << getName( rhs.type )
+				<< cuT( ", " ) << makeString( ashes::getName( convert( rhs.format ) ) )
+				<< cuT( ", " ) << rhs.extent->x
+				<< cuT( "x" ) << rhs.extent->y;
+
+			if ( rhs.extent->z > 1 )
+			{
+				stream << ", " << rhs.extent << " slices";
+			}
+			else
+			{
+				stream << ", " << rhs.layers << " layers";
+			}
+
+			stream << ", " << rhs.levels << " miplevels";
+			return stream;
+		}
 	};
 
 	inline ImageMemoryLayout::DeviceSize getSliceSize( ImageMemoryLayout const & layout )

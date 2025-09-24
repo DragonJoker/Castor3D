@@ -36,12 +36,12 @@ namespace atmosphere_scattering
 			, sdw::Float const & objectId
 			, sdw::Float const & linearDepth
 			, sdw::IVec2 const & fragCoord
-			, sdw::Vec3 & sunLuminance
-			, sdw::Vec3 & skyLuminance
-			, sdw::Float & skyBlendFactor );
+			, sdw::Vec3 const & sunLuminance
+			, sdw::Vec3 const & skyLuminance
+			, sdw::Float const & skyBlendFactor );
 
 	private:
-		sdw::Vec2 getSphericalProjection( sdw::Vec3 const & p );
+		static sdw::Vec2 getSphericalProjection( sdw::Vec3 const & p );
 		sdw::RetFloat getHeightFraction( sdw::Vec3 const & inPos );
 		sdw::RetVec3 skewSamplePointWithWind( sdw::Vec3 const & point
 			, sdw::Float const & heightFraction );
@@ -67,12 +67,11 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & pos
 			, sdw::Float const & stepSize
 			, sdw::Vec3 const & lightDir );
-		sdw::RetVec4 raymarchToCloud( Ray const & ray
-			, sdw::Vec3 const & startPos
+		sdw::RetVec4 raymarchToCloud( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & endPos
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
-			, sdw::Float & planetShadow );
+			, sdw::Float const & planetShadow );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor
@@ -88,11 +87,11 @@ namespace atmosphere_scattering
 		sdw::RetVec4 computeLighting( Ray const & ray
 			, sdw::Vec3 const & sunRadiance
 			, sdw::Vec3 const & sunLuminance
-			, sdw::Vec3 & skyLuminance
+			, sdw::Vec3 const & skyLuminance
 			, sdw::Float const & fadeOut
 			, sdw::Float const & planetShadow
 			, sdw::Vec4 const & rayMarchResult );
-		sdw::Float getLightEnergy( sdw::Float cosTheta
+		sdw::Float getLightEnergy( sdw::Float const & cosTheta
 			, sdw::Float const & coneDensity );
 
 	private:
@@ -146,7 +145,6 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InVec3 > m_raymarchToLight;
 		sdw::Function< sdw::Vec4
-			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InIVec2

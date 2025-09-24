@@ -153,7 +153,7 @@ namespace c3d
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
-			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
+			if ( checkFlag( sceneFlags, SceneFlag( uint16_t( SceneFlag::eShadowBegin ) << j ) ) )
 			{
 				// Depth
 				addDescriptorSetLayoutBinding( bindings, index
@@ -257,17 +257,20 @@ namespace c3d
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, shaderStages );
 
-				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
+				if ( indirectLighting.llpvResult )
 				{
-					addDescriptorSetLayoutBinding( bindings, index
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages );	// c3d_lpvAccumulationRn
-					addDescriptorSetLayoutBinding( bindings, index
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages );	// c3d_lpvAccumulationGn
-					addDescriptorSetLayoutBinding( bindings, index
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages );	// c3d_lpvAccumulationBn
+					for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
+					{
+						addDescriptorSetLayoutBinding( bindings, index
+							, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+							, shaderStages );	// c3d_lpvAccumulationRn
+						addDescriptorSetLayoutBinding( bindings, index
+							, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+							, shaderStages );	// c3d_lpvAccumulationGn
+						addDescriptorSetLayoutBinding( bindings, index
+							, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+							, shaderStages );	// c3d_lpvAccumulationBn
+					}
 				}
 			}
 			else if ( indirectLighting.llpvConfigUbo )
@@ -356,7 +359,7 @@ namespace c3d
 
 		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
-			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
+			if ( checkFlag( sceneFlags, SceneFlag( uint16_t( SceneFlag::eShadowBegin ) << i ) ) )
 			{
 				for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
 				{
@@ -448,37 +451,12 @@ namespace c3d
 			{
 				CU_Require( indirectLighting.lpvConfigUbo );
 				CU_Require( indirectLighting.lpvResult );
-				indirectLighting.lpvConfigUbo->addDescriptorWrite( descriptorWrites
-					, index );
-				auto const & lpv = *indirectLighting.lpvResult;
-				bindTexture( lpv.getSampledView( LpvTexture::eR )
-					, lpv.getSampler( LpvTexture::eR )
-					, descriptorWrites
-					, index );
-				bindTexture( lpv.getSampledView( LpvTexture::eG )
-					, lpv.getSampler( LpvTexture::eG )
-					, descriptorWrites
-					, index );
-				bindTexture( lpv.getSampledView( LpvTexture::eB )
-					, lpv.getSampler( LpvTexture::eB )
-					, descriptorWrites
-					, index );
-			}
-			else if ( indirectLighting.lpvConfigUbo )
-			{
-				index += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
-			}
+				if ( indirectLighting.lpvConfigUbo )
+					indirectLighting.lpvConfigUbo->addDescriptorWrite( descriptorWrites, index );
 
-			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
-			{
-				CU_Require( indirectLighting.llpvConfigUbo );
-				CU_Require( indirectLighting.llpvResult );
-				indirectLighting.llpvConfigUbo->addDescriptorWrite( descriptorWrites
-					, index );
-
-				for ( auto const & plpv : *indirectLighting.llpvResult )
+				if ( indirectLighting.lpvResult )
 				{
-					auto const & lpv = *plpv;
+					auto const & lpv = *indirectLighting.lpvResult;
 					bindTexture( lpv.getSampledView( LpvTexture::eR )
 						, lpv.getSampler( LpvTexture::eR )
 						, descriptorWrites
@@ -491,6 +469,38 @@ namespace c3d
 						, lpv.getSampler( LpvTexture::eB )
 						, descriptorWrites
 						, index );
+				}
+			}
+			else if ( indirectLighting.lpvConfigUbo )
+			{
+				index += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( indirectLighting.llpvConfigUbo );
+				CU_Require( indirectLighting.llpvResult );
+				if ( indirectLighting.llpvConfigUbo )
+					indirectLighting.llpvConfigUbo->addDescriptorWrite( descriptorWrites, index );
+
+				if ( indirectLighting.llpvResult )
+				{
+					for ( auto const & plpv : *indirectLighting.llpvResult )
+					{
+						auto const & lpv = *plpv;
+						bindTexture( lpv.getSampledView( LpvTexture::eR )
+							, lpv.getSampler( LpvTexture::eR )
+							, descriptorWrites
+							, index );
+						bindTexture( lpv.getSampledView( LpvTexture::eG )
+							, lpv.getSampler( LpvTexture::eG )
+							, descriptorWrites
+							, index );
+						bindTexture( lpv.getSampledView( LpvTexture::eB )
+							, lpv.getSampler( LpvTexture::eB )
+							, descriptorWrites
+							, index );
+					}
 				}
 			}
 			else if ( indirectLighting.llpvConfigUbo )

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 #include "CastorUtils/Design/DataHolder.hpp"
-#include "CastorUtils/Math/Coords.hpp"
+#include "CastorUtils/Math/PointView.hpp"
 
 namespace c3d
 {
@@ -24,10 +24,10 @@ namespace c3d
 
 	class Position
 		: private DataHolderT< PositionData >
-		, public Coords< int32_t, 2 >
+		, public PointView< int32_t, 2 >
 	{
 	private:
-		using BaseType = Coords< int32_t, 2 >;
+		using BaseType = PointView< int32_t, 2 >;
 
 	public:
 		/**
@@ -162,29 +162,13 @@ namespace c3d
 
 		using BaseType::ptr;
 		using BaseType::constPtr;
+
+	private:
+		friend bool operator==( Position const & lhs, Position const & rhs )noexcept
+		{
+			return lhs.x() == rhs.x() && lhs.y() == rhs.y();
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Equality operator
-	 *\param[in]	a, b	The positions to compare
-	 *\return		\p true if positions have same coordinates
-	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	a, b	Les positions à comparer
-	 *\return		\p true si les positions ont les mêmes coordonnées
-	 */
-	CU_API bool operator==( Position const & a, Position const & b );
-	/**
-	 *\~english
-	 *\brief		Difference operator
-	 *\param[in]	a, b	The positions to compare
-	 *\return		\p false if positions have same coordinates
-	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	a, b	Les positions à comparer
-	 *\return		\p false si les positions ont les mêmes coordonnées
-	 */
-	CU_API bool operator!=( Position const & a, Position const & b );
 }
 
 #endif

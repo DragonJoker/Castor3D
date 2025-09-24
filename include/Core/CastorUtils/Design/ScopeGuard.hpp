@@ -10,10 +10,10 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	template< typename ScopeExitFuncType >
 	class ScopeGuard
 	{
 	public:
+		using ScopeExitFuncType = Function< void() >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -43,7 +43,11 @@ namespace c3d
 		 *\brief		Constructeur par déplacement.
 		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		ScopeGuard( ScopeGuard && rhs )noexcept = default;
+		ScopeGuard( ScopeGuard && rhs )noexcept
+			: m_function{ rhs.m_function }
+		{
+			rhs.m_function = {};
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -52,7 +56,8 @@ namespace c3d
 		 */
 		~ScopeGuard()noexcept
 		{
-			m_function();
+			if ( m_function )
+				m_function();
 		}
 		/**
 		 *\~english
@@ -71,10 +76,16 @@ namespace c3d
 		 *\brief		Constructeur par déplacement.
 		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		ScopeGuard & operator=( ScopeGuard && rhs )noexcept = default;
+		ScopeGuard & operator=( ScopeGuard && rhs )noexcept
+		{
+			m_function = rhs.m_function;
+			rhs.m_function = {};
+
+			return *this;
+		}
 
 	private:
-		ScopeExitFuncType m_function;
+		Function< void() > m_function;
 	};
 	/**
 	 *\~english
@@ -87,9 +98,9 @@ namespace c3d
 	 *\return		Le ScopeGuard.
 	 */
 	template< typename ScopeExitFuncType >
-	ScopeGuard< ScopeExitFuncType > makeScopeGuard( ScopeExitFuncType const & function )
+	ScopeGuard makeScopeGuard( ScopeExitFuncType const & function )
 	{
-		return ScopeGuard< ScopeExitFuncType >( function );
+		return ScopeGuard{ function };
 	}
 }
 

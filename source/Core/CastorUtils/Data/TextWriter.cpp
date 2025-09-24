@@ -107,13 +107,13 @@ namespace c3d
 			try
 			{
 				m_result = txtwrite::writeRawText( m_file, m_writer->tabs() + cuT( "}\n" ) );
+				m_writer->checkError( m_result, ( cuT( "footer " ) + m_name ).c_str() );
 			}
 			catch ( ... )
 			{
 				// Nothing to do here...
 			}
 
-			m_writer->checkError( m_result, ( cuT( "footer " ) + m_name ).c_str() );
 		}
 	}
 
@@ -332,21 +332,21 @@ namespace c3d
 		return writeOpt( file, name, value, false );
 	}
 
-	bool TextWriterBase::writeName( StringStream & file, StringView name, WString const & value )const
+	bool TextWriterBase::writeName( StringStream & file, StringView name, WStringView value )const
 	{
 		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + makeString( value ) + cuT( "\"\n" ) );
 		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeName( StringStream & file, StringView name, MbString const & value )const
+	bool TextWriterBase::writeName( StringStream & file, StringView name, MbStringView value )const
 	{
 		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + makeString( value ) + cuT( "\"\n" ) );
 		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, WString const & value, WString const & comp )const
+	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, WString const & value, WStringView comp )const
 	{
 		if ( value != comp )
 		{
@@ -356,7 +356,7 @@ namespace c3d
 		return true;
 	}
 
-	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, MbString const & value, MbString const & comp )const
+	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, MbString const & value, MbStringView comp )const
 	{
 		if ( value != comp )
 		{

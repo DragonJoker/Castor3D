@@ -28,9 +28,9 @@ namespace smaa
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx : uint32_t
+		enum class Bindings : uint32_t
 		{
-			DepthTexIdx = SmaaUboIdx + 1,
+			DepthTexIdx = uint32_t( smaa::Bindings::SmaaUboIdx ) + 1u,
 		};
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
@@ -39,33 +39,30 @@ namespace smaa
 			c3ds::Utils utils{ writer };
 
 			// Shader inputs
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_depthObjTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObjTex", DepthTexIdx, 0u );
+			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
+			auto c3d_depthObjTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObjTex", Bindings::DepthTexIdx, 0u );
 
 			/**
 			 * Gathers current pixel, and the top-left neighbors.
 			 */
 			auto SMAAGatherNeighbours = writer.implementFunction< sdw::Vec3 >( "SMAAGatherNeighbours"
-				, [&]( sdw::Vec2 const & texcoord
-					, sdw::Vec4Array const & offset
+				, [&writer, &c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::CombinedImage2DRgba32 const & depthObjTex )
 				{
 					writer.returnStmt( depthObjTex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InVec4Array{ writer, "offset", 3u }
 				, sdw::InCombinedImage2DRgba32{ writer, "depthObjTex" } );
 
 			/**
 			 * Depth Edge Detection
 			 */
 			auto SMAADepthEdgeDetectionPS = writer.implementFunction< sdw::Vec2 >( "SMAADepthEdgeDetectionPS"
-				, [&]( sdw::Vec2 const & texcoord
-					, sdw::Vec4Array const & offset
+				, [&writer, &SMAAGatherNeighbours, &c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::CombinedImage2DRgba32 const & depthTex )
 				{
 					auto neighbours = writer.declLocale( "neighbours"
-						, SMAAGatherNeighbours( texcoord, offset, depthTex ) );
+						, SMAAGatherNeighbours( texcoord, depthTex ) );
 					auto delta = writer.declLocale( "delta"
 						, abs( neighbours.xx() - neighbours.yz() ) );
 					auto edges = writer.declLocale( "edges"
@@ -80,16 +77,15 @@ namespace smaa
 					writer.returnStmt( edges );
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InVec4Array{ writer, "offset", 3u }
 				, sdw::InCombinedImage2DRgba32{ writer, "depthTex" } );
 
 			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
 
-			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > const & in
+			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&utils, &SMAADepthEdgeDetectionPS, &c3d_depthObjTex]( sdw::FragmentInT< EDVertexT > const & in
 				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = vec4( 0.0_f );
-					out.colour().xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( in.texcoord() ), in.offset(), c3d_depthObjTex );
+					out.colour().xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( in.texcoord() ), c3d_depthObjTex );
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -114,7 +110,7 @@ namespace smaa
 			, nullptr
 			, 1u }
 	{
-		m_pass.addInputSampled( *depthObj.getSampledLastAttach(), dpthed::DepthTexIdx
+		m_pass.addInputSampledT( *depthObj.getSampledLastAttach(), dpthed::Bindings::DepthTexIdx
 			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest } );
 	}
 }

@@ -32,7 +32,7 @@ namespace c3d
 
 	namespace dspclst
 	{
-		enum BindingPoints
+		enum class Bindings
 		{
 			eCamera,
 			eLights,
@@ -49,8 +49,7 @@ namespace c3d
 			eSpotLightCluster,
 		};
 
-		static ShaderPtr createShader( RenderDevice const & device
-			, ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
 			uint32_t NumThreads = 32u;
 
@@ -66,43 +65,43 @@ namespace c3d
 
 			// Inputs
 			C3D_Camera( writer
-				, eCamera
+				, Bindings::eCamera
 				, 0u );
 			shader::LightsBuffer lights{ writer
-				, eLights
+				, uint32_t( Bindings::eLights )
 				, 0u };
 			C3D_Clusters( writer
-				, eClusters
+				, Bindings::eClusters
 				, 0u );
 			C3D_AllLightsAABB( writer
-				, eAllLightsAABB
+				, Bindings::eAllLightsAABB
 				, 0u );
 			C3D_ClustersAABB( writer
-				, eClustersAABB
+				, Bindings::eClustersAABB
 				, 0u );
 			C3D_PointLightBVH( writer
-				, ePointLightBVH
+				, Bindings::ePointLightBVH
 				, 0u );
 			C3D_SpotLightBVH( writer
-				, eSpotLightBVH
+				, Bindings::eSpotLightBVH
 				, 0u );
 			C3D_PointLightIndices( writer
-				, ePointLightIndices
+				, Bindings::ePointLightIndices
 				, 0u );
 			C3D_SpotLightIndices( writer
-				, eSpotLightIndices
+				, Bindings::eSpotLightIndices
 				, 0u );
 			C3D_PointLightClusterIndex( writer
-				, ePointLightIndex
+				, Bindings::ePointLightIndex
 				, 0u );
 			C3D_PointLightClusterGrid( writer
-				, ePointLightCluster
+				, Bindings::ePointLightCluster
 				, 0u );
 			C3D_SpotLightClusterIndex( writer
-				, eSpotLightIndex
+				, Bindings::eSpotLightIndex
 				, 0u );
 			C3D_SpotLightClusterGrid( writer
-				, eSpotLightCluster
+				, Bindings::eSpotLightCluster
 				, 0u );
 
 			static constexpr s32 MaxValues = 1024;
@@ -128,147 +127,151 @@ namespace c3d
 			auto gsClusterSphere = writer.declSharedVariable< sdw::Vec4 >( "gsClusterSphere" );
 
 			shader::Utils utils{ writer };
-			sdw::Function< sdw::Void, sdw::InUInt > pushNode;
-			sdw::Function< sdw::UInt > popNode;
-
-			Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
-			Function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
-			Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getLeafIndex;
-
-			pushNode = writer.implementFunction< sdw::Void >( "pushNode"
-				, [&writer, &gsStackPtr, &gsNodeStack]( sdw::UInt const & nodeIndex )
-				{
-					auto stackPtr = writer.declLocale( "stackPtr"
-						, sdw::atomicAdd( gsStackPtr, 1_i ) );
-
-					sdwIF( writer, stackPtr < MaxValues )
-					{
-						gsNodeStack[stackPtr] = nodeIndex;
-					}
-					sdwFI
-				}
-				, sdw::InUInt{ writer, "nodeIndex" } );
-
-			popNode = writer.implementFunction< sdw::UInt >( "popNode"
-				, [&writer, &gsStackPtr, &gsNodeStack]()
-				{
-					auto nodeIndex = writer.declLocale( "nodeIndex"
-						, 0_u );
-					auto stackPtr = writer.declLocale( "stackPtr"
-						, sdw::atomicAdd( gsStackPtr, -1_i ) );
-
-					sdwIF( writer, stackPtr > 0 && stackPtr < MaxValues )
-					{
-						nodeIndex = gsNodeStack[stackPtr - 1];
-					}
-					sdwFI
-
-					writer.returnStmt( nodeIndex );
-				} );
-
-			// Get the index of the the first child node in the BVH.
-			getFirstChild = [&writer]( sdw::UInt const & parentIndex
-				, sdw::UInt const & numLevels )
-			{
-				return writer.ternary( numLevels > 0_u
-					, parentIndex * 32_u + 1_u
-					, 0_u );
-			};
-
-			// Check to see if an index of the BVH is a leaf.
-			isLeafNode = [&writer, &c3d_numChildNodes]( sdw::UInt const & childIndex
-				, sdw::UInt const & numLevels )
-			{
-				return writer.ternary( numLevels > 0_u
-					, childIndex > ( c3d_numChildNodes[numLevels - 1_u] - 1_u )
-					, 1_b );
-			};
-
-			// Get the index of a leaf node given the node ID in the BVH.
-			getLeafIndex = [&writer, &c3d_numChildNodes]( sdw::UInt const & nodeIndex
-				, sdw::UInt const & numLevels )
-			{
-				return writer.ternary( numLevels > 0_u
-					, nodeIndex - c3d_numChildNodes[numLevels - 1_u]
-					, nodeIndex );
-			};
-
-			// Check to see if on AABB intersects another AABB.
-			// Source: Real-time collision detection, Christer Ericson (2005)
-			auto aabbIntersectAABB = writer.implementFunction< sdw::Boolean >( "aabbIntersectAABB"
-				, [&writer]( shader::AABB const & a
-					, shader::AABB const & b )
-				{
-					auto result = writer.declLocale( "result"
-						, 1_b );
-
-					for ( int i = 0; i < 3; ++i )
-					{
-						result = result
-							&& ( a.max()[i] >= b.min()[i]
-								&& a.min()[i] <= b.max()[i] );
-					}
-
-					writer.returnStmt( result );
-				}
-				, shader::InAABB{ writer, "a" }
-				, shader::InAABB{ writer, "b" } );
-
-			auto sphereInsideAABB = writer.implementFunction< sdw::Boolean >( "sphereInsideAABB"
-				, [&writer]( sdw::Vec4 const & sphere
-					, shader::AABB const & aabb )
-				{
-					auto sqDistance = writer.declLocale( "sqDistance"
-						, 0.0_f );
-					auto v = writer.declLocale( "v"
-						, 0.0_f );
-
-					for ( int i = 0; i < 3; ++i )
-					{
-						v = sphere[i];
-
-						sdwIF( writer, v < aabb.min()[i] )
-						{
-							sqDistance += pow( aabb.min()[i] - v, 2.0_f );
-						}
-						sdwFI
-						sdwIF( writer, v > aabb.max()[i] )
-						{
-							sqDistance += pow( v - aabb.max()[i], 2.0_f );
-						}
-						sdwFI
-					}
-
-					writer.returnStmt( sqDistance <= sphere.w() * sphere.w() );
-				}
-				, sdw::InVec4{ writer, "sphere" }
-				, shader::InAABB{ writer, "aabb" } );
-
-			auto coneInsideSphere = writer.implementFunction< sdw::Boolean >( "coneInsideSphere"
-				, [&writer]( shader::Cone const & cone
-					, sdw::Vec4 const & sphere )
-				{
-					auto V = writer.declLocale( "V"
-						, sphere.xyz() - cone.apex() );
-					auto lenSqV = writer.declLocale( "lenSqV"
-						, dot( V, V ) );
-					auto lenV1 = writer.declLocale( "lenV1"
-						, dot( V, cone.direction() ) );
-					auto distanceClosestPoint = writer.declLocale( "distanceClosestPoint"
-						, cone.apertureCos() * sqrt( lenSqV - lenV1 * lenV1 ) - lenV1 * cone.apertureSin() );
-
-					auto angleCull = distanceClosestPoint > sphere.w();
-					auto frontCull = lenV1 > sphere.w() + cone.range();
-					auto backCull = lenV1 < -sphere.w();
-
-					writer.returnStmt( !( angleCull || frontCull || backCull ) );
-				}
-				, shader::InCone{ writer, "cone" }
-				, sdw::InVec4{ writer, "sphere" } );
-
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &lights, &c3d_cameraData, &c3d_pointLightIndices, &c3d_spotLightIndices, &c3d_allLightsAABB, &c3d_clustersData, &c3D_clustersAABB
+					, &gsPointLights, &gsSpotLights, &gsClusterAABB, &gsClusterSphere, &gsStackPtr, &gsParentIndex, &gsClusterIndex1D, &gsNodeStack
+					, &gsPointLightStartOffset, &gsSpotLightStartOffset, &c3d_pointLightClusterIndex, &c3d_spotLightClusterIndex
+					, &c3d_pointLightClusterListCount, &c3d_spotLightClusterListCount, &c3d_pointLightClusterGrid, &c3d_spotLightClusterGrid
+					, &c3d_numChildNodes, &c3d_pointLightBVH, &c3d_spotLightBVH, NumThreads]( sdw::ComputeIn const & in )
 				{
+					sdw::Function< sdw::Void, sdw::InUInt > pushNode;
+					sdw::Function< sdw::UInt > popNode;
+
+					Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
+					Function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
+					Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getLeafIndex;
+
+					pushNode = writer.implementFunction< sdw::Void >( "pushNode"
+						, [&writer, &gsStackPtr, &gsNodeStack]( sdw::UInt const & nodeIndex )
+						{
+							auto stackPtr = writer.declLocale( "stackPtr"
+								, sdw::atomicAdd( gsStackPtr, 1_i ) );
+
+							sdwIF( writer, stackPtr < MaxValues )
+							{
+								gsNodeStack[stackPtr] = nodeIndex;
+							}
+							sdwFI
+						}
+						, sdw::InUInt{ writer, "nodeIndex" } );
+
+					popNode = writer.implementFunction< sdw::UInt >( "popNode"
+						, [&writer, &gsStackPtr, &gsNodeStack]()
+						{
+							auto nodeIndex = writer.declLocale( "nodeIndex"
+								, 0_u );
+							auto stackPtr = writer.declLocale( "stackPtr"
+								, sdw::atomicAdd( gsStackPtr, -1_i ) );
+
+							sdwIF( writer, stackPtr > 0 && stackPtr < MaxValues )
+							{
+								nodeIndex = gsNodeStack[stackPtr - 1];
+							}
+							sdwFI
+
+							writer.returnStmt( nodeIndex );
+						} );
+
+					// Get the index of the the first child node in the BVH.
+					getFirstChild = [&writer]( sdw::UInt const & parentIndex
+						, sdw::UInt const & numLevels )
+					{
+						return writer.ternary( numLevels > 0_u
+							, parentIndex * 32_u + 1_u
+							, 0_u );
+					};
+
+					// Check to see if an index of the BVH is a leaf.
+					isLeafNode = [&writer, &c3d_numChildNodes]( sdw::UInt const & childIndex
+						, sdw::UInt const & numLevels )
+					{
+						return writer.ternary( numLevels > 0_u
+							, childIndex > ( c3d_numChildNodes[numLevels - 1_u] - 1_u )
+							, 1_b );
+					};
+
+					// Get the index of a leaf node given the node ID in the BVH.
+					getLeafIndex = [&writer, &c3d_numChildNodes]( sdw::UInt const & nodeIndex
+						, sdw::UInt const & numLevels )
+					{
+						return writer.ternary( numLevels > 0_u
+							, nodeIndex - c3d_numChildNodes[numLevels - 1_u]
+							, nodeIndex );
+					};
+
+					// Check to see if on AABB intersects another AABB.
+					// Source: Real-time collision detection, Christer Ericson (2005)
+					auto aabbIntersectAABB = writer.implementFunction< sdw::Boolean >( "aabbIntersectAABB"
+						, [&writer]( shader::AABB const & a
+							, shader::AABB const & b )
+						{
+							auto result = writer.declLocale( "result"
+								, 1_b );
+
+							for ( int i = 0; i < 3; ++i )
+							{
+								result = result
+									&& ( a.max()[i] >= b.min()[i]
+										&& a.min()[i] <= b.max()[i] );
+							}
+
+							writer.returnStmt( result );
+						}
+						, shader::InAABB{ writer, "a" }
+						, shader::InAABB{ writer, "b" } );
+
+					auto sphereInsideAABB = writer.implementFunction< sdw::Boolean >( "sphereInsideAABB"
+						, [&writer]( sdw::Vec4 const & sphere
+							, shader::AABB const & aabb )
+						{
+							auto sqDistance = writer.declLocale( "sqDistance"
+								, 0.0_f );
+							auto v = writer.declLocale( "v"
+								, 0.0_f );
+
+							for ( int i = 0; i < 3; ++i )
+							{
+								v = sphere[i];
+
+								sdwIF( writer, v < aabb.min()[i] )
+								{
+									sqDistance += pow( aabb.min()[i] - v, 2.0_f );
+								}
+								sdwFI
+								sdwIF( writer, v > aabb.max()[i] )
+								{
+									sqDistance += pow( v - aabb.max()[i], 2.0_f );
+								}
+								sdwFI
+							}
+
+							writer.returnStmt( sqDistance <= sphere.w() * sphere.w() );
+						}
+						, sdw::InVec4{ writer, "sphere" }
+						, shader::InAABB{ writer, "aabb" } );
+
+					auto coneInsideSphere = writer.implementFunction< sdw::Boolean >( "coneInsideSphere"
+						, [&writer]( shader::Cone const & cone
+							, sdw::Vec4 const & sphere )
+						{
+							auto V = writer.declLocale( "V"
+								, sphere.xyz() - cone.apex() );
+							auto lenSqV = writer.declLocale( "lenSqV"
+								, dot( V, V ) );
+							auto lenV1 = writer.declLocale( "lenV1"
+								, dot( V, cone.direction() ) );
+							auto distanceClosestPoint = writer.declLocale( "distanceClosestPoint"
+								, cone.apertureCos() * sqrt( lenSqV - lenV1 * lenV1 ) - lenV1 * cone.apertureSin() );
+
+							auto angleCull = distanceClosestPoint > sphere.w();
+							auto frontCull = lenV1 > sphere.w() + cone.range();
+							auto backCull = lenV1 < -sphere.w();
+
+							writer.returnStmt( !( angleCull || frontCull || backCull ) );
+						}
+						, shader::InCone{ writer, "cone" }
+						, sdw::InVec4{ writer, "sphere" } );
+
 					auto const & groupIndex = in.localInvocationIndex;
 
 					auto processPointLightAABB = [&]( sdw::UInt const & leafIndex )
@@ -514,7 +517,7 @@ namespace c3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), dspclst::createShader( m_device, m_config ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), dspclst::createShader( m_device ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
@@ -554,11 +557,11 @@ namespace c3d
 		auto & pass = graph.createPass( "AssignLightsToClusters"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				auto result = makeRawUnique< dspclst::FramePass >( framePass
 					, context
-					, graph
+					, runGraph
 					, device
 					, clusters
 					, crg::cp::Config{}
@@ -569,20 +572,20 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		clustersCameraUbo.createPassBinding( pass, dspclst::eCamera );
-		lights.createPassBinding( pass, dspclst::eLights );
-		clusters.getClustersUbo().createPassBinding( pass, dspclst::eClusters );
-		pass.addInputStorage( *allLightsAABB.getLastAttach(), uint32_t( dspclst::eAllLightsAABB ) );
-		pass.addInputStorage( *clustersAABB.getLastAttach(), uint32_t( dspclst::eClustersAABB ) );
-		pass.addInputStorage( *pointLightBVH.getLastAttach(), uint32_t( dspclst::ePointLightBVH ) );
-		pass.addInputStorage( *spotLightBVH.getLastAttach(), uint32_t( dspclst::eSpotLightBVH ) );
-		pass.addInputStorage( *outputSortAttachs.pointLightIndices, uint32_t( dspclst::ePointLightIndices ) );
-		pass.addInputStorage( *outputSortAttachs.spotLightIndices, uint32_t( dspclst::eSpotLightIndices ) );
+		clustersCameraUbo.createPassBinding( pass, dspclst::Bindings::eCamera );
+		lights.createPassBindingT( pass, dspclst::Bindings::eLights );
+		clusters.getClustersUbo().createPassBinding( pass, dspclst::Bindings::eClusters );
+		pass.addInputStorageT( *allLightsAABB.getLastAttach(), dspclst::Bindings::eAllLightsAABB );
+		pass.addInputStorageT( *clustersAABB.getLastAttach(), dspclst::Bindings::eClustersAABB );
+		pass.addInputStorageT( *pointLightBVH.getLastAttach(), dspclst::Bindings::ePointLightBVH );
+		pass.addInputStorageT( *spotLightBVH.getLastAttach(), dspclst::Bindings::eSpotLightBVH );
+		pass.addInputStorageT( *outputSortAttachs.pointLightIndices, dspclst::Bindings::ePointLightIndices );
+		pass.addInputStorageT( *outputSortAttachs.spotLightIndices, dspclst::Bindings::eSpotLightIndices );
 
-		pointLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBuffer( pointLightClusterIndex.bufferViewId, uint32_t( dspclst::ePointLightIndex ) ) );
-		pointLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBuffer( pointLightClusterGrid.bufferViewId, uint32_t( dspclst::ePointLightCluster ) ) );
-		spotLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBuffer( spotLightClusterIndex.bufferViewId, uint32_t( dspclst::eSpotLightIndex ) ) );
-		spotLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBuffer( spotLightClusterGrid.bufferViewId, uint32_t( dspclst::eSpotLightCluster ) ) );
+		pointLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterIndex.bufferViewId, dspclst::Bindings::ePointLightIndex ) );
+		pointLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterGrid.bufferViewId, dspclst::Bindings::ePointLightCluster ) );
+		spotLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightClusterIndex.bufferViewId, dspclst::Bindings::eSpotLightIndex ) );
+		spotLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightClusterGrid.bufferViewId, dspclst::Bindings::eSpotLightCluster ) );
 	}
 
 	//*********************************************************************************************

@@ -67,7 +67,7 @@ namespace c3d
 			, Size{} ) );
 		m_line->setVisible( visible );
 		m_line->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr, KeyboardEvent const & event )
+			, [this]( Control const *, KeyboardEvent const & event )
 			{
 				onNcKeyDown( event );
 			} );
@@ -82,22 +82,22 @@ namespace c3d
 		m_tick->setVisible( visible );
 		m_tick->setCatchesMouseEvents( true );
 		m_tick->connectNC( MouseEventType::eMove
-			, [this]( ControlRPtr, MouseEvent const & event )
+			, [this]( Control const *, MouseEvent const & event )
 			{
 				onTickMouseMove( event );
 			} );
 		m_tick->connectNC( MouseEventType::ePushed
-			, [this]( ControlRPtr, MouseEvent const & event )
+			, [this]( Control const *, MouseEvent const & event )
 			{
 				onTickMouseButtonDown( event );
 			} );
 		m_tick->connectNC( MouseEventType::eReleased
-			, [this]( ControlRPtr, MouseEvent const & event )
+			, [this]( Control const *, MouseEvent const & event )
 			{
 				onTickMouseButtonUp( event );
 			} );
 		m_tick->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr, KeyboardEvent const & event )
+			, [this]( Control const *, KeyboardEvent const & event )
 			{
 				onNcKeyDown( event );
 			} );

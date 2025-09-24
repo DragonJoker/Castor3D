@@ -20,7 +20,7 @@ namespace atmosphere_scattering
 
 	namespace curl
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eOutput,
 			eCount,
@@ -32,11 +32,11 @@ namespace atmosphere_scattering
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto outputTexture = writer.declStorageImg< sdw::WImage2DRg32 >( "outputTexture"
-				, uint32_t( Bindings::eOutput )
+				, Bindings::eOutput
 				, 0u );
 
 			auto hash = writer.implementFunction< sdw::Vec2 >( "hash"
-				, [&]( sdw::Vec2 p )
+				, [&writer]( sdw::Vec2 p )
 				{
 					p = vec2( dot( p, vec2( 127.1_f, 311.7_f ) ),
 						dot( p, vec2( 269.5_f, 183.3_f ) ) );
@@ -46,7 +46,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "p" } );
 
 			auto noise = writer.implementFunction< sdw::Float >( "noise"
-				, [&]( sdw::Vec2 const & p )
+				, [&writer, &hash]( sdw::Vec2 const & p )
 				{
 					auto i = writer.declLocale( "i"
 						, floor( p ) );
@@ -63,11 +63,11 @@ namespace atmosphere_scattering
 				}
 				, sdw::InVec2{ writer, "p" } );
 
-			auto detailScale = 20.0_f;
-
 			auto fragToUV = writer.implementFunction< sdw::Vec2 >( "fragToUV"
-				, [&]( sdw::Vec2 const & coord )
+				, [&writer, &dimension]( sdw::Vec2 const & coord )
 				{
+					auto detailScale = 20.0_f;
+
 					auto dim = sdw::Float{ float( dimension ) };
 					auto p = writer.declLocale( "p"
 						, coord.xy() / dim - 0.5_f );
@@ -77,7 +77,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "coord" } );
 
 			auto curl = writer.implementFunction< sdw::Vec2 >( "curl"
-				, [&]( sdw::Vec2 const & fragCoord )
+				, [&writer, &noise, &fragToUV]( sdw::Vec2 const & fragCoord )
 				{
 					auto pN = writer.declLocale( "pN"
 						, noise( fragToUV( fragCoord + vec2( 0.0_f, 1.0_f ) ) ) );
@@ -93,7 +93,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "fragCoord" } );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
-				, [&]( sdw::ComputeIn in )
+				, [&writer, &curl, &outputTexture]( sdw::ComputeIn const & in )
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, ivec2( in.globalInvocationID.xy() ) );
@@ -109,7 +109,7 @@ namespace atmosphere_scattering
 	CloudsCurlPass::CloudsCurlPass( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
 		, c3d::Texture & result
-		, bool & enabled )
+		, bool const & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/CurlPass" ), curl::getProgram( device, result.getExtent().width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
@@ -132,7 +132,7 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		result.setLastAttach( computePass.addOutputStorageImage( result.getTargetViewId(), curl::eOutput ) );
+		result.setLastAttach( computePass.addOutputStorageImageT( result.getTargetViewId(), curl::Bindings::eOutput ) );
 	}
 
 	void CloudsCurlPass::accept( c3d::ConfigurationVisitorBase & visitor )const

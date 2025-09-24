@@ -23,7 +23,6 @@ namespace castortd
 				, c3d::String const & attackAnimName )
 				: m_kind{ kind }
 				, m_attackAnimName{ attackAnimName }
-				, m_attackAnimTime{}
 			{
 			}
 
@@ -126,7 +125,7 @@ namespace castortd
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
 			c3d::String m_attackAnimName;
-			c3d::Milliseconds m_attackAnimTime;
+			c3d::Milliseconds m_attackAnimTime{};
 		};
 
 		using CategoryPtr = c3d::RawUniquePtr< Category >;
@@ -228,7 +227,7 @@ namespace castortd
 		}
 
 	private:
-		bool doLookForEnemy( EnemyArray & enemies );
+		bool doLookForEnemy( EnemyArray const & enemies );
 		bool doCanShoot();
 		void doStartAttack();
 		bool doAnimEnded( EnemyArray & enemies );

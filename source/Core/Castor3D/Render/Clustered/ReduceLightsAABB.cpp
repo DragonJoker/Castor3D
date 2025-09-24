@@ -33,7 +33,7 @@ namespace c3d
 
 	namespace rdclgb
 	{
-		enum BindingPoints
+		enum class Bindings
 		{
 			eCamera,
 			eClusters,
@@ -52,17 +52,17 @@ namespace c3d
 
 			// Inputs
 			C3D_Camera( writer
-				, eCamera
+				, Bindings::eCamera
 				, 0u );
 			C3D_Clusters( writer
-				, eClusters
+				, Bindings::eClusters
 				, 0u );
 			C3D_AllLightsAABBEx( writer
-				, eAllLightsAABB
+				, Bindings::eAllLightsAABB
 				, 0u
 				, first );
 			C3D_ReducedLightsAABB( writer
-				, eReducedLightsAABB
+				, Bindings::eReducedLightsAABB
 				, 0u );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DispatchData", "c3d_dispatchData" };
@@ -74,8 +74,9 @@ namespace c3d
 			auto gsAABBMax = writer.declSharedVariable< sdw::Vec4 >( "gsAABBMax", NumThreads );
 
 			// Perform log-step reduction in group shared memory.
-			auto logStepReduction = [&]( sdw::UInt const & groupIndex
-				, sdw::UInt const & groupID )
+			auto logStepReduction = [&writer, &c3d_reducedLightsAABB, &gsAABBMin, &gsAABBMax
+				, &config]( sdw::UInt const & groupIndex
+					, sdw::UInt const & groupID )
 			{
 				// If we can assume that NumThreads is a power of 2, we can compute
 				// the reduction index by performing a bit shift. This is equivalent to 
@@ -158,7 +159,9 @@ namespace c3d
 			};
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &c3d_allLightsAABB, &c3d_clustersData, &c3d_reducedLightsAABB, &c3d_numThreadGroups, &c3d_clustersLightsData
+					, &c3d_lightsAABBRange, &c3d_cameraData, &c3d_reduceNumElements, &gsAABBMin, &gsAABBMax, &logStepReduction
+					, first]( sdw::ComputeIn const & in )
 				{
 					auto const & groupIndex = in.localInvocationIndex;
 					auto const & groupID = in.workGroupID.x();
@@ -291,7 +294,7 @@ namespace c3d
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
 						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext &, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( cmd ); } ) )
+						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd ); } ) )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
 						.getGroupCountX( crg::cp::GetGroupCountCallback( [this]() { return doGetGroupsCountX(); } ) ) }
 				, m_device{ device }
@@ -336,13 +339,14 @@ namespace c3d
 					&& m_clusters.needsLightsUpdate();
 			}
 
-			uint32_t doGetPassIndex()
+			uint32_t doGetPassIndex()const
 			{
 				uint32_t result{ ( m_clusters.getConfig().enableReduceWarpOptimisation ? 1u : 0u ) };
 				return result;
 			}
 
-			void doSubRecordInto( VkCommandBuffer commandBuffer )
+			void doSubRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer )
 			{
 				struct
 				{
@@ -354,7 +358,7 @@ namespace c3d
 				// elements to be reduced.
 				m_dispatchCount = computeThreadGroupsCount( m_lightCache );
 				dispatchData.numThreadGroups = m_dispatchCount;
-				m_context.vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
+				context->vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
 			}
 
 			uint32_t doGetGroupsCountX()const
@@ -381,7 +385,7 @@ namespace c3d
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
 						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext &, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( cmd ); } ) )
+						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd ); } ) )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } ) }
 				, m_device{ device }
 				, m_clusters{ clusters }
@@ -429,7 +433,8 @@ namespace c3d
 					&& m_clusters.needsLightsUpdate();
 			}
 
-			void doSubRecordInto( VkCommandBuffer commandBuffer )const
+			void doSubRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer )const
 			{
 				struct
 				{
@@ -442,7 +447,7 @@ namespace c3d
 				dispatchData.reduceNumElements = computeThreadGroupsCount( m_lightCache );
 				dispatchData.numThreadGroups = 1u;
 
-				m_context.vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
+				context->vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
 			}
 		};
 	}
@@ -459,11 +464,11 @@ namespace c3d
 		auto & first = graph.createPass( "ReduceLightsAABB/First"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				auto result = makeRawUnique< rdclgb::FirstFramePass >( framePass
 					, context
-					, graph
+					, runGraph
 					, device
 					, clusters
 					, crg::cp::Config{} );
@@ -471,19 +476,19 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		clustersCameraUbo.createPassBinding( first, rdclgb::eCamera );
-		clusters.getClustersUbo().createPassBinding( first, rdclgb::eClusters );
-		first.addInputStorage( *allLightsAABB.getLastAttach(), uint32_t( rdclgb::eAllLightsAABB ) );
-		reducedLightsAABB.setLastAttach( first.addClearableOutputStorageBuffer( reducedLightsAABB.bufferViewId, uint32_t( rdclgb::eReducedLightsAABB ) ) );
+		clustersCameraUbo.createPassBinding( first, rdclgb::Bindings::eCamera );
+		clusters.getClustersUbo().createPassBinding( first, rdclgb::Bindings::eClusters );
+		first.addInputStorageT( *allLightsAABB.getLastAttach(), rdclgb::Bindings::eAllLightsAABB );
+		reducedLightsAABB.setLastAttach( first.addClearableOutputStorageBufferT( reducedLightsAABB.bufferViewId, rdclgb::Bindings::eReducedLightsAABB ) );
 
 		auto & second = graph.createPass( "ReduceLightsAABB/Second"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				auto result = makeRawUnique< rdclgb::SecondFramePass >( framePass
 					, context
-					, graph
+					, runGraph
 					, device
 					, clusters
 					, crg::cp::Config{} );
@@ -491,9 +496,9 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		clustersCameraUbo.createPassBinding( second, rdclgb::eCamera );
-		clusters.getClustersUbo().createPassBinding( second, rdclgb::eClusters );
-		reducedLightsAABB.setLastAttach( second.addInOutStorage( *reducedLightsAABB.getLastAttach(), uint32_t( rdclgb::eReducedLightsAABB ) ) );
+		clustersCameraUbo.createPassBinding( second, rdclgb::Bindings::eCamera );
+		clusters.getClustersUbo().createPassBinding( second, rdclgb::Bindings::eClusters );
+		reducedLightsAABB.setLastAttach( second.addInOutStorageT( *reducedLightsAABB.getLastAttach(), rdclgb::Bindings::eReducedLightsAABB ) );
 	}
 
 	//*********************************************************************************************

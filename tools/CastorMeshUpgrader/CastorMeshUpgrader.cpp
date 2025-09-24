@@ -159,7 +159,7 @@ namespace
 	}
 
 	void doInitialise( c3d::RenderDevice const & device
-		, c3d::Mesh & mesh )
+		, c3d::Mesh const & mesh )
 	{
 		for ( auto & submesh : mesh )
 		{
@@ -168,7 +168,7 @@ namespace
 	}
 
 	void doInitialise( c3d::RenderDevice const & device
-		, c3d::Skeleton & skeleton )
+		, [[maybe_unused]] c3d::Skeleton const & skeleton )
 	{
 	}
 
@@ -227,7 +227,7 @@ namespace
 	}
 
 	bool doPostWrite( c3d::Path const & path
-		, c3d::Skeleton & skeleton )
+		, [[maybe_unused]] c3d::Skeleton const & skeleton )
 	{
 		return true;
 	}

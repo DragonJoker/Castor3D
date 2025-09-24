@@ -71,20 +71,30 @@ namespace c3d
 		 *\param[in]	index	L'indice du point d'attache.
 		 *\param[in]	stages	Les shader stages.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding createLayoutBinding( BindingT binding = 0u
 			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| VK_SHADER_STAGE_GEOMETRY_BIT
 				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				| VK_SHADER_STAGE_VERTEX_BIT ) )const;
+				| VK_SHADER_STAGE_VERTEX_BIT ) )const
+		{
+			return makeDescriptorSetLayoutBindingT( binding
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stages );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates a frame pass binding.
 		 *\~french
 		 *\brief		Crée une attache de frame pass.
 		 */
-		C3D_API void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const;
+		template< typename BindingT >
+		void createPassBinding( crg::FramePass & pass
+			, BindingT binding )const
+		{
+			this->doCreatePasBinding( pass, uint32_t( binding ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.
@@ -95,9 +105,13 @@ namespace c3d
 		 *\param[in]	binding			L'attache de layout de set de descripteurs.
 		 *\param[in]	offset, size	L'intervalle à mettre à jour.
 		 */
-		C3D_API ashes::WriteDescriptorSet getSingleBinding( uint32_t binding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getSingleBinding( BindingT binding
 			, VkDeviceSize offset
-			, VkDeviceSize size )const;
+			, VkDeviceSize size )const
+		{
+			return doGetSingleBinding( uint32_t( binding ), offset, size );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.
@@ -106,7 +120,11 @@ namespace c3d
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 *\param[in]	binding	L'attache de layout de set de descripteurs.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getBinding( BindingT binding )const
+		{
+			return doGetBinding( uint32_t( binding ) );
+		}
 		/**
 		 *\~english
 		 *\brief			Creates the descriptor set binding at given point.
@@ -182,6 +200,14 @@ namespace c3d
 			setFirstCount( value );
 		}
 		/**@}*/
+
+	private:
+		C3D_API void doCreatePasBinding( crg::FramePass & pass
+			, uint32_t binding )const;
+		C3D_API ashes::WriteDescriptorSet doGetSingleBinding( uint32_t binding
+			, VkDeviceSize offset
+			, VkDeviceSize size )const;
+		C3D_API ashes::WriteDescriptorSet doGetBinding( uint32_t binding )const;
 
 	private:
 		RenderDevice const & m_device;

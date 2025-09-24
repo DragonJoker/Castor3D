@@ -381,10 +381,7 @@ namespace c3d
 
 	bool ShadowMap::doEnableBlur( uint32_t index )const
 	{
-		auto & dyn = m_passes[m_passesIndex].otherNodes;
-
-		return !dyn.passes[index]->pass->hasNodes()
-			|| dyn.passes[index]->pass->isPassEnabled();
+		return doEnableCopyStatic( index );
 	}
 
 	//*********************************************************************************************

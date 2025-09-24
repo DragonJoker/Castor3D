@@ -14,7 +14,7 @@ namespace c3d
 		{
 		}
 
-		virtual bool operator()( GroupAnimation const & group
+		bool operator()( GroupAnimation const & group
 			, StringStream & file )override
 		{
 			bool result = false;
@@ -46,9 +46,9 @@ namespace c3d
 		{
 			result = true;
 
-			for ( auto & it : group.getObjects() )
+			for ( auto const & [baseName, _] : group.getObjects() )
 			{
-				auto name = it.first;
+				auto name = baseName;
 				size_t skel = name.find( cuT( "_Skeleton" ) );
 				size_t mesh = name.find( cuT( "_Mesh" ) );
 				size_t node = name.find( cuT( "_Node" ) );
@@ -74,10 +74,10 @@ namespace c3d
 
 			if ( !group.getAnimations().empty() )
 			{
-				for ( auto it : group.getAnimations() )
+				for ( auto const & [_, anim] : group.getAnimations() )
 				{
 					result = result
-						&& writeSub( file, it.second );
+						&& writeSub( file, anim );
 				}
 			}
 
@@ -85,11 +85,11 @@ namespace c3d
 			{
 				result = result && writeText( file, cuT( "\n" ) );
 
-				for ( auto it : group.getAnimations() )
+				for ( auto const & [name, anim] : group.getAnimations() )
 				{
-					if ( it.second.state == AnimationState::ePlaying )
+					if ( anim.state == AnimationState::ePlaying )
 					{
-						result = result && writeName( file, cuT( "start_animation" ), it.first );
+						result = result && writeName( file, cuT( "start_animation" ), name );
 					}
 				}
 			}

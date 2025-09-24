@@ -263,7 +263,7 @@ namespace c3d::shader
 		return m_compRegister.getTexcoordModifs( combine );
 	}
 
-	sdw::Vec4 PassShaders::sampleMap( PipelineFlags const & flags
+	sdw::RetVec4 PassShaders::sampleMap( PipelineFlags const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, sdw::Vec3 const texCoords
 		, shader::BlendComponents const & components )const
@@ -282,7 +282,7 @@ namespace c3d::shader
 				: m_utils.sampleMap( map, texCoords ) );
 	}
 
-	sdw::Vec4 PassShaders::sampleMap( PipelineFlags const & flags
+	sdw::RetVec4 PassShaders::sampleMap( PipelineFlags const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, DerivTex const texCoords
 		, shader::BlendComponents const & components )const
@@ -301,7 +301,7 @@ namespace c3d::shader
 				: m_utils.sampleMap( map, texCoords ) );
 	}
 
-	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
+	sdw::RetVec4 PassShaders::sampleMap( TextureCombine const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, sdw::Vec3 const texCoords
 		, shader::BlendComponents const & components )const
@@ -309,7 +309,7 @@ namespace c3d::shader
 		return m_utils.sampleMap( map, texCoords );
 	}
 
-	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
+	sdw::RetVec4 PassShaders::sampleMap( TextureCombine const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, sdw::Vec2 const texCoords
 		, shader::BlendComponents const & components )const
@@ -317,7 +317,7 @@ namespace c3d::shader
 		return m_utils.sampleMap( map, texCoords );
 	}
 
-	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
+	sdw::RetVec4 PassShaders::sampleMap( TextureCombine const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, DerivTex const texCoords
 		, shader::BlendComponents const & components )const

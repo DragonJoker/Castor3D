@@ -32,20 +32,19 @@ namespace atmosphere_scattering
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			C3D_Scene( writer, AtmosphereBackgroundPass::eScene, 0u );
-			C3D_Render( writer, AtmosphereBackgroundPass::eRenderConfig, 0u );
-			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
-				, uint32_t( AtmosphereBackgroundPass::eClouds )
-				, 0u );
+			C3D_Scene( writer, AtmosphereBackgroundBindings::eScene, 0u );
+			C3D_Render( writer, AtmosphereBackgroundBindings::eRenderConfig, 0u );
+			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap", AtmosphereBackgroundBindings::eClouds, 0u );
 
-			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 1.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &cloudsMap, &c3d_renderData, &c3d_sceneData
+				, isVisible, &renderSize]( sdw::FragmentIn const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					if ( isVisible )
 					{
@@ -86,9 +85,9 @@ namespace atmosphere_scattering
 				.depthStencilState( c3d::makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL ) )
 				.passIndex( &background.getPassIndex( forceVisible ) )
 				.programCreator( { 2u
-					, [size, this, &background, &device]( uint32_t programIndex )
+					, [size, this, &device]( uint32_t programIndex )
 					{
-						return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, background, size, programIndex ) );
+						return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, size, programIndex ) );
 					} } ) }
 	{
 	}
@@ -101,7 +100,6 @@ namespace atmosphere_scattering
 	}
 
 	crg::VkPipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader( c3d::RenderDevice const & device
-		, AtmosphereBackground & background
 		, c3d::Extent2D const & size
 		, uint32_t passIndex )
 	{

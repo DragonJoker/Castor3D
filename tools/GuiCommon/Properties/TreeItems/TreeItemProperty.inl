@@ -27,15 +27,12 @@ namespace GuiCommon
 
 	//*********************************************************************************************
 
-	template< typename ParentT, typename MyValueT, typename ControlT >
+	template< typename ParentT, typename MyValueT >
 	wxPGProperty * TreeItemProperty::createProperty( ParentT * parent
 		, wxString const & name
-		, MyValueT && value
-		, PropertyChangeHandler handler
-		, c3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
+		, MyValueT const & value )
 	{
 		using ValueT = std::remove_cv_t< std::remove_reference_t< MyValueT > >;
-		m_handlers.emplace( m_prefix + name, doGetHandler( handler, c3d::move( controls ) ) );
 
 		if constexpr ( std::is_same_v< ValueT, bool > )
 		{
@@ -270,13 +267,13 @@ namespace GuiCommon
 		}
 		else if constexpr ( c3d::isSpeedT< ValueT > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.getValue(), handler, c3d::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.getValue() );
 			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, c3d::Angle > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.degrees(), handler, c3d::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.degrees() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0 ) );
 			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
@@ -285,13 +282,13 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, c3d::LuminousIntensity > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.candela(), handler, c3d::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.candela() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, c3d::Illumination > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.lux(), handler, c3d::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.lux() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			return prop;
 		}
@@ -312,11 +309,11 @@ namespace GuiCommon
 		}
 		else if constexpr ( c3d::isGroupChangeTrackedT< ValueT > )
 		{
-			return createProperty( parent, name, value.value(), handler, c3d::move( controls ) );
+			return createProperty( parent, name, value.value() );
 		}
 		else if constexpr ( c3d::isChangeTrackedT< ValueT > )
 		{
-			return createProperty( parent, name, value.value(), handler, c3d::move( controls ) );
+			return createProperty( parent, name, value.value() );
 		}
 		else if constexpr ( c3d::isRangedValueT< ValueT > )
 		{
@@ -350,9 +347,19 @@ namespace GuiCommon
 		}
 		else
 		{
-			//static_assert( false, "TreeItemProperty::createProperty - Unsupported ValueT" );
 			return appendProp( parent, new wxStringProperty( name, m_prefix + name, value ) );
 		}
+	}
+
+	template< typename ParentT, typename MyValueT, typename ControlT >
+	wxPGProperty * TreeItemProperty::createProperty( ParentT * parent
+		, wxString const & name
+		, MyValueT const & value
+		, PropertyChangeHandler handler
+		, c3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
+	{
+		m_handlers.emplace( m_prefix + name, doGetHandler( handler, c3d::move( controls ) ) );
+		return createProperty( parent, name, value );
 	}
 
 	template< typename ParentT, typename EnumT, typename FuncT, typename ControlT >
@@ -710,10 +717,11 @@ namespace GuiCommon
 	//*********************************************************************************************
 
 	template< typename ConfigT >
-	TreeItemPropertyT< ConfigT >::TreeItemPropertyT( bool editable
+	TreeItemPropertyT< ConfigT >::TreeItemPropertyT( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine
 		, ConfigT & config )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 		, m_config{ config }
 	{
 		CreateTreeItemMenu();

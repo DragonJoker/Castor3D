@@ -12,7 +12,7 @@ namespace castortd
 			, c3d::SceneNode & node
 			, c3d::Point3f target );
 
-		bool accept( Game & game );
+		bool accept( Game const & game )const;
 
 		void load( float speed
 			, uint32_t damage

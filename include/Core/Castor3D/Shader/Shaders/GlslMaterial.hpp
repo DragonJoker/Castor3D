@@ -17,11 +17,11 @@ namespace c3d::shader
 		: public sdw::StructInstance
 	{
 		friend class Materials;
+		SDW_DeclStructInstance( C3D_API, Material );
 
 		C3D_API Material( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, Material );
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, PassShaders const & passShaders

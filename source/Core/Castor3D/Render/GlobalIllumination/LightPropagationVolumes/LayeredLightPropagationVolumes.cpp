@@ -43,23 +43,24 @@ namespace c3d
 					, graph
 					, { crg::defaultV< InitialiseCallback >
 						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-						, RecordCallback( [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } ) } }
+						, RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } ) } }
 			{
 			}
 
 		private:
-			void doRecordInto( VkCommandBuffer commandBuffer
+			void doRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
 				auto clearValue = convert( transparentBlackClearColor );
 
-				for ( auto & [_, attach] : m_pass.outputs )
+				for ( auto & [_, attach] : getPass().getOutputs() )
 				{
 					auto view = attach->view( index );
-					auto image = m_graph.createImage( view.data->image );
+					auto image = getGraph().createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
 					assert( attach->isTransferOutputImageView() );
-					m_context.vkCmdClearColorImage( commandBuffer
+					context->vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, &clearValue

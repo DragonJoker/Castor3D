@@ -6,9 +6,10 @@
 
 namespace GuiCommon
 {
-	BoneTreeItemProperty::BoneTreeItemProperty( bool editable
+	BoneTreeItemProperty::BoneTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

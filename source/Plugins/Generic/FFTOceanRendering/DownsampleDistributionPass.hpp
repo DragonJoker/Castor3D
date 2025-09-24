@@ -16,7 +16,7 @@ namespace ocean_fft
 		: public crg::RunnablePass
 	{
 	public:
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eConfig,
 			eInput,
@@ -40,7 +40,7 @@ namespace ocean_fft
 			, c3d::RenderDevice const & device
 			, c3d::Extent2D const & extent
 			, uint32_t downsample
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::defaultV< crg::RunnablePass::IsEnabledCallback > );
 		/**
 		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */
@@ -50,9 +50,9 @@ namespace ocean_fft
 		static c3d::MbString const Name;
 
 	private:
-		void doRecordInto( crg::RecordContext & context
+		void doRecordInto( crg::RecordContext const & context
 			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+			, uint32_t index )const;
 		uint32_t doGetPassIndex()const;
 		bool doIsComputePass()const;
 

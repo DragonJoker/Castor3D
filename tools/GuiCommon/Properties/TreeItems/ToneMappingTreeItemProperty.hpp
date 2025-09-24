@@ -32,7 +32,8 @@ namespace GuiCommon
 		*\param[in]	editable	Dit si les propriétés sont modifiables.
 		*\param[in]	toneMapping	L'objet cible.
 		*/
-		ToneMappingTreeItemProperty( bool editable
+		ToneMappingTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::RenderTarget & target
 			, wxWindow * parent );
 

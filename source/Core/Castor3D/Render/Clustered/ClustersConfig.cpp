@@ -165,12 +165,4 @@ namespace c3d
 		clustersContext.addParser( cuT( "min_distance" ), clscfg::parserClustersMinDistance, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
 		clustersContext.addPopParser( cuT( "}" ), clscfg::parserClustersEnd );
 	}
-
-	bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs )
-	{
-		return lhs.enabled == rhs.enabled
-			&& lhs.enableReduceWarpOptimisation == rhs.enableReduceWarpOptimisation
-			&& lhs.splitScheme == rhs.splitScheme
-			&& lhs.minDistance == rhs.minDistance;
-	}
 }

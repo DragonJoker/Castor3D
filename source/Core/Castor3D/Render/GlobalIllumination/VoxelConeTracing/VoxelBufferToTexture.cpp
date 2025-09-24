@@ -50,8 +50,8 @@ namespace c3d
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			auto voxels = pass.inputs.begin();
-			auto result = pass.outputs.begin();
+			auto voxels = pass.getInputs().begin();
+			auto result = pass.getOutputs().begin();
 			ashes::WriteDescriptorSetArray writes;
 
 			auto write = graph.getDescriptorWrite( *voxels->second, voxels->first );
@@ -177,15 +177,15 @@ namespace c3d
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, c3d::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, crg::ru::Config{ 2u, false }.implicitAction( pass.outputs.begin()->second->view()
-				, crg::RecordContext::clearAttachment( pass.outputs.begin()->second->view(), transparentBlackClearColor ) ) }
+			, crg::ru::Config{ 2u, false }.implicitAction( pass.getOutputs().begin()->second->view()
+				, crg::RecordContext::clearAttachment( pass.getOutputs().begin()->second->view(), transparentBlackClearColor ) ) }
 		, m_device{ device }
 		, m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ vxlbuftotex::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ vxlbuftotex::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
 		, m_pipelines{ vxlbuftotex::createPipelines( device, *m_pipelineLayout, m_vctConfig.gridSize.value() ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ vxlbuftotex::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ vxlbuftotex::createDescriptorSet( getGraph(), *m_descriptorSetPool, getPass() ) }
 	{
 	}
 
@@ -204,9 +204,9 @@ namespace c3d
 		auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.outputs.begin()->second->view( index );
+		auto view = getPass().getOutputs().begin()->second->view( index );
 		auto layoutState = getLayoutState( view );
-		auto image = m_graph.createImage( view.data->image );
+		auto image = getGraph().createImage( view.data->image );
 
 		if ( !temporalSmoothing )
 		{
@@ -216,7 +216,7 @@ namespace c3d
 				, view
 				, ImageLayout::eUndefined
 				, makeLayoutState( ImageLayout::eTransferDst ) );
-			m_context.vkCmdClearColorImage( commandBuffer
+			context->vkCmdClearColorImage( commandBuffer
 				, image
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, &color
@@ -228,10 +228,10 @@ namespace c3d
 				, layoutState );
 		}
 
-		m_context.vkCmdBindPipeline( commandBuffer
+		context->vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelines[doGetPassIndex()].pipeline );
-		m_context.vkCmdBindDescriptorSets( commandBuffer
+		context->vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelineLayout
 			, 0u
@@ -239,7 +239,7 @@ namespace c3d
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		m_context.vkCmdDispatch( commandBuffer, voxelGridSize * voxelGridSize * voxelGridSize / 256, 1u, 1u );
+		context->vkCmdDispatch( commandBuffer, voxelGridSize * voxelGridSize * voxelGridSize / 256, 1u, 1u );
 	}
 
 	uint32_t VoxelBufferToTexture::doGetPassIndex()const

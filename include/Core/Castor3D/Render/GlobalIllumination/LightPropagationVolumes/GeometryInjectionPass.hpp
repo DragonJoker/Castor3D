@@ -101,8 +101,17 @@ namespace c3d
 			, uint32_t gridSize
 			, uint32_t rsmSize );
 		/**
-		 *\copydoc		RenderTechniquePass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**
 		 *\~english
@@ -128,7 +137,7 @@ namespace c3d
 
 	private:
 		void doSubInitialise( uint32_t index );
-		void doSubRecordInto( crg::RecordContext & context
+		void doSubRecordInto( crg::RecordContext const & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 
@@ -144,7 +153,7 @@ namespace c3d
 
 			void initialise( VkRenderPass renderPass
 				, uint32_t index );
-			void recordInto( crg::RecordContext & context
+			void recordInto( crg::RecordContext const & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index );
 
@@ -153,8 +162,8 @@ namespace c3d
 
 		private:
 			crg::PipelineHolder m_holder;
-			uint32_t m_lpvSize;
-			VkRenderPass m_renderPass;
+			uint32_t m_lpvSize{};
+			VkRenderPass m_renderPass{};
 		};
 
 	private:

@@ -36,7 +36,7 @@ namespace c3d
 		static uint32_t constexpr NumValuesPerThread = 8u;
 		static uint32_t constexpr NumValuesPerThreadGroup = NumThreadsPerThreadGroup * NumValuesPerThread;
 
-		enum BindingPoints
+		enum class Bindings
 		{
 			eInputKeys,
 			eInputValues,
@@ -51,31 +51,31 @@ namespace c3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
-				, uint32_t( eInputKeys )
+				, Bindings::eInputKeys
 				, 0u );
 			auto c3d_inputKeys = inputKeysBuffer.declMemberArray< sdw::UInt >( "ik" );
 			inputKeysBuffer.end();
 
 			auto inputValuesBuffer = writer.declStorageBuffer( "c3d_inputValuesBuffer"
-				, uint32_t( eInputValues )
+				, Bindings::eInputValues
 				, 0u );
 			auto c3d_inputValues = inputValuesBuffer.declMemberArray< sdw::UInt >( "iv" );
 			inputValuesBuffer.end();
 
 			auto outputKeysBuffer = writer.declStorageBuffer( "c3d_outputKeysBuffer"
-				, uint32_t( eOutputKeys )
+				, Bindings::eOutputKeys
 				, 0u );
 			auto c3d_outputKeys = outputKeysBuffer.declMemberArray< sdw::UInt >( "ok" );
 			outputKeysBuffer.end();
 
 			auto outputValuesBuffer = writer.declStorageBuffer( "c3d_outputValuesBuffer"
-				, uint32_t( eOutputValues )
+				, Bindings::eOutputValues
 				, 0u );
 			auto c3d_outputValues = outputValuesBuffer.declMemberArray< sdw::UInt >( "ov" );
 			outputValuesBuffer.end();
 
 			auto mergePathPartitionsBuffer = writer.declStorageBuffer( "c3d_mergePathPartitionsBuffer"
-				, uint32_t( eMergePathPartitions )
+				, Bindings::eMergePathPartitions
 				, 0u );
 			auto c3d_mergePathPartitions = mergePathPartitionsBuffer.declMemberArray< sdw::Int >( "mp" );
 			mergePathPartitionsBuffer.end();
@@ -103,7 +103,7 @@ namespace c3d
 			* @return
 			*/
 			auto mergePath = writer.implementFunction< sdw::Int >( "c3d_mergePath"
-				, [&]( sdw::Int const & a0, sdw::Int const & aCount
+				, [&writer, &gsKeys, &c3d_inputKeys]( sdw::Int const & a0, sdw::Int const & aCount
 					, sdw::Int const & b0, sdw::Int const & bCount
 					, sdw::Int const & diag, sdw::Boolean const & bUseSharedMem )
 				{
@@ -141,7 +141,7 @@ namespace c3d
 			* Perform a serial merge using shared memory. Write results to global memory.
 			*/
 			auto serialMerge = writer.implementFunction< sdw::Void >( "c3d_serialMerge"
-				, [&]( sdw::Int a0, sdw::Int const & a1
+				, [&writer, &gsKeys, &gsValues, &c3d_outputKeys, &c3d_outputValues]( sdw::Int a0, sdw::Int const & a1
 					, sdw::Int b0, sdw::Int const & b1
 					, sdw::Int const & diag
 					, sdw::Int const & numValues, sdw::Int const & out0 )
@@ -187,7 +187,10 @@ namespace c3d
 				, sdw::InInt{ writer, "out0" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreadsPerThreadGroup
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &mergePath, &serialMerge
+					, &c3d_inputKeys, &c3d_inputValues, &gsKeys, &gsValues
+					, &c3d_chunkSize, &c3d_numElements, &c3d_mergePathPartitions
+					, mergePathPartitions]( sdw::ComputeIn const & in )
 				{
 					auto const & threadIndex = in.globalInvocationID.x();
 					auto const & chunkSize = c3d_chunkSize;
@@ -433,8 +436,8 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
-				auto & mortonAttach = *m_pass.inputs.find( 0 )->second;
-				auto & indicesAttach = *m_pass.inputs.find( 1 )->second;
+				auto & mortonAttach = *getPass().getInputs().find( 0 )->second;
+				auto & indicesAttach = *getPass().getInputs().find( 1 )->second;
 
 				// The number of threads per thread group.
 				constexpr u32 threadsPerThreadGroupCount = NumThreadsPerThreadGroup;
@@ -474,8 +477,8 @@ namespace c3d
 
 						doMergeTransitionBarrier( context, commandBuffer, index );
 						m_partitions.pipeline.recordInto( context, commandBuffer, index );
-						m_context.vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
-						m_context.vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
+						context->vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
+						context->vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
 					}
 
 					// Perform merge sort using merge path partitions computed from the previous step.
@@ -490,8 +493,8 @@ namespace c3d
 
 						doAllBarriers( context, commandBuffer, index );
 						m_merge.pipeline.recordInto( context, commandBuffer, index );
-						m_context.vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
-						m_context.vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
+						context->vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
+						context->vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
 					}
 
 					if ( chunksCount & 1 )
@@ -524,7 +527,7 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t passIndex )const
 			{
-				auto & attach = *m_pass.outputs.rbegin()->second;
+				auto & attach = *getPass().getOutputs().rbegin()->second;
 				auto buffer = attach.buffer( passIndex );
 				auto currentState = context.getAccessState( buffer.data->buffer, attach.getBufferRange() );
 				context.memoryBarrier( commandBuffer
@@ -539,7 +542,7 @@ namespace c3d
 			{
 				uint32_t bufferIndex{};
 
-				for ( auto & [binding, attach] : m_pass.inouts )
+				for ( auto & [binding, attach] : getPass().getInouts() )
 				{
 					if ( !attach->isNoTransition()
 						&& attach->isStorageBuffer() )
@@ -629,11 +632,11 @@ namespace c3d
 						, runPass->getTimer() );
 					return runPass;
 				} );
-			point.addInputStorage( *inputSortAttachs.pointLightMortonCodes, uint32_t( merge::eInputKeys ) );
-			point.addInputStorage( *inputSortAttachs.pointLightIndices, uint32_t( merge::eInputValues ) );
-			outputSortAttachs.pointLightMortonCodes = point.addOutputStorageBuffer( outputSortAttachs.pointLightMortonCodes->bufferAttach.buffers, uint32_t( merge::eOutputKeys ) );
-			outputSortAttachs.pointLightIndices = point.addOutputStorageBuffer( outputSortAttachs.pointLightIndices->bufferAttach.buffers, uint32_t( merge::eOutputValues ) );
-			mergePathPartitionsAttach = point.addClearableOutputStorageBuffer( mergePathPartitions.bufferViewId, uint32_t( merge::eMergePathPartitions ) );
+			point.addInputStorageT( *inputSortAttachs.pointLightMortonCodes, merge::Bindings::eInputKeys );
+			point.addInputStorageT( *inputSortAttachs.pointLightIndices, merge::Bindings::eInputValues );
+			outputSortAttachs.pointLightMortonCodes = point.addOutputStorageBufferT( outputSortAttachs.pointLightMortonCodes->bufferAttach.buffers, merge::Bindings::eOutputKeys );
+			outputSortAttachs.pointLightIndices = point.addOutputStorageBufferT( outputSortAttachs.pointLightIndices->bufferAttach.buffers, merge::Bindings::eOutputValues );
+			mergePathPartitionsAttach = point.addClearableOutputStorageBufferT( mergePathPartitions.bufferViewId, merge::Bindings::eMergePathPartitions );
 		}
 		{
 			// Spot lights
@@ -653,11 +656,11 @@ namespace c3d
 					return runPass;
 				} );
 			spot.addImplicit( *mergePathPartitionsAttach, AccessState{} );
-			spot.addInputStorage( *inputSortAttachs.spotLightMortonCodes, uint32_t( merge::eInputKeys ) );
-			spot.addInputStorage( *inputSortAttachs.spotLightIndices, uint32_t( merge::eInputValues ) );
-			outputSortAttachs.spotLightMortonCodes = spot.addOutputStorageBuffer( outputSortAttachs.spotLightMortonCodes->bufferAttach.buffers, uint32_t( merge::eOutputKeys ) );
-			outputSortAttachs.spotLightIndices = spot.addOutputStorageBuffer( outputSortAttachs.spotLightIndices->bufferAttach.buffers, uint32_t( merge::eOutputValues ) );
-			mergePathPartitions.setLastAttach( spot.addClearableOutputStorageBuffer( mergePathPartitions.bufferViewId, uint32_t( merge::eMergePathPartitions ) ) );
+			spot.addInputStorageT( *inputSortAttachs.spotLightMortonCodes, merge::Bindings::eInputKeys );
+			spot.addInputStorageT( *inputSortAttachs.spotLightIndices, merge::Bindings::eInputValues );
+			outputSortAttachs.spotLightMortonCodes = spot.addOutputStorageBufferT( outputSortAttachs.spotLightMortonCodes->bufferAttach.buffers, merge::Bindings::eOutputKeys );
+			outputSortAttachs.spotLightIndices = spot.addOutputStorageBufferT( outputSortAttachs.spotLightIndices->bufferAttach.buffers, merge::Bindings::eOutputValues );
+			mergePathPartitions.setLastAttach( spot.addClearableOutputStorageBufferT( mergePathPartitions.bufferViewId, merge::Bindings::eMergePathPartitions ) );
 		}
 	}
 

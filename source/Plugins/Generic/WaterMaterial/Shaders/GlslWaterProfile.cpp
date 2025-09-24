@@ -27,7 +27,7 @@ namespace water::shader
 	{
 	}
 
-	void WaterProfiles::update( c3d::ShaderBuffer & buffer
+	void WaterProfiles::update( c3d::ShaderBuffer const & buffer
 		, c3d::Pass const & pass )
 	{
 		if ( auto edges = pass.getComponent< WaterComponent >() )

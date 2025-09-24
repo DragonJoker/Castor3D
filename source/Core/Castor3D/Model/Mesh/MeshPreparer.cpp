@@ -54,9 +54,9 @@ namespace c3d
 							|| submeshData == SubmeshData::eNormals
 							|| submeshData == SubmeshData::eTexcoords0 )
 						{
-							result.push_back( { submesh.getBaseData( submeshData ).data()
+							result.emplace_back() = { submesh.getBaseData( submeshData ).data()
 								, sizeof( Point3f )
-								, sizeof( Point3f ) } );
+								, sizeof( Point3f ) };
 						}
 
 						remapped.baseBuffers.try_emplace( submeshData, submesh.getBaseData( submeshData ) );
@@ -65,62 +65,52 @@ namespace c3d
 			}
 
 			if ( auto skin = submesh.getComponent< SkinComponent >() )
-			{
 				remapped.skin = skin->getData().getData();
-			}
-
 			if ( auto passMasks = submesh.getComponent< PassMasksComponent >() )
-			{
 				remapped.passMasks = passMasks->getData().getData();
-			}
-
 			if ( auto morph = submesh.getComponent< MorphComponent >() )
-			{
-				for ( auto & buffers : morph->getData().getMorphTargetsBuffers() )
-				{
+				for ( auto const & buffers : morph->getData().getMorphTargetsBuffers() )
 					remapped.morphTargets.push_back( buffers );
-				}
-			}
 
 			return result;
 		}
 
-		static void * getPtr( Point3fArray & data )
+		static float * getPtr( Point3fArray & data )
 		{
 			return data.data()->ptr();
 		}
 
-		static void * getPtr( Point4fArray & data )
+		static float * getPtr( Point4fArray & data )
 		{
 			return data.data()->ptr();
 		}
 
-		static void const * getConstPtr( Point3fArray & data )
+		static float const * getConstPtr( Point3fArray & data )
 		{
 			return data.data()->constPtr();
 		}
 
-		static void const * getConstPtr( Point4fArray & data )
+		static float const * getConstPtr( Point4fArray & data )
 		{
 			return data.data()->constPtr();
 		}
 
-		static void * getPtr( VertexBoneDataArray & data )
+		static VertexBoneData * getPtr( VertexBoneDataArray & data )
 		{
 			return data.data();
 		}
 
-		static void const * getConstPtr( VertexBoneDataArray & data )
+		static VertexBoneData const * getConstPtr( VertexBoneDataArray & data )
 		{
 			return data.data();
 		}
 
-		static void * getPtr( Vector< PassMasks > & data )
+		static uint8_t * getPtr( Vector< PassMasks > & data )
 		{
 			return data.data()->data.data();
 		}
 
-		static void const * getConstPtr( Vector< PassMasks > & data )
+		static uint8_t const * getConstPtr( Vector< PassMasks > & data )
 		{
 			return data.data()->data.data();
 		}

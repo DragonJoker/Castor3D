@@ -15,7 +15,11 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Buffer/BufferView.hpp>
 #include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Image/Sampler.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/DotExport.hpp>
@@ -347,42 +351,33 @@ namespace c3d
 
 	void printGraph( crg::RunnableGraph const & graph )
 	{
-		auto name = File::normaliseFileName( makeString( graph.getGraph()->getName() ) );
-		auto graphsDir = Engine::getEngineDirectory() / cuT( "Graphs" );
+		auto name = File::normaliseFileName( makeString( graph.getNodeGraph()->getName() ) );
+		auto path = Engine::getEngineDirectory() / cuT( "Graphs" );
 
-		if ( !File::directoryExists( graphsDir ) )
+		if ( !File::directoryExists( path ) )
 		{
-			File::directoryCreate( graphsDir );
+			File::directoryCreate( path );
 		}
 
 		{
-			auto path = graphsDir;
+			auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
+			std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
+			file << streams.find( MbString{} )->second.str();
+		}
+		{
+			auto streams = crg::dot::displayTransitions( graph, { true, true, false, false } );
+			std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
+			file << streams.find( MbString{} )->second.str();
+		}
+		{
+			auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
 
-			if ( !File::directoryExists( path ) )
+			for ( auto const & [str, strm] : streams )
 			{
-				File::directoryCreate( path );
-			}
-
-			{
-				auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
-				std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
-				file << streams.find( MbString{} )->second.str();
-			}
-			{
-				auto streams = crg::dot::displayTransitions( graph, { true, true, false, false } );
-				std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
-				file << streams.find( MbString{} )->second.str();
-			}
-			{
-				auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
-
-				for ( auto const & [str, strm] : streams )
+				if ( !str.empty() )
 				{
-					if ( !str.empty() )
-					{
-						std::ofstream file{ path / ( name + cuT( "_" ) + makeString( str ) + cuT( ".dot" ) ) };
-						file << strm.str();
-					}
+					std::ofstream file{ path / ( name + cuT( "_" ) + makeString( str ) + cuT( ".dot" ) ) };
+					file << strm.str();
 				}
 			}
 		}
@@ -390,115 +385,59 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
+	VkSampler getSampler( ashes::Sampler const & sampler )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
-		result.imageInfo.push_back( { VkSampler{}, view, VK_IMAGE_LAYOUT_GENERAL } );
-		return result;
+		return sampler;
 	}
 
-	ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
-		, VkSampler const & sampler
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
+	VkImageView getImageView( ashes::ImageView const & view )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
-		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		return result;
+		return view;
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
+	VkBufferView getBufferView( ashes::BufferView const & view )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
-		result.imageInfo.push_back( { VkSampler{}, view, VK_IMAGE_LAYOUT_GENERAL } );
-		return result;
+		return view;
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
-		, ashes::Sampler const & sampler
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
+	DeviceSize getAlignedSize( ashes::UniformBuffer const & buffer )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
-		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		return result;
+		return buffer.getAlignedSize();
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
-		, uint32_t dstBinding
-		, VkDeviceSize elemOffset
-		, VkDeviceSize elemRange
-		, uint32_t dstArrayElement )
+	VkBuffer getBuffer( ashes::BufferBase const & buffer )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-		result.bufferInfo.push_back( { buffer.getBuffer()
-			, buffer.getAlignedSize() * elemOffset
-			, buffer.getAlignedSize() * elemRange } );
-		return result;
+		return buffer;
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & storageBuffer
-		, uint32_t dstBinding
-		, VkDeviceSize byteOffset
-		, VkDeviceSize byteRange
-		, uint32_t dstArrayElement )
+	VkBuffer getBuffer( ashes::UniformBuffer const & buffer )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( { storageBuffer
-			, byteOffset
-			, byteRange } );
-		return result;
+		return getBuffer( buffer.getBuffer() );
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( BufferBase const & storageBuffer
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
+	VkBuffer getBuffer( BufferBase const & buffer )noexcept
 	{
-		auto & range = getSubresourceRange( storageBuffer.bufferViewId );
-		return makeDescriptorWrite( *storageBuffer.buffer
-			, dstBinding
-			, range.offset, range.size
-			, dstArrayElement );
+		return getBuffer( *buffer.buffer );
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
-		, ashes::BufferView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
+	DeviceSize getOffset( ashes::BufferView const & view )noexcept
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, ( ( buffer.getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
-				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ), };
-		result.bufferInfo.push_back( { buffer
-			, view.getOffset()
-			, view.getRange() } );
-		result.texelBufferView.push_back( view );
-		return result;
+		return view.getOffset();
+	}
+
+	DeviceSize getRange( ashes::BufferView const & view )noexcept
+	{
+		return view.getRange();
+	}
+
+	VkBufferUsageFlags getUsageFlags( ashes::BufferBase const & buffer )noexcept
+	{
+		return buffer.getUsage();
+	}
+
+	BufferSubresourceRange const & getSubresourceRange( BufferBase const & buffer )noexcept
+	{
+		return getSubresourceRange( buffer.bufferViewId );
 	}
 
 	//*********************************************************************************************

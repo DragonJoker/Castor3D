@@ -21,9 +21,9 @@ namespace smaa
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx : uint32_t
+		enum class Bindings : uint32_t
 		{
-			ColorTexIdx = SmaaUboIdx + 1,
+			ColorTexIdx = uint32_t( smaa::Bindings::SmaaUboIdx ) + 1u,
 			BlendTexIdx,
 			VelocityTexIdx,
 		};
@@ -54,13 +54,13 @@ namespace smaa
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
-			auto c3d_blendTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
-			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
+			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
+			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", Bindings::ColorTexIdx, 0u );
+			auto c3d_blendTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_blendTex", Bindings::BlendTexIdx, 0u );
+			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", Bindings::VelocityTexIdx, 0u, reprojection );
 
 			auto SMAANeighborhoodBlendingVS = writer.implementFunction< sdw::Void >( "SMAANeighborhoodBlendingVS"
-				, [&]( sdw::Vec2 const & texcoord
+				, [&c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::Vec4 offset )
 				{
 					offset = fma( c3d_smaaData.rtMetrics.xyxy()
@@ -74,8 +74,8 @@ namespace smaa
 			 * Conditional move:
 			 */
 			auto SMAAMovc2 = writer.implementFunction< sdw::Void >( "SMAAMovc2"
-				, [&]( sdw::BVec2 const & cond
-					, sdw::Vec2 variable
+				, [&writer]( sdw::BVec2 const & cond
+					, sdw::Vec2 const & variable
 					, sdw::Vec2 const & value )
 				{
 					sdwIF( writer, cond.x() )
@@ -95,8 +95,8 @@ namespace smaa
 				, sdw::InVec2{ writer, "value" } );
 
 			auto SMAAMovc4 = writer.implementFunction< sdw::Void >( "SMAAMovc4"
-				, [&]( sdw::BVec4 const & cond
-					, sdw::Vec4 variable
+				, [&SMAAMovc2]( sdw::BVec4 const & cond
+					, sdw::Vec4 const & variable
 					, sdw::Vec4 const & value )
 				{
 					SMAAMovc2( cond.xy(), variable.xy(), value.xy() );
@@ -107,7 +107,7 @@ namespace smaa
 				, sdw::InVec4{ writer, "value" } );
 
 			auto SMAANeighborhoodBlendingPS = writer.implementFunction< sdw::Vec4 >( "SMAANeighborhoodBlendingPS"
-				, [&]( sdw::Vec2 const & texcoord
+				, [&writer, &c3d_velocityTex, reprojection, &SMAAMovc4, &SMAAMovc2, c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::Vec4 const & offset
 					, sdw::CombinedImage2DRgba32 const & colorTex
 					, sdw::CombinedImage2DRgba32 const & blendTex )
@@ -181,7 +181,7 @@ namespace smaa
 				, sdw::InCombinedImage2DRgba32{ writer, "colourTex" }
 				, sdw::InCombinedImage2DRgba32{ writer, "blendTex" } );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > const & in
+			writer.implementEntryPointT< c3ds::PosUv2FT, VertexT >( [&SMAANeighborhoodBlendingVS]( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -190,7 +190,7 @@ namespace smaa
 					SMAANeighborhoodBlendingVS( out.texcoord(), out.offset() );
 				} );
 
-			writer.implementEntryPointT< VertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
+			writer.implementEntryPointT< VertexT, c3ds::Colour4FT >( [&SMAANeighborhoodBlendingPS, &c3d_colourTex, &c3d_blendTex]( sdw::FragmentInT< VertexT > const & in
 				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = SMAANeighborhoodBlendingPS( in.texcoord(), in.offset(), c3d_colourTex, c3d_blendTex );
@@ -247,12 +247,12 @@ namespace smaa
 
 		inputs.insert( inputs.end(), addInputs.begin(), addInputs.end() );
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
-		ubo.createPassBinding( pass, SmaaUboIdx );
-		pass.addInputSampledImage( inputs, neighblend::ColorTexIdx, linearSampler );
-		pass.addInputSampled( *blendView.getSampledLastAttach(), neighblend::BlendTexIdx, linearSampler );
+		ubo.createPassBinding( pass, smaa::Bindings::SmaaUboIdx );
+		pass.addInputSampledImageT( inputs, neighblend::Bindings::ColorTexIdx, linearSampler );
+		pass.addInputSampledT( *blendView.getSampledLastAttach(), neighblend::Bindings::BlendTexIdx, linearSampler );
 
 		if ( velocityView )
-			pass.addInputSampled( *velocityView->getSampledLastAttach(), neighblend::VelocityTexIdx, linearSampler );
+			pass.addInputSampledT( *velocityView->getSampledLastAttach(), neighblend::Bindings::VelocityTexIdx, linearSampler );
 
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{

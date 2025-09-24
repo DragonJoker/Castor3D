@@ -22,13 +22,8 @@ namespace c3d
 		log::info << tabs() << cuT( "Writing ListBoxCtrl " ) << control.getName() << std::endl;
 		bool result = writeSub< Control >( file, control );
 
-		for ( auto item : control.getItems() )
-		{
-			if ( result )
-			{
-				result = writeName( file, cuT( "item" ), item );
-			}
-		}
+		for ( auto const & item : control.getItems() )
+			result = result && writeName( file, cuT( "item" ), item );
 
 		return result;
 	}
@@ -51,25 +46,19 @@ namespace c3d
 		if ( result )
 		{
 			if ( auto block{ beginBlock( file, cuT( "item_style" ) ) } )
-			{
 				result = TextWriter< StaticStyle >{ tabs(), m_fontName }( style.getItemStyle(), file );
-			}
 		}
 
 		if ( result )
 		{
 			if ( auto block{ beginBlock( file, cuT( "selected_item_style" ) ) } )
-			{
 				result = TextWriter< StaticStyle >{ tabs(), m_fontName }( style.getSelectedItemStyle(), file );
-			}
 		}
 
 		if ( result )
 		{
 			if ( auto block{ beginBlock( file, cuT( "highlighted_item_style" ) ) } )
-			{
 				result = TextWriter< StaticStyle >{ tabs(), m_fontName }( style.getHighlightedItemStyle(), file );
-			}
 		}
 
 		return result;

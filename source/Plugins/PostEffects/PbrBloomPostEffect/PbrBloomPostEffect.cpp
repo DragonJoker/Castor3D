@@ -28,9 +28,6 @@ namespace PbrBloom
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_blurRadius{ BaseBlurRadius }
-		, m_bloomStrength{ BaseBloomStrength }
-		, m_duPassesCount{ BaseFilterCount }
 	{
 		PostEffect::setParameters( params );
 	}
@@ -67,7 +64,7 @@ namespace PbrBloom
 			, m_bloomStrength );
 
 		uint32_t index{};
-		for ( auto & layerViews : m_downSampled )
+		for ( auto const & layerViews : m_downSampled )
 		{
 			visitor.visit( cuT( "PostFX: PBRB - Down " ) + c3d::string::toString( index )
 				, layerViews.getSampledViewId()
@@ -77,7 +74,7 @@ namespace PbrBloom
 		}
 
 		index = {};
-		for ( auto & layerViews : m_upSampled )
+		for ( auto const & layerViews : m_upSampled )
 		{
 			visitor.visit( cuT( "PostFX: PBRB - Up " ) + c3d::string::toString( index )
 				, layerViews.getSampledViewId()

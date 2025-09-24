@@ -3,6 +3,16 @@ See LICENSE file in root folder
 */
 namespace c3d::shader
 {
+	namespace glslout
+	{
+		static uint32_t getNextIndex( uint32_t & index )
+		{
+			auto result = index;
+			++index;
+			return result;
+		}
+	}
+
 	//*********************************************************************************************
 
 	template< sdw::var::Flag FlagT >
@@ -31,18 +41,18 @@ namespace c3d::shader
 			uint32_t index = 0u;
 			result->declMember( "depthObj", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, index++ );
+				, glslout::getNextIndex( index ) );
 			result->declMember( "visibility", ast::type::Kind::eVec2U32
 				, ast::type::NotArray
-				, ( flags.writeVisibility() ? index++ : 0 )
+				, ( flags.writeVisibility() ? glslout::getNextIndex( index ) : 0 )
 				, flags.writeVisibility() );
 			result->declMember( "velocity", ast::type::Kind::eVec2F
 				, ast::type::NotArray
-				, ( flags.writeVelocity() ? index++ : 0 )
+				, ( flags.writeVelocity() ? glslout::getNextIndex( index ) : 0 )
 				, flags.writeVelocity() );
 			result->declMember( "nmlOcc", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, index++ );
+				, glslout::getNextIndex( index ) );
 		}
 
 		return result;
@@ -98,22 +108,22 @@ namespace c3d::shader
 			uint32_t index = 0u;
 			result->declMember( "linear", ast::type::Kind::eFloat
 				, ast::type::NotArray
-				, index++ );
+				, glslout::getNextIndex( index ) );
 			result->declMember( "variance", ast::type::Kind::eVec2F
 				, ast::type::NotArray
-				, ( needsVsm ? index++ : 0 )
+				, ( needsVsm ? glslout::getNextIndex( index ) : 0 )
 				, needsVsm );
 			result->declMember( "normal", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( needsRsm ? index++ : 0 )
+				, ( needsRsm ? glslout::getNextIndex( index ) : 0 )
 				, needsRsm );
 			result->declMember( "position", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( needsRsm ? index++ : 0 )
+				, ( needsRsm ? glslout::getNextIndex( index ) : 0 )
 				, needsRsm );
 			result->declMember( "flux", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( needsRsm ? index++ : 0 )
+				, ( needsRsm ? glslout::getNextIndex( index ) : 0 )
 				, needsRsm );
 		}
 

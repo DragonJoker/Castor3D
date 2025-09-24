@@ -10,8 +10,10 @@
 
 namespace GuiCommon
 {
-	CameraTreeItemProperty::CameraTreeItemProperty( bool editable, c3d::Camera & camera )
-		: TreeItemProperty( camera.getScene()->getEngine(), editable )
+	CameraTreeItemProperty::CameraTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
+		, c3d::Camera & camera )
+		: TreeItemProperty( camera.getScene()->getEngine(), imagesLoader, editable )
 		, m_camera( camera )
 	{
 		CreateTreeItemMenu();

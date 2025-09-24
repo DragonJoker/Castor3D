@@ -11,9 +11,10 @@
 
 namespace GuiCommon
 {
-	SceneTreeItemProperty::SceneTreeItemProperty( bool editable
+	SceneTreeItemProperty::SceneTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Scene & scene )
-		: TreeItemProperty{ scene.getEngine(), editable }
+		: TreeItemProperty{ scene.getEngine(), imagesLoader, editable }
 		, m_scene( scene )
 	{
 		CreateTreeItemMenu();

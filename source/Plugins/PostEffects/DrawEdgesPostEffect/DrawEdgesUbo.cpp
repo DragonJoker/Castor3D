@@ -9,31 +9,6 @@ namespace draw_edges
 {
 	//*********************************************************************************************
 
-	DrawEdgesData::DrawEdgesData( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
-		, normalDepthWidth{ getMember< sdw::Int >( "normalDepthWidth" ) }
-		, objectWidth{ getMember< sdw::Int >( "objectWidth" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr DrawEdgesData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-			, "C3D_DrawEdgesData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "normalDepthWidth", ast::type::Kind::eInt );
-			result->declMember( "objectWidth", ast::type::Kind::eInt );
-		}
-
-		return result;
-	}
-
-	//*********************************************************************************************
-
 	c3d::MbString const DrawEdgesUbo::Buffer = "DrawEdges";
 	c3d::MbString const DrawEdgesUbo::Data = "c3d_drawEdgesData";
 

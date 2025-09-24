@@ -20,7 +20,7 @@ namespace c3d
 
 		using TextWriterT< SkeletonNode >::write;
 
-		bool write( StringStream & file, String const & name, Matrix4x4f const & value )
+		bool write( StringStream & file, String const & name, Matrix4x4f const & value )const
 		{
 			StringStream stream;
 			stream << value[0] << " " << value[1] << " " << value[2] << " " << value[3];
@@ -88,13 +88,9 @@ namespace c3d
 			else
 			{
 				if ( !m_subfolder.empty() )
-				{
 					result = writeName( file, cuT( "import" ), cuT( "Skeletons/" ) + m_subfolder + cuT( "/" ) + object.getName() + cuT( ".cskl" ) );
-				}
 				else
-				{
 					result = writeName( file, cuT( "import" ), cuT( "Skeletons/" ) + object.getName() + cuT( ".cskl" ) );
-				}
 
 				for ( auto const & [name, _] : object.getAnimations() )
 				{

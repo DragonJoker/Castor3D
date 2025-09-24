@@ -27,9 +27,9 @@ namespace smaa
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx : uint32_t
+		enum class Bindings : uint32_t
 		{
-			ColorTexIdx = SmaaUboIdx + 1,
+			ColorTexIdx = uint32_t( smaa::Bindings::SmaaUboIdx ) + 1u,
 			PredicationTexIdx,
 		};
 
@@ -39,34 +39,31 @@ namespace smaa
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
-			auto c3d_predicationTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_predicationTex", PredicationTexIdx, 0u, predication );
+			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
+			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", Bindings::ColorTexIdx, 0u );
+			auto c3d_predicationTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_predicationTex", Bindings::PredicationTexIdx, 0u, predication );
 
 			/**
 			 * Gathers current pixel, and the top-left neighbors.
 			 */
 			auto SMAAGatherNeighbours = writer.implementFunction< sdw::Vec3 >( "SMAAGatherNeighbours"
-				, [&]( sdw::Vec2 const & texcoord
-					, sdw::Vec4Array const & offset
+				, [&writer, &c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::CombinedImage2DRgba32 const & tex )
 				{
 					writer.returnStmt( tex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InVec4Array{ writer, "offset", 3u }
 				, sdw::InCombinedImage2DRgba32{ writer, "tex" } );
 
 			/**
 			 * Adjusts the threshold by means of predication.
 			 */
 			auto SMAACalculatePredicatedThreshold = writer.implementFunction< sdw::Vec2 >( "SMAACalculatePredicatedThreshold"
-				, [&]( sdw::Vec2 const & texcoord
-					, sdw::Vec4Array const & offset
+				, [&writer, &SMAAGatherNeighbours, &c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::CombinedImage2DRgba32 const & predicationTex )
 				{
 					auto neighbours = writer.declLocale( "neighbours"
-						, SMAAGatherNeighbours( texcoord, offset, predicationTex ) );
+						, SMAAGatherNeighbours( texcoord, predicationTex ) );
 					auto delta = writer.declLocale( "delta"
 						, abs( neighbours.xx() - neighbours.yz() ) );
 					auto edges = writer.declLocale( "edges"
@@ -74,7 +71,6 @@ namespace smaa
 					writer.returnStmt( c3d_smaaData.predicationScale * c3d_smaaData.threshold * ( 1.0_f - c3d_smaaData.predicationStrength * edges ) );
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InVec4Array{ writer, "offset", 3u }
 				, sdw::InCombinedImage2DRgba32{ writer, "predicationTex" } );
 
 			/**
@@ -84,13 +80,14 @@ namespace smaa
 			 * thus 'colorTex' should be a non-sRGB texture.
 			 */
 			auto SMAALumaEdgeDetectionPS = writer.implementFunction< sdw::Vec2 >( "SMAALumaEdgeDetectionPS"
-				, [&]( sdw::Vec2 const & texcoord
-					, sdw::Vec4Array const & offset )
+				, [&writer, &SMAACalculatePredicatedThreshold, &c3d_predicationTex, &c3d_smaaData, &c3d_colourTex
+					, &predication]( sdw::Vec2 const & texcoord
+						, sdw::Vec4Array const & offset )
 				{
 					// Calculate the threshold:
 					auto threshold = writer.declLocale< sdw::Vec2 >( "threshold"
 						, ( predication
-							? SMAACalculatePredicatedThreshold( texcoord, offset, c3d_predicationTex )
+							? SMAACalculatePredicatedThreshold( texcoord, c3d_predicationTex )
 							: vec2( c3d_smaaData.threshold, c3d_smaaData.threshold ) ) );
 
 					// Calculate lumas:
@@ -150,8 +147,8 @@ namespace smaa
 
 			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
 
-			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&SMAALumaEdgeDetectionPS]( sdw::FragmentInT< EDVertexT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = vec4( 0.0_f );
 					out.colour().xy() = SMAALumaEdgeDetectionPS( in.texcoord(), in.offset() );
@@ -183,8 +180,8 @@ namespace smaa
 			, uint32_t( colourView.size() ) }
 	{
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
-		m_pass.addInputSampled( *colourView.getSampledLastAttach(), lumaed::ColorTexIdx, linearSampler );
+		m_pass.addInputSampledT( *colourView.getSampledLastAttach(), lumaed::Bindings::ColorTexIdx, linearSampler );
 		if ( predication )
-			m_pass.addInputSampled( *predication->getSampledLastAttach(), lumaed::PredicationTexIdx, linearSampler );
+			m_pass.addInputSampledT( *predication->getSampledLastAttach(), lumaed::Bindings::PredicationTexIdx, linearSampler );
 	}
 }

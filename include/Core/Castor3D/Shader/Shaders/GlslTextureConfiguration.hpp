@@ -63,15 +63,17 @@ namespace c3d::shader
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
+		SDW_DeclStructInstance( C3D_API, TextureConfigData );
+
 		C3D_API void transformUV( Utils & utils
 			, TextureTransformData const & anim
-			, sdw::Vec2 & uv )const;
+			, sdw::Vec2 & outUV )const;
 		C3D_API void transformUVW( Utils & utils
 			, TextureTransformData const & anim
-			, sdw::Vec3 & uvw )const;
+			, sdw::Vec3 & outUVW )const;
 		C3D_API void transformUV( Utils & utils
 			, TextureTransformData const & anim
-			, DerivTex & uv )const;
+			, DerivTex const & outUV )const;
 
 		C3D_API static sdw::Float getFloat( sdw::Vec4 const & sampled
 			, sdw::UInt const & mask );
@@ -98,7 +100,7 @@ namespace c3d::shader
 		auto texSet()const { return getMember< "texSet" >(); }
 
 		C3D_API sdw::Vec2 getUv( DerivTex const & uvw )const;
-		C3D_API void setUv( DerivTex & lhs
+		C3D_API void setUv( DerivTex const & ioLhs
 			, DerivTex const & rhs )const;
 		C3D_API DerivTex toUv( DerivTex const & uvw )const;
 
@@ -112,10 +114,10 @@ namespace c3d::shader
 			return uvw.xy();
 		}
 
-		void setUv( sdw::Vec3 & lhs
+		void setUv( sdw::Vec3 const & ioLhs
 			, sdw::Vec2 const & rhs )const
 		{
-			lhs.xy() = rhs;
+			ioLhs.xy() = rhs;
 		}
 	};
 

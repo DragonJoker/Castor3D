@@ -10,9 +10,10 @@
 
 namespace GuiCommon
 {
-	BillboardTreeItemProperty::BillboardTreeItemProperty( bool editable
+	BillboardTreeItemProperty::BillboardTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 			, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

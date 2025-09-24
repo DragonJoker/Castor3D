@@ -28,9 +28,6 @@ namespace CastorCom
 		COM_PROPERTY_GET_MPTR( RootNode, ISceneNode, c3dScene_getRootNode );
 		COM_PROPERTY_GET_MPTR( ObjectRootNode, ISceneNode, c3dScene_getObjectRootNode );
 		COM_PROPERTY_GET_MPTR( CameraRootNode, ISceneNode, c3dScene_getCameraRootNode );
-		//STDMETHOD( get_RootNode )( /*[out, retval]*/ ISceneNode ** pRet );
-		//STDMETHOD( get_ObjectRootNode )( /*[out, retval]*/ ISceneNode ** pRet );
-		//STDMETHOD( get_CameraRootNode )( /*[out, retval]*/ ISceneNode ** pRet );
 
 		COM_DESTROY( CScene, c3dScene_delete );
 		STDMETHOD( AddNode )( /*[in]*/ ISceneNode * val )override;
@@ -53,7 +50,7 @@ namespace CastorCom
 		STDMETHOD( RemoveMesh )( /*[in]*/ IMesh * mesh )override;
 		STDMETHOD( CreateNode )( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[out, retval]*/ ISceneNode ** pRet )override;
 		STDMETHOD( CreateGeometry )( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ IMesh * mesh, /*[out, retval]*/ IGeometry ** pRet )override;
-		STDMETHOD( CreateCamera )( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ UINT width, /*[in]*/ UINT height, /*[out, retval]*/ ICamera ** pRet )override;
+		STDMETHOD( CreateCamera )( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[out, retval]*/ ICamera ** pRet )override;
 		STDMETHOD( CreateLight )( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ eLIGHT_TYPE type, /*[out, retval]*/ ILight ** pRet )override;
 		STDMETHOD( CreateLightGroup )( /*[in]*/ BSTR name, /*[in]*/ eLIGHT_TYPE type, /*[out, retval]*/ ILightGroup ** pRet )override;
 		STDMETHOD( CreateMesh )( /*[in]*/ BSTR name, /*[in]*/ BSTR type, /*[out, retval]*/ IMesh ** pRet )override;

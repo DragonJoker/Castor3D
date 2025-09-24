@@ -17,19 +17,20 @@ namespace c3d
 	{
 #	if CU_HasXinerama
 
-		bool getScreenSize( uint32_t /*p_screen*/, Size & p_size )
+		bool getScreenSize( uint32_t /*p_screen*/, Size & size )
 		{
 			bool result = false;
-			auto display = XOpenDisplay( nullptr );
 
-			if ( !display )
+			if ( auto display = XOpenDisplay( nullptr );
+				!display )
 			{
 				Logger::logError( "Failed to open default display." );
 			}
 			else
 			{
 				auto screenIndex = DefaultScreen( display );
-				int dummy1, dummy2;
+				int dummy1{};
+				int dummy2{};
 
 				if ( XineramaQueryExtension( display, &dummy1, &dummy2 ) )
 				{
@@ -40,7 +41,7 @@ namespace c3d
 
 						if ( heads > 0 && screenIndex < heads )
 						{
-							p_size.set( screenInfo[screenIndex].width, screenInfo[screenIndex].height );
+							size.set( screenInfo[screenIndex].width, screenInfo[screenIndex].height );
 							result = true;
 						}
 						else
@@ -70,7 +71,7 @@ namespace c3d
 					}
 					else
 					{
-						p_size.set( screen->width, screen->height );
+						size.set( screen->width, screen->height );
 						result = true;
 					}
 				}
@@ -83,7 +84,7 @@ namespace c3d
 
 #	else
 
-		bool getScreenSize( uint32_t /*p_screen*/, Size & p_size )
+		bool getScreenSize( uint32_t /*p_screen*/, Size & size )
 		{
 			bool result = false;
 			auto display = XOpenDisplay( nullptr );
@@ -103,7 +104,7 @@ namespace c3d
 				}
 				else
 				{
-					p_size.set( screen->width, screen->height );
+					size.set( screen->width, screen->height );
 					result = true;
 				}
 			}
@@ -118,9 +119,9 @@ namespace c3d
 		{
 			String result;
 			int error = errno;
-			char * szError = nullptr;
 
-			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
+			if ( char const * szError = nullptr;
+				error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
 				result = string::toString( error ) + cuT( " (" ) + makeString( szError ) + cuT( ")" );
 				string::replace( result, cuT( "\n" ), cuT( "" ) );
@@ -137,8 +138,6 @@ namespace c3d
 
 			while ( std::getline( finfo, line ) )
 			{
-				MbStringStream str( line );
-
 				if ( line.substr( 0, 11 ) == "PRETTY_NAME" )
 				{
 					result = line.substr( 13 );

@@ -184,27 +184,23 @@ namespace c3d
 	private:
 		Point3f m_normal{};
 		float m_d{};
-		friend CU_API bool operator==( PlaneEquation const &, PlaneEquation const & );
-		friend CU_API bool operator!=( PlaneEquation const &, PlaneEquation const & );
+
+	private:
+		friend bool operator==( PlaneEquation const & lhs
+			, PlaneEquation const & rhs )noexcept
+		{
+			bool result = false;
+
+			if ( lhs.isParallel( rhs ) )
+			{
+				auto ratioA = lhs.m_normal[0] / rhs.m_normal[0];
+				auto ratioD = lhs.m_d / rhs.m_d;
+				result = ratioA == ratioD;
+			}
+
+			return result;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Checks if this plane is equal to another one.
-	 *\remarks		A plane is equal to another one if it is parallel to it and if normals and d coeff are equal
-	 *\~french
-	 *\brief		Vérifie si un plan est égal à un autre
-	 *\remarks		Deux plans sont égaux si ils sont parallèles et si leurs normales et coeff sont égaux
-	 */
-	CU_API bool operator==( PlaneEquation const & lhs
-		, PlaneEquation const & rhs );
-	/**
-	 *\~english
-	 *\brief		Checks if this plane is different from another one
-	 *\~french
-	 *\brief		Vérifie si ce plan est différent d'un autre
-	 */
-	CU_API bool operator!=( PlaneEquation const & lhs
-		, PlaneEquation const & rhs );
 }
 
 #endif

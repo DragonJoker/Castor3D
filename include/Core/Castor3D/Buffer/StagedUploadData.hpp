@@ -84,7 +84,7 @@ namespace c3d
 		using BufferArray = Vector< StagingBuffer >;
 
 		GpuBufferOffset doGetBuffer( BufferArray & pool
-			, VkDeviceSize size );
+			, VkDeviceSize size )const;
 		void doPutBuffer( BufferArray & pool
 			, GpuBufferOffset const & bufferOffset )const noexcept;
 

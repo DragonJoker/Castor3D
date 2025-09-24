@@ -16,8 +16,8 @@ namespace Testing
 		void doRegisterTests() override;
 
 	private:
-		void TestPixelConversions();
-		void TestBufferConversions();
+		void TestPixelConversions()const;
+		void TestBufferConversions()const;
 	};
 }
 

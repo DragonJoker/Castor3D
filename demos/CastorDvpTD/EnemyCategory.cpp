@@ -13,7 +13,7 @@ namespace castortd
 			return value + std::max( level, uint32_t( value * 5.0 / 100.0 ) );
 		} );
 
-		m_bounty.initialise( 9u, []( uint32_t value, uint32_t level )
+		m_bounty.initialise( 9u, []( uint32_t value, [[maybe_unused]] uint32_t level )
 		{
 			return value + std::max( 2u, ( value * 4 ) / 100 );
 		} );

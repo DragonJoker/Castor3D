@@ -74,25 +74,25 @@ namespace c3d::shader
 			m_count = 0_u32;
 		}
 
-		sdw::UInt getCount()const
+		sdw::UInt32 getCount()const
 		{
 			return m_count;
 		}
 
-		sdw::UInt incrementCount()const
+		sdw::RetUInt32 incrementCount()const
 		{
 			return sdw::atomicAdd( m_count, 1_u32 );
 		}
 
-		void appendData( DataT const data )
+		void appendData( DataT const & data )
 		{
 			sdw::ShaderWriter & writer = *this->getWriter();
 			auto idx = writer.declLocale( "appendIndex", this->incrementCount() );
 			m_data[idx] = data;
 		}
 
-		void appendData( DataT const data
-			, sdw::UInt maxCount )
+		void appendData( DataT const & data
+			, sdw::UInt32 const & maxCount )
 		{
 			sdw::ShaderWriter & writer = *this->getWriter();
 			auto idx = writer.declLocale( "appendIndex", this->incrementCount() );
@@ -104,21 +104,21 @@ namespace c3d::shader
 			sdwFI
 		}
 
-		void appendData( DataT const data
-			, sdw::Int maxCount )
+		void appendData( DataT const & data
+			, sdw::Int const & maxCount )
 		{
 			sdw::ShaderWriter & writer = *this->getWriter();
-			this->appendData( data, writer.cast< sdw::UInt >( maxCount ) );
+			this->appendData( data, writer.cast< sdw::UInt32 >( maxCount ) );
 		}
 
 		void appendData( DataT const data
 			, u32 maxCount )
 		{
-			this->appendData( data, sdw::UInt{ maxCount } );
+			this->appendData( data, sdw::UInt32{ maxCount } );
 		}
 
 	private:
-		sdw::UInt m_count;
+		sdw::UInt32 m_count;
 		sdw::Array< DataT > m_data;
 	};
 
@@ -186,7 +186,7 @@ namespace c3d::shader
 		}
 
 		template< typename ... ParamsT >
-		DataT getData( sdw::UInt const & index
+		DataT getData( sdw::UInt32 const & index
 			, ParamsT && ... params )const
 		{
 			return ( m_ssbo
@@ -194,7 +194,7 @@ namespace c3d::shader
 				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, c3d::forward< ParamsT >( params )... ) );
 		}
 
-		void appendData( DataT const data )
+		void appendData( DataT const & data )
 		{
 			if ( m_ssbo )
 			{
@@ -203,8 +203,8 @@ namespace c3d::shader
 			}
 		}
 
-		void appendData( DataT const data
-			, sdw::UInt const maxCount )
+		void appendData( DataT const & data
+			, sdw::UInt32 const & maxCount )
 		{
 			if ( m_ssbo )
 			{
@@ -218,7 +218,7 @@ namespace c3d::shader
 			}
 		}
 
-		void appendData( DataT const data
+		void appendData( DataT const & data
 			, uint32_t maxCount )
 		{
 			if ( m_ssbo )

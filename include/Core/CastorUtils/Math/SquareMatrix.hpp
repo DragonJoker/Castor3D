@@ -150,7 +150,7 @@ namespace c3d
 		 *\brief		Récupère la matrice inverse de cette matrice
 		 *\return		La matrice inverse
 		 */
-		SquareMatrix< T, Count > getInverse()const;
+		SquareMatrix getInverse()const;
 		/**
 		 *\~english
 		 *\brief		Inverts this matrix
@@ -159,7 +159,7 @@ namespace c3d
 		 *\brief		Inverse cette matrice
 		 *\return		Une référence sur cette matrice
 		 */
-		SquareMatrix< T, Count > & invert();
+		SquareMatrix & invert();
 		/**
 		 *\~english
 		 *name Assignment operators.
@@ -168,13 +168,13 @@ namespace c3d
 		**/
 		/**@{*/
 		template< typename Type >
-		SquareMatrix< T, Count > & operator=( Matrix< Type, Count, Count > const & rhs );
-		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > const & rhs );
-		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > && rhs )noexcept;
+		SquareMatrix & operator=( Matrix< Type, Count, Count > const & rhs );
+		SquareMatrix & operator=( SquareMatrix const & rhs );
+		SquareMatrix & operator=( SquareMatrix && rhs )noexcept;
 		template< typename Type >
-		SquareMatrix< T, Count > & operator=( SquareMatrix< Type, Count > const & rhs );
+		SquareMatrix & operator=( SquareMatrix< Type, Count > const & rhs );
 		template< typename Type >
-		SquareMatrix< T, Count > & operator=( Type const * rhs );
+		SquareMatrix & operator=( Type const * rhs );
 		/**@}*/
 		/**
 		 *\~english
@@ -184,87 +184,211 @@ namespace c3d
 		**/
 		/**@{*/
 		template< typename Type >
-		SquareMatrix< T, Count > & operator+=( SquareMatrix< Type, Count > const & rhs );
+		SquareMatrix & operator+=( SquareMatrix< Type, Count > const & rhs );
 		template< typename Type >
-		SquareMatrix< T, Count > & operator-=( SquareMatrix< Type, Count > const & rhs );
+		SquareMatrix & operator-=( SquareMatrix< Type, Count > const & rhs );
 		template< typename Type >
-		SquareMatrix< T, Count > & operator*=( SquareMatrix< Type, Count > const & rhs );
+		SquareMatrix & operator*=( SquareMatrix< Type, Count > const & rhs );
 		template< typename Type >
-		SquareMatrix< T, Count > & operator+=( Type const * rhs );
+		SquareMatrix & operator+=( Type const * rhs );
 		template< typename Type >
-		SquareMatrix< T, Count > & operator-=( Type const * rhs );
+		SquareMatrix & operator-=( Type const * rhs );
 		template< typename Type >
-		SquareMatrix< T, Count > & operator*=( Type const * rhs );
-		SquareMatrix< T, Count > & operator+=( T const & rhs );
-		SquareMatrix< T, Count > & operator-=( T const & rhs );
-		SquareMatrix< T, Count > & operator*=( T const & rhs );
-		SquareMatrix< T, Count > & operator/=( T const & rhs );
+		SquareMatrix & operator*=( Type const * rhs );
+		SquareMatrix & operator+=( T const & rhs );
+		SquareMatrix & operator-=( T const & rhs );
+		SquareMatrix & operator*=( T const & rhs );
+		SquareMatrix & operator/=( T const & rhs );
 		/**@}*/
+
+	private:
+		/**
+		 *\~english
+		 *name Logic operators.
+		 *\~french
+		 *name Opérateurs logiques
+		**/
+		/**@{*/
+		friend bool operator==( SquareMatrix const & lhs, SquareMatrix const & rhs )noexcept
+		{
+			bool result = true;
+
+			uint32_t i = 0;
+			while ( i < Count && result )
+			{
+				uint32_t j = 0;
+				while ( j < Count && result )
+				{
+					result = lhs[i][j] == rhs[i][j];
+					++j;
+				}
+				++i;
+			}
+
+			return result;
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Arithmetic operators.
+		 *\~french
+		 *name Opérateurs arithmétiques.
+		**/
+		/**@{*/
+		template< typename U >
+		friend SquareMatrix operator+( SquareMatrix const & lhs, SquareMatrix< U, Count > const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator-( SquareMatrix const & lhs, SquareMatrix< U, Count > const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator*( SquareMatrix const & lhs, SquareMatrix< U, Count > const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator+( SquareMatrix const & lhs, U const * rhs )
+		{
+			SquareMatrix result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator-( SquareMatrix const & lhs, U const * rhs )
+		{
+			SquareMatrix result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator*( SquareMatrix const & lhs, U const * rhs )
+		{
+			SquareMatrix result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator+( SquareMatrix const & lhs, U const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator-( SquareMatrix const & lhs, U const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator*( SquareMatrix const & lhs, U const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		template< typename U >
+		friend SquareMatrix operator/( SquareMatrix const & lhs, U const & rhs )
+		{
+			SquareMatrix result( lhs );
+			result /= rhs;
+			return result;
+		}
+
+		friend SquareMatrix operator+( T lhs, SquareMatrix const & rhs )
+		{
+			return rhs + lhs;
+		}
+
+		friend SquareMatrix operator-( T lhs, SquareMatrix const & rhs )
+		{
+			return rhs - lhs;
+		}
+
+		friend SquareMatrix operator*( T lhs, SquareMatrix const & rhs )
+		{
+			return rhs * lhs;
+		}
+
+		friend SquareMatrix operator-( SquareMatrix const & lhs )
+		{
+			SquareMatrix result;
+
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				for ( uint32_t j = 0; j < Count; j++ )
+				{
+					result[i][j] = -lhs[i][j];
+				}
+			}
+
+			return result;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name Stream operators.
+		*\~french
+		*name Opérateurs de flux.
+		**/
+		/**@{*/
+		template< typename CharT >
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, SquareMatrix const & rhs )
+		{
+			auto precision = stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				for ( uint32_t j = 0; j < Count; j++ )
+				{
+					stream.width( 15 );
+					stream << std::right << rhs[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			stream.precision( precision );
+			return stream;
+		}
+
+		template< typename CharT >
+		friend std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, SquareMatrix & rhs )
+		{
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				for ( uint32_t j = 0; j < Count; j++ )
+				{
+					stream >> rhs[i][j];
+				}
+
+				stream.ignore();
+			}
+
+			return stream;
+		}
+	   /**@}*/
 	};
-	/**
-	 *\~english
-	 *name Logic operators.
-	 *\~french
-	 *name Opérateurs logiques
-	**/
-	/**@{*/
-	template< typename T, uint32_t Count >
-	bool operator==( SquareMatrix< T, Count > const & lhs, SquareMatrix< T, Count > const & rhs );
-	template< typename T, uint32_t Count >
-	bool operator!=( SquareMatrix< T, Count > const & lhs, SquareMatrix< T, Count > const & rhs );
-	/**@}*/
-	/**
-	 *\~english
-	 *name Arithmetic operators.
-	 *\~french
-	 *name Opérateurs arithmétiques.
-	**/
-	/**@{*/
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & lhs, SquareMatrix< U, Count > const & rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & lhs, SquareMatrix< U, Count > const & rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, SquareMatrix< U, Count > const & rhs );
-	template< typename T, uint32_t Count, typename U, uint32_t Columns >
-	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, Matrix< U, Columns, Count > const & rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & lhs, U const * rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & lhs, U const * rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, U const * rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & lhs, T const &	rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count, typename U >
-	SquareMatrix< T, Count > operator/( SquareMatrix< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count, typename U, uint32_t Rows >
-	Matrix< T, Count, Rows > operator*( Matrix< U, Count, Rows > const & lhs, SquareMatrix< T, Count > const & rhs );
-	template< typename T, uint32_t Count >
-	SquareMatrix< T, Count > operator+( T const & lhs, SquareMatrix< T, Count > const & rhs );
-	template< typename T, uint32_t Count >
-	SquareMatrix< T, Count > operator-( T const & lhs, SquareMatrix< T, Count > const & rhs );
-	template< typename T, uint32_t Count >
-	SquareMatrix< T, Count > operator*( T const & lhs, SquareMatrix< T, Count > const & rhs );
-	template< typename T, uint32_t Count >
-	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & rhs );
-	/**@}*/
-	/**
-	*\~english
-	*name Stream operators.
-	*\~french
-	*name Opérateurs de flux.
-	**/
-	/**@{*/
-	template< typename CharT, typename T, uint32_t Count >
-	 std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & streamOut, SquareMatrix< T, Count > const & matrix );
-	template< typename CharT, typename T, uint32_t Count >
-	 std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & streamIn, SquareMatrix< T, Count > & matrix );
-	/**@}*/
 }
 
 #include "SquareMatrix.inl"

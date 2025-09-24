@@ -104,57 +104,57 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static constexpr uint32_t DefaultGpuIndex = 0u;
+		constexpr uint32_t DefaultGpuIndex = 0u;
 #if defined( NDEBUG )
-		static constexpr c3d::LogType DefaultLogType = c3d::LogType::eInfo;
-		static constexpr bool DefaultValidation = false;
+		constexpr c3d::LogType DefaultLogType = c3d::LogType::eInfo;
+		constexpr bool DefaultValidation = false;
 #else
-		static constexpr c3d::LogType DefaultLogType = c3d::LogType::eTrace;
-		static constexpr bool DefaultValidation = true;
+		constexpr c3d::LogType DefaultLogType = c3d::LogType::eTrace;
+		constexpr bool DefaultValidation = true;
 #endif
 
 		namespace option
 		{
 			namespace lg
 			{
-				static const wxString Help{ wxT( "help" ) };
-				static const wxString Config{ wxT( "config" ) };
-				static const wxString LogLevel{ wxT( "log" ) };
-				static const wxString Validate{ wxT( "validate" ) };
-				static const wxString ShaderDebugLevel{ wxT( "shader_debug_level" ) };
-				static const wxString SyncRender{ wxT( "sync" ) };
-				static const wxString UnlimFPS{ wxT( "unlimited" ) };
-				static const wxString FixedFPS{ wxT( "fps" ) };
-				static const wxString GpuIndex{ wxT( "gpu" ) };
-				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
-				static const wxString DisRandom{ wxT( "disable_random" ) };
-				static const wxString EnShaderVal{ wxT( "shader_validation" ) };
-				static const wxString EnApiTrace{ wxT( "api_trace" ) };
-				static const wxString KeepTextShd{ wxT( "text_shaders" ) };
-				static const wxString MaxImgSize{ wxT( "max_image_size" ) };
-				static const wxString WaitDebugger{ wxT( "wait_debugger" ) };
-				static const wxString DebugTargets{ wxT( "debug_targets" ) };
+				const wxString Help{ wxT( "help" ) };
+				const wxString Config{ wxT( "config" ) };
+				const wxString LogLevel{ wxT( "log" ) };
+				const wxString Validate{ wxT( "validate" ) };
+				const wxString ShaderDebugLevel{ wxT( "shader_debug_level" ) };
+				const wxString SyncRender{ wxT( "sync" ) };
+				const wxString UnlimFPS{ wxT( "unlimited" ) };
+				const wxString FixedFPS{ wxT( "fps" ) };
+				const wxString GpuIndex{ wxT( "gpu" ) };
+				const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
+				const wxString DisRandom{ wxT( "disable_random" ) };
+				const wxString EnShaderVal{ wxT( "shader_validation" ) };
+				const wxString EnApiTrace{ wxT( "api_trace" ) };
+				const wxString KeepTextShd{ wxT( "text_shaders" ) };
+				const wxString MaxImgSize{ wxT( "max_image_size" ) };
+				const wxString WaitDebugger{ wxT( "wait_debugger" ) };
+				const wxString DebugTargets{ wxT( "debug_targets" ) };
 			}
 
 			namespace st
 			{
-				static const wxString Validate{ wxT( "a" ) };
-				static const wxString Config{ wxT( "c" ) };
-				static const wxString DisUpdOptim{ wxT( "d" ) };
-				static const wxString ShaderDebugLevel{ wxT( "e" ) };
-				static const wxString FixedFPS{ wxT( "f" ) };
-				static const wxString GpuIndex{ wxT( "g" ) };
-				static const wxString Help{ wxT( "h" ) };
-				static const wxString MaxImgSize{ wxT( "i" ) };
-				static const wxString KeepTextShd{ wxT( "k" ) };
-				static const wxString LogLevel{ wxT( "l" ) };
-				static const wxString DisRandom{ wxT( "r" ) };
-				static const wxString SyncRender{ wxT( "s" ) };
-				static const wxString EnApiTrace{ wxT( "t" ) };
-				static const wxString UnlimFPS{ wxT( "u" ) };
-				static const wxString EnShaderVal{ wxT( "v" ) };
-				static const wxString WaitDebugger{ wxT( "w" ) };
-				static const wxString DebugTargets{ wxT( "dt" ) };
+				const wxString Validate{ wxT( "a" ) };
+				const wxString Config{ wxT( "c" ) };
+				const wxString DisUpdOptim{ wxT( "d" ) };
+				const wxString ShaderDebugLevel{ wxT( "e" ) };
+				const wxString FixedFPS{ wxT( "f" ) };
+				const wxString GpuIndex{ wxT( "g" ) };
+				const wxString Help{ wxT( "h" ) };
+				const wxString MaxImgSize{ wxT( "i" ) };
+				const wxString KeepTextShd{ wxT( "k" ) };
+				const wxString LogLevel{ wxT( "l" ) };
+				const wxString DisRandom{ wxT( "r" ) };
+				const wxString SyncRender{ wxT( "s" ) };
+				const wxString EnApiTrace{ wxT( "t" ) };
+				const wxString UnlimFPS{ wxT( "u" ) };
+				const wxString EnShaderVal{ wxT( "v" ) };
+				const wxString WaitDebugger{ wxT( "w" ) };
+				const wxString DebugTargets{ wxT( "dt" ) };
 			}
 		}
 
@@ -222,19 +222,16 @@ namespace GuiCommon
 					throw false;
 				}
 
-				configFile = new wxFileConfig{ wxEmptyString
+				configFile = c3d::makeRawUnique< wxFileConfig >( wxEmptyString
 					, wxEmptyString
 					, findConfigFile( parser )
 					, wxEmptyString
-					, wxCONFIG_USE_LOCAL_FILE };
+					, wxCONFIG_USE_LOCAL_FILE );
 			}
 
-			~Options()
-			{
-				delete configFile;
-			}
+			~Options()noexcept = default;
 
-			bool has( wxString const & option )
+			bool has( wxString const & option )const
 			{
 				return parser.Found( option );
 			}
@@ -325,7 +322,7 @@ namespace GuiCommon
 		private:
 			wxCmdLineParser parser;
 			ashes::RendererList list;
-			wxFileConfig * configFile{ nullptr };
+			c3d::RawUniquePtr< wxFileConfig > configFile{ nullptr };
 		};
 	}
 
@@ -338,9 +335,7 @@ namespace GuiCommon
 		, c3d::String rendererType )
 		: m_internalName{ c3d::move( internalName ) }
 		, m_displayName{ c3d::move( displayName ) }
-		, m_castor{ nullptr }
 		, m_steps{ steps + 4 }
-		, m_splashScreen{ nullptr }
 		, m_version{ c3d::move( version ) }
 		, m_config{ DefaultValidation
 			, 0u
@@ -348,7 +343,7 @@ namespace GuiCommon
 			, DefaultLogType
 			, wantedFPS
 			, !isCastorThreaded
-			, rendererType }
+			, c3d::move( rendererType ) }
 	{
 		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )
@@ -488,9 +483,10 @@ namespace GuiCommon
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( language ) )
 		{
-			m_locale = c3d::makeRawUnique< wxLocale >( language, wxLOCALE_LOAD_DEFAULT );
 			// add locale search paths
-			m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
+			wxLocale::AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
+
+			m_locale = c3d::makeRawUnique< wxLocale >( language, wxLOCALE_LOAD_DEFAULT );
 			m_locale->AddCatalog( m_internalName );
 
 			if ( !m_locale->IsOk() )
@@ -533,26 +529,18 @@ namespace GuiCommon
 		doloadPlugins( splashScreen );
 
 		splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto & renderers = m_castor->getRenderersList();
 
-		if ( renderers.empty() )
-		{
+		if ( auto & renderers = m_castor->getRenderersList();
+			renderers.empty() )
 			CU_Exception( "No renderer plug-ins" );
-		}
 		else if ( std::next( renderers.begin() ) == renderers.end() )
-		{
 			m_config.rendererName = c3d::makeString( renderers.begin()->name );
-		}
 
 		if ( m_config.rendererName == c3d::RenderTypeUndefined )
 		{
-			RendererSelector m_dialog( *m_castor, nullptr, m_displayName );
-
+			RendererSelector m_dialog{ *m_castor, m_imagesLoader, nullptr, m_displayName };
 			if ( m_dialog.ShowModal() != wxID_OK )
-			{
 				return false;
-			}
-
 			m_castor->loadRenderer( m_dialog.getSelected() );
 		}
 		else if ( auto it = m_castor->getRenderersList().find( c3d::toUtf8( m_config.rendererName ) );
@@ -569,18 +557,12 @@ namespace GuiCommon
 		}
 
 		if ( !isUnlimitedFps() )
-		{
 			m_castor->initialise( m_config.fixedFPS, !m_config.syncRender );
-		}
 		else
-		{
 			m_castor->initialise( 0xFFFFFFFFu, !m_config.syncRender );
-		}
 
 		if ( m_config.maxImageSize > 0u )
-		{
 			m_castor->setMaxImageSize( m_config.maxImageSize );
-		}
 
 		c3d::Logger::logInfo( cuT( "Castor3D Initialised." ) );
 		return true;
@@ -597,93 +579,93 @@ namespace GuiCommon
 		splashScreen.Step( _( "Loading images" ), 1 );
 		wxInitAllImageHandlers();
 		m_imagesLoader.addBitmap( CV_IMG_CASTOR, app::castor_transparent_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECTGROUP, app::animated_object_group_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, app::animated_object_group_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECT, app::animated_object_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECT_SEL, app::animated_object_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATION, app::animation_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATION_SEL, app::animation_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BONE, app::bone_xpm );
-		m_imagesLoader.addBitmap( eBMP_BONE_SEL, app::bone_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SCENE, app::scene_xpm );
-		m_imagesLoader.addBitmap( eBMP_SCENE_SEL, app::scene_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SKELETON, app::skeleton_xpm );
-		m_imagesLoader.addBitmap( eBMP_SKELETON_SEL, app::skeleton_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_NODE, app::node_xpm );
-		m_imagesLoader.addBitmap( eBMP_NODE_SEL, app::node_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_CAMERA, app::camera_xpm );
-		m_imagesLoader.addBitmap( eBMP_CAMERA_SEL, app::camera_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_GEOMETRY, app::geometry_xpm );
-		m_imagesLoader.addBitmap( eBMP_GEOMETRY_SEL, app::geometry_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_DIRECTIONAL_LIGHT, app::directional_xpm );
-		m_imagesLoader.addBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, app::directional_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_POINT_LIGHT, app::point_xpm );
-		m_imagesLoader.addBitmap( eBMP_POINT_LIGHT_SEL, app::point_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SPOT_LIGHT, app::spot_xpm );
-		m_imagesLoader.addBitmap( eBMP_SPOT_LIGHT_SEL, app::spot_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SUBMESH, app::submesh_xpm );
-		m_imagesLoader.addBitmap( eBMP_SUBMESH_SEL, app::submesh_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PANEL_OVERLAY, app::panel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PANEL_OVERLAY_SEL, app::panel_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BORDER_PANEL_OVERLAY, app::border_panel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, app::border_panel_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXT_OVERLAY, app::text_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXT_OVERLAY_SEL, app::text_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_MATERIAL, app::material_xpm );
-		m_imagesLoader.addBitmap( eBMP_MATERIAL_SEL, app::material_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PASS, app::pass_xpm );
-		m_imagesLoader.addBitmap( eBMP_PASS_SEL, app::pass_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXTURE, app::texture_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXTURE_SEL, app::texture_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BILLBOARD, app::billboard_xpm );
-		m_imagesLoader.addBitmap( eBMP_BILLBOARD_SEL, app::billboard_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_VIEWPORT, app::viewport_xpm );
-		m_imagesLoader.addBitmap( eBMP_VIEWPORT_SEL, app::viewport_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_POST_EFFECT, app::post_effect_xpm );
-		m_imagesLoader.addBitmap( eBMP_POST_EFFECT_SEL, app::post_effect_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_TONE_MAPPING, app::tone_mapping_xpm );
-		m_imagesLoader.addBitmap( eBMP_TONE_MAPPING_SEL, app::tone_mapping_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_TARGET, app::render_target_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_TARGET_SEL, app::render_target_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_WINDOW, app::render_window_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_WINDOW_SEL, app::render_window_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE, app::frame_variable_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_SEL, app::frame_variable_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER, app::frame_variable_buffer_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, app::frame_variable_buffer_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG, app::ssao_config_xpm );
-		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG_SEL, app::ssao_config_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_COLOURGRADING_CONFIG, app::colour_grading_xpm );
-		m_imagesLoader.addBitmap( eBMP_COLOURGRADING_CONFIG_SEL, app::colour_grading_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_CLUSTERS_CONFIG, app::ssao_config_xpm );
-		m_imagesLoader.addBitmap( eBMP_CLUSTERS_CONFIG_SEL, app::ssao_config_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_VCT_CONFIG, app::ssao_config_xpm );
-		m_imagesLoader.addBitmap( eBMP_VCT_CONFIG_SEL, app::ssao_config_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BACKGROUND, app::background_xpm );
-		m_imagesLoader.addBitmap( eBMP_BACKGROUND_SEL, app::background_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_COLLAPSE_ALL, app::collapse_all_xpm );
-		m_imagesLoader.addBitmap( eBMP_EXPAND_ALL, app::expand_all_xpm );
-		m_imagesLoader.addBitmap( eBMP_CONTROLS, app::controls_xpm );
-		m_imagesLoader.addBitmap( eBMP_CONTROLS_SEL, app::controls_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_CONTROL, app::control_xpm );
-		m_imagesLoader.addBitmap( eBMP_CONTROL_SEL, app::control_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_STYLES, app::styles_xpm );
-		m_imagesLoader.addBitmap( eBMP_STYLES_SEL, app::styles_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_STYLE, app::style_xpm );
-		m_imagesLoader.addBitmap( eBMP_STYLE_SEL, app::style_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_THEME, app::theme_xpm );
-		m_imagesLoader.addBitmap( eBMP_THEME_SEL, app::theme_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PARTICLE, app::particle_xpm );
-		m_imagesLoader.addBitmap( eBMP_PARTICLE_SEL, app::particle_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eAnimatedObjectGroup, app::animated_object_group_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eAnimatedObjectGroupSelected, app::animated_object_group_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eAnimatedObject, app::animated_object_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eAnimatedObjectSelected, app::animated_object_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eAnimation, app::animation_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eAnimationSelected, app::animation_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBone, app::bone_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBoneSelected, app::bone_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eScene, app::scene_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSceneSelected, app::scene_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSkeleton, app::skeleton_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSkeletonSelected, app::skeleton_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eNode, app::node_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eNodeSelected, app::node_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eCamera, app::camera_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eCameraSelected, app::camera_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eGeometry, app::geometry_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eGeometrySelected, app::geometry_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eDirectionalLight, app::directional_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eDirectionalLightSelected, app::directional_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePointLight, app::point_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePointLightSelected, app::point_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSpotLight, app::spot_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSpotLightSelected, app::spot_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSubmesh, app::submesh_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSubmeshSelected, app::submesh_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePanelOverlay, app::panel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePanelOverlaySelected, app::panel_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBorderPanelOverlay, app::border_panel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBorderPanelOverlaySelected, app::border_panel_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eTextOverlay, app::text_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eTextOverlaySelected, app::text_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eMaterial, app::material_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eMaterialSelected, app::material_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePass, app::pass_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePassSelected, app::pass_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eTexture, app::texture_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eTextureSelected, app::texture_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBillboard, app::billboard_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBillboardSelected, app::billboard_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eViewport, app::viewport_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eViewportSelected, app::viewport_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePostEffect, app::post_effect_xpm );
+		m_imagesLoader.addBitmapT( eBMP::ePostEffectSelected, app::post_effect_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eToneMapping, app::tone_mapping_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eToneMappingSelected, app::tone_mapping_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eRenderTarget, app::render_target_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eRenderTargetSelected, app::render_target_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eRenderWindow, app::render_window_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eRenderWindowSelected, app::render_window_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eFrameVariable, app::frame_variable_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eFrameVariableSelected, app::frame_variable_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eFrameVariableBuffer, app::frame_variable_buffer_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eFrameVariableBufferSelected, app::frame_variable_buffer_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSSAOConfig, app::ssao_config_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eSSAOConfigSelected, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eColourGradingConfig, app::colour_grading_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eColourGradingConfigSelected, app::colour_grading_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eClustersConfig, app::ssao_config_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eClustersConfigSelected, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eVCTConfig, app::ssao_config_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eVCTConfigSelected, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBackground, app::background_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eBackgroundSelected, app::background_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eCollapseAll, app::collapse_all_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eExpandAll, app::expand_all_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eControl, app::controls_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eControlSelected, app::controls_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eControl, app::control_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eControlSelected, app::control_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eStyle, app::styles_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eStyleSelected, app::styles_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eStyle, app::style_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eStyleSelected, app::style_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eTheme, app::theme_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eThemeSelected, app::theme_sel_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eParticle, app::particle_xpm );
+		m_imagesLoader.addBitmapT( eBMP::eParticleSelected, app::particle_sel_xpm );
 		doLoadAppImages();
-		ImagesLoader::waitAsyncLoads();
+		m_imagesLoader.waitAsyncLoads();
 	}
 
 	void CastorApplication::doCleanup()
 	{
 		doCleanupCastor();
 		m_locale.reset();
-		ImagesLoader::cleanup();
+		m_imagesLoader.cleanup();
 		c3d::Logger::cleanup();
 		wxImage::CleanUpHandlers();
 	}

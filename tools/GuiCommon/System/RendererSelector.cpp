@@ -10,10 +10,10 @@ namespace GuiCommon
 {
 	namespace rendsel
 	{
-		enum IDs
+		enum class IDs
 		{
-			ID_RENDERERS,
-			ID_DEVICES,
+			eRenderers,
+			eDevices,
 		};
 
 		static constexpr int ListHeight = 100;
@@ -23,11 +23,13 @@ namespace GuiCommon
 	//*********************************************************************************************
 
 	RendererSelector::RendererSelector( c3d::Engine & engine
+		, ImagesLoader & imagesLoader
 		, wxWindow * parent
 		, wxString const & title )
 		: wxDialog{ parent, wxID_ANY, title + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 400 + ( rendsel::ListHeight * 2 ) ), wxDEFAULT_DIALOG_STYLE }
-		, m_castorImg{ ImagesLoader::getBitmap( CV_IMG_CASTOR ) }
+		, m_castorImg{ imagesLoader.getBitmap( CV_IMG_CASTOR ) }
 		, m_engine{ engine }
+		, m_title{ title }
 	{
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
@@ -40,18 +42,18 @@ namespace GuiCommon
 			doSelectRenderer( false );
 		}
 
-		wxBoxSizer * sizer = new wxBoxSizer( wxVERTICAL );
+		auto sizer = new wxBoxSizer( wxVERTICAL );
 
-		wxBoxSizer * titleSizer = new wxBoxSizer( wxHORIZONTAL );
+		auto titleSizer = new wxBoxSizer( wxHORIZONTAL );
 		titleSizer->Add( 50, 0, 1 );
-		auto titleTxt = new wxStaticText( this, wxID_ANY, title );
+		auto titleTxt = new wxStaticText( this, wxID_ANY, m_title );
 		titleTxt->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		titleTxt->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		titleTxt->SetFont( wxFont{ 30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial" ) } );
 		titleSizer->Add( titleTxt, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
 		sizer->Add( titleSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
 
-		wxBoxSizer * descSizer = new wxBoxSizer( wxHORIZONTAL );
+		auto descSizer = new wxBoxSizer( wxHORIZONTAL );
 		descSizer->Add( 50, 0, 1 );
 		auto staticTxt = new wxStaticText( this, wxID_ANY, _( "Select your renderer in the list below" ) );
 		staticTxt->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -59,29 +61,29 @@ namespace GuiCommon
 		descSizer->Add( staticTxt, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
 		sizer->Add( descSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
 
-		wxBoxSizer * buttonSizer = new wxBoxSizer( wxHORIZONTAL );
-		GradientButton * ok = new GradientButton( this, wxID_OK, _( "OK" ) );
+		auto buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+		auto ok = new GradientButton( this, wxID_OK, _( "OK" ) );
 		buttonSizer->Add( ok, wxSizerFlags( 0 ).Border( wxLEFT, 5 ) );
 		buttonSizer->Add( 200, 0, 1 );
-		GradientButton * cancel = new GradientButton( this, wxID_CANCEL, _( "Cancel" ) );
+		auto cancel = new GradientButton( this, wxID_CANCEL, _( "Cancel" ) );
 		buttonSizer->Add( cancel, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
 
 		sizer->Add( 0, 60, 0 );
 		sizer->Add( m_renderersList, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand() );
 		sizer->Add( m_devicesList, wxSizerFlags( 0 ).Border( wxALL, 10 ).Expand() );
-		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxALL,  5 ).Expand() );
+		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
 		SetSizer( sizer );
 		sizer->SetSizeHints( this );
 		wxClientDC clientDC( this );
-		doDraw( & clientDC );
+		doDraw( &clientDC );
 	}
 
 	c3d::Renderer RendererSelector::getSelected()
 	{
 		c3d::Renderer result;
-		auto selected = uint32_t( m_renderersList->GetSelection() );
 
-		if ( selected < m_renderersList->GetCount() )
+		if ( auto selected = uint32_t( m_renderersList->GetSelection() );
+			selected < m_renderersList->GetCount() )
 		{
 			auto it = std::next( m_renderers.begin(), selected );
 			result = c3d::move( *it );
@@ -94,7 +96,7 @@ namespace GuiCommon
 	wxListBox * RendererSelector::doFillRenderers()
 	{
 		auto result = new wxListBox{ this
-			, rendsel::ID_RENDERERS
+			, int( rendsel::IDs::eRenderers )
 			, wxDefaultPosition
 			, wxSize{ rendsel::ListWidth, rendsel::ListHeight } };
 		result->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -112,7 +114,8 @@ namespace GuiCommon
 			m_renderers.emplace_back( m_engine, renderer );
 			auto name = make_wxString( renderer.description );
 			name.Replace( wxT( " for Ashes" ), wxEmptyString );
-			result->Insert( name, count++ );
+			result->Insert( name, count );
+			++count;
 		}
 
 		return result;
@@ -121,7 +124,7 @@ namespace GuiCommon
 	wxListBox * RendererSelector::doInitialiseDevices()
 	{
 		auto result = new wxListBox{ this
-			, rendsel::ID_DEVICES
+			, int( rendsel::IDs::eDevices )
 			, wxPoint{ 0, rendsel::ListHeight }
 			, wxSize{ rendsel::ListWidth, rendsel::ListHeight } };
 		result->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -141,23 +144,17 @@ namespace GuiCommon
 		m_devicesList->Clear();
 
 		for ( auto & gpu : renderer.gpus )
-		{
 			m_devicesList->Insert( gpu->getProperties().deviceName, count++ );
-		}
 
 		if ( renderer.gpus.size() > 1u )
-		{
 			m_devicesList->Show();
-		}
 		else
-		{
 			m_devicesList->Hide();
-		}
 
 		m_devicesList->Update();
 	}
 
-	void RendererSelector::doDraw( wxDC * dc )
+	void RendererSelector::doDraw( wxDC * dc )const
 	{
 		dc->DrawBitmap( *m_castorImg, wxPoint( 0, 0 ), true );
 	}
@@ -166,9 +163,8 @@ namespace GuiCommon
 	{
 		if ( !m_renderers.empty() )
 		{
-			auto selected = uint32_t( m_renderersList->GetSelection() );
-
-			if ( selected < m_renderersList->GetCount() )
+			if ( auto selected = uint32_t( m_renderersList->GetSelection() );
+				selected < m_renderersList->GetCount() )
 			{
 				m_currentRenderer = &m_renderers[selected];
 			}
@@ -176,11 +172,9 @@ namespace GuiCommon
 			doFillDevices( *m_currentRenderer );
 
 			if ( next )
-			{
 				m_devicesList->SetFocus();
-			}
 
-			if ( m_devicesList->GetCount() > 0 )
+			if ( !m_devicesList->IsEmpty() )
 			{
 				m_devicesList->Select( 0 );
 				doSelectDevice( next && ( m_devicesList->GetCount() == 1 ) );
@@ -196,17 +190,14 @@ namespace GuiCommon
 	{
 		if ( m_currentRenderer )
 		{
-			auto selected = uint32_t( m_devicesList->GetSelection() );
-
-			if ( selected < m_currentRenderer->gpus.size() )
+			if ( auto selected = uint32_t( m_devicesList->GetSelection() );
+				selected < m_currentRenderer->gpus.size() )
 			{
 				m_currentRenderer->gpu = m_currentRenderer->gpus[selected].get();
 			}
 
 			if ( next )
-			{
 				EndModal( wxID_OK );
-			}
 		}
 			else if ( next )
 		{
@@ -217,11 +208,11 @@ namespace GuiCommon
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RendererSelector, wxDialog )
-		EVT_PAINT(	RendererSelector::onPaint )
+		EVT_PAINT( RendererSelector::onPaint )
 		EVT_BUTTON(	wxID_OK, RendererSelector::onButtonOk )
 		EVT_BUTTON(	wxID_CANCEL, RendererSelector::onButtonCancel )
-		EVT_LISTBOX_DCLICK( rendsel::ID_RENDERERS, RendererSelector::onSelectRenderer )
-		EVT_LISTBOX_DCLICK( rendsel::ID_DEVICES, RendererSelector::onButtonOk )
+		EVT_LISTBOX_DCLICK( int( rendsel::IDs::eRenderers ), RendererSelector::onSelectRenderer )
+		EVT_LISTBOX_DCLICK( int( rendsel::IDs::eDevices ), RendererSelector::onButtonOk )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
@@ -234,24 +225,16 @@ namespace GuiCommon
 
 	void RendererSelector::onRenderersKeyUp( wxKeyEvent & event )
 	{
-		switch ( event.GetKeyCode() )
-		{
-		case WXK_RETURN:
+		if ( event.GetKeyCode() == WXK_RETURN )
 			doSelectRenderer( false );
-			break;
-		}
 
 		event.Skip();
 	}
 
 	void RendererSelector::onDevicesKeyUp( wxKeyEvent & event )
 	{
-		switch ( event.GetKeyCode() )
-		{
-		case WXK_RETURN:
+		if ( event.GetKeyCode() == WXK_RETURN )
 			doSelectDevice( false );
-			break;
-		}
 
 		event.Skip();
 	}

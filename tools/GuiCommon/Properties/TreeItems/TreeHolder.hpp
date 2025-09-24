@@ -17,7 +17,8 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		TreeHolder( wxWindow * parent
+		TreeHolder( ImagesLoader & imagesLoader
+			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
 		~TreeHolder()override;

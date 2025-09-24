@@ -35,7 +35,7 @@ namespace c3d
 			if ( auto block{ beginBlock( file, cuT( "lines" ) ) } )
 			{
 				result = true;
-				for ( auto & value : object.getData().getFaces() )
+				for ( auto const & value : object.getData().getFaces() )
 				{
 					StringStream stream;
 					stream << value[0] << " " << value[1];

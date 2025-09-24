@@ -144,15 +144,15 @@ See LICENSE file in root folder
 	CU_DeclareVector( Point##count##name, Point##count##name );\
 	CU_DeclareList( Point##count##name, Point##count##name )
 
-#define CU_DeclareCoord( type, count, name )\
-	using Coords##count##name = Coords< type, count >;\
-	CU_DeclareVector( Coords##count##name, Coords##count##name );\
-	CU_DeclareList( Coords##count##name, Coords##count##name )
+#define CU_DeclarePointView( type, count, name )\
+	using PointView##count##name = PointView< type, count >;\
+	CU_DeclareVector( PointView##count##name, PointView##count##name );\
+	CU_DeclareList( PointView##count##name, PointView##count##name )
 
-#define CU_DeclareConstCoord( type, count, name )\
-	using ConstCoords##count##name = Coords< type const, count >;\
-	CU_DeclareVector( ConstCoords##count##name, ConstCoords##count##name );\
-	CU_DeclareList( ConstCoords##count##name, ConstCoords##count##name )
+#define CU_DeclareConstPointView( type, count, name )\
+	using ConstPointView##count##name = PointView< type const, count >;\
+	CU_DeclareVector( ConstPointView##count##name, ConstPointView##count##name );\
+	CU_DeclareList( ConstPointView##count##name, ConstPointView##count##name )
 
 #define CU_DeclareMtx( type, rows, cols, name )\
 	using Matrix##rows##x##cols##name = Matrix< type, rows, cols >;\
@@ -174,9 +174,9 @@ See LICENSE file in root folder
 	EnumName##_MAX = EnumName##_COUNT - 1
 
 #define CU_ScopedEnumBounds( EnumMin, EnumMax )\
-	eCount = EnumMax + 1,\
 	eMin = EnumMin,\
-	eMax = eCount - 1
+	eMax = EnumMax,\
+	eCount = eMax + 1
 
 #define CU_ImplementFlags( FlagType )\
 	using FlagType##s = c3d::FlagCombination< FlagType >;\

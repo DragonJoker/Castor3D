@@ -273,7 +273,7 @@ namespace c3d
 			*\param[in] components
 			*	Contient les membres du composants.
 			*/
-			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			C3D_API virtual sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 const & texCoords
 				, shader::BlendComponents const & components )const;
 			/**
@@ -294,7 +294,7 @@ namespace c3d
 			*\param[in] components
 			*	Contient les membres du composants.
 			*/
-			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+			C3D_API virtual sdw::RetVec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, shader::DerivTex const & texCoords
 				, shader::BlendComponents const & components )const;
 			/**
@@ -1202,7 +1202,7 @@ namespace c3d
 			setColour( HdrRgbColour{ v, gamma } );
 		}
 
-		void setColour( Coords3f const & v )
+		void setColour( PointView3f const & v )
 		{
 			setColour( HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}

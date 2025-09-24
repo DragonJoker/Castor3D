@@ -24,6 +24,8 @@ namespace c3d::shader
 			, sdw::UIntField< "triangleCount" >
 			, sdw::UIntField< "meshletIndex" > >
 	{
+		SDW_DeclStructInstance( C3D_API, Meshlet );
+
 		Meshlet( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )

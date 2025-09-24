@@ -11,7 +11,6 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
-#include <Castor3D/Render/Ray.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Camera.hpp>
@@ -42,15 +41,15 @@ namespace castortd
 		: wxPanel{ parent, wxID_ANY, wxDefaultPosition, size }
 		, m_timers
 		{
-			new wxTimer( this, int( TimerID::eUp ) ),
-			new wxTimer( this, int( TimerID::eDown ) ),
-			new wxTimer( this, int( TimerID::eLeft ) ),
-			new wxTimer( this, int( TimerID::eRight ) ),
+			c3d::makeRawUnique< wxTimer >( this, int( TimerID::eUp ) ),
+			c3d::makeRawUnique< wxTimer >( this, int( TimerID::eDown ) ),
+			c3d::makeRawUnique< wxTimer >( this, int( TimerID::eLeft ) ),
+			c3d::makeRawUnique< wxTimer >( this, int( TimerID::eRight ) ),
 		}
 		, m_game{ game }
 	{
 		auto & engine = *wxGetApp().getCastor();
-		c3d::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
+		c3d::Size sizeWnd = GuiCommon::makeSize( wxPanel::GetClientSize() );
 		m_renderWindow = c3d::makeUnique< c3d::RenderWindow >( cuT( "CastorTD" )
 			, engine
 			, sizeWnd
@@ -61,7 +60,7 @@ namespace castortd
 	{
 		for ( auto & timer : m_timers )
 		{
-			delete timer;
+			timer = {};
 		}
 	}
 
@@ -112,30 +111,30 @@ namespace castortd
 		}
 	}
 
-	float RenderPanel::doTransformX( int x )
+	float RenderPanel::doTransformX( int x )const
 	{
-		float result = float( x );
+		auto result = float( x );
 		result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) / float( GetClientSize().x );
 		return result;
 	}
 
-	float RenderPanel::doTransformY( int y )
+	float RenderPanel::doTransformY( int y )const
 	{
-		float result = float( y );
+		auto result = float( y );
 		result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) / float( GetClientSize().y );
 		return result;
 	}
 
-	int RenderPanel::doTransformX( float x )
+	int RenderPanel::doTransformX( float x )const
 	{
-		int result = int( x );
+		auto result = int( x );
 		result = int( x * float( GetClientSize().x ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) );
 		return result;
 	}
 
-	int RenderPanel::doTransformY( float y )
+	int RenderPanel::doTransformY( float y )const
 	{
-		int result = int( y );
+		auto result = int( y );
 		result = int( y * float( GetClientSize().y ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) );
 		return result;
 	}
@@ -195,8 +194,6 @@ namespace castortd
 						m_selectedTower = m_game.selectTower( cell );
 						break;
 
-					case Cell::State::Target:
-					case Cell::State::Path:
 					default:
 						m_selectedTower = nullptr;
 						break;
@@ -207,13 +204,11 @@ namespace castortd
 			}
 
 			m_listener->postEvent( c3d::makeGpuFunctorEvent( c3d::GpuEventType::ePreUpload
-				, [this, freeCell]( c3d::RenderDevice const & device
-					, c3d::QueueData const & queueData )
+				, [this, freeCell]( c3d::RenderDevice const &
+					, c3d::QueueData const & )
 				{
 					if ( m_marker )
-					{
 						m_marker->setVisible( freeCell );
-					}
 				} ) );
 		}
 	}
@@ -279,52 +274,52 @@ namespace castortd
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
-		EVT_SIZE( RenderPanel::OnSize )
-		EVT_MOVE( RenderPanel::OnMove )
-		EVT_PAINT( RenderPanel::OnPaint )
+		EVT_SIZE( RenderPanel::onSize )
+		EVT_MOVE( RenderPanel::onMove )
+		EVT_PAINT( RenderPanel::onPaint )
 		EVT_KEY_DOWN( RenderPanel::onKeyDown )
 		EVT_KEY_UP( RenderPanel::onKeyUp )
-		EVT_LEFT_DOWN( RenderPanel::OnMouseLdown )
-		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
-		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
-		EVT_MOTION( RenderPanel::OnMouseMove )
-		EVT_MOUSEWHEEL( RenderPanel::OnMouseWheel )
-		EVT_TIMER( int( TimerID::eUp ), RenderPanel::OnTimerUp )
-		EVT_TIMER( int( TimerID::eDown ), RenderPanel::OnTimerDown )
-		EVT_TIMER( int( TimerID::eLeft ), RenderPanel::OnTimerLeft )
-		EVT_TIMER( int( TimerID::eRight ), RenderPanel::OnTimerRight )
-		EVT_MENU( int( panel::MenuID::eNewLRTower ), RenderPanel::OnNewLongRangeTower )
-		EVT_MENU( int( panel::MenuID::eNewSRTower ), RenderPanel::OnNewShortRangeTower )
-		EVT_MENU( int( panel::MenuID::eUpgradeSpeed ), RenderPanel::OnUpgradeTowerSpeed )
-		EVT_MENU( int( panel::MenuID::eUpgradeRange ), RenderPanel::OnUpgradeTowerRange )
-		EVT_MENU( int( panel::MenuID::eUpgradeDamage ), RenderPanel::OnUpgradeTowerDamage )
+		EVT_LEFT_DOWN( RenderPanel::onMouseLDown )
+		EVT_LEFT_UP( RenderPanel::onMouseLUp )
+		EVT_RIGHT_UP( RenderPanel::onMouseRUp )
+		EVT_MOTION( RenderPanel::onMouseMove )
+		EVT_MOUSEWHEEL( RenderPanel::onMouseWheel )
+		EVT_TIMER( int( TimerID::eUp ), RenderPanel::onTimerUp )
+		EVT_TIMER( int( TimerID::eDown ), RenderPanel::onTimerDown )
+		EVT_TIMER( int( TimerID::eLeft ), RenderPanel::onTimerLeft )
+		EVT_TIMER( int( TimerID::eRight ), RenderPanel::onTimerRight )
+		EVT_MENU( int( panel::MenuID::eNewLRTower ), RenderPanel::onNewLongRangeTower )
+		EVT_MENU( int( panel::MenuID::eNewSRTower ), RenderPanel::onNewShortRangeTower )
+		EVT_MENU( int( panel::MenuID::eUpgradeSpeed ), RenderPanel::onUpgradeTowerSpeed )
+		EVT_MENU( int( panel::MenuID::eUpgradeRange ), RenderPanel::onUpgradeTowerRange )
+		EVT_MENU( int( panel::MenuID::eUpgradeDamage ), RenderPanel::onUpgradeTowerDamage )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
 
-	void RenderPanel::OnSize( wxSizeEvent & event )
+	void RenderPanel::onSize( wxSizeEvent & event )
 	{
 		m_renderWindow->resize( uint32_t( event.GetSize().x )
 			, uint32_t( event.GetSize().y ) );
 		event.Skip();
 	}
 
-	void RenderPanel::OnMove( wxMoveEvent & event )
+	void RenderPanel::onMove( wxMoveEvent & event )
 	{
 		event.Skip();
 	}
 
-	void RenderPanel::OnPaint( wxPaintEvent & event )
+	void RenderPanel::onPaint( wxPaintEvent & event )
 	{
 		event.Skip();
 	}
 
-	void RenderPanel::OnsetFocus( wxFocusEvent & event )
+	void RenderPanel::onSetFocus( wxFocusEvent & event )
 	{
 		event.Skip();
 	}
 
-	void RenderPanel::OnKillFocus( wxFocusEvent & event )
+	void RenderPanel::onKillFocus( wxFocusEvent & event )
 	{
 		doStopTimer( TimerID::eCount );
 		event.Skip();
@@ -337,25 +332,32 @@ namespace castortd
 		case WXK_LEFT:
 		case 'Q':
 			doStartTimer( TimerID::eLeft );
+			event.Skip( false );
 			break;
 
 		case WXK_RIGHT:
 		case 'D':
 			doStartTimer( TimerID::eRight );
+			event.Skip( false );
 			break;
 
 		case WXK_UP:
 		case 'Z':
 			doStartTimer( TimerID::eUp );
+			event.Skip( false );
 			break;
 
 		case WXK_DOWN:
 		case 'S':
 			doStartTimer( TimerID::eDown );
+			event.Skip( false );
+			break;
+
+		default:
+			event.Skip();
 			break;
 		}
 
-		event.Skip();
 	}
 
 	void RenderPanel::onKeyUp( wxKeyEvent & event )
@@ -365,16 +367,19 @@ namespace castortd
 		case WXK_NUMPAD1:
 		case '1':
 			doUpgradeTowerDamage();
+			event.Skip( false );
 			break;
 
 		case WXK_NUMPAD2:
 		case '2':
 			doUpgradeTowerRange();
+			event.Skip( false );
 			break;
 
 		case WXK_NUMPAD3:
 		case '3':
 			doUpgradeTowerSpeed();
+			event.Skip( false );
 			break;
 
 		case WXK_F1:
@@ -386,6 +391,7 @@ namespace castortd
 						m_game.help();
 					}
 				} ) );
+			event.Skip( false );
 			break;
 
 		case WXK_RETURN:
@@ -403,6 +409,7 @@ namespace castortd
 						m_game.start();
 					}
 				} ) );
+			event.Skip( false );
 			break;
 
 		case WXK_SPACE:
@@ -421,33 +428,40 @@ namespace castortd
 						}
 					}
 				} ) );
+			event.Skip( false );
 			break;
 
 		case WXK_LEFT:
 		case 'Q':
 			doStopTimer( TimerID::eLeft );
+			event.Skip( false );
 			break;
 
 		case WXK_RIGHT:
 		case 'D':
 			doStopTimer( TimerID::eRight );
+			event.Skip( false );
 			break;
 
 		case WXK_UP:
 		case 'Z':
 			doStopTimer( TimerID::eUp );
+			event.Skip( false );
 			break;
 
 		case WXK_DOWN:
 		case 'S':
 			doStopTimer( TimerID::eDown );
+			event.Skip( false );
+			break;
+
+		default:
+			event.Skip();
 			break;
 		}
-
-		event.Skip();
 	}
 
-	void RenderPanel::OnMouseLdown( wxMouseEvent & event )
+	void RenderPanel::onMouseLDown( wxMouseEvent & event )
 	{
 		m_mouseLeftDown = true;
 
@@ -458,9 +472,10 @@ namespace castortd
 			m_oldX = m_x;
 			m_oldY = m_y;
 		}
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnMouseLUp( wxMouseEvent & event )
+	void RenderPanel::onMouseLUp( wxMouseEvent & event )
 	{
 		m_mouseLeftDown = false;
 
@@ -471,8 +486,8 @@ namespace castortd
 			m_oldX = m_x;
 			m_oldY = m_y;
 			m_listener->postEvent( c3d::makeGpuFunctorEvent( c3d::GpuEventType::ePreUpload
-				, [this]( c3d::RenderDevice const & device
-					, c3d::QueueData const & queueData )
+				, [this]( c3d::RenderDevice const &
+					, c3d::QueueData const & )
 				{
 					c3d::Camera & camera = *m_renderWindow->getCamera();
 					camera.update();
@@ -490,10 +505,10 @@ namespace castortd
 				} ) );
 		}
 
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnMouseRUp( wxMouseEvent & event )
+	void RenderPanel::onMouseRUp( wxMouseEvent & event )
 	{
 		if ( m_game.isRunning() && m_selectedTower )
 		{
@@ -544,10 +559,10 @@ namespace castortd
 			PopupMenu( &menu, event.GetPosition() );
 		}
 
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnMouseMove( wxMouseEvent & event )
+	void RenderPanel::onMouseMove( wxMouseEvent & event )
 	{
 		m_x = doTransformX( event.GetX() );
 		m_y = doTransformY( event.GetY() );
@@ -566,17 +581,16 @@ namespace castortd
 
 		m_oldX = m_x;
 		m_oldY = m_y;
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnMouseWheel( wxMouseEvent & event )
+	void RenderPanel::onMouseWheel( wxMouseEvent & event )
 	{
 		int wheelRotation = event.GetWheelRotation();
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireMouseWheel( c3d::Position( 0, wheelRotation )
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireMouseWheel( c3d::Position( 0, wheelRotation )
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( wheelRotation < 0 )
 			{
@@ -588,34 +602,34 @@ namespace castortd
 			}
 		}
 
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnTimerUp( wxTimerEvent & event )
+	void RenderPanel::onTimerUp( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( c3d::Point3f{ 0.0f, panel::g_camSpeed, 0.0f } );
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnTimerDown( wxTimerEvent & event )
+	void RenderPanel::onTimerDown( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( c3d::Point3f{ 0.0f, -panel::g_camSpeed, 0.0f } );
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnTimerLeft( wxTimerEvent & event )
+	void RenderPanel::onTimerLeft( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( c3d::Point3f{ panel::g_camSpeed, 0.0f, 0.0f } );
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnTimerRight( wxTimerEvent & event )
+	void RenderPanel::onTimerRight( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( c3d::Point3f{ -panel::g_camSpeed, 0.0f, 0.0f } );
-		event.Skip();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnNewLongRangeTower( wxCommandEvent & event )
+	void RenderPanel::onNewLongRangeTower( wxCommandEvent & event )
 	{
 		if ( m_game.isRunning() )
 		{
@@ -628,9 +642,10 @@ namespace castortd
 					}
 				} ) );
 		}
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnNewShortRangeTower( wxCommandEvent & event )
+	void RenderPanel::onNewShortRangeTower( wxCommandEvent & event )
 	{
 		if ( m_game.isRunning() )
 		{
@@ -643,20 +658,24 @@ namespace castortd
 					}
 				} ) );
 		}
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnUpgradeTowerSpeed( wxCommandEvent & event )
+	void RenderPanel::onUpgradeTowerSpeed( wxCommandEvent & event )
 	{
 		doUpgradeTowerSpeed();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnUpgradeTowerRange( wxCommandEvent & event )
+	void RenderPanel::onUpgradeTowerRange( wxCommandEvent & event )
 	{
 		doUpgradeTowerRange();
+		event.Skip( false );
 	}
 
-	void RenderPanel::OnUpgradeTowerDamage( wxCommandEvent & event )
+	void RenderPanel::onUpgradeTowerDamage( wxCommandEvent & event )
 	{
 		doUpgradeTowerDamage();
+		event.Skip( false );
 	}
 }

@@ -20,27 +20,27 @@ namespace c3d::shader
 	public:
 		C3D_API DebugOutput( DebugConfig & config
 			, String category
-			, sdw::UInt const index
-			, sdw::Vec4 const output
+			, sdw::UInt const & index
+			, sdw::Vec4 const & output
 			, bool enable );
 		C3D_API ~DebugOutput()noexcept;
 
-		C3D_API void registerOutput( String category
-			, String name
-			, sdw::Vec4 const value );
-		C3D_API void registerOutput( String category
-			, String name
-			, sdw::Vec3 const value );
-		C3D_API void registerOutput( String category
-			, String name
-			, sdw::Vec2 const value );
-		C3D_API void registerOutput( String category
-			, String name
-			, sdw::Float const value );
+		C3D_API void registerOutput( String const & category
+			, String const & name
+			, sdw::Vec4 const & value );
+		C3D_API void registerOutput( String const & category
+			, String const & name
+			, sdw::Vec3 const & value );
+		C3D_API void registerOutput( String const & category
+			, String const & name
+			, sdw::Vec2 const & value );
+		C3D_API void registerOutput( String const & category
+			, String const & name
+			, sdw::Float const & value );
 		C3D_API DebugOutputCategory pushBlock( String category );
 
 		template< typename ValueT >
-		void registerOutput( String name
+		void registerOutput( String const & name
 			, ValueT const & value )
 		{
 			registerOutput( concatenateCategories(), name, value );

@@ -214,8 +214,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/Text/TextSize.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextCoords.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextCoords.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPointView.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPointView.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextFont.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPoint.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPoint.inl
@@ -453,8 +453,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Angle.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Angle.inl
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Coords.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Coords.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Illumination.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Length.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Length.inl
@@ -471,6 +469,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointData.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointOperators.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointOperators.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointView.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointView.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Quaternion.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Quaternion.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Range.hpp

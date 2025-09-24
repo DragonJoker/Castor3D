@@ -22,6 +22,8 @@ namespace c3d::shader
 			, sdw::Vec3Field< "coating" >
 			, sdw::Vec4Field< "sheen" > >
 	{
+		SDW_DeclStructInstance( C3D_API, DirectLighting );
+
 		C3D_API DirectLighting( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -55,6 +57,8 @@ namespace c3d::shader
 			, sdw::Vec3Field< "specular" >
 			, sdw::FloatField< "occlusion" > >
 	{
+		SDW_DeclStructInstance( C3D_API, IndirectLighting );
+
 		C3D_API IndirectLighting( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -83,6 +87,8 @@ namespace c3d::shader
 			, sdw::Vec3Field< "coating" >
 			, sdw::Vec4Field< "sheen" > >
 	{
+		SDW_DeclStructInstance( C3D_API, ReflectionRefraction );
+
 		C3D_API ReflectionRefraction( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );

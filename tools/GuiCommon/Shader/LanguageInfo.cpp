@@ -53,12 +53,15 @@ namespace GuiCommon
 		, c3d::StringArray const & keywords )
 	{
 		CU_Require( index < 9 );
+		if ( index >= 9 )
+			return;
+
 		c3d::String & toAdd = m_keywords[index];
 		c3d::String sep;
 
 		if ( isCLike )
 		{
-			for ( auto keyword : keywords )
+			for ( auto const & keyword : keywords )
 			{
 				toAdd += sep + keyword;
 				sep = cuT( " " );
@@ -66,9 +69,9 @@ namespace GuiCommon
 		}
 		else
 		{
-			for ( auto keyword : keywords )
+			for ( auto const & keyword : keywords )
 			{
-				toAdd += sep + c3d::string::toLowerCase( keyword );
+				toAdd += sep + c3d::string::lowerCase( keyword );
 				sep = cuT( " " );
 			}
 		}

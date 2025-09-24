@@ -280,7 +280,7 @@ namespace c3d
 			m_visible = v;
 			onChanged( *this );
 
-			for ( auto & pass : m_passes )
+			for ( auto const & pass : m_passes )
 			{
 				pass->onChanged( *pass, pass->getComponentCombineID(), pass->getComponentCombineID() );
 			}

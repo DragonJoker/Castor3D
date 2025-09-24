@@ -13,56 +13,30 @@ namespace smaa
 	SmaaData::SmaaData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
-		, rtMetrics{ getMember< sdw::Vec4 >( "rtMetrics" ) }
-		, predication{ getMember< sdw::Vec4 >( "predication" ) }
-		, subsampleIndices{ getMember< sdw::Vec4 >( "subsampleIndices" ) }
-		, searchSizes{ getMember< sdw::Vec4 >( "searchSizes" ) }
-		, areaTexPixelSizeAndLocalContrast{ getMember< sdw::Vec4 >( "areaTexPixelSizeAndLocalContrast" ) }
-		, areaTexSizesReprojWS{ getMember< sdw::Vec4 >( "areaTexSizesReprojWS" ) }
-		, maxsSearchSteps{ getMember< sdw::IVec4 >( "maxsSearchSteps" ) }
-		, tweaks{ getMember< sdw::IVec4 >( "tweaks" ) }
-		, threshold{ predication.x() }
-		, predicationThreshold{ predication.y() }
-		, predicationScale{ predication.z() }
-		, predicationStrength{ predication.w() }
-		, searchTexSize{ searchSizes.xy() }
-		, searchTexPackedSize{ searchSizes.zw() }
-		, areaTexPixelSize{ areaTexPixelSizeAndLocalContrast.xy() }
-		, localContrastAdaptationFactor{ areaTexPixelSizeAndLocalContrast.z() }
-		, cornerRounding{ writer.cast< sdw::Int >( areaTexPixelSizeAndLocalContrast.w() ) }
-		, areaTexMaxDistance{ areaTexSizesReprojWS.x() }
-		, areaTexMaxDistanceDiag{ areaTexSizesReprojWS.y() }
-		, areaTexSubtexSize{ areaTexSizesReprojWS.z() }
-		, reprojectionWeightScale{ areaTexSizesReprojWS.w() }
-		, maxSearchSteps{ maxsSearchSteps.x() }
-		, maxSearchStepsDiag{ maxsSearchSteps.y() }
-		, disableCornerDetection{ tweaks.x() }
-		, disableDiagonalDetection{ tweaks.y() }
-		, enableReprojection{ tweaks.z() }
+		: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+		, rtMetrics{ getMember< "rtMetrics" >() }
+		, threshold{ getMember< "threshold" >() }
+		, predicationThreshold{ getMember< "predicationThreshold" >() }
+		, predicationScale{ getMember< "predicationScale" >() }
+		, predicationStrength{ getMember< "predicationStrength" >() }
+		, subsampleIndices{ getMember< "subsampleIndices" >() }
+		, searchTexSize{ getMember< "searchTexSize" >() }
+		, searchTexPackedSize{ getMember < "searchTexPackedSize" >() }
+		, areaTexPixelSize{ getMember < "areaTexPixelSize" >() }
+		, localContrastAdaptationFactor{ getMember < "localContrastAdaptationFactor" >() }
+		, cornerRounding{ getMember < "cornerRounding" >() }
+		, areaTexMaxDistance{ getMember < "areaTexMaxDistance" >() }
+		, areaTexMaxDistanceDiag{ getMember < "areaTexMaxDistanceDiag" >() }
+		, areaTexSubtexSize{ getMember < "areaTexSubtexSize" >() }
+		, reprojectionWeightScale{ getMember < "reprojectionWeightScale" >() }
+		, maxSearchSteps{ getMember < "maxSearchSteps" >() }
+		, maxSearchStepsDiag{ getMember < "maxSearchStepsDiag" >() }
+		, disableCornerDetection{ getMember < "disableCornerDetection" >() }
+		, disableDiagonalDetection{ getMember < "disableDiagonalDetection" >() }
+		, enableReprojection{ getMember < "enableReprojection" >() }
 		, cornerRoundingNorm{ writer.cast< sdw::Float >( cornerRounding ) / 100.0_f }
 		, depthThreshold{ threshold * 0.1_f }
 	{
-	}
-
-	ast::type::BaseStructPtr SmaaData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-			, "C3D_SmaaData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "rtMetrics", ast::type::Kind::eVec4F );
-			result->declMember( "predication", ast::type::Kind::eVec4F );
-			result->declMember( "subsampleIndices", ast::type::Kind::eVec4F );
-			result->declMember( "searchSizes", ast::type::Kind::eVec4F );
-			result->declMember( "areaTexPixelSizeAndLocalContrast", ast::type::Kind::eVec4F );
-			result->declMember( "areaTexSizesReprojWS", ast::type::Kind::eVec4F );
-			result->declMember( "maxsSearchSteps", ast::type::Kind::eVec4I );
-			result->declMember( "tweaks", ast::type::Kind::eVec4I );
-		}
-
-		return result;
 	}
 
 	//*********************************************************************************************

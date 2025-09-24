@@ -74,24 +74,8 @@ namespace Testing
 
 	void CastorUtilsUniqueTest::doRegisterTests()
 	{
-		doRegisterTest( "NoInstanceTest", std::bind( &CastorUtilsUniqueTest::NoInstanceTest, this ) );
-		doRegisterTest( "OneInstanceTest", std::bind( &CastorUtilsUniqueTest::OneInstanceTest, this ) );
-		doRegisterTest( "MultipleInstanceTest", std::bind( &CastorUtilsUniqueTest::MultipleInstanceTest, this ) );
-		doRegisterTest( "MemoryTest", std::bind( &CastorUtilsUniqueTest::MemoryTest, this ) );
-	}
-
-	void CastorUtilsUniqueTest::NoInstanceTest()
-	{
-		//CT_CHECK_THROW( TestUnique::getInstance() );
-	}
-
-	void CastorUtilsUniqueTest::OneInstanceTest()
-	{
-		//{
-		//	TestUnique tmp;
-		//	CT_CHECK_NOTHROW( TestUnique::getInstance() );
-		//}
-		//CT_CHECK_THROW( TestUnique::getInstance() );
+		doRegisterTest( "MultipleInstanceTest", [this](){ MultipleInstanceTest(); } );
+		doRegisterTest( "MemoryTest", [this](){ MemoryTest(); } );
 	}
 
 	void CastorUtilsUniqueTest::MultipleInstanceTest()
@@ -106,7 +90,7 @@ namespace Testing
 			TestUniqueFirst src;
 			src.m_int = 0xFFCCBBAA;
 			src.m_ptr = &src;
-			auto & ref = src;
+			auto const & ref = src;
 			CT_CHECK( src.m_int == ref.m_int );
 			CT_CHECK( src.m_ptr == ref.m_ptr );
 			CT_CHECK( src.m_ptr == &ref );
@@ -115,7 +99,7 @@ namespace Testing
 			TestUniqueMiddle src;
 			src.m_int = 0x99887766;
 			src.m_ptr = &src;
-			auto & ref = src;
+			auto const & ref = src;
 			CT_CHECK( src.m_int == ref.m_int );
 			CT_CHECK( src.m_ptr == ref.m_ptr );
 			CT_CHECK( src.m_ptr == &ref );
@@ -124,7 +108,7 @@ namespace Testing
 			TestUniqueLast src;
 			src.m_int = 0x55443322;
 			src.m_ptr = &src;
-			auto & ref = src;
+			auto const & ref = src;
 			CT_CHECK( src.m_int == ref.m_int );
 			CT_CHECK( src.m_ptr == ref.m_ptr );
 			CT_CHECK( src.m_ptr == &ref );

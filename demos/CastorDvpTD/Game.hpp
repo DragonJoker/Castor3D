@@ -14,7 +14,6 @@ namespace castortd
 	{
 	public:
 		explicit Game( c3d::Scene & scene );
-		~Game();
 
 		void reset();
 		void start();
@@ -36,13 +35,13 @@ namespace castortd
 		void spend( uint32_t value );
 		void earn( uint32_t value );
 		void loseLife( uint32_t value );
-		void areaDamage( c3d::Point3f const & position, uint32_t damage );
+		void areaDamage( c3d::Point3f const & position, uint32_t damage )const;
 
 		TowerPtr selectTower( Cell const & cell );
 		void upgradeTowerSpeed( Tower & tower );
 		void upgradeTowerRange( Tower & tower );
 		void upgradeTowerDamage( Tower & tower );
-		bool canAfford( uint32_t price );
+		bool canAfford( uint32_t price )const;
 
 		Tower * getSelectedTower()const
 		{
@@ -143,8 +142,8 @@ namespace castortd
 		void doPrepareGrid();
 		void doAddMapCube( Cell & cell );
 		void doAddTarget( Cell & cell );
-		c3d::MeshResPtr doSelectMesh( Tower::Category & category );
-		void doAddTower( Cell & cell, Tower::CategoryPtr && category );
+		c3d::MeshResPtr doSelectMesh( Tower::Category const & category );
+		void doAddTower( Cell & cell, Tower::CategoryPtr category );
 		void doUpdateTowers();
 		void doUpdateEnemies();
 		void doUpdateBullets();
@@ -179,10 +178,10 @@ namespace castortd
 		EnemyArray m_enemies;
 		BulletArray m_bullets;
 		BulletArray m_bulletsCache;
-		uint64_t m_totalBullets{ 0ull };
+		uint64_t m_totalBullets{ 0u };
 		BoulderArray m_boulders;
 		BoulderArray m_bouldersCache;
-		uint64_t m_totalBoulders{ 0ull };
+		uint64_t m_totalBoulders{ 0u };
 		uint32_t m_lives{ 0u };
 		uint32_t m_ore{ 0u };
 		uint32_t m_kills{ 0u };

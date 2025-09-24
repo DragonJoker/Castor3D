@@ -116,7 +116,7 @@ namespace dof
 		, DepthOfFieldUbo const & configurationUbo
 		, c3d::Texture const & firstBlurResult
 		, c3d::Texture & blurResult
-		, crg::RunnablePass::IsEnabledCallback isEnabled
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled
 		, uint32_t const * passIndex )
 	{
 		auto extent = blurResult.getExtent();

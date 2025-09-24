@@ -7,9 +7,10 @@
 namespace GuiCommon
 {
 	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, bool editable
 		, UniformBufferValues & /*buffer*/ )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

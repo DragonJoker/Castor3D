@@ -29,7 +29,7 @@ namespace draw_edges
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eMaterials,
 			eModels,
@@ -53,18 +53,18 @@ namespace draw_edges
 				, c3d::ComponentModeFlag::eNone
 				, utils };
 
-			auto specifics = uint32_t( eSpecifics );
-			c3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
-			C3D_ModelsData( writer, eModels, 0u );
-			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
-			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
-			auto c3d_scattering = writer.declCombinedImg< FImg2DRgba32 >( "c3d_scattering", eScattering, 0u );
-			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
-			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
-			C3D_DrawEdges( writer, eDrawEdges, 0u );
+			auto specifics = uint32_t( Bindings::eSpecifics );
+			c3d::shader::Materials materials{ engine, writer, passShaders, uint32_t( Bindings::eMaterials ), 0u, specifics };
+			C3D_ModelsData( writer, Bindings::eModels, 0u );
+			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", Bindings::eDepthObj, 0u );
+			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", Bindings::eSource, 0u );
+			auto c3d_scattering = writer.declCombinedImg< FImg2DRgba32 >( "c3d_scattering", Bindings::eScattering, 0u );
+			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", Bindings::eEdgeDN, 0u );
+			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", Bindings::eEdgeO, 0u );
+			C3D_DrawEdges( writer, Bindings::eDrawEdges, 0u );
 
 			auto getEdge = writer.implementFunction< sdw::Float >( "getEdge"
-				, [&]( sdw::CombinedImage2DR32 const & tex
+				, [&writer]( sdw::CombinedImage2DR32 const & tex
 					, sdw::IVec2 const & texCoord
 					, sdw::Int const & width )
 				{
@@ -98,15 +98,17 @@ namespace draw_edges
 				, sdw::InIVec2{ writer, "texCoord" }
 				, sdw::InInt{ writer, "width" } );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &materials, &c3d_source, &c3d_depthObj, &c3d_modelsData
+				, &c3d_drawEdgesData, &c3d_edgeDN, &c3d_edgeO, &c3d_scattering, &getEdge
+				, &extent]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+					, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_source.sample( in.uv() ) );
@@ -167,6 +169,8 @@ namespace draw_edges
 	const c3d::String PostEffect::NormalDepthWidth = cuT( "normalDepthWidth" );
 	const c3d::String PostEffect::ObjectWidth = cuT( "objectWidth" );
 
+	PostEffect::~PostEffect()noexcept = default;
+
 	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
 		, c3d::RenderSystem & renderSystem
 		, c3d::Parameters const & parameters )
@@ -182,11 +186,7 @@ namespace draw_edges
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
 	{
-		setParameters( parameters );
-	}
-
-	PostEffect::~PostEffect()
-	{
+		doParseParameters( parameters );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -219,17 +219,7 @@ namespace draw_edges
 
 	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
-		c3d::String param;
-
-		if ( parameters.get( NormalDepthWidth, param ) )
-		{
-			m_config.normalDepthWidth = c3d::string::toInt( param );
-		}
-
-		if ( parameters.get( ObjectWidth, param ) )
-		{
-			m_config.objectWidth = c3d::string::toInt( param );
-		}
+		doParseParameters( parameters );
 	}
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
@@ -237,7 +227,7 @@ namespace draw_edges
 		, c3d::Texture & target )
 	{
 		auto & engine = *device.renderSystem.getEngine();
-		auto & technique = m_renderTarget.getTechnique();
+		auto const & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & depthObj = technique.getDepthObj();
 		auto & nmlOcc = technique.getNormal();
@@ -280,15 +270,15 @@ namespace draw_edges
 				return result;
 			} );
 		auto & modelBuffer = m_renderTarget.getScene()->getModelBuffer();
-		passBuffer.createPassBinding( pass, px::eMaterials );
-		pass.addInputStorage( *modelBuffer.getLastAttach(), px::eModels );
-		pass.addInputSampled( *depthObj.getSampledLastAttach(), px::eDepthObj );
-		pass.addInputSampled( *source.getSampledLastAttach(), px::eSource );
-		pass.addInputSampled( *technique.getScattering().getSampledLastAttach(), px::eScattering );
-		pass.addInputSampled( *m_depthNormal->getResult().getSampledLastAttach(), px::eEdgeDN );
-		pass.addInputSampled( *m_objectID->getResult().getSampledLastAttach(), px::eEdgeO );
-		m_ubo.createPassBinding( pass, px::eDrawEdges );
-		auto index = uint32_t( px::eSpecifics );
+		passBuffer.createPassBinding( pass, px::Bindings::eMaterials );
+		pass.addInputStorageT( *modelBuffer.getLastAttach(), px::Bindings::eModels );
+		pass.addInputSampledT( *depthObj.getSampledLastAttach(), px::Bindings::eDepthObj );
+		pass.addInputSampledT( *source.getSampledLastAttach(), px::Bindings::eSource );
+		pass.addInputSampledT( *technique.getScattering().getSampledLastAttach(), px::Bindings::eScattering );
+		pass.addInputSampledT( *m_depthNormal->getResult().getSampledLastAttach(), px::Bindings::eEdgeDN );
+		pass.addInputSampledT( *m_objectID->getResult().getSampledLastAttach(), px::Bindings::eEdgeO );
+		m_ubo.createPassBinding( pass, px::Bindings::eDrawEdges );
+		auto index = uint32_t( px::Bindings::eSpecifics );
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
 		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 
@@ -317,5 +307,20 @@ namespace draw_edges
 		file << ( tabs + cuT( "\t" ) + ObjectWidth + cuT( " " ) + c3d::string::toString( m_config.objectWidth ) + cuT( "\n" ) );
 		file << ( tabs + cuT( "}\n" ) );
 		return true;
+	}
+
+	void PostEffect::doParseParameters( c3d::Parameters parameters )
+	{
+		c3d::String param;
+
+		if ( parameters.get( NormalDepthWidth, param ) )
+		{
+			m_config.normalDepthWidth = c3d::string::toInt( param );
+		}
+
+		if ( parameters.get( ObjectWidth, param ) )
+		{
+			m_config.objectWidth = c3d::string::toInt( param );
+		}
 	}
 }

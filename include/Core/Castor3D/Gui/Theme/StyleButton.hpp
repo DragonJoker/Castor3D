@@ -94,7 +94,7 @@ namespace c3d
 			m_disabledTextMaterial = material;
 		}
 
-		void setFont( String value )
+		void setFont( StringView value )
 		{
 			m_fontName = value;
 		}

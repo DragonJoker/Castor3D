@@ -632,15 +632,23 @@ namespace c3d
 			Pass const & pass = *node.pass;
 			auto const & scene = renderPass.getCuller().getScene();
 			auto submeshData = node.getRenderData();
-			auto pipelineFlags = renderPass.createPipelineFlags( pass
-				, pass.getTexturesMask()
+			auto pipelineFlags = renderPass.createPipelineFlags( pass.getPassFlags()
 				, components.getSubmeshComponentCombine( node.getComponentCombineID() )
+				, pass.getColourBlendMode()
+				, pass.getAlphaBlendMode()
+				, pass.getRenderPassTypeId()
+				, pass.getLightingModelId()
+				, scene.getBackgroundModelId()
+				, pass.getAlphaFunc()
+				, pass.getBlendAlphaFunc()
+				, pass.getTexturesMask()
 				, node.getProgramFlags()
 				, scene.getFlags()
 				, submeshData ? submeshData->getPrimitiveTopology() : node.getPrimitiveTopology()
 				, frontCulled
+				, pass.getIndex()
 				, node.getMorphTargets()
-				, node.getRenderData()
+				, submeshData
 				, vertexStride );
 
 			if ( submeshData )
@@ -1032,8 +1040,8 @@ namespace c3d
 	void QueueRenderNodes::checkEmpty()
 	{
 		auto & queue = *getOwner();
-		auto & renderPass = *queue.getOwner();
-		auto & culler = queue.getCuller();
+		auto const & renderPass = *queue.getOwner();
+		auto const & culler = queue.getCuller();
 		auto submeshesIt = std::find_if( culler.getSubmeshes().begin()
 			, culler.getSubmeshes().end()
 			, [&renderPass]( CulledNodePtrT< SubmeshRenderNode > const & lookup )
@@ -1066,7 +1074,7 @@ namespace c3d
 		{
 			C3D_DebugTime( renderPass.getTypeName() );
 
-			auto & culler = queue.getCuller();
+			auto const & culler = queue.getCuller();
 			m_hasNodes = false;
 			m_nodesIds.clear();
 			m_submeshNodes.clear();
@@ -1242,19 +1250,21 @@ namespace c3d
 							}
 							else
 #endif
-							if ( getOwner()->getOwner()->getEngine()->getRenderDevice()->hasDrawId() )
 							{
-								result += doParseSimpleSubmeshesIndirect( commandBuffer, viewport, scissors
-									, nodesIdsBuffer, maxNodesCount
-									, submeshIdxCommands, origIndirectIdxBuffer, indirectIdxBuffer
-									, submeshNIdxCommands, origIndirectNIdxBuffer, indirectNIdxBuffer
-									, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
-							}
-							else
-							{
-								result += doParseSimpleSubmeshesDirect( commandBuffer, viewport, scissors
-									, nodesIdsBuffer, maxNodesCount
-									, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
+								if ( getOwner()->getOwner()->getEngine()->getRenderDevice()->hasDrawId() )
+								{
+									result += doParseSimpleSubmeshesIndirect( commandBuffer, viewport, scissors
+										, nodesIdsBuffer, maxNodesCount
+										, submeshIdxCommands, origIndirectIdxBuffer, indirectIdxBuffer
+										, submeshNIdxCommands, origIndirectNIdxBuffer, indirectNIdxBuffer
+										, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
+								}
+								else
+								{
+									result += doParseSimpleSubmeshesDirect( commandBuffer, viewport, scissors
+										, nodesIdsBuffer, maxNodesCount
+										, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
+								}
 							}
 						}
 					}
@@ -1301,17 +1311,19 @@ namespace c3d
 							}
 							else
 #endif
-							if ( getOwner()->getOwner()->getEngine()->getRenderDevice()->hasDrawId() )
 							{
-								result += doParseInstantiatedSubmeshesIndirect( commandBuffer, viewport, scissors
-									, submeshIdxCommands, origIndirectIdxBuffer, indirectIdxBuffer
-									, submeshNIdxCommands, origIndirectNIdxBuffer, indirectNIdxBuffer
-									, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
-							}
-							else
-							{
-								result += doParseInstantiatedSubmeshesDirect( commandBuffer, viewport, scissors
-									, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
+								if ( getOwner()->getOwner()->getEngine()->getRenderDevice()->hasDrawId() )
+								{
+									result += doParseInstantiatedSubmeshesIndirect( commandBuffer, viewport, scissors
+										, submeshIdxCommands, origIndirectIdxBuffer, indirectIdxBuffer
+										, submeshNIdxCommands, origIndirectNIdxBuffer, indirectNIdxBuffer
+										, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
+								}
+								else
+								{
+									result += doParseInstantiatedSubmeshesDirect( commandBuffer, viewport, scissors
+										, pipelinesNodes.nodes, pipeline, idxIndex, nidxIndex );
+								}
 							}
 						}
 					}
@@ -1637,7 +1649,7 @@ namespace c3d
 	void QueueRenderNodes::doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & node )
 	{
 		auto & queue = *getOwner();
-		auto & renderPass = *queue.getOwner();
+		auto const & renderPass = *queue.getOwner();
 
 		if ( renderPass.isValidPass( *node.node->pass )
 			&& renderPass.isValidRenderable( node.node->instance )
@@ -1650,7 +1662,7 @@ namespace c3d
 	void QueueRenderNodes::doAddBillboard( CulledNodeT< BillboardRenderNode > const & node )
 	{
 		auto & queue = *getOwner();
-		auto & renderPass = *queue.getOwner();
+		auto const & renderPass = *queue.getOwner();
 
 		if ( renderPass.isValidPass( *node.node->pass )
 			&& renderPass.isValidRenderable( node.node->instance )

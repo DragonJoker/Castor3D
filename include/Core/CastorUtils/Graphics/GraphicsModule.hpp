@@ -760,10 +760,10 @@ namespace c3d
 	/**
 	\~english
 	\brief		Position class
-	\remark		Kind of specialisation of Coords< 2, int32_t >
+	\remark		Kind of specialisation of PointView< 2, int32_t >
 	\~french
 	\brief		Classe de position
-	\remark		Sorte de spécialisation de Coords< 2, int32_t >
+	\remark		Sorte de spécialisation de PointView< 2, int32_t >
 	*/
 	class Position;
 	/**
@@ -802,10 +802,10 @@ namespace c3d
 	/**
 	\~english
 	\brief		Size class
-	\remark		Kind of specialisation of Coords< 2, uint32_t >
+	\remark		Kind of specialisation of PointView< 2, uint32_t >
 	\~french
 	\brief		Classe de taille
-	\remark		Sorte de spécialisation de Coords< 2, uint32_t >
+	\remark		Sorte de spécialisation de PointView< 2, uint32_t >
 	*/
 	class Size;
 	/**

@@ -19,7 +19,8 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		explicit TreeListContainerT( wxWindow * parent
+		explicit TreeListContainerT( ImagesLoader & imagesLoader
+			, wxWindow * parent
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize )
 			: wxPanel{ parent, wxID_ANY, pos, size, wxDEFAULT_FRAME_STYLE }
@@ -32,8 +33,8 @@ namespace GuiCommon
 			this->m_holder->setGrid( this->m_container );
 			this->m_holder->SetMinSize( { 100, 300 } );
 
-			auto holder = new TreeHolder{ this, wxDefaultPosition, wxDefaultSize };
-			this->m_list = new ListT{ this->m_container, holder, wxDefaultPosition, wxDefaultSize };
+			auto holder = new TreeHolder{ imagesLoader, this, wxDefaultPosition, wxDefaultSize };
+			this->m_list = new ListT{ imagesLoader, this->m_container, holder, wxDefaultPosition, wxDefaultSize };
 			this->m_list->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 			this->m_list->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 			this->m_list->SetMinSize( { 100, 300 } );

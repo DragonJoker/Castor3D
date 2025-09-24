@@ -136,6 +136,8 @@ namespace c3d::shader
 	using OverlaySurface = OverlaySurfaceT< sdw::var::Flag::eNone >;
 
 	template< sdw::var::Flag FlagT >
+	using Colour1FT = ColourT< sdw::Float, FlagT >;
+	template< sdw::var::Flag FlagT >
 	using Colour3FT = ColourT< sdw::Vec3, FlagT >;
 	template< sdw::var::Flag FlagT >
 	using Colour4FT = ColourT< sdw::Vec4, FlagT >;
@@ -340,11 +342,14 @@ namespace c3d::shader
 		, sdw::type::MemoryLayout::eStd430
 		, sdw::Vec4Field< "data" > >
 	{
+		SDW_DeclStructInstance( C3D_API, BufferData );
+
 		BufferData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
-		{}
+		{
+		}
 
 		auto data()const
 		{

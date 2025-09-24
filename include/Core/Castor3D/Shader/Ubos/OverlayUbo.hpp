@@ -34,6 +34,8 @@ namespace c3d::shader
 			, sdw::FloatField< "textTopOffset" >
 			, sdw::UIntField< "pad1" > >
 	{
+		SDW_DeclStructInstance( C3D_API, OverlayData );
+
 		OverlayData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -69,8 +71,8 @@ namespace c3d::shader
 			, sdw::Float const & ssAbsBoundSize
 			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & uvRange
-			, sdw::Float ssRelBound
-			, sdw::Float uv );
+			, sdw::Float const & outSsRelBound
+			, sdw::Float const & outUv );
 		/**
 		 *\~english
 		 *\brief		Crops a maximum boundary and its UV.
@@ -82,8 +84,8 @@ namespace c3d::shader
 			, sdw::Float const & ssAbsBoundSize
 			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & uvRange
-			, sdw::Float ssRelBound
-			, sdw::Float uv );
+			, sdw::Float const & outSsRelBound
+			, sdw::Float const & outUv );
 		/**
 		 *\~english
 		 *\brief		Crops a minimum boundary and its UVs.
@@ -97,9 +99,9 @@ namespace c3d::shader
 			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
-			, sdw::Float ssRelBound
-			, sdw::Float texUv
-			, sdw::Float fontUv );
+			, sdw::Float const & outSsRelBound
+			, sdw::Float const & outTexUv
+			, sdw::Float const & outFontUv );
 		/**
 		 *\~english
 		 *\brief		Crops a maximum boundary and its UVs.
@@ -113,9 +115,9 @@ namespace c3d::shader
 			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
-			, sdw::Float ssRelBound
-			, sdw::Float texUv
-			, sdw::Float fontUv );
+			, sdw::Float const & outSsRelBound
+			, sdw::Float const & outTexUv
+			, sdw::Float const & outFontUv );
 		/**
 		 *\~english
 		 *\brief		Crops a minimum boundary and its UVs.
@@ -129,9 +131,9 @@ namespace c3d::shader
 			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
-			, sdw::Float ssRelBound
-			, sdw::Float texUv
-			, sdw::Float fontUv );
+			, sdw::Float const & outSsRelBound
+			, sdw::Float const & outTexUv
+			, sdw::Float const & outFontUv );
 		/**
 		 *\~english
 		 *\brief		Crops a maximum boundary and its UVs.
@@ -145,9 +147,9 @@ namespace c3d::shader
 			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
-			, sdw::Float ssRelBound
-			, sdw::Float texUv
-			, sdw::Float fontUv );
+			, sdw::Float const & outSsRelBound
+			, sdw::Float const & outTexUv
+			, sdw::Float const & outFontUv );
 
 	private:
 		sdw::Function< sdw::Void
@@ -211,46 +213,18 @@ namespace c3d::shader
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_cropMaxMaxValue;
 	};
-
-	struct OverlaysIDs
-		: public sdw::StructInstanceHelperT < "C3D_OverlaysIDs"
-		, sdw::type::MemoryLayout::eStd430
-		, sdw::UIntArrayField< "v", MaxWordsPerBuffer > >
-	{
-		OverlaysIDs( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
-		{
-		}
-
-		auto operator[]( sdw::UInt const & index )const
-		{
-			return getMember< "v" >()[index];
-		}
-	};
 }
 
 #define C3D_Overlays( writer, binding, set )\
-	sdw::StorageBuffer c3d_overlaysDataBuffer{ writer\
-		, "C3D_OverlaysDataBuffer"\
-		, "c3d_overlaysDataBuffer"\
+	auto c3d_overlaysData = writer.declArrayStorageBuffer< c3d::shader::OverlayData >( "c3d_overlaysData"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< c3d::shader::OverlayData >( "d" );\
-	c3d_overlaysDataBuffer.end()
+		, true )
 
 #define C3D_OverlaysIDs( writer, binding, set )\
-	sdw::StorageBuffer c3d_overlaysIDsBuffer{ writer\
-		, "C3D_OverlaysIDsBuffer"\
-		, "c3d_overlaysIDsBuffer"\
+	auto c3d_overlaysIDs = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_overlaysIDs"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< c3d::shader::OverlaysIDs >( "d" );\
-	c3d_overlaysIDsBuffer.end()
+		, true )
 
 #endif

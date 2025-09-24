@@ -20,25 +20,4 @@ namespace c3d
 			}
 		}
 	}
-
-	bool operator==( ParticleDeclaration const & lhs, ParticleDeclaration const & rhs )
-	{
-		bool result = lhs.stride() == rhs.stride() && lhs.count() == rhs.count();
-		auto itl = lhs.begin();
-		auto itr = rhs.begin();
-
-		while ( result && itl != lhs.end() )
-		{
-			result = *itl++ == *itr++;
-			++itl;
-			++itr;
-		}
-
-		return result;
-	}
-
-	bool operator!=( ParticleDeclaration const & lhs, ParticleDeclaration const & rhs )
-	{
-		return !( lhs == rhs );
-	}
 }

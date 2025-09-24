@@ -1552,7 +1552,7 @@ interface IScene
 	[id( 27 ), helpstring( "Removes the given mesh" )] HRESULT RemoveMesh( [in] IMesh * mesh );
 	[id( 28 ), helpstring( "Creates a scene node object" )] HRESULT CreateNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pRet );
 	[id( 29 ), helpstring( "Creates a geometry object" )] HRESULT CreateGeometry( [in] BSTR name, [in] ISceneNode * node, [in] IMesh * mesh, [out, retval] IGeometry ** pRet );
-	[id( 30 ), helpstring( "Creates a camera object" )] HRESULT CreateCamera( [in] BSTR name, [in] ISceneNode * node, [in] UINT width, [in] UINT height, [out, retval] ICamera ** pRet );
+	[id( 30 ), helpstring( "Creates a camera object" )] HRESULT CreateCamera( [in] BSTR name, [in] ISceneNode * node, [out, retval] ICamera ** pRet );
 	[id( 31 ), helpstring( "Creates a light object" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pRet );
 	[id( 32 ), helpstring( "Creates a light group object" )] HRESULT CreateLightGroup( [in] BSTR name, [in] eLIGHT_TYPE type, [out, retval] ILightGroup ** pRet );
 	[id( 33 ), helpstring( "Creates a mesh object" )] HRESULT CreateMesh( [in] BSTR name, [in] BSTR type, [out, retval] IMesh ** pRet );

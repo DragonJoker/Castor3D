@@ -11,7 +11,7 @@ namespace castortd
 
 	namespace
 	{
-		static c3d::Milliseconds constexpr zeroTime{ 0_ms };
+		c3d::Milliseconds constexpr zeroTime{ 0_ms };
 
 		// Nearest enemy
 		EnemyArray doSortNearest( EnemyArray const & enemies, c3d::Point3f const & position )
@@ -26,12 +26,6 @@ namespace castortd
 				} );
 			return result;
 		}
-
-		//// First enemy
-		//EnemyArray doSortFirst( EnemyArray const & enemies, c3d::Point3f const & position )
-		//{
-		//	return enemies;
-		//}
 	}
 
 	//*********************************************************************************************
@@ -84,9 +78,9 @@ namespace castortd
 		}
 	}
 
-	bool Tower::doLookForEnemy( EnemyArray & enemies )
+	bool Tower::doLookForEnemy( EnemyArray const & enemies )
 	{
-		for ( auto & enemy : enemies )
+		for ( auto const & enemy : enemies )
 		{
 			if ( enemy->isAlive()
 				&& doIsInRange( *enemy ) )

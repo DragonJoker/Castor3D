@@ -33,6 +33,7 @@ namespace GuiCommon
 		 *\param[in]	uniform		La variable cible.
 		 */
 		FrameVariableTreeItemProperty( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, bool editable
 			, UniformValueBase & uniform );
 

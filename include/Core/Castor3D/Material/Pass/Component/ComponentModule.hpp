@@ -566,9 +566,14 @@ namespace c3d
 		bool hasParallaxOcclusionMappingOneFlag{};
 		bool hasParallaxOcclusionMappingRepeatFlag{};
 		bool hasDeferredDiffuseLightingFlag{};
-	};
 
-	C3D_API bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept;
+	private:
+		friend bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept
+		{
+			return lhs.baseId == rhs.baseId
+				&& lhs.flags == rhs.flags;
+		}
+	};
 
 	C3D_API bool hasAny( PassComponentCombine const & lhs
 		, PassComponentFlag rhs )noexcept;

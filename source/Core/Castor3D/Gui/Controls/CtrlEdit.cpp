@@ -119,7 +119,8 @@ namespace c3d
 		m_caret.overlay = caret;
 
 		setStyle( style );
-		EditCtrl::doUpdateFlags();
+		doUpdateTextAlign();
+		checkScrollBarFlags();
 	}
 
 	EditCtrl::~EditCtrl()noexcept
@@ -348,24 +349,7 @@ namespace c3d
 
 	void EditCtrl::doUpdateFlags()
 	{
-		if ( auto text = m_text )
-		{
-			if ( isMultiLine() )
-			{
-				if ( checkFlag( getFlags(), ScrollBarFlag::eHorizontal ) )
-				{
-					text->setTextWrappingMode( TextWrappingMode::eNone );
-				}
-				else
-				{
-					text->setTextWrappingMode( TextWrappingMode::eBreakWords );
-				}
-
-				text->setLineSpacingMode( TextLineSpacingMode::eMaxLineHeight );
-				text->setVAlign( VAlign::eTop );
-			}
-		}
-
+		doUpdateTextAlign();
 		checkScrollBarFlags();
 	}
 
@@ -1409,6 +1393,27 @@ namespace c3d
 		{
 			auto pos = position + getClientOffset();
 			text->setPixelPosition( { pos->x, pos->y } );
+		}
+	}
+
+	void EditCtrl::doUpdateTextAlign()
+	{
+		if ( auto text = m_text )
+		{
+			if ( isMultiLine() )
+			{
+				if ( checkFlag( getFlags(), ScrollBarFlag::eHorizontal ) )
+				{
+					text->setTextWrappingMode( TextWrappingMode::eNone );
+				}
+				else
+				{
+					text->setTextWrappingMode( TextWrappingMode::eBreakWords );
+				}
+
+				text->setLineSpacingMode( TextLineSpacingMode::eMaxLineHeight );
+				text->setVAlign( VAlign::eTop );
+			}
 		}
 	}
 }

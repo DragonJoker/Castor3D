@@ -94,7 +94,7 @@ namespace c3d
 			}
 #endif
 
-			m_pfnOnLoad( getEngine(), this );
+			m_pfnOnLoad( getEngine() );
 		}
 	}
 

@@ -50,7 +50,12 @@ namespace c3d
 		 *\~french
 		 *\brief		Crée une attache de frame pass.
 		 */
-		C3D_API void createPassBinding( crg::FramePass & pass, uint32_t binding )const;
+		template< typename BindingT >
+		void createPassBinding( crg::FramePass & pass
+			, BindingT binding )const
+		{
+			return m_buffer.createPassBinding( pass, binding );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.

@@ -2,88 +2,52 @@
 
 namespace GuiCommon
 {
-	ImagesLoader::ImagesLoader()
-		: ImagesLoader{ this }
+	void ImagesLoader::cleanup()noexcept
 	{
-	}
-
-	ImagesLoader::~ImagesLoader()
-	{
-		doCleanup();
-		doGetInstance() = nullptr;
-	}
-
-	void ImagesLoader::cleanup()
-	{
-		doGetInstance()->doCleanup();
+		waitAsyncLoads();
+		{
+			auto lock = c3d::makeUniqueLock( m_mutex );
+			m_mapImages.clear();
+		}
 	}
 
 	wxImage * ImagesLoader::getBitmap( uint32_t id )
 	{
-		return doGetInstance()->doGetBitmap( id );
-	}
-
-	void ImagesLoader::addBitmap( uint32_t id, char const * const * bits )
-	{
-		doGetInstance()->doAddBitmap( id, bits );
-	}
-
-	void ImagesLoader::waitAsyncLoads()
-	{
-		doGetInstance()->doWaitAsyncLoads();
-	}
-
-	void ImagesLoader::doCleanup()
-	{
-		doWaitAsyncLoads();
-		m_mutex.lock();
-
-		for ( auto pair : m_mapImages )
-		{
-			delete pair.second;
-		}
-
-		m_mapImages.clear();
-		m_mutex.unlock();
-	}
-
-	wxImage * ImagesLoader::doGetBitmap( uint32_t id )
-	{
 		wxImage * result = nullptr;
-		m_mutex.lock();
-		ImageIdMapIt it = m_mapImages.find( id );
-		ImageIdMapConstIt itEnd = m_mapImages.end();
-		m_mutex.unlock();
-
-		if ( it != itEnd )
 		{
-			result = it->second;
+			auto lock = c3d::makeUniqueLock( m_mutex );
+			auto it = m_mapImages.find( id );
+			auto itEnd = m_mapImages.end();
+
+			if ( it != itEnd )
+			{
+				result = it->second.get();
+			}
 		}
 
 		return result;
 	}
 
-	void ImagesLoader::doAddBitmap( uint32_t id, char const * const * bits )
+	void ImagesLoader::addBitmap( uint32_t id, char const * const * bits )
 	{
-		m_mutex.lock();
-		auto ires = m_mapImages.insert( { id, nullptr } );
+		auto lock = c3d::makeUniqueLock( m_mutex );
+		auto [_, ins] = m_mapImages.insert( { id, nullptr } );
 
-		if ( ires.second )
+		if ( ins )
 		{
 			m_arrayCurrentLoads.emplace_back( std::thread{ [this, bits, id]()
 				{
-					wxImage * image = new wxImage;
+					auto image = c3d::makeRawUnique< wxImage >();
 					image->Create( bits );
-					m_mutex.lock();
-					m_mapImages[id] = image;
-					m_mutex.unlock();
+					{
+						auto tdLock = c3d::makeUniqueLock( m_mutex );
+						m_mapImages[id] = c3d::move( image );
+					}
 				} } );
 		}
-
-		m_mutex.unlock();
 	}
 
-	void ImagesLoader::doWaitAsyncLoads()
+	void ImagesLoader::waitAsyncLoads()
 	{
 		for ( auto & thread : m_arrayCurrentLoads )
 		{

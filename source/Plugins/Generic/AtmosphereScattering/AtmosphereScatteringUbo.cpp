@@ -37,7 +37,7 @@ namespace atmosphere_scattering
 		, c3d::SceneNode const & sunNode
 		, c3d::SceneNode const & planetNode )
 	{
-		auto & engine = *sunNode.getScene()->getEngine();
+		auto const & engine = *sunNode.getScene()->getEngine();
 
 		auto sunDirection = c3d::Point3f{ 0, 0, 1 };
 		sunNode.getDerivedOrientation().transform( sunDirection, sunDirection );

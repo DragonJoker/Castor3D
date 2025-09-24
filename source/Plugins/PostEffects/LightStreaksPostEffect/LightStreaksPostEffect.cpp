@@ -41,7 +41,6 @@ namespace light_streaks
 			, Count + 2u }
 		, m_kawaseUbo{ renderSystem.getRenderDevice() }
 	{
-		setParameters( params );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -79,10 +78,6 @@ namespace light_streaks
 			, m_kawaseCfg.attenuation );
 		visitor.visit( cuT( "Samples" )
 			, m_kawaseCfg.samples );
-	}
-
-	void PostEffect::setParameters( c3d::Parameters parameters )
-	{
 	}
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device

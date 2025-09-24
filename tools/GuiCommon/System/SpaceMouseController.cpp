@@ -71,6 +71,11 @@ namespace GuiCommon
 			return out = mtx;
 		}
 
+		inline c3d::MbString const SettingsName{ navlib::settings_k };
+		inline c3d::MbString const MotionModelSettingsName{ SettingsName + ".MotionModel" };
+		inline c3d::MbString const LockHorizonSettingsName{ SettingsName + ".LockHorizon" };
+		inline c3d::MbString const MoveObjectsSettingsName{ SettingsName + ".MoveObjects" };
+
 		class SpaceMouseController
 			: public TDx::SpaceMouse::Navigation3D::CNavigation3D
 			, public I3DController
@@ -78,11 +83,16 @@ namespace GuiCommon
 		public:
 			SpaceMouseController( c3d::String const & appName
 				, c3d::FrameListener & listener )
-				: m_listener{ listener }
+				: m_appName{ appName }
+				, m_listener{ listener }
+			{
+			}
+
+			void initialise()
 			{
 				try
 				{
-					PutProfileHint( c3d::toUtf8( appName ).c_str() );
+					PutProfileHint( c3d::toUtf8( m_appName ) );
 					PutFrameTimingSource( TimingSource::SpaceMouse );
 					EnableNavigation( true );
 					Write( getMotionModelSettingsName(), "FreeCamera" );
@@ -100,7 +110,7 @@ namespace GuiCommon
 				}
 			}
 
-			~SpaceMouseController()noexcept override
+			void cleanup()
 			{
 				if ( m_connected )
 				{
@@ -110,26 +120,22 @@ namespace GuiCommon
 
 			static c3d::MbString const & getSettingsName()
 			{
-				static c3d::MbString const result{ navlib::settings_k };
-				return result;
+				return SettingsName;
 			}
 
 			static c3d::MbString const & getMotionModelSettingsName()
 			{
-				static c3d::MbString const result{ getSettingsName() + ".MotionModel" };
-				return result;
+				return MotionModelSettingsName;
 			}
 
 			static c3d::MbString const & getLockHorizonSettingsName()
 			{
-				static c3d::MbString const result{ getSettingsName() + ".LockHorizon" };
-				return result;
+				return LockHorizonSettingsName;
 			}
 
 			static c3d::MbString const & getMoveObjectsSettingsName()
 			{
-				static c3d::MbString const result{ getSettingsName() + ".MoveObjects" };
-				return result;
+				return MoveObjectsSettingsName;
 			}
 
 			void reset()override
@@ -258,7 +264,7 @@ namespace GuiCommon
 				return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 			}
 
-			long GetViewConstructionPlane( navlib::plane_t & plane ) const
+			long GetViewConstructionPlane( navlib::plane_t & plane )const override
 			{
 				if ( isCameraActive() )
 				{
@@ -302,7 +308,7 @@ namespace GuiCommon
 					&& ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
 						|| m_camera->getViewportType() == c3d::ViewportType::eFrustum ) )
 				{
-					auto & viewport = m_camera->getViewport();
+					auto const & viewport = m_camera->getViewport();
 
 					if ( m_camera->getViewportType() == c3d::ViewportType::eFrustum )
 					{
@@ -326,7 +332,7 @@ namespace GuiCommon
 					&& ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
 						|| m_camera->getViewportType() == c3d::ViewportType::eFrustum ) )
 				{
-					auto & viewport = m_camera->getViewport();
+					auto const & viewport = m_camera->getViewport();
 
 					if ( m_camera->getViewportType() == c3d::ViewportType::eFrustum )
 					{
@@ -440,7 +446,7 @@ namespace GuiCommon
 			*\name IModel overrides.
 			*/
 			/**@{*/
-			long GetModelExtents( navlib::box_t & bbox )const override
+			long doGetModelExtents( navlib::box_t & bbox )const
 			{
 				if ( isGeometryActive() )
 				{
@@ -453,17 +459,14 @@ namespace GuiCommon
 				return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 			}
 
+			long GetModelExtents( navlib::box_t & bbox )const override
+			{
+				return doGetModelExtents( bbox );
+			}
+
 			long GetSelectionExtents( navlib::box_t & bbox )const override
 			{
-				if ( isGeometryActive() )
-				{
-					auto & extents = m_geometry->getBoundingBox();
-					convert( extents.getMin(), bbox.min );
-					convert( extents.getMax(), bbox.max );
-					return 0;
-				}
-
-				return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
+				return doGetModelExtents( bbox );
 			}
 
 			long GetSelectionTransform( navlib::matrix_t & matrix )const override
@@ -670,6 +673,7 @@ namespace GuiCommon
 
 		private:
 			bool m_connected{};
+			c3d::String m_appName;
 			c3d::FrameListener & m_listener;
 			c3d::RenderWindowRPtr m_window{};
 			c3d::CameraRPtr m_camera{};

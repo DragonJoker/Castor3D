@@ -404,7 +404,7 @@ namespace c3d_gltf
 		static c3d::Image const & loadImage( c3d::TextureSourceInfo const & source
 			, c3d::MaterialImporter const & importer )
 		{
-			c3d::Image * result{};
+			c3d::Image const * result{};
 			auto loadConfig = source.loadConfig();
 			if ( loadConfig.allowCompression )
 				loadConfig.keepAlphaChannel = true;

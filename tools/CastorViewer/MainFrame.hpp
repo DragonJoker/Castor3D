@@ -22,12 +22,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Data/Path.hpp>
 
-#if defined( __WXOSX_COCOA__ )
-#	define CV_MainFrameToolbar 0
-#else
-#	define CV_MainFrameToolbar 1
-#endif
-
 namespace CastorViewer
 {
 	class RenderPanel;
@@ -36,24 +30,24 @@ namespace CastorViewer
 	{
 		c3d::Vector< c3d::Pair< wxString, bool > > queue;
 		c3d::Mutex mutex;
-		wxListBox * listBox{ nullptr };
+		wxListBox * listBox{};
 	};
 
-	typedef enum eBMP
+	enum class eBMP
 	{
-		eBMP_SCENES = GuiCommon::eBMP_COUNT,
-		eBMP_MATERIALS,
-		eBMP_EXPORT,
-		eBMP_LOGS,
-		eBMP_PROPERTIES,
-		eBMP_PRINTSCREEN
-	}	eBMP;
+		eScenes = uint32_t( GuiCommon::eBMP::eCount ),
+		eMaterials,
+		eExport,
+		eLogs,
+		eProperties,
+		ePrintScreen
+	};
 
 	class MainFrame
 		: public wxFrame
 	{
 	public:
-		MainFrame( wxString const & title );
+		explicit MainFrame( wxString const & title );
 		~MainFrame()override;
 
 		bool initialise( GuiCommon::SplashScreen & splashScreen );
@@ -64,7 +58,6 @@ namespace CastorViewer
 	private:
 		void doInitialiseTimers();
 		void doInitialiseGUI();
-		bool doInitialiseImages();
 		void doPopulateStatusBar();
 		void doPopulateToolBar( GuiCommon::SplashScreen & splashScreen );
 		void doInitialisePerspectives();
@@ -86,7 +79,6 @@ namespace CastorViewer
 		void onFpsTimer( wxTimerEvent & event );
 		void onPaint( wxPaintEvent & event );
 		void onSize( wxSizeEvent & event );
-		void onInit( wxInitDialogEvent & event );
 		void onClose( wxCloseEvent  & event );
 		void onEnterWindow( wxMouseEvent & event );
 		void onLeaveWindow( wxMouseEvent & event );
@@ -105,31 +97,28 @@ namespace CastorViewer
 		int m_logsHeight{ 100 };
 		int m_propertiesWidth{ 240 };
 		wxAuiManager m_auiManager;
-		RenderPanel * m_renderPanel{ nullptr };
-		wxTimer * m_timer{ nullptr };
-		wxTimer * m_fpsTimer{ nullptr };
-#if CV_MainFrameToolbar
-		wxAuiToolBar * m_toolBar{ nullptr };
-#else
-		wxMenu * m_fileMenu{ nullptr };
-		wxMenu * m_tabsMenu{ nullptr };
-		wxMenu * m_captureMenu{ nullptr };
-		wxMenuBar * m_menuBar{ nullptr };
-#endif
-		wxAuiNotebook * m_logTabsContainer{ nullptr };
-		wxAuiNotebook * m_sceneTabsContainer{ nullptr };
+		RenderPanel * m_renderPanel{};
+		c3d::RawUniquePtr< wxTimer > m_timer{};
+		c3d::RawUniquePtr< wxTimer > m_fpsTimer{};
+		wxAuiToolBar * m_toolBar{};
+		wxMenu * m_fileMenu{};
+		wxMenu * m_tabsMenu{};
+		wxMenu * m_captureMenu{};
+		wxMenuBar * m_menuBar{};
+		wxAuiNotebook * m_logTabsContainer{};
+		wxAuiNotebook * m_sceneTabsContainer{};
 		LogContainer m_messageLog;
 		LogContainer m_errorLog;
 #ifndef NDEBUG
 		LogContainer m_debugLog;
 #endif
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_sceneTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_objectsTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_nodesTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_lightsTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_materialsTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_overlaysTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_guiTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_sceneTree{};
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_objectsTree{};
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_nodesTree{};
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_lightsTree{};
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_materialsTree{};
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_overlaysTree{};
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_guiTree{};
 		c3d::SceneRPtr m_mainScene{};
 		c3d::CameraRPtr m_mainCamera{};
 		c3d::SceneNodeRPtr m_sceneNode{};
@@ -137,10 +126,10 @@ namespace CastorViewer
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
 		wxString m_debugPerspective;
-		wxTimer * m_timerErr{ nullptr };
-		wxTimer * m_timerMsg{ nullptr };
+		c3d::RawUniquePtr< wxTimer > m_timerErr{};
+		c3d::RawUniquePtr< wxTimer > m_timerMsg{};
 		GuiCommon::Recorder m_recorder;
-		int m_recordFps{ 0 };
+		int m_recordFps{};
 		wxString m_title;
 		uint32_t m_minCount{};
 		uint32_t m_maxCount{};

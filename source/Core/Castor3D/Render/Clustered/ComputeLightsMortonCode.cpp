@@ -31,7 +31,7 @@ namespace c3d
 
 	namespace cmpmrt
 	{
-		enum BindingPoints
+		enum class Bindings
 		{
 			eClusters,
 			eAllLightsAABB,
@@ -53,32 +53,31 @@ namespace c3d
 		// to produce the final morton code.
 		static float constexpr coordinateScale = float( ( 1u << kBitMortonCode ) - 1u ); // This is equivalent to 2^k-1 which results in a value that when scaled by 1 will produce a number that is exactly k bits.
 
-		static ShaderPtr createShader( RenderDevice const & device
-			, ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_Clusters( writer
-				, eClusters
+				, Bindings::eClusters
 				, 0u );
 			C3D_AllLightsAABB( writer
-				, eAllLightsAABB
+				, Bindings::eAllLightsAABB
 				, 0u );
 			C3D_ReducedLightsAABB( writer
-				, eReducedLightsAABB
+				, Bindings::eReducedLightsAABB
 				, 0u );
 			C3D_PointLightMortonCodes( writer
-				, ePointLightMortonCodes
+				, Bindings::ePointLightMortonCodes
 				, 0u );
 			C3D_SpotLightMortonCodes( writer
-				, eSpotLightMortonCodes
+				, Bindings::eSpotLightMortonCodes
 				, 0u );
 			C3D_PointLightIndices( writer
-				, ePointLightIndices
+				, Bindings::ePointLightIndices
 				, 0u );
 			C3D_SpotLightIndices( writer
-				, eSpotLightIndices
+				, Bindings::eSpotLightIndices
 				, 0u );
 
 			auto gsAABB = writer.declSharedVariable< shader::AABB >( "gsAABB" );
@@ -109,7 +108,9 @@ namespace c3d
 				, sdw::InUVec3{ writer, "quantizedCoord" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &c3d_allLightsAABB, &c3d_reducedLightsAABB, &c3d_lightsAABBRange, &c3d_clustersData
+					, c3d_pointLightMortonCodes, &c3d_pointLightIndices, &c3d_spotLightMortonCodes, &c3d_spotLightIndices
+					, &gsAABB, &gsAABBRange, &getMortonCode]( sdw::ComputeIn const & in )
 				{
 					auto const & groupIndex = in.localInvocationIndex;
 
@@ -173,7 +174,7 @@ namespace c3d
 				, RenderDevice const & device
 				, FrustumClusters & clusters
 				, crg::cp::Config config )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeLightsMortonCode" ), createShader( device, clusters.getConfig() ) } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeLightsMortonCode" ), createShader( device ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{framePass
 					, context
@@ -227,13 +228,13 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		clusters.getClustersUbo().createPassBinding( pass, cmpmrt::eClusters );
-		pass.addInputStorage( *allLightsAABB.getLastAttach(), uint32_t( cmpmrt::eAllLightsAABB ) );
-		pass.addInputStorage( *reducedLightsAABB.getLastAttach(), uint32_t( cmpmrt::eReducedLightsAABB ) );
-		return { pass.addClearableOutputStorageBuffer( pointLightMortonCodes, uint32_t( cmpmrt::ePointLightMortonCodes ) )
-			, pass.addClearableOutputStorageBuffer( spotLightMortonCodes, uint32_t( cmpmrt::eSpotLightMortonCodes ) )
-			, pass.addClearableOutputStorageBuffer( pointLightIndices, uint32_t( cmpmrt::ePointLightIndices ) )
-			, pass.addClearableOutputStorageBuffer( spotLightIndices, uint32_t( cmpmrt::eSpotLightIndices ) ) };
+		clusters.getClustersUbo().createPassBinding( pass, cmpmrt::Bindings::eClusters );
+		pass.addInputStorageT( *allLightsAABB.getLastAttach(), cmpmrt::Bindings::eAllLightsAABB );
+		pass.addInputStorageT( *reducedLightsAABB.getLastAttach(), cmpmrt::Bindings::eReducedLightsAABB );
+		return { pass.addClearableOutputStorageBufferT( pointLightMortonCodes, cmpmrt::Bindings::ePointLightMortonCodes )
+			, pass.addClearableOutputStorageBufferT( spotLightMortonCodes, cmpmrt::Bindings::eSpotLightMortonCodes )
+			, pass.addClearableOutputStorageBufferT( pointLightIndices, cmpmrt::Bindings::ePointLightIndices )
+			, pass.addClearableOutputStorageBufferT( spotLightIndices, cmpmrt::Bindings::eSpotLightIndices ) };
 	}
 
 	//*********************************************************************************************

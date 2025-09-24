@@ -290,6 +290,11 @@ namespace c3d
 			return m_combined;
 		}
 
+		Texture const & getVelocity()const noexcept
+		{
+			return m_velocity;
+		}
+
 		Texture & getVelocity()noexcept
 		{
 			return m_velocity;
@@ -635,8 +640,8 @@ namespace c3d
 	 *\param[in]	enableDepthTest		\p true pour activer le depth test.
 	 */
 	C3D_API void addDebugDrawable( RenderTarget const & target
-		, DebugVertexBuffers vertexBuffers
-		, DebugIndexBuffer indexBuffer
+		, DebugVertexBuffers const & vertexBuffers
+		, DebugIndexBuffer const & indexBuffer
 		, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
 		, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
 		, ashes::VkDescriptorSetLayoutBindingArray const & descriptorBindings

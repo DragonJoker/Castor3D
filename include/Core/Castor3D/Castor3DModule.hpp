@@ -14,8 +14,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Exception/Assertion.hpp>
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Math/PointView.hpp>
 
 #include <ashespp/AshesPPPrerequisites.hpp>
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
@@ -200,6 +200,16 @@ namespace c3d
 		};
 	}
 
+	template< typename EnumT >
+	inline VkDescriptorSetLayoutBinding makeDescriptorSetLayoutBindingT( EnumT binding
+		, VkDescriptorType descriptorType
+		, VkShaderStageFlags stageFlags
+		, uint32_t descriptorCount = 1u
+		, VkSampler const * pImmutableSamplers = nullptr )
+	{
+		return makeDescriptorSetLayoutBinding( uint32_t( binding ), descriptorType, stageFlags, descriptorCount, pImmutableSamplers );
+	}
+
 	inline void addDescriptorSetLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & binding
 		, VkDescriptorType descriptorType
@@ -213,6 +223,21 @@ namespace c3d
 			, descriptorCount
 			, pImmutableSamplers ) );
 		++binding;
+	}
+
+	template< typename EnumT >
+	inline void addDescriptorSetLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, EnumT binding
+		, VkDescriptorType descriptorType
+		, VkShaderStageFlags stageFlags
+		, uint32_t descriptorCount = 1u
+		, VkSampler const * pImmutableSamplers = nullptr )
+	{
+		bindings.push_back( makeDescriptorSetLayoutBindingT( binding
+			, descriptorType
+			, stageFlags
+			, descriptorCount
+			, pImmutableSamplers ) );
 	}
 
 	inline Size makeSize( VkExtent2D const & size )
@@ -260,7 +285,7 @@ namespace c3d
 		return VkExtent3D{ size.width, size.height, 1u };
 	}
 
-	inline Extent2D makeExtent2D( Coords2ui const & size )
+	inline Extent2D makeExtent2D( PointView2ui const & size )
 	{
 		return Extent2D
 		{
@@ -269,7 +294,7 @@ namespace c3d
 		};
 	}
 
-	inline VkExtent2D makeVkExtent2D( Coords2ui const & size )
+	inline VkExtent2D makeVkExtent2D( PointView2ui const & size )
 	{
 		return VkExtent2D
 		{
@@ -287,7 +312,7 @@ namespace c3d
 		};
 	}
 
-	inline Extent3D makeExtent3D( Coords2ui const & size )
+	inline Extent3D makeExtent3D( PointView2ui const & size )
 	{
 		return Extent3D
 		{
@@ -297,7 +322,7 @@ namespace c3d
 		};
 	}
 
-	inline VkExtent3D makeVkExtent3D( Coords2ui const & size )
+	inline VkExtent3D makeVkExtent3D( PointView2ui const & size )
 	{
 		return VkExtent3D
 		{
@@ -317,7 +342,7 @@ namespace c3d
 		};
 	}
 
-	inline Offset2D makeOffset2D( Coords2i const & pos )
+	inline Offset2D makeOffset2D( PointView2i const & pos )
 	{
 		return Offset2D
 		{
@@ -335,7 +360,7 @@ namespace c3d
 		};
 	}
 
-	inline Offset3D makeOffset3D( Coords2i const & pos )
+	inline Offset3D makeOffset3D( PointView2i const & pos )
 	{
 		return Offset3D
 		{
@@ -355,7 +380,7 @@ namespace c3d
 		};
 	}
 
-	inline VkViewport makeViewport( Coords2ui const & size
+	inline VkViewport makeViewport( PointView2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -375,8 +400,8 @@ namespace c3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( Coords2i const & pos
-		, Coords2ui const & size
+	inline VkViewport makeViewport( PointView2i const & pos
+		, PointView2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -387,7 +412,7 @@ namespace c3d
 	}
 
 	inline VkViewport makeViewport( Point2i const & pos
-		, Coords2ui const & size
+		, PointView2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -397,7 +422,7 @@ namespace c3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( Coords2i const & pos
+	inline VkViewport makeViewport( PointView2i const & pos
 		, Point2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
@@ -419,7 +444,7 @@ namespace c3d
 			, zMax );
 	}
 
-	inline VkRect2D makeScissor( Coords2ui const & size )
+	inline VkRect2D makeScissor( PointView2ui const & size )
 	{
 		return ashes::makeScissor( {}
 		, convert( makeExtent2D( size ) ) );
@@ -431,21 +456,21 @@ namespace c3d
 		, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( Coords2i const & pos
-		, Coords2ui const & size )
+	inline VkRect2D makeScissor( PointView2i const & pos
+		, PointView2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
 			, convert( makeExtent2D( size ) ) );
 	}
 
 	inline VkRect2D makeScissor( Point2i const & pos
-		, Coords2ui const & size )
+		, PointView2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
 			, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( Coords2i const & pos
+	inline VkRect2D makeScissor( PointView2i const & pos
 		, Point2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
@@ -484,66 +509,6 @@ namespace c3d
 	static ClearColorValue const transparentBlackClearColor{ 0.0f, 0.0f, 0.0f, 0.0f };
 	static ClearColorValue const opaqueWhiteClearColor{ 1.0f, 1.0f, 1.0f, 1.0f };
 	static ClearColorValue const transparentWhiteClearColor{ 1.0f, 1.0f, 1.0f, 0.0f };
-
-	inline bool operator>( ImageSubresourceRange const & lhs
-		, ImageSubresourceRange const & rhs )
-	{
-		return lhs.aspectMask > rhs.aspectMask
-			|| ( lhs.aspectMask == rhs.aspectMask
-				&& ( lhs.baseArrayLayer > rhs.baseArrayLayer
-					|| ( lhs.baseArrayLayer == rhs.baseArrayLayer
-						&& ( lhs.layerCount > rhs.layerCount
-							|| ( lhs.layerCount == rhs.layerCount
-								&& ( lhs.baseMipLevel > rhs.baseMipLevel
-									|| ( lhs.baseMipLevel == rhs.baseMipLevel
-										&& lhs.levelCount > rhs.levelCount
-										)
-									)
-								)
-							)
-						)
-					)
-				);
-	}
-
-	inline bool operator<( ImageSubresourceRange const & lhs
-		, ImageSubresourceRange const & rhs )
-	{
-		return lhs.aspectMask < rhs.aspectMask
-			|| ( lhs.aspectMask == rhs.aspectMask
-				&& ( lhs.baseArrayLayer < rhs.baseArrayLayer
-					|| ( lhs.baseArrayLayer == rhs.baseArrayLayer
-						&& ( lhs.layerCount < rhs.layerCount
-							|| ( lhs.layerCount == rhs.layerCount
-								&& ( lhs.baseMipLevel < rhs.baseMipLevel
-									|| ( lhs.baseMipLevel == rhs.baseMipLevel
-										&& lhs.levelCount < rhs.levelCount
-										)
-									)
-								)
-							)
-						)
-					)
-				);
-	}
-
-	inline bool operator<=( ImageSubresourceRange const & lhs
-		, ImageSubresourceRange const & rhs )
-	{
-		return !( lhs > rhs );
-	}
-
-	inline bool operator>=( ImageSubresourceRange const & lhs
-		, ImageSubresourceRange const & rhs )
-	{
-		return !( lhs < rhs );
-	}
-
-	inline bool operator!=( ImageSubresourceRange const & lhs
-		, ImageSubresourceRange const & rhs )
-	{
-		return lhs < rhs || lhs > rhs;
-	}
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, Engine, Engine )

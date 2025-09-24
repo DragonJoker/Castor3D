@@ -146,7 +146,7 @@ namespace c3d
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( RenderTechnique * parent
-		, Scene const & scene
+		, Scene & scene
 		, bool outputScattering )
 		: m_parent{ parent }
 		, m_scene{ scene }
@@ -233,8 +233,8 @@ namespace c3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData
-		, uint32_t vertexStride )const
+		, SubmeshRenderData const * submeshData
+		, uint32_t vertexStride )const noexcept
 	{
 		return RenderNodesPass::createPipelineFlags( passComponents
 			, submeshComponents

@@ -6,9 +6,10 @@
 
 namespace GuiCommon
 {
-	ExportOptionsTreeItemProperty::ExportOptionsTreeItemProperty( bool editable
+	ExportOptionsTreeItemProperty::ExportOptionsTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::exporter::ExportOptions & options )
-		: TreeItemProperty{ nullptr, editable }
+		: TreeItemProperty{ nullptr, imagesLoader, editable }
 		, m_options{ options }
 	{
 		CreateTreeItemMenu();

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec2.hpp>
 
 namespace fxaa
@@ -22,25 +22,30 @@ namespace fxaa
 	};
 
 	struct FxaaData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_FxaaData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec2Field< "pixelSize" >
+			, sdw::FloatField< "subpixShift" >
+			, sdw::FloatField< "spanMax" >
+			, sdw::FloatField< "reduceMul" > >
 	{
-	public:
-		FxaaData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
 		SDW_DeclStructInstance( , FxaaData );
 
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+		FxaaData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+			, pixelSize{ getMember< "pixelSize" >() }
+			, subpixShift{ getMember< "subpixShift" >() }
+			, spanMax{ getMember< "spanMax" >() }
+			, reduceMul{ getMember< "reduceMul" >() }
+		{
+		}
 
-	public:
 		sdw::Vec2 pixelSize;
 		sdw::Float subpixShift;
 		sdw::Float spanMax;
 		sdw::Float reduceMul;
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
 	};
 
 	class FxaaUbo

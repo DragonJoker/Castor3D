@@ -128,16 +128,6 @@ namespace c3d
 			return &m_pixel;
 		}
 
-		bool operator==( PixelIterator const & it )const
-		{
-			return m_current == it.m_current;
-		}
-
-		bool operator!=( PixelIterator const & it )const
-		{
-			return !( *this == it );
-		}
-
 		static difference_type diffIt( PixelIterator const & lhs
 			, PixelIterator const & rhs )
 		{
@@ -154,37 +144,36 @@ namespace c3d
 			}
 		}
 
+		friend bool operator==( PixelIterator const & lhs, PixelIterator const & rhs )noexcept
+		{
+			return lhs.m_current == rhs.m_current;
+		}
+
+		friend PixelIterator operator+( PixelIterator it, size_t offset )
+		{
+			PixelIterator result{ it };
+			result += offset;
+			return result;
+		}
+
+		friend PixelIterator operator-( PixelIterator it, size_t offset )
+		{
+			PixelIterator result{ it };
+			result -= offset;
+			return result;
+		}
+
+		friend difference_type operator-( PixelIterator const & lhs, PixelIterator const & rhs )
+		{
+			return PixelIterator::diffIt( lhs, rhs );
+		}
+
 	private:
 		static uint8_t const size = PixelDefinitionsT< PF >::Size;
 		internal_type m_current;
 		const_internal_type m_end;
 		pixel_type m_pixel;
 	};
-
-	template< PixelFormat PF >
-	inline PixelIterator< PF > operator+( PixelIterator< PF > it
-		, size_t offset )
-	{
-		PixelIterator< PF > result{ it };
-		result += offset;
-		return result;
-	}
-
-	template< PixelFormat PF >
-	inline PixelIterator< PF > operator-( PixelIterator< PF > it
-		, size_t offset )
-	{
-		PixelIterator< PF > result{ it };
-		result -= offset;
-		return result;
-	}
-
-	template< PixelFormat PF >
-	inline typename PixelIterator< PF >::difference_type operator-( PixelIterator< PF > const & lhs
-		, PixelIterator< PF > const & rhs )
-	{
-		return PixelIterator< PF >::diffIt( lhs, rhs );
-	}
 }
 
 #endif

@@ -391,41 +391,6 @@ namespace c3d
 
 	//*************************************************************************************************
 
-	template< typename ComponentType >
-	bool operator==( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs )
-	{
-		bool result = true;
-
-		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ) && result; i++ )
-		{
-			result = lhs[RgbComponent( i )] == rhs[RgbComponent( i )];
-		}
-
-		return result;
-	}
-
-	template< typename ComponentType >
-	bool operator!=( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs )
-	{
-		return !operator==( lhs, rhs );
-	}
-
-	template< typename ComponentType >
-	RgbColourT< ComponentType > operator+( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs )
-	{
-		RgbColourT< ComponentType > result( lhs );
-		result += rhs;
-		return result;
-	}
-
-	template< typename ComponentType >
-	RgbColourT< ComponentType > operator-( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs )
-	{
-		RgbColourT< ComponentType > result( lhs );
-		result -= rhs;
-		return result;
-	}
-
 	Point3ub toRGBByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point3ub result;

@@ -5,9 +5,9 @@
 
 namespace GuiCommon
 {
-	namespace
+	namespace aui
 	{
-		void indentPressedBitmap( wxRect * rect
+		static void indentPressedBitmap( wxRect * rect
 			, int buttonState )
 		{
 			if ( buttonState == wxAUI_BUTTON_STATE_PRESSED )
@@ -17,11 +17,12 @@ namespace GuiCommon
 			}
 		}
 
-		static wxString auiChopText( wxDC & dc
+		static wxString chopText( wxDC const & dc
 			, const wxString & text
 			, int maxSize )
 		{
-			wxCoord x, y;
+			wxCoord x;
+			wxCoord y;
 			// first check if the text fits with no problems
 			dc.GetTextExtent( text, &x, &y );
 
@@ -30,10 +31,10 @@ namespace GuiCommon
 				return text;
 			}
 
-			size_t i, len = text.Length();
+			size_t len = text.Length();
 			size_t lastGoodLength = 0;
 
-			for ( i = 0; i < len; ++i )
+			for ( size_t i = 0u; i < len; ++i )
 			{
 				wxString s = text.Left( i );
 				s += wxT( "..." );
@@ -52,17 +53,17 @@ namespace GuiCommon
 			return ret;
 		}
 
-		static const unsigned char leftBits[] = {
+		static const c3d::Array< unsigned char, 32u > leftBits{
 			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xfe, 0x3f, 0xfe,
 			0x1f, 0xfe, 0x0f, 0xfe, 0x1f, 0xfe, 0x3f, 0xfe, 0x7f, 0xfe, 0xff, 0xfe,
 			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
-		static const unsigned char rightBits[] = {
+		static const c3d::Array< unsigned char, 32u > rightBits{
 			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0xff, 0x9f, 0xff, 0x1f, 0xff,
 			0x1f, 0xfe, 0x1f, 0xfc, 0x1f, 0xfe, 0x1f, 0xff, 0x9f, 0xff, 0xdf, 0xff,
 			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
-		wxBitmap AuiBitmapFromBits( const unsigned char bits[], int w, int h,
+		static wxBitmap bitmapFromBits( const unsigned char bits[], int w, int h,
 			const wxColour& color )
 		{
 			wxImage img = wxBitmap( reinterpret_cast< const char * >( bits ), w, h ).ConvertToImage();
@@ -82,11 +83,11 @@ namespace GuiCommon
 		wxAuiDefaultTabArt::SetNormalFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
 		wxAuiDefaultTabArt::SetSelectedFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
 
-		m_activeLeftBmp = AuiBitmapFromBits( leftBits, 16, 16, ACTIVE_TAB_COLOUR );
-		m_disabledLeftBmp = AuiBitmapFromBits( leftBits, 16, 16, m_disabledColour );
+		m_activeLeftBmp = aui::bitmapFromBits( aui::leftBits.data(), 16, 16, ACTIVE_TAB_COLOUR );
+		m_disabledLeftBmp = aui::bitmapFromBits( aui::leftBits.data(), 16, 16, m_disabledColour );
 
-		m_activeRightBmp = AuiBitmapFromBits( rightBits, 16, 16, ACTIVE_TAB_COLOUR );
-		m_disabledRightBmp = AuiBitmapFromBits( rightBits, 16, 16, m_disabledColour );
+		m_activeRightBmp = aui::bitmapFromBits( aui::rightBits.data(), 16, 16, ACTIVE_TAB_COLOUR );
+		m_disabledRightBmp = aui::bitmapFromBits( aui::rightBits.data(), 16, 16, m_disabledColour );
 	}
 
 	wxAuiTabArt * AuiTabArt::Clone()
@@ -129,8 +130,10 @@ namespace GuiCommon
 		, wxRect * outButtonRect
 		, int * xExtent )
 	{
-		wxCoord normalTextX, normalTextY;
-		wxCoord selectedTextX, selectedTextY;
+		wxCoord normalTextX;
+		wxCoord normalTextY;
+		wxCoord selectedTextX;
+		wxCoord selectedTextY;
 		wxCoord textY;
 
 		// if the caption is empty, measure some temporary text
@@ -185,7 +188,7 @@ namespace GuiCommon
 		dc.SetClippingRegion( tabX, tabY, clip_width + 1, tabHeight - 3 );
 #endif
 
-		wxPoint borderPoints[6];
+		c3d::Array< wxPoint, 6u > borderPoints;
 
 		if ( m_flags & wxAUI_NB_BOTTOM )
 		{
@@ -251,7 +254,6 @@ namespace GuiCommon
 		}
 
 
-		int textOffset = tabX + 8;
 		int closeButtonWidth = 0;
 
 		if ( closeButtonState != wxAUI_BUTTON_STATE_HIDDEN )
@@ -263,9 +265,9 @@ namespace GuiCommon
 #endif
 		}
 
-		textOffset = tabX + 8;
+		int textOffset = tabX + 8;
 
-		wxString drawText = auiChopText( dc, caption, tabWidth - ( textOffset - tabX ) - closeButtonWidth );
+		wxString drawText = aui::chopText( dc, caption, tabWidth - ( textOffset - tabX ) - closeButtonWidth );
 
 		// draw tab text
 		if ( pane.active )
@@ -278,12 +280,12 @@ namespace GuiCommon
 		}
 
 		dc.SetFont( m_normalFont );
-		dc.DrawText( drawText, textOffset, drawnTabYOffset + ( drawnTabHeight ) / 2 - ( textY / 2 ) );
+		dc.DrawText( drawText, textOffset, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( textY / 2 ) );
 
 		// draw focus rectangle
-		if ( pane.active && ( wnd->FindFocus() == wnd ) )
+		if ( pane.active && ( wxWindow::FindFocus() == wnd ) )
 		{
-			wxRect focusRectText( textOffset, ( drawnTabYOffset + ( drawnTabHeight ) / 2 - ( textY / 2 ) - 1 ), selectedTextX, selectedTextY );
+			wxRect focusRectText( textOffset, ( drawnTabYOffset + ( drawnTabHeight / 2 ) - ( textY / 2 ) - 1 ), selectedTextX, selectedTextY );
 
 			wxRect focusRect;
 			wxRect focusRectBitmap;
@@ -351,7 +353,7 @@ namespace GuiCommon
 				closeButtonWidth,
 				tabHeight );
 
-			indentPressedBitmap( &rect, closeButtonState );
+			aui::indentPressedBitmap( &rect, closeButtonState );
 			dc.DrawBitmap( bmp, rect.x, rect.y, true );
 
 			*outButtonRect = rect;
@@ -370,13 +372,8 @@ namespace GuiCommon
 		, int orientation
 		, wxRect * outRect )
 	{
-		switch ( bitmapId )
-		{
-		case wxAUI_BUTTON_CLOSE:
-		case wxAUI_BUTTON_WINDOWLIST:
+		if ( bitmapId == wxAUI_BUTTON_CLOSE || bitmapId == wxAUI_BUTTON_WINDOWLIST )
 			wxAuiDefaultTabArt::DrawButton( dc, wnd, inRect, bitmapId, buttonState, orientation, outRect );
-			return;
-		}
 
 		wxBitmap bmp;
 
@@ -421,6 +418,9 @@ namespace GuiCommon
 #endif
 				dc.SetPen( m_activeColour );
 			}
+			break;
+
+		default:
 			break;
 		}
 

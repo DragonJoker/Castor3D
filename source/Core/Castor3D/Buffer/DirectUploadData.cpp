@@ -41,7 +41,7 @@ namespace c3d
 
 	DirectUploadData::~DirectUploadData()noexcept
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto const & buffer : m_buffers )
 			buffer->destroy();
 		m_buffers.clear();
 	}

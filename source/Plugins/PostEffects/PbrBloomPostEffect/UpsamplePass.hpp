@@ -18,7 +18,7 @@ namespace PbrBloom
 			, c3d::UniformBufferOffsetT< c3d::Point2f > const & ubo
 			, uint32_t passesCount
 			, bool const * enabled );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:
 		c3d::ProgramModule m_shader;

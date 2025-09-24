@@ -71,20 +71,17 @@ namespace c3d
 
 	private:
 		CU_API static CpuInformationsInternal const m_internal;
+
+	private:
+		friend OutputStream & operator<<( OutputStream & stream, CpuInformations const & object )
+		{
+			stream << "CPU informations:" << std::endl;
+			stream << "    Vendor: " << object.getVendor() << std::endl;
+			stream << "    Model: " << object.getModel() << std::endl;
+			stream << "    Core count: " << object.getCoreCount();
+			return stream;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief			Output stream operator.
-	 *\param[in,out]	stream	The stream.
-	 *\param[in]		object	The object to put in the stream.
-	 *\return			The stream.
-	 *\~french
-	 *\brief			Opérateur de flux de sortie.
-	 *\param[in,out]	stream	Le flux.
-	 *\param[in]		object	L'objet à mettre dans le flux.
-	 *\return			Le flux
-	 */
-	CU_API OutputStream & operator<<( OutputStream & stream, CpuInformations const & object );
 }
 
 #endif

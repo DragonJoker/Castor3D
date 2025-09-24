@@ -26,10 +26,6 @@ namespace light_streaks
 		 *\copydoc		c3d::PostEffect::accept
 		 */
 		void accept( c3d::ConfigurationVisitorBase & visitor )override;
-		/**
-		 *\copydoc		c3d::PostEffect::setParameters
-		 */
-		void setParameters( c3d::Parameters parameters )override;
 
 	private:
 		/**

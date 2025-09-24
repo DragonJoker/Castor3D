@@ -39,19 +39,19 @@ namespace Testing
 	{
 #if defined( CASTOR_USE_GLM )
 
-		doRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsQuaternionTest::TransformationMatrixComparison, this ) );
+		doRegisterTest( "TransformationMatrixComparison", [this](){ TransformationMatrixComparison(); } );
 
 #endif
 	}
 
 #if defined( CASTOR_USE_GLM )
 
-	bool CastorUtilsQuaternionTest::compare( Matrix4x4f const & lhs, glm::mat4x4 const & rhs )
+	bool CastorUtilsQuaternionTest::compare( Matrix4x4f const & lhs, glm::mat4x4 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsQuaternionTest::compare( Matrix4x4d const & lhs, glm::mat4x4 const & rhs )
+	bool CastorUtilsQuaternionTest::compare( Matrix4x4d const & lhs, glm::mat4x4 const & rhs )const
 	{
 		return Testing::compare( lhs, rhs );
 	}

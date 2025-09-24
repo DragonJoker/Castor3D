@@ -97,17 +97,10 @@ namespace diamond_square_terrain
 			, float weight )
 		{
 			c3d::Map< uint32_t, float > result;
-
-			for ( auto & pair : lhs )
-			{
-				result[pair.first] = pair.second * ( 1.0f - weight );
-			}
-
-			for ( auto & pair : rhs )
-			{
-				result[pair.first] += pair.second * weight;
-			}
-
+			for ( auto const & [biome, value] : lhs )
+				result[biome] = value * ( 1.0f - weight );
+			for ( auto const & [biome, value] : rhs )
+				result[biome] += value * weight;
 			return result;
 		}
 
@@ -142,12 +135,8 @@ namespace diamond_square_terrain
 		{
 			auto weights = getPassWeights( height, steepness, ranges, biomes );
 			c3d::PassMasks result{};
-
-			for ( auto & pair : weights )
-			{
-				result.data[pair.first] = uint8_t( pair.second * 255.0f );
-			}
-
+			for ( auto const & [biome, value] : weights )
+				result.data[biome] = uint8_t( value * 255.0f );
 			return result;
 		}
 
@@ -161,7 +150,7 @@ namespace diamond_square_terrain
 			return std::min( 1.0f, std::max( 0.0f, height ) );
 		}
 
-		static Matrix generateNoiseMap( std::default_random_engine engine
+		static Matrix generateNoiseMap( std::default_random_engine const & engine
 			, uint32_t width )
 		{
 			Matrix result{ width };
@@ -197,14 +186,13 @@ namespace diamond_square_terrain
 		}
 	}
 
-	void generateBiomes( std::default_random_engine engine
+	void generateBiomes( std::default_random_engine const & engine
 		, uint32_t max
 		, uint32_t size
 		, float heatOffset
 		, float zeroPoint
 		, Matrix const & heightMap
 		, Biomes biomes
-		, c3d::FaceArray const & faces
 		, c3d::Map< uint32_t, uint32_t > const & vertexMap
 		, c3d::SubmeshAnimationBuffer & submesh )
 	{

@@ -616,7 +616,7 @@ extern "C"
 			return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dScene_createCamera( C3DScene const * object, C3DString name, uint32_t ww, uint32_t wh, C3DSceneNode const * parent, C3DCamera ** result )
+	C3D_CAPIMETHODIMP c3dScene_createCamera( C3DScene const * object, C3DString name, C3DSceneNode const * parent, C3DCamera ** result )
 	{
 		if ( !object || !name || !parent || !result )
 			return C3D_POINTER;

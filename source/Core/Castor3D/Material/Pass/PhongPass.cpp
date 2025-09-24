@@ -17,7 +17,7 @@ namespace c3d
 	shader::SpecularBrdfDesc const PhongPass::DefaultSpecularBrdf = { String{ shader::PhongSpecularBRDF::Name }, shader::PhongSpecularBRDF::create };
 	shader::SpecularBrdfArray const PhongPass::SpecularBrdfs{ DefaultSpecularBrdf };
 
-	shader::SheenBrdfDesc const PhongPass::DefaultSheenBrdf = { String{ cuT( "none" ) }, []( sdw::ShaderWriter &, shader::BRDFHelpers & ){ return nullptr; } };
+	shader::SheenBrdfDesc const PhongPass::DefaultSheenBrdf = { String{ cuT( "none" ) }, []( sdw::ShaderWriter const &, shader::BRDFHelpers const & ){ return nullptr; } };
 	shader::SheenBrdfArray const PhongPass::SheenBrdfs{ DefaultSheenBrdf };
 
 	shader::ClearcoatBrdfDesc const PhongPass::DefaultClearcoatBrdf = { String{ shader::PhongClearcoatBRDF::Name }, shader::PhongClearcoatBRDF::create };

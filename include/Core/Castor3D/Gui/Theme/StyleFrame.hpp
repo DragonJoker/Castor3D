@@ -40,7 +40,7 @@ namespace c3d
 		{
 		}
 
-		void setHeaderFont( String value )
+		void setHeaderFont( StringView value )
 		{
 			m_headerStyle.setFont( value );
 		}

@@ -37,27 +37,19 @@ namespace c3d
 	private:
 		CU_API LuminousIntensity( Illumination const & illumination, float metres )noexcept;
 
+		friend bool operator==( LuminousIntensity const & lhs, LuminousIntensity const & rhs )noexcept
+		{
+			return std::abs( lhs.candela() - rhs.candela() ) < std::numeric_limits< float >::epsilon();
+		}
+
+		friend auto operator<=>( LuminousIntensity const & lhs, LuminousIntensity const & rhs )noexcept
+		{
+			return lhs.candela() <=> rhs.candela();
+		}
+
+	private:
 		float m_candela{};
-
-		friend bool operator==( LuminousIntensity const & lhs, LuminousIntensity const & rhs )noexcept;
 	};
-	/**
-	 *\~english
-	 *\name Comparison operators.
-	 *\~french
-	 *\name Opérateurs de comparaison.
-	 **/
-	/**@{*/
-	inline bool operator==( LuminousIntensity const & lhs, LuminousIntensity const & rhs )noexcept
-	{
-		return std::abs( lhs.candela() - rhs.candela() ) < std::numeric_limits< float >::epsilon();
-	}
-
-	inline auto operator<=>( LuminousIntensity const & lhs, LuminousIntensity const & rhs )noexcept
-	{
-		return lhs.candela() <=> rhs.candela();
-	}
-	/**@}*/
 }
 
 #endif

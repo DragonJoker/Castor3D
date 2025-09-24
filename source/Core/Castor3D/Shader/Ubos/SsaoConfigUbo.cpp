@@ -12,100 +12,24 @@ namespace c3d
 {
 	//*********************************************************************************************
 
-	namespace shader
+	namespace shader::ssao
 	{
-		namespace ssao
+		static uint32_t constexpr numPrecomputed = 100u;
+
+		static Array< int, numPrecomputed > constexpr minDiscrepancyArray
 		{
-			static uint32_t constexpr numPrecomputed = 100u;
-
-			static Array< int, numPrecomputed > constexpr minDiscrepancyArray
-			{
-			//   0   1   2   3   4   5   6   7   8   9
-				 1,  1,  1,  2,  3,  2,  5,  2,  3,  2,  // 0
-				 3,  3,  5,  5,  3,  4,  7,  5,  5,  7,  // 1
-				 9,  8,  5,  5,  7,  7,  7,  8,  5,  8,  // 2
-				11, 12,  7, 10, 13,  8, 11,  8,  7, 14,  // 3
-				11, 11, 13, 12, 13, 19, 17, 13, 11, 18,  // 4
-				19, 11, 11, 14, 17, 21, 15, 16, 17, 18,  // 5
-				13, 17, 11, 17, 19, 18, 25, 18, 19, 19,  // 6
-				29, 21, 19, 27, 31, 29, 21, 18, 17, 29,  // 7
-				31, 31, 23, 18, 25, 26, 25, 23, 19, 34,  // 8
-				19, 27, 21, 25, 39, 29, 17, 21, 27, 29   // 9
-			};
-		}
-
-		//*****************************************************************************************
-
-		SsaoConfigData::SsaoConfigData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, c3d::move( expr ), enabled }
-			, projInfo{ getMember< sdw::Vec4 >( "projInfo" ) }
-			, numSamples{ getMember< sdw::Int >( "numSamples" ) }
-			, numSpiralTurns{ getMember< sdw::Int >( "numSpiralTurns" ) }
-			, projScale{ getMember< sdw::Float >( "projScale" ) }
-			, radius{ getMember< sdw::Float >( "radius" ) }
-			, invRadius{ getMember< sdw::Float >( "invRadius" ) }
-			, radius2{ getMember< sdw::Float >( "radius2" ) }
-			, invRadius2{ getMember< sdw::Float >( "invRadius2" ) }
-			, bias{ getMember< sdw::Float >( "bias" ) }
-			, intensity{ getMember< sdw::Float >( "intensity" ) }
-			, intensityDivR6{ getMember< sdw::Float >( "intensityDivR6" ) }
-			, farPlaneZ{ getMember< sdw::Float >( "farPlaneZ" ) }
-			, edgeSharpness{ getMember< sdw::Float >( "edgeSharpness" ) }
-			, blurStepSize{ getMember< sdw::UInt >( "blurStepSize" ) }
-			, blurRadius{ getMember< sdw::UInt >( "blurRadius" ) }
-			, highQuality{ getMember< sdw::Int >( "highQuality" ) }
-			, blurHighQuality{ getMember< sdw::Int >( "blurHighQuality" ) }
-			, logMaxOffset{ getMember< sdw::Int >( "logMaxOffset" ) }
-			, maxMipLevel{ getMember< sdw::Int >( "maxMipLevel" ) }
-			, minRadius{ getMember< sdw::Float >( "minRadius" ) }
-			, variation{ getMember< sdw::Int >( "variation" ) }
-			, bendStepCount{ getMember< sdw::UInt >( "bendStepCount" ) }
-			, bendStepSize{ getMember< sdw::Float >( "bendStepSize" ) }
-		{
-		}
-
-		ast::type::BaseStructPtr SsaoConfigData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_SsaoConfigData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "projInfo", ast::type::Kind::eVec4F );
-				result->declMember( "numSamples", ast::type::Kind::eInt );
-				result->declMember( "numSpiralTurns", ast::type::Kind::eInt );
-				result->declMember( "projScale", ast::type::Kind::eFloat );
-				result->declMember( "radius", ast::type::Kind::eFloat );
-				result->declMember( "invRadius", ast::type::Kind::eFloat );
-				result->declMember( "radius2", ast::type::Kind::eFloat );
-				result->declMember( "invRadius2", ast::type::Kind::eFloat );
-				result->declMember( "bias", ast::type::Kind::eFloat );
-				result->declMember( "intensity", ast::type::Kind::eFloat );
-				result->declMember( "intensityDivR6", ast::type::Kind::eFloat );
-				result->declMember( "farPlaneZ", ast::type::Kind::eFloat );
-				result->declMember( "edgeSharpness", ast::type::Kind::eFloat );
-				result->declMember( "blurStepSize", ast::type::Kind::eUInt );
-				result->declMember( "blurRadius", ast::type::Kind::eUInt );
-				result->declMember( "highQuality", ast::type::Kind::eInt );
-				result->declMember( "blurHighQuality", ast::type::Kind::eInt );
-				result->declMember( "logMaxOffset", ast::type::Kind::eInt );
-				result->declMember( "maxMipLevel", ast::type::Kind::eInt );
-				result->declMember( "minRadius", ast::type::Kind::eFloat );
-				result->declMember( "variation", ast::type::Kind::eInt );
-				result->declMember( "bendStepCount", ast::type::Kind::eUInt );
-				result->declMember( "bendStepSize", ast::type::Kind::eFloat );
-			}
-
-			return result;
-		}
-
-		RawUniquePtr< sdw::Struct > SsaoConfigData::declare( sdw::ShaderWriter & writer )
-		{
-			return makeRawUnique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
+		//   0   1   2   3   4   5   6   7   8   9
+				1,  1,  1,  2,  3,  2,  5,  2,  3,  2,  // 0
+				3,  3,  5,  5,  3,  4,  7,  5,  5,  7,  // 1
+				9,  8,  5,  5,  7,  7,  7,  8,  5,  8,  // 2
+			11, 12,  7, 10, 13,  8, 11,  8,  7, 14,  // 3
+			11, 11, 13, 12, 13, 19, 17, 13, 11, 18,  // 4
+			19, 11, 11, 14, 17, 21, 15, 16, 17, 18,  // 5
+			13, 17, 11, 17, 19, 18, 25, 18, 19, 19,  // 6
+			29, 21, 19, 27, 31, 29, 21, 18, 17, 29,  // 7
+			31, 31, 23, 18, 25, 26, 25, 23, 19, 34,  // 8
+			19, 27, 21, 25, 39, 29, 17, 21, 27, 29   // 9
+		};
 	}
 
 	//*********************************************************************************************

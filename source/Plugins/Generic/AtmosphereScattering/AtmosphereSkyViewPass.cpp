@@ -23,7 +23,7 @@ namespace atmosphere_scattering
 
 	namespace skyview
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eCamera,
 			eAtmosphere,
@@ -43,17 +43,17 @@ namespace atmosphere_scattering
 				, uint32_t( Bindings::eAtmosphere )
 				, 0u );
 			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
-				, uint32_t( Bindings::eTransmittance )
+				, Bindings::eTransmittance
 				, 0u );
 
-			auto  sampleCountIni = writer.declConstant( "sampleCountIni"
+			auto sampleCountIni = writer.declConstant( "sampleCountIni"
 				, 30.0_f );	// Can go a low as 10 sample but energy lost starts to be visible.
-			auto  depthBufferValue = writer.declConstant( "depthBufferValue"
+			auto depthBufferValue = writer.declConstant( "depthBufferValue"
 				, -1.0_f );
 			auto planetRadiusOffset = writer.declConstant( "planetRadiusOffset"
 				, 0.01_f );
 
-			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -68,8 +68,9 @@ namespace atmosphere_scattering
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
-			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &atmosphere, &c3d_atmosphereData, &sampleCountIni, &depthBufferValue
+				, &renderSize]( sdw::FragmentIn const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
@@ -161,9 +162,9 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		cameraUbo.createPassBinding( pass, skyview::eCamera );
-		atmosphereUbo.createPassBinding( pass, skyview::eAtmosphere );
-		pass.addInputSampled( *transmittance.getSampledLastAttach(), skyview::eTransmittance
+		cameraUbo.createPassBinding( pass, skyview::Bindings::eCamera );
+		atmosphereUbo.createPassBinding( pass, skyview::Bindings::eAtmosphere );
+		pass.addInputSampledT( *transmittance.getSampledLastAttach(), skyview::Bindings::eTransmittance
 			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}

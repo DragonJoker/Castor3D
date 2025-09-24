@@ -10,6 +10,7 @@
 #pragma warning( disable: 4371 )
 #pragma warning( disable: 5054 )
 #include <wx/app.h>
+#include <memory>
 #pragma warning( pop )
 
 namespace ImgToIco
@@ -21,7 +22,7 @@ namespace ImgToIco
 	{
 	private:
 		MainFrame * m_mainFrame;
-		wxLocale * m_pLocale;
+		std::unique_ptr< wxLocale > m_locale;
 
 	public:
 		bool OnInit()override;

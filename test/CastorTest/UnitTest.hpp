@@ -572,6 +572,7 @@ namespace Testing
 		}
 
 		Lazy( Lazy const & ) = delete;
+		Lazy & operator=( Lazy const & ) = delete;
 
 		const Value & operator()()const
 		{
@@ -700,6 +701,13 @@ namespace Testing
 
 	struct TestBlock
 	{
+	private:
+		TestBlock( TestBlock && )noexcept = delete;
+		TestBlock( TestBlock const & ) = delete;
+		TestBlock & operator=( TestBlock && )noexcept = delete;
+		TestBlock & operator=( TestBlock const & ) = delete;
+
+	public:
 		TestBlock( TestCase & testCase
 			, std::string text
 			, bool indent );
@@ -722,6 +730,12 @@ namespace Testing
 
 	class TestCase
 	{
+	private:
+		TestCase( TestCase && )noexcept = delete;
+		TestCase( TestCase const & ) = delete;
+		TestCase & operator=( TestCase && )noexcept = delete;
+		TestCase & operator=( TestCase const & ) = delete;
+
 	public:
 		using TestFunction = std::function< void () >;
 		friend struct TestBlock;

@@ -121,7 +121,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
 	{
 		if ( !m_computeSheenReflection )
@@ -170,7 +170,7 @@ namespace c3d::shader
 	sdw::RetVec3 IblBackgroundModel::computeRefraction( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		if ( !m_computeRefraction )
 		{
@@ -209,7 +209,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, sdw::Float const & proughness
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -260,7 +260,7 @@ namespace c3d::shader
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeDiffuse( sdw::Vec3 const & pwsDirection
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		if ( !m_computeDiffuse )
 		{

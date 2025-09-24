@@ -19,7 +19,7 @@
 
 namespace
 {
-	c3d::Vector< c3d::Pair< c3d::String, c3d::Plugin::Extension > > getExtensions( c3d::Engine * engine )
+	c3d::Vector< c3d::Pair< c3d::String, c3d::Plugin::Extension > > getExtensions()
 	{
 		c3d::Vector< c3d::Pair< c3d::String, c3d::Plugin::Extension > > extensions;
 		using Extension = c3d::Plugin::Extension;
@@ -111,7 +111,7 @@ extern "C"
 	C3D_Assimp_API void getType( c3d::PluginType * type );
 	C3D_Assimp_API void isDebug( int * value );
 	C3D_Assimp_API void getName( char const ** name );
-	C3D_Assimp_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_Assimp_API void onLoad( c3d::Engine * engine );
 	C3D_Assimp_API void onUnload( c3d::Engine * engine );
 
 	C3D_Assimp_API void getRequiredVersion( c3d::Version * version )
@@ -134,26 +134,26 @@ extern "C"
 		*name = c3d_assimp::AssimpImporterFile::Name.c_str();
 	}
 
-	C3D_Assimp_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
+	C3D_Assimp_API void onLoad( c3d::Engine * engine )
 	{
-		auto extensions = getExtensions( engine );
+		auto extensions = getExtensions();
 
-		for ( auto const & extension : extensions )
+		for ( auto const & [fileExtension, extension] : extensions )
 		{
-			engine->getImporterFileFactory().registerType( c3d::string::lowerCase( extension.second.first )
-				, extension.first
+			engine->getImporterFileFactory().registerType( c3d::string::lowerCase( extension.first )
+				, fileExtension
 				, &c3d_assimp::AssimpImporterFile::create );
 		}
 	}
 
 	C3D_Assimp_API void onUnload( c3d::Engine * engine )
 	{
-		auto extensions = getExtensions( engine );
+		auto extensions = getExtensions();
 
-		for ( auto const & extension : extensions )
+		for ( auto const & [fileExtension, extension] : extensions )
 		{
-			engine->getImporterFileFactory().unregisterType( c3d::string::lowerCase( extension.second.first )
-				, extension.first );
+			engine->getImporterFileFactory().unregisterType( c3d::string::lowerCase( extension.first )
+				, fileExtension );
 		}
 	}
 }

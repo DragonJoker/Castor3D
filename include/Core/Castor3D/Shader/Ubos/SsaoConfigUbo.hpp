@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace c3d
@@ -19,15 +19,63 @@ namespace c3d
 	namespace shader
 	{
 		struct SsaoConfigData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_SsaoConfigData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::Vec4Field< "projInfo" >
+				, sdw::IntField< "numSamples" >
+				, sdw::IntField< "numSpiralTurns" >
+				, sdw::FloatField< "projScale" >
+				, sdw::FloatField< "radius" >
+				, sdw::FloatField< "invRadius" >
+				, sdw::FloatField< "radius2" >
+				, sdw::FloatField< "invRadius2" >
+				, sdw::FloatField< "bias" >
+				, sdw::FloatField< "intensity" >
+				, sdw::FloatField< "intensityDivR6" >
+				, sdw::FloatField< "farPlaneZ" >
+				, sdw::FloatField< "edgeSharpness" >
+				, sdw::UIntField< "blurStepSize" >
+				, sdw::UIntField< "blurRadius" >
+				, sdw::IntField< "highQuality" >
+				, sdw::IntField< "blurHighQuality" >
+				, sdw::IntField< "logMaxOffset" >
+				, sdw::IntField< "maxMipLevel" >
+				, sdw::FloatField< "minRadius" >
+				, sdw::IntField< "variation" >
+				, sdw::UIntField< "bendStepCount" >
+				, sdw::FloatField< "bendStepSize" > >
 		{
-			C3D_API SsaoConfigData( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, SsaoConfigData );
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			SsaoConfigData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+				, projInfo{ getMember< "projInfo" >() }
+				, numSamples{ getMember< "numSamples" >() }
+				, numSpiralTurns{ getMember< "numSpiralTurns" >() }
+				, projScale{ getMember< "projScale" >() }
+				, radius{ getMember< "radius" >() }
+				, invRadius{ getMember< "invRadius" >() }
+				, radius2{ getMember< "radius2" >() }
+				, invRadius2{ getMember< "invRadius2" >() }
+				, bias{ getMember< "bias" >() }
+				, intensity{ getMember< "intensity" >() }
+				, intensityDivR6{ getMember< "intensityDivR6" >() }
+				, farPlaneZ{ getMember< "farPlaneZ" >() }
+				, edgeSharpness{ getMember< "edgeSharpness" >() }
+				, blurStepSize{ getMember< "blurStepSize" >() }
+				, blurRadius{ getMember< "blurRadius" >() }
+				, highQuality{ getMember< "highQuality" >() }
+				, blurHighQuality{ getMember< "blurHighQuality" >() }
+				, logMaxOffset{ getMember< "logMaxOffset" >() }
+				, maxMipLevel{ getMember< "maxMipLevel" >() }
+				, minRadius{ getMember< "minRadius" >() }
+				, variation{ getMember< "variation" >() }
+				, bendStepCount{ getMember< "bendStepCount" >() }
+				, bendStepSize{ getMember< "bendStepSize" >() }
+			{
+			}
 
 			sdw::Vec4 projInfo;
 			sdw::Int numSamples;
@@ -52,10 +100,6 @@ namespace c3d
 			sdw::Int variation;
 			sdw::UInt bendStepCount;
 			sdw::Float bendStepSize;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
 		};
 	}
 
@@ -132,7 +176,7 @@ namespace c3d
 	public:
 		C3D_API SsaoConfigUbo( SsaoConfigUbo const & rhs ) = delete;
 		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo const & rhs ) = delete;
-		C3D_API SsaoConfigUbo( SsaoConfigUbo && rhs )noexcept = default;
+		C3D_API SsaoConfigUbo( SsaoConfigUbo && rhs )noexcept = delete;
 		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit SsaoConfigUbo( RenderDevice const & device );
 		C3D_API ~SsaoConfigUbo()noexcept;
@@ -150,8 +194,9 @@ namespace c3d
 			, Camera const & camera
 			, Size const & renderSize );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			return m_ubo.createPassBinding( pass, binding );
 		}

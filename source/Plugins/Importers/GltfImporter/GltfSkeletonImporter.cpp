@@ -162,7 +162,9 @@ namespace c3d_gltf
 			, impAsset.skins.end()
 			, [&file, &name, &skinIndex]( fastgltf::Skin const & lookup )
 			{
-				return name == file.getSkinName( skinIndex++ );
+				auto result = ( name == file.getSkinName( skinIndex ) );
+				++skinIndex;
+				return result;
 			} );
 
 		if ( it == impAsset.skins.end() )

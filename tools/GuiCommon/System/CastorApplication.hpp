@@ -137,6 +137,16 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
+		 *\return		The images loader.
+		 *\~french
+		 *\return		Le loader d'images.
+		 */
+		ImagesLoader & getImagesLoader()
+		{
+			return m_imagesLoader;
+		}
+		/**
+		 *\~english
 		 *\return		The unlimited FPS status.
 		 *\~french
 		 *\return		Le statut de FPS non limitées.
@@ -226,7 +236,7 @@ namespace GuiCommon
 	private:
 		c3d::RawUniquePtr< wxLocale > m_locale;
 		uint32_t m_steps;
-		SplashScreen * m_splashScreen;
+		SplashScreen * m_splashScreen{};
 		c3d::Version m_version;
 		Config m_config;
 	};

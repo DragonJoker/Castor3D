@@ -21,17 +21,18 @@ namespace atmosphere_scattering
 		float expScale;
 		float linearTerm;
 		float constantTerm;
-	};
 
-	inline bool operator==( DensityProfileLayer const & lhs
-		, DensityProfileLayer const & rhs )
-	{
-		return lhs.layerWidth == rhs.layerWidth
-			&& lhs.expTerm == rhs.expTerm
-			&& lhs.expScale == rhs.expScale
-			&& lhs.linearTerm == rhs.linearTerm
-			&& lhs.constantTerm == rhs.constantTerm;
-	}
+	private:
+		friend bool operator==( DensityProfileLayer const & lhs
+			, DensityProfileLayer const & rhs )noexcept
+		{
+			return lhs.layerWidth == rhs.layerWidth
+				&& lhs.expTerm == rhs.expTerm
+				&& lhs.expScale == rhs.expScale
+				&& lhs.linearTerm == rhs.linearTerm
+				&& lhs.constantTerm == rhs.constantTerm;
+		}
+	};
 
 	using DensityProfileLayers = c3d::Array< DensityProfileLayer, 2u >;
 
@@ -47,9 +48,7 @@ namespace atmosphere_scattering
 	{
 		template< typename ... ParamsT >
 		explicit AtmosphereScatteringConfigT( ParamsT & ... params )
-			: sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees }
-			, planetPosition{ 0.0f, 0.0f, 0.0f }
-			, solarIrradiance{ params..., c3d::Point3f{ 1.0f, 1.0f, 1.0f } }
+			: solarIrradiance{ params..., c3d::Point3f{ 1.0f, 1.0f, 1.0f } }
 			, sunAngularRadius{ params..., 0.004675f }
 			, sunIlluminance{ params..., c3d::Point3f{ 1.0f, 1.0f, 1.0f } }
 			, sunIlluminanceScale{ params..., 1.0f }
@@ -62,7 +61,6 @@ namespace atmosphere_scattering
 			, bottomRadius{ params..., EarthBottomRadius }
 			, mieExtinction{ params..., c3d::Point3f{ 0.004440f, 0.004440f, 0.004440f } }
 			, topRadius{ params..., EarthTopRadius }
-			, mieAbsorption{}
 			, multipleScatteringFactor{ params..., 1.0f }
 			, groundAlbedo{ params..., c3d::Point3f{ 0.0f, 0.0f, 0.0f } }
 			, multiScatteringLUTRes{ params..., 32.0f }
@@ -104,8 +102,8 @@ namespace atmosphere_scattering
 			return *this;
 		}
 
-		c3d::Point4f sunDirection;
-		c3d::Point4f planetPosition;
+		c3d::Point4f sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees };
+		c3d::Point4f planetPosition{ 0.0f, 0.0f, 0.0f };
 
 		// The solar irradiance at the top of the atmosphere.
 		WrapperT< c3d::Point3f > solarIrradiance;

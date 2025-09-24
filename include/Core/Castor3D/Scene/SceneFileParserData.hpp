@@ -127,7 +127,7 @@ namespace c3d
 		ProgressBar * progress{};
 	};
 
-	inline String getPrefix( RootContext const & context )
+	inline String getPrefix( [[maybe_unused]] RootContext const & context )
 	{
 		return String{};
 	}

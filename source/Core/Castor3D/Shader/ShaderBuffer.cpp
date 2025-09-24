@@ -71,46 +71,6 @@ namespace c3d
 			, m_wantedState.pipelineStage );
 	}
 
-	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index
-		, VkShaderStageFlags stages )const
-	{
-		return makeDescriptorSetLayoutBinding( index
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, stages );
-	}
-
-	void ShaderBuffer::createPassBinding( crg::FramePass & pass
-		, uint32_t binding )const
-	{
-		pass.addInputStorage( *m_buffer->getLastAttach(), binding );
-	}
-
-	ashes::WriteDescriptorSet ShaderBuffer::getSingleBinding( uint32_t binding
-		, VkDeviceSize offset
-		, VkDeviceSize size )const
-	{
-		auto result = ashes::WriteDescriptorSet{ binding
-			, 0u
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer->buffer
-			, offset + sizeof( uint32_t ) * 4u
-			, size } );
-		return result;
-	}
-
-	ashes::WriteDescriptorSet ShaderBuffer::getBinding( uint32_t binding )const
-	{
-		auto result = ashes::WriteDescriptorSet{ binding
-			, 0u
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer->buffer
-			, 0u
-			, m_size } );
-		return result;
-	}
-
 	void ShaderBuffer::createBinding( ashes::DescriptorSet & descriptorSet
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
@@ -118,5 +78,37 @@ namespace c3d
 			, *m_buffer->buffer
 			, 0u
 			, uint32_t( m_size ) );
+	}
+
+	void ShaderBuffer::doCreatePasBinding( crg::FramePass & pass
+		, uint32_t binding )const
+	{
+		pass.addInputStorage( *m_buffer->getLastAttach(), binding );
+	}
+
+	ashes::WriteDescriptorSet ShaderBuffer::doGetSingleBinding( uint32_t binding
+		, VkDeviceSize offset
+		, VkDeviceSize size )const
+	{
+		auto result = ashes::WriteDescriptorSet{ binding
+			, 0u
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.emplace_back() = { *m_buffer->buffer
+			, offset + sizeof( uint32_t ) * 4u
+			, size };
+		return result;
+	}
+
+	ashes::WriteDescriptorSet ShaderBuffer::doGetBinding( uint32_t binding )const
+	{
+		auto result = ashes::WriteDescriptorSet{ binding
+			, 0u
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.emplace_back() = { *m_buffer->buffer
+			, 0u
+			, m_size };
+		return result;
 	}
 }

@@ -23,36 +23,36 @@ namespace test_launcher
 		{
 			namespace lg
 			{
-				static const wxString Help{ wxT( "help" ) };
-				static const wxString ConfigFile{ wxT( "config" ) };
-				static const wxString LogLevel{ wxT( "log" ) };
-				static const wxString Validate{ wxT( "validate" ) };
-				static const wxString Generate{ wxT( "generate" ) };
-				static const wxString FrameCount{ wxT( "frames" ) };
-				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
-				static const wxString DisRandom{ wxT( "disable_random" ) };
+				const wxString Help{ wxT( "help" ) };
+				const wxString ConfigFile{ wxT( "config" ) };
+				const wxString LogLevel{ wxT( "log" ) };
+				const wxString Validate{ wxT( "validate" ) };
+				const wxString Generate{ wxT( "generate" ) };
+				const wxString FrameCount{ wxT( "frames" ) };
+				const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
+				const wxString DisRandom{ wxT( "disable_random" ) };
 			}
 
 			namespace st
 			{
-				static const wxString Help{ wxT( "h" ) };
-				static const wxString ConfigFile{ wxT( "c" ) };
-				static const wxString LogLevel{ wxT( "l" ) };
-				static const wxString Validate{ wxT( "a" ) };
-				static const wxString Generate{ wxT( "e" ) };
-				static const wxString FrameCount{ wxT( "f" ) };
-				static const wxString DisUpdOptim{ wxT( "d" ) };
-				static const wxString DisRandom{ wxT( "r" ) };
+				const wxString Help{ wxT( "h" ) };
+				const wxString ConfigFile{ wxT( "c" ) };
+				const wxString LogLevel{ wxT( "l" ) };
+				const wxString Validate{ wxT( "a" ) };
+				const wxString Generate{ wxT( "e" ) };
+				const wxString FrameCount{ wxT( "f" ) };
+				const wxString DisUpdOptim{ wxT( "d" ) };
+				const wxString DisRandom{ wxT( "r" ) };
 			}
 
 			namespace df
 			{
 #if defined( NDEBUG )
-				static constexpr c3d::LogType LogLevel = c3d::LogType::eInfo;
+				constexpr c3d::LogType LogLevel = c3d::LogType::eInfo;
 #else
-				static constexpr c3d::LogType LogLevel = c3d::LogType::eTrace;
+				constexpr c3d::LogType LogLevel = c3d::LogType::eTrace;
 #endif
-				static constexpr uint32_t FrameCount{ 10u };
+				constexpr uint32_t FrameCount{ 10u };
 			}
 		}
 	}
@@ -182,7 +182,7 @@ namespace test_launcher
 		return result;
 	}
 
-	c3d::EngineUPtr CastorTestLauncher::doInitialiseCastor()
+	c3d::EngineUPtr CastorTestLauncher::doInitialiseCastor()const
 	{
 		if ( !c3d::File::directoryExists( c3d::Engine::getEngineDirectory() ) )
 		{
@@ -205,20 +205,44 @@ namespace test_launcher
 			c3d::PathArray arrayFailed;
 			c3d::PathArray otherPlugins;
 
-			for ( auto file : arrayFiles )
+			for ( auto const & file : arrayFiles )
 			{
-				if ( file.getExtension() == CU_SharedLibExt )
+				if ( file.getExtension() == CU_SharedLibExt
+					&& !castor->getPluginCache().loadPlugin( file ) )
 				{
-					if ( !castor->getPluginCache().loadPlugin( file ) )
-					{
-						arrayFailed.push_back( file );
-					}
+					arrayFailed.push_back( file );
 				}
 			}
 		}
 
 		castor->loadRenderer( m_config.renderer );
 		return castor;
+	}
+
+	void CastorTestLauncher::doRunTest( c3d::Engine & engine )
+	{
+		FrameTimes frameTimes{ Clock::now() };
+		auto mainFrame = c3d::makeRawUnique< MainFrame >( engine, m_config.maxFrameCount );
+
+		try
+		{
+			if ( mainFrame->initialise() )
+			{
+				c3d::Logger::logInfo( cuT( "Load scene" ) );
+				mainFrame->loadScene( m_config.fileName );
+				c3d::Logger::logInfo( cuT( "Save frame" ) );
+				mainFrame->saveFrame( m_outputFileSuffix, frameTimes );
+				c3d::Logger::logInfo( cuT( "Cleanup frame" ) );
+				mainFrame->cleanup( m_outputFileSuffix, frameTimes );
+			}
+
+			c3d::Logger::logInfo( cuT( "Close window" ) );
+			mainFrame->Close();
+		}
+		catch ( ... )
+		{
+			mainFrame->Close();
+		}
 	}
 
 	bool CastorTestLauncher::OnInit()
@@ -234,38 +258,11 @@ namespace test_launcher
 
 			c3d::Logger::setFileName( m_config.fileName.getPath() / cuT( "Compare" ) / ( m_config.fileName.getFileName() + cuT( "_" ) + m_config.renderer + cuT( ".log" ) ) );
 			c3d::Logger::logInfo( cuT( "Start" ) );
-			FrameTimes frameTimes{ Clock::now() };
 
 			try
 			{
 				if ( auto engine = doInitialiseCastor() )
-				{
-					MainFrame * mainFrame{ new MainFrame{ *engine, m_config.maxFrameCount } };
-
-					try
-					{
-						if ( mainFrame->initialise() )
-						{
-							c3d::Logger::logInfo( cuT( "Load scene" ) );
-							mainFrame->loadScene( m_config.fileName );
-							c3d::Logger::logInfo( cuT( "Save frame" ) );
-							mainFrame->saveFrame( m_outputFileSuffix, frameTimes );
-							c3d::Logger::logInfo( cuT( "Cleanup frame" ) );
-							mainFrame->cleanup( m_outputFileSuffix, frameTimes );
-						}
-
-						c3d::Logger::logInfo( cuT( "Close window" ) );
-						mainFrame->Close();
-						delete mainFrame;
-					}
-					catch ( ... )
-					{
-						mainFrame->Close();
-						delete mainFrame;
-						throw;
-					}
-
-				}
+					doRunTest( *engine );
 			}
 			catch ( c3d::Exception & exc )
 			{

@@ -104,7 +104,7 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t C >
-	inline bool compare( c3d::Coords< T, C > const & a, c3d::Coords< T, C > const & b )
+	inline bool compare( c3d::PointView< T, C > const & a, c3d::PointView< T, C > const & b )
 	{
 		float epsilon = 0.001f;
 		return std::abs( a[0] - b[0] ) < epsilon

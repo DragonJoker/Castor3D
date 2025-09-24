@@ -30,7 +30,7 @@ namespace diamond_square_terrain
 		/**
 		 *\copydoc		c3d::MeshGenerator::doGenerate
 		 */
-		virtual void doGenerate( c3d::Mesh & mesh
+		void doGenerate( c3d::Mesh & mesh
 			, c3d::Parameters const & parameters )override;
 
 	public:

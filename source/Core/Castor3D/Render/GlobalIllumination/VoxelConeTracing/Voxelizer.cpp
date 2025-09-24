@@ -85,20 +85,21 @@ namespace c3d
 				, graph
 				, { crg::defaultV< InitialiseCallback >
 					, GetPipelineStateCallback( []() { return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-					, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t i ) { doRecordInto( cb, i ); }
+					, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ) { doRecordInto( ctx, cb, i ); }
 					, crg::defaultV< GetPassIndexCallback >
 					, c3d::move( isEnabled ) } }
 			{
 			}
 
 		protected:
-			void doRecordInto( VkCommandBuffer commandBuffer
+			void doRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer
 				, uint32_t index )const
 			{
-				for ( auto & [_, attach] : m_pass.outputs )
+				for ( auto & [_, attach] : getPass().getOutputs() )
 				{
-					m_context.vkCmdFillBuffer( commandBuffer
-						, m_graph.createBuffer( attach->buffer( index ).data->buffer )
+					context->vkCmdFillBuffer( commandBuffer
+						, getGraph().createBuffer( attach->buffer( index ).data->buffer )
 						, attach->getBufferRange().offset
 						, attach->getBufferRange().size
 						, 0u );

@@ -124,7 +124,7 @@ namespace c3d
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API virtual void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
@@ -286,7 +286,7 @@ namespace c3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept;
+		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept;
 		C3D_API virtual bool isPassEnabled()const noexcept;
 		C3D_API bool isValidPass( Pass const & pass )const noexcept;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const noexcept;

@@ -64,13 +64,12 @@ namespace c3d
 		, SceneNode const * ignored )
 		: OwnedBy< RenderNodesPass >{ renderPass }
 		, m_culler{ culler }
-		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )
+		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & cullr )
 			{
-				doOnCullerCompute( culler );
+				doOnCullerCompute( cullr );
 			} ) )
 		, m_ignoredNode{ ignored }
 		, m_renderNodes{ makeUnique< QueueRenderNodes >( *this, device, typeName, meshShading ) }
-		, m_pass{ makeRawUnique< PassData >() }
 		, m_currentPass{ m_pass.get() }
 		, m_viewport{ makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
@@ -130,7 +129,7 @@ namespace c3d
 		}
 	}
 
-	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
+	void RenderQueue::update( ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer
 		, VkViewport const & viewport
 		, VkRect2D const & scissor )
@@ -140,7 +139,7 @@ namespace c3d
 		update( shadowMaps, shadowBuffer );
 	}
 
-	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
+	void RenderQueue::update( ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer
 		, VkRect2D const & scissor )
 	{

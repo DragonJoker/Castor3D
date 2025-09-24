@@ -16,15 +16,16 @@ namespace GuiCommon
 	{
 	public:
 		ShaderDialog( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, ShaderSources sources
 			, wxString const & title
 			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, const wxSize size = wxSize( 800, 600 ) );
-		~ShaderDialog()override;
+		~ShaderDialog()noexcept override;
 
 	private:
-		void doLoadLanguage( ShaderLanguage language );
+		void doLoadLanguage( ShaderLanguage language )const;
 		void doInitialiseShaderLanguage();
 		void doInitialiseLayout();
 		void doLoadPages();
@@ -48,6 +49,7 @@ namespace GuiCommon
 
 	private:
 		c3d::Engine * m_engine;
+		ImagesLoader & m_imagesLoader;
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_programs;
 		c3d::RawUniquePtr< StcContext > m_stcContext;

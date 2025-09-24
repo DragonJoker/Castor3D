@@ -39,7 +39,7 @@ namespace c3d
 
 	String const DepthPass::Type = cuT( "c3d.depth" );
 
-	DepthPass::DepthPass( RenderTechnique * parent
+	DepthPass::DepthPass( RenderTechnique & parent
 		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -47,7 +47,7 @@ namespace c3d
 		, Texture & targetDepth
 		, SsaoConfig const & ssaoConfig
 		, RenderNodesPassDesc const & renderPassDesc )
-		: RenderTechniqueNodesPass{ parent, pass, context, graph, device
+		: RenderTechniqueNodesPass{ &parent, pass, context, graph, device
 			, Type, {}, &targetDepth
 			, renderPassDesc, { false, ssaoConfig } }
 	{

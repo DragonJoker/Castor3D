@@ -56,15 +56,17 @@
 
 namespace GuiCommon
 {
-	SceneObjectsTree::SceneObjectsTree( PropertiesContainer * propertiesHolder
+	SceneObjectsTree::SceneObjectsTree( ImagesLoader & imagesLoader
+		, PropertiesContainer * propertiesHolder
 		, wxWindow * parent
 		, wxPoint const & pos
 		, wxSize const & size )
 		: wxTreeCtrl{ parent, wxID_ANY, pos, size, wxTR_HAS_BUTTONS | wxTR_SINGLE | wxNO_BORDER }
+		, m_imagesLoader{ imagesLoader }
 		, m_propertiesHolder{ propertiesHolder }
 		, m_images{ GC_IMG_SIZE, GC_IMG_SIZE, true }
 	{
-		for ( auto const & [id, image] : ImagesLoader::getBitmaps() )
+		for ( auto const & [id, image] : imagesLoader.getBitmaps() )
 		{
 			if ( int sizeOrig = image->GetWidth();
 				sizeOrig != GC_IMG_SIZE )
@@ -87,27 +89,27 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			auto rootId = AddRoot( make_wxString( window.getName() )
-				, eBMP_RENDER_WINDOW
-				, eBMP_RENDER_WINDOW_SEL
-				, new DataType{ std::make_unique< RenderWindowTreeItemProperty >( m_propertiesHolder->isEditable(), window ) } );
+			auto rootId = AddRootT( make_wxString( window.getName() )
+				, eBMP::eRenderWindow
+				, eBMP::eRenderWindowSelected
+				, new DataType{ std::make_unique< RenderWindowTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), window ) } );
 
-			auto sceneId = AppendItem( rootId
+			auto sceneId = AppendItemT( rootId
 				, make_wxString( scene->getName() )
-				, eBMP_SCENE
-				, eBMP_SCENE_SEL
-				, new DataType{ std::make_unique< SceneTreeItemProperty >( m_propertiesHolder->isEditable(), *scene ) } );
+				, eBMP::eScene
+				, eBMP::eSceneSelected
+				, new DataType{ std::make_unique< SceneTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), *scene ) } );
 
-			AppendItem( sceneId
+			AppendItemT( sceneId
 				, _( "Background" )
-				, eBMP_BACKGROUND
-				, eBMP_BACKGROUND_SEL
-				, new DataType{ std::make_unique< BackgroundTreeItemProperty >( m_propertiesHolder->isEditable(), *scene->getBackground() ) } );
+				, eBMP::eBackground
+				, eBMP::eBackgroundSelected
+				, new DataType{ std::make_unique< BackgroundTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), *scene->getBackground() ) } );
 
-			auto catId = AppendItem( sceneId
+			auto catId = AppendItemT( sceneId
 				, _( "Render Targets" )
-				, eBMP_RENDER_TARGET
-				, eBMP_RENDER_TARGET_SEL );
+				, eBMP::eRenderTarget
+				, eBMP::eRenderTargetSelected );
 			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( c3d::RenderTarget & elem )
 				{
 					appendRenderTarget( this
@@ -116,28 +118,28 @@ namespace GuiCommon
 						, elem );
 				} );
 			
-			catId = AppendItem( sceneId
+			catId = AppendItemT( sceneId
 				, _( "Cameras" )
-				, eBMP_CAMERA
-				, eBMP_CAMERA_SEL );
+				, eBMP::eCamera
+				, eBMP::eCameraSelected );
 			scene->getCameraCache().forEach( [this, catId]( c3d::Camera & elem )
 				{
 					doAddCamera( catId, elem );
 				} );
 
-			catId = AppendItem( sceneId
+			catId = AppendItemT( sceneId
 				, _( "Animated Object Groups" )
-				, eBMP_ANIMATED_OBJECTGROUP
-				, eBMP_ANIMATED_OBJECTGROUP_SEL );
-			m_animatedObjectGroupProperties = std::make_unique< AnimatedObjectGroupTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_animationProperties = std::make_unique< AnimationTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
+				, eBMP::eAnimatedObjectGroup
+				, eBMP::eAnimatedObjectGroupSelected );
+			m_animatedObjectGroupProperties = std::make_unique< AnimatedObjectGroupTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_animationProperties = std::make_unique< AnimationTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
 			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( c3d::AnimatedObjectGroup & elem )
 				{
-					doAddAnimatedObjectGroup( AppendItem( catId
+					doAddAnimatedObjectGroup( AppendItemT( catId
 							, elem.getName()
-							, eBMP_ANIMATED_OBJECTGROUP
-							, eBMP_ANIMATED_OBJECTGROUP_SEL
-							, new DataType{ ObjectType::eAnimatedObjectGroup, &elem } )
+							, eBMP::eAnimatedObjectGroup
+							, eBMP::eAnimatedObjectGroupSelected
+							, new DataType{ &elem } )
 						, elem );
 				} );
 
@@ -155,12 +157,12 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			auto rootId = AddRoot( _( "Materials" )
-				, eBMP_MATERIAL
-				, eBMP_MATERIAL_SEL );
-			m_materialProperties = std::make_unique< MaterialTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_passProperties = std::make_unique< PassTreeItemProperty >( m_propertiesHolder->isEditable(), *m_scene, this );
-			m_textureProperties = std::make_unique< TextureTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
+			auto rootId = AddRootT( _( "Materials" )
+				, eBMP::eMaterial
+				, eBMP::eMaterialSelected );
+			m_materialProperties = std::make_unique< MaterialTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_passProperties = std::make_unique< PassTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), *m_scene, this );
+			m_textureProperties = std::make_unique< TextureTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
 
 			for ( auto const & materialName : scene->getMaterialView() )
 			{
@@ -182,37 +184,37 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			m_overlayProperties = std::make_unique< OverlayTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			auto rootId = AddRoot( _( "Overlays" )
-				, eBMP_BORDER_PANEL_OVERLAY
-				, eBMP_BORDER_PANEL_OVERLAY_SEL );
+			m_overlayProperties = std::make_unique< OverlayTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			auto rootId = AddRootT( _( "Overlays" )
+				, eBMP::eBorderPanelOverlay
+				, eBMP::eBorderPanelOverlaySelected );
 
 			for ( auto overlay : scene->getOverlayCache().getCategories() )
 			{
 				switch ( overlay->getType() )
 				{
 				case c3d::OverlayType::ePanel:
-					doAddOverlay( AppendItem( rootId
+					doAddOverlay( AppendItemT( rootId
 							, overlay->getOverlayName()
-							, eBMP_PANEL_OVERLAY
-							, eBMP_PANEL_OVERLAY_SEL
-							, new DataType{ ObjectType::eOverlay, overlay } )
+							, eBMP::ePanelOverlay
+							, eBMP::ePanelOverlaySelected
+							, new DataType{ overlay } )
 						, *overlay );
 					break;
 				case c3d::OverlayType::eBorderPanel:
-					doAddOverlay( AppendItem( rootId
+					doAddOverlay( AppendItemT( rootId
 							, overlay->getOverlayName()
-							, eBMP_BORDER_PANEL_OVERLAY
-							, eBMP_BORDER_PANEL_OVERLAY_SEL
-							, new DataType{ ObjectType::eOverlay, overlay } )
+							, eBMP::eBorderPanelOverlay
+							, eBMP::eBorderPanelOverlaySelected
+							, new DataType{ overlay } )
 						, *overlay );
 					break;
 				case c3d::OverlayType::eText:
-					doAddOverlay( AppendItem( rootId
+					doAddOverlay( AppendItemT( rootId
 							, overlay->getOverlayName()
-							, eBMP_TEXT_OVERLAY
-							, eBMP_TEXT_OVERLAY_SEL
-							, new DataType{ ObjectType::eOverlay, overlay } )
+							, eBMP::eTextOverlay
+							, eBMP::eTextOverlaySelected
+							, new DataType{ overlay } )
 						, *overlay );
 					break;
 				default:
@@ -234,34 +236,34 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			m_styleProperties = std::make_unique< StyleTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_controlProperties = std::make_unique< ControlTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
+			m_styleProperties = std::make_unique< StyleTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_controlProperties = std::make_unique< ControlTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
 			auto & controlsManager = static_cast< c3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() );
-			auto rootId = AddRoot( _( "GUI" )
-				, eBMP_STYLES
-				, eBMP_STYLES_SEL );
-			auto catId = AppendItem( rootId
+			auto rootId = AddRootT( _( "GUI" )
+				, eBMP::eStyles
+				, eBMP::eStylesSelected );
+			auto catId = AppendItemT( rootId
 				, _( "Global GUI Styles" )
-				, eBMP_STYLES
-				, eBMP_STYLES_SEL );
+				, eBMP::eStyles
+				, eBMP::eStylesSelected );
 			doAddStyles( catId, controlsManager, nullptr );
 
 			for ( auto const & [name, theme] : controlsManager.getThemes() )
 			{
 				if ( name != "Debug" )
 				{
-					auto themeId = AppendItem( catId
+					auto themeId = AppendItemT( catId
 						, name
-						, eBMP_THEME
-						, eBMP_THEME_SEL );
+						, eBMP::eTheme
+						, eBMP::eThemeSelected );
 					doAddStyles( themeId, *theme, nullptr );
 				}
 			}
 
-			catId = AppendItem( rootId
+			catId = AppendItemT( rootId
 				, _( "Global GUI Controls" )
-				, eBMP_CONTROLS
-				, eBMP_CONTROLS_SEL );
+				, eBMP::eControls
+				, eBMP::eControlsSelected );
 
 			for ( auto const & control : controlsManager.getRootControls() )
 			{
@@ -274,16 +276,16 @@ namespace GuiCommon
 				}
 			}
 
-			catId = AppendItem( rootId
+			catId = AppendItemT( rootId
 				, _( "Scene GUI Styles" )
-				, eBMP_STYLES
-				, eBMP_STYLES_SEL );
+				, eBMP::eStyles
+				, eBMP::eStylesSelected );
 			doAddStyles( catId, controlsManager, scene );
 
-			catId = AppendItem( rootId
+			catId = AppendItemT( rootId
 				, _( "Scene GUI Controls" )
-				, eBMP_CONTROLS
-				, eBMP_CONTROLS_SEL );
+				, eBMP::eControls
+				, eBMP::eControlsSelected );
 
 			for ( auto const & control : static_cast< c3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
 			{
@@ -308,10 +310,10 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			m_nodeProperties = std::make_unique< NodeTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			auto rootId = AddRoot( _( "Nodes" )
-				, eBMP_NODE
-				, eBMP_NODE_SEL );
+			m_nodeProperties = std::make_unique< NodeTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			auto rootId = AddRootT( _( "Nodes" )
+				, eBMP::eNode
+				, eBMP::eNodeSelected );
 
 			if ( auto rootNode = scene->getRootNode() )
 			{
@@ -331,43 +333,43 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			m_nodeProperties = std::make_unique< NodeTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_lightProperties = std::make_unique< LightTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_lightGroupProperties = std::make_unique< LightGroupTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
+			m_nodeProperties = std::make_unique< NodeTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_lightProperties = std::make_unique< LightTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_lightGroupProperties = std::make_unique< LightGroupTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
 
-			auto rootId = AddRoot( _( "Lights And Groups" )
-				, eBMP_DIRECTIONAL_LIGHT
-				, eBMP_DIRECTIONAL_LIGHT_SEL );
+			auto rootId = AddRootT( _( "Lights And Groups" )
+				, eBMP::eDirectionalLight
+				, eBMP::eDirectionalLightSelected );
 			doLoadSceneLights( rootId
 				, _( "Directional Lights" )
 				, c3d::LightType::eDirectional
-				, eBMP_DIRECTIONAL_LIGHT
-				, eBMP_DIRECTIONAL_LIGHT_SEL );
+				, eBMP::eDirectionalLight
+				, eBMP::eDirectionalLightSelected );
 			doLoadSceneLights( rootId
 				, _( "Point Lights" )
 				, c3d::LightType::ePoint
-				, eBMP_POINT_LIGHT
-				, eBMP_POINT_LIGHT_SEL );
+				, eBMP::ePointLight
+				, eBMP::ePointLightSelected );
 			doLoadSceneLights( rootId
 				, _( "Spot Lights" )
 				, c3d::LightType::eSpot
-				, eBMP_SPOT_LIGHT
-				, eBMP_SPOT_LIGHT_SEL );
+				, eBMP::eSpotLight
+				, eBMP::eSpotLightSelected );
 			doLoadSceneLightGroups( rootId
 				, _( "Directional LightGroups" )
 				, c3d::LightType::eDirectional
-				, eBMP_DIRECTIONAL_LIGHT
-				, eBMP_DIRECTIONAL_LIGHT_SEL );
+				, eBMP::eDirectionalLight
+				, eBMP::eDirectionalLightSelected );
 			doLoadSceneLightGroups( rootId
 				, _( "Point LightGroups" )
 				, c3d::LightType::ePoint
-				, eBMP_POINT_LIGHT
-				, eBMP_POINT_LIGHT_SEL );
+				, eBMP::ePointLight
+				, eBMP::ePointLightSelected );
 			doLoadSceneLightGroups( rootId
 				, _( "Spot LightGroups" )
 				, c3d::LightType::eSpot
-				, eBMP_SPOT_LIGHT
-				, eBMP_SPOT_LIGHT_SEL );
+				, eBMP::eSpotLight
+				, eBMP::eSpotLightSelected );
 			CollapseAll();
 			Expand( rootId );
 		}
@@ -381,41 +383,41 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			m_geometryProperties = std::make_unique< GeometryTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_billboardsProperties = std::make_unique< BillboardTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_particlesProperties = std::make_unique< ParticleSystemTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_submeshProperties = std::make_unique< SubmeshTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_skeletonProperties = std::make_unique< SkeletonTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_skeletonBoneProperties = std::make_unique< BoneTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_skeletonNodeProperties = std::make_unique< SkeletonNodeTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			m_skeletonAnimationProperties = std::make_unique< SkeletonAnimationTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
+			m_geometryProperties = std::make_unique< GeometryTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_billboardsProperties = std::make_unique< BillboardTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_particlesProperties = std::make_unique< ParticleSystemTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_submeshProperties = std::make_unique< SubmeshTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_skeletonProperties = std::make_unique< SkeletonTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_skeletonBoneProperties = std::make_unique< BoneTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_skeletonNodeProperties = std::make_unique< SkeletonNodeTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
+			m_skeletonAnimationProperties = std::make_unique< SkeletonAnimationTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
 
-			auto rootId = AddRoot( _( "Objects" )
-				, eBMP_GEOMETRY
-				, eBMP_GEOMETRY_SEL );
+			auto rootId = AddRootT( _( "Objects" )
+				, eBMP::eGeometry
+				, eBMP::eGeometrySelected );
 
-			auto geometriesId = AppendItem( rootId
+			auto geometriesId = AppendItemT( rootId
 				, _( "Geometries" )
-				, eBMP_GEOMETRY
-				, eBMP_GEOMETRY_SEL );
+				, eBMP::eGeometry
+				, eBMP::eGeometrySelected );
 			scene->getGeometryCache().forEach( [this, geometriesId]( c3d::Geometry & elem )
 				{
 					doAddGeometry( geometriesId, elem );
 				} );
 
-			auto billboardsId = AppendItem( rootId
+			auto billboardsId = AppendItemT( rootId
 				, _( "Billboards" )
-				, eBMP_BILLBOARD
-				, eBMP_BILLBOARD_SEL );
+				, eBMP::eBillboard
+				, eBMP::eBillboardSelected );
 			scene->getBillboardListCache().forEach( [this, billboardsId]( c3d::BillboardList & elem )
 				{
 					doAddBillboard( billboardsId, elem );
 				} );
 
-			auto particlesId = AppendItem( rootId
+			auto particlesId = AppendItemT( rootId
 				, _( "Particles" )
-				, eBMP_PARTICLE
-				, eBMP_PARTICLE_SEL );
+				, eBMP::eParticle
+				, eBMP::eParticleSelected );
 			scene->getParticleSystemCache().forEach( [this, particlesId]( c3d::ParticleSystem & elem )
 				{
 					doAddParticleSystem( particlesId, elem );
@@ -469,11 +471,11 @@ namespace GuiCommon
 	void SceneObjectsTree::doAddGeometry( wxTreeItemId id
 		, c3d::Geometry & geometry )
 	{
-		auto geometryId = AppendItem( id
+		auto geometryId = AppendItemT( id
 			, geometry.getName()
-			, eBMP_GEOMETRY
-			, eBMP_GEOMETRY_SEL
-			, new DataType{ ObjectType::eGeometry, &geometry } );
+			, eBMP::eGeometry
+			, eBMP::eGeometrySelected
+			, new DataType{ &geometry } );
 
 		if ( auto const & mesh = geometry.getMesh() )
 		{
@@ -484,10 +486,10 @@ namespace GuiCommon
 				wxString name = _( "Submesh " );
 				name << count;
 				++count;
-				auto idSubmesh = AppendItem( geometryId
+				auto idSubmesh = AppendItemT( geometryId
 					, name
-					, eBMP_SUBMESH
-					, eBMP_SUBMESH_SEL
+					, eBMP::eSubmesh
+					, eBMP::eSubmeshSelected
 					, new DataType{ geometry, *submesh } );
 				doAddSubmesh( idSubmesh
 					, &geometry
@@ -497,11 +499,11 @@ namespace GuiCommon
 			if ( auto skeleton = mesh->getSkeleton();
 				skeleton )
 			{
-				auto idSkeleton = AppendItem( geometryId
+				auto idSkeleton = AppendItemT( geometryId
 					, mesh->getName()
-					, eBMP_SKELETON
-					, eBMP_SKELETON_SEL
-					, new DataType{ ObjectType::eSkeleton, skeleton } );
+					, eBMP::eSkeleton
+					, eBMP::eSkeletonSelected
+					, new DataType{ skeleton } );
 				doAddSkeleton( idSkeleton , *skeleton );
 			}
 		}
@@ -514,45 +516,45 @@ namespace GuiCommon
 		{
 			if ( node->getType() == c3d::SkeletonNodeType::eBone )
 			{
-				AppendItem( idSkeleton
+				AppendItemT( idSkeleton
 					, node->getName()
-					, eBMP_SKELETON
-					, eBMP_SKELETON_SEL
-					, new DataType{ ObjectType::eSkeletonBone, &static_cast< c3d::BoneNode & >( *node ) } );
+					, eBMP::eSkeleton
+					, eBMP::eSkeletonSelected
+					, new DataType{ &static_cast< c3d::BoneNode & >( *node ) } );
 			}
 			else
 			{
-				AppendItem( idSkeleton
+				AppendItemT( idSkeleton
 					, node->getName()
-					, eBMP_SKELETON
-					, eBMP_SKELETON_SEL
-					, new DataType{ ObjectType::eSkeletonNode, node.get() } );
+					, eBMP::eSkeleton
+					, eBMP::eSkeletonSelected
+					, new DataType{ node.get() } );
 			}
 		}
 
 		for ( auto const & [name, anim] : skeleton.getAnimations() )
 		{
-			AppendItem( idSkeleton
+			AppendItemT( idSkeleton
 				, name
-				, eBMP_ANIMATION
-				, eBMP_ANIMATION_SEL
-				, new DataType{ ObjectType::eSkeletonAnimation, &static_cast< c3d::SkeletonAnimation & >( *anim ) } );
+				, eBMP::eAnimation
+				, eBMP::eAnimationSelected
+				, new DataType{ &static_cast< c3d::SkeletonAnimation & >( *anim ) } );
 		}
 	}
 
 	void SceneObjectsTree::doAddCamera( wxTreeItemId id
 		, c3d::Camera & camera )
 	{
-		auto cameraId = AppendItem( id
+		auto cameraId = AppendItemT( id
 			, camera.getName()
-			, eBMP_CAMERA
-			, eBMP_CAMERA_SEL
-			, new DataType{ std::make_unique< CameraTreeItemProperty >( m_propertiesHolder->isEditable(), camera ) } );
-		AppendItem( cameraId
+			, eBMP::eCamera
+			, eBMP::eCameraSelected
+			, new DataType{ std::make_unique< CameraTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), camera ) } );
+		AppendItemT( cameraId
 			, _( "Viewport" )
-			, eBMP_VIEWPORT
-			, eBMP_VIEWPORT_SEL
-			, new DataType{ std::make_unique< ViewportTreeItemProperty >( m_propertiesHolder->isEditable()
+			, eBMP::eViewport
+			, eBMP::eViewportSelected
+			, new DataType{ std::make_unique< ViewportTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable()
 				, *camera.getScene()->getEngine()
 				, camera.getViewport() ) } );
 	}
@@ -560,21 +562,21 @@ namespace GuiCommon
 	void SceneObjectsTree::doAddBillboard( wxTreeItemId id
 		, c3d::BillboardList & billboard )
 	{
-		AppendItem( id
+		AppendItemT( id
 			, billboard.getName()
-			, eBMP_BILLBOARD
-			, eBMP_BILLBOARD_SEL
-			, new DataType{ ObjectType::eBillboards, &billboard } );
+			, eBMP::eBillboard
+			, eBMP::eBillboardSelected
+			, new DataType{ &billboard } );
 	}
 
 	void SceneObjectsTree::doAddParticleSystem( wxTreeItemId id
 		, c3d::ParticleSystem & particleSystem )
 	{
-		AppendItem( id
+		AppendItemT( id
 			, particleSystem.getName()
-			, eBMP_PARTICLE
-			, eBMP_PARTICLE_SEL
-			, new DataType{ ObjectType::eParticleSystem, &particleSystem } );
+			, eBMP::eParticle
+			, eBMP::eParticleSelected
+			, new DataType{ &particleSystem } );
 	}
 
 	void SceneObjectsTree::doAddNode( wxTreeItemId id
@@ -582,11 +584,11 @@ namespace GuiCommon
 	{
 		for ( auto const & [name, child] : node.getChildren() )
 		{
-			doAddNode( AppendItem( id
+			doAddNode( AppendItemT( id
 					, name
-					, eBMP_NODE
-					, eBMP_NODE_SEL
-					, new DataType{ ObjectType::eSceneNode, child } )
+					, eBMP::eNode
+					, eBMP::eNodeSelected
+					, new DataType{ child } )
 				, *child );
 		}
 	}
@@ -596,10 +598,10 @@ namespace GuiCommon
 	{
 		for ( auto const & [name, anim] : group.getAnimations() )
 		{
-			AppendItem( id
+			AppendItemT( id
 				, name
-				, eBMP_ANIMATION
-				, eBMP_ANIMATION_SEL
+				, eBMP::eAnimation
+				, eBMP::eAnimationSelected
 				, new DataType{ group, anim } );
 		}
 	}
@@ -612,27 +614,27 @@ namespace GuiCommon
 			switch ( overlay->getType() )
 			{
 			case c3d::OverlayType::ePanel:
-				doAddOverlay( AppendItem( id
+				doAddOverlay( AppendItemT( id
 						, overlay->getName()
-						, eBMP_PANEL_OVERLAY
-						, eBMP_PANEL_OVERLAY_SEL
-						, new DataType{ ObjectType::eOverlay, &overlay->getCategory() } )
+						, eBMP::ePanelOverlay
+						, eBMP::ePanelOverlaySelected
+						, new DataType{ &overlay->getCategory() } )
 					, overlay->getCategory() );
 				break;
 			case c3d::OverlayType::eBorderPanel:
-				doAddOverlay( AppendItem( id
+				doAddOverlay( AppendItemT( id
 						, overlay->getName()
-						, eBMP_BORDER_PANEL_OVERLAY
-						, eBMP_BORDER_PANEL_OVERLAY_SEL
-						, new DataType{ ObjectType::eOverlay, &overlay->getCategory() } )
+						, eBMP::eBorderPanelOverlay
+						, eBMP::eBorderPanelOverlaySelected
+						, new DataType{ &overlay->getCategory() } )
 					, overlay->getCategory() );
 				break;
 			case c3d::OverlayType::eText:
-				doAddOverlay( AppendItem( id
+				doAddOverlay( AppendItemT( id
 						, overlay->getName()
-						, eBMP_TEXT_OVERLAY
-						, eBMP_TEXT_OVERLAY_SEL
-						, new DataType{ ObjectType::eOverlay, &overlay->getCategory() } )
+						, eBMP::eTextOverlay
+						, eBMP::eTextOverlaySelected
+						, new DataType{ &overlay->getCategory() } )
 					, overlay->getCategory() );
 				break;
 			default:
@@ -703,11 +705,11 @@ namespace GuiCommon
 			return;
 		}
 
-		auto parentId = AppendItem( id
+		auto parentId = AppendItemT( id
 			, name
-			, eBMP_STYLE
-			, eBMP_STYLE_SEL
-			, new DataType{ ObjectType::eStyle, &style } );
+			, eBMP::eStyle
+			, eBMP::eStyleSelected
+			, new DataType{ &style } );
 
 		if ( isStylesHolder( style ) )
 		{
@@ -757,10 +759,10 @@ namespace GuiCommon
 		, bool full
 		, bool inLayout )
 	{
-		auto parentId = AppendItem( id
+		auto parentId = AppendItemT( id
 			, name
-			, eBMP_CONTROL
-			, eBMP_CONTROL_SEL
+			, eBMP::eControl
+			, eBMP::eControlSelected
 			, new DataType{ control, full, inLayout } );
 
 		if ( isLayoutControl( control ) )
@@ -792,11 +794,11 @@ namespace GuiCommon
 	void SceneObjectsTree::doAddMaterial( wxTreeItemId id
 		, c3d::MaterialObs material )
 	{
-		auto materialId = AppendItem( id
+		auto materialId = AppendItemT( id
 			, material->getName()
-			, int( eBMP_MATERIAL )
-			, int( eBMP_MATERIAL_SEL )
-			, new DataType{ ObjectType::eMaterial, material } );
+			, eBMP::eMaterial
+			, eBMP::eMaterialSelected
+			, new DataType{ material } );
 		uint32_t passIndex = 0;
 		m_materials.try_emplace( material, materialId );
 
@@ -813,11 +815,11 @@ namespace GuiCommon
 		, uint32_t index
 		, c3d::Pass & pass )
 	{
-		auto passId = AppendItem( id
+		auto passId = AppendItemT( id
 			, wxString( _( "Pass " ) ) << index
-			, int( eBMP_PASS )
-			, int( eBMP_PASS_SEL )
-			, new DataType{ ObjectType::ePass, &pass } );
+			, eBMP::ePass
+			, eBMP::ePassSelected
+			, new DataType{ &pass } );
 		uint32_t unitIndex = 0;
 
 		for ( auto unit : pass )
@@ -838,10 +840,10 @@ namespace GuiCommon
 		, c3d::Pass & pass
 		, c3d::TextureUnit & texture )
 	{
-		auto unitId = AppendItem( id
+		auto unitId = AppendItemT( id
 			, wxString( _( "Texture Unit " ) ) << index
-			, int( eBMP_TEXTURE )
-			, int( eBMP_TEXTURE_SEL )
+			, eBMP::eTexture
+			, eBMP::eTextureSelected
 			, new DataType{ pass, texture } );
 
 		if ( texture.isRenderTarget() )
@@ -857,24 +859,24 @@ namespace GuiCommon
 	void SceneObjectsTree::doLoadSceneLights( wxTreeItemId id
 		, wxString const & name
 		, c3d::LightType type
-		, int icon
-		, int iconSel )
+		, eBMP icon
+		, eBMP iconSel )
 	{
 		if ( auto lights = m_scene->getLightCache().getLights( type );
 			!lights.empty() )
 		{
-			auto lightsId = AppendItem( id
+			auto lightsId = AppendItemT( id
 				, name
 				, icon
 				, iconSel );
 
 			for ( auto light : lights )
 			{
-				AppendItem( lightsId
+				AppendItemT( lightsId
 					, light->getName()
 					, icon
 					, iconSel
-					, new DataType{ ObjectType::eLight, light } );
+					, new DataType{ light } );
 			}
 		}
 	}
@@ -882,32 +884,32 @@ namespace GuiCommon
 	void SceneObjectsTree::doLoadSceneLightGroups( wxTreeItemId id
 		, wxString const & name
 		, c3d::LightType type
-		, int icon
-		, int iconSel )
+		, eBMP icon
+		, eBMP iconSel )
 	{
 		if ( auto & lightGroups = m_scene->getLightGroupCache().getLightGroups( type );
 			!lightGroups.empty() )
 		{
-			auto lightGroupsId = AppendItem( id
+			auto lightGroupsId = AppendItemT( id
 				, name
 				, icon
 				, iconSel );
 
 			for ( auto lightGroup : lightGroups )
 			{
-				auto groupId = AppendItem( lightGroupsId
+				auto groupId = AppendItemT( lightGroupsId
 					, lightGroup->getName()
 					, icon
 					, iconSel
-					, new DataType{ ObjectType::eLightGroup, lightGroup } );
+					, new DataType{ lightGroup } );
 
 				for ( auto & instance : *lightGroup )
 				{
-					AppendItem( groupId
+					AppendItemT( groupId
 						, instance->getNode().getName()
-						, eBMP_NODE
-						, eBMP_NODE_SEL
-						, new DataType{ ObjectType::eGroupLight, instance.get() } );
+						, eBMP::eNode
+						, eBMP::eNodeSelected
+						, new DataType{ instance.get() } );
 				}
 			}
 		}
@@ -937,93 +939,93 @@ namespace GuiCommon
 		{
 			switch ( data->getType() )
 			{
-			case ObjectType::eTreeItemProp:
+			case ObjectType::TreeItemProperty:
 				m_propertiesHolder->setPropertyData( data->getProperties() );
 				break;
-			case ObjectType::eMaterial:
-				m_materialProperties->setData( data->getObject< c3d::Material >() );
+			case ObjectType::Material:
+				m_materialProperties->setData( data->getObject< ObjectType::Material >() );
 				m_propertiesHolder->setPropertyData( m_materialProperties.get() );
 				break;
-			case ObjectType::ePass:
-				m_passProperties->setData( data->getObject< c3d::Pass >() );
+			case ObjectType::Pass:
+				m_passProperties->setData( data->getObject< ObjectType::Pass >() );
 				m_propertiesHolder->setPropertyData( m_passProperties.get() );
 				break;
-			case ObjectType::eSceneNode:
-				m_nodeProperties->setData( data->getObject< c3d::SceneNode >() );
+			case ObjectType::SceneNode:
+				m_nodeProperties->setData( data->getObject< ObjectType::SceneNode >() );
 				m_propertiesHolder->setPropertyData( m_nodeProperties.get() );
-				onSelectNode( &data->getObject< c3d::SceneNode >() );
+				onSelectNode( &data->getObject< ObjectType::SceneNode >() );
 				break;
-			case ObjectType::eLight:
-				m_lightProperties->setData( data->getObject< c3d::Light >() );
+			case ObjectType::Light:
+				m_lightProperties->setData( data->getObject< ObjectType::Light >() );
 				m_propertiesHolder->setPropertyData( m_lightProperties.get() );
-				onSelectLight( data->getObject< c3d::Light >().getInstance() );
+				onSelectLight( data->getObject< ObjectType::Light >().getInstance() );
 				break;
-			case ObjectType::eLightGroup:
-				m_lightGroupProperties->setData( data->getObject< c3d::LightGroup >() );
+			case ObjectType::LightGroup:
+				m_lightGroupProperties->setData( data->getObject< ObjectType::LightGroup >() );
 				m_propertiesHolder->setPropertyData( m_lightGroupProperties.get() );
 				break;
-			case ObjectType::eGroupLight:
-				m_nodeProperties->setData( data->getObject< c3d::LightInstance >().getNode() );
+			case ObjectType::LightInstance:
+				m_nodeProperties->setData( data->getObject< ObjectType::LightInstance >().getNode() );
 				m_propertiesHolder->setPropertyData( m_nodeProperties.get() );
-				onSelectLight( &data->getObject< c3d::LightInstance >() );
+				onSelectLight( &data->getObject< ObjectType::LightInstance >() );
 				break;
-			case ObjectType::eOverlay:
-				m_overlayProperties->setData( data->getObject< c3d::OverlayCategory >() );
+			case ObjectType::OverlayCategory:
+				m_overlayProperties->setData( data->getObject< ObjectType::OverlayCategory >() );
 				m_propertiesHolder->setPropertyData( m_overlayProperties.get() );
 				break;
-			case ObjectType::eStyle:
-				m_styleProperties->setData( data->getObject< c3d::ControlStyle >() );
+			case ObjectType::ControlStyle:
+				m_styleProperties->setData( data->getObject< ObjectType::ControlStyle >() );
 				m_propertiesHolder->setPropertyData( m_styleProperties.get() );
 				break;
-			case ObjectType::eGeometry:
-				m_geometryProperties->setData( data->getObject< c3d::Geometry >() );
+			case ObjectType::Geometry:
+				m_geometryProperties->setData( data->getObject< ObjectType::Geometry >() );
 				m_propertiesHolder->setPropertyData( m_geometryProperties.get() );
 				break;
-			case ObjectType::eBillboards:
-				m_billboardsProperties->setData( data->getObject< c3d::BillboardList >() );
+			case ObjectType::BillboardList:
+				m_billboardsProperties->setData( data->getObject< ObjectType::BillboardList >() );
 				m_propertiesHolder->setPropertyData( m_billboardsProperties.get() );
 				break;
-			case ObjectType::eParticleSystem:
-				m_particlesProperties->setData( data->getObject< c3d::ParticleSystem >() );
+			case ObjectType::ParticleSystem:
+				m_particlesProperties->setData( data->getObject< ObjectType::ParticleSystem >() );
 				m_propertiesHolder->setPropertyData( m_particlesProperties.get() );
 				break;
-			case ObjectType::eSkeleton:
-				m_skeletonProperties->setData( data->getObject< c3d::Skeleton >() );
+			case ObjectType::Skeleton:
+				m_skeletonProperties->setData( data->getObject< ObjectType::Skeleton >() );
 				m_propertiesHolder->setPropertyData( m_skeletonProperties.get() );
 				break;
-			case ObjectType::eSkeletonBone:
-				m_skeletonBoneProperties->setData( data->getObject< c3d::BoneNode >() );
+			case ObjectType::BoneNode:
+				m_skeletonBoneProperties->setData( data->getObject< ObjectType::BoneNode >() );
 				m_propertiesHolder->setPropertyData( m_skeletonBoneProperties.get() );
 				break;
-			case ObjectType::eSkeletonNode:
-				m_skeletonNodeProperties->setData( data->getObject< c3d::SkeletonNode >() );
+			case ObjectType::SkeletonNode:
+				m_skeletonNodeProperties->setData( data->getObject< ObjectType::SkeletonNode >() );
 				m_propertiesHolder->setPropertyData( m_skeletonNodeProperties.get() );
 				break;
-			case ObjectType::eSkeletonAnimation:
-				m_skeletonAnimationProperties->setData( data->getObject< c3d::SkeletonAnimation >() );
+			case ObjectType::SkeletonAnimation:
+				m_skeletonAnimationProperties->setData( data->getObject< ObjectType::SkeletonAnimation >() );
 				m_propertiesHolder->setPropertyData( m_skeletonAnimationProperties.get() );
 				break;
-			case ObjectType::eAnimatedObjectGroup:
-				m_animatedObjectGroupProperties->setData( data->getObject< c3d::AnimatedObjectGroup >() );
+			case ObjectType::AnimatedObjectGroup:
+				m_animatedObjectGroupProperties->setData( data->getObject< ObjectType::AnimatedObjectGroup >() );
 				m_propertiesHolder->setPropertyData( m_animatedObjectGroupProperties.get() );
 				break;
-			case ObjectType::eTexture:
+			case ObjectType::Texture:
 				m_textureProperties->setData( *std::get< 0 >( data->getPassTexture() )
 					, *std::get< 1 >( data->getPassTexture() ) );
 				m_propertiesHolder->setPropertyData( m_textureProperties.get() );
 				break;
-			case ObjectType::eControl:
+			case ObjectType::Control:
 				m_controlProperties->setData( *std::get< 0 >( data->getControlData() )
 					, std::get< 1 >( data->getControlData() )
 					, std::get< 2 >( data->getControlData() ) );
 				m_propertiesHolder->setPropertyData( m_controlProperties.get() );
 				break;
-			case ObjectType::eAnimation:
+			case ObjectType::Animation:
 				m_animationProperties->setData( *std::get< 0 >( data->getAnimationData() )
 					, std::get< 1 >( data->getAnimationData() ) );
 				m_propertiesHolder->setPropertyData( m_animationProperties.get() );
 				break;
-			case ObjectType::eSubmesh:
+			case ObjectType::Submesh:
 				m_submeshProperties->setData( *std::get< 0 >( data->getSubmeshData() )
 					, *std::get< 1 >( data->getSubmeshData() ) );
 				m_propertiesHolder->setPropertyData( m_submeshProperties.get() );

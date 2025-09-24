@@ -33,10 +33,10 @@ namespace c3d::shader
 		 */
 		template< typename ValueT >
 		void sortT( sdw::ShaderWriter & writer
-			, sdw::UInt elementOffset
+			, sdw::UInt const & elementOffset
 			, sdw::UInt elementCount
-			, sdw::UInt groupIndex
-			, [[maybe_unused]] sdw::UInt threadIndex
+			, sdw::UInt const & groupIndex
+			, [[maybe_unused]] sdw::UInt const & threadIndex
 			, sdw::Array< sdw::UInt > const & inputKeys
 			, sdw::Array< sdw::UInt > const & outputKeys
 			, sdw::Array< ValueT > const & inputValues
@@ -148,10 +148,10 @@ namespace c3d::shader
 		 */
 		template< typename ValueT >
 		void sortT( sdw::ComputeWriter & writer
-			, sdw::UInt elementOffset
+			, sdw::UInt const & elementOffset
 			, sdw::UInt elementCount
-			, sdw::UInt groupIndex
-			, sdw::UInt threadIndex
+			, sdw::UInt const & groupIndex
+			, sdw::UInt const & threadIndex
 			, sdw::Array< sdw::UInt > const & inputKeys
 			, sdw::Array< sdw::UInt > const & outputKeys
 			, ValueT const & invalidValue )

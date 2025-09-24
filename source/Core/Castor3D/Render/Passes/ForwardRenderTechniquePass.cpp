@@ -186,10 +186,11 @@ namespace c3d
 				, index );
 		}
 
-		if ( flags.pass.hasDeferredDiffuseLightingFlag
+		if ( m_parent
+			&& flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
-			bindImage( getTechnique().getSssDiffuse().getSampledView()
+			bindImage( m_parent->getSssDiffuse().getSampledView()
 				, descriptorWrites
 				, index );
 		}

@@ -251,7 +251,7 @@ namespace c3d
 	void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
 		, Point4fArray const & data
-		, Point4fArray &
+		, Point4fArray const &
 		, UploadData & uploader )
 	{
 		auto count = uint32_t( data.size() );

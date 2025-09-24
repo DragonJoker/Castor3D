@@ -8,10 +8,11 @@
 
 namespace GuiCommon
 {
-	ViewportTreeItemProperty::ViewportTreeItemProperty( bool editable
+	ViewportTreeItemProperty::ViewportTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine & engine
 		, c3d::Viewport & viewport )
-		: TreeItemProperty( &engine, editable )
+		: TreeItemProperty( &engine, imagesLoader, editable )
 		, m_viewport( viewport )
 	{
 		CreateTreeItemMenu();

@@ -68,10 +68,8 @@ namespace c3d
 				} );
 
 			if ( it == queues.end() )
-			{
 				throw ashes::Exception{ VK_ERROR_INITIALIZATION_FAILED
 					, "Couldn't find a queue supporting presentation." };
-			}
 
 			return &( *it );
 		}
@@ -80,13 +78,8 @@ namespace c3d
 		{
 			auto surfaceCaps = surface.getCapabilities();
 			uint32_t desiredNumberOfSwapChainImages{ surfaceCaps.minImageCount + 1 };
-
-			if ( ( surfaceCaps.maxImageCount > 0 ) &&
-				( desiredNumberOfSwapChainImages > surfaceCaps.maxImageCount ) )
-			{
+			if ( ( surfaceCaps.maxImageCount > 0 ) && ( desiredNumberOfSwapChainImages > surfaceCaps.maxImageCount ) )
 				desiredNumberOfSwapChainImages = surfaceCaps.maxImageCount;
-			}
-
 			return desiredNumberOfSwapChainImages;
 		}
 
@@ -114,23 +107,17 @@ namespace c3d
 					} );
 
 				if ( allowHdr && it == formats.end() )
-				{
 					it = std::find_if( formats.begin()
 						, formats.end()
 						, []( VkSurfaceFormatKHR const & lookup )
 						{
 							return lookup.format == VK_FORMAT_R8G8B8A8_UNORM;
 						} );
-				}
 
 				if ( it != formats.end() )
-				{
 					result = *it;
-				}
 				else
-				{
 					result = formats.front();
-				}
 			}
 
 			return result;
@@ -151,9 +138,7 @@ namespace c3d
 
 				if ( ( result != VK_PRESENT_MODE_MAILBOX_KHR )
 					&& ( mode == VK_PRESENT_MODE_IMMEDIATE_KHR ) )
-				{
 					result = mode;
-				}
 			}
 
 			return result;
@@ -163,28 +148,18 @@ namespace c3d
 			, VkExtent2D const & size
 			, bool allowHdr )
 		{
-			VkExtent2D swapChainExtent{};
 			auto surfaceCaps = surface.getCapabilities();
-
+			VkExtent2D swapChainExtent{};
 			if ( surfaceCaps.currentExtent.width == uint32_t( -1 ) )
-			{
 				swapChainExtent = size;
-			}
 			else
-			{
 				swapChainExtent = surfaceCaps.currentExtent;
-			}
 
 			VkSurfaceTransformFlagBitsKHR preTransform{};
-
 			if ( ashes::checkFlag( surfaceCaps.supportedTransforms, VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR ) )
-			{
 				preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-			}
 			else
-			{
 				preTransform = surfaceCaps.currentTransform;
-			}
 
 			auto presentMode = selectPresentMode( surface );
 			auto surfaceFormat = selectFormat( surface, allowHdr );
@@ -322,39 +297,27 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserVSync, WindowContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->window.enableVSync );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserFullscreen, WindowContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->window.fullscreen );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserAllowHdr, WindowContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( blockContext->window.allowHdr );
-			}
 		}
 		CU_EndAttribute()
 
@@ -427,20 +390,14 @@ namespace c3d
 		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
 	{
 		log::debug << "Created RenderWindow, size: " << size << std::endl;
-
 		if ( !m_surface )
-		{
 			CU_Exception( "Could not create Vulkan surface." );
-		}
 
 		getEngine()->getMaterialCache().initialise( m_device );
 		doCreateProgram();
 		auto queueData = m_reservedQueue;
-
 		if ( !queueData )
-		{
 			queueData = m_queues->getQueue();
-		}
 
 		doCreateSwapchain();
 
@@ -452,10 +409,7 @@ namespace c3d
 		}
 
 		if ( !m_reservedQueue )
-		{
 			m_queues->putQueue( queueData );
-		}
-
 		log::debug << "Created render window " << m_index << std::endl;
 	}
 
@@ -477,9 +431,7 @@ namespace c3d
 		m_device.uboPool->putBuffer( m_configUbo );
 
 		if ( m_reservedQueue )
-		{
 			m_queues->unreserveQueue( m_reservedQueue );
-		}
 	}
 
 	void RenderWindow::initialise( RenderWindowDesc const & desc )
@@ -492,9 +444,7 @@ namespace c3d
 		if ( m_loadingScreen )
 		{
 			if ( !m_loading.exchange( true ) )
-			{
 				m_loadingScreen->enable();
-			}
 
 			auto progress = m_progressBar.get();
 			incProgressBarGlobalRange( progress
@@ -522,10 +472,7 @@ namespace c3d
 									, [this]()
 									{
 										if ( m_loadingScreen )
-										{
 											m_loadingScreen->disable();
-										}
-
 										m_loading = false;
 										m_initialised = true;
 									} ) );
@@ -538,10 +485,7 @@ namespace c3d
 							, [this]()
 							{
 								if ( m_loadingScreen )
-								{
 									m_loadingScreen->disable();
-								}
-
 								m_loading = false;
 								m_initialised = true;
 							} ) );
@@ -557,10 +501,7 @@ namespace c3d
 			doCreateSaveData();
 
 			if ( m_loadingScreen )
-			{
 				m_loadingScreen->disable();
-			}
-
 			m_loading = false;
 			m_initialised = true;
 			getEngine()->registerWindow( *this );
@@ -572,44 +513,29 @@ namespace c3d
 		auto & engine = *getEngine();
 		engine.unregisterWindow( *this );
 		auto queueData = m_reservedQueue;
-
 		if ( !queueData )
-		{
 			queueData = m_queues->getQueue();
-		}
 
 		auto lock = makeUniqueLock( m_renderMutex );
 		doWaitFrame( *queueData, {}, ~0u );
 		getDevice()->waitIdle();
 
 		doDestroySaveData();
-
 		if ( engine.isThreaded() )
-		{
 			doDestroyLoadingScreen();
-		}
-
 		doDestroyIntermediateViews();
 		doDestroyPickingPass();
 
 		if ( auto target = getRenderTarget() )
-		{
 			target->cleanup( m_device );
-		}
-
 		if ( !m_reservedQueue )
-		{
 			m_queues->putQueue( queueData );
-		}
-
 	}
 
 	void RenderWindow::update( CpuUpdater & updater )
 	{
 		if ( m_skip )
-		{
 			return;
-		}
 
 		auto lock( makeUniqueLock( m_renderMutex ) );
 
@@ -651,9 +577,7 @@ namespace c3d
 					}
 
 					if (m_texture3Dto2D )
-					{
 						m_texture3Dto2D->update( updater );
-					}
 
 					auto & config = m_configUbo.getData();
 					config.multiply = Point4f{ intermediate.factors.multiply };
@@ -680,55 +604,36 @@ namespace c3d
 	void RenderWindow::update( GpuUpdater & updater )
 	{
 		if ( m_skip )
-		{
 			return;
-		}
 
 		auto lock( makeUniqueLock( m_renderMutex ) );
-
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
-		{
 			m_loadingScreen->update( updater );
-		}
 		else if ( auto target = getRenderTarget() )
-		{
 			target->update( updater );
-		}
 	}
 
 	void RenderWindow::upload( UploadData & uploader )
 	{
 		if ( m_skip )
-		{
 			return;
-		}
 
 		auto lock( makeUniqueLock( m_renderMutex ) );
-
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
-		{
 			m_loadingScreen->upload( uploader );
-		}
 		else if ( auto target = getRenderTarget() )
-		{
 			target->upload( uploader );
-		}
 	}
 
 	void RenderWindow::render( bool waitOnly
 		, SemaphoreWaitArray & baseToWait )
 	{
 		if ( m_skip )
-		{
 			return;
-		}
 
 		auto queueData = m_reservedQueue;
-
 		if ( !queueData )
-		{
 			queueData = m_queues->getQueue();
-		}
 
 		auto lock = makeUniqueLock( m_renderMutex );
 		auto target = getRenderTarget();
@@ -797,9 +702,7 @@ namespace c3d
 		}
 
 		if ( !m_reservedQueue )
-		{
 			m_queues->putQueue( queueData );
-		}
 	}
 
 	void RenderWindow::resize( uint32_t x, uint32_t y )
@@ -817,9 +720,7 @@ namespace c3d
 	void RenderWindow::setCamera( Camera & camera )const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			target->setCamera( camera );
-		}
 	}
 
 	void RenderWindow::enableFullScreen( bool value )
@@ -830,105 +731,73 @@ namespace c3d
 	SceneRPtr RenderWindow::getScene()const
 	{
 		SceneRPtr result{};
-
 		if ( auto target = getRenderTarget() )
-		{
 			result = target->getScene();
-		}
-
 		return result;
 	}
 
 	CameraRPtr RenderWindow::getCamera()const
 	{
 		CameraRPtr result{};
-
 		if ( auto target = getRenderTarget() )
-		{
 			result = target->getCamera();
-		}
-
 		return result;
 	}
 
 	ViewportType RenderWindow::getViewportType()const
 	{
 		ViewportType result{};
-
 		if ( auto target = getRenderTarget() )
-		{
 			result = target->getViewportType();
-		}
-
 		return result;
 	}
 
 	void RenderWindow::setViewportType( ViewportType value )const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			target->setViewportType( value );
-		}
 	}
 
 	PixelFormat RenderWindow::getPixelFormat()const
 	{
 		PixelFormat result = PixelFormat::eUNDEFINED;
-
 		if ( auto target = getRenderTarget() )
-		{
 			result = target->getPixelFormat();
-		}
-
 		return result;
 	}
 
 	void RenderWindow::setScene( Scene & value )const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			target->setScene( value );
-		}
 	}
 
 	bool RenderWindow::isUsingStereo()const
 	{
 		bool result = false;
-
 		if ( auto target = getRenderTarget() )
-		{
 			result = target->isUsingStereo();
-		}
-
 		return result;
 	}
 
 	void RenderWindow::setStereo( bool value )const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			target->setStereo( value );
-		}
 	}
 
 	float RenderWindow::getIntraOcularDistance()const
 	{
 		float result = 0;
-
 		if ( auto target = getRenderTarget() )
-		{
 			result = target->getIntraOcularDistance();
-		}
-
 		return result;
 	}
 
 	void RenderWindow::setIntraOcularDistance( float value )const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			target->setIntraOcularDistance( value );
-		}
 	}
 
 	Size RenderWindow::getSize()const
@@ -944,13 +813,9 @@ namespace c3d
 
 #else
 		PickNodeType result = PickNodeType::eNone;
-
 		if ( auto camera = getCamera();
 			camera && !m_picking->isPicking() )
-		{
 			result = m_picking->pick( position );
-		}
-
 		return result;
 
 #endif
@@ -983,11 +848,8 @@ namespace c3d
 	GeometryRPtr RenderWindow::getPickedGeometry()const
 	{
 		auto sel = m_picking->getPickedGeometry();
-
 		if ( !sel )
-		{
 			return nullptr;
-		}
 
 		auto geometry = sel->getScene()->findGeometry( sel->getName() );
 		return geometry;
@@ -1006,20 +868,14 @@ namespace c3d
 	ShadowMapLightTypeArray RenderWindow::getShadowMaps()const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			return target->getShadowMaps();
-		}
-
 		return {};
 	}
 
 	ShadowBuffer * RenderWindow::getShadowBuffer()const
 	{
 		if ( auto target = getRenderTarget() )
-		{
 			return target->getShadowBuffer();
-		}
-
 		return nullptr;
 	}
 
@@ -1031,16 +887,11 @@ namespace c3d
 	void RenderWindow::allowHdrSwapchain( bool value )
 	{
 		if ( value == m_allowHdrSwapchain )
-		{
 			return;
-		}
 
 		m_allowHdrSwapchain = value;
-
 		if ( m_hasHdrSupport && m_swapChain )
-		{
 			doResetSwapChainAndCommands();
-		}
 	}
 
 	void RenderWindow::doCreateRenderPass()
@@ -1120,7 +971,8 @@ namespace c3d
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&writer, &c3d_mapResult, c3d_uvMultiplyAdd, &c3d_data, &c3d_multiply, &c3d_add]( sdw::FragmentInT< shader::Uv2FT > const & in
+			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&c3d_mapResult, c3d_uvMultiplyAdd, &c3d_data, &c3d_multiply, &c3d_add
+					, &writer]( sdw::FragmentInT< shader::Uv2FT > const & in
 				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto sampled = writer.declLocale( "sampled"
@@ -1165,9 +1017,7 @@ namespace c3d
 
 		if ( !m_renderPass
 			|| m_swapChain->getFormat() != convert( m_swapchainFormat ) )
-		{
 			doCreateRenderPass();
-		}
 
 		m_swapchainFormat = c3d::convert( m_swapChain->getFormat() );
 		doCreateRenderingResources();
@@ -1299,11 +1149,8 @@ namespace c3d
 	void RenderWindow::doCreatePickingPass( QueueData const & queueData )
 	{
 		auto target = getRenderTarget();
-
 		if ( !target )
-		{
 			return;
-		}
 
 		m_picking = makeUnique< Picking >( m_resources
 			, m_device
@@ -1355,7 +1202,7 @@ namespace c3d
 			{
 				auto const & intermediateView = intermediate.intermediateSampledView;
 				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediateView.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-						, makeDescriptorWrite( m_configUbo, 1u ) }
+						, makeUniformBufferDescriptorWrite( m_configUbo, 1u ) }
 					, intermediateView.factors.invertY );
 			}
 
@@ -1394,7 +1241,6 @@ namespace c3d
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 			if ( intermediate.layout != ImageLayout::eShaderReadOnly )
-			{
 				commandBuffer->memoryBarrier( ashes::getStageMask( convert( intermediateBarrierView.layout ) )
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
@@ -1403,7 +1249,6 @@ namespace c3d
 						, ImageLayout::eShaderReadOnly
 						, VK_QUEUE_FAMILY_IGNORED
 						, VK_QUEUE_FAMILY_IGNORED ) );
-			}
 
 			commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
@@ -1412,9 +1257,7 @@ namespace c3d
 			m_renderQuad->registerPass( *commandBuffer, passIndex );
 			commandBuffer->endRenderPass();
 
-			if ( intermediate.layout != ImageLayout::eShaderReadOnly
-				&& intermediate.layout != ImageLayout::eUndefined )
-			{
+			if ( intermediate.layout != ImageLayout::eShaderReadOnly && intermediate.layout != ImageLayout::eUndefined )
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, ashes::getStageMask( convert( intermediateBarrierView.layout ) )
 					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
@@ -1423,7 +1266,6 @@ namespace c3d
 						, intermediateBarrierView.layout
 						, VK_QUEUE_FAMILY_IGNORED
 						, VK_QUEUE_FAMILY_IGNORED ) );
-			}
 #else
 			commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
@@ -1446,9 +1288,7 @@ namespace c3d
 
 		if ( !m_loadingScreen
 			&& ( !target || !target->hasTechnique() ) )
-		{
 			return;
-		}
 
 		auto lock( makeUniqueLock( m_renderMutex ) );
 
@@ -1498,7 +1338,7 @@ namespace c3d
 			for ( auto const & intermediate : makeArrayView( begin, m_intermediates.end() ) )
 			{
 				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediate.intermediateSampledView.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-						, makeDescriptorWrite( m_configUbo, 1u ) }
+						, makeUniformBufferDescriptorWrite( m_configUbo, 1u ) }
 				, intermediate.intermediateSampledView.factors.invertY );
 			}
 
@@ -1698,16 +1538,10 @@ namespace c3d
 #endif
 		auto dstExtent = targetExtent;
 		VkOffset3D srcOffset{};
-
 		if ( srcExtent.width > dstExtent.width )
-		{
 			srcOffset.x = int32_t( srcExtent.width - dstExtent.width ) / 2;
-		}
-
 		if ( srcExtent.height > dstExtent.height )
-		{
 			srcOffset.y = int32_t( srcExtent.height - dstExtent.height ) / 2;
-		}
 
 		dstExtent.width = std::min( dstExtent.width, srcExtent.width );
 		dstExtent.height = std::min( dstExtent.height, srcExtent.height );
@@ -1932,22 +1766,17 @@ namespace c3d
 			log::error << "  Addresses: \n";
 
 			for ( auto const & info : faultInfo.addressInfos )
-			{
 				log::error << cuT( "    From 0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
 					<< cuT( " to 0x" ) << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
 					<< cuT( ": " ) << rendwndw::getAddressTypeName( info.addressType ) << cuT( "\n" );
-			}
 		}
 
 		if ( !faultInfo.vendorInfos.empty() )
 		{
 			log::error << "  Vendor Infos: \n";
-
 			for ( auto const & info : faultInfo.vendorInfos )
-			{
 				log::error << cuT( "    " ) << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << info.vendorFaultCode
 					<< cuT( ": " ) << info.description << "\n";
-			}
 		}
 #endif
 	}

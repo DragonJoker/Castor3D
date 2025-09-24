@@ -134,6 +134,8 @@ namespace c3d::shader
 	struct SurfaceT
 		: public SurfaceBaseT< Position3T, Position4T, NormalT >
 	{
+		SDW_DeclStructInstance( , SurfaceT );
+
 		SurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -157,7 +159,6 @@ namespace c3d::shader
 			, NormalT normal );
 		SurfaceT( NormalT world
 			, NormalT normal );
-		SDW_DeclStructInstance( , SurfaceT );
 
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
@@ -188,6 +189,8 @@ namespace c3d::shader
 	struct RasterizerSurfaceBaseT
 		: public SurfaceBaseT< Position3T, Position4T, Normal3T >
 	{
+		SDW_DeclStructInstance( , RasterizerSurfaceBaseT );
+
 		RasterizerSurfaceBaseT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -255,11 +258,11 @@ namespace c3d::shader
 	struct BillboardSurfaceT
 		: public sdw::StructInstance
 	{
+		SDW_DeclStructInstance( , BillboardSurfaceT );
+
 		BillboardSurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
-
-		SDW_DeclStructInstance( , BillboardSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint
@@ -276,6 +279,8 @@ namespace c3d::shader
 		: public RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >
 	{
 	public:
+		SDW_DeclStructInstance( , RasterizerSurfaceT );
+
 		RasterizerSurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -286,8 +291,6 @@ namespace c3d::shader
 			, TexcoordT texCoord );
 		template< sdw::var::Flag FlagU >
 		explicit RasterizerSurfaceT( RasterizerSurfaceT< Position3T, Position4T, Normal3T, Normal4T, TexcoordT, FlagU > const & rhs );
-
-		SDW_DeclStructInstance( , RasterizerSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint
@@ -312,11 +315,11 @@ namespace c3d::shader
 	struct VoxelSurfaceT
 		: shader::SurfaceBase
 	{
+		SDW_DeclStructInstance( , VoxelSurfaceT );
+
 		VoxelSurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true );
-
-		SDW_DeclStructInstance( , VoxelSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint

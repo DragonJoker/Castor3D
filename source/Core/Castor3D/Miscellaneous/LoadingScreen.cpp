@@ -267,33 +267,31 @@ namespace c3d
 
 	void LoadingScreen::record()
 	{
-		if ( m_enabled )
+		if ( m_enabled
+			&& m_needsRecreate.exchange( false ) )
 		{
-			if ( m_needsRecreate.exchange( false ) )
-			{
-				auto & resources = *m_colour.resources;
+			auto & resources = *m_colour.resources;
 
-				m_runnable.reset();
-				m_backgroundRenderer.reset();
-				m_colour.destroy();
-				m_graph.reset();
+			m_runnable.reset();
+			m_backgroundRenderer.reset();
+			m_colour.destroy();
+			m_graph.reset();
 
-				m_graph = makeRawUnique< crg::FrameGraph >( resources.getHandler(), toUtf8( SceneName ) );
-				m_colour = loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat );
-				m_colour.create();
-				m_backgroundRenderer = makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
-					, m_device
-					, nullptr
-					, *m_scene->getBackground()
-					, m_renderUbo
-					, *m_sceneUbo
-					, m_colour
-					, true /*clearColour*/ );
-				doCreateOpaquePass();
-				doCreateTransparentPass();
-				doCreateOverlayPass();
-				m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
-			}
+			m_graph = makeRawUnique< crg::FrameGraph >( resources.getHandler(), toUtf8( SceneName ) );
+			m_colour = loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat );
+			m_colour.create();
+			m_backgroundRenderer = makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
+				, m_device
+				, nullptr
+				, *m_scene->getBackground()
+				, m_renderUbo
+				, *m_sceneUbo
+				, m_colour
+				, true /*clearColour*/ );
+			doCreateOpaquePass();
+			doCreateTransparentPass();
+			doCreateOverlayPass();
+			m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
 		}
 	}
 

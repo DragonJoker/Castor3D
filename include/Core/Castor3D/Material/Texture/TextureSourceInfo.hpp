@@ -194,6 +194,42 @@ namespace c3d
 		ByteArray m_data{};
 		// Vulkan image mode.
 		ImageCreateInfo m_createInfo{ {} };
+
+	private:
+		friend bool operator==( TextureSourceInfo const & lhs
+			, TextureSourceInfo const & rhs )noexcept
+		{
+			if ( lhs.isVulkanImage() || rhs.isVulkanImage() )
+			{
+				return &lhs == &rhs;
+			}
+
+			if ( lhs.isRenderTarget() || rhs.isRenderTarget() )
+			{
+				return ( lhs.isRenderTarget() && rhs.isRenderTarget() )
+					&& ( lhs.renderTarget() == rhs.renderTarget() );
+			}
+
+			bool result{ true };
+
+			if ( lhs.isBufferImage() || rhs.isBufferImage() )
+			{
+				result = ( lhs.isBufferImage() && rhs.isBufferImage() )
+					&& ( lhs.name() == rhs.name() )
+					&& ( lhs.type() == rhs.type() )
+					&& ( lhs.buffer().size() == rhs.buffer().size() );
+			}
+			else if ( lhs.isFileImage() || rhs.isFileImage() )
+			{
+				result = ( lhs.isFileImage() && rhs.isFileImage() )
+					&& ( lhs.folder() == rhs.folder() )
+					&& ( lhs.relative() == rhs.relative() );
+			}
+
+			return result
+				&& ( lhs.allowCompression() == rhs.allowCompression() )
+				&& ( lhs.generateMips() == rhs.generateMips() );
+		}
 	};
 }
 

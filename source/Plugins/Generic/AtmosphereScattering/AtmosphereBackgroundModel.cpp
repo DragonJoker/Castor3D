@@ -13,12 +13,19 @@ namespace atmosphere_scattering
 	namespace model
 	{
 		template< typename DataT >
-		DataT getData( sdw::UniformBuffer & ubo
+		static DataT getData( sdw::UniformBuffer & ubo
 			, c3d::MbString const & name
 			, bool enabled = true )
 		{
 			auto result = ubo.declMember< DataT >( name, enabled );
 			ubo.end();
+			return result;
+		}
+
+		static uint32_t getNextBinding( uint32_t & binding )
+		{
+			auto result = binding;
+			++binding;
 			return result;
 		}
 	}
@@ -36,15 +43,15 @@ namespace atmosphere_scattering
 		, uint32_t set )
 		: c3d::shader::BackgroundModel{ writer, utils, c3d::move( targetSize ), true, false, false }
 		, cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
-			, binding++
+			, model::getNextBinding( binding )
 			, set ) }
 		, cameraData{ model::getData< CameraData >( cameraBuffer, CameraUbo::Data ) }
 		, atmosphereBuffer{ writer.declUniformBuffer<>( AtmosphereScatteringUbo::Buffer
-			, binding++
+			, model::getNextBinding( binding )
 			, set ) }
 		, atmosphereData{ model::getData< AtmosphereData >( atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
 		, cloudsBuffer{ writer.declUniformBuffer<>( CloudsUbo::Buffer
-			, binding++
+			, model::getNextBinding( binding )
 			, set
 			, sdw::type::MemoryLayout::eStd140
 			, needsForeground ) }
@@ -65,7 +72,7 @@ namespace atmosphere_scattering
 			, binding
 			, set }
 		, cloudsResult{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_atmbg_cloudsResult"
-			, binding++
+			, model::getNextBinding( binding )
 			, set
 			, needsForeground ) }
 	{
@@ -119,11 +126,11 @@ namespace atmosphere_scattering
 			, pV );
 	}
 
-	void AtmosphereBackgroundModel::applyVolume( sdw::Vec2 const pfragCoord
-		, sdw::Float const plinearDepth
-		, sdw::Vec2 const ptargetSize
-		, sdw::Vec2 const pcameraPlanes
-		, sdw::Vec4 & poutput )
+	void AtmosphereBackgroundModel::applyVolume( sdw::Vec2 const & pfragCoord
+		, sdw::Float const & plinearDepth
+		, sdw::Vec2 const & ptargetSize
+		, sdw::Vec2 const & pcameraPlanes
+		, sdw::Vec4 const & poutput )
 	{
 		if ( !cloudsBuffer.isEnabled() )
 		{
@@ -133,7 +140,7 @@ namespace atmosphere_scattering
 		if ( !m_computeVolume )
 		{
 			m_computeVolume = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_computeVolume"
-				, [&]( sdw::Vec2 const & fragCoord
+				, [this]( sdw::Vec2 const & fragCoord
 					, sdw::Float linearDepth
 					, sdw::Vec2 const & targetSize
 					, sdw::Vec4 output )

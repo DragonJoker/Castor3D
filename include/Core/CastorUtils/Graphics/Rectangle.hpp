@@ -24,7 +24,7 @@ namespace c3d
 
 	class Rectangle
 		: private DataHolderT< RectangleData >
-		, public Coords4i
+		, public PointView4i
 	{
 	private:
 

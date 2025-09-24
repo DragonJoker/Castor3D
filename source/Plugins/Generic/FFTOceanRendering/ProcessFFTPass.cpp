@@ -26,6 +26,12 @@ namespace ocean_fft
 
 	namespace procfft
 	{
+		enum class Bindings : uint32_t
+		{
+			eInput,
+			eOutput,
+		};
+
 		static c3d::String getName( VkFFTResult result )
 		{
 			switch ( result )
@@ -253,6 +259,95 @@ namespace ocean_fft
 				, initializeVkFFT( &result, fftConfig ) );
 			return result;
 		}
+
+		//*****************************************************************************************
+
+		class ProcessFFTPass
+			: public crg::RunnablePass
+		{
+		public:
+			/**
+			 *\~english
+			 *\param[in]	device		The GPU device.
+			 *\param[in]	vctConfig	The voxelizer configuration.
+			 *\param[in]	voxels		The voxels buffer.
+			 *\param[in]	result		The resulting texture.
+			 *\~french
+			 *\param[in]	device		Le device GPU.
+			 *\param[in]	vctConfig	La configuration du voxelizer.
+			 *\param[in]	voxels		Le tampon de voxels.
+			 *\param[in]	result		La texture résultante.
+			 */
+			ProcessFFTPass( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph
+				, c3d::RenderDevice const & device
+				, VkFFTConfig const & config
+				, c3d::Extent2D const & extent
+				, c3d::BufferBase const & input
+				, c3d::Array< c3d::BufferUPtr, 2u > const & output
+				, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) )
+				: crg::RunnablePass{ pass
+					, context
+					, graph
+					, { []( uint32_t ){}
+						, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
+						, [this]( crg::RecordContext const &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); }
+						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
+						, c3d::move( isEnabled )
+						, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+					, { 1u } }
+				, m_device{ device }
+				, m_extent{ extent }
+				, m_inBufferSize{ input.getSize() }
+				, m_vkInput{ *input.buffer }
+				, m_outBufferSize{ output[0]->getSize() }
+				, m_vkOutput{ *output[0]->buffer, *output[1]->buffer }
+				, m_app{ procfft::createApp( config
+					, device
+					, m_extent
+					, m_inBufferSize
+					, m_vkInput
+					, m_outBufferSize
+					, m_vkOutput ) }
+			{
+			}
+
+			~ProcessFFTPass()override
+			{
+				deleteVkFFT( &m_app );
+			}
+
+		private:
+			void doRecordInto( VkCommandBuffer commandBuffer )
+			{
+				VkFFTLaunchParams launchParams{};
+				launchParams.commandBuffer = &commandBuffer;
+				launchParams.inputBuffer = &m_vkInput;
+				launchParams.buffer = &m_vkOutput[0];
+				checkFFTResult( cuT( "VkFFT recording" )
+					, VkFFTAppend( &m_app, -1, &launchParams ) );
+			}
+
+			uint32_t doGetPassIndex()const
+			{
+				return 0u;
+			}
+
+			bool doIsComputePass()const
+			{
+				return true;
+			}
+
+		private:
+			c3d::RenderDevice const & m_device;
+			c3d::Extent2D m_extent;
+			VkDeviceSize m_inBufferSize{};
+			VkBuffer m_vkInput{};
+			VkDeviceSize m_outBufferSize{};
+			c3d::Array< VkBuffer, 2u > m_vkOutput{};
+			VkFFTApplication m_app{};
+		};
 	}
 
 	//************************************************************************************************
@@ -280,84 +375,13 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	VkFFTConfig::VkFFTConfig( c3d::RenderDevice const & device
-		, c3d::Extent2D const & dimensions )
+	VkFFTConfig::VkFFTConfig( c3d::RenderDevice const & device )
 		: device{ device }
 		, fence{ device->createFence( "OceanFFT" ) }
 		, vkPhysicalDevice{ device->getPhysicalDevice() }
 		, vkDevice{ *device }
 		, vkFence{ *fence }
 	{
-	}
-
-	//************************************************************************************************
-
-	c3d::String const ProcessFFTPass::Name{ cuT( "GenerateHeightmap" ) };
-
-	ProcessFFTPass::ProcessFFTPass( crg::FramePass const & pass
-		, crg::GraphContext & context
-		, crg::RunnableGraph & graph
-		, c3d::RenderDevice const & device
-		, VkFFTConfig const & config
-		, c3d::Extent2D const & extent
-		, c3d::BufferBase const & input
-		, c3d::Array< c3d::BufferUPtr, 2u > const & output
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
-		: crg::RunnablePass{ pass
-			, context
-			, graph
-			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, isEnabled
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, { 1u } }
-		, m_device{ device }
-		, m_extent{ extent }
-		, m_inBufferSize{ input.getSize() }
-		, m_vkInput{ *input.buffer }
-		, m_outBufferSize{ output[0]->getSize() }
-		, m_vkOutput{ *output[0]->buffer, *output[1]->buffer }
-		, m_app{ procfft::createApp( config
-			, device
-			, m_extent
-			, m_inBufferSize
-			, m_vkInput
-			, m_outBufferSize
-			, m_vkOutput ) }
-	{
-	}
-
-	ProcessFFTPass::~ProcessFFTPass()
-	{
-		deleteVkFFT( &m_app );
-	}
-
-	void ProcessFFTPass::accept( c3d::RenderTechniqueVisitor & visitor )
-	{
-	}
-
-	void ProcessFFTPass::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
-	{
-		VkFFTLaunchParams launchParams{};
-		launchParams.commandBuffer = &commandBuffer;
-		launchParams.inputBuffer = &m_vkInput;
-		launchParams.buffer = &m_vkOutput[0] ;
-		checkFFTResult( cuT( "VkFFT recording" )
-			, VkFFTAppend( &m_app, -1, &launchParams ) );
-	}
-
-	uint32_t ProcessFFTPass::doGetPassIndex()const
-	{
-		return 0u;
-	}
-
-	bool ProcessFFTPass::doIsComputePass()const
-	{
-		return true;
 	}
 
 	//************************************************************************************************
@@ -376,7 +400,7 @@ namespace ocean_fft
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = c3d::makeRawUnique< ProcessFFTPass >( framePass
+				auto res = c3d::makeRawUnique< procfft::ProcessFFTPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -389,8 +413,8 @@ namespace ocean_fft
 					, res->getTimer() );
 				return res;
 			} );
-		result.addInputStorage( *input.getLastAttach(), ProcessFFTPass::eInput );
-		output.front()->setLastAttach( result.addOutputStorageBuffer( output.front()->bufferViewId, ProcessFFTPass::eOutput ) );
+		result.addInputStorageT( *input.getLastAttach(), procfft::Bindings::eInput );
+		output.front()->setLastAttach( result.addOutputStorageBufferT( output.front()->bufferViewId, procfft::Bindings::eOutput ) );
 	}
 
 	//************************************************************************************************

@@ -39,7 +39,7 @@ namespace c3d::shader
 		return normalize( wsPosition - wsCamera );
 	}
 
-	DerivVec3 ReflectionModel::computeIncident( DerivVec3 const & wsPosition
+	RetDerivVec3 ReflectionModel::computeIncident( DerivVec3 const & wsPosition
 		, sdw::Vec3 const & wsCamera )
 	{
 		return normalize( wsPosition - wsCamera );
@@ -57,7 +57,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & attenuationColor
 		, sdw::Float const & attenuationDistance )
 	{
-		return transmissionDistance.getWriter()->ternary( attenuationDistance == 0.0_f
+		return sdw::findWriterMandat( transmissionDistance ).ternary( attenuationDistance == 0.0_f
 			// Attenuation distance is +∞ (which we indicate by zero), i.e. the transmitted color is not attenuated at all.
 			, vec3( 1.0_f )
 			// Compute light attenuation using Beer's law.
@@ -69,14 +69,14 @@ namespace c3d::shader
 		return roughness * clamp( ior * 2.0_f, 0.0_f, 2.0_f );
 	}
 
-	void ReflectionModel::computeWithTransmission( BlendComponents & components
+	void ReflectionModel::computeWithTransmission( BlendComponents const & components
 		, LightSurface const & lightSurface
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, CameraData const & camera
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
-		, ReflectionRefraction & output
+		, ReflectionRefraction const & output
 		, DebugOutputCategory const & debugOutput )
 	{
 		computeWithTransmission( components
@@ -93,7 +93,7 @@ namespace c3d::shader
 			, debugOutput );
 	}
 
-	void ReflectionModel::computeWithTransmission( BlendComponents & pcomponents
+	void ReflectionModel::computeWithTransmission( BlendComponents const & pcomponents
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
@@ -103,13 +103,13 @@ namespace c3d::shader
 		, CameraData const & camera
 		, sdw::Vec2 const & psceneUv
 		, sdw::UInt const & penvMapIndex
-		, ReflectionRefraction & poutput
+		, ReflectionRefraction const & poutput
 		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeWithTransmission )
 		{
 			m_computeWithTransmission = m_writer.implementFunction< sdw::Void >( "c3d_backgroundBrdfWithTransmission"
-				, [this, &debugOutput, &background, &camera]( BlendComponents components
+				, [this, &debugOutput, &background, &camera]( BlendComponents const & components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
@@ -154,7 +154,7 @@ namespace c3d::shader
 						, envMapIndex, components
 						, output.sheen );
 				}
-				, InOutBlendComponents{ m_writer, "components", pcomponents }
+				, InBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
 				, sdw::InVec3{ m_writer, "V" }
@@ -176,7 +176,7 @@ namespace c3d::shader
 			, poutput );
 	}
 
-	void ReflectionModel::computeWithoutTransmission( BlendComponents & components
+	void ReflectionModel::computeWithoutTransmission( BlendComponents const & components
 		, LightSurface const & lightSurface
 		, BackgroundModel & background
 		, sdw::UInt const & envMapIndex
@@ -191,7 +191,7 @@ namespace c3d::shader
 			, reflectedDiffuse, reflectedSpecular );
 	}
 
-	sdw::Boolean ReflectionModel::computeWithoutTransmission( BlendComponents & components
+	sdw::Boolean ReflectionModel::computeWithoutTransmission( BlendComponents const & components
 		, sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
@@ -212,20 +212,20 @@ namespace c3d::shader
 		return hasEnvMap;
 	}
 
-	void ReflectionModel::computeWithoutTransmission( BlendComponents & pcomponents
+	void ReflectionModel::computeWithoutTransmission( BlendComponents const & pcomponents
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, BackgroundModel & background
 		, sdw::UInt const & penvMapIndex
-		, ReflectionRefraction & poutput
+		, ReflectionRefraction const & poutput
 		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeWithoutTransmission )
 		{
 			m_computeWithoutTransmission = m_writer.implementFunction< sdw::Void >( "c3d_backgroundBrdfWithoutTransmission"
-				, [this, &debugOutput, &background]( BlendComponents components
+				, [this, &debugOutput, &background]( BlendComponents const & components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
@@ -256,7 +256,7 @@ namespace c3d::shader
 						, envMapIndex, components
 						, output.sheen );
 				}
-				, InOutBlendComponents{ m_writer, "components", pcomponents }
+				, InBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
 				, sdw::InVec3{ m_writer, "V" }
@@ -274,7 +274,7 @@ namespace c3d::shader
 			, poutput );
 	}
 
-	void ReflectionModel::computeDiffuseBrdf( BlendComponents & components
+	void ReflectionModel::computeDiffuseBrdf( BlendComponents const & components
 		, BackgroundModel & background
 		, sdw::Vec3 const & reflectedDiffuse
 		, sdw::Vec3 const & wsNormal
@@ -576,21 +576,21 @@ namespace c3d::shader
 			, pcolourMap );
 	}
 
-	sdw::RetBoolean ReflectionModel::traceScreenSpace( sdw::Vec3 pcsOrigin
-		, sdw::Vec3 pcsDirection
-		, sdw::Mat4 pprojectToPixelMatrix
-		, sdw::CombinedImage2DR32 pcsZBuffer
-		, sdw::Vec2 pcsZBufferSize
-		, sdw::Float pcsZThickness
-		, sdw::Boolean pcsZBufferIsHyperbolic
-		, sdw::Vec3 pclipInfo
-		, sdw::Float pnearPlaneZ
-		, sdw::Float pstride
-		, sdw::Float pjitterFraction
-		, sdw::Float pmaxSteps
-		, sdw::Float pmaxRayTraceDistance
-		, sdw::Vec2 & phitPixel
-		, sdw::Vec3 & pcsHitPoint )
+	sdw::RetBoolean ReflectionModel::traceScreenSpace( sdw::Vec3 const & pcsOrigin
+		, sdw::Vec3 const & pcsDirection
+		, sdw::Mat4 const & pprojectToPixelMatrix
+		, sdw::CombinedImage2DR32 const & pcsZBuffer
+		, sdw::Vec2 const & pcsZBufferSize
+		, sdw::Float const & pcsZThickness
+		, sdw::Boolean const & pcsZBufferIsHyperbolic
+		, sdw::Vec3 const & pclipInfo
+		, sdw::Float const & pnearPlaneZ
+		, sdw::Float const & pstride
+		, sdw::Float const & pjitterFraction
+		, sdw::Float const & pmaxSteps
+		, sdw::Float const & pmaxRayTraceDistance
+		, sdw::Vec2 const & phitPixel
+		, sdw::Vec3 const & pcsHitPoint )
 	{
 		if ( !m_traceScreenSpace )
 		{
@@ -853,7 +853,7 @@ namespace c3d::shader
 		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penv
 		, sdw::UInt const & penvIndex
 		, sdw::Float const & pNdotV
-		, BlendComponents & pcomponents )
+		, BlendComponents const & pcomponents )
 	{
 		if ( !m_computeSheenReflEnvMaps )
 		{
@@ -901,7 +901,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penvMap
 		, sdw::UInt const & penvMapIndex
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		if ( !m_computeRefrEnvMaps )
 		{
@@ -937,7 +937,7 @@ namespace c3d::shader
 	sdw::RetVec3 ReflectionModel::computeDiffuseEnvMaps( sdw::Vec3 const & pwsDirection
 		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penvMap
 		, sdw::UInt const & penvMapIndex
-		, BlendComponents & components )
+		, BlendComponents const & components )
 	{
 		if ( !m_computeDiffuseEnvMaps )
 		{
@@ -967,8 +967,8 @@ namespace c3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImage2DRgba32 const & psceneMap
 		, CameraData const & matrices
-		, sdw::Vec2 psceneUv
-		, BlendComponents & components )
+		, sdw::Vec2 const & psceneUv
+		, BlendComponents const & components )
 	{
 		if ( !m_computeSpecularTransmission )
 		{
@@ -1111,7 +1111,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::UInt const & envMapIndex
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
@@ -1162,7 +1162,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::UInt const & envMapIndex
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec3 & refracted )
 	{
 		auto & writer = *envMap.getWriter();
@@ -1207,7 +1207,7 @@ namespace c3d::shader
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsDirection
 		, sdw::UInt const & envMapIndex
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec3 & result )
 	{
 		if ( m_hasEnvMap )
@@ -1241,7 +1241,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::UInt const & envMapIndex
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec3 & coatReflected )
 	{
 		if ( components.hasMember( "clearcoatFactor" ) )
@@ -1287,7 +1287,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
 		, sdw::UInt const & envMapIndex
-		, BlendComponents & components
+		, BlendComponents const & components
 		, sdw::Vec4 & sheenReflected )
 	{
 		if ( components.hasMember( "sheenColour" ) )

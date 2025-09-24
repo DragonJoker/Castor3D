@@ -38,6 +38,8 @@ namespace ocean_fft
 			, sdw::Int32Field< "displacementDownsample" >
 			, sdw::FloatField< "L" > >
 	{
+		SDW_DeclStructInstance( , OceanUboData );
+
 		OceanUboData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -69,18 +71,24 @@ namespace ocean_fft
 	{
 	private:
 		using Configuration = OceanUboConfiguration;
+		OceanUbo( OceanUbo const & ) = delete;
+		OceanUbo & operator=( OceanUbo const & ) = delete;
+		OceanUbo( OceanUbo && )noexcept = delete;
+		OceanUbo & operator=( OceanUbo && )noexcept = delete;
 
 	public:
 		explicit OceanUbo( c3d::RenderDevice const & device );
 		~OceanUbo();
+
 		void cpuUpdate( Configuration const & config
 			, OceanFFTConfig const & fftConfig
 			, c3d::Point3f const & cameraPosition );
 
+		template< typename EnumT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, EnumT binding )const
 		{
-			m_ubo.createPassBinding( pass, binding );
+			m_ubo.createPassBinding( pass, uint32_t( binding ) );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

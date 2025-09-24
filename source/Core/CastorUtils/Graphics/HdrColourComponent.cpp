@@ -8,65 +8,15 @@ namespace c3d
 {
 	namespace hdrcol
 	{
-		static float removeGamma( float srgb, float gamma )
+		static float removeGamma( float srgb, float gamma )noexcept
 		{
 			return powf( std::max( srgb, 0.0f ), gamma );
 		}
 	}
 
 	HdrColourComponentValue::HdrColourComponentValue( ColourComponentValue const & rhs
-		, float gamma )
+		, float gamma )noexcept
 		: m_component{ hdrcol::removeGamma( rhs.value(), gamma ) }
 	{
-	}
-
-	bool operator==( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
-	{
-		float uiA;
-		float uiB;
-		lhs.convertTo( uiA );
-		rhs.convertTo( uiB );
-		return uiA == uiB;
-	}
-
-	bool operator!=( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
-	{
-		return !( lhs == rhs );
-	}
-
-	float operator-( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
-	{
-		float fValue;
-		lhs.convertTo( fValue );
-		HdrColourComponentValue cpnt( fValue );
-		cpnt -= rhs;
-		return cpnt;
-	}
-
-	float operator+( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
-	{
-		float fValue;
-		lhs.convertTo( fValue );
-		HdrColourComponentValue cpnt( fValue );
-		cpnt += rhs;
-		return cpnt;
-	}
-
-	float operator*( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
-	{
-		float fValue;
-		lhs.convertTo( fValue );
-		HdrColourComponentValue cpnt( fValue );
-		cpnt *= rhs;
-		return cpnt;
-	}
-
-	float operator/( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
-	{
-		float fValue;
-		lhs.convertTo( fValue );
-		HdrColourComponentValue cpnt( fValue );
-		cpnt /= rhs;
-		return cpnt;
 	}
 }

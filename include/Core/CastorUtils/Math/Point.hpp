@@ -58,7 +58,7 @@ namespace c3d
 		template< typename U, uint32_t UCount >
 		explicit Point( Point< U, UCount > const & rhs )noexcept;
 		template< typename U, uint32_t UCount >
-		explicit Point( Coords< U, UCount > const & rhs )noexcept;
+		explicit Point( PointView< U, UCount > const & rhs )noexcept;
 		template< typename U >
 		explicit Point( U const * rhs )noexcept;
 		template< typename ValueA >
@@ -87,23 +87,23 @@ namespace c3d
 		 *\name Opérateurs arithmétiques.
 		**/
 		/**@{*/
-		template< typename U, uint32_t UCount >
-		Point & operator+=( Point< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Point & operator-=( Point< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Point & operator*=( Point< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Point & operator/=( Point< U, UCount > const & rhs );
+		template< typename U >
+		Point & operator+=( Point< U, TCount > const & rhs );
+		template< typename U >
+		Point & operator-=( Point< U, TCount > const & rhs );
+		template< typename U >
+		Point & operator*=( Point< U, TCount > const & rhs );
+		template< typename U >
+		Point & operator/=( Point< U, TCount > const & rhs );
 
-		template< typename U, uint32_t UCount >
-		Point & operator+=( Coords< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Point & operator-=( Coords< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Point & operator*=( Coords< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Point & operator/=( Coords< U, UCount > const & rhs );
+		template< typename U >
+		Point & operator+=( PointView< U, TCount > const & rhs );
+		template< typename U >
+		Point & operator-=( PointView< U, TCount > const & rhs );
+		template< typename U >
+		Point & operator*=( PointView< U, TCount > const & rhs );
+		template< typename U >
+		Point & operator/=( PointView< U, TCount > const & rhs );
 
 		template< typename U >
 		Point & operator+=( U const * rhs );
@@ -218,29 +218,105 @@ namespace c3d
 			Array< T, TCount > coords;
 			PointData< T, TCount > data;
 		} m_data{};
+
+	private:
+		/**
+		 *\~english
+		 *name Logic operators.
+		 *\~french
+		 *name Opérateurs logiques
+		**/
+		/**@{*/
+		template< typename U >
+		friend bool operator==( Point const & lhs, Point< U, TCount > const & rhs )noexcept
+		{
+			bool result = true;
+			uint32_t i = 0;
+			while ( i < TCount && result )
+			{
+				result = lhs[i] == rhs[i];
+				++i;
+			}
+			return result;
+		}
+
+		template< typename U >
+		friend bool operator==( PointView< T, TCount > const & lhs, Point< U, TCount > const & rhs )noexcept
+		{
+			bool result = true;
+			uint32_t i = 0;
+			while ( i < TCount && result )
+			{
+				result = lhs[i] == rhs[i];
+				++i;
+			}
+			return result;
+		}
+
+		template< typename U >
+		friend bool operator==( Point const & lhs, PointView< U, TCount > const & rhs )noexcept
+		{
+			bool result = true;
+			uint32_t i = 0;
+			while ( i < TCount && result )
+			{
+				result = lhs[i] == rhs[i];
+				++i;
+			}
+			return result;
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Stream operators.
+		 *\~french
+		 *name Opérateurs de flux.
+		**/
+		/**@{*/
+		friend String & operator<<( String & out, Point const & in )
+		{
+			StringStream stream{ makeStringStream() };
+			stream << in;
+			out += stream.str();
+			return out;
+		}
+
+		friend String & operator>>( String & in, Point & out )
+		{
+			StringStream stream( in );
+			stream >> out;
+			in = stream.str();
+			return in;
+		}
+
+		template< typename CharT >
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Point const & in )
+		{
+			if constexpr ( TCount != 0u )
+			{
+				out << in[0];
+
+				for ( uint32_t i = 1; i < TCount; i++ )
+				{
+					out << "\t" << in[i];
+				}
+			}
+
+			return out;
+		}
+
+		template< typename CharT >
+		friend std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Point & out )
+		{
+			for ( uint32_t i = 0; i < TCount; i++ )
+			{
+				in >> out[i];
+			}
+
+			return in;
+		}
+			/**@}*/
 	};
-	/**
-	 *\~english
-	 *name Logic operators.
-	 *\~french
-	 *name Opérateurs logiques
-	**/
-	/**@{*/
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	bool operator==( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	bool operator!=( Point< T, TCount > const & lhs, Point< U, UCount >	const & rhs );
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	bool operator==( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	bool operator!=( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	bool operator==( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	bool operator!=( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	/**@}*/
 	/**
 	 *\~english
 	 *name Arithmetic operators.
@@ -251,32 +327,14 @@ namespace c3d
 	template< typename T, uint32_t TCount >
 	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & rhs );
 
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
-
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator+( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator-( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator*( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
-	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, TCount > operator/( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	template< typename T, uint32_t TCount, typename U >
+	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs );
+	template< typename T, uint32_t TCount, typename U >
+	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs );
+	template< typename T, uint32_t TCount, typename U >
+	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs );
+	template< typename T, uint32_t TCount, typename U >
+	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs );
 
 	template< typename T, uint32_t TCount, typename U >
 	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, U const * rhs );
@@ -322,7 +380,7 @@ namespace c3d
 			, uint32_t i
 			, CoordT const & c );
 		template< typename CoordT, uint32_t CountT >
-		void setCoord( Coords< CoordT, CountT > & pt
+		void setCoord( PointView< CoordT, CountT > & pt
 			, uint32_t i
 			, CoordT const & c );
 		template< typename CoordT, uint32_t CountT >
@@ -333,7 +391,7 @@ namespace c3d
 		CoordT const & getCoord( Point< CoordT, CountT > const & pt
 			, uint32_t i );
 		template< typename CoordT, uint32_t CountT >
-		CoordT const & getCoord( Coords< CoordT, CountT > const & pt
+		CoordT const & getCoord( PointView< CoordT, CountT > const & pt
 			, uint32_t i );
 		template< typename CoordT, uint32_t CountT >
 		CoordT const & getCoord( LengthT< Point< CoordT, CountT > > const & pt
@@ -609,7 +667,7 @@ namespace c3d
 		 *\return		Le produit scalaire
 		 */
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Coords< T, TCount > const & lhs, Point< T, TCount > const & rhs );
+		static T dot( PointView< T, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the cross product of 2 points.
@@ -621,7 +679,7 @@ namespace c3d
 		 *\return		Le vecteur résultant.
 		 */
 		template< typename T, typename U >
-		static Point3< T > cross( Coords3< T > const & lhs, Point3< T > const & rhs );
+		static Point3< T > cross( PointView3< T > const & lhs, Point3< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -633,7 +691,7 @@ namespace c3d
 		 *\return		Le cosinus
 		 */
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Coords< T, TCount > const & lhs, Point< T, TCount > const & rhs );
+		static double cosTheta( PointView< T, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -645,7 +703,7 @@ namespace c3d
 		 *\return		Le produit scalaire
 		 */
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Point< T, TCount > const & lhs, Coords< T, TCount > const & rhs );
+		static T dot( Point< T, TCount > const & lhs, PointView< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the cross product of 2 points.
@@ -657,7 +715,7 @@ namespace c3d
 		 *\return		Le vecteur résultant.
 		 */
 		template< typename T, typename U >
-		static Point3< T > cross( Point3< T > const & lhs, Coords3< T > const & rhs );
+		static Point3< T > cross( Point3< T > const & lhs, PointView3< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -669,7 +727,7 @@ namespace c3d
 		 *\return		Le cosinus
 		 */
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Point< T, TCount > const & lhs, Coords< T, TCount > const & rhs );
+		static double cosTheta( Point< T, TCount > const & lhs, PointView< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -681,7 +739,7 @@ namespace c3d
 		 *\return		Le produit scalaire
 		 */
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Coords< T const, TCount > const & lhs, Point< T, TCount > const & rhs );
+		static T dot( PointView< T const, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the cross product of 2 points.
@@ -693,7 +751,7 @@ namespace c3d
 		 *\return		Le vecteur résultant.
 		 */
 		template< typename T, typename U >
-		static Point3< T > cross( Coords< T const, 3 > const & lhs, Point3< T > const & rhs );
+		static Point3< T > cross( PointView< T const, 3 > const & lhs, Point3< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -705,7 +763,7 @@ namespace c3d
 		 *\return		Le cosinus
 		 */
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Coords< T const, TCount > const & lhs, Point< T, TCount > const & rhs );
+		static double cosTheta( PointView< T const, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -717,7 +775,7 @@ namespace c3d
 		 *\return		Le produit scalaire
 		 */
 		template< typename T, typename U, uint32_t TCount >
-		static T dot( Point< T, TCount > const & lhs, Coords< T const, TCount > const & rhs );
+		static T dot( Point< T, TCount > const & lhs, PointView< T const, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the cross product of 2 points.
@@ -729,7 +787,7 @@ namespace c3d
 		 *\return		Le vecteur résultant.
 		 */
 		template< typename T, typename U >
-		static Point3< T > cross( Point3< T > const & lhs, Coords< T const, 3 > const & rhs );
+		static Point3< T > cross( Point3< T > const & lhs, PointView< T const, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -741,24 +799,8 @@ namespace c3d
 		 *\return		Le cosinus
 		 */
 		template< typename T, uint32_t TCount >
-		static double cosTheta( Point< T, TCount > const & lhs, Coords< T const, TCount > const & rhs );
+		static double cosTheta( Point< T, TCount > const & lhs, PointView< T const, TCount > const & rhs );
 	}
-	/**
-	 *\~english
-	 *name Stream operators.
-	 *\~french
-	 *name Opérateurs de flux.
-	**/
-	/**@{*/
-	template< typename T, uint32_t TCount >
-	String & operator<<( String & out, Point< T, TCount > const & in );
-	template< typename T, uint32_t TCount >
-	String & operator>>( String & in, Point< T, TCount > & out );
-	template< typename T, uint32_t TCount, typename CharT >
-	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Point< T, TCount > const & in );
-	template< typename T, uint32_t TCount, typename CharT >
-	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Point< T, TCount > & out );
-	/**@}*/
 }
 #include "Point.inl"
 

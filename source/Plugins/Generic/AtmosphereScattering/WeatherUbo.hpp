@@ -29,6 +29,8 @@ namespace atmosphere_scattering
 			, sdw::FloatField< "perlinScale" >
 			, sdw::UIntField< "perlinOctaves" > >
 	{
+		SDW_DeclStructInstance( , WeatherData );
+
 		WeatherData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -48,6 +50,10 @@ namespace atmosphere_scattering
 	{
 	private:
 		using Configuration = WeatherConfig;
+		WeatherUbo( WeatherUbo const & ) = delete;
+		WeatherUbo & operator=( WeatherUbo const & ) = delete;
+		WeatherUbo( WeatherUbo && )noexcept = delete;
+		WeatherUbo & operator=( WeatherUbo && )noexcept = delete;
 
 	public:
 		WeatherUbo( c3d::RenderDevice const & device
@@ -55,8 +61,9 @@ namespace atmosphere_scattering
 		~WeatherUbo();
 		void cpuUpdate( Configuration const & config );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			m_ubo.createPassBinding( pass, binding );
 		}
@@ -67,7 +74,8 @@ namespace atmosphere_scattering
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );

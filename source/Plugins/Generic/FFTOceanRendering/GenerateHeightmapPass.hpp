@@ -16,7 +16,7 @@ namespace ocean_fft
 		: public crg::RunnablePass
 	{
 	public:
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eConfig,
 			eInput,
@@ -49,9 +49,8 @@ namespace ocean_fft
 		static c3d::MbString const Name;
 
 	private:
-		void doRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+		void doRecordInto( crg::RecordContext const & context
+			, VkCommandBuffer commandBuffer )const;
 		uint32_t doGetPassIndex()const;
 		bool doIsComputePass()const;
 

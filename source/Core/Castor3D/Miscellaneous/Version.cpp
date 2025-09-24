@@ -22,42 +22,4 @@ namespace c3d
 	{
 		return ashes::makeVersion( m_major, m_minor, m_build );
 	}
-
-	bool operator==( Version const & lhs, Version const & rhs )
-	{
-		return lhs.getMajor() == rhs.getMajor()
-			&& lhs.getMinor() == rhs.getMinor()
-			&& lhs.getBuild() == rhs.getBuild();
-	}
-
-	bool operator!=( Version const & lhs, Version const & rhs )
-	{
-		return lhs.getMajor() != rhs.getMajor()
-			|| lhs.getMinor() != rhs.getMinor()
-			|| lhs.getBuild() != rhs.getBuild();
-	}
-
-	bool operator<( Version const & lhs, Version const & rhs )
-	{
-		return	lhs.getMajor() < rhs.getMajor()
-			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() < rhs.getMinor() )
-			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() == rhs.getMinor() && lhs.getBuild() < rhs.getBuild() );
-	}
-
-	bool operator>( Version const & lhs, Version const & rhs )
-	{
-		return	lhs.getMajor() > rhs.getMajor()
-			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() > rhs.getMinor() )
-			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() == rhs.getMinor() && lhs.getBuild() < rhs.getBuild() );
-	}
-
-	bool operator<=( Version const & lhs, Version const & rhs )
-	{
-		return !( lhs > rhs );
-	}
-
-	bool operator>=( Version const & lhs, Version const & rhs )
-	{
-		return !( lhs < rhs );
-	}
 }

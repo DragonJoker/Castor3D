@@ -22,7 +22,7 @@ namespace Bloom
 	{
 		namespace c3ds = c3d::shader;
 
-		enum Idx
+		enum class Bindings
 		{
 			GaussCfgUboIdx,
 			DifImgIdx,
@@ -32,13 +32,13 @@ namespace Bloom
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto config = writer.declUniformBuffer( c3d::GaussianBlur::Config, GaussCfgUboIdx, 0u );
+			auto config = writer.declUniformBuffer( c3d::GaussianBlur::Config, Bindings::GaussCfgUboIdx, 0u );
 			auto c3d_pixelSize = config.declMember< sdw::Vec2 >( c3d::GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< sdw::UInt >( c3d::GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< sdw::UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< sdw::Vec4 >( c3d::GaussianBlur::Coefficients, c3d::GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
+			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", Bindings::DifImgIdx, 0u );
 
 			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
@@ -180,8 +180,8 @@ namespace Bloom
 							, result->getTimer() );
 						return result;
 				} );
-			m_blurUbo[index].createPassBinding( pass, blur::GaussCfgUboIdx );
-			pass.addInputSampled( *srcImage.getSampledLastAttach( 0u, index ), blur::DifImgIdx
+			m_blurUbo[index].createPassBinding( pass, blur::Bindings::GaussCfgUboIdx );
+			pass.addInputSampledT( *srcImage.getSampledLastAttach( 0u, index ), blur::Bindings::DifImgIdx
 				, crg::SamplerDesc{ c3d::FilterMode::eNearest, c3d::FilterMode::eNearest, c3d::MipmapMode::eNearest
 					, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge
 					, 0.0f, float( index ), float( index + 1u ) } );

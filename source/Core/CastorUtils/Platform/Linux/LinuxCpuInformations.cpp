@@ -11,6 +11,10 @@
 #include <fstream>
 #include <string>
 
+#if defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
+#	include <cpuid.h>
+#endif
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic push
@@ -59,7 +63,6 @@ namespace c3d::platform
 }
 
 #if defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
-#	include <cpuid.h>
 
 namespace c3d::platform
 {

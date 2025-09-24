@@ -28,7 +28,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	engine		Le moteur.
 		 */
-		AnimatedObjectGroupTreeItemProperty( bool editable
+		AnimatedObjectGroupTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::Engine * engine );
 
 		void setData( c3d::AnimatedObjectGroup & data )noexcept

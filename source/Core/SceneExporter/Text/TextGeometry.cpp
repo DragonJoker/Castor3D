@@ -17,9 +17,8 @@ namespace c3d
 		, StringStream & file )
 	{
 		bool result{ true };
-		auto mesh = geometry.getMesh();
 
-		if ( mesh )
+		if ( auto mesh = geometry.getMesh() )
 		{
 			log::info << tabs() << cuT( "Writing Geometry " ) << geometry.getName() << std::endl;
 			result = false;
@@ -43,22 +42,14 @@ namespace c3d
 					if ( it != mesh->end() )
 					{
 						if ( mesh->getSubmeshCount() == 1 )
-						{
 							result = writeName( file, cuT( "material" ), geometry.getMaterial( *mesh->getSubmesh( 0u ) )->getName() );
-						}
 						else if ( auto matsBlock{ beginBlock( file, cuT( "materials" ) ) } )
-						{
-							for ( auto & submesh : *mesh )
+							for ( auto const & submesh : *mesh )
 							{
 								auto material = geometry.getMaterial( *submesh );
-
 								if ( material != submesh->getDefaultMaterial() )
-								{
-									result = result
-										&& writeText( file, tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) );
-								}
+									result = result && writeText( file, tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) );
 							}
-						}
 					}
 				}
 			}

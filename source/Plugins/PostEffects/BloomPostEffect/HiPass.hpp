@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 
-#define Bloom_DebugHiPass 0
-
 namespace Bloom
 {
+	static bool constexpr DebugHiPass = false;
+
 	class HiPass
 	{
 	public:
@@ -20,7 +20,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		c3d::Texture & getResult()
 		{

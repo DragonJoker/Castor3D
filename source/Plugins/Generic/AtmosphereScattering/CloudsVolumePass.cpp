@@ -29,7 +29,7 @@ namespace atmosphere_scattering
 
 	namespace volclouds
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eAtmosphere,
 			eClouds,
@@ -62,7 +62,7 @@ namespace atmosphere_scattering
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
 			{
-				writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+				writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 					, sdw::VertexOut out )
 					{
 						out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -72,8 +72,8 @@ namespace atmosphere_scattering
 				auto outSun = writer.declOutput< sdw::Vec4 >( "outSun", sdw::EntryPoint::eFragment, 1u );
 				auto outClouds = writer.declOutput< sdw::Vec4 >( "outClouds", sdw::EntryPoint::eFragment, 2u );
 
-				writer.implementEntryPoint( [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+				writer.implementEntryPoint( [&writer, &func, &outSky, &outSun, &outClouds]( sdw::FragmentIn const & in
+					, sdw::FragmentOut const & )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, vec2( in.fragCoord.xy() ) );
@@ -110,7 +110,7 @@ namespace atmosphere_scattering
 					, uint32_t( Bindings::eOutClouds )
 					, 0u );
 
-				writer.implementMain( [&]( sdw::ComputeIn in )
+				writer.implementMain( [&writer, &func, &outSky, &outSun, &outClouds]( sdw::ComputeIn const & in )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, vec2( in.globalInvocationID.xy() ) );
@@ -137,13 +137,13 @@ namespace atmosphere_scattering
 			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			C3D_AtmosphereScattering( writer
-				, uint32_t( Bindings::eAtmosphere )
+				, Bindings::eAtmosphere
 				, 0u );
 			C3D_Clouds( writer
-				, uint32_t( Bindings::eClouds )
+				, Bindings::eClouds
 				, 0u );
 			ATM_Camera( writer
-				, uint32_t( Bindings::eCamera )
+				, Bindings::eCamera
 				, 0u );
 
 			auto targetSize = writer.declConstant( "targetSize"
@@ -182,7 +182,8 @@ namespace atmosphere_scattering
 				, hasDepth ) };
 
 			ShaderWriter< useCompute >::implementMain( writer
-				, [&]( sdw::Vec2 const & fragCoord
+				, [&writer, &scattering, &targetSize, &depthBufferValue, &c3d_cloudsData, &depthMap, &atmosphere, &clouds
+					, &hasDepth]( sdw::Vec2 const & fragCoord
 					, sdw::Vec4 & skyColor
 					, sdw::Vec4 & sunColor
 					, sdw::Vec4 & cloudsColor )
@@ -291,31 +292,31 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		atmosphereUbo.createPassBinding( pass, volclouds::eAtmosphere );
-		cloudsUbo.createPassBinding( pass, volclouds::eClouds );
-		cameraUbo.createPassBinding( pass, volclouds::eCamera );
+		atmosphereUbo.createPassBinding( pass, volclouds::Bindings::eAtmosphere );
+		cloudsUbo.createPassBinding( pass, volclouds::Bindings::eClouds );
+		cameraUbo.createPassBinding( pass, volclouds::Bindings::eCamera );
 		crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
 		crg::SamplerDesc linearRepeatSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest
 			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
 		crg::SamplerDesc mipLinearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eLinear
 			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
-		pass.addInputSampled( *transmittance.getSampledLastAttach(), volclouds::eTransmittance, linearClampSampler );
-		pass.addInputSampled( *multiscatter.getSampledLastAttach(), volclouds::eMultiScatter, linearClampSampler );
-		pass.addInputSampled( *skyview.getSampledLastAttach(), volclouds::eSkyView, linearClampSampler );
-		pass.addInputSampled( *volume.getSampledLastAttach(), volclouds::eVolume, linearClampSampler );
-		pass.addInputSampled( *perlinWorley.getSampledLastAttach(), volclouds::ePerlinWorley, mipLinearSampler );
-		pass.addInputSampled( *worley.getSampledLastAttach(), volclouds::eWorley, mipLinearSampler );
-		pass.addInputSampled( *curl.getSampledLastAttach(), volclouds::eCurl, linearRepeatSampler );
-		pass.addInputSampled( *weather.getSampledLastAttach(), volclouds::eWeatherMap, linearRepeatSampler );
+		pass.addInputSampledT( *transmittance.getSampledLastAttach(), volclouds::Bindings::eTransmittance, linearClampSampler );
+		pass.addInputSampledT( *multiscatter.getSampledLastAttach(), volclouds::Bindings::eMultiScatter, linearClampSampler );
+		pass.addInputSampledT( *skyview.getSampledLastAttach(), volclouds::Bindings::eSkyView, linearClampSampler );
+		pass.addInputSampledT( *volume.getSampledLastAttach(), volclouds::Bindings::eVolume, linearClampSampler );
+		pass.addInputSampledT( *perlinWorley.getSampledLastAttach(), volclouds::Bindings::ePerlinWorley, mipLinearSampler );
+		pass.addInputSampledT( *worley.getSampledLastAttach(), volclouds::Bindings::eWorley, mipLinearSampler );
+		pass.addInputSampledT( *curl.getSampledLastAttach(), volclouds::Bindings::eCurl, linearRepeatSampler );
+		pass.addInputSampledT( *weather.getSampledLastAttach(), volclouds::Bindings::eWeatherMap, linearRepeatSampler );
 
 		if ( depthObj )
-			pass.addInputSampled( *depthObj->getSampledLastAttach(), volclouds::eDepthMap, linearClampSampler );
+			pass.addInputSampledT( *depthObj->getSampledLastAttach(), volclouds::Bindings::eDepthMap, linearClampSampler );
 
 		if constexpr ( volclouds::useCompute )
 		{
-			skyResult.setLastAttach( pass.addOutputStorageImage( skyResult.getTargetViewId(), volclouds::eOutSky ) );
-			sunResult.setLastAttach( pass.addOutputStorageImage( sunResult.getTargetViewId(), volclouds::eOutSun ) );
-			cloudsResult.setLastAttach( pass.addOutputStorageImage( cloudsResult.getTargetViewId(), volclouds::eOutClouds ) );
+			skyResult.setLastAttach( pass.addOutputStorageImageT( skyResult.getTargetViewId(), volclouds::Bindings::eOutSky ) );
+			sunResult.setLastAttach( pass.addOutputStorageImageT( sunResult.getTargetViewId(), volclouds::Bindings::eOutSun ) );
+			cloudsResult.setLastAttach( pass.addOutputStorageImageT( cloudsResult.getTargetViewId(), volclouds::Bindings::eOutClouds ) );
 		}
 		else
 		{

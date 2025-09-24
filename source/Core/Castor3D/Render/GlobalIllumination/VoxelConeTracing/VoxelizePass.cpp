@@ -607,14 +607,12 @@ namespace c3d
 						auto combined = writer.declLocale( "combined"
 							, vec3( 0.0_f ) );
 						auto lightSurface = shader::LightSurface::create( writer
-							, utils
 							, "lightSurface"
 							, c3d_cameraData.position()
 							, { in.worldPosition, dFdx( in.worldPosition ), dFdy( in.worldPosition ) }
 							, { in.worldPosition.xyz(), dFdx( in.worldPosition.xyz() ), dFdy( in.worldPosition.xyz() ) }
 							, in.fragCoord.xyz()
 							, normalize( components.getDerivNormal() )
-							, components
 							, true );
 						lights.computeCombinedDif( components
 							, *backgroundModel

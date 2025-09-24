@@ -378,7 +378,7 @@ namespace c3d
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material );
-		bool result = m_particlesBillboard->initialise( device, m_particlesCount );
+		bool result = m_particlesBillboard->initialiseBase( device, m_particlesCount );
 
 		if ( result )
 		{

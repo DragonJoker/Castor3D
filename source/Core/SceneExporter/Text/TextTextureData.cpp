@@ -17,7 +17,7 @@ namespace c3d
 {
 	namespace txtexdata
 	{
-		static bool isReworkedImage( String texName )
+		static bool isReworkedImage( StringView texName )
 		{
 			return String::npos != texName.find( cuT( "/Compressed" ) )
 				|| String::npos != texName.find( cuT( "/Mipped" ) )
@@ -54,7 +54,7 @@ namespace c3d
 		: TextWriterT< TextureData >{ tabs, cuT( "TextureData" ) }
 		, m_engine{ engine }
 		, m_folder{ folder }
-		, m_subFolder{ subFolder }
+		, m_subFolder{ c3d::move( subFolder ) }
 	{
 	}
 
@@ -87,31 +87,28 @@ namespace c3d
 
 					if ( createImageFile )
 					{
+						result = false;
 						log::info << tabs() << cuT( "\tCreating texture image" ) << std::endl;
-						Path path{ cuT( "Textures" ) };
-
-						if ( !m_subFolder.empty() )
+						if ( object.image )
 						{
-							path /= m_subFolder;
-						}
+							Path path{ cuT( "Textures" ) };
+							if ( !m_subFolder.empty() )
+								path /= m_subFolder;
 
-						if ( !File::directoryExists( m_folder / path ) )
-						{
-							File::directoryCreate( m_folder / path );
-						}
+							if ( !File::directoryExists( m_folder / path ) )
+								File::directoryCreate( m_folder / path );
 
-						Path imageFile = sourceInfo.isFileImage()
-							? sourceInfo.relative()
-							: Path{ name };
-						txtexdata::reworkImageFileName( name, imageFile, config.needsYInversion );
-						path /= imageFile;
-						auto & writer = m_engine.getImageWriter();
-						result = writer.write( m_folder / path, object.image->getPxBuffer() );
-						checkError( result, cuT( "Image creation" ) );
+							Path imageFile = sourceInfo.isFileImage()
+								? sourceInfo.relative()
+								: Path{ name };
+							txtexdata::reworkImageFileName( name, imageFile, config.needsYInversion );
+							path /= imageFile;
+							auto & writer = m_engine.getImageWriter();
+							result = writer.write( m_folder / path, object.image->getPxBuffer() );
+							checkError( result, cuT( "Image creation" ) );
 
-						if ( result )
-						{
-							result = writePath( file, cuT( "image" ), path );
+							if ( result )
+								result = writePath( file, cuT( "image" ), path );
 						}
 					}
 					else
@@ -119,17 +116,11 @@ namespace c3d
 						log::info << tabs() << cuT( "\tCopying texture image" ) << std::endl;
 
 						if ( m_subFolder.empty() )
-						{
 							result = writeFile( file, cuT( "image" ), sourceInfo.relative(), m_folder, cuT( "Textures" ) );
-						}
 						else if ( sourceInfo.folder().empty() )
-						{
 							result = writeFile( file, cuT( "image" ), sourceInfo.relative(), m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
-						}
 						else
-						{
 							result = writeFile( file, cuT( "image" ), sourceInfo.folder() / sourceInfo.relative(), m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
-						}
 					}
 				}
 

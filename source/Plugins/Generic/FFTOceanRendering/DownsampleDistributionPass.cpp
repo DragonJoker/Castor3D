@@ -28,13 +28,13 @@ namespace ocean_fft
 	{
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( DownsampleDistributionPass::eConfig
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBindingT( DownsampleDistributionPass::Bindings::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( DownsampleDistributionPass::eInput
+				, c3d::makeDescriptorSetLayoutBindingT( DownsampleDistributionPass::Bindings::eInput
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( DownsampleDistributionPass::eOutput
+				, c3d::makeDescriptorSetLayoutBindingT( DownsampleDistributionPass::Bindings::eOutput
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( DownsampleDistributionPass::Name 
@@ -47,20 +47,20 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = graph.getDescriptorWrite( *pass.uniforms.begin()->second
-				, DownsampleDistributionPass::eConfig );
+			auto write = graph.getDescriptorWriteT( *pass.getUniforms().begin()->second
+				, DownsampleDistributionPass::Bindings::eConfig );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getDescriptorWrite( *pass.inputs.begin()->second
-				, DownsampleDistributionPass::eInput );
+			write = graph.getDescriptorWriteT( *pass.getInputs().begin()->second
+				, DownsampleDistributionPass::Bindings::eInput );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getDescriptorWrite( *pass.outputs.begin()->second
-				, DownsampleDistributionPass::eOutput );
+			write = graph.getDescriptorWriteT( *pass.getOutputs().begin()->second
+				, DownsampleDistributionPass::Bindings::eOutput );
 			writes.emplace_back( write->dstBinding, write->dstArrayElement
 				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
@@ -93,19 +93,19 @@ namespace ocean_fft
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			C3D_FftOcean( writer, DownsampleDistributionPass::eConfig, 0u );
+			C3D_FftOcean( writer, DownsampleDistributionPass::Bindings::eConfig, 0u );
 
-			auto distributions = writer.declStorageBuffer( "Distribution", DownsampleDistributionPass::eInput, 0u );
+			auto distributions = writer.declStorageBuffer( "Distribution", DownsampleDistributionPass::Bindings::eInput, 0u );
 			auto distribution = distributions.declMemberArray< sdw::Vec2 >( "distribution" );
 			distributions.end();
 
-			auto downs = writer.declStorageBuffer( "Downsampled", DownsampleDistributionPass::eOutput, 0u );
+			auto downs = writer.declStorageBuffer( "Downsampled", DownsampleDistributionPass::Bindings::eOutput, 0u );
 			auto downsampled = downs.declMemberArray< sdw::Vec2 >( "downsampled" );
 			downs.end();
 
 			auto alias = writer.implementFunction< sdw::Vec2 >( "alias"
-				, [&]( sdw::Vec2 i
-					, sdw::Vec2 N )
+				, [&writer]( sdw::Vec2 const & i
+					, sdw::Vec2 const & N )
 				{
 					writer.returnStmt( mix( i, i - N, vec2( greaterThan( i, 0.5_f * N ) ) ) );
 				}
@@ -113,7 +113,7 @@ namespace ocean_fft
 				, sdw::InVec2{ writer, "n" } );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 64u, 1u, 1u }
-				, [&]( sdw::ComputeIn in )
+				, [&writer, &c3d_oceanData, &alias, &downsampled, &distribution]( sdw::ComputeIn const & in )
 				{
 					auto outN = writer.declLocale( "outN"
 						, in.workGroupSize.xy() * in.numWorkGroups.xy() );
@@ -153,13 +153,13 @@ namespace ocean_fft
 		, c3d::RenderDevice const & device
 		, c3d::Extent2D const & extent
 		, uint32_t downsample
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { []( uint32_t ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+				, [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
@@ -170,7 +170,7 @@ namespace ocean_fft
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), downdist::createShader( device ) }
 		, m_pipeline{ downdist::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ downdist::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ downdist::createDescriptorSet( getGraph(), *m_descriptorSetPool, getPass() ) }
 		, m_extent{ crg::convert( ashes::getSubresourceDimensions( convert( extent ), downsample ) ) }
 	{
 	}
@@ -180,15 +180,15 @@ namespace ocean_fft
 		visitor.visit( m_shader );
 	}
 
-	void DownsampleDistributionPass::doRecordInto( crg::RecordContext & context
+	void DownsampleDistributionPass::doRecordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, [[maybe_unused]] uint32_t index )const
 	{
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		m_context.vkCmdBindPipeline( commandBuffer
+		context->vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipeline );
-		m_context.vkCmdBindDescriptorSets( commandBuffer
+		context->vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *m_pipelineLayout
 			, 0u
@@ -196,7 +196,7 @@ namespace ocean_fft
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		m_context.vkCmdDispatch( commandBuffer
+		context->vkCmdDispatch( commandBuffer
 			, m_extent.width / 64u
 			, m_extent.height
 			, 1u );
@@ -240,9 +240,9 @@ namespace ocean_fft
 					, res->getTimer() );
 				return res;
 			} );
-		ubo.createPassBinding( pass, DownsampleDistributionPass::eConfig );
-		pass.addInputStorage( *input.getLastAttach(), DownsampleDistributionPass::eInput );
-		output.setLastAttach( pass.addOutputStorageBuffer( output.bufferViewId, DownsampleDistributionPass::eOutput ) );
+		ubo.createPassBinding( pass, DownsampleDistributionPass::Bindings::eConfig );
+		pass.addInputStorageT( *input.getLastAttach(), DownsampleDistributionPass::Bindings::eInput );
+		output.setLastAttach( pass.addOutputStorageBufferT( output.bufferViewId, DownsampleDistributionPass::Bindings::eOutput ) );
 	}
 
 	//************************************************************************************************

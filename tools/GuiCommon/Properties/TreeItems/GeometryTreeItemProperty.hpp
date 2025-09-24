@@ -28,7 +28,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	engine		Le moteur.
 		 */
-		GeometryTreeItemProperty( bool editable
+		GeometryTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::Engine * engine );
 		/**
 		 *\~english

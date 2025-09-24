@@ -929,10 +929,7 @@ namespace c3d
 	bool Pass::hasLighting()const
 	{
 		if ( auto component = getComponent< PassHeaderComponent >() )
-		{
 			return component->isLightingEnabled();
-		}
-
 		return false;
 	}
 
@@ -958,29 +955,26 @@ namespace c3d
 	LightingModelID Pass::getLightingModelId()const
 	{
 		LightingModelID result{};
-
 		if ( auto component = getComponent< LightingModelComponent >() )
-		{
 			result = component->getLightingModelId();
-		}
-
 		return result;
+	}
+
+	RenderPassTypeID Pass::getRenderPassTypeId()const
+	{
+		return m_renderPassInfo ? m_renderPassInfo->id : RenderPassTypeID{};
 	}
 
 	void Pass::enableLighting( bool value )const
 	{
 		if ( auto component = getComponent< PassHeaderComponent >() )
-		{
 			component->enableLighting( value );
-		}
 	}
 
 	void Pass::enablePicking( bool value )const
 	{
 		if ( auto component = getComponent< PickableComponent >() )
-		{
 			component->setPickable( value );
-		}
 	}
 
 	void Pass::doPrepareImage( PassTextureSource const & cfg )
@@ -1010,9 +1004,7 @@ namespace c3d
 				for ( auto & component : prepared->base->sourceInfo.textureConfig().components )
 				{
 					if ( component.componentsMask )
-					{
 						textureConfigs.push_back( component );
-					}
 				}
 			}
 		}
@@ -1023,9 +1015,7 @@ namespace c3d
 				for ( auto & component : info.textureConfig().components )
 				{
 					if ( component.componentsMask )
-					{
 						textureConfigs.push_back( component );
-					}
 				}
 			}
 		}
@@ -1045,7 +1035,7 @@ namespace c3d
 			auto & compDeps = component->getDependencies();
 			auto compIt = std::find_if( compDeps.begin()
 				, compDeps.end()
-				, [&name]( String lookup )
+				, [&name]( StringView lookup )
 				{
 					return lookup == name;
 				} );
@@ -1060,11 +1050,8 @@ namespace c3d
 		for ( auto const & dep : depends )
 		{
 			auto removed = removeComponent( dep );
-
 			for ( auto & rem : removed )
-			{
 				result.emplace_back( c3d::move( rem ) );
-			}
 		}
 
 		return result;

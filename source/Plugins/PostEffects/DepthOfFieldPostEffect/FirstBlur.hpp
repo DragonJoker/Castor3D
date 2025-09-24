@@ -16,7 +16,7 @@ namespace dof
 		, c3d::Texture const & colour
 		, c3d::Texture const & cocResult
 		, c3d::Texture & blurResult
-		, crg::RunnablePass::IsEnabledCallback isEnabled
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled
 		, uint32_t const * passIndex );
 }
 

@@ -581,30 +581,6 @@ namespace c3d::string
 		}
 
 		template< typename CharT, typename StringT >
-		inline bool iterator< CharT, StringT >::operator==( const iterator< CharT, StringT > & rhs )const
-		{
-			return m_it == rhs.m_it;
-		}
-
-		template< typename CharT, typename StringT >
-		inline bool iterator< CharT, StringT >::operator==( const typename iterator::iterator_type & rhs )const
-		{
-			return m_it == rhs;
-		}
-
-		template< typename CharT, typename StringT >
-		inline bool iterator< CharT, StringT >::operator!=( const iterator< CharT, StringT > & rhs )const
-		{
-			return m_it != rhs.m_it;
-		}
-
-		template< typename CharT, typename StringT >
-		inline bool iterator< CharT, StringT >::operator!=( const typename iterator::iterator_type & rhs )const
-		{
-			return m_it != rhs;
-		}
-
-		template< typename CharT, typename StringT >
 		inline typename iterator< CharT, StringT >::iterator_type iterator< CharT, StringT >::internal()const
 		{
 			return m_it;
@@ -618,24 +594,6 @@ namespace c3d::string
 				m_lastCodePoint = toUtf8( m_it, m_it );
 				m_dirty = false;
 			}
-		}
-
-		//*************************************************************************************************
-
-		template< typename CharT, typename StringT >
-		iterator< CharT, StringT > operator+( iterator< CharT, StringT > lhs, size_t rhs )
-		{
-			iterator< CharT, StringT > it( lhs );
-			it += rhs;
-			return it;
-		}
-
-		template< typename CharT, typename StringT >
-		iterator< CharT, StringT > operator-( iterator< CharT, StringT > lhs, size_t rhs )
-		{
-			iterator< CharT, StringT > it( lhs );
-			it -= rhs;
-			return it;
 		}
 
 		//*************************************************************************************************
@@ -786,30 +744,6 @@ namespace c3d::string
 		}
 
 		template< typename CharT, typename StringT >
-		inline bool const_iterator< CharT, StringT >::operator==( const const_iterator< CharT, StringT > & rhs )const
-		{
-			return m_it == rhs.m_it;
-		}
-
-		template< typename CharT, typename StringT >
-		inline bool const_iterator< CharT, StringT >::operator==( const const_iterator::iterator_type & rhs )const
-		{
-			return m_it == rhs;
-		}
-
-		template< typename CharT, typename StringT >
-		inline bool const_iterator< CharT, StringT >::operator!=( const const_iterator< CharT, StringT > & rhs )const
-		{
-			return m_it != rhs.m_it;
-		}
-
-		template< typename CharT, typename StringT >
-		inline bool const_iterator< CharT, StringT >::operator!=( const typename const_iterator::iterator_type & rhs )const
-		{
-			return m_it != rhs;
-		}
-
-		template< typename CharT, typename StringT >
 		inline typename const_iterator< CharT, StringT >::iterator_type const_iterator< CharT, StringT >::internal()const
 		{
 			return m_it;
@@ -823,24 +757,6 @@ namespace c3d::string
 				m_lastCodePoint = toUtf8( m_it, m_it );
 				m_dirty = false;
 			}
-		}
-
-		//*************************************************************************************************
-
-		template< typename CharT, typename StringT >
-		const_iterator< CharT, StringT >  operator+( const_iterator< CharT, StringT > lhs, size_t rhs )
-		{
-			const_iterator< CharT, StringT > it( lhs );
-			it += rhs;
-			return it;
-		}
-
-		template< typename CharT, typename StringT >
-		const_iterator< CharT, StringT > operator-( const_iterator< CharT, StringT > lhs, size_t rhs )
-		{
-			const_iterator< CharT, StringT > it( lhs );
-			it -= rhs;
-			return it;
 		}
 
 		//*************************************************************************************************

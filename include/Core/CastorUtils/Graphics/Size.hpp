@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 #include "CastorUtils/Design/DataHolder.hpp"
-#include "CastorUtils/Math/Coords.hpp"
+#include "CastorUtils/Math/PointView.hpp"
 
 namespace c3d
 {
@@ -24,10 +24,10 @@ namespace c3d
 
 	class Size
 		: private DataHolderT< SizeData >
-		, public Coords< uint32_t, 2 >
+		, public PointView< uint32_t, 2 >
 	{
 	private:
-		using BaseType = Coords< uint32_t, 2 >;
+		using BaseType = PointView< uint32_t, 2 >;
 
 	public:
 		/**
@@ -188,43 +188,27 @@ namespace c3d
 
 		using BaseType::ptr;
 		using BaseType::constPtr;
+
+	private:
+		friend bool operator==( Size const & lhs, Size const & rhs )noexcept
+		{
+			return lhs.getWidth() == rhs.getWidth() && lhs.getHeight() == rhs.getHeight();
+		}
+
+		friend Size operator<<( Size const & lhs, uint32_t rhs )noexcept
+		{
+			Size tmp{ lhs };
+			tmp <<= rhs;
+			return tmp;
+		}
+
+		friend Size operator>>( Size const & lhs, uint32_t rhs )noexcept
+		{
+			Size tmp{ lhs };
+			tmp >>= rhs;
+			return tmp;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Equality operator
-	 *\param[in]	a, b	The sizes to compare
-	 *\return		\p true if sizes have same dimensions
-	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	a, b	Les tailles à comparer
-	 *\return		\p true si les tailles ont les mêmes dimensions
-	 */
-	CU_API bool operator==( Size const & a, Size const & b )noexcept;
-	/**
-	 *\~english
-	 *\brief		Difference operator
-	 *\param[in]	a, b	The sizes to compare
-	 *\return		\p false if sizes have same dimensions
-	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	a, b	Les tailles à comparer
-	 *\return		\p false si les tailles ont les mêmes dimensions
-	 */
-	CU_API bool operator!=( Size const & a, Size const & b )noexcept;
-
-	inline Size operator<<( Size const & lhs, uint32_t rhs )noexcept
-	{
-		Size tmp{ lhs };
-		tmp <<= rhs;
-		return tmp;
-	}
-
-	inline Size operator>>( Size const & lhs, uint32_t rhs )noexcept
-	{
-		Size tmp{ lhs };
-		tmp >>= rhs;
-		return tmp;
-	}
 }
 
 #endif

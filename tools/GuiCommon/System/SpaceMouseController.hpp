@@ -16,6 +16,9 @@ namespace GuiCommon
 		static I3DControllerUPtr create( c3d::String const & appName
 			, c3d::FrameListener & listener );
 
+		virtual void initialise() = 0;
+		virtual void cleanup() = 0;
+
 		virtual void reset() = 0;
 		virtual void setCamera( c3d::CameraRPtr camera ) = 0;
 		virtual void setGeometry( c3d::Geometry const * geometry ) = 0;

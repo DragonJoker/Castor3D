@@ -21,17 +21,6 @@ namespace GuiCommon
 		struct RenderPassConfigurationBuilder
 			: public c3d::RenderTechniqueVisitor
 		{
-		private:
-			explicit RenderPassConfigurationBuilder( c3d::PipelineFlags flags
-				, c3d::Scene const & scene
-				, wxPropertyGrid * grid
-				, TreeItemProperty & prop )
-				: c3d::RenderTechniqueVisitor{ c3d::move( flags ), scene, { false } }
-				, m_grid{ grid }
-				, m_prop{ prop }
-			{
-			}
-
 		public:
 			static void submit( wxPropertyGrid * grid
 				, TreeItemProperty & prop
@@ -61,6 +50,16 @@ namespace GuiCommon
 					, grid
 					, prop };
 				renderPass.accept( vis );
+			}
+
+			explicit RenderPassConfigurationBuilder( c3d::PipelineFlags flags
+				, c3d::Scene const & scene
+				, wxPropertyGrid * grid
+				, TreeItemProperty & prop )
+				: c3d::RenderTechniqueVisitor{ c3d::move( flags ), scene, { false } }
+				, m_grid{ grid }
+				, m_prop{ prop }
+			{
 			}
 
 		private:
@@ -197,7 +196,7 @@ namespace GuiCommon
 		private:
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new RenderPassConfigurationBuilder{ getFlags(), getScene(), m_grid, m_prop } );
+				return c3d::makeRawUnique< RenderPassConfigurationBuilder >( getFlags(), getScene(), m_grid, m_prop );
 			}
 
 		private:

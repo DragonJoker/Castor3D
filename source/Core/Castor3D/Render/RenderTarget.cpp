@@ -135,13 +135,6 @@ namespace c3d
 				value.accept( vis );
 			}
 
-		protected:
-			RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( String const & category )override
-			{
-				return RawUniquePtr< ConfigurationVisitorBase >( new IntermediatesLister{ getFlags(), getScene(), m_cache, m_result } );
-			}
-
-		private:
 			IntermediatesLister( PipelineFlags const & flags
 				, Scene const & scene
 				, ImageViewCache & cache
@@ -153,6 +146,13 @@ namespace c3d
 			{
 			}
 
+		protected:
+			RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( String const & category )override
+			{
+				return c3d::makeRawUnique< IntermediatesLister >( getFlags(), getScene(), m_cache, m_result );
+			}
+
+		private:
 			void doVisit3D( String const & name
 				, crg::ImageViewId viewId
 				, ImageLayout layout
@@ -1701,8 +1701,8 @@ namespace c3d
 	}
 
 	void addDebugDrawable( RenderTarget const & target
-		, DebugVertexBuffers vertexBuffers
-		, DebugIndexBuffer indexBuffer
+		, DebugVertexBuffers const & vertexBuffers
+		, DebugIndexBuffer const & indexBuffer
 		, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
 		, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
 		, ashes::VkDescriptorSetLayoutBindingArray const & bindings
@@ -1712,7 +1712,7 @@ namespace c3d
 		, bool enableDepthTest )
 	{
 		addDebugDrawable( target.getDebugDrawer()
-			, std::move( vertexBuffers ), std::move( indexBuffer )
+			, vertexBuffers, indexBuffer
 			, vertexAttributes, vertexBindings
 			, bindings, writes, count, shader, enableDepthTest );
 	}

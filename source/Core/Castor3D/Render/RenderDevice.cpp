@@ -85,7 +85,6 @@ namespace c3d
 		}
 
 		static ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
-			, ashes::PhysicalDevice const & gpu
 			, ashes::DeviceQueueCreateInfoArray queueCreateInfos
 			, ashes::StringArray const & enabledExtensions
 			, VkPhysicalDeviceFeatures2 const & features2 )
@@ -545,7 +544,6 @@ namespace c3d
 
 		device = renderSystem.getInstance().createDevice( gpu
 			, renddvc::getDeviceCreateInfo( renderSystem.getInstance()
-				, gpu
 				, renddvc::getQueueCreateInfos( queueFamilies )
 				, m_deviceExtensions.getExtensionsNames()
 				, m_features2 ) );

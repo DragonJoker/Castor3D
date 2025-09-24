@@ -77,56 +77,27 @@ namespace diamond_square_terrain
 		bool island = false;
 
 		if ( parameters.get( ParamRandomSeed, param ) )
-		{
 			disableRandomSeed = ( param == cuT( "1" ) );
-		}
-
 		if ( parameters.get( ParamIsland, param ) )
-		{
 			island = ( param == cuT( "1" ) );
-		}
-
 		if ( parameters.get( ParamYMin, param ) )
-		{
 			heightRange = c3d::makeRange( heightRange.getMin()
 				, c3d::string::toFloat( param ) );
-		}
-
 		if ( parameters.get( ParamYMax, param ) )
-		{
 			heightRange = c3d::makeRange( c3d::string::toFloat( param )
 				, heightRange.getMax() );
-		}
-
 		if ( parameters.get( ParamXScale, param ) )
-		{
 			xScale = c3d::string::toFloat( param );
-		}
-
 		if ( parameters.get( ParamZScale, param ) )
-		{
 			zScale = c3d::string::toFloat( param );
-		}
-
 		if ( parameters.get( ParamUScale, param ) )
-		{
 			uScale = c3d::string::toFloat( param );
-		}
-
 		if ( parameters.get( ParamVScale, param ) )
-		{
 			vScale = c3d::string::toFloat( param );
-		}
-
 		if ( parameters.get( ParamDetail, param ) )
-		{
 			size = uint32_t( pow( 2, c3d::string::toUInt( param ) ) );
-		}
-
 		if ( parameters.get( ParamHeatOffset, param ) )
-		{
 			heatOffset = c3d::string::toFloat( param );
-		}
 
 		if ( size )
 		{
@@ -155,7 +126,8 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
-					vertexMap.emplace( heightMap.getIndex( x, z ), index++ );
+					vertexMap.emplace( heightMap.getIndex( x, z ), index );
+					++index;
 					submeshBuffers.positions.emplace_back( transform( x, xScale ), heightRange.value( heightMap( x, z ) ), transform( z, zScale ) );
 					submeshBuffers.texcoords0.emplace_back( float( x ) / uScale, float( z ) / vScale, 0.0f );
 				}
@@ -193,7 +165,6 @@ namespace diamond_square_terrain
 				, zeroPoint
 				, heightMap
 				, m_biomes
-				, faces
 				, vertexMap
 				, submeshBuffers );
 

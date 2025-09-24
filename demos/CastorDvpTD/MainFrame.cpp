@@ -17,16 +17,15 @@ namespace castortd
 	{
 		static const wxSize MainFrameSize{ 1024, 768 };
 
-		typedef enum eID
+		enum class eID
 		{
-			eID_RENDER_TIMER,
-		}	eID;
+			eRenderTimer,
+		};
 
 		static void doUpdate( Game & game )
 		{
-			auto & engine = *wxGetApp().getCastor();
-
-			if ( !engine.isCleaned() )
+			if ( auto const & engine = *wxGetApp().getCastor();
+				!engine.isCleaned() )
 			{
 				game.update();
 				engine.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
@@ -106,7 +105,7 @@ namespace castortd
 			}
 			else
 			{
-				m_timer = new wxTimer( this, main::eID_RENDER_TIMER );
+				m_timer = c3d::makeRawUnique< wxTimer >( this, int( main::eID::eRenderTimer ) );
 				m_timer->Start( 1000 / int( engine.getRenderLoop().getWantedFps() ), true );
 			}
 
@@ -121,33 +120,32 @@ namespace castortd
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
-		EVT_PAINT( MainFrame::OnPaint )
-		EVT_CLOSE( MainFrame::OnClose )
-		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
-		EVT_TIMER( main::eID_RENDER_TIMER, MainFrame::OnRenderTimer )
+		EVT_PAINT( MainFrame::onPaint )
+		EVT_CLOSE( MainFrame::onClose )
+		EVT_ERASE_BACKGROUND( MainFrame::onEraseBackground )
+		EVT_TIMER( int( main::eID::eRenderTimer ), MainFrame::onRenderTimer )
 		EVT_KEY_DOWN( MainFrame::onKeyDown )
 		EVT_KEY_UP( MainFrame::onKeyUp )
-		EVT_LEFT_DOWN( MainFrame::OnMouseLdown )
-		EVT_LEFT_UP( MainFrame::OnMouseLUp )
-		EVT_RIGHT_UP( MainFrame::OnMouseRUp )
+		EVT_LEFT_DOWN( MainFrame::onMouseLDown )
+		EVT_LEFT_UP( MainFrame::onMouseLUp )
+		EVT_RIGHT_UP( MainFrame::onMouseRUp )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-	void MainFrame::OnPaint( wxPaintEvent & event )
+	void MainFrame::onPaint( wxPaintEvent & event )
 	{
 		wxPaintDC paintDC( this );
 		event.Skip();
 	}
 
-	void MainFrame::OnClose( wxCloseEvent & event )
+	void MainFrame::onClose( wxCloseEvent & event )
 	{
 		Hide();
 
 		if ( m_timer )
 		{
 			m_timer->Stop();
-			delete m_timer;
-			m_timer = nullptr;
+			m_timer = {};
 		}
 
 		auto & engine = *wxGetApp().getCastor();
@@ -182,27 +180,27 @@ namespace castortd
 		event.Skip();
 	}
 
-	void MainFrame::OnEraseBackground( wxEraseEvent & event )
+	void MainFrame::onEraseBackground( wxEraseEvent & event )
 	{
 		event.Skip();
 	}
 
-	void MainFrame::OnRenderTimer( wxTimerEvent & event )
+	void MainFrame::onRenderTimer( wxTimerEvent & event )
 	{
 		if ( wxGetApp().getCastor() )
 		{
-			auto & castor = *wxGetApp().getCastor();
+			auto const & castor = *wxGetApp().getCastor();
 
-			if ( !castor.isCleaned() )
+			if ( !castor.isCleaned()
+				&& !castor.isThreaded() )
 			{
-				if ( !castor.isThreaded() )
-				{
-					castor.getRenderLoop().renderSyncFrame();
-					m_game->update();
-					m_timer->Start( 1000 / int( castor.getRenderLoop().getWantedFps() ), true );
-				}
+				castor.getRenderLoop().renderSyncFrame();
+				m_game->update();
+				m_timer->Start( 1000 / int( castor.getRenderLoop().getWantedFps() ), true );
 			}
 		}
+
+		event.Skip( false );
 	}
 
 	void MainFrame::onKeyDown( wxKeyEvent & event )
@@ -223,7 +221,7 @@ namespace castortd
 		}
 	}
 
-	void MainFrame::OnMouseLdown( wxMouseEvent & event )
+	void MainFrame::onMouseLDown( wxMouseEvent & event )
 	{
 		if ( m_panel )
 		{
@@ -232,7 +230,7 @@ namespace castortd
 		}
 	}
 
-	void MainFrame::OnMouseLUp( wxMouseEvent & event )
+	void MainFrame::onMouseLUp( wxMouseEvent & event )
 	{
 		if ( m_panel )
 		{
@@ -241,7 +239,7 @@ namespace castortd
 		}
 	}
 
-	void MainFrame::OnMouseRUp( wxMouseEvent & event )
+	void MainFrame::onMouseRUp( wxMouseEvent & event )
 	{
 		if ( m_panel )
 		{
@@ -250,7 +248,7 @@ namespace castortd
 		}
 	}
 
-	void MainFrame::OnMouseWheel( wxMouseEvent & event )
+	void MainFrame::onMouseWheel( wxMouseEvent & event )
 	{
 		if ( m_panel )
 		{

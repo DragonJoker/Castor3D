@@ -21,7 +21,8 @@ namespace castortd
 
 		void upgrade()
 		{
-			m_value = m_increment( m_value, m_level++ );
+			m_value = m_increment( m_value, m_level );
+			++m_level;
 		}
 
 		T const & getValue()const
@@ -50,7 +51,7 @@ namespace castortd
 		{
 			Ability< T >::initialise( value, valueIncrement );
 			m_cost = cost;
-			m_costIncrement = costIncrement;
+			m_costIncrement = c3d::move( costIncrement );
 			m_maxLevel = maxLevel;
 		}
 

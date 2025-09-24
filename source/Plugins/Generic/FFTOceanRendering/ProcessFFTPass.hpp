@@ -8,66 +8,8 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/RenderModule.hpp>
 
-#include <RenderGraph/RunnablePass.hpp>
-
 namespace ocean_fft
 {
-	class ProcessFFTPass
-		: public crg::RunnablePass
-	{
-	public:
-		enum Bindings : uint32_t
-		{
-			eInput,
-			eOutput,
-		};
-		/**
-		 *\~english
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	vctConfig	The voxelizer configuration.
-		 *\param[in]	voxels		The voxels buffer.
-		 *\param[in]	result		The resulting texture.
-		 *\~french
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	vctConfig	La configuration du voxelizer.
-		 *\param[in]	voxels		Le tampon de voxels.
-		 *\param[in]	result		La texture résultante.
-		 */
-		ProcessFFTPass( crg::FramePass const & pass
-			, crg::GraphContext & context
-			, crg::RunnableGraph & graph
-			, c3d::RenderDevice const & device
-			, VkFFTConfig const & config
-			, c3d::Extent2D const & extent
-			, c3d::BufferBase const & input
-			, c3d::Array< c3d::BufferUPtr, 2u > const & output
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-		~ProcessFFTPass()override;
-		/**
-		 *\copydoc		c3d::RenderTechniquePass::accept
-		 */
-		void accept( c3d::RenderTechniqueVisitor & visitor );
-
-	public:
-		static c3d::String const Name;
-
-	private:
-		void doRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
-		uint32_t doGetPassIndex()const;
-		bool doIsComputePass()const;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::Extent2D m_extent;
-		VkDeviceSize m_inBufferSize{};
-		VkBuffer m_vkInput{};
-		VkDeviceSize m_outBufferSize{};
-		c3d::Array< VkBuffer, 2u > m_vkOutput{};
-		VkFFTApplication m_app{};
-	};
-
 	void createProcessFFTPass( c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph

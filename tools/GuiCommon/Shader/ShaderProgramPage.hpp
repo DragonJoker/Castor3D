@@ -16,6 +16,7 @@ namespace GuiCommon
 	{
 	public:
 		ShaderProgramPage( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, bool canEdit
 			, StcContext & stcContext
 			, ShaderSource & source
@@ -25,10 +26,10 @@ namespace GuiCommon
 			, wxSize const & size = wxSize( 800, 600 ) );
 		~ShaderProgramPage()override;
 
-		void loadLanguage( ShaderLanguage language );
+		void loadLanguage( ShaderLanguage language )const;
 
 	private:
-		void doInitialiseLayout( c3d::Engine * engine );
+		void doInitialiseLayout();
 		void doLoadPages( ShaderLanguage language );
 		void doCleanup();
 
@@ -40,12 +41,14 @@ namespace GuiCommon
 
 	protected:
 		c3d::Engine * m_engine;
+		ImagesLoader & m_imagesLoader;
 		ShaderSource & m_source;
 		StcContext & m_stcContext;
 		wxAuiManager m_auiManager;
 		bool m_canEdit;
 		wxAuiNotebook * m_editors{};
 		c3d::Vector< ShaderEditor * > m_pages;
+		ShaderLanguage m_language;
 	};
 }
 

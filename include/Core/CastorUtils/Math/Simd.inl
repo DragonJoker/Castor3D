@@ -40,30 +40,6 @@ namespace c3d
 		m_value = _mm_div_ps( m_value, rhs.m_value );
 		return *this;
 	}
-
-	inline Float4 operator+( Float4 const & lhs, Float4 const & rhs )
-	{
-		Float4 result{ lhs };
-		return result += rhs;
-	}
-
-	inline Float4 operator-( Float4 const & lhs, Float4 const & rhs )
-	{
-		Float4 result{ lhs };
-		return result -= rhs;
-	}
-
-	inline Float4 operator*( Float4 const & lhs, Float4 const & rhs )
-	{
-		Float4 result{ lhs };
-		return result *= rhs;
-	}
-
-	inline Float4 operator/( Float4 const & lhs, Float4 const & rhs )
-	{
-		Float4 result{ lhs };
-		return result /= rhs;
-	}
 }
 
 #endif

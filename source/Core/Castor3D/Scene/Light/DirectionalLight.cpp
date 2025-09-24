@@ -19,6 +19,8 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
+CU_ImplementSmartPtr( c3d, DirectionalLight )
+
 namespace c3d
 {
 	//*************************************************************************************************
@@ -149,16 +151,6 @@ namespace c3d
 
 			return result;
 		}
-	}
-
-	//*************************************************************************************************
-
-	bool operator==( DirectionalLightCascade const & lhs
-		, DirectionalLightCascade  const & rhs )
-	{
-		return lhs.viewMatrix == rhs.viewMatrix
-			&& lhs.projMatrix == rhs.projMatrix
-			&& lhs.splitDepthScale == rhs.splitDepthScale;
 	}
 
 	//*************************************************************************************************

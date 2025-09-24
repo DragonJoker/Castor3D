@@ -39,6 +39,8 @@ namespace atmosphere_scattering
 			, sdw::Vec3Field< "windDirection" >
 			, sdw::FloatField< "topOffset" > >
 	{
+		SDW_DeclStructInstance( , CloudsData );
+
 		CloudsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -72,6 +74,10 @@ namespace atmosphere_scattering
 	{
 	private:
 		using Configuration = CloudsConfig;
+		CloudsUbo( CloudsUbo const & ) = delete;
+		CloudsUbo & operator=( CloudsUbo const & ) = delete;
+		CloudsUbo( CloudsUbo && )noexcept = delete;
+		CloudsUbo & operator=( CloudsUbo && )noexcept = delete;
 
 	public:
 		CloudsUbo( c3d::RenderDevice const & device
@@ -80,8 +86,9 @@ namespace atmosphere_scattering
 		void cpuUpdate( Configuration const & config
 			, float totalTime );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			m_ubo.createPassBinding( pass, binding );
 		}
@@ -92,7 +99,8 @@ namespace atmosphere_scattering
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );

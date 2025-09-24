@@ -314,7 +314,8 @@ namespace c3d
 	{
 		if ( auto text = m_text )
 		{
-			text->setOrder( index++, 0u );
+			text->setOrder( index, 0u );
+			++index;
 		}
 	}
 

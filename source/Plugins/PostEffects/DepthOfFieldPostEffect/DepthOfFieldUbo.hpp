@@ -59,6 +59,8 @@ namespace dof
 			, sdw::Vec4ArrayField< "points16", 16u > >
 	{
 	public:
+		SDW_DeclStructInstance( , DepthOfFieldData );
+
 		DepthOfFieldData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )

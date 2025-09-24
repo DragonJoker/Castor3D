@@ -591,6 +591,11 @@ namespace c3d
 		{
 		}
 
+		template< typename ToSinkT >
+		void doSink( [[maybe_unused]] ToSinkT toSink )const
+		{
+		}
+
 	public:
 		/**
 		*\~english
@@ -625,454 +630,530 @@ namespace c3d
 		*	Valeurs.
 		**/
 		/**@{*/
-		void visit( String const & name
-			, bool & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] bool & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int16_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int16_t & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint16_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint16_t & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int32_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int32_t & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint32_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint32_t & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int64_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int64_t & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint64_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint64_t & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, float & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] float & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, double & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] double & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Angle & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Angle & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, LuminousIntensity & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] LuminousIntensity & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Illumination & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Illumination & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RgbColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RgbColour & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RgbaColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RgbaColour & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, HdrRgbColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] HdrRgbColour & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, HdrRgbaColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] HdrRgbaColour & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, ColourWrapper value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] ColourWrapper value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point2f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point2f & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point2i & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point2i & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point2ui & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point2ui & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point3f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point3f & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point3i & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point3i & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point3ui & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point3ui & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point4f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point4f & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point4i & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point4i & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point4ui & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point4ui & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Matrix4x4f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Matrix4x4f & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RangedValue< float > & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RangedValue< float > & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RangedValue< int32_t > & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RangedValue< int32_t > & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RangedValue< uint32_t > & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RangedValue< uint32_t > & value
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, float & value
-			, Range< float > const & range
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] float & value
+			, [[maybe_unused]] Range< float > const & range
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int32_t & value
-			, Range< int32_t > const & range
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int32_t & value
+			, [[maybe_unused]] Range< int32_t > const & range
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint32_t & value
-			, Range< uint32_t > const & range
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint32_t & value
+			, [[maybe_unused]] Range< uint32_t > const & range
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, PassComponentTextureFlag textureFlag
-			, TextureFlagConfiguration & value
-			, uint32_t componentsCount
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] PassComponentTextureFlag textureFlag
+			, [[maybe_unused]] TextureFlagConfiguration & value
+			, [[maybe_unused]] uint32_t componentsCount
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int32_t & enumValue
-			, StringArray const & enumNames
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int32_t & enumValue
+			, [[maybe_unused]] StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( onChange ) );
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint32_t & enumValue
-			, StringArray const & enumNames
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint32_t & enumValue
+			, [[maybe_unused]] StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, ControlsList controls )override
 		{
+			doSink( c3d::move( onChange ) );
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, bool & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] bool & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int16_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int16_t & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint16_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint16_t & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int32_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int32_t & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint32_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint32_t & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int64_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int64_t & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint64_t & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint64_t & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, float & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] float & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, double & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] double & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Angle & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Angle & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, LuminousIntensity & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] LuminousIntensity & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Illumination & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Illumination & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RgbColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RgbColour & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RgbaColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RgbaColour & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, HdrRgbColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] HdrRgbColour & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, HdrRgbaColour & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] HdrRgbaColour & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, ColourWrapper value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] ColourWrapper value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point2f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point2f & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point2i & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point2i & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point2ui & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point2ui & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point3f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point3f & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point3i & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point3i & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point3ui & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point3ui & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point4f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point4f & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point4i & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point4i & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Point4ui & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Point4ui & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, Matrix4x4f & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] Matrix4x4f & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RangedValue< float > & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RangedValue< float > & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RangedValue< int32_t > & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RangedValue< int32_t > & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, RangedValue< uint32_t > & value
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] RangedValue< uint32_t > & value
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, float & value
-			, Range< float > const & range
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] float & value
+			, [[maybe_unused]] Range< float > const & range
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int32_t & value
-			, Range< int32_t > const & range
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int32_t & value
+			, [[maybe_unused]] Range< int32_t > const & range
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint32_t & value
-			, Range< uint32_t > const & range
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint32_t & value
+			, [[maybe_unused]] Range< uint32_t > const & range
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, PassComponentTextureFlag textureFlag
-			, TextureFlagConfiguration & value
-			, uint32_t componentsCount
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] PassComponentTextureFlag textureFlag
+			, [[maybe_unused]] TextureFlagConfiguration & value
+			, [[maybe_unused]] uint32_t componentsCount
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, int32_t & enumValue
-			, StringArray const & enumNames
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] int32_t & enumValue
+			, [[maybe_unused]] StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( onChange ) );
+			doSink( c3d::move( controls ) );
 		}
 
-		void visit( String const & name
-			, uint32_t & enumValue
-			, StringArray const & enumNames
+		void visit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] uint32_t & enumValue
+			, [[maybe_unused]] StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
+			doSink( c3d::move( onChange ) );
+			doSink( c3d::move( controls ) );
 		}
 		/**@}*/
 
@@ -1080,17 +1161,17 @@ namespace c3d
 		using ConfigurationVisitorBase::visit;
 
 	protected:
-		bool doFilter( crg::ImageViewId const & viewId
-			, TextureFactors const & factors )const override
+		bool doFilter( [[maybe_unused]] crg::ImageViewId const & viewId
+			, [[maybe_unused]] TextureFactors const & factors )const override
 		{
 			return true;
 		}
 
 	private:
-		void doVisit( String const & name
-			, crg::ImageViewId viewId
-			, ImageLayout layout
-			, TextureFactors const & factors = TextureFactors{} )override
+		void doVisit( [[maybe_unused]] String const & name
+			, [[maybe_unused]] crg::ImageViewId viewId
+			, [[maybe_unused]] ImageLayout layout
+			, [[maybe_unused]] TextureFactors const & factors )override
 		{
 		}
 	};

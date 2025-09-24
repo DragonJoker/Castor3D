@@ -204,9 +204,8 @@ namespace c3d
 		, RenderDevice const & device
 		, Size const & size
 		, Texture const & srcTexture )
-		: RenderCube{ device, false }
+		: RenderCube{ device, false, radcomp::doCreateSampler( engine ) }
 		, m_result{ radcomp::doCreateRadianceTexture( m_device, *srcTexture.resources, size ) }
-		, m_sampler{ radcomp::doCreateSampler( engine ) }
 		, m_srcView{ srcTexture }
 		, m_srcImage{ m_srcView.image.get() }
 		, m_srcImageView{ radcomp::doCreateSrcView( *m_srcImage ) }

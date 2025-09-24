@@ -14,7 +14,7 @@ namespace c3d
 	{
 	public:
 		//!< Signature for the plug-in's loading function
-		using OnLoadFunction = void ( * )( Engine *, Plugin * );
+		using OnLoadFunction = void ( * )( Engine * );
 		//!< Signature for the plug-in's unloading function
 		using OnUnloadFunction = void ( * )( Engine * )noexcept;
 		//!< Signature for the plug-in's debug mode retrieval function

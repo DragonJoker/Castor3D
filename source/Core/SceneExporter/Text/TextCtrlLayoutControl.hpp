@@ -27,7 +27,7 @@ namespace c3d
 	bool writeControl( TextWriterBase & writer
 		, Control const & control
 		, StringStream & file
-		, String const & prefix = {} );
+		, StringView prefix = {} );
 }
 
 #endif

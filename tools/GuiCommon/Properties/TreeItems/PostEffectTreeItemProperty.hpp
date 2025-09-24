@@ -34,7 +34,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	effect		L'objet cible.
 		 */
-		PostEffectTreeItemProperty( bool editable
+		PostEffectTreeItemProperty( ImagesLoader & imagesLoader
+			, bool editable
 			, c3d::PostEffect & effect
 			, wxWindow * parent );
 

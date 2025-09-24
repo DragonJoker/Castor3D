@@ -18,6 +18,8 @@ namespace c3d::shader
 		, sdw::FloatField< "sinTheta" >
 		, sdw::FloatField< "phi" > >
 	{
+		SDW_DeclStructInstance( C3D_API, MicrofacetDistributionSample );
+
 		MicrofacetDistributionSample( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )

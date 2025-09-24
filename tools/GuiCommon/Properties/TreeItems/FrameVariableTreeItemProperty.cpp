@@ -94,9 +94,10 @@ namespace GuiCommon
 	}
 
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, bool editable
 		, UniformValueBase & uniform )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 		, m_uniform{ uniform }
 	{
 		CreateTreeItemMenu();

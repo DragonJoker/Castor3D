@@ -1,5 +1,5 @@
 #include "CastorUtils/Math/Point.hpp"
-#include "CastorUtils/Math/Coords.hpp"
+#include "CastorUtils/Math/PointView.hpp"
 #include "CastorUtils/Design/Templates.hpp"
 #include "CastorUtils/Math/Simd.hpp"
 
@@ -389,25 +389,37 @@ namespace c3d
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 4 > add( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return add( lhs, rhs.constPtr() );
+			return Point< RawT1, 4 >( lhs[0] + rhs[0]
+				, lhs[1] + rhs[1]
+				, lhs[2] + rhs[2]
+				, lhs[3] + rhs[3] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 4 > sub( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return sub( lhs, rhs.constPtr() );
+			return Point< RawT1, 4 >( lhs[0] - rhs[0]
+				, lhs[1] - rhs[1]
+				, lhs[2] - rhs[2]
+				, lhs[3] - rhs[3] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 4 > mul( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return mul( lhs, rhs.constPtr() );
+			return Point< RawT1, 4 >( lhs[0] * rhs[0]
+				, lhs[1] * rhs[1]
+				, lhs[2] * rhs[2]
+				, lhs[3] * rhs[3] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 4 > div( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return div( lhs, rhs.constPtr() );
+			return Point< RawT1, 4 >( lhs[0] / rhs[0]
+				, lhs[1] / rhs[1]
+				, lhs[2] / rhs[2]
+				, lhs[3] / rhs[3] );
 		}
 	};
 
@@ -485,25 +497,33 @@ namespace c3d
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 3 > add( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return add( lhs, rhs.constPtr() );
+			return Point< RawT1, 3 >( lhs[0] + rhs[0]
+				, lhs[1] + rhs[1]
+				, lhs[2] + rhs[2] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 3 > sub( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return sub( lhs, rhs.constPtr() );
+			return Point< RawT1, 3 >( lhs[0] - rhs[0]
+				, lhs[1] - rhs[1]
+				, lhs[2] - rhs[2] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 3 > mul( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return mul( lhs, rhs.constPtr() );
+			return Point< RawT1, 3 >( lhs[0] * rhs[0]
+				, lhs[1] * rhs[1]
+				, lhs[2] * rhs[2] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 3 > div( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return div( lhs, rhs.constPtr() );
+			return Point< RawT1, 3 >( lhs[0] / rhs[0]
+				, lhs[1] / rhs[1]
+				, lhs[2] / rhs[2] );
 		}
 	};
 
@@ -565,25 +585,25 @@ namespace c3d
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 2 > add( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return add( lhs, rhs.constPtr() );
+			return Point< RawT1, 2 >( lhs[0] + rhs[0], lhs[1] + rhs[1] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 2 > sub( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return sub( lhs, rhs.constPtr() );
+			return Point< RawT1, 2 >( lhs[0] - rhs[0], lhs[1] - rhs[1] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 2 > mul( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return mul( lhs, rhs.constPtr() );
+			return Point< RawT1, 2 >( lhs[0] * rhs[0], lhs[1] * rhs[1] );
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline Point< RawT1, 2 > div( PtType1 const & lhs, PtType2 const & rhs )
 		{
-			return div( lhs, rhs.constPtr() );
+			return Point< RawT1, 2 >( lhs[0] / rhs[0], lhs[1] / rhs[1] );
 		}
 	};
 
@@ -675,25 +695,41 @@ namespace c3d
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & add( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return add( lhs, rhs.constPtr() );
+			lhs[0] += rhs[0];
+			lhs[1] += rhs[1];
+			lhs[2] += rhs[2];
+			lhs[3] += rhs[3];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & sub( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return sub( lhs, rhs.constPtr() );
+			lhs[0] -= rhs[0];
+			lhs[1] -= rhs[1];
+			lhs[2] -= rhs[2];
+			lhs[3] -= rhs[3];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & mul( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return mul( lhs, rhs.constPtr() );
+			lhs[0] *= rhs[0];
+			lhs[1] *= rhs[1];
+			lhs[2] *= rhs[2];
+			lhs[3] *= rhs[3];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & div( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return div( lhs, rhs.constPtr() );
+			lhs[0] /= rhs[0];
+			lhs[1] /= rhs[1];
+			lhs[2] /= rhs[2];
+			lhs[3] /= rhs[3];
+			return lhs;
 		}
 	};
 
@@ -777,25 +813,37 @@ namespace c3d
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & add( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return add( lhs, rhs.constPtr() );
+			lhs[0] += rhs[0];
+			lhs[1] += rhs[1];
+			lhs[2] += rhs[2];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & sub( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return sub( lhs, rhs.constPtr() );
+			lhs[0] -= rhs[0];
+			lhs[1] -= rhs[1];
+			lhs[2] -= rhs[2];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & mul( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return mul( lhs, rhs.constPtr() );
+			lhs[0] *= rhs[0];
+			lhs[1] *= rhs[1];
+			lhs[2] *= rhs[2];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & div( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return div( lhs, rhs.constPtr() );
+			lhs[0] /= rhs[0];
+			lhs[1] /= rhs[1];
+			lhs[2] /= rhs[2];
+			return lhs;
 		}
 	};
 
@@ -871,25 +919,33 @@ namespace c3d
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & add( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return add( lhs, rhs.constPtr() );
+			lhs[0] += rhs[0];
+			lhs[1] += rhs[1];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & sub( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return sub( lhs, rhs.constPtr() );
+			lhs[0] -= rhs[0];
+			lhs[1] -= rhs[1];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & mul( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return mul( lhs, rhs.constPtr() );
+			lhs[0] *= rhs[0];
+			lhs[1] *= rhs[1];
+			return lhs;
 		}
 
 		template< typename PtType1, typename PtType2 >
 		static inline PtType1 & div( PtType1 & lhs, PtType2 const & rhs )
 		{
-			return div( lhs, rhs.constPtr() );
+			lhs[0] /= rhs[0];
+			lhs[1] /= rhs[1];
+			return lhs;
 		}
 	};
 

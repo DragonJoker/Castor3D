@@ -168,55 +168,37 @@ namespace c3d
 	void OpaqueRendering::update( CpuUpdater & updater )
 	{
 		if ( !m_opaquePass )
-		{
 			return;
-		}
 
 		if ( getOwner()->getSsaoConfig().enabled )
-		{
 			m_ssao->update( updater );
-		}
 
 		auto & scene = *updater.scene;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		if ( m_opaquePass )
-		{
 			m_opaquePass->update( updater );
-		}
 
 		if ( m_deferredOpaquePass )
-		{
 			m_deferredOpaquePass->update( updater );
-		}
 
 		if ( m_visibilityOpaquePass )
-		{
 			m_visibilityOpaquePass->update( updater );
-		}
 	}
 
 	void OpaqueRendering::update( GpuUpdater & updater )const
 	{
 		if ( !m_opaquePass )
-		{
 			return;
-		}
 
 		if ( m_opaquePass )
-		{
 			m_opaquePass->countNodes( updater.info );
-		}
 
 		if ( m_deferredOpaquePass )
-		{
 			m_deferredOpaquePass->countNodes( updater.info );
-		}
 
 		if ( m_visibilityOpaquePass )
-		{
 			m_visibilityOpaquePass->countNodes( updater.info );
-		}
 	}
 
 	void OpaqueRendering::accept( RenderTechniqueVisitor & visitor )
@@ -225,21 +207,15 @@ namespace c3d
 
 		if ( m_opaquePass
 			&& m_opaquePass->areValidPassFlags( visitor.getFlags().pass ) )
-		{
 			m_opaquePass->accept( visitor );
-		}
 
 		if ( m_deferredOpaquePass
 			&& m_deferredOpaquePass->areValidPassFlags( visitor.getFlags().pass ) )
-		{
 			m_deferredOpaquePass->accept( visitor );
-		}
 
 		if ( m_visibilityOpaquePass
 			&& m_visibilityOpaquePass->areValidPassFlags( visitor.getFlags().pass ) )
-		{
 			m_visibilityOpaquePass->accept( visitor );
-		}
 	}
 
 	Engine * OpaqueRendering::getEngine()const noexcept
@@ -309,11 +285,11 @@ namespace c3d
 					.outputScattering();
 				if ( !isDeferredLighting )
 				{
-					auto diffuse = framePass.outputs.find( 1u )->second;
+					auto diffuse = framePass.getOutputs().find( 1u )->second;
 					renderPassDesc.implicitAction( diffuse->view(), crg::RecordContext::clearAttachment( *diffuse ) );
 				}
 
-				auto res = makeRawUnique< VisibilityResolvePass >( getOwner()
+				auto res = makeRawUnique< VisibilityResolvePass >( *getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -326,15 +302,10 @@ namespace c3d
 					, targetResult
 					, c3d::move( renderPassDesc )
 					, c3d::move( techniquePassDesc ) );
-
 				if ( isDeferredLighting )
-				{
 					m_deferredOpaquePass = res.get();
-				}
 				else
-				{
 					m_opaquePass = res.get();
-				}
 
 				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
@@ -504,7 +475,7 @@ namespace c3d
 
 				if ( !isDeferredLighting )
 				{
-					auto diffuse = *framePass.targets.rbegin();
+					auto diffuse = *framePass.getTargets().rbegin();
 					renderPassDesc.implicitAction( diffuse->view(), crg::RecordContext::clearAttachment( *diffuse ) );
 				}
 
@@ -519,16 +490,10 @@ namespace c3d
 					, targetDepth
 					, c3d::move( renderPassDesc )
 					, c3d::move( techniquePassDesc ) );
-
 				if ( isDeferredLighting )
-				{
 					m_deferredOpaquePass = res.get();
-				}
 				else
-				{
 					m_opaquePass = res.get();
-				}
-
 				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;

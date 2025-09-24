@@ -94,7 +94,7 @@ namespace toon::shader
 		m_prefix = cuT( "toon_phong_" );
 	}
 
-	const c3d::String ToonPhongLightingModel::getName()
+	c3d::String ToonPhongLightingModel::getName()
 	{
 		return cuT( "toon.phong" );
 	}
@@ -193,7 +193,7 @@ namespace toon::shader
 		m_prefix = cuT( "toon_pbr_" );
 	}
 
-	const c3d::String ToonPbrLightingModel::getName()
+	c3d::String ToonPbrLightingModel::getName()
 	{
 		return cuT( "toon.pbr" );
 	}

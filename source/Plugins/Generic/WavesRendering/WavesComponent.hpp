@@ -26,7 +26,7 @@ namespace waves
 		struct RenderData
 			: public c3d::SubmeshRenderData
 		{
-			RenderData( c3d::SubmeshComponent const & component );
+			explicit RenderData( c3d::SubmeshComponent const & component );
 			/**
 			 *\copydoc	c3d::shader::SubmeshRenderShader::initialise
 			 */

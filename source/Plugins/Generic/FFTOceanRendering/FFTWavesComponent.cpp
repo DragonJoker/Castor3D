@@ -246,14 +246,14 @@ namespace ocean_fft
 		struct PatchT
 			: public sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , PatchT );
+
 			PatchT( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
 				: StructInstance{ writer, c3d::move( expr ), enabled }
 			{
 			}
-
-			SDW_DeclStructInstance( , PatchT );
 
 			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint
@@ -269,11 +269,13 @@ namespace ocean_fft
 					result->declMember( "patchWorldPosition"
 						, ast::type::Kind::eVec3F
 						, ast::type::NotArray
-						, index++ );
+						, index );
+					++index;
 					result->declMember( "patchLods"
 						, ast::type::Kind::eVec4F
 						, ast::type::NotArray
-						, index++ );
+						, index );
+					++index;
 					result->declMember( "colour"
 						, ast::type::Kind::eVec3F
 						, ast::type::NotArray
@@ -287,7 +289,8 @@ namespace ocean_fft
 					result->declMember( "nodeId"
 						, ast::type::Kind::eInt
 						, ast::type::NotArray
-						, index++ );
+						, index );
+					++index;
 				}
 
 				return result;
@@ -342,9 +345,12 @@ namespace ocean_fft
 	{
 		if ( index )
 		{
-			static_cast< sdw::type::IOStruct & >( type ).declMember( "gradientJacobianUV", ast::type::Kind::eVec2F, ast::type::NotArray, ( *index )++ );
-			static_cast< sdw::type::IOStruct & >( type ).declMember( "noiseGradientUV", ast::type::Kind::eVec2F, ast::type::NotArray, ( *index )++ );
-			static_cast< sdw::type::IOStruct & >( type ).declMember( "mdlPosition", ast::type::Kind::eVec3F, ast::type::NotArray, ( *index )++ );
+			static_cast< sdw::type::IOStruct & >( type ).declMember( "gradientJacobianUV", ast::type::Kind::eVec2F, ast::type::NotArray, ( *index ) );
+			++( *index );
+			static_cast< sdw::type::IOStruct & >( type ).declMember( "noiseGradientUV", ast::type::Kind::eVec2F, ast::type::NotArray, ( *index ) );
+			++( *index );
+			static_cast< sdw::type::IOStruct & >( type ).declMember( "mdlPosition", ast::type::Kind::eVec3F, ast::type::NotArray, ( *index ) );
+			++( *index );
 		}
 		else
 		{
@@ -510,17 +516,21 @@ namespace ocean_fft
 			, RenderPipeline::eBuffers );
 		auto index = uint32_t( c3d::GlobalBuffersIdx::eCount );
 		C3D_FftOcean( writer
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_heightDisplacementMap"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		auto c3d_gradientJacobianMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "c3d_gradientJacobianMap"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		auto c3d_normalsMap = writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "c3d_normalsMap"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		shader::InstantiatedMeshBuffers meshBuffers{ writer
 			, flags
 			, uint32_t( MeshBuffersIdx::ePosition )
@@ -533,8 +543,8 @@ namespace ocean_fft
 		pcb.end();
 
 		auto tessLevel1f = writer.implementFunction< sdw::Float >( "tessLevel1f"
-			, [&]( sdw::Float lod
-				, sdw::Vec2 maxTessLevel )
+			, [&writer]( sdw::Float const & lod
+				, sdw::Vec2 const & maxTessLevel )
 			{
 				writer.returnStmt( maxTessLevel.y() * exp2( -lod ) );
 			}
@@ -542,8 +552,8 @@ namespace ocean_fft
 			, sdw::InVec2{ writer, "maxTessLevel" } );
 
 		auto tessLevel4f = writer.implementFunction< sdw::Vec4 >( "tessLevel4f"
-			, [&]( sdw::Vec4 lod
-				, sdw::Vec2 maxTessLevel )
+			, [&writer]( sdw::Vec4 const & lod
+				, sdw::Vec2 const & maxTessLevel )
 			{
 				writer.returnStmt( maxTessLevel.y() * exp2( -lod ) );
 			}
@@ -551,11 +561,11 @@ namespace ocean_fft
 			, sdw::InVec2{ writer, "maxTessLevel" } );
 
 		auto lodFactors = writer.implementFunction< sdw::Float >( "lodFactors"
-			, [&]( sdw::Vec3 worldPos
-				, sdw::Vec3 worldEye
-				, sdw::Vec2 tileScale
-				, sdw::Vec2 maxTessLevel
-				, sdw::Float distanceMod )
+			, [&writer]( sdw::Vec3 const & worldPos
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec2 const & tileScale
+				, sdw::Vec2 const & maxTessLevel
+				, sdw::Float const & distanceMod )
 			{
 				worldPos.xz() *= tileScale;
 				auto distToCam = writer.declLocale( "distToCam"
@@ -573,9 +583,9 @@ namespace ocean_fft
 			, sdw::InFloat{ writer, "distanceMod" } );
 
 		auto lerpVertex = writer.implementFunction< sdw::Vec2 >( "lerpVertex"
-			, [&]( sdw::Vec3 patchPosBase
-				, sdw::Vec2 tessCoord
-				, sdw::Vec2 patchSize )
+			, [&writer]( sdw::Vec3 const & patchPosBase
+				, sdw::Vec2 const & tessCoord
+				, sdw::Vec2 const & patchSize )
 			{
 				writer.returnStmt( fma( tessCoord, patchSize, patchPosBase.xz() ) );
 			}
@@ -584,8 +594,8 @@ namespace ocean_fft
 			, sdw::InVec2{ writer, "patchSize" } );
 
 		auto lodFactor = writer.implementFunction< sdw::Vec2 >( "lodFactor"
-			, [&]( sdw::Vec2 tessCoord
-				, sdw::Vec4 patchLods )
+			, [&writer]( sdw::Vec2 const & tessCoord
+				, sdw::Vec4 const & patchLods )
 			{
 				// Bilinear interpolation from patch corners.
 				auto x = writer.declLocale( "x"
@@ -603,9 +613,9 @@ namespace ocean_fft
 			, sdw::InVec4{ writer, "patchLods" } );
 
 		auto sampleHeightDisplacement = writer.implementFunction< sdw::Vec3 >( "sampleHeightDisplacement"
-			, [&]( sdw::Vec2 uv
-				, sdw::Vec2 off
-				, sdw::Vec2 lod )
+			, [&writer, &c3d_heightDisplacementMap]( sdw::Vec2 const & uv
+				, sdw::Vec2 const & off
+				, sdw::Vec2 const & lod )
 			{
 				writer.returnStmt( mix( c3d_heightDisplacementMap.lod( uv + vec2( 0.5_f ) * off, lod.x() ).xyz()
 					, c3d_heightDisplacementMap.lod( uv + vec2( 1.0_f ) * off, lod.x() + 1.0_f ).xyz()
@@ -623,7 +633,8 @@ namespace ocean_fft
 
 			writer.implementEntryPointT< sdw::VoidT, shd::PatchT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shd::PatchT >{ writer, flags }
-				, [&]( sdw::VertexIn const & in
+			, [&engine, &writer, &c3d_objectIdsData, &c3d_modelsData, &c3d_cameraData, c3d_billboardData, c3d_renderData
+					, &pipelineID, &drawID , &meshBuffers]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shd::PatchT > out )
 				{
 					auto bbPositions = writer.declConstantArray( "bbPositions"
@@ -684,7 +695,8 @@ namespace ocean_fft
 		{
 			writer.implementEntryPointT< sdw::VoidT, shd::PatchT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shd::PatchT >{ writer, flags }
-				, [&]( sdw::VertexIn const & in
+				, [&engine, &flags, &writer, &c3d_objectIdsData, &c3d_oceanData
+					, &drawID, &pipelineID, &meshBuffers]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shd::PatchT > out )
 				{
 					auto instanceId = writer.declLocale( "instanceId"
@@ -696,8 +708,6 @@ namespace ocean_fft
 							, pipelineID
 							, instanceId
 							, flags ) );
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[nodeId - 1u] );
 					auto vertexIndex = writer.declLocale( "vertexIndex"
 						, writer.cast< sdw::UInt >( in.vertexIndex ) );
 					auto pos = writer.declLocale( "pos"
@@ -717,9 +727,9 @@ namespace ocean_fft
 			, sdw::QuadsTessPatchOutT< shd::PatchT >{ writer
 				, 9u
 				, flags }
-			, [&]( sdw::TessControlPatchRoutineIn in
-				, sdw::TessControlListInT< shd::PatchT, shd::OutputVertices > listIn
-				, sdw::QuadsTessPatchOutT< shd::PatchT > patchOut )
+			, [&writer, &c3d_cameraData, &c3d_oceanData, &lodFactors, &tessLevel4f]( [[maybe_unused]] sdw::TessControlPatchRoutineIn const & in
+				, sdw::TessControlListInT< shd::PatchT, shd::OutputVertices > const & listIn
+				, sdw::QuadsTessPatchOutT< shd::PatchT > const & patchOut )
 			{
 				auto patchSize = writer.declLocale( "patchSize"
 					, vec3( c3d_oceanData.patchSize().x(), 0.0_f, c3d_oceanData.patchSize().y() ) );
@@ -784,8 +794,8 @@ namespace ocean_fft
 				, ast::type::OutputTopology::eQuad
 				, ast::type::PrimitiveOrdering::eCW
 				, shd::OutputVertices }
-			, [&]( sdw::TessControlMainIn in
-				, sdw::TessControlListInT< shd::PatchT, shd::OutputVertices > listIn
+			, []( sdw::TessControlMainIn const & in
+				, sdw::TessControlListInT< shd::PatchT, shd::OutputVertices > const & listIn
 				, sdw::TrianglesTessControlListOut listOut )
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
@@ -803,9 +813,10 @@ namespace ocean_fft
 				, submeshShaders
 				, passShaders
 				, flags }
-			, [&]( sdw::TessEvalMainIn mainIn
-				, sdw::TessEvalListInT< shd::PatchT, shd::OutputVertices > listIn
-				, sdw::QuadsTessPatchInT< shd::PatchT > patchIn
+			, [&flags, &writer, &lerpVertex, &lodFactor, &sampleHeightDisplacement
+				, &c3d_oceanData, &c3d_modelsData, &c3d_cameraData]( [[maybe_unused]] sdw::TessEvalMainIn const & mainIn
+				, [[maybe_unused]] sdw::TessEvalListInT< shd::PatchT, shd::OutputVertices > const & listIn
+				, sdw::QuadsTessPatchInT< shd::PatchT > const & patchIn
 				, sdw::TessEvalDataOutT< c3d::shader::FragmentSurfaceT > out )
 			{
 				auto tessCoord = writer.declLocale( "tessCoord"

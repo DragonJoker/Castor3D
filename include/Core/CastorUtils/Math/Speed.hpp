@@ -240,28 +240,50 @@ namespace c3d
 
 	private:
 		ValueT m_value{};
-	};
-	/**
-	*\~english
-	*\name	Comparison.
-	*\~english
-	*\name	Comparaison.
-	**/
-	/**@{*/
-	template< typename ValueT, typename DurationT, typename TraitsT >
-	bool operator==( SpeedT< ValueT, DurationT, TraitsT > const & lhs
-		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
-	{
-		return lhs.getValue() == rhs.getValue();
-	}
 
-	template< typename ValueT, typename DurationT, typename TraitsT >
-	auto operator<=>( SpeedT< ValueT, DurationT, TraitsT > const & lhs
-		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
-	{
-		return lhs.getValue() <=> rhs.getValue();
-	}
-	/**@}*/
+	private:
+		friend bool operator==( SpeedT const & lhs, SpeedT const & rhs )noexcept
+		{
+			return lhs.getValue() == rhs.getValue();
+		}
+
+		friend auto operator<=>( SpeedT const & lhs, SpeedT const & rhs )noexcept
+		{
+			return lhs.getValue() <=> rhs.getValue();
+		}
+
+		template< typename ValueU >
+		friend SpeedT operator+( SpeedT const & lhs, ValueU const & rhs )noexcept
+		{
+			SpeedT result{ lhs };
+			result += rhs;
+			return result;
+		}
+
+		template< typename ValueU >
+		friend SpeedT operator-( SpeedT const & lhs, ValueU const & rhs )noexcept
+		{
+			SpeedT result{ lhs };
+			result -= rhs;
+			return result;
+		}
+
+		template< typename ValueU >
+		friend SpeedT operator*( SpeedT const & lhs, ValueU const & rhs )noexcept
+		{
+			SpeedT result{ lhs };
+			result *= rhs;
+			return result;
+		}
+
+		template< typename ValueU >
+		friend SpeedT operator/( SpeedT const & lhs, ValueU const & rhs )noexcept
+		{
+			SpeedT result{ lhs };
+			result /= rhs;
+			return result;
+		}
+	};
 
 	template< typename DurationT, typename ValueT >
 	SpeedT< ValueT, DurationT > makeSpeed( ValueT const & value )
@@ -274,38 +296,6 @@ namespace c3d
 		, DurationT const & )
 	{
 		return makeSpeed< DurationT >( value );
-	}
-
-	template< typename DurationT, typename ValueT, typename ValueU >
-	SpeedT< ValueT, DurationT > operator+( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
-	{
-		SpeedT< ValueT, DurationT > result{ lhs };
-		result += rhs;
-		return result;
-	}
-
-	template< typename DurationT, typename ValueT, typename ValueU >
-	SpeedT< ValueT, DurationT > operator-( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
-	{
-		SpeedT< ValueT, DurationT > result{ lhs };
-		result -= rhs;
-		return result;
-	}
-
-	template< typename DurationT, typename ValueT, typename ValueU >
-	SpeedT< ValueT, DurationT > operator*( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
-	{
-		SpeedT< ValueT, DurationT > result{ lhs };
-		result *= rhs;
-		return result;
-	}
-
-	template< typename DurationT, typename ValueT, typename ValueU >
-	SpeedT< ValueT, DurationT > operator/( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
-	{
-		SpeedT< ValueT, DurationT > result{ lhs };
-		result /= rhs;
-		return result;
 	}
 }
 

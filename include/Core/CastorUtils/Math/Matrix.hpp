@@ -76,18 +76,18 @@ namespace c3d
 		/**@{*/
 		void setRow( uint32_t index, value_type const * row );
 		void setRow( uint32_t index, Point< value_type, Columns > const & row );
-		void setRow( uint32_t index, Coords< value_type, Columns > const & row );
+		void setRow( uint32_t index, PointView< value_type, Columns > const & row );
 		Point< value_type, Columns > getRow( uint32_t index )const;
 		void getRow( uint32_t index, Point< value_type, Columns > & result )const;
 
 		void setColumn( uint32_t index, value_type const * col );
 		void setColumn( uint32_t index, Point< value_type, Rows > const & col );
-		void setColumn( uint32_t index, Coords< value_type const, Rows > const & col );
-		void setColumn( uint32_t index, Coords< value_type, Rows > const & col );
+		void setColumn( uint32_t index, PointView< value_type const, Rows > const & col );
+		void setColumn( uint32_t index, PointView< value_type, Rows > const & col );
 		Point< value_type, Rows > const & getColumn( uint32_t index )const;
 		Point< value_type, Rows > & getColumn( uint32_t index );
 		void getColumn( uint32_t index, Point< value_type, Rows > & result )const;
-		void getColumn( uint32_t index, Coords< value_type, Rows > & result );
+		void getColumn( uint32_t index, PointView< value_type, Rows > & result );
 		/**@}*/
 		/**
 		 *\~english
@@ -175,10 +175,10 @@ namespace c3d
 		*name Opérateurs d'affectation.
 		**/
 		/**@{*/
-		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > const & rhs );
-		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > && rhs )noexcept;
-		template< typename Type > Matrix< T, Columns, Rows > & operator=( Matrix< Type, Columns, Rows > const & rhs );
-		template< typename Type > Matrix< T, Columns, Rows > & operator=( Type const * rhs );
+		Matrix & operator=( Matrix const & rhs );
+		Matrix & operator=( Matrix && rhs )noexcept;
+		template< typename Type > Matrix & operator=( Matrix< Type, Columns, Rows > const & rhs );
+		template< typename Type > Matrix & operator=( Type const * rhs );
 		/**@}*/
 		/**
 		 *\~english
@@ -187,12 +187,12 @@ namespace c3d
 		 *name Opérateurs arithmétiques.
 		**/
 		/**@{*/
-		template< typename Type > Matrix< T, Columns, Rows > & operator+=( Matrix< Type, Columns, Rows > const & rhs );
-		template< typename Type > Matrix< T, Columns, Rows > & operator-=( Matrix< Type, Columns, Rows > const & rhs );
-		Matrix< T, Columns, Rows > & operator+=( T const & rhs );
-		Matrix< T, Columns, Rows > & operator-=( T const & rhs );
-		Matrix< T, Columns, Rows > & operator*=( T const & rhs );
-		Matrix< T, Columns, Rows > & operator/=( T const & rhs );
+		template< typename Type > Matrix & operator+=( Matrix< Type, Columns, Rows > const & rhs );
+		template< typename Type > Matrix & operator-=( Matrix< Type, Columns, Rows > const & rhs );
+		Matrix & operator+=( T const & rhs );
+		Matrix & operator-=( T const & rhs );
+		Matrix & operator*=( T const & rhs );
+		Matrix & operator/=( T const & rhs );
 		/**@}*/
 
 	protected:
@@ -204,79 +204,231 @@ namespace c3d
 			Array< T, Columns * Rows > m_data;
 			Array< col_type, Columns > m_columns;
 		};
+		/**
+		 *\~english
+		 *name Logic operators.
+		 *\~french
+		 *name Opérateurs logiques
+		**/
+		/**@{*/
+		friend bool operator==( Matrix const & lhs, Matrix const & rhs )noexcept
+		{
+			bool result = true;
+
+			uint32_t i = 0;
+			while ( i < Columns && result )
+			{
+				uint32_t j = 0;
+				while ( j < Rows && result )
+				{
+					result = lhs[i][j] == rhs[i][j];
+					++j;
+				}
+				++i;
+			}
+
+			return result;
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Arithmetic operators.
+		 *\~french
+		 *name Opérateurs arithmétiques.
+		**/
+		/**@{*/
+		template< typename U >
+		friend Matrix operator+( Matrix const & lhs, Matrix< U, Columns, Rows > const & rhs )
+		{
+			Matrix mtx( lhs );
+			mtx += rhs;
+			return mtx;
+		}
+
+		template< typename U >
+		friend Matrix operator-( Matrix const & lhs, Matrix< U, Columns, Rows > const & rhs )
+		{
+			Matrix mtx( lhs );
+			mtx -= rhs;
+			return mtx;
+		}
+
+		template< typename U, uint32_t ColumnsU >
+		friend Matrix< T, ColumnsU, Rows > operator*( Matrix const & lhs, Matrix< U, ColumnsU, Columns > const & rhs )
+		{
+			Matrix< T, ColumnsU, Rows > result;
+
+			for ( uint32_t i = 0; i < ColumnsU; i++ )
+			{
+				for ( uint32_t j = 0; j < Columns; j++ )
+				{
+					for ( uint32_t k = 0; k < Rows; k++ )
+					{
+						result[i][k] += T( lhs[j][k] * rhs[i][j] );
+					}
+				}
+			}
+
+			return result;
+		}
+
+		template< typename U >
+		friend Point< T, Rows > operator*( Matrix const & lhs, Point< U, Columns > const & rhs )
+		{
+			Point< T, Rows > result;
+
+			for ( uint32_t i = 0; i < Columns; i++ )
+			{
+				for ( uint32_t j = 0; j < Rows; j++ )
+				{
+					result[j] += T( lhs[i][j] * rhs[i] );
+				}
+			}
+
+			return result;
+		}
+
+		template< typename U >
+		friend Point< T, Columns > operator*( Point< T, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs )
+		{
+			return rhs * lhs;
+		}
+
+		template< typename U >
+		friend Matrix operator+( Matrix const & lhs, U const * rhs )
+		{
+			Matrix mtx( lhs );
+			mtx += rhs;
+			return mtx;
+		}
+
+		template< typename U >
+		friend Matrix operator-( Matrix const & lhs, U const * rhs )
+		{
+			Matrix mtx( lhs );
+			mtx -= rhs;
+			return mtx;
+		}
+
+		friend Matrix operator+( Matrix const & lhs, T const & rhs )
+		{
+			Matrix mtx( lhs );
+			mtx += rhs;
+			return mtx;
+		}
+
+		friend Matrix operator-( Matrix const & lhs, T const & rhs )
+		{
+			Matrix mtx( lhs );
+			mtx -= rhs;
+			return mtx;
+		}
+
+		friend Matrix operator*( Matrix const & lhs, T const & rhs )
+		{
+			Matrix mtx( lhs );
+			mtx *= rhs;
+			return mtx;
+		}
+
+		friend Matrix operator/( Matrix const & lhs, T const & rhs )
+		{
+			Matrix mtx( lhs );
+			mtx /= rhs;
+			return mtx;
+		}
+
+		friend Matrix operator+( T const & lhs, Matrix const & rhs )
+		{
+			return rhs + lhs;
+		}
+
+		friend Matrix operator-( T const & lhs, Matrix const & rhs )
+		{
+			return rhs - lhs;
+		}
+
+		friend Matrix operator*( T const & lhs, Matrix const & rhs )
+		{
+			return rhs * lhs;
+		}
+
+		friend Matrix operator-( Matrix const & matrix )
+		{
+			Matrix result;
+
+			for ( uint32_t i = 0; i < Columns; i++ )
+			{
+				for ( uint32_t j = 0; j < Rows; j++ )
+				{
+					result[i][j] = -matrix[i][j];
+				}
+			}
+
+			return result;
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Stream operators.
+		 *\~french
+		 *name Opérateurs de flux.
+		**/
+		/**@{*/
+		friend String & operator<<( String & text, Matrix const & matrix )
+		{
+			StringStream stream{ makeStringStream() };
+			stream.precision( 10 );
+			stream << matrix;
+			text += stream.str();
+			return text;
+		}
+
+		friend String & operator>>( String & text, Matrix & matrix )
+		{
+			StringStream stream( text );
+			stream >> matrix;
+			text = stream.str();
+			return text;
+		}
+
+		template< typename CharT >
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Matrix const & matrix )
+		{
+			auto precision = stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < Columns; i++ )
+			{
+				for ( uint32_t j = 0; j < Rows; j++ )
+				{
+					stream.width( 15 );
+					stream << std::right << matrix[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			stream.precision( precision );
+			return stream;
+		}
+
+		template< typename CharT >
+		friend std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, Matrix & matrix )
+		{
+			for ( uint32_t i = 0; i < Columns; i++ )
+			{
+				for ( uint32_t j = 0; j < Rows; j++ )
+				{
+					stream >> matrix[i][j];
+				}
+
+				stream.ignore();
+			}
+
+			return stream;
+		}
+		/**@}*/
 	};
-	/**
-	 *\~english
-	 *name Logic operators.
-	 *\~french
-	 *name Opérateurs logiques
-	**/
-	/**@{*/
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	bool operator==( Matrix< T, Columns, Rows > const & lhs, Matrix< T, Columns, Rows > const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	bool operator!=( Matrix< T, Columns, Rows > const & lhs, Matrix< T, Columns, Rows > const & rhs );
-	/**@}*/
-	/**
-	 *\~english
-	 *name Arithmetic operators.
-	 *\~french
-	 *name Opérateurs arithmétiques.
-	**/
-	/**@{*/
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator+( Matrix< T, Columns, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t ColumnsU >
-	Matrix< T, ColumnsU, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Matrix< U, ColumnsU, Columns > const & rhs );
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Point< T, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Point< U, Columns > const & rhs );
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Point< T, Columns > operator*( Point< T, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs );
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator+( Matrix< T, Columns, Rows > const & lhs, U const * rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & lhs, U const * rhs );
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator+( Matrix< T, Columns, Rows > const & lhs, T const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & lhs, T const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, T const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator/( Matrix< T, Columns, Rows > const & lhs, T const & rhs );
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator+( T const & lhs, Matrix< U, Columns, Rows > const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator-( T const & lhs, Matrix< U, Columns, Rows > const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator*( T const & lhs, Matrix< U, Columns, Rows > const & rhs );
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & rhs );
-	/**@}*/
-	/**
-	 *\~english
-	 *name Stream operators.
-	 *\~french
-	 *name Opérateurs de flux.
-	**/
-	/**@{*/
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	String & operator<<( String & stream, Matrix< T, Columns, Rows > const & matrix );
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	String & operator>>( String & stream, Matrix< T, Columns, Rows > & matrix );
-	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Matrix< T, Columns, Rows > const & matrix );
-	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, Matrix< T, Columns, Rows > & matrix );
-	/**@}*/
 }
 
 #include "Matrix.inl"

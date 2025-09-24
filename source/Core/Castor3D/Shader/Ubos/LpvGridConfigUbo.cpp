@@ -20,45 +20,6 @@ namespace c3d
 
 	namespace shader
 	{
-		LpvGridData::LpvGridData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, c3d::move( expr ), enabled }
-			, minVolumeCornerSize{ getMember< sdw::Vec4 >( "minVolumeCornerSize" ) }
-			, gridSizeAtt{ getMember< sdw::Vec4 >( "gridSizeAtt" ) }
-			, cameraPos4{ getMember< sdw::Vec4 >( "cameraPosition" ) }
-			, minVolumeCorner{ minVolumeCornerSize.xyz() }
-			, gridWidth{ gridSizeAtt.x() }
-			, gridHeight{ gridSizeAtt.y() }
-			, gridDepth{ gridSizeAtt.z() }
-			, gridSize{ gridSizeAtt.xyz() }
-			, cameraPos{ cameraPos4.xyz() }
-			, m_cellSize{ minVolumeCornerSize.w() }
-			, m_indirectAttenuation{ gridSizeAtt.w() }
-		{
-		}
-
-		ast::type::BaseStructPtr LpvGridData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_LpvGridData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "minVolumeCornerSize", ast::type::Kind::eVec4F );
-				result->declMember( "gridSizeAtt", ast::type::Kind::eVec4F );
-				result->declMember( "cameraPosition", ast::type::Kind::eVec4F );
-			}
-
-			return result;
-		}
-
-		RawUniquePtr< sdw::Struct > LpvGridData::declare( sdw::ShaderWriter & writer )
-		{
-			return makeRawUnique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-
 		sdw::IVec3 LpvGridData::worldToGrid( sdw::Vec3 const & pos )const
 		{
 			return ivec3( ( pos - minVolumeCorner ) / vec3( cellSize() ) - vec3( 0.5_f ) );

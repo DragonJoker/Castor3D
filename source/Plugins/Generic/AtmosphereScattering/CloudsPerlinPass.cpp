@@ -20,7 +20,7 @@ namespace atmosphere_scattering
 
 	namespace perwor
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eOutput,
 			eCount,
@@ -44,14 +44,14 @@ namespace atmosphere_scattering
 			//Special thanks https://github.com/NadirRoGue
 
 			auto hash = writer.implementFunction< sdw::Float >( "hash"
-				, [&]( sdw::Int const & n )
+				, [&writer]( sdw::Int const & n )
 				{
 					writer.returnStmt( fract( sin( writer.cast< sdw::Float >( n ) + 1.951_f ) * 43758.5453123_f ) );
 				}
 				, sdw::InInt{ writer, "n" } );
 
 			auto noise = writer.implementFunction< sdw::Float >( "noise"
-				, [&]( sdw::Vec3 const & x )
+				, [&writer, &hash]( sdw::Vec3 const & x )
 				{
 					auto p = writer.declLocale( "p"
 						, floor( x ) );
@@ -75,7 +75,7 @@ namespace atmosphere_scattering
 				, sdw::InVec3{ writer, "x" } );
 
 			auto cells = writer.implementFunction< sdw::Float >( "cells"
-				, [&]( sdw::Vec3 const & p
+				, [&writer, &noise]( sdw::Vec3 const & p
 					, sdw::Float const & cellCount )
 				{
 					auto pCell = writer.declLocale( "pCell"
@@ -113,35 +113,35 @@ namespace atmosphere_scattering
 
 			// From GLM (gtc/noise.hpp & detail/_noise.hpp)
 			auto mod289 = writer.implementFunction< sdw::Vec4 >( "mod289"
-				, [&]( sdw::Vec4 const & x )
+				, [&writer]( sdw::Vec4 const & x )
 				{
 					writer.returnStmt( x - floor( x * vec4( 1.0_f ) / vec4( 289.0_f ) ) * vec4( 289.0_f ) );
 				}
 				, sdw::InVec4{ writer, "x" } );
 
 			auto permute = writer.implementFunction< sdw::Vec4 >( "permute"
-				, [&]( sdw::Vec4 const & x )
+				, [&writer, &mod289]( sdw::Vec4 const & x )
 				{
 					writer.returnStmt( mod289( ( ( x * 34.0_f ) + 1.0_f ) * x ) );
 				}
 				, sdw::InVec4{ writer, "x" } );
 
 			auto taylorInvSqrt = writer.implementFunction< sdw::Vec4 >( "taylorInvSqrt"
-				, [&]( sdw::Vec4 const & r )
+				, [&writer]( sdw::Vec4 const & r )
 				{
 						writer.returnStmt( vec4( 1.79284291400159_f ) - vec4( 0.85373472095314_f ) * r );
 				}
 				, sdw::InVec4{ writer, "r" } );
 
 			auto fade = writer.implementFunction< sdw::Vec4 >( "fade"
-				, [&]( sdw::Vec4 const & t )
+				, [&writer]( sdw::Vec4 const & t )
 				{
 					writer.returnStmt( ( t * t * t ) * ( t * ( t * vec4( 6.0_f ) - vec4( 15.0_f ) ) + vec4( 10.0_f ) ) );
 				}
 				, sdw::InVec4{ writer, "t" } );
 
 			auto glmPerlin4D = writer.implementFunction< sdw::Float >( "glmPerlin4D"
-				, [&]( sdw::Vec4 const & position
+				, [&writer, &permute, &taylorInvSqrt, &fade]( sdw::Vec4 const & position
 					, sdw::Vec4 const & rep )
 				{
 					auto Pi0 = writer.declLocale( "Pi0", mod( floor( position ), rep ) );	// Integer part for indexing
@@ -283,7 +283,7 @@ namespace atmosphere_scattering
 				, sdw::InVec4{ writer, "rep" } );
 
 			auto remap = writer.implementFunction< sdw::Float >( "remap"
-				, [&]( sdw::Float const & originalValue
+				, [&writer]( sdw::Float const & originalValue
 					, sdw::Float const & originalMin
 					, sdw::Float const & originalMax
 					, sdw::Float const & newMin
@@ -300,7 +300,7 @@ namespace atmosphere_scattering
 			// ======================================================================
 
 			auto worleyNoise3D = writer.implementFunction< sdw::Float >( "worleyNoise3D"
-				, [&]( sdw::Vec3 const & p
+				, [&writer, &cells]( sdw::Vec3 const & p
 					, sdw::Float const & cellCount )
 				{
 					writer.returnStmt( cells( p, cellCount ) );
@@ -309,7 +309,7 @@ namespace atmosphere_scattering
 				, sdw::InFloat{ writer, "cellCount" } );
 
 			auto perlinNoise3D = writer.implementFunction< sdw::Float >( "perlinNoise3D"
-				, [&]( sdw::Vec3 const & pIn
+				, [&writer, &glmPerlin4D]( sdw::Vec3 const & pIn
 					, sdw::Float frequency
 					, sdw::UInt const & octaveCount )
 				{
@@ -355,7 +355,7 @@ namespace atmosphere_scattering
 				, sdw::InUInt{ writer, "octaveCount" } );
 
 			auto stackable3DNoise = writer.implementFunction< sdw::Vec4 >( "stackable3DNoise"
-				, [&]( sdw::IVec3 const & pixel )
+				, [&writer, dimension, &perlinNoise3D, &worleyNoise3D, &remap, &frequenceMul]( sdw::IVec3 const & pixel )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec3( writer.cast< sdw::Float >( pixel.x() ) / float( dimension )
@@ -408,7 +408,7 @@ namespace atmosphere_scattering
 				, sdw::InIVec3{ writer, "pixel" } );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 4u }
-				, [&]( sdw::ComputeIn in )
+				, [&writer, &outputTexture, &stackable3DNoise]( sdw::ComputeIn const & in )
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, ivec3( in.globalInvocationID.xyz() ) );
@@ -425,7 +425,7 @@ namespace atmosphere_scattering
 	CloudsPerlinPass::CloudsPerlinPass( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
 		, c3d::Texture & result
-		, bool & enabled )
+		, bool const & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/PerlinWorleyPass" ), perwor::getProgram( device, result.getExtent().width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
@@ -449,7 +449,7 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		result.setLastAttach( computePass.addOutputStorageImage( result.getSampledViewId(), perwor::eOutput ) );
+		result.setLastAttach( computePass.addOutputStorageImageT( result.getSampledViewId(), perwor::Bindings::eOutput ) );
 		auto & mipsPass = graph.createPass( "Clouds/PerlinWorleyMipsGenPass"
 			, [&device, &enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context

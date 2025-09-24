@@ -8,26 +8,39 @@ See LICENSE file in root folder
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace Uncharted2
 {
 	struct Uncharted2Data
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_Uncharted2Data"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::FloatField< "shoulderStrength" >
+			, sdw::FloatField< "linearStrength" >
+			, sdw::FloatField< "linearAngle" >
+			, sdw::FloatField< "toeStrength" >
+			, sdw::FloatField< "toeNumerator" >
+			, sdw::FloatField< "toeDenominator" >
+			, sdw::FloatField< "linearWhitePointValue" >
+			, sdw::FloatField< "exposureBias" > >
 	{
 		SDW_DeclStructInstance( , Uncharted2Data );
+
 		Uncharted2Data( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+			, shoulderStrength{ getMember< "shoulderStrength" >() }
+			, linearStrength{ getMember< "linearStrength" >() }
+			, linearAngle{ getMember< "linearAngle" >() }
+			, toeStrength{ getMember< "toeStrength" >() }
+			, toeNumerator{ getMember< "toeNumerator" >() }
+			, toeDenominator{ getMember< "toeDenominator" >() }
+			, linearWhitePointValue{ getMember< "linearWhitePointValue" >() }
+			, exposureBias{ getMember< "exposureBias" >() }
+		{
+		}
 
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-		static c3d::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	public:
 		sdw::Float shoulderStrength;
 		sdw::Float linearStrength;
 		sdw::Float linearAngle;

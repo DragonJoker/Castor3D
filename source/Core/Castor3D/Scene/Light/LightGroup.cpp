@@ -461,6 +461,17 @@ namespace c3d
 		m_instances.emplace_back( m_category->instantiate( node, [this](){ return m_enabled.value(); } ) );
 	}
 
+	void LightGroup::removeInstance( SceneNode const & node )
+	{
+		auto it = std::find_if( m_instances.begin(), m_instances.end()
+			, [&node]( LightInstanceUPtr const & lookup )
+			{
+				return &lookup->getNode() == &node;
+			} );
+		if ( it != m_instances.end() )
+			m_instances.erase( it );
+	}
+
 	void LightGroup::markDirty()
 	{
 		getScene()->markDirty( *this );

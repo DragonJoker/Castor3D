@@ -68,7 +68,7 @@ namespace atmosphere_scattering
 		if ( !m_getWorldPos )
 		{
 			m_getWorldPos = writer.implementFunction< sdw::Vec3 >( "atm_getWorldPos"
-				, [&]( sdw::Float const & depth
+				, [this]( sdw::Float const & depth
 					, sdw::Vec2 const & pixPos
 					, sdw::Vec2 const & texSize )
 				{
@@ -93,7 +93,7 @@ namespace atmosphere_scattering
 		if ( !m_getMultipleScattering )
 		{
 			m_getMultipleScattering = writer.implementFunction< sdw::Vec3 >( "getMultipleScattering"
-				, [&]( sdw::Float const & worldPosLength
+				, [this]( sdw::Float const & worldPosLength
 					, sdw::Float const & viewZenithCosAngle )
 				{
 					auto uv = writer.declLocale( "uv"
@@ -124,7 +124,7 @@ namespace atmosphere_scattering
 		if ( !m_castRay )
 		{
 			m_castRay = writer.implementFunction< Ray >( "atm_castRay"
-				, [&]( sdw::Vec2 const & uv )
+				, [this]( sdw::Vec2 const & uv )
 				{
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, atmodel::getClipSpace( uv, 0.0_f ) );
@@ -159,7 +159,7 @@ namespace atmosphere_scattering
 		if ( !m_integrateScatteredLuminance )
 		{
 			m_integrateScatteredLuminance = writer.implementFunction< SingleScatteringResult >( "atm_integrateScatteredLuminance"
-				, [&]( sdw::Vec2 const & pixPos
+				, [this]( sdw::Vec2 const & pixPos
 					, Ray const & ray
 					, sdw::Vec3 const & sunDir
 					, sdw::Float const & sampleCountIni
@@ -310,8 +310,8 @@ namespace atmosphere_scattering
 						auto pHeight = writer.declLocale( "pHeight", length( rayToSun.origin ) );
 						auto upVector = writer.declLocale( "upVector", rayToSun.origin / pHeight );
 						auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle", dot( rayToSun.direction, upVector ) );
-						auto trUv = writer.declLocale< sdw::Vec2 >( "trUv" );
-						lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle, trUv );
+						auto trUv = writer.declLocale( "trUv"
+							, lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle ) );
 						auto transmittanceToSun = writer.declLocale( "transmittanceToSun"
 							, ( transmittanceTexture
 								? transmittanceTexture->lod( trUv, 0.0_f ).rgb()
@@ -379,8 +379,8 @@ namespace atmosphere_scattering
 
 							auto upVector = writer.declLocale( "upVector", P / pHeight );
 							auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle", dot( sunDir, upVector ) );
-							auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
-							lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle, uv );
+							auto uv = writer.declLocale( "uv"
+								, lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle ) );
 							auto transmittanceToSun = writer.declLocale( "transmittanceToSun"
 								, ( transmittanceTexture
 									? transmittanceTexture->lod( uv, 0.0_f ).rgb()
@@ -418,7 +418,7 @@ namespace atmosphere_scattering
 		if ( !m_moveToTopAtmosphere )
 		{
 			m_moveToTopAtmosphere = writer.implementFunction< sdw::Boolean >( "atm_moveToTopAtmosphere"
-				, [&]( Ray ray )
+				, [this]( Ray ray )
 				{
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( ray.origin ) );
@@ -461,14 +461,14 @@ namespace atmosphere_scattering
 		if ( !m_getSunRadiance )
 		{
 			m_getSunRadiance = writer.implementFunction< sdw::Vec3 >( "atm_getSunRadiance"
-				, [&]( sdw::Vec3 const & sunDir
+				, [this]( sdw::Vec3 const & sunDir
 					, sdw::CombinedImage2DRgba16 const & transmittanceMap )
 				{
 					auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
 						, dot( sunDir, normalize( getCameraPosition() ) ) );
 
-					auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
-					lutTransmittanceParamsToUv( getPlanetRadius(), sunZenithCosAngle, uv );
+					auto uv = writer.declLocale( "uv"
+						, lutTransmittanceParamsToUv( getPlanetRadius(), sunZenithCosAngle ) );
 					writer.returnStmt( transmittanceMap.lod( uv, 0.0_f ).rgb() );
 				}
 				, sdw::InVec3{ writer, "sunDir" }
@@ -484,7 +484,7 @@ namespace atmosphere_scattering
 		if ( !m_getPlanetShadow )
 		{
 			m_getPlanetShadow = writer.implementFunction< sdw::Float >( "atm_getPlanetShadow"
-				, [&]( sdw::Vec3 const & planetOrigin
+				, [this]( sdw::Vec3 const & planetOrigin
 					, sdw::Vec3 const & position )
 				{
 					auto rayToSun = writer.declLocale< Ray >( "rayToSun" );
@@ -508,7 +508,7 @@ namespace atmosphere_scattering
 		if ( !m_raySphereIntersectNearest )
 		{
 			m_raySphereIntersectNearest = writer.implementFunction< Intersection >( "atm_raySphereIntersectNearest"
-				, [&]( Ray const & ray
+				, [this]( Ray const & ray
 					, sdw::Vec3 const & sphereCenter
 					, sdw::Float const & sphereRadius )
 				{
@@ -587,12 +587,12 @@ namespace atmosphere_scattering
 		if ( !m_raySphereIntersect )
 		{
 			m_raySphereIntersect = writer.implementFunction< sdw::Int >( "atm_raySphereIntersect"
-				, [&]( Ray const & ray
+				, [this]( Ray const & ray
 					, sdw::Float const & sphereRadius
 					, Intersection const & ground
 					, sdw::Boolean const & clampToGround
-					, Intersection nearest
-					, Intersection farthest )
+					, Intersection const & nearest
+					, Intersection const & farthest )
 				{
 					auto s0_r0 = writer.declLocale( "s0_r0"
 						, ray.origin );
@@ -673,7 +673,7 @@ namespace atmosphere_scattering
 		if ( !m_raySphereintersectSkyMap )
 		{
 			m_raySphereintersectSkyMap = writer.implementFunction< Intersection >( "atm_raySphereintersectSkyMap"
-				, [&]( sdw::Vec3 const & rd
+				, [this]( sdw::Vec3 const & rd
 					, sdw::Float const & radius )
 				{
 					auto L = writer.declLocale( "L", -vec3( 0.0_f ) );
@@ -698,7 +698,7 @@ namespace atmosphere_scattering
 		if ( !m_hgPhase )
 		{
 			m_hgPhase = writer.implementFunction< sdw::Float >( "atm_hgPhase"
-				, [&]( sdw::Float const & g
+				, [this]( sdw::Float const & g
 					, sdw::Float const & cosTheta )
 				{
 					auto numer = writer.declLocale( "numer"
@@ -719,7 +719,7 @@ namespace atmosphere_scattering
 		if ( !m_sampleMediumRGB )
 		{
 			m_sampleMediumRGB = writer.implementFunction< MediumSampleRGB >( "atm_sampleMediumRGB"
-				, [&]( sdw::Vec3 const & worldPos )
+				, [this]( sdw::Vec3 const & worldPos )
 				{
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( worldPos ) - getPlanetRadius() );
@@ -767,12 +767,12 @@ namespace atmosphere_scattering
 		return 3.0_f / ( 16.0_f * c3d::Pi< float > ) * ( 1.0_f + cosTheta * cosTheta );
 	}
 
-	sdw::Float AtmosphereModel::fromUnitToSubUvs( sdw::Float u, sdw::Float resolution )
+	sdw::Float AtmosphereModel::fromUnitToSubUvs( sdw::Float const & u, sdw::Float const & resolution )
 	{
 		return ( u + 0.5f / resolution ) * ( resolution / ( resolution + 1.0f ) );
 	}
 
-	sdw::Float AtmosphereModel::fromSubUvsToUnit( sdw::Float u, sdw::Float resolution )
+	sdw::Float AtmosphereModel::fromSubUvsToUnit( sdw::Float const & u, sdw::Float const & resolution )
 	{
 		return ( u - 0.5f / resolution ) * ( resolution / ( resolution - 1.0f ) );
 	}
@@ -784,7 +784,7 @@ namespace atmosphere_scattering
 		if ( !m_uvToLutTransmittanceParams )
 		{
 			m_uvToLutTransmittanceParams = writer.implementFunction< sdw::Void >( "atm_uvToLutTransmittanceParams"
-				, [&]( sdw::Float viewHeight
+				, [this]( sdw::Float viewHeight
 					, sdw::Float viewZenithCosAngle
 					, sdw::Vec2 const & uv )
 				{
@@ -818,16 +818,14 @@ namespace atmosphere_scattering
 		return m_uvToLutTransmittanceParams( pviewHeight, pviewZenithCosAngle, puv );
 	}
 
-	sdw::Void AtmosphereModel::lutTransmittanceParamsToUv( sdw::Float const & pviewHeight
-		, sdw::Float const & pviewZenithCosAngle
-		, sdw::Vec2 & puv )
+	sdw::RetVec2 AtmosphereModel::lutTransmittanceParamsToUv( sdw::Float const & pviewHeight
+		, sdw::Float const & pviewZenithCosAngle )
 	{
 		if ( !m_lutTransmittanceParamsToUv )
 		{
-			m_lutTransmittanceParamsToUv = writer.implementFunction< sdw::Void >( "atm_lutTransmittanceParamsToUv"
-				, [&]( sdw::Float const & viewHeight
-					, sdw::Float const & viewZenithCosAngle
-					, sdw::Vec2 uv )
+			m_lutTransmittanceParamsToUv = writer.implementFunction< sdw::Vec2 >( "atm_lutTransmittanceParamsToUv"
+				, [this]( sdw::Float const & viewHeight
+					, sdw::Float const & viewZenithCosAngle )
 				{
 					auto H = writer.declLocale( "H"
 						, getAtmosphereH() );
@@ -848,14 +846,13 @@ namespace atmosphere_scattering
 					auto x_r = writer.declLocale( "x_r"
 						, rho / H );
 
-					uv = vec2( x_mu, x_r );
+					writer.returnStmt( vec2( x_mu, x_r ) );
 				}
 				, sdw::InFloat{ writer, "viewHeight" }
-				, sdw::InFloat{ writer, "viewZenithCosAngle" }
-				, sdw::OutVec2{ writer, "uv" } );
+				, sdw::InFloat{ writer, "viewZenithCosAngle" } );
 		}
 
-		return m_lutTransmittanceParamsToUv( pviewHeight, pviewZenithCosAngle, puv );
+		return m_lutTransmittanceParamsToUv( pviewHeight, pviewZenithCosAngle );
 	}
 
 	sdw::Void AtmosphereModel::uvToSkyViewLutParams( sdw::Float & pviewZenithCosAngle
@@ -867,11 +864,11 @@ namespace atmosphere_scattering
 		if ( !m_uvToSkyViewLutParams )
 		{
 			m_uvToSkyViewLutParams = writer.implementFunction< sdw::Void >( "atm_uvToSkyViewLutParams"
-				, [&]( sdw::Float viewZenithCosAngle
+				, [this]( sdw::Float viewZenithCosAngle
 					, sdw::Float lightViewCosAngle
 					, sdw::Float const & viewHeight
 					, sdw::Vec2 uv
-					, sdw::Vec2 size )
+					, sdw::Vec2 const & size )
 				{
 					// Constrain uvs to valid sub texel range (avoid zenith derivative issue making LUT usage visible)
 					uv = vec2( fromSubUvsToUnit( uv.x(), size.x() )
@@ -919,21 +916,19 @@ namespace atmosphere_scattering
 		return m_uvToSkyViewLutParams( pviewZenithCosAngle, plightViewCosAngle, pviewHeight, puv, psize );
 	}
 
-	sdw::Void AtmosphereModel::skyViewLutParamsToUv( sdw::Boolean const & pintersectGround
+	sdw::RetVec2 AtmosphereModel::skyViewLutParamsToUv( sdw::Boolean const & pintersectGround
 		, sdw::Float const & pviewZenithCosAngle
 		, sdw::Float const & plightViewCosAngle
 		, sdw::Float const & pviewHeight
-		, sdw::Vec2 & puv
 		, sdw::Vec2 const & psize )
 	{
 		if ( !m_skyViewLutParamsToUv )
 		{
-			m_skyViewLutParamsToUv = writer.implementFunction< sdw::Void >( "atm_skyViewLutParamsToUv"
-				, [&]( sdw::Boolean const & intersectGround
+			m_skyViewLutParamsToUv = writer.implementFunction< sdw::Vec2 >( "atm_skyViewLutParamsToUv"
+				, [this]( sdw::Boolean const & intersectGround
 					,  sdw::Float const & viewZenithCosAngle
 					, sdw::Float const & lightViewCosAngle
 					, sdw::Float const & viewHeight
-					, sdw::Vec2 uv
 					, sdw::Vec2 const & size )
 				{
 					auto Vhorizon = writer.declLocale( "Vhorizon"
@@ -944,6 +939,8 @@ namespace atmosphere_scattering
 						, acos( cosBeta ) );
 					auto zenithHorizonAngle = writer.declLocale( "zenithHorizonAngle"
 						, sdw::Float{ c3d::Pi< float > } - beta );
+					auto uv = writer.declLocale( "uv"
+						, vec2( 0.0_f ) );
 
 					sdwIF( writer, !intersectGround )
 					{
@@ -970,13 +967,12 @@ namespace atmosphere_scattering
 					}
 
 					// Constrain uvs to valid sub texel range (avoid zenith derivative issue making LUT usage visible)
-					uv = vec2( fromUnitToSubUvs( uv.x(), size.x() ), fromUnitToSubUvs( uv.y(), size.y() ) );
+					writer.returnStmt( vec2( fromUnitToSubUvs( uv.x(), size.x() ), fromUnitToSubUvs( uv.y(), size.y() ) ) );
 				}
 				, sdw::InBoolean{ writer, "intersectGround" }
 				, sdw::InFloat{ writer, "viewZenithCosAngle" }
 				, sdw::InFloat{ writer, "lightViewCosAngle" }
 				, sdw::InFloat{ writer, "viewHeight" }
-				, sdw::OutVec2{ writer, "uv" }
 				, sdw::InVec2{ writer, "size" } );
 		}
 
@@ -984,7 +980,6 @@ namespace atmosphere_scattering
 			, pviewZenithCosAngle
 			, plightViewCosAngle
 			, pviewHeight
-			, puv
 			, psize );
 	}
 

@@ -69,7 +69,6 @@ namespace c3d
 		}
 
 		static ImageViewCreateInfo getSubviewCreateInfos( ImageCreateInfo const & info
-			, VkImage image
 			, uint32_t baseMipLevel
 			, uint32_t levelCount
 			, uint32_t baseArrayLayer
@@ -97,7 +96,6 @@ namespace c3d
 		{
 			return makeUnique< TextureView >( layout
 				, getSubviewCreateInfos( info
-					, VK_NULL_HANDLE
 					, baseMipLevel
 					, levelCount
 					, baseArrayLayer
@@ -943,18 +941,6 @@ namespace c3d
 		return m_defaultView.view->getTargetView();
 	}
 
-	ashes::ImageView const & TextureLayout::getLayerCubeTargetView( size_t layer )const noexcept
-	{
-		CU_Require( getLayerCube( layer ).view.view );
-		return getLayerCube( layer ).view.view->getTargetView();
-	}
-
-	String TextureLayout::getLayerCubeSourceString( size_t layer )const noexcept
-	{
-		CU_Require( getLayerCube( layer ).view.view );
-		return getLayerCube( layer ).view.view->toString();
-	}
-
 	ashes::ImageView const & TextureLayout::getLayerCubeFaceTargetView( size_t layer
 		, CubeMapFace face )const noexcept
 	{
@@ -977,47 +963,6 @@ namespace c3d
 	Path TextureLayout::getPath()const
 	{
 		return m_image.getPath();
-	}
-
-	bool TextureLayout::needsXInversion()const
-	{
-		if ( getDefaultView().needsXInversion()
-			&& m_image.getPixels()->isXInverted() )
-		{
-			return false;
-		}
-
-		return getDefaultView().needsXInversion()
-			|| m_image.getPixels()->isXInverted();
-	}
-
-	bool TextureLayout::needsYInversion()const
-	{
-		if ( getDefaultView().needsYInversion()
-			&& m_image.getPixels()->isYInverted() )
-		{
-			return false;
-		}
-
-		return getDefaultView().needsYInversion()
-			|| m_image.getPixels()->isYInverted();
-	}
-
-	bool TextureLayout::needsZInversion()const
-	{
-		if ( getDefaultView().needsZInversion()
-			&& m_image.getPixels()->isZInverted() )
-		{
-			return false;
-		}
-
-		return getDefaultView().needsZInversion()
-			|| m_image.getPixels()->isZInverted();
-	}
-
-	bool TextureLayout::hasBuffer()const
-	{
-		return getDefaultView().hasBuffer();
 	}
 
 	uint32_t TextureLayout::doUpdateViews()

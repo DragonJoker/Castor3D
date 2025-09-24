@@ -16,9 +16,10 @@
 
 namespace GuiCommon
 {
-	StyleTreeItemProperty::StyleTreeItemProperty( bool editable
+	StyleTreeItemProperty::StyleTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

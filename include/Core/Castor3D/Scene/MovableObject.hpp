@@ -127,7 +127,7 @@ namespace c3d
 		{
 		}
 
-		void operator()( typename CacheT::ElementObjectCacheT const & source
+		void operator()( [[maybe_unused]] typename CacheT::ElementObjectCacheT const & source
 			, typename CacheT::ElementContT & destination
 			, typename CacheT::ElementPtrT element
 			, SceneNodeRPtr rootCameraNode
@@ -167,9 +167,9 @@ namespace c3d
 
 		void operator()( ElementT & element
 			, SceneNode & parent
-			, [[maybe_unused]] SceneNodeRPtr rootNode
-			, [[maybe_unused]] SceneNodeRPtr rootCameraNode
-			, [[maybe_unused]] SceneNodeRPtr rootObjectNode )const
+			, [[maybe_unused]] SceneNode const * rootNode
+			, [[maybe_unused]] SceneNode const * rootCameraNode
+			, [[maybe_unused]] SceneNode const * rootObjectNode )const
 		{
 			parent.attachObject( element );
 		}

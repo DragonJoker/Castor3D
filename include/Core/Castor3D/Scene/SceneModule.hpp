@@ -482,7 +482,7 @@ namespace c3d
 		using ElementDetacherT = Function< void( ElementT & ) >;
 
 		template< typename ... ParametersT >
-		static ElementPtrT makeElement( ElementCacheT const & cache
+		static ElementPtrT makeElement( [[maybe_unused]] ElementCacheT const & cache
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{

@@ -50,8 +50,8 @@ namespace CastorViewer
 
 		void reset();
 		void updateWindow( c3d::RenderWindowDesc const & window );
-		void select( c3d::Geometry * geometry, c3d::Submesh const * submesh );
-		void select( c3d::LightInstance * light );
+		void select( c3d::Geometry const * geometry, c3d::Submesh const * submesh );
+		void select( c3d::LightInstance const * light );
 		void select( c3d::SceneNode * node
 			, bool cameraNode = false );
 		void select( c3d::Camera * camera );
@@ -84,10 +84,10 @@ namespace CastorViewer
 		void doTurnCameraVertic();
 		void doChangeCamera();
 		void doReloadScene();
-		float doTransformX( int x );
-		float doTransformY( int y );
-		int doTransformX( float x );
-		int doTransformY( float y );
+		float doTransformX( int x )const;
+		float doTransformY( int y )const;
+		int doTransformX( float x )const;
+		int doTransformY( float y )const;
 		void doUpdateSelectedGeometry( c3d::Geometry const * geometry
 			, c3d::Submesh const * submesh
 			, bool forwardToMain );
@@ -141,7 +141,7 @@ namespace CastorViewer
 		double m_speedMult{ 1.0 };
 		std::atomic_bool m_movementStarted{};
 		c3d::RenderWindowUPtr m_renderWindow{};
-		c3d::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > m_timers{};
+		c3d::Array< c3d::RawUniquePtr< wxTimer >, size_t( eTIMER_ID::COUNT ) > m_timers{};
 
 		c3d::SceneNodeRPtr m_lightsNode{};
 		c3d::SceneNodeRPtr m_currentNode{};

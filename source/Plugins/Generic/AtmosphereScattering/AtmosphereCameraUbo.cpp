@@ -57,7 +57,7 @@ namespace atmosphere_scattering
 		, c3d::Vector3f const & planetPosition )
 	{
 		auto node = camera.getParent();
-		auto & engine = *node->getScene()->getEngine();
+		auto const & engine = *node->getScene()->getEngine();
 		auto position = c3d::Vector3f::fromUnit( node->getDerivedPosition(), engine.getLengthUnit() ) - planetPosition;
 		auto orientation = node->getDerivedOrientation();
 		auto length = c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() );

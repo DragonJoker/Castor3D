@@ -131,10 +131,10 @@ namespace c3d
 		CU_API bool writeOpt( StringStream & file, StringView name, bool value )const;
 		CU_API bool writeText( StringStream & file, WString const & value )const;
 		CU_API bool writeText( StringStream & file, MbString const & value )const;
-		CU_API bool writeName( StringStream & file, StringView name, WString const & value )const;
-		CU_API bool writeName( StringStream & file, StringView name, MbString const & value )const;
-		CU_API bool writeNameOpt( StringStream & file, StringView name, WString const & value, WString const & comp )const;
-		CU_API bool writeNameOpt( StringStream & file, StringView name, MbString const & value, MbString const & comp )const;
+		CU_API bool writeName( StringStream & file, StringView name, WStringView value )const;
+		CU_API bool writeName( StringStream & file, StringView name, MbStringView value )const;
+		CU_API bool writeNameOpt( StringStream & file, StringView name, WString const & value, WStringView comp )const;
+		CU_API bool writeNameOpt( StringStream & file, StringView name, MbString const & value, MbStringView comp )const;
 		CU_API bool writePath( StringStream & file, StringView name, Path const & value )const;
 		CU_API bool writeFile( StringStream & file, StringView name, Path const & source, Path const & folder, String const & subfolder )const;
 

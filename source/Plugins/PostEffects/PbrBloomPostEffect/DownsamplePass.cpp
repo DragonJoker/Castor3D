@@ -32,15 +32,15 @@ namespace PbrBloom
 			constants.end();
 			auto c3d_mapColor = writer.declCombinedImg< Img2DRgba >( "c3d_mapColor", 0u, 0u );
 
-			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour3FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour3FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour3FT >( [&writer, &srcTexelSize, &c3d_mapColor]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour3FT > const & out )
 				{
 					auto x = writer.declLocale( "x"
 						, srcTexelSize.x() );
@@ -117,8 +117,7 @@ namespace PbrBloom
 		, uint32_t passesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_graph{ graph }
-		, m_shader{ cuT( "PbrBloomDownsample" ), down::getProgram( device ) }
+		: m_shader{ cuT( "PbrBloomDownsample" ), down::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		c3d::Vector< crg::FramePass * > result;
@@ -132,7 +131,7 @@ namespace PbrBloom
 			auto & pass = graph.createPass( "Downsample" + c3d::string::toMbString( i )
 				, [this, &device, passIndex, enabled, count, srcExtent, dstExtent, i]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runGraph )
 				{
 					auto builder = crg::RenderQuadBuilder{}
 						.enabled( enabled )
@@ -140,9 +139,9 @@ namespace PbrBloom
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_FRAGMENT_BIT, 0u, sizeof( c3d::Point2f ) } )
 						.renderSize( dstExtent )
 						.texcoordConfig( {} )
-						.recordInto( [this, srcExtent, i]( crg::RecordContext & ctx
+						.recordInto( [this, srcExtent, i]( crg::RecordContext const & ctx
 							, VkCommandBuffer cb
-							, uint32_t idx )
+							, [[maybe_unused]] uint32_t idx )
 							{
 								c3d::Point2f invSize{ 1.0f / float( srcExtent.width )
 									, 1.0f / float( srcExtent.height ) };
@@ -159,9 +158,7 @@ namespace PbrBloom
 						builder.passIndex( passIndex );
 					}
 
-					auto result = builder.build( framePass
-						, context
-						, graph
+					auto result = builder.build( framePass, context, runGraph
 						, crg::ru::Config{ count } );
 					m_quads.push_back( result.get() );
 					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
@@ -175,7 +172,7 @@ namespace PbrBloom
 	}
 
 
-	void DownsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void DownsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

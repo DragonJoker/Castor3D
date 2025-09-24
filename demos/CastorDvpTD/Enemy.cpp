@@ -33,9 +33,9 @@ namespace castortd
 		auto distanceToDst = c3d::point::length( direction );
 		direction[0] *= float( speed / distanceToDst );
 		direction[2] *= float( speed / distanceToDst );
-		bool reachDst{ distanceToDst <= speed };
 
-		if ( !reachDst )
+		if ( bool reachDst{ distanceToDst <= speed };
+			!reachDst )
 		{
 			destination = position + direction;
 		}

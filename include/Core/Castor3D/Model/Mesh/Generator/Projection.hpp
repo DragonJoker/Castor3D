@@ -46,11 +46,11 @@ namespace c3d
 			, Parameters const & parameters )override;
 
 	private:
-		//Pattern< Point3f > m_pattern{};
-		//Point3f m_axis{};
-		//float m_depth{};
-		//bool m_closed{};
-		//uint32_t m_nbFaces{};
+		Pattern< Point3f > m_pattern{};
+		Point3f m_axis{};
+		float m_depth{};
+		bool m_closed{};
+		uint32_t m_nbFaces{};
 	};
 }
 

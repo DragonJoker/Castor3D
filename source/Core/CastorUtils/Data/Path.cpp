@@ -262,55 +262,6 @@ namespace c3d
 		}
 	}
 
-	Path operator/( Path const & lhs, Path const & rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
-	Path operator/( Path const & lhs, String const & rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
-	Path operator/( Path const & lhs, char const * rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
-	Path operator/( Path const & lhs, wchar_t const * rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
-	Path operator/( String const & lhs, Path const & rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
-	Path operator/( char const * lhs, Path const & rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
-	Path operator/( wchar_t const * lhs, Path const & rhs )
-	{
-		Path path{ lhs };
-		path /= rhs;
-		return path;
-	}
-
 	std::filesystem::path makePath( StringView str )
 	{
 		if constexpr ( std::is_same_v< xchar, wchar_t > )

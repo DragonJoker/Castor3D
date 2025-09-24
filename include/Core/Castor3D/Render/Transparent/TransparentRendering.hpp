@@ -26,22 +26,17 @@ namespace c3d
 		 *\brief		Constructor
 		 *\param[in]	parent			The parent technique.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	previous		The prepass renderer.
-		 *\param[in]	previousPasses	The passes this pass depends on.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	weightedBlended	\p true to enable weighted blended rendering.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	parent			La technique parente.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	previous		Le renderer de prépasse.
-		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	weightedBlended	\p true pour activer le weighted blended rendering.
 		 */
 		C3D_API TransparentRendering( RenderTechnique & parent
 			, RenderDevice const & device
-			, OpaqueRendering const & previous
 			, ProgressBar * progress
 			, bool weightedBlended );
 		/**

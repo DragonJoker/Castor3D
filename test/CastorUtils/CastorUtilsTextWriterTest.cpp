@@ -1,8 +1,8 @@
 #include "CastorUtilsTextWriterTest.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
-#include <CastorUtils/Data/Text/TextCoords.hpp>
 #include <CastorUtils/Data/Text/TextPoint.hpp>
+#include <CastorUtils/Data/Text/TextPointView.hpp>
 #include <CastorUtils/Data/Text/TextQuaternion.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 #include <CastorUtils/Data/Text/TextRgbaColour.hpp>
@@ -16,14 +16,14 @@ namespace Testing
 
 	void CastorUtilsTextWriterTest::doRegisterTests()
 	{
-		doRegisterTest( "BaseTypesTextWriterTest", std::bind( &CastorUtilsTextWriterTest::BaseTypes, this ) );
-		doRegisterTest( "PointTextWriterTest", std::bind( &CastorUtilsTextWriterTest::Point, this ) );
-		doRegisterTest( "QuaternionTextWriterTest", std::bind( &CastorUtilsTextWriterTest::Quaternion, this ) );
-		doRegisterTest( "RgbColourTextWriterTest", std::bind( &CastorUtilsTextWriterTest::RgbColour, this ) );
-		doRegisterTest( "RgbaColourTextWriterTest", std::bind( &CastorUtilsTextWriterTest::RgbaColour, this ) );
-		doRegisterTest( "UnnamedBlockTextWriterTest", std::bind( &CastorUtilsTextWriterTest::UnnamedBlock, this ) );
-		doRegisterTest( "NamedBlockTextWriterTest", std::bind( &CastorUtilsTextWriterTest::NamedBlock, this ) );
-		doRegisterTest( "TypedBlockTextWriterTest", std::bind( &CastorUtilsTextWriterTest::TypedBlock, this ) );
+		doRegisterTest( "BaseTypesTextWriterTest", [this](){ BaseTypes(); } );
+		doRegisterTest( "PointTextWriterTest", [this](){ Point(); } );
+		doRegisterTest( "QuaternionTextWriterTest", [this](){ Quaternion(); } );
+		doRegisterTest( "RgbColourTextWriterTest", [this](){ RgbColour(); } );
+		doRegisterTest( "RgbaColourTextWriterTest", [this](){ RgbaColour(); } );
+		doRegisterTest( "UnnamedBlockTextWriterTest", [this](){ UnnamedBlock(); } );
+		doRegisterTest( "NamedBlockTextWriterTest", [this](){ NamedBlock(); } );
+		doRegisterTest( "TypedBlockTextWriterTest", [this](){ TypedBlock(); } );
 	}
 
 	void CastorUtilsTextWriterTest::BaseTypes()

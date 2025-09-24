@@ -41,7 +41,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dImage_resample( C3DImage const * object, C3DSize * size )
+	C3D_CAPIMETHODIMP c3dImage_resample( C3DImage const * object, C3DSize const * size )
 	{
 		if ( !object || !size )
 			return C3D_POINTER;
@@ -53,7 +53,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dImage_fill( C3DImage const * object, C3DRgbaColour * colour )
+	C3D_CAPIMETHODIMP c3dImage_fill( C3DImage const * object, C3DRgbaColour const * colour )
 	{
 		if ( !object || !colour )
 			return C3D_POINTER;

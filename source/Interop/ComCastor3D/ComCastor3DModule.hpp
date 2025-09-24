@@ -4,6 +4,8 @@
 
 #include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
+#include <vector>
+
 namespace CastorCom
 {
 	class CComCastor3DModule
@@ -24,12 +26,12 @@ namespace CastorCom
 
 		static HRESULT WINAPI UpdateRegistryAppId( BOOL bRegister )noexcept
 		{
-			ATL::_ATL_REGMAP_ENTRY aMapEntries [] =
+			std::vector< ATL::_ATL_REGMAP_ENTRY > aMapEntries =
 			{
 				{ OLESTR( "APPID" ), GetAppId() },
 				{ nullptr, nullptr }
 			};
-			return ATL::_pAtlModule->UpdateRegistryFromResource( IDR_Castor3D, bRegister, aMapEntries );
+			return ATL::_pAtlModule->UpdateRegistryFromResource( IDR_Castor3D, bRegister, aMapEntries.data() );
 		}
 
 	private:

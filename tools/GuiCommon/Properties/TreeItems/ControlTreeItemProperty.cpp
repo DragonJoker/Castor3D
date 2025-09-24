@@ -24,9 +24,10 @@
 
 namespace GuiCommon
 {
-	ControlTreeItemProperty::ControlTreeItemProperty( bool editable
+	ControlTreeItemProperty::ControlTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

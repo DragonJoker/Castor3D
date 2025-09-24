@@ -33,7 +33,7 @@ namespace PbrBloom
 		/**
 		 *\copydoc		c3d::PostEffect::setParameters
 		 */
-		void setParameters( c3d::Parameters parameters )override;
+		void setParameters( c3d::Parameters parameters )final;
 
 	private:
 		/**
@@ -67,9 +67,9 @@ namespace PbrBloom
 		c3d::RawUniquePtr< UpsamplePass > m_upsamplePass;
 		c3d::RawUniquePtr< CombinePass > m_combinePass;
 		c3d::UniformBufferOffsetT< c3d::Point2f > m_ubo;
-		uint32_t m_blurRadius;
-		float m_bloomStrength;
-		uint32_t m_duPassesCount;
+		uint32_t m_blurRadius{ BaseBlurRadius };
+		float m_bloomStrength{ BaseBloomStrength };
+		uint32_t m_duPassesCount{ BaseFilterCount };
 	};
 }
 

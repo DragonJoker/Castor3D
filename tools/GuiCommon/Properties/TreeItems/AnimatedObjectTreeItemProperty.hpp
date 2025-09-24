@@ -31,6 +31,7 @@ namespace GuiCommon
 		 *\param[in]	object		L"AnimatedObject cible.
 		 */
 		AnimatedObjectTreeItemProperty( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, bool editable
 			, c3d::AnimatedObjectRPtr object );
 		/**

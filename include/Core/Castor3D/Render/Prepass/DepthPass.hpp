@@ -36,7 +36,7 @@ namespace c3d
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	renderPassDesc	La description de la passe de rendu.
 		 */
-		C3D_API DepthPass( RenderTechnique * parent
+		C3D_API DepthPass( RenderTechnique & parent
 			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
@@ -48,6 +48,11 @@ namespace c3d
 		 *\copydoc		RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const noexcept override;
+
+		RenderTechnique const & getTechnique()const noexcept
+		{
+			return *m_parent;
+		}
 
 	private:
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;

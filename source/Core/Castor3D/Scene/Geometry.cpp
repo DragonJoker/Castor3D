@@ -315,9 +315,9 @@ namespace c3d
 			{
 				bool changed = false;
 				MaterialObs oldMaterial{};
-				auto itSubMat = m_submeshesMaterials.find( &submesh );
 
-				if ( itSubMat != m_submeshesMaterials.end() )
+				if ( auto itSubMat = m_submeshesMaterials.find( &submesh );
+					itSubMat != m_submeshesMaterials.end() )
 				{
 					oldMaterial = itSubMat->second;
 
@@ -345,7 +345,7 @@ namespace c3d
 							, *material );
 						submesh.instantiate( *this, oldMaterial, material, true );
 
-						for ( auto & pass : *oldMaterial )
+						for ( auto const & pass : *oldMaterial )
 						{
 							auto itPass = m_ids.find( pass.get() );
 
@@ -356,11 +356,8 @@ namespace c3d
 								if ( itSubmesh != itPass->second.end() )
 								{
 									itPass->second.erase( itSubmesh );
-
 									if ( itPass->second.empty() )
-									{
 										m_ids.erase( itPass );
-									}
 								}
 							}
 						}
@@ -410,10 +407,10 @@ namespace c3d
 
 		if ( auto mesh = m_mesh )
 		{
-			for ( auto & submesh : *mesh )
+			for ( auto const & submesh : *mesh )
 			{
-				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
-				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
+				m_submeshesBoxes.try_emplace( submesh.get(), submesh->getBoundingBox() );
+				m_submeshesSpheres.try_emplace( submesh.get(), submesh->getBoundingSphere() );
 			}
 
 			doUpdateContainers();
@@ -563,16 +560,14 @@ namespace c3d
 					markDirty();
 				} );
 
-			for ( auto & submesh : *mesh )
+			for ( auto const & submesh : *mesh )
 			{
 				CU_Require( &submesh->getParent() == mesh );
 				auto material = submesh->getDefaultMaterial();
 				m_submeshesMaterials.emplace( submesh.get(), material );
 
 				if ( material )
-				{
 					submesh->instantiate( *this, {}, material, true );
-				}
 			}
 
 			initContainers();

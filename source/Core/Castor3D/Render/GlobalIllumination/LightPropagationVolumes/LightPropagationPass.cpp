@@ -43,6 +43,8 @@ namespace c3d
 		struct SurfaceT
 			: sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , SurfaceT );
+
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -50,8 +52,6 @@ namespace c3d
 				, cellIndex{ getMember< sdw::IVec3 >( "cellIndex" ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , SurfaceT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint )
@@ -154,7 +154,7 @@ namespace c3d
 
 			// no normalization
 			auto evalSH_direct = writer.implementFunction< sdw::Vec4 >( "evalSH_direct"
-				, [&]( sdw::Vec3 const & direction )
+				, [&writer, &SH_C0, &SH_C1]( sdw::Vec3 const & direction )
 				{
 					writer.returnStmt( vec4( SH_C0
 						, -SH_C1 * direction.y()
@@ -165,7 +165,7 @@ namespace c3d
 
 			// no normalization
 			auto evalCosineLobeToDir_direct = writer.implementFunction< sdw::Vec4 >( "evalCosineLobeToDir_direct"
-				, [&]( sdw::Vec3 const & direction )
+				, [&writer, &SH_cosLobe_C0, &SH_cosLobe_C1]( sdw::Vec3 const & direction )
 				{
 					writer.returnStmt( vec4( SH_cosLobe_C0
 						, -SH_cosLobe_C1 * direction.y()
@@ -176,11 +176,11 @@ namespace c3d
 
 			//Get side direction
 			auto getEvalSideDirection = writer.implementFunction< sdw::Vec3 >( "getEvalSideDirection"
-				, [&]( sdw::Int const & index
+				, [&writer, &cellSides]( sdw::Int const & index
 					, sdw::IVec3 const & orientation )
 				{
-					const float smallComponent = float( 1.0f / sqrt( 5.0f ) );
-					const float bigComponent = float( 2.0f / sqrt( 5.0f ) );
+					float const smallComponent{ 1.0f / sqrtf( 5.0f ) };
+					float const bigComponent{ 2.0f / sqrtf( 5.0f ) };
 
 					auto tmp = writer.declLocale( "tmp"
 						, vec3( writer.cast< sdw::Float >( cellSides[index].x() ) * smallComponent
@@ -192,7 +192,7 @@ namespace c3d
 				, sdw::InIVec3{ writer, "orientation" } );
 
 			auto getReprojSideDirection = writer.implementFunction< sdw::Vec3 >( "getReprojSideDirection"
-				, [&]( sdw::Int const & index
+				, [&writer, &cellSides]( sdw::Int const & index
 					, sdw::IVec3 const & orientation )
 				{
 					writer.returnStmt( vec3( orientation.x() * cellSides[index].x()
@@ -205,7 +205,10 @@ namespace c3d
 			float occlusionAmplifier = 1.0f;
 
 			auto propagate = writer.implementFunction< sdw::Void >( "propagate"
-				, [&]( sdw::IVec3 const & cellIndex
+				, [&writer, &propDirections, occlusionAmplifier, evalSH_direct, evalCosineLobeToDir_direct
+						, &c3d_lpvGridR, &c3d_lpvGridG, c3d_lpvGridB, getEvalSideDirection, getReprojSideDirection
+						, c3d_lpvGridData, c3d_geometryVolume, directFaceSubtendedSolidAngle, sideFaceSubtendedSolidAngle
+						, occlusion]( sdw::IVec3 const & cellIndex
 					, sdw::Vec4 shR
 					, sdw::Vec4 shG
 					, sdw::Vec4 shB )
@@ -294,7 +297,7 @@ namespace c3d
 				, sdw::OutVec4{ writer, "shG" }
 				, sdw::OutVec4{ writer, "shB" } );
 
-			writer.implementEntryPointT< sdw::VoidT, lpvprop::SurfaceT >( [&]( sdw::VertexIn const &
+			writer.implementEntryPointT< sdw::VoidT, lpvprop::SurfaceT >( [&writer, &inPosition, &c3d_lpvGridData]( sdw::VertexIn const &
 				, sdw::VertexOutT< lpvprop::SurfaceT > out )
 				{
 					out.cellIndex = ivec3( inPosition );
@@ -303,7 +306,7 @@ namespace c3d
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
 
-			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( [&]( sdw::GeometryIn const &
+			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( []( sdw::GeometryIn const &
 				, sdw::PointListT< lpvprop::SurfaceT > const & list
 				, sdw::PointStreamT< lpvprop::SurfaceT > out )
 				{
@@ -317,7 +320,9 @@ namespace c3d
 					out.restartStrip();
 				} );
 
-			writer.implementEntryPointT< lpvprop::SurfaceT, sdw::VoidT >( [&]( sdw::FragmentInT< lpvprop::SurfaceT > const & in
+			writer.implementEntryPointT< lpvprop::SurfaceT, sdw::VoidT >( [&outLpvAccumulatorR, &outLpvAccumulatorG, &outLpvAccumulatorB
+					, &outLpvNextStepR, &outLpvNextStepG, &outLpvNextStepB
+					, &writer, &propagate]( sdw::FragmentInT< lpvprop::SurfaceT > const & in
 				, sdw::FragmentOut const & )
 				{
 					auto shR = writer.declLocale( "shR"
@@ -393,7 +398,7 @@ namespace c3d
 		}
 	}
 
-	void LightPropagationPass::PipelineHolder::recordInto( crg::RecordContext & context
+	void LightPropagationPass::PipelineHolder::recordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
@@ -487,7 +492,7 @@ namespace c3d
 			, context
 			, graph
 			, { [this]( uint32_t index ){ doSubInitialise( index ); }
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
 		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, m_gridSize ) }
@@ -508,7 +513,7 @@ namespace c3d
 		m_holder.initialise( getRenderPass( index ), index );
 	}
 
-	void LightPropagationPass::doSubRecordInto( crg::RecordContext & context
+	void LightPropagationPass::doSubRecordInto( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
@@ -516,8 +521,8 @@ namespace c3d
 		auto vplCount = m_gridSize * m_gridSize * m_gridSize;
 		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
 		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer().getBuffer();
-		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
-		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
+		context->vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
+		context->vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
 
 	void LightPropagationPass::accept( ConfigurationVisitorBase & visitor )const

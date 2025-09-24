@@ -92,14 +92,13 @@ namespace diamond_square_terrain
 		return result;
 	}
 
-	void generateBiomes( std::default_random_engine engine
+	void generateBiomes( std::default_random_engine const & engine
 		, uint32_t max
 		, uint32_t size
 		, float heatOffset
 		, float zeroPoint
 		, Matrix const & heightMap
 		, Biomes biomes
-		, c3d::FaceArray const & faces
 		, c3d::Map< uint32_t, uint32_t > const & vertexMap
 		, c3d::SubmeshAnimationBuffer & submesh );
 }

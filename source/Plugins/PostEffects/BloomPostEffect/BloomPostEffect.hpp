@@ -51,6 +51,8 @@ namespace Bloom
 		 */
 		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs )override;
 
+		void doParseParameters( c3d::Parameters parameters );
+
 	public:
 		static c3d::String const Type;
 		static c3d::MbString const Name;

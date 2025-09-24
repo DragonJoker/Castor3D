@@ -258,13 +258,8 @@ namespace c3d
 	SceneNode::~SceneNode()
 	{
 		Count--;
-		auto parent = getParent();
-
-		if ( parent )
-		{
+		if ( auto parent = getParent() )
 			parent->doDetachChild( getName() );
-		}
-
 		doDetachChildren( true );
 		cleanupAnimations();
 	}
@@ -656,7 +651,7 @@ namespace c3d
 		}
 	}
 
-	void SceneNode::doUpdateChildsDerivedTransform()
+	void SceneNode::doUpdateChildsDerivedTransform()const
 	{
 		for ( auto const & [key,current] : m_children )
 		{
@@ -711,7 +706,7 @@ namespace c3d
 
 		if ( m_children.find( name ) == m_children.end() )
 		{
-			m_children.insert( std::make_pair( name, &child ) );
+			m_children.try_emplace( name, &child );
 		}
 		else
 		{

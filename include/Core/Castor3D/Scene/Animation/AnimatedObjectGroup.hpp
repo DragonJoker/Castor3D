@@ -121,7 +121,7 @@ namespace c3d
 		 *\brief		Recherche un AnimatedObject en fonction de son nom.
 		 *\param[in]	name	Le nom de l'AnimatedObject.
 		 */
-		C3D_API AnimatedObject * findObject( String const & name )const;
+		C3D_API AnimatedObject * findObject( StringView name )const;
 		/**
 		 *\~english
 		 *\brief		adds the animation to the list.
@@ -201,7 +201,7 @@ namespace c3d
 		 *\brief			Mise à jour CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater const & updater );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name

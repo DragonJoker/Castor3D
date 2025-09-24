@@ -22,8 +22,6 @@
 
 #include <RenderGraph/FramePassGroup.hpp>
 
-#define C3D_ATM_DisablePassOptimisations 0
-
 //*************************************************************************************************
 
 CU_ImplementSmartPtr( atmosphere_scattering, AtmosphereBackground )
@@ -153,6 +151,8 @@ namespace c3d
 
 namespace atmosphere_scattering
 {
+	static constexpr bool disablePassOptimisations = false;
+
 	AtmosphereBackground::CameraPasses::CameraPasses( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
 		, AtmosphereBackground & background
@@ -295,9 +295,9 @@ namespace atmosphere_scattering
 				return res;
 			} );
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
-		renderUbo.createPassBinding( pass, AtmosphereBackgroundPass::eRenderConfig );
-		sceneUbo.createPassBinding( pass, AtmosphereBackgroundPass::eScene );
-		pass.addInputSampled( *cloudsResult.getSampledLastAttach(), AtmosphereBackgroundPass::eClouds
+		renderUbo.createPassBinding( pass, AtmosphereBackgroundBindings::eRenderConfig );
+		sceneUbo.createPassBinding( pass, AtmosphereBackgroundBindings::eScene );
+		pass.addInputSampledT( *cloudsResult.getSampledLastAttach(), AtmosphereBackgroundBindings::eClouds
 			, linearSampler );
 		lastPass = &pass;
 	}
@@ -336,7 +336,7 @@ namespace atmosphere_scattering
 			, c3d::TextureFactors{}.invert( true ) );
 	}
 
-	void AtmosphereBackground::CameraPasses::update( c3d::CpuUpdater & updater
+	void AtmosphereBackground::CameraPasses::update( c3d::CpuUpdater const & updater
 		, c3d::Point3f const & sunDirection
 		, c3d::Vector3f const & planetPosition )const
 	{
@@ -501,9 +501,9 @@ namespace atmosphere_scattering
 			, c3d::ImageLayout::eShaderReadOnly
 			, c3d::TextureFactors{}.invert( true ) );
 
-		for ( auto & cameraPass : m_cameraPasses )
+		for ( auto const & [_, pass] : m_cameraPasses )
 		{
-			cameraPass.second->accept( visitor );
+			pass->accept( visitor );
 		}
 
 		visitor.visit( cuT( "Weather Result" )
@@ -643,7 +643,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::loadWorley( uint32_t dimension )
 	{
 		auto & resources = getScene().getResources();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_worleyResolution = dimension;
 		m_worley = c3d::Texture{ device
 			, resources
@@ -660,7 +660,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::loadPerlinWorley( uint32_t dimension )
 	{
 		auto & resources = getScene().getResources();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_perlinWorleyResolution = dimension;
 		m_perlinWorley = c3d::Texture{ device
 			, resources
@@ -677,7 +677,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::loadCurl( uint32_t dimension )
 	{
 		auto & resources = getScene().getResources();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_curlResolution = dimension;
 		m_curl = c3d::Texture{ device
 			, resources
@@ -694,7 +694,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::loadWeather( uint32_t dimension )
 	{
 		auto & resources = getScene().getResources();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_weatherResolution = dimension;
 		m_weather = c3d::Texture{ device
 			, resources
@@ -711,7 +711,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::loadTransmittance( c3d::Point2ui const & dimensions )
 	{
 		auto & resources = getScene().getResources();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_transmittance = c3d::Texture{ device
 			, resources
 			, cuT( "Transmittance" )
@@ -726,7 +726,7 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::loadMultiScatter( uint32_t dimension )
 	{
 		auto & resources = getScene().getResources();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_multiScatter = c3d::Texture{ device
 			, resources
 			, cuT( "MultiScatter" )
@@ -734,7 +734,7 @@ namespace atmosphere_scattering
 				, { dimension, dimension, 1u }, 1u, 1u
 				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
 				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eStorage }
-			, { { .mipFilter = c3d::MipmapMode::eNearest } } };;
+			, { { .mipFilter = c3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
@@ -795,9 +795,9 @@ namespace atmosphere_scattering
 		m_generatePerlinWorley = m_generatePerlinWorley && m_first;
 		m_generateCurl = m_generateCurl && m_first;
 
-#if C3D_ATM_DisablePassOptimisations
-		m_first = true;
-#endif
+		if constexpr ( disablePassOptimisations )
+			m_first = true;
+
 		m_atmosphereChanged = m_first;
 		m_weatherChanged = m_first;
 		m_cloudsChanged = m_first;
@@ -805,19 +805,22 @@ namespace atmosphere_scattering
 
 		CU_Require( m_sunNode );
 		CU_Require( m_planetNode );
-		auto [sunDirection, planetPosition] = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_sunNode, *m_planetNode );
-		auto time = updater.tslf > 0_ms
-			? updater.tslf
-			: std::chrono::duration_cast< c3d::Milliseconds >( m_timer.getElapsed() );
-		m_time += float( time.count() ) / 1000.0f;
-		m_weatherUbo->cpuUpdate( m_weatherCfg );
-		m_cloudsUbo->cpuUpdate( m_cloudsCfg, m_time );
-		auto it = findCameraPass( updater.targetImage );
-
-		if ( it != m_cameraPasses.end() )
+		if ( m_planetNode && m_sunNode )
 		{
-			it->second->camAtmoChanged = m_atmosphereChanged;
-			it->second->update( updater, sunDirection, planetPosition );
+			auto [sunDirection, planetPosition] = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_sunNode, *m_planetNode );
+			auto time = updater.tslf > 0_ms
+				? updater.tslf
+				: std::chrono::duration_cast< c3d::Milliseconds >( m_timer.getElapsed() );
+			m_time += float( time.count() ) / 1000.0f;
+			m_weatherUbo->cpuUpdate( m_weatherCfg );
+			m_cloudsUbo->cpuUpdate( m_cloudsCfg, m_time );
+			auto it = findCameraPass( updater.targetImage );
+
+			if ( it != m_cameraPasses.end() )
+			{
+				it->second->camAtmoChanged = m_atmosphereChanged;
+				it->second->update( updater, sunDirection, planetPosition );
+			}
 		}
 	}
 
@@ -837,29 +840,24 @@ namespace atmosphere_scattering
 
 		if ( it != m_cameraPasses.end() )
 		{
-			it->second->cameraUbo.createPassBinding( pass
-				, index++ );
-			m_atmosphereUbo->createPassBinding( pass
-				, index++ );
-			m_cloudsUbo->createPassBinding( pass
-				, index++ );
+			it->second->cameraUbo.createPassBinding( pass, index );
+			++index;
+			m_atmosphereUbo->createPassBinding( pass, index );
+			++index;
+			m_cloudsUbo->createPassBinding( pass, index );
+			++index;
 			crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear
 				, c3d::FilterMode::eLinear };
-			pass.addInputSampled( *m_transmittance.getSampledLastAttach()
-				, index++
-				, linearClampSampler );
-			pass.addInputSampled( *m_multiScatter.getSampledLastAttach()
-				, index++
-				, linearClampSampler );
-			pass.addInputSampled( *it->second->skyView.getSampledLastAttach()
-				, index++
-				, linearClampSampler );
-			pass.addInputSampled( *it->second->volume.getSampledLastAttach()
-				, index++
-				, linearClampSampler );
-			pass.addInputSampled( *it->second->cloudsResult.getSampledLastAttach()
-				, index++
-				, linearClampSampler );
+			pass.addInputSampled( *m_transmittance.getSampledLastAttach(), index, linearClampSampler );
+			++index;
+			pass.addInputSampled( *m_multiScatter.getSampledLastAttach(), index, linearClampSampler );
+			++index;
+			pass.addInputSampled( *it->second->skyView.getSampledLastAttach(), index, linearClampSampler );
+			++index;
+			pass.addInputSampled( *it->second->volume.getSampledLastAttach(), index, linearClampSampler );
+			++index;
+			pass.addInputSampled( *it->second->cloudsResult.getSampledLastAttach(), index, linearClampSampler );
+			++index;
 		}
 	}
 
@@ -901,9 +899,12 @@ namespace atmosphere_scattering
 
 		if ( it != m_cameraPasses.end() )
 		{
-			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index++ ) );
-			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index++ ) );
-			descriptorWrites.push_back( m_cloudsUbo->getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index ) );
+			++index;
+			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index ) );
+			++index;
+			descriptorWrites.push_back( m_cloudsUbo->getDescriptorWrite( index ) );
+			++index;
 			c3d::bindTexture( m_transmittance.getSampledView()
 				, *m_transmittance.sampler
 				, descriptorWrites

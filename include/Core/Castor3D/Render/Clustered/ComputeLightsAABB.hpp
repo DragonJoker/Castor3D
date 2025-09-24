@@ -14,7 +14,6 @@ namespace c3d
 		, CameraUbo const & clustersCameraUbo
 		, BufferBase & allLightsAABBB );
 	C3D_API void createDisplayLightsAABBProgram( RenderDevice const & device
-		, FrustumClusters const & clusters
 		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program

@@ -172,7 +172,7 @@ namespace c3d
 		RenderTechniquePass * m_opaquePass{};
 		SubsurfaceScatteringPassUPtr m_subsurfaceScattering{};
 		RenderTechniquePass * m_deferredOpaquePass{};
-		RenderTechniquePass * m_visibilityOpaquePass{};
+		RenderTechniqueNodesPass * m_visibilityOpaquePass{};
 	};
 }
 

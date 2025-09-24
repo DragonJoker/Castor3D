@@ -43,11 +43,11 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & V
 			, sdw::Float const & roughness )override;
 
-		void applyVolume( sdw::Vec2 const fragCoord
-			, sdw::Float const linearDepth
-			, sdw::Vec2 const targetSize
-			, sdw::Vec2 const cameraPlanes
-			, sdw::Vec4 & output )override;
+		void applyVolume( sdw::Vec2 const & fragCoord
+			, sdw::Float const & linearDepth
+			, sdw::Vec2 const & targetSize
+			, sdw::Vec2 const & cameraPlanes
+			, sdw::Vec4 const & output )override;
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
 		c3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos

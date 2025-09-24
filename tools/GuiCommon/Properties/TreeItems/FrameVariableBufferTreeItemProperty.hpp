@@ -35,6 +35,7 @@ namespace GuiCommon
 		 *\param[in]	buffer		Le tampon cible
 		 */
 		FrameVariableBufferTreeItemProperty( c3d::Engine * engine
+			, ImagesLoader & imagesLoader
 			, bool editable
 			, UniformBufferValues & buffer );
 

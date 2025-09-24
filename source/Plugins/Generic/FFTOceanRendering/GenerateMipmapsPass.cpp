@@ -26,7 +26,7 @@ namespace ocean_fft
 	{
 		c3d::MbString const Name{ "GenerateMipmaps" };
 
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eInput,
 			eOutput,
@@ -34,10 +34,10 @@ namespace ocean_fft
 
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( eInput
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBindingT( Bindings::eInput
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( eOutput
+				, c3d::makeDescriptorSetLayoutBindingT( Bindings::eOutput
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( Name
@@ -49,7 +49,7 @@ namespace ocean_fft
 			, crg::FramePass const & pass )
 		{
 			c3d::Vector< ashes::DescriptorSetPtr > result;
-			auto & srcDstAttach = *pass.inouts.begin()->second;
+			auto & srcDstAttach = *pass.getInouts().begin()->second;
 			auto inViewId = srcDstAttach.view();
 			auto imageId = inViewId.data->image;
 			auto data = *srcDstAttach.view().data;
@@ -62,7 +62,7 @@ namespace ocean_fft
 			for ( uint32_t level = range.baseMipLevel; level < range.baseMipLevel + range.levelCount - 1u; ++level )
 			{
 				ashes::WriteDescriptorSetArray writes;
-				writes.emplace_back( uint32_t( eInput )
+				writes.emplace_back( uint32_t( Bindings::eInput )
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER );
@@ -74,7 +74,7 @@ namespace ocean_fft
 				data.name = imageId.data->name + "_L" + c3d::string::toMbString( data.info.subresourceRange.baseMipLevel );
 				auto outViewId = graph.getResources().getHandler().createViewId( data );
 				auto outView = graph.createImageView( outViewId );
-				writes.emplace_back( uint32_t( eOutput )
+				writes.emplace_back( uint32_t( Bindings::eOutput )
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE );
@@ -115,17 +115,16 @@ namespace ocean_fft
 		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-			auto const G = writer.declConstant( "G", 9.81_f );
 
 			auto pcb = writer.declPushConstantsBuffer( "MipmapsData" );
 			auto invSize = pcb.declMember< sdw::Vec2 >( "invSize" );
 			pcb.end();
 
-			auto inImg = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "inImg", eInput, 0u );
-			auto outImg = writer.declStorageImg< sdw::WImage2DRgba16 >( "outImg", eOutput, 0u );
+			auto inImg = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "inImg", uint32_t( Bindings::eInput ), 0u );
+			auto outImg = writer.declStorageImg< sdw::WImage2DRgba16 >( "outImg", uint32_t( Bindings::eOutput ), 0u );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
-				, [&]( sdw::ComputeIn in )
+				, [&writer, &invSize, &inImg, &outImg]( sdw::ComputeIn const & in )
 				{
 					auto uv = writer.declLocale( "uv"
 						, invSize * fma( vec2( in.globalInvocationID.xy() ), vec2( 2.0_f ), vec2( 0.5_f ) ) );
@@ -169,10 +168,10 @@ namespace ocean_fft
 				, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
 				, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), genmips::createShader( device ) }
 				, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
-				, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.inouts.begin()->second->view() ) + crg::getMipLevels( m_pass.inouts.rbegin()->second->view() ) ) }
-				, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
+				, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( getPass().getInouts().begin()->second->view() ) + crg::getMipLevels( getPass().getInouts().rbegin()->second->view() ) ) }
+				, m_descriptorSets{ genmips::createDescriptorSets( getGraph(), *m_descriptorSetPool, getPass() ) }
 			{
-				auto extent = getExtent( m_pass.inouts.begin()->second->view() );
+				auto extent = getExtent( getPass().getInouts().begin()->second->view() );
 
 				for ( size_t i = 0u; i < m_descriptorSets.size(); ++i )
 				{
@@ -188,7 +187,7 @@ namespace ocean_fft
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
-				auto viewAttach{ m_pass.inouts.begin()->second };
+				auto viewAttach{ getPass().getInouts().begin()->second };
 				auto viewId{ viewAttach->view( index ) };
 				auto imageId{ viewId.data->image };
 				auto extent = getExtent( viewId );
@@ -214,7 +213,7 @@ namespace ocean_fft
 					, 0u
 					, 1u };
 				// Transition first mip level to shader source for read in next iteration
-				auto firstLayoutState = m_graph.getCurrentLayoutState( context
+				auto firstLayoutState = getGraph().getCurrentLayoutState( context
 					, imageId
 					, getImageViewType( viewId )
 					, mipSubRange );
@@ -225,7 +224,7 @@ namespace ocean_fft
 					, firstLayoutState.layout
 					, shaderRead );
 
-				for ( auto & ds : m_descriptorSets )
+				for ( auto const & ds : m_descriptorSets )
 				{
 					extent.width >>= 1u;
 					extent.height >>= 1u;
@@ -240,16 +239,16 @@ namespace ocean_fft
 
 					// Generate mip level
 					VkDescriptorSet descriptorSet = *ds;
-					m_context.vkCmdBindPipeline( commandBuffer
+					context->vkCmdBindPipeline( commandBuffer
 						, VK_PIPELINE_BIND_POINT_COMPUTE
 						, *m_pipeline );
-					m_context.vkCmdPushConstants( commandBuffer
+					context->vkCmdPushConstants( commandBuffer
 						, *m_pipelineLayout
 						, VK_SHADER_STAGE_COMPUTE_BIT
 						, 0u
 						, uint32_t( sizeof( c3d::Point2f ) )
 						, &( *invSizeIt ) );
-					m_context.vkCmdBindDescriptorSets( commandBuffer
+					context->vkCmdBindDescriptorSets( commandBuffer
 						, VK_PIPELINE_BIND_POINT_COMPUTE
 						, *m_pipelineLayout
 						, 0u
@@ -257,7 +256,7 @@ namespace ocean_fft
 						, &descriptorSet
 						, 0u
 						, nullptr );
-					m_context.vkCmdDispatch( commandBuffer
+					context->vkCmdDispatch( commandBuffer
 						, extent.width / 4u
 						, extent.height / 4u
 						, 1u );

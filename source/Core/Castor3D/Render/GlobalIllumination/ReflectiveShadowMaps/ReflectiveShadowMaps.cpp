@@ -46,7 +46,7 @@ namespace c3d
 					, graph
 					, Callbacks{ []( uint32_t ){}
 						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-						, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
+						, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
 			{
 			}
 
@@ -57,13 +57,13 @@ namespace c3d
 			{
 				auto clearValue = crg::convert( transparentBlackClearColor );
 
-				for ( auto & [binding, attach] : m_pass.outputs )
+				for ( auto & [binding, attach] : getPass().getOutputs() )
 				{
 					auto view = attach->view();
-					auto image = m_graph.createImage( view.data->image );
+					auto image = getGraph().createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
 					assert( attach->isTransferInputImageView() );
-					m_context.vkCmdClearColorImage( commandBuffer
+					context->vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, &clearValue
@@ -299,7 +299,7 @@ namespace c3d
 		}
 	}
 
-	void ReflectiveShadowMaps::update( CpuUpdater & updater )
+	void ReflectiveShadowMaps::update( CpuUpdater & updater )const
 	{
 		if ( !m_initialised
 			|| !m_scene.needsGlobalIllumination( GlobalIlluminationType::eRsm ) )
@@ -307,10 +307,10 @@ namespace c3d
 			return;
 		}
 
-		for ( auto const & lightRsm : m_lightRsms )
+		for ( auto const & [light, rsm] : m_lightRsms )
 		{
-			updater.light = lightRsm.first;
-			lightRsm.second->update( updater );
+			updater.light = light;
+			rsm->update( updater );
 		}
 	}
 
@@ -331,10 +331,10 @@ namespace c3d
 	{
 		if ( m_initialised )
 		{
-			for ( auto const & lightRsm : m_lightRsms )
+			for ( auto const & [_, rsm] : m_lightRsms )
 			{
-				lightRsm.second->giPass->accept( visitor );
-				lightRsm.second->interpolatePass->accept( visitor );
+				rsm->giPass->accept( visitor );
+				rsm->interpolatePass->accept( visitor );
 			}
 
 			visitor.visit( getName() + " GI"

@@ -21,15 +21,6 @@ namespace GuiCommon
 		class PostEffectShaderGatherer
 			: public c3d::ConfigurationVisitor
 		{
-		private:
-			explicit PostEffectShaderGatherer( c3d::RenderDevice const & device
-				, ShaderSources & sources )
-				: c3d::ConfigurationVisitor{ { true } }
-				, m_device{ device }
-				, m_sources{ sources }
-			{
-			}
-
 		public:
 			static ShaderSources submit( c3d::PostEffect & postEffect )
 			{
@@ -39,57 +30,64 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( c3d::ShaderModule const & module
+			explicit PostEffectShaderGatherer( c3d::RenderDevice const & device
+				, ShaderSources & sources )
+				: c3d::ConfigurationVisitor{ { true } }
+				, m_device{ device }
+				, m_sources{ sources }
+			{
+			}
+
+			void visit( c3d::ShaderModule const & shaderModule
 				, bool forceProgramsVisit )override
 			{
-				if ( !module.shader
-					&& module.source.empty()
-					&& module.compiled.spirv.empty()
-					&& module.compiled.text.empty() )
+				if ( !shaderModule.shader
+					&& shaderModule.source.empty()
+					&& shaderModule.compiled.spirv.empty()
+					&& shaderModule.compiled.text.empty() )
 				{
 					return;
 				}
 
-				doGetSource( module.name ).sources.push_back( { module.shader.get()
-					, module.compiled
-					, c3d::getEntryPointType( m_device, module.stage ) } );
+				doGetSource( shaderModule.name ).sources.emplace_back( shaderModule.shader.get()
+					, shaderModule.compiled
+					, c3d::getEntryPointType( m_device, shaderModule.stage ) );
 			}
 
-			void visit( c3d::ProgramModule const & module
+			void visit( c3d::ProgramModule const & shaderModule
 				, ast::EntryPoint entryPoint
 				, bool forceProgramsVisit )override
 			{
-				auto it = module.compiled.find( getShaderStage( entryPoint ) );
+				auto it = shaderModule.compiled.find( getShaderStage( entryPoint ) );
 
-				if ( !module.shader
-					&& ( it == module.compiled.end()
+				if ( !shaderModule.shader
+					&& ( it == shaderModule.compiled.end()
 						|| ( it->second.text.empty()
 							&& it->second.spirv.empty() ) ) )
 				{
 					return;
 				}
 
-				doGetSource( module.name ).sources.push_back( { module.shader.get()
+				doGetSource( shaderModule.name ).sources.emplace_back( shaderModule.shader.get()
 					, it->second
-					, entryPoint } );
+					, entryPoint );
 			}
 
 		private:
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new PostEffectShaderGatherer{ m_device, m_sources } );
+				return c3d::makeRawUnique< PostEffectShaderGatherer >( m_device, m_sources );
 			}
 
 			ShaderSource & doGetSource( c3d::String const & name )
 			{
-				auto it = std::find_if( m_sources.begin()
+				if ( auto it = std::find_if( m_sources.begin()
 					, m_sources.end()
 					, [&name]( ShaderSource const & lookup )
 					{
 						return lookup.name == name;
 					} );
-
-				if ( it != m_sources.end() )
+					it != m_sources.end() )
 				{
 					return *it;
 				}
@@ -105,10 +103,11 @@ namespace GuiCommon
 		};
 	}
 
-	PostEffectTreeItemProperty::PostEffectTreeItemProperty( bool editable
+	PostEffectTreeItemProperty::PostEffectTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::PostEffect & effect
 		, wxWindow * parent )
-		: TreeItemProperty{ effect.getRenderSystem()->getEngine(), editable }
+		: TreeItemProperty{ effect.getRenderSystem()->getEngine(), imagesLoader, editable }
 		, m_effect{ effect }
 		, m_parent{ parent }
 	{
@@ -125,14 +124,15 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() );
 		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &c3d::PostEffect::enable );
 		addProperty( grid, PROPERTY_POST_EFFECT_SHADER
-			, [this]( wxVariant const & var )
+			, [this]( wxVariant const & )
 			{
 				ShaderSources sources = PostEffectShaderGatherer::submit( m_effect );
-				ShaderDialog * editor = new ShaderDialog{ m_effect.getRenderSystem()->getEngine()
+				ShaderDialog editor{ m_effect.getRenderSystem()->getEngine()
+					, m_imagesLoader
 					, c3d::move( sources )
 					, m_effect.getFullName()
 					, m_parent };
-				editor->Show();
+				editor.Show();
 			} );
 		TreeItemConfigurationBuilder::submit( grid, *this, m_effect );
 	}

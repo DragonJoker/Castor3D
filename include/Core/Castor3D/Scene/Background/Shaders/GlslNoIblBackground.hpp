@@ -29,16 +29,16 @@ namespace c3d::shader
 		void computeReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, BlendComponents & components
+			, BlendComponents const & components
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular )override;
 		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, BlendComponents & components )override;
+			, BlendComponents const & components )override;
 
 		sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
-			, BlendComponents & components )override;
+			, BlendComponents const & components )override;
 
 	public:
 		static String const Name;

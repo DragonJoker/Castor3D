@@ -1,13 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_COORDS_H___
-#define ___CASTOR_COORDS_H___
+#ifndef ___CU_PointView_H___
+#define ___CU_PointView_H___
 
 #include "CastorUtils/Math/MathModule.hpp"
 
 #include "CastorUtils/Data/TextLoader.hpp"
 #include "CastorUtils/Data/TextWriter.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 #include <cmath>
 
@@ -18,20 +19,20 @@ See LICENSE file in root folder
 namespace c3d
 {
 	template< typename T, uint32_t Count >
-	class Coords
+	class PointView
 	{
 	private:
-		template< typename U, uint32_t UCount > friend class Coords;
+		template< typename U, uint32_t UCount > friend class PointView;
 
 		using value_type = T;
 		using reference = value_type &;
 		using pointer = value_type * ;
 		using const_reference = value_type const &;
 		using const_pointer = value_type const *;
-		using point_reference = Coords< value_type, Count > &;
-		using point_pointer = Coords< value_type, Count > *;
-		using const_point_reference = Coords< value_type, Count > const &;
-		using const_point_pointer = Coords< value_type, Count > const *;
+		using point_reference = PointView< value_type, Count > &;
+		using point_pointer = PointView< value_type, Count > *;
+		using const_point_reference = PointView< value_type, Count > const &;
+		using const_point_pointer = PointView< value_type, Count > const *;
 		static constexpr std::size_t binary_size = sizeof( T ) * Count;
 
 	public:
@@ -50,9 +51,9 @@ namespace c3d
 		 *name Construction / Destruction.
 		 **/
 		/**@{*/
-		Coords() = default;
-		explicit Coords( Point< T, Count > & rhs );
-		explicit Coords( T * rhs );
+		PointView() = default;
+		explicit PointView( Point< T, Count > & rhs );
+		explicit PointView( T * rhs );
 		/**@}*/
 		/**
 		 *\~english
@@ -61,8 +62,8 @@ namespace c3d
 		 *name Opérateurs d'affectation.
 		 **/
 		/**@{*/
-		Coords & operator=( T * rhs );
-		Coords & operator=( Point< T, Count > const & rhs );
+		PointView & operator=( T * rhs );
+		PointView & operator=( Point< T, Count > const & rhs );
 		/**@}*/
 		/**
 		 *\~english
@@ -71,37 +72,37 @@ namespace c3d
 		 *name Opérateurs arithmétiques.
 		**/
 		/**@{*/
-		template< typename U, uint32_t UCount >
-		Coords & operator+=( Coords< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Coords & operator-=( Coords< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Coords & operator*=( Coords< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Coords & operator/=( Coords< U, UCount > const & rhs );
-
-		template< typename U, uint32_t UCount >
-		Coords & operator+=( Point< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Coords & operator-=( Point< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Coords & operator*=( Point< U, UCount > const & rhs );
-		template< typename U, uint32_t UCount >
-		Coords & operator/=( Point< U, UCount > const & rhs );
+		template< typename U >
+		PointView & operator+=( PointView< U, Count > const & rhs );
+		template< typename U >
+		PointView & operator-=( PointView< U, Count > const & rhs );
+		template< typename U >
+		PointView & operator*=( PointView< U, Count > const & rhs );
+		template< typename U >
+		PointView & operator/=( PointView< U, Count > const & rhs );
 
 		template< typename U >
-		Coords & operator+=( U const * coords );
+		PointView & operator+=( Point< U, Count > const & rhs );
 		template< typename U >
-		Coords & operator-=( U const * coords );
+		PointView & operator-=( Point< U, Count > const & rhs );
 		template< typename U >
-		Coords & operator*=( U const * coords );
+		PointView & operator*=( Point< U, Count > const & rhs );
 		template< typename U >
-		Coords & operator/=( U const * coords );
+		PointView & operator/=( Point< U, Count > const & rhs );
 
-		Coords & operator+=( T const & coord );
-		Coords & operator-=( T const & coord );
-		Coords & operator*=( T const & coord );
-		Coords & operator/=( T const & coord );
+		template< typename U >
+		PointView & operator+=( U const * coords );
+		template< typename U >
+		PointView & operator-=( U const * coords );
+		template< typename U >
+		PointView & operator*=( U const * coords );
+		template< typename U >
+		PointView & operator/=( U const * coords );
+
+		PointView & operator+=( T const & coord );
+		PointView & operator-=( T const & coord );
+		PointView & operator*=( T const & coord );
+		PointView & operator/=( T const & coord );
 		/**@}*/
 		/**
 		 *\~english
@@ -111,7 +112,7 @@ namespace c3d
 		 *\brief		Echange les données de c epoint avec celles du point donné
 		 *\param[in]	rhs	Le point à échanger
 		 */
-		void swap( Coords & rhs )noexcept;
+		void swap( PointView & rhs )noexcept;
 		/**
 		 *\~english
 		 *\return		The point total size: count * elemSize.
@@ -231,60 +232,190 @@ namespace c3d
 
 	private:
 		T * m_coords{};
+		/**
+		 *\~english
+		 *name Comparison operators.
+		 *\~french
+		 *name Opérateurs de comparaison.
+		**/
+		/**@{*/
+		template< typename U >
+		friend bool operator==( PointView const & lhs, PointView< U, Count > const & rhs )noexcept
+		{
+			bool result = true;
+			uint32_t i = 0;
+
+			while ( i < Count && result )
+			{
+				result = lhs[i] == rhs[i];
+				++i;
+			}
+
+			return result;
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Arithmetic operators.
+		 *\~french
+		 *name Opérateurs arithmétiques.
+		**/
+		/**@{*/
+		friend Point< std::remove_cv_t< T >, Count > operator-( PointView const & rhs )
+		{
+			Point< std::remove_cv_t< T >, Count > result;
+			for ( uint32_t i = 0; i < Count; ++i )
+				result[i] = -rhs[i];
+			return result;
+		}
+
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator+( PointView const & lhs, PointView< U, Count > const & rhs )
+		{
+			return PtOperators< T, U, Count, Count >::add( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator-( PointView const & lhs, PointView< U, Count > const & rhs )
+		{
+			return PtOperators< T, U, Count, Count >::sub( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator*( PointView const & lhs, PointView< U, Count > const & rhs )
+		{
+			return PtOperators< T, U, Count, Count >::mul( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator/( PointView const & lhs, PointView< U, Count > const & rhs )
+		{
+			return PtOperators< T, U, Count, Count >::div( lhs, rhs );
+		}
+
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator+( PointView const & lhs, U const * rhs )
+		{
+			return PtOperators< T, U, Count, Count >::add( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator-( PointView const & lhs, U const * rhs )
+		{
+			return PtOperators< T, U, Count, Count >::sub( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator*( PointView const & lhs, U const * rhs )
+		{
+			return PtOperators< T, U, Count, Count >::mul( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator/( PointView const & lhs, U const * rhs )
+		{
+			return PtOperators< T, U, Count, Count >::div( lhs, rhs );
+		}
+
+		friend Point< std::remove_cv_t< T >, Count > operator+( PointView const & lhs, T const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::add( lhs, rhs );
+		}
+		friend Point< std::remove_cv_t< T >, Count > operator-( PointView const & lhs, T const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::sub( lhs, rhs );
+		}
+		friend Point< std::remove_cv_t< T >, Count > operator*( PointView const & lhs, T const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::mul( lhs, rhs );
+		}
+		friend Point< std::remove_cv_t< T >, Count > operator/( PointView const & lhs, T const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::div( lhs, rhs );
+		}
+
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator+( PointView const & lhs, Point< U, Count > const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::add( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator-( PointView const & lhs, Point< U, Count > const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::sub( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator*( PointView const & lhs, Point< U, Count > const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::mul( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< T >, Count > operator/( PointView const & lhs, Point< U, Count > const & rhs )
+		{
+			return PtOperators< T, T, Count, Count >::div( lhs, rhs );
+		}
+
+		template< typename U >
+		friend Point< std::remove_cv_t< U >, Count > operator+( Point< U, Count > const & lhs, PointView const & rhs )
+		{
+			return PtOperators< U, T, Count, Count >::add( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< U >, Count > operator-( Point< U, Count > const & lhs, PointView const & rhs )
+		{
+			return PtOperators< U, T, Count, Count >::sub( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< U >, Count > operator*( Point< U, Count > const & lhs, PointView const & rhs )
+		{
+			return PtOperators< U, T, Count, Count >::mul( lhs, rhs );
+		}
+		template< typename U >
+		friend Point< std::remove_cv_t< U >, Count > operator/( Point< U, Count > const & lhs, PointView const & rhs )
+		{
+			return PtOperators< U, T, Count, Count >::div( lhs, rhs );
+		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Stream operators.
+		 *\~french
+		 *name Opérateurs de flux.
+		**/
+		/**@{*/
+		friend String & operator<<( String & out, PointView const & in )
+		{
+			StringStream stream{ makeStringStream() };
+			stream << in;
+			out += stream.str();
+			return out;
+		}
+
+		friend String & operator>>( String & in, PointView & out )
+		{
+			StringStream stream( in );
+			stream >> out;
+			in = stream.str();
+			return in;
+		}
+
+		template< typename CharT >
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, PointView const & in )
+		{
+			if constexpr ( Count != 0 )
+			{
+				out << in[0];
+				for ( uint32_t i = 1; i < Count; i++ )
+					out << " " << in[i];
+			}
+
+			return out;
+		}
+
+		template< typename CharT >
+		friend std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, PointView & out )
+		{
+			for ( uint32_t i = 0; i < Count; i++ )
+				in >> out[i];
+			return in;
+		}
+		/**@}*/
 	};
 	/**
-	 *\~english
-	 *name Comparison operators.
-	 *\~french
-	 *name Opérateurs de comparaison.
-	**/
-	/**@{*/
-	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	bool operator==( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	bool operator!=( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
-	/**@}*/
-	/**
-	 *\~english
-	 *name Arithmetic operators.
-	 *\~french
-	 *name Opérateurs arithmétiques.
-	**/
-	/**@{*/
-	template< typename T, uint32_t Count >
-	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & rhs );
-
-	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
-	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
-
-	template< typename T, uint32_t Count, typename U >
-	Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, U const * rhs );
-	template< typename T, uint32_t Count, typename U >
-	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, U const * rhs );
-	template< typename T, uint32_t Count, typename U >
-	Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, U const * rhs );
-	template< typename T, uint32_t Count, typename U >
-	Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, U const * rhs );
-
-	template< typename T, uint32_t Count, typename U >
-	Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count, typename U >
-	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count >
-	Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count >
-	Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, T const & rhs );
-	/**@}*/
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		10/07/2012
-	\version	0.7.0
 	\~english
 	\brief		Point helper functions
 	\~french
@@ -301,7 +432,7 @@ namespace c3d
 		 *\param[in]	point	Le point
 		 */
 		template< typename T, uint32_t Count >
-		inline void negate( Coords< T, Count > & point );
+		inline void negate( PointView< T, Count > & point );
 		/**
 		 *\~english
 		 *\brief		Normalises the point
@@ -315,7 +446,7 @@ namespace c3d
 		 *\param[in]	point	Le point
 		 */
 		template< typename T, uint32_t Count >
-		inline void normalise( Coords< T, Count > & point );
+		inline void normalise( PointView< T, Count > & point );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -327,7 +458,7 @@ namespace c3d
 		 *\return		Le produit scalaire
 		 */
 		template< typename T, uint32_t Count >
-		inline T dot( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		inline T dot( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Cross product operator
@@ -339,7 +470,7 @@ namespace c3d
 		 *\return		Le résultat du produit vectoriel
 		 */
 		template< typename T, typename U >
-		inline Point< T, 3 > cross( Coords< T, 3 > const & lhs, Coords< U, 3 > const & rhs );
+		inline Point< T, 3 > cross( PointView< T, 3 > const & lhs, PointView< U, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -351,7 +482,7 @@ namespace c3d
 		 *\return		Le cosinus
 		 */
 		template< typename T, uint32_t Count >
-		inline double cosTheta( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		inline double cosTheta( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian length of the vector
@@ -363,7 +494,7 @@ namespace c3d
 		 *\return		Le carré de la norme Euclidienne
 		 */
 		template< typename T, uint32_t Count >
-		inline double lengthSquared( Coords< T, Count > const & point );
+		inline double lengthSquared( PointView< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian length of the vector
@@ -375,7 +506,7 @@ namespace c3d
 		 *\return		La norme Euclidienne
 		 */
 		template< typename T, uint32_t Count >
-		inline double length( Coords< T, Count > const & point );
+		inline double length( PointView< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the Manhattan length of the vector
@@ -387,7 +518,7 @@ namespace c3d
 		 *\return		La distance de Manhattan
 		 */
 		template< typename T, uint32_t Count >
-		inline double lengthManhattan( Coords< T, Count > const & point );
+		inline double lengthManhattan( PointView< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski length of the vector
@@ -401,7 +532,7 @@ namespace c3d
 		 *\return		La distance de Minkowski
 		 */
 		template< typename T, uint32_t Count >
-		inline double lengthMinkowski( Coords< T, Count > const & point, double order );
+		inline double lengthMinkowski( PointView< T, Count > const & point, double order );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev length of the vector
@@ -413,7 +544,7 @@ namespace c3d
 		 *\return		La distance de Chebychev
 		 */
 		template< typename T, uint32_t Count >
-		inline double lengthChebychev( Coords< T, Count > const & point );
+		inline double lengthChebychev( PointView< T, Count > const & point );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance between two points.
@@ -425,7 +556,7 @@ namespace c3d
 		 *\return		Le carré de la norme Euclidienne.
 		 */
 		template< typename T, uint32_t Count >
-		inline double distanceSquared( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		inline double distanceSquared( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian distance between two points.
@@ -437,7 +568,7 @@ namespace c3d
 		 *\return		La norme Euclidienne.
 		 */
 		template< typename T, uint32_t Count >
-		inline double distance( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		inline double distance( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Manhattan distance between two points.
@@ -449,7 +580,7 @@ namespace c3d
 		 *\return		La distance de Manhattan.
 		 */
 		template< typename T, uint32_t Count >
-		inline double distanceManhattan( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		inline double distanceManhattan( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski distance between two points.
@@ -463,7 +594,7 @@ namespace c3d
 		 *\return		La distance de Minkowski.
 		 */
 		template< typename T, uint32_t Count >
-		inline double distanceMinkowski( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs, double order );
+		inline double distanceMinkowski( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs, double order );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev distance between two points.
@@ -475,26 +606,10 @@ namespace c3d
 		 *\return		La distance de Chebychev.
 		 */
 		template< typename T, uint32_t Count >
-		inline double distanceChebychev( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs );
+		inline double distanceChebychev( PointView< T, Count > const & lhs, PointView< T, Count > const & rhs );
 	}
-	/**
-	 *\~english
-	 *name Stream operators.
-	 *\~french
-	 *name Opérateurs de flux.
-	**/
-	/**@{*/
-	template< typename T, uint32_t Count >
-	String & operator<<( String & out, Coords< T, Count > const & in );
-	template< typename T, uint32_t Count >
-	String & operator>>( String & in, Coords< T, Count > & out );
-	template< typename T, uint32_t Count, typename CharT >
-	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Coords< T, Count > const & in );
-	template< typename T, uint32_t Count, typename CharT >
-	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Coords< T, Count > & out );
-	/**@}*/
 }
 
-#include "Coords.inl"
+#include "PointView.inl"
 
 #endif

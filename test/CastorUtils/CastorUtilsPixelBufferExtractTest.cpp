@@ -331,11 +331,11 @@ namespace Testing
 
 	void CastorUtilsPixelBufferExtractTest::doRegisterTests()
 	{
-		doRegisterTest( "TestExtract1Component", std::bind( &CastorUtilsPixelBufferExtractTest::TestExtract1Component, this ) );
-		doRegisterTest( "TestExtract2ContigComponents", std::bind( &CastorUtilsPixelBufferExtractTest::TestExtract2ContigComponents, this ) );
-		doRegisterTest( "TestExtract3ContigComponents", std::bind( &CastorUtilsPixelBufferExtractTest::TestExtract3ContigComponents, this ) );
-		doRegisterTest( "TestExtract2DisjointComponents", std::bind( &CastorUtilsPixelBufferExtractTest::TestExtract2DisjointComponents, this ) );
-		doRegisterTest( "TestExtract3DisjointComponents", std::bind( &CastorUtilsPixelBufferExtractTest::TestExtract3DisjointComponents, this ) );
+		doRegisterTest( "TestExtract1Component", [this](){ TestExtract1Component(); } );
+		doRegisterTest( "TestExtract2ContigComponents", [this](){ TestExtract2ContigComponents(); } );
+		doRegisterTest( "TestExtract3ContigComponents", [this](){ TestExtract3ContigComponents(); } );
+		doRegisterTest( "TestExtract2DisjointComponents", [this](){ TestExtract2DisjointComponents(); } );
+		doRegisterTest( "TestExtract3DisjointComponents", [this](){ TestExtract3DisjointComponents(); } );
 	}
 
 	void CastorUtilsPixelBufferExtractTest::TestExtract1Component()

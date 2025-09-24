@@ -40,6 +40,14 @@ namespace c3d::manip
 			// store the base value in the manipulator.
 			os.iword( getIWord() ) = m_base;
 		}
+
+	private:
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream
+			, BasicBaseManip const & manip )
+		{
+			manip.apply( stream );
+			return stream;
+		}
 	};
 
 	using BaseManip = BasicBaseManip< char >;
@@ -121,60 +129,6 @@ namespace c3d::manip
 	inline U32BaseManip u32base( int b )
 	{
 		return U32BaseManip( b );
-	}
-
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\remarks		We need this so we can apply our custom stream manipulator to the stream.
-	 *\param[in]	stream	The stream
-	 *\param[in]	manip	The manipulator
-	 *\~french
-	 *\brief		Opérateur de flux
-	 *\remarks		Applique notre manipulateur au flux
-	 *\param[in]	stream	Le flux
-	 *\param[in]	manip	Le manipulateur
-	 */
-	inline std::ostream & operator<<( std::ostream & stream, const manip::BaseManip & manip )
-	{
-		manip.apply( stream );
-		return stream;
-	}
-
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\remarks		We need this so we can apply our custom stream manipulator to the stream.
-	 *\param[in]	stream	The stream
-	 *\param[in]	manip	The manipulator
-	 *\~french
-	 *\brief		Opérateur de flux
-	 *\remarks		Applique notre manipulateur au flux
-	 *\param[in]	stream	Le flux
-	 *\param[in]	manip	Le manipulateur
-	 */
-	inline std::wostream & operator<<( std::wostream & stream, const manip::WBaseManip & manip )
-	{
-		manip.apply( stream );
-		return stream;
-	}
-
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\remarks		We need this so we can apply our custom stream manipulator to the stream.
-	 *\param[in]	stream	The stream
-	 *\param[in]	manip	The manipulator
-	 *\~french
-	 *\brief		Opérateur de flux
-	 *\remarks		Applique notre manipulateur au flux
-	 *\param[in]	stream	Le flux
-	 *\param[in]	manip	Le manipulateur
-	 */
-	inline U32OutputStream & operator<<( U32OutputStream & stream, const manip::U32BaseManip & manip )
-	{
-		manip.apply( stream );
-		return stream;
 	}
 
 	template< typename CharT >

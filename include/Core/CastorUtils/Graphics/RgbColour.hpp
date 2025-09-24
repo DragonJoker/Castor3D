@@ -834,121 +834,65 @@ namespace c3d
 
 	private:
 		ColourComponentArray m_components;
+
+		friend bool operator==( RgbColourT const & lhs, RgbColourT const & rhs )noexcept
+		{
+			bool result = true;
+
+			for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ) && result; i++ )
+			{
+				result = lhs[RgbComponent( i )] == rhs[RgbComponent( i )];
+			}
+
+			return result;
+		}
+
+		friend RgbColourT operator+( RgbColourT const & lhs, RgbColourT const & rhs )
+		{
+			RgbColourT result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		friend RgbColourT operator-( RgbColourT const & lhs, RgbColourT const & rhs )
+		{
+			RgbColourT result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		template< typename T >
+		friend RgbColourT operator+( RgbColourT const & lhs, T rhs )
+		{
+			RgbColourT result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		template< typename T >
+		friend RgbColourT operator-( RgbColourT const & lhs, T rhs )
+		{
+			RgbColourT result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		template< typename T >
+		friend RgbColourT operator*( RgbColourT const & lhs, T rhs )
+		{
+			RgbColourT result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		template< typename T >
+		friend RgbColourT operator/( RgbColourT const & lhs, T rhs )
+		{
+			RgbColourT result( lhs );
+			result /= rhs;
+			return result;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Equality operator
-	 *\param[in]	lhs, rhs	The colours to compare
-	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	lhs, rhs	Les couleurs à comparer
-	 */
-	template< typename ComponentType >
-	inline bool operator==( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Inequality operator
-	 *\param[in]	lhs, rhs	The colours to compare
-	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	lhs, rhs	Les couleurs à comparer
-	 */
-	template< typename ComponentType >
-	inline bool operator!=( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs );
-	/**
-	 *\~english
-	 *\brief		addition operator
-	 *\param[in]	lhs, rhs	The colours to add
-	 *\return		Result of lhs + rhs
-	 *\~french
-	 *\brief		Opérateur d'addition
-	 *\param[in]	lhs, rhs	Les couleurs à ajouter
-	 *\return		Resultat de lhs + rhs
-	 */
-	template< typename ComponentType >
-	inline RgbColourT< ComponentType > operator+( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Substraction operator
-	 *\param[in]	lhs, rhs	The colours to subtract
-	 *\return		Result of lhs - rhs
-	 *\~french
-	 *\brief		Opérateur de soustraction
-	 *\param[in]	lhs, rhs	Les couleurs à soustraire
-	 *\return		Resultat de lhs - rhs
-	 */
-	template< typename ComponentType >
-	inline RgbColourT< ComponentType > operator-( RgbColourT< ComponentType > const & lhs, RgbColourT< ComponentType > const & rhs );
-	/**
-	 *\~english
-	 *\brief		addition operator
-	 *\param[in]	lhs, rhs	The values to add
-	 *\return		Result of lhs + rhs
-	 *\~french
-	 *\brief		Opérateur d'addition
-	 *\param[in]	lhs, rhs	Les valeurs à ajouter
-	 *\return		Resultat de lhs + rhs
-	 */
-	template< typename ComponentType, typename T >
-	RgbColourT< ComponentType > operator+( RgbColourT< ComponentType > const & lhs, T rhs )
-	{
-		RgbColourT< ComponentType > result( lhs );
-		result += rhs;
-		return result;
-	}
-	/**
-	 *\~english
-	 *\brief		Subtraction operator
-	 *\param[in]	lhs, rhs	The values to subtract
-	 *\return		Result of lhs - rhs
-	 *\~french
-	 *\brief		Opérateur de soustraction
-	 *\param[in]	lhs, rhs	Les valeurs à soustraire
-	 *\return		Resultat de lhs - rhs
-	 */
-	template< typename ComponentType, typename T >
-	RgbColourT< ComponentType > operator-( RgbColourT< ComponentType > const & lhs, T rhs )
-	{
-		RgbColourT< ComponentType > result( lhs );
-		result -= rhs;
-		return result;
-	}
-
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs, rhs	The values to multiply
-	 *\return		Result of lhs * rhs
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs, rhs	Les valeurs à multiplier
-	 *\return		Resultat de lhs * rhs
-	 */
-	template< typename ComponentType, typename T >
-	RgbColourT< ComponentType > operator*( RgbColourT< ComponentType > const & lhs, T rhs )
-	{
-		RgbColourT< ComponentType > result( lhs );
-		result *= rhs;
-		return result;
-	}
-
-	/**
-	 *\~english
-	 *\brief		Division operator
-	 *\param[in]	lhs, rhs	The values to divide
-	 *\return		Result of lhs / rhs
-	 *\~french
-	 *\brief		Opérateur de division
-	 *\param[in]	lhs, rhs	Les valeurs à diviser
-	 *\return		Resultat de lhs / rhs
-	 */
-	template< typename ComponentType, typename T >
-	RgbColourT< ComponentType > operator/( RgbColourT< ComponentType > const & lhs, T rhs )
-	{
-		RgbColourT< ComponentType > result( lhs );
-		result /= rhs;
-		return result;
-	}
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGB format.

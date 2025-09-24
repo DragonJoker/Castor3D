@@ -13,7 +13,7 @@ namespace c3d
 {
 	namespace txtnode
 	{
-		static bool isIgnored( String const & name )
+		static bool isIgnored( StringView name )
 		{
 			return name == Scene::RootNode
 				|| name == Scene::ObjectRootNode
@@ -52,13 +52,9 @@ namespace c3d
 			{
 				if ( node.getParent()
 					&& !txtnode::isIgnored( *node.getParent() ) )
-				{
 					result = writeName( file, cuT( "parent" ), node.getParent()->getName() );
-				}
 				else
-				{
 					result = true;
-				}
 
 				if ( result )
 				{

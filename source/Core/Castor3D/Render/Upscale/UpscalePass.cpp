@@ -45,7 +45,7 @@ namespace c3d
 		if ( m_upscaler )
 			m_upscaler.reset();
 
-		auto itResolved = m_pass.inputs.begin();
+		auto itResolved = getPass().getInputs().begin();
 		auto itUnresolved = std::next( itResolved );
 		auto resolved = itResolved->second->view( index );
 		auto unresolved = itUnresolved->second->view( index );
@@ -61,11 +61,11 @@ namespace c3d
 
 	void UpscalingFramePass::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, uint32_t index )const
 	{
 		if ( m_updateCount == 0 )
 			return;
-		auto itResolved = m_pass.inputs.begin();
+		auto itResolved = getPass().getInputs().begin();
 		auto itUnresolved = std::next( itResolved );
 		auto itMotion = std::next( itUnresolved );
 		auto itDepth = std::next( itMotion );

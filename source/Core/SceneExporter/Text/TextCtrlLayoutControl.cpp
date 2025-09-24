@@ -42,11 +42,8 @@ namespace c3d
 			if ( result )
 			{
 				result = false;
-
 				if ( ctrl )
-				{
 					result = writeControl( *this, *ctrl, file, control.getName() + cuT( "/" ) );
-				}
 			}
 		}
 
@@ -57,9 +54,7 @@ namespace c3d
 				if ( layout->getName() == cuT( "c3d.layout.box" ) )
 				{
 					if ( auto block{ beginBlock( file, cuT( "box_layout" ) ) } )
-					{
 						result = writeSub( file, static_cast< LayoutBox const & >( *control.getLayout() ) );
-					}
 				}
 			}
 		}
@@ -70,7 +65,7 @@ namespace c3d
 	bool writeControl( TextWriterBase & writer
 		, Control const & control
 		, StringStream & file
-		, String const & prefix )
+		, StringView prefix )
 	{
 		bool result{};
 		auto name = control.getName();

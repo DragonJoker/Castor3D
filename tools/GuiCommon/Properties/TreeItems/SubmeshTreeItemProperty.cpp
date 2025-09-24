@@ -18,9 +18,10 @@
 
 namespace GuiCommon
 {
-	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable
+	SubmeshTreeItemProperty::SubmeshTreeItemProperty( ImagesLoader & imagesLoader
+		, bool editable
 		, c3d::Engine * engine )
-		: TreeItemProperty{ engine, editable }
+		: TreeItemProperty{ engine, imagesLoader, editable }
 	{
 		CreateTreeItemMenu();
 	}

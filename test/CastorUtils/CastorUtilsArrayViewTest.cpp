@@ -13,7 +13,7 @@ namespace Testing
 
 	void CastorUtilsArrayViewTest::doRegisterTests()
 	{
-		doRegisterTest( "BasicArrayViewTest", std::bind( &CastorUtilsArrayViewTest::BasicTest, this ) );
+		doRegisterTest( "BasicArrayViewTest", [this](){ BasicTest(); } );
 	}
 
 	void CastorUtilsArrayViewTest::BasicTest()
@@ -21,13 +21,14 @@ namespace Testing
 		{
 			CT_ON("	Check build from dynamically allocated buffer" );
 			uint64_t const size = 8;
-			int * tmp = new int[size];
-			c3d::ArrayView< int > view1 = c3d::makeArrayView( tmp, size );
+			c3d::Vector< int > tmp;
+			tmp.resize( size );
+			auto view1 = c3d::makeArrayView( tmp.data(), size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
-			CT_CHECK( view1.begin() == tmp );
+			CT_CHECK( view1.begin() == tmp.data() );
 			CT_CHECK( view1.cbegin() == view1.begin() );
-			CT_CHECK( view1.end() == tmp + size );
+			CT_CHECK( view1.end() == tmp.data() + size );
 			CT_CHECK( view1.cend() == view1.end() );
 			CT_CHECK( view1.end() == view1.begin() + view1.size() );
 			CT_CHECK( view1.end() == view1.begin() + view1.size() );
@@ -40,13 +41,12 @@ namespace Testing
 			}
 
 			CT_CHECK( *view1.rbegin() == tmp[--index] );
-			delete[] tmp;
 		}
 		{
 			CT_ON("	Check build from statically allocated buffer" );
 			static size_t const size = 8;
 			int tmp[size];
-			c3d::ArrayView< int > view1 = c3d::makeArrayView( tmp );
+			auto view1 = c3d::makeArrayView( tmp );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -68,18 +68,18 @@ namespace Testing
 		{
 			CT_ON("	Check build buffer part" );
 			uint32_t const size = 0;
-			int * tmp = new int[size + 1];
-			c3d::ArrayView< int > view1 = c3d::makeArrayView( tmp, size );
+			c3d::Vector< int > tmp;
+			tmp.resize( size + 1 );
+			auto view1 = c3d::makeArrayView( tmp.data(), size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( view1.empty() );
-			CT_CHECK( view1.begin() == tmp );
+			CT_CHECK( view1.begin() == tmp.data() );
 			CT_CHECK( view1.cbegin() == view1.begin() );
-			CT_CHECK( view1.end() == tmp + size );
+			CT_CHECK( view1.end() == tmp.data() + size );
 			CT_CHECK( view1.cend() == view1.end() );
 			CT_CHECK( view1.end() == view1.begin() + view1.size() );
 			CT_CHECK( view1.end() == view1.begin() + view1.size() );
 			CT_CHECK( view1.end() == view1.begin() );
-			delete[] tmp;
 		}
 	}
 }

@@ -21,24 +21,17 @@ namespace c3d
 		Point3f translate{ 0, 0, 0 };
 		Angle rotate;
 		Point3f scale{ 1, 1, 1 };
+
+	private:
+		friend bool operator==( TextureTransform const & lhs
+			, TextureTransform const & rhs )noexcept
+		{
+			return lhs.translate == rhs.translate
+				&& lhs.rotate == rhs.rotate
+				&& lhs.scale == rhs.scale;
+		}
 	};
-	/**
-	*\~english
-	*name
-	*	Comparison operators.
-	*\~french
-	*name
-	*	Opérateurs de comparaison.
-	*/
-	/**@{*/
-	C3D_API bool operator==( TextureTransform const & lhs
-		, TextureTransform const & rhs )noexcept;
-	inline bool operator!=( TextureTransform const & lhs
-		, TextureTransform const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
-	/**@}*/
+
 	struct TextureFlagConfiguration
 	{
 		/**
@@ -68,6 +61,15 @@ namespace c3d
 		*	Indice de début, utilisé avec le masque pour filtrer les composantes d'une image (AARRGGBB).
 		*/
 		uint32_t startIndex{};
+
+	private:
+		friend bool operator==( TextureFlagConfiguration const & lhs
+			, TextureFlagConfiguration const & rhs )noexcept
+		{
+			return lhs.flag == rhs.flag
+				&& lhs.componentsMask == rhs.componentsMask
+				&& lhs.startIndex == rhs.startIndex;
+		}
 	};
 	/**
 	*\~english
@@ -80,13 +82,6 @@ namespace c3d
 	/**@{*/
 	C3D_API bool shallowEqual( TextureFlagConfiguration const & lhs
 		, TextureFlagConfiguration const & rhs );
-	C3D_API bool operator==( TextureFlagConfiguration const & lhs
-		, TextureFlagConfiguration const & rhs )noexcept;
-	inline bool operator!=( TextureFlagConfiguration const & lhs
-		, TextureFlagConfiguration const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
 	/**@}*/
 	/**
 	*\~english
@@ -159,6 +154,26 @@ namespace c3d
 		static uint32_t constexpr RgbMask = RgMask | BlueMask;
 		static uint32_t constexpr RgbaMask = RgbMask | AlphaMask;
 		/**@}*/
+
+	private:
+		friend bool operator==( TextureConfiguration const & lhs
+			, TextureConfiguration const & rhs )noexcept
+		{
+			return lhs.components[0] == rhs.components[0]
+				&& lhs.components[1] == rhs.components[1]
+				&& lhs.components[2] == rhs.components[2]
+				&& lhs.components[3] == rhs.components[3]
+				&& lhs.normalFactor == rhs.normalFactor
+				&& lhs.heightFactor == rhs.heightFactor
+				&& lhs.normalDirectX == rhs.normalDirectX
+				&& lhs.needsYInversion == rhs.needsYInversion
+				&& lhs.needsXInversion == rhs.needsXInversion
+				&& lhs.needsZInversion == rhs.needsZInversion
+				&& lhs.normal2Channels == rhs.normal2Channels
+				&& lhs.transform.translate == rhs.transform.translate
+				&& lhs.transform.rotate == rhs.transform.rotate
+				&& lhs.transform.scale == rhs.transform.scale;
+		}
 	};
 	/**
 	*\~english
@@ -171,13 +186,6 @@ namespace c3d
 	/**@{*/
 	C3D_API bool shallowEqual( TextureConfiguration const & lhs
 		, TextureConfiguration const & rhs );
-	C3D_API bool operator==( TextureConfiguration const & lhs
-		, TextureConfiguration const & rhs );
-	inline bool operator!=( TextureConfiguration const & lhs
-		, TextureConfiguration const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
 	/**@}*/
 	/**
 	*\~english
@@ -225,6 +233,14 @@ namespace c3d
 	{
 		SamplerObs sampler{};
 		uint32_t texcoordSet{};
+
+	private:
+		friend bool operator==( PassTextureConfig const & lhs
+			, PassTextureConfig const & rhs )noexcept
+		{
+			return lhs.sampler == rhs.sampler
+				&& lhs.texcoordSet == rhs.texcoordSet;
+		}
 	};
 }
 

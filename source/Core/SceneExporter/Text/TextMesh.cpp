@@ -38,7 +38,7 @@ namespace c3d
 			if ( auto block{ beginBlock( file, name ) } )
 			{
 				result = true;
-				for ( auto & value : data )
+				for ( auto const & value : data )
 					result = result && write( file, cuT( "value" ), value );
 			}
 
@@ -54,7 +54,7 @@ namespace c3d
 			if ( auto block{ beginBlock( file, name ) } )
 			{
 				result = true;
-				for ( auto & value : data )
+				for ( auto const & value : data )
 					result = result && write( file, cuT( "value" ), value );
 			}
 
@@ -70,7 +70,7 @@ namespace c3d
 			if ( auto block{ beginBlock( file, name ) } )
 			{
 				result = true;
-				for ( auto & value : data )
+				for ( auto const & value : data )
 				{
 					StringStream stream;
 					stream << value[0] << " " << value[1] << " " << value[2];
@@ -90,7 +90,7 @@ namespace c3d
 			if ( auto block{ beginBlock( file, name ) } )
 			{
 				result = true;
-				for ( auto & value : data )
+				for ( auto const & value : data )
 				{
 					StringStream stream;
 					stream << value[0] << " " << value[1];
@@ -110,7 +110,7 @@ namespace c3d
 			if ( auto block{ beginBlock( file, name ) } )
 			{
 				result = true;
-				for ( auto & value : data )
+				for ( auto const & value : data )
 				{
 					if ( auto boneBlock{ beginBlock( file, "vertex_bone_data" ) } )
 					{
@@ -245,13 +245,9 @@ namespace c3d
 			else
 			{
 				if ( !m_subfolder.empty() )
-				{
 					result = writeName( file, cuT( "import" ), cuT( "Meshes/" ) + m_subfolder + cuT( "/" ) + object.getName() + cuT( ".cmsh" ) );
-				}
 				else
-				{
 					result = writeName( file, cuT( "import" ), cuT( "Meshes/" ) + object.getName() + cuT( ".cmsh" ) );
-				}
 
 				for ( auto const & [name, _] : object.getAnimations() )
 				{
@@ -277,11 +273,8 @@ namespace c3d
 			if ( result && it != object.end() )
 			{
 				if ( object.getSubmeshCount() == 1 )
-				{
 					result = writeName( file, cuT( "default_material" ), object.getSubmesh( 0u )->getDefaultMaterial()->getName() );
-				}
 				else if ( auto matsBlock{ beginBlock( file, cuT( "default_materials" ) ) } )
-				{
 					for ( auto & submesh : object )
 					{
 						if ( submesh->getDefaultMaterial() )
@@ -289,7 +282,6 @@ namespace c3d
 							result = writeText( file, tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
 						}
 					}
-				}
 			}
 		}
 

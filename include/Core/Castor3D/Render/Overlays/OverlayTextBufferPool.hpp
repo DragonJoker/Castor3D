@@ -63,7 +63,7 @@ namespace c3d
 		C3D_API void fillDescriptorSet( FontTexture const * fontTexture
 			, ashes::DescriptorSetLayout const & descriptorLayout
 			, ashes::DescriptorSet & descriptorSet );
-		C3D_API void upload( UploadData & uploader );
+		C3D_API void upload( UploadData & uploader )const;
 		C3D_API OverlayTextBuffer const * get( FontTexture const & fontTexture );
 
 	private:

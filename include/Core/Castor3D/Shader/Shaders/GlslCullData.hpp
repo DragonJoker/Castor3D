@@ -6,30 +6,30 @@ See LICENSE file in root folder
 
 #include "SdwModule.hpp"
 
-#include <ShaderWriter/BaseTypes/UInt.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace c3d::shader
 {
 	struct CullData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_CullData"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec4Field< "sphere" >
+			, sdw::Vec4Field< "cone" > >
 	{
-		C3D_API CullData( sdw::ShaderWriter & writer
-			, sdw::expr::ExprPtr expr
-			, bool enabled = true );
-
 		SDW_DeclStructInstance( C3D_API, CullData );
 
-		C3D_API static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
+		CullData( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled = true )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+			, sphere{ StructInstanceHelperT::getMember< "sphere" >() }
+			, cone{ StructInstanceHelperT::getMember< "cone" >() }
+		{
+		}
 
-	public:
 		sdw::Vec4 sphere;
 		sdw::Vec4 cone;
-
-	private:
-		mutable sdw::Function< sdw::Vec4
-			, sdw::InInt > m_unpackCone;
 	};
 
 	Writer_Parameter( CullData );

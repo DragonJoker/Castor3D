@@ -212,7 +212,7 @@ namespace c3d
 		doClearNoLock();
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( CpuUpdater & updater )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( [[maybe_unused]] CpuUpdater const & updater )
 	{
 		auto lock( makeUniqueLock( *this ) );
 		doUpdatePending();
@@ -226,7 +226,7 @@ namespace c3d
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( GpuUpdater & updater )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( [[maybe_unused]] GpuUpdater const & updater )
 	{
 	}
 

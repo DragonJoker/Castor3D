@@ -25,13 +25,9 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( langContext.currentLanguage->name );
-			}
 		}
 		CU_EndAttributePush( LANGSection::eLanguage )
 
@@ -40,9 +36,7 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				c3d::String strParams;
@@ -53,13 +47,10 @@ namespace GuiCommon
 					auto array = c3d::string::split( strParams, cuT( "\t ,;" ), 100, false );
 					langContext.currentLanguage->filePattern.clear();
 
-					for ( auto & pattern : array )
+					for ( auto const & pattern : array )
 					{
 						if ( !langContext.currentLanguage->filePattern.empty() )
-						{
 							langContext.currentLanguage->filePattern += cuT( ";" );
-						}
-
 						langContext.currentLanguage->filePattern += pattern;
 					}
 				}
@@ -76,9 +67,7 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				c3d::String strParams;
@@ -89,10 +78,8 @@ namespace GuiCommon
 					auto array = c3d::string::split( strParams, cuT( "\t ,;" ), 100, false );
 					langContext.currentLanguage->foldFlags = 0u;
 
-					for ( auto & flag : array )
-					{
+					for ( auto const & flag : array )
 						langContext.currentLanguage->foldFlags |= langContext.mapFoldFlags[flag];
-					}
 				}
 				else
 				{
@@ -108,13 +95,9 @@ namespace GuiCommon
 			langContext.keywords.clear();
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( langContext.index );
-			}
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
@@ -203,13 +186,9 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				langContext.keywords.push_back( params[0]->get< c3d::String >() );
-			}
 		}
 		CU_EndAttribute()
 
@@ -224,13 +203,9 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( langContext.currentLanguage->fontName );
-			}
 		}
 		CU_EndAttribute()
 
@@ -239,13 +214,9 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
-			{
 				params[0]->get( langContext.currentLanguage->fontSize );
-			}
 		}
 		CU_EndAttribute()
 
@@ -254,9 +225,7 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				params[0]->get( langContext.currentLanguage->isCLike );
@@ -270,9 +239,7 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				uint32_t type;
@@ -287,9 +254,7 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				c3d::String name;
@@ -304,9 +269,7 @@ namespace GuiCommon
 			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else
 			{
 				c3d::String name;
@@ -327,23 +290,23 @@ namespace GuiCommon
 				auto styles = c3d::string::split( c3d::string::lowerCase( c3d::string::trim( langParams ) ), cuT( "\t " ), 10, false );
 				int style = 0;
 
-				for ( auto name : styles )
+				for ( auto const & name : styles )
 				{
 					if ( name == cuT( "bold" ) )
 					{
-						style |= eSTC_STYLE_BOLD;
+						style |= int( eSTC_STYLE::eBOLD );
 					}
 					else if ( name == cuT( "italic" ) )
 					{
-						style |= eSTC_STYLE_ITALIC;
+						style |= int( eSTC_STYLE::eITALIC );
 					}
 					else if ( name == cuT( "underlined" ) )
 					{
-						style |= eSTC_STYLE_UNDERL;
+						style |= int( eSTC_STYLE::eUNDERL );
 					}
 					else if ( name == cuT( "hidden" ) )
 					{
-						style |= eSTC_STYLE_HIDDEN;
+						style |= int( eSTC_STYLE::eHIDDEN );
 					}
 				}
 
@@ -447,9 +410,9 @@ namespace GuiCommon
 				, { c3d::SectionId( LANGSection::eStyle ), cuT( "style" ) } };
 		}
 
-		static void * createContext( c3d::FileParserContext & context )
+		static LanguageFileContext * createContext( [[maybe_unused]] c3d::FileParserContext const & context )
 		{
-			LanguageFileContext * userContext = new LanguageFileContext;
+			auto userContext = new LanguageFileContext;
 			userContext->currentLanguage.reset( new LanguageInfo );
 			return userContext;
 		}

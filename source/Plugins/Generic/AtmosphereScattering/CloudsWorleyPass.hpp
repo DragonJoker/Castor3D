@@ -18,7 +18,7 @@ namespace atmosphere_scattering
 		CloudsWorleyPass( crg::FramePassGroup & graph
 			, c3d::RenderDevice const & device
 			, c3d::Texture & result
-			, bool & enabled );
+			, bool const & enabled );
 		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	private:

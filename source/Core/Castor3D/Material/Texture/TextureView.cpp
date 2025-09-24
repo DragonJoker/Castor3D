@@ -96,8 +96,7 @@ namespace c3d
 		m_info.subresourceRange.levelCount = mipLevels;
 	}
 
-	void TextureView::update( VkImage image
-		, uint32_t baseArrayLayer
+	void TextureView::update( uint32_t baseArrayLayer
 		, uint32_t layerCount
 		, uint32_t baseMipLevel
 		, uint32_t levelCount )

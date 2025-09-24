@@ -69,14 +69,14 @@ namespace c3d
 	{
 		static constexpr bool useCompute{ true };
 
-		enum Sets : uint32_t
+		enum class Sets : uint32_t
 		{
 			eInOuts,
 			eVtx,
 			eTex,
 		};
 
-		enum InOutBindings : uint32_t
+		enum class InOutBindings : uint32_t
 		{
 			eMainCamera,
 			eClustersCamera,
@@ -100,7 +100,7 @@ namespace c3d
 			eCount,
 		};
 
-		enum VtxBindings : uint32_t
+		enum class VtxBindings : uint32_t
 		{
 			eInMeshlets,
 			eInIndices,
@@ -117,7 +117,7 @@ namespace c3d
 			eInVelocity,
 		};
 
-		enum TexBindings : uint32_t
+		enum class TexBindings : uint32_t
 		{
 			eTextures,
 		};
@@ -167,7 +167,9 @@ namespace c3d
 						out.vtx.position = vec4( position * 2.0_f - 1.0_f, 0.0_f, 1.0_f );
 					} );
 
-				writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+				writer.implementEntryPoint( [&c3d_imgData, &c3d_imgDiffuse, &c3d_imgOutResult, &c3d_imgOutScattering
+						, &writer, &shade, &flags, &billboardNodeId, stride
+						, isMeshShading, isDeferredLighting]( sdw::FragmentIn const & in
 					, sdw::FragmentOut const & )
 					{
 						auto pos = ivec2( in.fragCoord.xy() );
@@ -242,7 +244,9 @@ namespace c3d
 				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DR11fG11fB10f >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
 
 				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
-					, [&]( sdw::ComputeIn const & in )
+					, [&pipelineId, &c3d_imgData, &c3d_imgDiffuse, &billboardNodeId, &shade
+						, &materialsStarts, &pixelsXY, &c3d_imgOutResult, &c3d_imgOutScattering, &materialsCounts
+						, &writer, &flags, stride, isMeshShading, isDeferredLighting]( sdw::ComputeIn const & in )
 					{
 						auto pos = in.globalInvocationID.xy();
 						auto index = pos.y() * ( in.numWorkGroups.x() * in.workGroupSize.x() ) + pos.x();
@@ -303,6 +307,8 @@ namespace c3d
 			, sdw::Vec3Field< "dx" >
 			, sdw::Vec3Field< "dy" > >
 		{
+			SDW_DeclStructInstance( , BarycentricFullDerivatives );
+
 			BarycentricFullDerivatives( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
@@ -345,7 +351,7 @@ namespace c3d
 					, dot( mergedV, dy() ) );
 			}
 
-			shader::DerivVec2 computeGradient( sdw::Vec2 const & pv0
+			shader::RetDerivVec2 computeGradient( sdw::Vec2 const & pv0
 				, sdw::Vec2 const & pv1
 				, sdw::Vec2 const & pv2 )
 			{
@@ -381,7 +387,7 @@ namespace c3d
 				return m_computeGradient2( *this, pv0, pv1, pv2 );
 			}
 
-			shader::DerivVec3 computeGradient( sdw::Vec3 const & pv0
+			shader::RetDerivVec3 computeGradient( sdw::Vec3 const & pv0
 				, sdw::Vec3 const & pv1
 				, sdw::Vec3 const & pv2 )
 			{
@@ -421,7 +427,7 @@ namespace c3d
 				return m_computeGradient3( *this, pv0, pv1, pv2 );
 			}
 
-			shader::DerivVec4 computeGradient( sdw::Vec4 const & pv0
+			shader::RetDerivVec4 computeGradient( sdw::Vec4 const & pv0
 				, sdw::Vec4 const & pv1
 				, sdw::Vec4 const & pv2 )
 			{
@@ -486,6 +492,8 @@ namespace c3d
 		struct Position
 			: public sdw::StructInstance
 		{
+			SDW_DeclStructInstance( , Position );
+
 			Position( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
@@ -494,8 +502,6 @@ namespace c3d
 				, fill{ getMemberArray< sdw::Vec4 >( "fill", true ) }
 			{
 			}
-
-			SDW_DeclStructInstance( , Position );
 
 			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
 				, uint32_t stride )
@@ -548,7 +554,7 @@ namespace c3d
 			{
 			}
 
-			BarycentricFullDerivatives calcFullBarycentric( sdw::Vec4 const & ppt0
+			RetBarycentricFullDerivatives calcFullBarycentric( sdw::Vec4 const & ppt0
 				, sdw::Vec4 const & ppt1
 				, sdw::Vec4 const & ppt2
 				, sdw::Vec2 const & ppixelNdc
@@ -647,7 +653,7 @@ namespace c3d
 				if ( !m_loadVertices )
 				{
 					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
-						, [&]( sdw::UInt const & /*nodeId*/
+						, [this]( sdw::UInt const & /*nodeId*/
 							, sdw::UInt const & primitiveId
 							, sdw::UInt const & meshletId
 							, shader::ModelData const & modelData
@@ -656,7 +662,7 @@ namespace c3d
 							, shader::MeshVertex const & v2 )
 						{
 							auto loadVertex = m_writer.implementFunction< sdw::Void >( "loadVertex"
-								, [&]( sdw::UInt const & vertexId
+								, [this]( sdw::UInt const & vertexId
 									, shader::MeshVertex result )
 								{
 									result.position = m_meshBuffers.positions[vertexId].position;
@@ -725,12 +731,12 @@ namespace c3d
 				, shader::MeshVertex const & pv2
 				, shader::CameraData const & c3d_cameraData
 				, shader::RenderData const & c3d_renderData
-				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
+				, sdw::ArrayStorageBufferT< shader::BillboardData > const & c3d_billboardData )
 			{
 				if ( !m_loadVertices )
 				{
 					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
-						, [&]( sdw::UInt const & nodeId
+						, [this, &c3d_cameraData, &c3d_renderData, &c3d_billboardData]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
 							, sdw::UInt const &
 							, shader::ModelData const & modelData
@@ -822,13 +828,13 @@ namespace c3d
 				, sdw::Float const & pdepth
 				, shader::CameraData const & c3d_cameraData
 				, shader::RenderData const & c3d_renderData
-				, sdw::Array< shader::BillboardData > const & c3d_billboardData
+				, sdw::ArrayStorageBufferT< shader::BillboardData > const & c3d_billboardData
 				, shader::AllDerivFragmentSurface const & presult )
 			{
 				if ( !m_loadSurface )
 				{
 					m_loadSurface = m_writer.implementFunction< sdw::Void >( "loadSurface"
-						, [&]( sdw::UInt const & nodeId
+						, [this, &c3d_renderData, &c3d_cameraData, &c3d_billboardData]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
 							, sdw::UInt const & meshletId
 							, sdw::Vec2 const & pixelCoord
@@ -862,16 +868,12 @@ namespace c3d
 							auto v2 = m_writer.declLocale< shader::MeshVertex >( "v2", true, m_submeshShaders );
 
 							if ( m_stride == 0u )
-							{
 								loadSubmeshVertices( nodeId, primitiveId, meshletId, modelData, v0, v1, v2 );
-							}
 							else
-							{
 								loadBillboardVertices( nodeId, primitiveId, modelData, v0, v1, v2
 									, c3d_cameraData
 									, c3d_renderData
 									, c3d_billboardData );
-							}
 
 							bool isWorldPos = m_flags.hasWorldPosInputs()
 								|| ( m_stride != 0u );
@@ -895,61 +897,39 @@ namespace c3d
 
 							// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
 							if ( m_flags.enableTexcoord0() )
-							{
 								result.texture0 = derivatives.computeGradient( v0.texture0.xy()
 									, v1.texture0.xy()
 									, v2.texture0.xy() );
-							}
-
 							if ( m_flags.enableTexcoord1() )
-							{
 								result.texture1 = derivatives.computeGradient( v0.texture1.xy()
 									, v1.texture1.xy()
 									, v2.texture1.xy() );
-							}
-
 							if ( m_flags.enableTexcoord2() )
-							{
 								result.texture2 = derivatives.computeGradient( v0.texture2.xy()
 									, v1.texture2.xy()
 									, v2.texture2.xy() );
-							}
-
 							if ( m_flags.enableTexcoord3() )
-							{
 								result.texture3 = derivatives.computeGradient( v0.texture3.xy()
 									, v1.texture3.xy()
 									, v2.texture3.xy() );
-							}
-
 							if ( m_flags.enableColours() )
-							{
 								result.colour = derivatives.interpolate( v0.colour.xyz()
 									, v1.colour.xyz()
 									, v2.colour.xyz() );
-							}
 
-							auto normal = m_writer.declLocale( "normal"
-								, ( m_flags.enableNormal()
-									? normalize( derivatives.computeGradient( v0.normal, v1.normal, v2.normal ) )
-									: shader::derivVec3( 0.0_f ) )
-								, m_flags.enableNormal() );
-							auto tangent = m_writer.declLocale( "tangent"
-								, ( m_flags.enableTangentSpace()
-									? derivatives.computeGradient( v0.tangent, v1.tangent, v2.tangent )
-									: shader::derivVec4( 0.0_f ) )
-								, m_flags.enableTangentSpace() );
+							auto normal = ( m_flags.enableNormal()
+									? m_writer.declLocale( "normal", normalize( derivatives.computeGradient( v0.normal, v1.normal, v2.normal ) ) )
+									: m_writer.declLocale( "normal", shader::derivVec3( 0.0_f ), false ) );
+							auto tangent = ( m_flags.enableTangentSpace()
+									? m_writer.declLocale( "tangent", derivatives.computeGradient( v0.tangent, v1.tangent, v2.tangent ) )
+									: m_writer.declLocale( "tangent", shader::derivVec4( 0.0_f ), false ) );
 
 							if ( m_flags.enableTangentSpace() )
-							{
 								tangent = derivVec4( normalize( getXYZ( tangent ) ), getW( tangent ) );
-							}
 
-							auto bitangent = m_writer.declLocale( "bitangent"
-								, ( m_flags.enableBitangent()
-									? normalize( derivatives.computeGradient( v0.bitangent, v1.bitangent, v2.bitangent ) )
-									: shader::derivVec3( 0.0_f ) )
-								, m_flags.enableBitangent() );
+							auto bitangent = ( m_flags.enableBitangent()
+									? m_writer.declLocale( "bitangent", normalize( derivatives.computeGradient( v0.bitangent, v1.bitangent, v2.bitangent ) ) )
+									: m_writer.declLocale( "bitangent", shader::derivVec3( 0.0_f ), false ) );
 
 							if ( m_flags.enablePassMasks() )
 							{
@@ -1131,23 +1111,23 @@ namespace c3d
 			shader::Materials materials{ *scene.getEngine()
 				, writer
 				, passShaders
-				, InOutBindings::eMaterials
-				, Sets::eInOuts
+				, uint32_t( InOutBindings::eMaterials )
+				, uint32_t( Sets::eInOuts )
 				, index };
 			shader::SssProfiles sssProfiles{ writer
-				, InOutBindings::eSssProfiles
-				, Sets::eInOuts
+				, uint32_t( InOutBindings::eSssProfiles )
+				, uint32_t( Sets::eInOuts )
 				, !C3D_DisableSSSTransmittance };
 			auto c3d_mapDiffusionProfiles = writer.declCombinedImg< FImg1DArrayRgba16 >( "c3d_mapDiffusionProfiles"
 				, InOutBindings::eSssDiffusionProfiles
-				, Sets::eInOuts
+				, uint32_t( Sets::eInOuts )
 				, !C3D_DisableSSSTransmittance );
 			shader::TextureConfigurations textureConfigs{ writer
-				, InOutBindings::eTexConfigs
-				, Sets::eInOuts };
+				, uint32_t( InOutBindings::eTexConfigs )
+				, uint32_t( Sets::eInOuts ) };
 			shader::TextureAnimations textureAnims{ writer
-				, InOutBindings::eTexAnims
-				, Sets::eInOuts };
+				, uint32_t( InOutBindings::eTexAnims )
+				, uint32_t( Sets::eInOuts ) };
 			auto c3d_imgData = writer.declStorageImg< sdw::RUImage2DRg32 >( "c3d_imgData"
 				, InOutBindings::eInData
 				, Sets::eInOuts );
@@ -1174,9 +1154,9 @@ namespace c3d
 				, &sssProfiles
 				, &c3d_mapDiffusionProfiles
 				, lightsIndex /* lightBinding */
-				, Sets::eInOuts /* lightSet */
+				, uint32_t( Sets::eInOuts ) /* lightSet */
 				, index /* shadowMapBinding */
-				, Sets::eInOuts /* shadowMapSet */
+				, uint32_t( Sets::eInOuts ) /* shadowMapSet */
 				, true /* enableVolumetric */ };
 			shader::ReflectionModel reflections{ writer
 				, utils
@@ -1191,16 +1171,16 @@ namespace c3d
 				, makeExtent2D( imageSize )
 				, true
 				, index
-				, Sets::eInOuts );
+				, uint32_t( Sets::eInOuts ) );
 			shader::GlobalIllumination indirect{ writer
 				, utils
 				, index
-				, Sets::eInOuts
+				, uint32_t( Sets::eInOuts )
 				, flags.getGlobalIlluminationFlags()
 				, *indirectLighting };
 			shader::ClusteredLights clusteredLights{ writer
 				, index
-				, Sets::eInOuts
+				, uint32_t( Sets::eInOuts )
 				, &clustersConfig };
 
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps", TexBindings::eTextures, Sets::eTex ) );
@@ -1214,14 +1194,19 @@ namespace c3d
 			VisibilityHelpers visHelpers{ writer, passShaders, submeshShaders, flags, stride, isMeshShading };
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
-				, [&]( sdw::IVec2 const & ipixel
-					, sdw::UInt const & curNodeId
-					, sdw::UInt const & curPipelineId
-					, sdw::UInt const & primitiveId
-					, sdw::UInt const & meshletId
-					, sdw::Vec4 outResult
-					, sdw::Vec4 inoutDiffuse
-					, sdw::Vec4 outScattering )
+				, [&writer, &passShaders, &submeshShaders, &utils, &indirect, &fog
+					, &materials, &pipelineId, &visHelpers, &textureConfigs, &textureAnims, &lights, &clusteredLights, &backgroundModel, &reflections
+					, &c3d_renderData, &c3d_modelsData, c3d_cameraDataClusters, &c3d_cameraDataMain, &c3d_billboardData, &c3d_sceneData
+					, &c3d_mapOcclusion, &c3d_mapBrdf, &c3d_maps
+					, &debugConfig, &flags, areDebugTargetsEnabled, hasSsao, deferredLighting, outputScattering
+					, isDeferredLighting]( sdw::IVec2 const & ipixel
+						, sdw::UInt const & curNodeId
+						, sdw::UInt const & curPipelineId
+						, sdw::UInt const & primitiveId
+						, sdw::UInt const & meshletId
+						, sdw::Vec4 outResult
+						, sdw::Vec4 inoutDiffuse
+						, sdw::Vec4 outScattering )
 				{
 					{
 						shader::DebugOutput output{ debugConfig
@@ -1316,7 +1301,7 @@ namespace c3d
 									, "lightSurface"
 									, c3d_cameraDataClusters.position()
 									, surface.worldPosition
-									, getXYZ( surface.viewPosition )
+									, shader::getXYZ( surface.viewPosition )
 									, surface.clipPosition
 									, surface.normal );
 
@@ -1371,7 +1356,7 @@ namespace c3d
 
 									// Indirect Lighting
 									lightSurface.updateL( components.getDerivNormal() );
-									auto indirectLighting = writer.declLocale( "indirectLighting"
+									auto indirLighting = writer.declLocale( "indirectLighting"
 										, shader::IndirectLighting{ writer } );
 									indirect.computeCombinedDifSpec( flags.getGlobalIlluminationFlags()
 										, flags.hasDiffuseGI()
@@ -1380,7 +1365,7 @@ namespace c3d
 										, lightSurface
 										, components.perceptualRoughness
 										, c3d_mapBrdf
-										, indirectLighting );
+										, indirLighting );
 
 									// Reflection/Refraction
 									auto reflRefrResult = writer.declLocale( "reflRefrResult"
@@ -1399,7 +1384,7 @@ namespace c3d
 										, c3d_cameraDataMain
 										, c3d_renderData
 										, directLighting
-										, indirectLighting
+										, indirLighting
 										, vec2( ipixel )
 										, modelData.getEnvMapIndex()
 										, shader::getRaw( incident )
@@ -1415,7 +1400,7 @@ namespace c3d
 											, shader::getRaw( incident )
 											, occlusion
 											, directLighting
-											, indirectLighting
+											, indirLighting
 											, reflRefrResult )
 										, components.opacity );
 									outScattering = vec4( directLighting.scattering, 1.0_f);
@@ -1526,60 +1511,60 @@ namespace c3d
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMainCamera
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMainCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eClustersCamera
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eClustersCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eRender
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eRender
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eScene
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eScene
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eModels
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eModels
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( InOutBindings::eBillboards )
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eBillboards
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages ) );
 			bindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( InOutBindings::eMaterials
 				, stages ) );
 			bindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( InOutBindings::eSssProfiles
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eSssDiffusionProfiles
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eSssDiffusionProfiles
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, stages ) );
 			bindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( InOutBindings::eTexConfigs
 				, stages ) );
 			bindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( InOutBindings::eTexAnims
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eInData
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eInData
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eInOutDiffuse
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eInOutDiffuse
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMapBrdf
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMapBrdf
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, stages ) );
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsCounts
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMaterialsCounts
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsStarts
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMaterialsStarts
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::ePixelsXY
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::ePixelsXY
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutResult
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eOutResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutScattering
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eOutScattering
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
 			}
@@ -1602,11 +1587,9 @@ namespace c3d
 			}
 
 			if ( technique.hasShadowBuffer() )
-			{
 				RenderNodesPass::addShadowBindings( bindings
 					, stages
 					, index );
-			}
 
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index // c3d_mapEnvironment
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -1614,12 +1597,10 @@ namespace c3d
 			++index;
 
 			if ( auto background = scene.getBackground() )
-			{
 				RenderNodesPass::addBackgroundBindings( *background
 					, bindings
 					, stages
 					, index );
-			}
 
 			RenderNodesPass::addGIBindings( scene.getFlags()
 				, *indirectLighting
@@ -1629,12 +1610,10 @@ namespace c3d
 
 			if ( allowClusteredLighting
 				&& technique.getRenderTarget().getFrustumClusters() )
-			{
 				RenderNodesPass::addClusteredLightingBindings( *technique.getRenderTarget().getFrustumClusters()
 					, bindings
 					, stages
 					, index );
-			}
 
 			return device->createDescriptorSetLayout( toUtf8( name ) + "InOut"
 				, c3d::move( bindings ) );
@@ -1666,9 +1645,9 @@ namespace c3d
 
 			writes.push_back( renderUbo.getDescriptorWrite( InOutBindings::eRender ) );
 			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
-			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
+			writes.push_back( makeStorageBufferDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels ) );
-			writes.push_back( makeDescriptorWrite( scene.getBillboardsBuffer()
+			writes.push_back( makeStorageBufferDescriptorWrite( scene.getBillboardsBuffer()
 				, InOutBindings::eBillboards ) );
 			writes.push_back( matCache.getPassBuffer().getBinding( InOutBindings::eMaterials ) );
 			writes.push_back( matCache.getSssProfileBuffer().getBinding( InOutBindings::eSssProfiles ) );
@@ -1678,14 +1657,14 @@ namespace c3d
 			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
 			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
 			auto & visibilityPassResult = technique.getVisibilityResult();
-			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.getTargetView()
+			writes.push_back( makeStorageImageDescriptorWrite( visibilityPassResult.getTargetView()
 				, InOutBindings::eInData ) );
 
 			if ( deferredLighting == DeferredLightingFilter::eDeferredOnly )
-				writes.push_back( makeImageViewDescriptorWrite( technique.getSssDiffuse().getTargetView()
+				writes.push_back( makeStorageImageDescriptorWrite( technique.getSssDiffuse().getTargetView()
 					, InOutBindings::eInOutDiffuse ) );
 			else
-				writes.push_back( makeImageViewDescriptorWrite( technique.getDiffuse().getTargetView()
+				writes.push_back( makeStorageImageDescriptorWrite( technique.getDiffuse().getTargetView()
 					, InOutBindings::eInOutDiffuse ) );
 
 			writes.push_back( makeImageViewDescriptorWrite( engine.getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
@@ -1694,15 +1673,15 @@ namespace c3d
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
-				writes.push_back( makeDescriptorWrite( technique.getMaterialsCounts()
+				writes.push_back( makeStorageBufferDescriptorWrite( technique.getMaterialsCounts()
 					, InOutBindings::eMaterialsCounts ) );
-				writes.push_back( makeDescriptorWrite( technique.getMaterialsStarts()
+				writes.push_back( makeStorageBufferDescriptorWrite( technique.getMaterialsStarts()
 					, InOutBindings::eMaterialsStarts ) );
-				writes.push_back( makeDescriptorWrite( technique.getPixelXY()
+				writes.push_back( makeStorageBufferDescriptorWrite( technique.getPixelXY()
 					, InOutBindings::ePixelsXY ) );
-				writes.push_back( makeImageViewDescriptorWrite( graph.createImageView( targetImage.getSampledViewId() )
+				writes.push_back( makeStorageImageDescriptorWrite( graph.createImageView( targetImage.getSampledViewId() )
 					, InOutBindings::eOutResult ) );
-				writes.push_back( makeImageViewDescriptorWrite( technique.getScattering().getTargetView()
+				writes.push_back( makeStorageImageDescriptorWrite( technique.getScattering().getTargetView()
 					, InOutBindings::eOutScattering ) );
 			}
 
@@ -1712,22 +1691,18 @@ namespace c3d
 			++index;
 
 			if ( ssao )
-			{
 				bindTexture( ssao->getSampledView()
 					, *ssao->sampler
 					, writes
 					, index );
-			}
 
 			if ( technique.hasShadowBuffer() )
-			{
 				RenderNodesPass::addShadowDescriptor( *engine.getRenderSystem()
 					, graph
 					, writes
 					, technique.getShadowMaps()
 					, technique.getShadowBuffer()
 					, index );
-			}
 
 			bindTexture( scene.getEnvironmentMap().getColourId().getSampledView()
 				, *scene.getEnvironmentMap().getColourId().sampler
@@ -1735,12 +1710,10 @@ namespace c3d
 				, index );
 
 			if ( auto background = scene.getBackground() )
-			{
 				RenderNodesPass::addBackgroundDescriptor( *background
 					, writes
 					, &targetImage
 					, index );
-			}
 
 			RenderNodesPass::addGIDescriptor( scene.getFlags()
 				, *indirectLighting
@@ -1749,14 +1722,12 @@ namespace c3d
 
 			if ( clustersCameraUbo
 				&& technique.getRenderTarget().getFrustumClusters() )
-			{
 				RenderNodesPass::addClusteredLightingDescriptor( *technique.getRenderTarget().getFrustumClusters()
 					, writes
 					, index );
-			}
 
 			auto result = pool.createDescriptorSet( toUtf8( name ) + "InOut"
-				, Sets::eInOuts );
+				, uint32_t( Sets::eInOuts ) );
 			result->setBindings( c3d::move( writes ) );
 			result->update();
 			return result;
@@ -1769,7 +1740,7 @@ namespace c3d
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInPosition
+			bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInPosition
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages ) );
 			return device->createDescriptorSetLayout( toUtf8( name ) + "Vtx"
@@ -1787,95 +1758,69 @@ namespace c3d
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
 
 			if ( isMeshShading )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInMeshlets
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInMeshlets
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableIndices() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInIndices
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInIndices
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enablePosition() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInPosition
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInPosition
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableNormal() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInNormal
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInNormal
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableTangentSpace() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTangent
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInTangent
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableBitangent() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInBitangent
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInBitangent
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableTexcoord0() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord0
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInTexcoord0
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableTexcoord1() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord1
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInTexcoord1
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableTexcoord2() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord2
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInTexcoord2
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableTexcoord3() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord3
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInTexcoord3
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableColours() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInColour
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInColour
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enablePassMasks() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInPassMasks
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInPassMasks
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			if ( flags.enableVelocity() )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInVelocity
+				bindings.emplace_back( makeDescriptorSetLayoutBindingT( VtxBindings::eInVelocity
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-			}
 
 			return device->createDescriptorSetLayout( toUtf8( name ) + "Vtx"
 				, c3d::move( bindings ) );
@@ -1888,9 +1833,9 @@ namespace c3d
 			, VkDeviceSize range )
 		{
 			ashes::WriteDescriptorSetArray writes;
-			writes.emplace_back( makeDescriptorWrite( positionsBuffer.getBuffer(), VtxBindings::eInPosition, offset, range ) );
+			writes.emplace_back( makeStorageBufferDescriptorWrite( positionsBuffer.getBuffer(), VtxBindings::eInPosition, offset, range ) );
 			auto result = pool.createDescriptorSet( toUtf8( name ) + "Vtx"
-				, Sets::eVtx );
+				, uint32_t( Sets::eVtx ) );
 			result->setBindings( c3d::move( writes ) );
 			result->update();
 			return result;
@@ -1908,83 +1853,83 @@ namespace c3d
 			if ( isMeshShading )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableIndices() )
 			{
 				CU_Require( indexBuffer );
-				writes.emplace_back( makeDescriptorWrite( indexBuffer->getBuffer(), VtxBindings::eInIndices, 0u, indexBuffer->getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( indexBuffer->getBuffer(), VtxBindings::eInIndices, 0u, indexBuffer->getSize() ) );
 			}
 
 			if ( flags.enablePosition() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPosition, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPosition, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableNormal() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInNormal, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInNormal, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTangentSpace() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTangent, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableBitangent() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord0() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord1() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord2() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord3() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableColours() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInColour, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInColour, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enablePassMasks() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableVelocity() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
 			}
 
 			auto result = pool.createDescriptorSet( toUtf8( name ) + "Vtx"
-				, Sets::eVtx );
+				, uint32_t( Sets::eVtx ) );
 			result->setBindings( c3d::move( writes ) );
 			result->update();
 			return result;
@@ -2000,20 +1945,16 @@ namespace c3d
 			auto srcLayout = ( ( first && deferredLighting == DeferredLightingFilter::eDeferLighting )
 				? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
-			auto srcStage = VkPipelineStageFlags( first
-				? VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				: VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
+			auto srcStage = VkPipelineStageFlags( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
 			auto dstStage = VkPipelineStageFlags( first
 				? VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				: VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
-			auto srcAccess = VkAccessFlags( first
-				? VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				: VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT );
+			auto srcAccess = VkAccessFlags( VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT );
 			auto dstAccess = VkAccessFlags( first
 				? VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
 				: VK_ACCESS_SHADER_READ_BIT );
 			ashes::VkAttachmentDescriptionArray attaches;
-			attaches.emplace_back( VkAttachmentDescription{ 0u
+			attaches.emplace_back() = VkAttachmentDescription{ 0u
 				, convert( getFormat( targetImage ) )
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_ATTACHMENT_LOAD_OP_LOAD
@@ -2021,11 +1962,11 @@ namespace c3d
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
 				, srcLayout
-				, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+				, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 
 			if ( scattering )
 			{
-				attaches.emplace_back( VkAttachmentDescription{ 0u
+				attaches.emplace_back() = VkAttachmentDescription{ 0u
 					, convert( scattering->getFormat() )
 					, VK_SAMPLE_COUNT_1_BIT
 					, ( first ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD )
@@ -2033,7 +1974,7 @@ namespace c3d
 					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 					, VK_ATTACHMENT_STORE_OP_DONT_CARE
 					, ( first ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL )
-					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 			}
 
 			ashes::SubpassDescription subpassesDesc{ 0u
@@ -2143,7 +2084,7 @@ namespace c3d
 		};
 	}
 
-	VisibilityResolvePass::VisibilityResolvePass( RenderTechnique * parent
+	VisibilityResolvePass::VisibilityResolvePass( RenderTechnique & parent
 		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -2155,7 +2096,7 @@ namespace c3d
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: Named{ category + cuT( "/" ) + name }
-		, RenderTechniquePass{ parent, *parent->getRenderTarget().getScene(), techniquePassDesc.m_outputScattering }
+		, RenderTechniquePass{ &parent, *parent.getRenderTarget().getScene(), techniquePassDesc.m_outputScattering }
 		, crg::RunnablePass{ pass
 			, context
 			, graph
@@ -2178,10 +2119,10 @@ namespace c3d
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( NodesPass const & ){ m_commandsChanged = true; } ) )
 		, m_renderPass{ ( useCompute()
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage.getTargetViewId(), m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage.getTargetViewId(), m_outputScattering ? &parent.getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
 		, m_framebuffer{ ( useCompute()
 			? nullptr
-			: visres::createFrameBuffer( *m_renderPass, getName(), graph, m_targetImage.getTargetViewId(), m_outputScattering ? &parent->getScattering() : nullptr ) ) }
+			: visres::createFrameBuffer( *m_renderPass, getName(), graph, m_targetImage.getTargetViewId(), m_outputScattering ? &parent.getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 	{
 	}
@@ -2319,8 +2260,8 @@ namespace c3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData
-		, uint32_t vertexStride )const
+		, SubmeshRenderData const * submeshData
+		, uint32_t vertexStride )const noexcept
 	{
 		auto result = m_nodesPass.createPipelineFlags( passComponents
 			, submeshComponents
@@ -2704,7 +2645,7 @@ namespace c3d
 			const CameraUbo * clustersCameraUbo = getClustersConfig()->enabled
 				? &m_parent->getRenderTarget().getFrustumClusters()->getCameraUbo()
 				: nullptr;
-			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph
+			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, getGraph()
 				, m_cameraUbo, clustersCameraUbo, m_parent->getRenderUbo(), m_sceneUbo, *m_parent, getScene()
 				, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
 

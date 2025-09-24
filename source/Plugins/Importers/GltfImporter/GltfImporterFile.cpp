@@ -78,12 +78,8 @@ namespace c3d_gltf
 			}
 
 			auto result = parser.loadGltf( data, path.parent_path(), gltfOptions );
-
 			if ( result.error() != fastgltf::Error::None )
-			{
 				c3d::log::error << "Failed to load glTF: " << c3d::makeString( fastgltf::getErrorMessage( result.error() ) ) << std::endl;
-			}
-
 			return result;
 		}
 
@@ -101,11 +97,8 @@ namespace c3d_gltf
 				{
 					fastgltf::Node const & node = allNodes[nodeIndex];
 					auto [curInstanceCount, carryOn, isSkel] = func( node, nodeIndex, parentNodeIndex, instanceCount, skeletonNode );
-
 					if ( carryOn )
-					{
 						parseNodesRec( node.children, nodeIndex, allNodes, func, parsed, curInstanceCount, isSkel );
-					}
 				}
 			}
 		}
@@ -132,18 +125,15 @@ namespace c3d_gltf
 			auto sit = impNode.findInstancingAttribute( "SCALE" );
 
 			if ( tit != impNode.instancingAttributes.end() )
-			{
 				iterateAccessor< c3d::Point3f >( impAsset
 					, impAsset.accessors[tit->accessorIndex]
 					, [&translations]( c3d::Point3f value )
 					{
-						translations.push_back( c3d::move( value ) );
+						translations.emplace_back( c3d::move( value ) );
 					}
 					, adapter );
-			}
 
 			if ( rit != impNode.instancingAttributes.end() )
-			{
 				iterateAccessor< c3d::Point4f >( impAsset
 					, impAsset.accessors[rit->accessorIndex]
 					, [&rotations]( c3d::Point4f const & value )
@@ -151,47 +141,32 @@ namespace c3d_gltf
 						rotations.emplace_back( value );
 					}
 					, adapter );
-			}
 
 			if ( sit != impNode.instancingAttributes.end() )
-			{
 				iterateAccessor< c3d::Point3f >( impAsset
 					, impAsset.accessors[sit->accessorIndex]
 					, [&scalings]( c3d::Point3f value )
 					{
-						scalings.push_back( c3d::move( value ) );
+						scalings.emplace_back( c3d::move( value ) );
 					}
 					, adapter );
-			}
 
 			size_t instanceCount = std::max( translations.size(), std::max( rotations.size(), scalings.size() ) );
 
 			if ( instanceCount )
 			{
 				if ( translations.empty() )
-				{
 					translations.resize( instanceCount, c3d::Point3f{} );
-				}
-
 				if ( rotations.empty() )
-				{
 					rotations.resize( instanceCount, c3d::Quaternion::identity() );
-				}
-
 				if ( scalings.empty() )
-				{
 					scalings.resize( instanceCount, c3d::Point3f{ 1.0f, 1.0f, 1.0f } );
-				}
 			}
 
 			c3d::Vector< c3d::NodeTransform > result;
 			result.reserve( instanceCount );
-
 			for ( size_t i = 0u; i < instanceCount; ++i )
-			{
-				result.emplace_back( c3d::NodeTransform{ translations[i], scalings[i], rotations[i] } );
-			}
-
+				result.emplace_back( translations[i], scalings[i], rotations[i] );
 			return result;
 		}
 
@@ -257,22 +232,15 @@ namespace c3d_gltf
 		{
 			if ( auto it = names.namesByIndex.find( index );
 				it != names.namesByIndex.end() )
-			{
 				return it->second;
-			}
 
 			auto result = c3d::makeString( elements[index].name );
-
 			if ( result.empty() )
-			{
 				result = baseName;
-			}
 
 			if ( auto it = names.names.find( result );
 				it != names.names.end() )
-			{
 				result += cuT( "-" ) + c3d::string::toString( index );
-			}
 
 			names.namesByIndex.emplace( index, result );
 			names.names.emplace( result );
@@ -337,8 +305,8 @@ namespace c3d_gltf
 				{
 					if ( isAnimationTarget( asset, channel, nodeData ) )
 					{
-						auto & channelSamplers = nodeData.anims.emplace( file.getAnimationName( animIndex ), AnimationChannelSamplers{} ).first->second;
-						auto & nodeSamplers = channelSamplers.emplace( channel.path, NodeAnimationChannelSampler{} ).first->second;
+						auto & channelSamplers = nodeData.anims.try_emplace( file.getAnimationName( animIndex ) ).first->second;
+						auto & nodeSamplers = channelSamplers.try_emplace( channel.path ).first->second;
 						nodeSamplers.emplace_back( channel, animation.samplers[channel.samplerIndex] );
 					}
 				}
@@ -361,8 +329,8 @@ namespace c3d_gltf
 					{
 						for ( auto & primitiveData : submeshData.primitives )
 						{
-							auto & channelSamplers = primitiveData.anims.emplace( file.getAnimationName( animIndex ), AnimationChannelSamplers{} ).first->second;
-							auto & nodeSamplers = channelSamplers.emplace( channel.path, NodeAnimationChannelSampler{} ).first->second;
+							auto & channelSamplers = primitiveData.anims.try_emplace( file.getAnimationName( animIndex ) ).first->second;
+							auto & nodeSamplers = channelSamplers.try_emplace( channel.path ).first->second;
 							nodeSamplers.emplace_back( channel, animation.samplers[channel.samplerIndex] );
 						}
 					}
@@ -462,10 +430,7 @@ namespace c3d_gltf
 			, GltfNodeData const & nodeData )
 		{
 			if ( nodeData.isCamera || nodeData.node->lightIndex || !nodeData.meshes.empty() )
-			{
 				return true;
-			}
-
 			return std::any_of( nodeData.node->children.begin()
 				, nodeData.node->children.end()
 				, [&sceneData]( size_t lookup )
@@ -492,7 +457,7 @@ namespace c3d_gltf
 		if ( transform.index() == 0u )
 		{
 			fastgltf::TRS const & trs = std::get< 0 >( transform );
-			return { convert( trs.translation )
+			return c3d::NodeTransform{ convert( trs.translation )
 				, convert( trs.scale )
 				, convert( trs.rotation ) };
 		}
@@ -501,7 +466,7 @@ namespace c3d_gltf
 		fastgltf::math::fvec3 scale;
 		fastgltf::math::fquat rotation;
 		fastgltf::math::decomposeTransformMatrix( std::get< 1 >( transform ), scale, rotation, translation );
-		return { convert( translation )
+		return c3d::NodeTransform{ convert( translation )
 			, convert( scale )
 			, convert( rotation ) };
 	}
@@ -565,32 +530,26 @@ namespace c3d_gltf
 			switch ( mc.mode )
 			{
 			case MeshoptCompressionMode::Attributes:
-				{
-					rc = meshopt_decodeVertexBuffer( result.data()
-						, mc.count
-						, mc.byteStride
-						, reinterpret_cast< const unsigned char * >( data.data() )
-						, mc.byteLength );
-					break;
-				}
+				rc = meshopt_decodeVertexBuffer( result.data()
+					, mc.count
+					, mc.byteStride
+					, reinterpret_cast< const unsigned char * >( data.data() )
+					, mc.byteLength );
+				break;
 			case MeshoptCompressionMode::Triangles:
-				{
-					rc = meshopt_decodeIndexBuffer( result.data()
-						, mc.count
-						, mc.byteStride
-						, reinterpret_cast< const unsigned char * >( data.data() )
-						, mc.byteLength );
-					break;
-				}
+				rc = meshopt_decodeIndexBuffer( result.data()
+					, mc.count
+					, mc.byteStride
+					, reinterpret_cast< const unsigned char * >( data.data() )
+					, mc.byteLength );
+				break;
 			case MeshoptCompressionMode::Indices:
-				{
-					rc = meshopt_decodeIndexSequence( result.data()
-						, mc.count
-						, mc.byteStride
-						, reinterpret_cast< const unsigned char * >( data.data() )
-						, mc.byteLength );
-					break;
-				}
+				rc = meshopt_decodeIndexSequence( result.data()
+					, mc.count
+					, mc.byteStride
+					, reinterpret_cast< const unsigned char * >( data.data() )
+					, mc.byteLength );
+				break;
 			}
 
 			if ( rc != 0 )
@@ -601,20 +560,14 @@ namespace c3d_gltf
 			case MeshoptCompressionFilter::None:
 				break;
 			case MeshoptCompressionFilter::Octahedral:
-				{
-					meshopt_decodeFilterOct( result.data(), mc.count, mc.byteStride );
-					break;
-				}
+				meshopt_decodeFilterOct( result.data(), mc.count, mc.byteStride );
+				break;
 			case MeshoptCompressionFilter::Quaternion:
-				{
-					meshopt_decodeFilterQuat( result.data(), mc.count, mc.byteStride );
-					break;
-				}
+				meshopt_decodeFilterQuat( result.data(), mc.count, mc.byteStride );
+				break;
 			case MeshoptCompressionFilter::Exponential:
-				{
-					meshopt_decodeFilterExp( result.data(), mc.count, mc.byteStride );
-					break;
-				}
+				meshopt_decodeFilterExp( result.data(), mc.count, mc.byteStride );
+				break;
 			}
 
 			decompressedBuffers.emplace_back( std::move( result ) );
@@ -768,11 +721,8 @@ namespace c3d_gltf
 	c3d::String GltfImporterFile::getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const
 	{
 		auto nodeName = file::getElementName( m_asset->nodes, nodeIndex, getName(), m_nodeNames );
-
 		if ( instance )
-		{
 			nodeName += cuT( "_" ) + c3d::string::toString( instance );
-		}
 
 		auto meshName = file::getElementName( m_asset->meshes, meshIndex, getName(), m_meshNames );
 		c3d::String result;
@@ -934,90 +884,54 @@ namespace c3d_gltf
 	c3d::StringArray GltfImporterFile::listMaterials()
 	{
 		c3d::StringArray result;
-
 		if ( isValid() )
-		{
 			for ( size_t i = 0u; i < m_asset->materials.size(); ++i )
-			{
 				result.emplace_back( getMaterialName( i ) );
-			}
-		}
-
 		return result;
 	}
 
 	c3d::Vector< c3d::ImporterFile::MeshData > GltfImporterFile::listMeshes()
 	{
 		c3d::Vector< MeshData > result;
-
 		for ( auto const & [name, data] : m_sceneData.meshes )
-		{
 			result.emplace_back( name
-				, ( data.skin
-					? getSkinName( data.skinIndex )
-					: c3d::String{} ) );
-		}
-
+				, ( data.skin ? getSkinName( data.skinIndex ) : c3d::String{} ) );
 		return result;
 	}
 
 	c3d::StringArray GltfImporterFile::listSkeletons()
 	{
 		c3d::StringArray result;
-
 		if ( isValid() )
-		{
 			for ( size_t i = 0u; i < m_asset->skins.size(); ++i )
-			{
 				result.emplace_back( getSkinName( i ) );
-			}
-		}
-
 		return result;
 	}
 
 	c3d::Vector< c3d::ImporterFile::NodeData > GltfImporterFile::listSceneNodes()
 	{
 		c3d::Vector< NodeData > result;
-
 		if ( isValid() )
-		{
 			for ( auto const * nodeData : m_sceneData.sortedNodes )
-			{
 				if ( file::hasNonSkinnedData( m_sceneData, *nodeData ) )
-				{
 					for ( auto const & [instance, _] : nodeData->instances )
-					{
 						result.emplace_back( instance );
-					}
-				}
-			}
-		}
-
 		return result;
 	}
 
 	c3d::Vector< c3d::ImporterFile::LightData > GltfImporterFile::listLights()
 	{
 		c3d::Vector< LightData > result;
-
 		for ( auto & light : m_sceneData.lights )
-		{
 			result.emplace_back( light.name, light.type );
-		}
-
 		return result;
 	}
 
 	c3d::Vector< c3d::ImporterFile::LightGroupData > GltfImporterFile::listLightGroups()
 	{
 		c3d::Vector< LightGroupData > result;
-
 		for ( auto & [_, light] : m_sceneData.lightGroups )
-		{
 			result.emplace_back( light.name, light.type );
-		}
-
 		return result;
 	}
 
@@ -1080,19 +994,11 @@ namespace c3d_gltf
 	c3d::StringArray GltfImporterFile::listMeshAnimations( c3d::Mesh const & mesh )
 	{
 		c3d::Set< c3d::String > result;
-
 		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
 			it != m_sceneData.meshes.end() )
-		{
 			for ( auto const & submesh : it->second.submeshes )
-			{
 				for ( auto const & [name, _] : submesh.primitives.front().anims )
-				{
 					result.insert( name );
-				}
-			}
-		}
-
 		return c3d::StringArray{ result.begin()
 			, result.end() };
 	}
@@ -1145,9 +1051,7 @@ namespace c3d_gltf
 			it != m_sceneData.nodes.end() )
 		{
 			for ( auto const & [name, _] : it->anims )
-			{
 				result.push_back( name );
-			}
 		}
 
 		return result;
@@ -1163,15 +1067,9 @@ namespace c3d_gltf
 	uint32_t GltfImporterFile::countAllMeshAnimations()const
 	{
 		uint32_t result{};
-
 		for ( auto & [_, mesh] : m_sceneData.meshes )
-		{
 			for ( auto & submesh : mesh.submeshes )
-			{
 				result += uint32_t( submesh.primitives.front().anims.size() );
-			}
-		}
-
 		return result;
 	}
 
@@ -1207,12 +1105,8 @@ namespace c3d_gltf
 	uint32_t GltfImporterFile::countAllSceneNodeAnimations()const
 	{
 		uint32_t result{};
-
 		for ( auto & node : m_sceneData.nodes )
-		{
 			result += uint32_t( node.anims.size() );
-		}
-
 		return result;
 	}
 

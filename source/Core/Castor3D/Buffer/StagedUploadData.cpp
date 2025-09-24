@@ -350,7 +350,7 @@ namespace c3d
 	}
 
 	StagedUploadData::GpuBufferOffset StagedUploadData::doGetBuffer( BufferArray & pool
-		, VkDeviceSize size )
+		, VkDeviceSize size )const
 	{
 		GpuBufferOffset result;
 		auto it = pool.begin();

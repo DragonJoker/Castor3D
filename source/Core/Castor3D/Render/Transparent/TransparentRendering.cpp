@@ -26,7 +26,6 @@ namespace c3d
 {
 	TransparentRendering::TransparentRendering( RenderTechnique & parent
 		, RenderDevice const & device
-		, OpaqueRendering const & previous
 		, ProgressBar * progress
 		, bool weightedBlended )
 		: OwnedBy< RenderTechnique >{ parent }
@@ -240,8 +239,8 @@ namespace c3d
 		stepProgressBarLocal( progress, cuT( "Creating transparent pass" ) );
 		auto & targetResult = getOwner()->getTargetResult();
 		auto & targetDepth = getOwner()->getTargetDepth();
-		auto & targetDepthObj = getOwner()->getDepthObj();
-		auto & targetNormal = getOwner()->getNormal();
+		auto const & targetDepthObj = getOwner()->getDepthObj();
+		auto const & targetNormal = getOwner()->getNormal();
 		auto & pass = m_graph.createPass( "NodesPass"
 			, [this, progress, &targetResult, &targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -251,7 +250,7 @@ namespace c3d
 				String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = false;
-				auto accumIt = framePass.targets.begin();
+				auto accumIt = framePass.getTargets().begin();
 				auto revealIt = std::next( accumIt );
 				auto res = makeRawUnique< TransparentPass >( getOwner()
 					, framePass

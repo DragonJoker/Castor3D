@@ -75,19 +75,17 @@ namespace c3d::exporter
 		}
 
 		template< typename ObjType >
-		using FilterFuncT = bool ( * )( ObjType const & obj );
-		template< typename ObjType >
-		inline FilterFuncT< ObjType > const defaultFilterT = []( ObjType const & )
+		inline auto const defaultFilterT = []( ObjType const & )
 			{
 				return true;
 			};
 
-		template< typename ObjType, typename ViewType, typename ... Params >
+		template< typename ObjType, typename ViewType, typename FilterFuncT, typename ... Params >
 		bool writeView( bool ignoreFailures
 			, ViewType const & view
 			, String const & elemsName
 			, StringStream & file
-			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
+			, FilterFuncT filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
 			bool result = true;
@@ -113,13 +111,13 @@ namespace c3d::exporter
 			return result;
 		}
 
-		template< typename ObjType, typename ViewType, typename ... Params >
+		template< typename ObjType, typename ViewType, typename FilterFuncT, typename ... Params >
 		bool writeView( bool ignoreFailures
 			, ViewType const & view
 			, String const & elemsName
 			, StringStream & sceneFile
 			, StringStream & globalFile
-			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
+			, FilterFuncT filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
 			bool result = true;
@@ -133,11 +131,8 @@ namespace c3d::exporter
 				StringStream gstream;
 				log::info << cuT( "SceneExporter::write - " ) << elemsName << cuT( "\n" );
 				gstream << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
-
 				if ( !view.isEmpty() )
-				{
 					sstream << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
-				}
 
 				TextWriter< ObjType > writer{ cuEmptyString
 					, c3d::forward< Params >( params )... };
@@ -166,25 +161,20 @@ namespace c3d::exporter
 				}
 
 				if ( gcount )
-				{
 					globalFile << gstream.str();
-				}
-
 				if ( scount )
-				{
 					sceneFile << sstream.str();
-				}
 			}
 
 			return result;
 		}
 
-		template< typename ObjType, typename CacheType, typename ... Params >
+		template< typename ObjType, typename CacheType, typename FilterFuncT, typename ... Params >
 		bool writeCache( bool ignoreFailures
 			, CacheType const & cache
 			, String const & elemsName
 			, StringStream & file
-			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
+			, FilterFuncT filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
 			bool result = true;
@@ -211,13 +201,13 @@ namespace c3d::exporter
 			return result;
 		}
 
-		template< typename ObjType, typename CacheType >
+		template< typename ObjType, typename CacheType, typename FilterFuncT >
 		bool writeCache( bool ignoreFailures
 			, CacheType const & cache
 			, String const & elemsName
 			, String const & subfolder
 			, StringStream & file
-			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType > )
+			, FilterFuncT filter = defaultFilterT< ObjType > )
 		{
 			bool result = true;
 
@@ -242,14 +232,14 @@ namespace c3d::exporter
 			return result;
 		}
 
-		template< typename CacheType >
-		bool writeCache( bool ignoreFailures
+		template< typename CacheType, typename FilterFuncT >
+		bool writeMeshCache( bool ignoreFailures
 			, CacheType const & cache
 			, String const & elemsName
 			, String const & subfolder
 			, bool forceText
 			, StringStream & file
-			, FilterFuncT< Mesh > filter = defaultFilterT< Mesh > )
+			, FilterFuncT filter = defaultFilterT< Mesh > )
 		{
 			bool result = true;
 
@@ -274,14 +264,14 @@ namespace c3d::exporter
 			return result;
 		}
 
-		template< typename CacheType >
-		bool writeCache( bool ignoreFailures
+		template< typename CacheType, typename FilterFuncT >
+		bool writeSkeletonCache( bool ignoreFailures
 			, CacheType const & cache
 			, String const & elemsName
 			, String const & subfolder
 			, bool forceText
 			, StringStream & file
-			, FilterFuncT< Skeleton > filter = defaultFilterT< Skeleton > )
+			, FilterFuncT filter = defaultFilterT< Skeleton > )
 		{
 			bool result = true;
 
@@ -312,15 +302,13 @@ namespace c3d::exporter
 		namespace
 		{
 			bool writeSkeletons( bool ignoreFailures
-				, Path const & /*folder*/
-				, Path const & /*filePath*/
 				, Scene const & scene
 				, TextWriter< Scene >::Options const & options
 				, StringStream & stream )
 			{
 				bool result = false;
 				{
-					result = writeCache( ignoreFailures
+					result = writeSkeletonCache( ignoreFailures
 						, scene.getSkeletonCache()
 						, cuT( "Skeletons" )
 						, options.subfolder
@@ -335,15 +323,13 @@ namespace c3d::exporter
 			}
 
 			bool writeMeshes( bool ignoreFailures
-				, Path const & /*folder*/
-				, Path const & /*filePath*/
 				, Scene const & scene
 				, TextWriter< Scene >::Options const & options
 				, StringStream & stream )
 			{
 				bool result = false;
 				{
-					result = writeCache( ignoreFailures
+					result = writeMeshCache( ignoreFailures
 						, scene.getMeshCache()
 						, cuT( "Meshes" )
 						, options.subfolder
@@ -358,10 +344,7 @@ namespace c3d::exporter
 			}
 
 			bool writeObjects( bool ignoreFailures
-				, Path const & /*folder*/
-				, Path const & /*filePath*/
 				, Scene const & scene
-				, TextWriter< Scene >::Options const & /*options*/
 				, StringStream & stream )
 			{
 				bool result = false;
@@ -562,12 +545,8 @@ namespace c3d::exporter
 					Point3f position;
 
 					if ( options.options.recenter )
-					{
 						if ( auto submesh = options.object.getSubmesh( 0u ) )
-						{
 							position = submesh->getBoundingBox().getCenter();
-						}
-					}
 
 					auto stream = makeStringStream();
 					stream << position[0] << cuT( " " ) << position[1] << cuT( " " ) << position[2];
@@ -577,14 +556,9 @@ namespace c3d::exporter
 					options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
 
 					if ( auto skeleton = options.object.getSkeleton() )
-					{
 						options.meshes << ( cuT( "\tskeleton \"" ) + skeleton->getName() + cuT( "\"\n" ) );
-					}
-
 					if ( auto material = options.object.getSubmesh( 0u )->getDefaultMaterial() )
-					{
 						options.meshes << ( cuT( "\tdefault_material \"" ) + material->getName() + cuT( "\"\n" ) );
-					}
 
 					options.meshes << cuT( "}\n" );
 					bool hasGeometries = false;
@@ -611,9 +585,7 @@ namespace c3d::exporter
 								options.objects << ( cuT( "\tmesh \"Mesh_" ) + options.name + cuT( "\"\n" ) );
 
 								if ( auto subMaterial = geometry->getMaterial( *split.submesh ) )
-								{
 									options.objects << ( cuT( "\tmaterial \"" ) + subMaterial->getName() + cuT( "\"\n" ) );
-								}
 
 								options.objects << cuT( "}\n" );
 							}
@@ -643,9 +615,7 @@ namespace c3d::exporter
 						options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
 
 						if ( auto skeleton = options.object.getSkeleton() )
-						{
 							options.meshes << ( cuT( "\tskeleton \"" ) + skeleton->getName() + cuT( "\"\n" ) );
-						}
 
 						options.meshes << cuT( "}\n" );
 
@@ -665,10 +635,7 @@ namespace c3d::exporter
 						for ( auto & submesh : options.object )
 						{
 							if ( auto material = submesh->getDefaultMaterial() )
-							{
 								options.objects << ( cuT( "\t\tmaterial " ) + string::toString( index ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) );
-							}
-
 							++index;
 						}
 
@@ -685,7 +652,7 @@ namespace c3d::exporter
 		struct ObjectPostWriterT< SplitT, Skeleton >
 		{
 			bool operator()( SkeletonWriterOptions const & options
-				, SplitInfo const & /*split*/ )const
+				, [[maybe_unused]] SplitInfo const & split )const
 			{
 				bool result = true;
 
@@ -708,14 +675,12 @@ namespace c3d::exporter
 
 					for ( auto const & [name, animation] : options.object.getAnimations() )
 					{
-						if ( carryOn( result, options ) )
+						if ( carryOn( result, options )
+							&& !options.forceText )
 						{
-							if ( !options.forceText )
-							{
-								BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".cska" ) )
-									, File::OpenMode::eWrite };
-								result = BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation ), animFile );
-							}
+							BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".cska" ) )
+								, File::OpenMode::eWrite };
+							result = BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation ), animFile );
 						}
 					}
 				}
@@ -728,7 +693,7 @@ namespace c3d::exporter
 		struct ObjectPostWriterT< SplitT, SceneNode >
 		{
 			bool operator()( SceneNodeWriterOptions const & options
-				, SplitInfo const & /*split*/ )const
+				, [[maybe_unused]] SplitInfo const & split )const
 			{
 				bool result = true;
 
@@ -736,14 +701,12 @@ namespace c3d::exporter
 				{
 					for ( auto const & [name, animation] : options.object.getAnimations() )
 					{
-						if ( carryOn( result, options ) )
+						if ( carryOn( result, options )
+							&& !options.forceText )
 						{
-							if ( !options.forceText )
-							{
-								BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".csna" ) )
-									, File::OpenMode::eWrite };
-								result = BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation ), animFile );
-							}
+							BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".csna" ) )
+								, File::OpenMode::eWrite };
+							result = BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation ), animFile );
 						}
 					}
 				}
@@ -772,81 +735,53 @@ namespace c3d::exporter
 							stream << options.name << "-S" << index;
 
 							if ( srcSubmesh->getDefaultMaterial() )
-							{
 								stream << "_" << srcSubmesh->getDefaultMaterial()->getName();
-							}
 
 							auto name = stream.str();
 							auto newPath = options.path / File::normaliseFileName( name + cuT( ".cmsh" ) );
 							auto mesh = makeRawUnique< Mesh >( name, *options.object.getScene() );
 
 							if ( auto skeleton = options.object.getSkeleton() )
-							{
 								mesh->setSkeleton( skeleton );
-							}
 
 							auto dstSubmesh = mesh->createSubmesh();
 							dstSubmesh->disableSceneUpdate();
 
 							if ( auto positions = srcSubmesh->getComponent< PositionsComponent >() )
-							{
 								dstSubmesh->addComponent( positions->clone( *dstSubmesh ) );
-							}
 
 							if ( auto normals = srcSubmesh->getComponent< NormalsComponent >() )
-							{
 								dstSubmesh->addComponent( normals->clone( *dstSubmesh ) );
-							}
 
 							if ( auto tangents = srcSubmesh->getComponent< TangentsComponent >() )
-							{
 								dstSubmesh->addComponent( tangents->clone( *dstSubmesh ) );
-							}
 
 							if ( auto bitangents = srcSubmesh->getComponent< BitangentsComponent >() )
-							{
 								dstSubmesh->addComponent( bitangents->clone( *dstSubmesh ) );
-							}
 
 							if ( auto texcoords = srcSubmesh->getComponent< Texcoords0Component >() )
-							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
-							}
 
 							if ( auto texcoords = srcSubmesh->getComponent< Texcoords1Component >() )
-							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
-							}
 
 							if ( auto texcoords = srcSubmesh->getComponent< Texcoords2Component >() )
-							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
-							}
 
 							if ( auto texcoords = srcSubmesh->getComponent< Texcoords3Component >() )
-							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
-							}
 
 							if ( auto colours = srcSubmesh->getComponent< ColoursComponent >() )
-							{
 								dstSubmesh->addComponent( colours->clone( *dstSubmesh ) );
-							}
 
 							if ( auto indexMapping = srcSubmesh->getIndexMapping() )
-							{
 								dstSubmesh->addComponent( indexMapping->clone( *dstSubmesh ) );
-							}
 
 							if ( auto bones = srcSubmesh->getComponent< SkinComponent >() )
-							{
 								dstSubmesh->addComponent( bones->clone( *dstSubmesh ) );
-							}
 
 							if ( auto morph = srcSubmesh->getComponent< MorphComponent >() )
-							{
 								dstSubmesh->addComponent( morph->clone( *dstSubmesh ) );
-							}
 
 							dstSubmesh->setDefaultMaterial( srcSubmesh->getDefaultMaterial() );
 							dstSubmesh->computeContainers();
@@ -854,11 +789,8 @@ namespace c3d::exporter
 							if ( options.options.recenter )
 							{
 								Point3f position = dstSubmesh->getBoundingBox().getCenter();
-
 								for ( auto & point : dstSubmesh->getPositions() )
-								{
 									point -= position;
-								}
 							}
 
 							if ( !options.forceText )
@@ -894,22 +826,18 @@ namespace c3d::exporter
 
 					for ( auto const & [name, animation] : options.object.getAnimations() )
 					{
-						if ( carryOn( result, options ) )
+						if ( carryOn( result, options )
+							&& !options.forceText )
 						{
-							if ( !options.forceText )
-							{
-								BinaryFile animFile{ options.path / File::normaliseFileName( options.object.getName() + cuT( "-" ) + name + cuT( ".cmsa" ) )
-									, File::OpenMode::eWrite };
-								result = BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation ), animFile );
-							}
+							BinaryFile animFile{ options.path / File::normaliseFileName( options.object.getName() + cuT( "-" ) + name + cuT( ".cmsa" ) )
+								, File::OpenMode::eWrite };
+							result = BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation ), animFile );
 						}
 					}
 				}
 
 				if ( carryOn( result, options ) )
-				{
 					result = postWriteT< false >( options, split );
-				}
 
 				return result;
 			}
@@ -931,9 +859,7 @@ namespace c3d::exporter
 				}
 
 				if ( carryOn( result, options ) )
-				{
 					result = postWriteT< false >( options, split );
-				}
 
 				return result;
 			}
@@ -956,9 +882,7 @@ namespace c3d::exporter
 			{
 				auto name = textureData->sourceInfo.name();
 				if ( name.find( cuT( "C3D_Default" ) ) == String::npos )
-				{
 					sorted.try_emplace( name, textureData.get() );
-				}
 			}
 
 			TextWriter< TextureData > writer{ cuEmptyString
@@ -968,9 +892,7 @@ namespace c3d::exporter
 			bool result = true;
 
 			for ( auto const & [_, sourceData] : sorted )
-			{
 				result = carryOn( result, ignoreFailures ) && writer( *sourceData, sceneStream );
-			}
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
@@ -1003,28 +925,16 @@ namespace c3d::exporter
 					if ( scene.hasMaterial( materialName ) )
 					{
 						for ( auto const & pass : *material )
-						{
 							for ( auto & unit : pass->getTextureUnits() )
-							{
 								if ( unit->getSampler().isSerialisable() )
-								{
 									sceneSamplers.emplace( &unit->getSampler() );
-								}
-							}
-						}
 					}
 					else
 					{
 						for ( auto const & pass : *material )
-						{
 							for ( auto & unit : pass->getTextureUnits() )
-							{
 								if ( unit->getSampler().isSerialisable() )
-								{
 									globalSamplers.emplace( &unit->getSampler() );
-								}
-							}
-						}
 					}
 				}
 			}
@@ -1033,14 +943,9 @@ namespace c3d::exporter
 			bool result = true;
 
 			for ( auto & sampler : sceneSamplers )
-			{
 				result = carryOn( result, ignoreFailures ) && writer( *sampler, sceneStream );
-			}
-
 			for ( auto & sampler : globalSamplers )
-			{
 				result = carryOn( result, ignoreFailures ) && writer( *sampler, globalStream );
-			}
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
@@ -1159,19 +1064,12 @@ namespace c3d::exporter
 			for ( auto & [name, theme] : manager.getThemes() )
 			{
 				if ( name == cuT( "Debug" ) )
-				{
 					continue;
-				}
 
 				if ( carryOn( result, ignoreFailures ) )
-				{
 					result = sceneWriter( *theme, sceneStream );
-				}
-
 				if ( carryOn( result, ignoreFailures ) )
-				{
 					result = globalWriter( *theme, globalStream );
-				}
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
@@ -1212,11 +1110,8 @@ namespace c3d::exporter
 			if ( !manager.isEmpty() )
 			{
 				result = sceneWriter( manager, sceneStream );
-
 				if ( carryOn( result, ignoreFailures ) )
-				{
 					result = globalWriter( manager, globalStream );
-				}
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
@@ -1255,20 +1150,14 @@ namespace c3d::exporter
 			{
 				if ( control.getName() == cuT( "Debug/Main" )
 					|| control.getName() == cuT( "Debug/RenderPasses" ) )
-				{
 					return nullptr;
-				}
 
 				if ( !control.hasScene() )
-				{
 					return &globalStream;
-				}
 
 				if ( control.hasScene()
 					&& &control.getScene() == &scene )
-				{
 					return &sceneStream;
-				}
 
 				return nullptr;
 			};
@@ -1276,15 +1165,9 @@ namespace c3d::exporter
 			bool result = true;
 
 			for ( auto control : manager.getRootControls() )
-			{
 				if ( carryOn( result, ignoreFailures ) )
-				{
 					if ( auto stream = filter( *control ) )
-					{
 						result = writeControl( writer, *control, *stream );
-					}
-				}
-			}
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
@@ -1346,10 +1229,8 @@ namespace c3d::exporter
 			return result;
 		}
 
-		bool writeNode( Path const & folder
-			, Path const & filePath
-			, SceneNode & node
-			, TextWriter< Scene >::Options & options
+		bool writeNode( SceneNode const & node
+			, TextWriter< Scene >::Options const & options
 			, ExportOptions const & exportOptions
 			, StringStream & stream )
 		{
@@ -1361,27 +1242,24 @@ namespace c3d::exporter
 				&& writer( node, stream );
 
 			for ( auto const & [_, childNode] : node.getChildren() )
-			{
 				if ( childNode )
 					result = carryOn( result, exportOptions )
-						&& writeNode( folder, filePath, *childNode, options, exportOptions, stream );
-			}
+						&& writeNode( *childNode, options, exportOptions, stream );
 
-			result = postWriteT< false >( SceneNodeWriterOptions{ exportOptions
-					, node
-					, options.rootFolder / options.nodesFile.getPath()
-					, node.getName()
-					, options.subfolder
-					, node.getName()
-					, exportOptions.forceText }
-				, { nullptr, nullptr } );
+			result = carryOn( result, exportOptions )
+				&& postWriteT< false >( SceneNodeWriterOptions{ exportOptions
+						, node
+						, options.rootFolder / options.nodesFile.getPath()
+						, node.getName()
+						, options.subfolder
+						, node.getName()
+						, exportOptions.forceText }
+					, { nullptr, nullptr } );
 			return result;
 		}
 
-		bool writeNodes( Path const & folder
-			, Path const & filePath
-			, Scene const & scene
-			, TextWriter< Scene >::Options & options
+		bool writeNodes( Scene const & scene
+			, TextWriter< Scene >::Options const & options
 			, ExportOptions const & exportOptions
 			, StringStream & stream )
 		{
@@ -1390,9 +1268,8 @@ namespace c3d::exporter
 			bool result = true;
 			{
 				for ( auto const & [_, node] : scene.getObjectRootNode()->getChildren() )
-				{
-					result = writeNode( folder, filePath, *node, options, exportOptions, stream );
-				}
+					result = carryOn( result, exportOptions )
+						&& writeNode( *node, options, exportOptions, stream );
 			}
 			return result;
 		}
@@ -1407,9 +1284,7 @@ namespace c3d::exporter
 			folder = fileName.getPath();
 
 			if ( !File::directoryExists( folder ) )
-			{
 				File::directoryCreate( folder );
-			}
 
 			TextWriter< Scene >::Options options;
 			options.rootFolder = fileName.getPath();
@@ -1431,21 +1306,14 @@ namespace c3d::exporter
 			}
 
 			if ( !File::directoryExists( skeletonFolder ) )
-			{
 				File::directoryCreate( skeletonFolder );
-			}
-
 			if ( !File::directoryExists( meshFolder ) )
-			{
 				File::directoryCreate( meshFolder );
-			}
 
 			filePath = folder / ( fileName.getFileName() + cuT( ".cscn" ) );
 
 			if ( !File::directoryExists( folder / cuT( "Helpers" ) ) )
-			{
 				File::directoryCreate( folder / cuT( "Helpers" ) );
-			}
 
 			options.skeletonsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Skeletons.cscn" ) );
 			options.meshesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Meshes.cscn" ) );
@@ -1459,7 +1327,7 @@ namespace c3d::exporter
 		String getCameraPosition( Mesh const & mesh
 			, float & farPlane )
 		{
-			auto const &  aabb = mesh.getBoundingBox();
+			auto const & aabb = mesh.getBoundingBox();
 			auto height = aabb.getDimensions()->y;
 			auto z = -( height * 1.5f );
 			farPlane = std::abs( z ) + std::max( aabb.getMax()->z, std::max( aabb.getMax()->x, aabb.getMax()->y ) ) * 2.0f;
@@ -1477,17 +1345,17 @@ namespace c3d::exporter
 			stream << cuT( "\n" );
 			stream << cuT( "window \"MainWindow\"\n" );
 			stream << cuT( "{\n" );
-			stream << cuT( "	vsync false\n" );
-			stream << cuT( "	fullscreen false\n" );
+			stream << cuT( "\tvsync false\n" );
+			stream << cuT( "\tfullscreen false\n" );
 			stream << cuT( "\n" );
-			stream << cuT( "	render_target\n" );
-			stream << cuT( "	{\n" );
-			stream << cuT( "		size 1920 1080\n" );
-			stream << cuT( "		format argb32\n" );
-			stream << cuT( "		scene \"" ) << sceneName << cuT( "\"\n" );
-			stream << cuT( "		camera \"" ) << cameraName << cuT( "\"\n" );
-			stream << cuT( "		tone_mapping \"linear\"\n" );
-			stream << cuT( "	}\n" );
+			stream << cuT( "\trender_target\n" );
+			stream << cuT( "\t{\n" );
+			stream << cuT( "\t\tsize 1920 1080\n" );
+			stream << cuT( "\t\tformat argb32\n" );
+			stream << cuT( "\t\tscene \"" ) << sceneName << cuT( "\"\n" );
+			stream << cuT( "\t\tcamera \"" ) << cameraName << cuT( "\"\n" );
+			stream << cuT( "\t\ttone_mapping \"linear\"\n" );
+			stream << cuT( "\t}\n" );
 			stream << cuT( "}\n" );
 		}
 
@@ -1563,136 +1431,91 @@ namespace c3d::exporter
 					stream << "materials " << scene.getDefaultLightingModelName() << "\n";
 
 					if ( !options.globalSamplersFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.globalSamplersFile << cuT( "\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"" ) << options.globalSamplersFile << cuT( "\"\n" );
 					if ( !options.globalMaterialsFile.empty() )
-					{
 						stream << "include \"" << options.globalMaterialsFile << cuT( "\"\n" );
-					}
-
 					if ( !options.globalFontsFile.empty() )
-					{
 						stream << "include \"" << options.globalFontsFile << cuT( "\"\n" );
-					}
-
 					if ( !options.globalThemesFile.empty() )
-					{
 						stream << "include \"" << options.globalThemesFile << cuT( "\"\n" );
-					}
-
 					if ( !options.globalStylesFile.empty() )
-					{
 						stream << "include \"" << options.globalStylesFile << cuT( "\"\n" );
-					}
-
 					if ( !options.globalControlsFile.empty() )
-					{
 						stream << "include \"" << options.globalControlsFile << cuT( "\"\n" );
-					}
 
 					stream << cuT( "\n" );
 					stream << cuT( "scene \"" ) << name << cuT( "\"\n" );
 					stream << cuT( "{\n" );
-					stream << cuT( "	// Scene configuration\n" );
-					stream << cuT( "	ambient_light 1.0 1.0 1.0\n" );
-					stream << cuT( "	background_colour 0.50000 0.50000 0.50000\n" );
+					stream << cuT( "\t// Scene configuration\n" );
+					stream << cuT( "\tambient_light 1.0 1.0 1.0\n" );
+					stream << cuT( "\tbackground_colour 0.50000 0.50000 0.50000\n" );
 
 					if ( !options.sceneSamplersFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.sceneSamplersFile << cuT( "\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"" ) << options.sceneSamplersFile << cuT( "\"\n" );
 					if ( !options.sceneMaterialsFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.sceneMaterialsFile << cuT( "\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"" ) << options.sceneMaterialsFile << cuT( "\"\n" );
 					if ( !options.sceneFontsFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.sceneFontsFile << cuT( "\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"" ) << options.sceneFontsFile << cuT( "\"\n" );
 					if ( !options.sceneThemesFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.sceneThemesFile << cuT( "\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"" ) << options.sceneThemesFile << cuT( "\"\n" );
 					if ( !options.sceneStylesFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.sceneStylesFile << cuT( "\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"" ) << options.sceneStylesFile << cuT( "\"\n" );
 					if ( !options.sceneControlsFile.empty() )
-					{
-						stream << cuT( "	include \"" ) << options.sceneControlsFile << cuT( "\"\n" );
-					}
+						stream << cuT( "\tinclude \"" ) << options.sceneControlsFile << cuT( "\"\n" );
 
 					if ( !skl.empty() )
-					{
-						stream << cuT( "	include \"Helpers/" ) << name << cuT( "-Skeletons.cscn\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"Helpers/" ) << name << cuT( "-Skeletons.cscn\"\n" );
 					if ( !msh.empty() )
-					{
-						stream << cuT( "	include \"Helpers/" ) << name << cuT( "-Meshes.cscn\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"Helpers/" ) << name << cuT( "-Meshes.cscn\"\n" );
 					if ( !nod.empty() )
-					{
-						stream << cuT( "	include \"Helpers/" ) << name << cuT( "-Nodes.cscn\"\n" );
-					}
-
+						stream << cuT( "\tinclude \"Helpers/" ) << name << cuT( "-Nodes.cscn\"\n" );
 					if ( !nod.empty() )
-					{
-						stream << cuT( "	include \"Helpers/" ) << name << cuT( "-Objects.cscn\"\n" );
-					}
+						stream << cuT( "\tinclude \"Helpers/" ) << name << cuT( "-Objects.cscn\"\n" );
 
 					stream << cuT( "\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "	//Cameras nodes\n" );
+					stream << cuT( "\t//Cameras nodes\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "	scene_node \"MainCameraNode\"\n" );
-					stream << cuT( "	{\n" );
+					stream << cuT( "\tscene_node \"MainCameraNode\"\n" );
+					stream << cuT( "\t{\n" );
 					float farPlane = 0.0f;
-					stream << cuT( "		position " ) << getCameraPosition( *singleMesh, farPlane ) << cuT( "\n" );
-					stream << cuT( "	}\n" );
+					stream << cuT( "\t\tposition " ) << getCameraPosition( *singleMesh, farPlane ) << cuT( "\n" );
+					stream << cuT( "\t}\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "	//Cameras\n" );
+					stream << cuT( "\t//Cameras\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "	camera \"MainCamera\"\n" );
-					stream << cuT( "	{\n" );
-					stream << cuT( "		parent \"MainCameraNode\"\n" );
+					stream << cuT( "\tcamera \"MainCamera\"\n" );
+					stream << cuT( "\t{\n" );
+					stream << cuT( "\t\tparent \"MainCameraNode\"\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "		viewport\n" );
-					stream << cuT( "		{\n" );
-					stream << cuT( "			type perspective\n" );
-					stream << cuT( "			near 0.100000\n" );
-					stream << cuT( "			far " ) << farPlane << cuT( "\n" );
-					stream << cuT( "			aspect_ratio 1.77800\n" );
-					stream << cuT( "			fov_y 45.0000\n" );
-					stream << cuT( "		}\n" );
+					stream << cuT( "\t\tviewport\n" );
+					stream << cuT( "\t\t{\n" );
+					stream << cuT( "\t\t\ttype perspective\n" );
+					stream << cuT( "\t\t\tnear 0.100000\n" );
+					stream << cuT( "\t\t\tfar " ) << farPlane << cuT( "\n" );
+					stream << cuT( "\t\t\taspect_ratio 1.77800\n" );
+					stream << cuT( "\t\t\tfov_y 45.0000\n" );
+					stream << cuT( "\t\t}\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "		hdr_config\n" );
-					stream << cuT( "		{\n" );
-					stream << cuT( "			exposure 1.00000\n" );
-					stream << cuT( "			gamma 2.20000\n" );
-					stream << cuT( "		}\n" );
-					stream << cuT( "	}\n" );
+					stream << cuT( "\t\thdr_config\n" );
+					stream << cuT( "\t\t{\n" );
+					stream << cuT( "\t\t\texposure 1.00000\n" );
+					stream << cuT( "\t\t\tgamma 2.20000\n" );
+					stream << cuT( "\t\t}\n" );
+					stream << cuT( "\t}\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "	scene_node \"LightNode\"\n" );
-					stream << cuT( "	{\n" );
-					stream << cuT( "		orientation 1 0 0 90\n" );
-					stream << cuT( "	}\n" );
+					stream << cuT( "\tscene_node \"LightNode\"\n" );
+					stream << cuT( "\t{\n" );
+					stream << cuT( "\t\torientation 1 0 0 90\n" );
+					stream << cuT( "\t}\n" );
 					stream << cuT( "\n" );
-					stream << cuT( "	light \"SunLight\"\n" );
-					stream << cuT( "	{\n" );
-					stream << cuT( "		parent \"LightNode\"\n" );
-					stream << cuT( "		type directional\n" );
-					stream << cuT( "		colour 1.00000 1.00000 1.00000\n" );
-					stream << cuT( "		intensity 8.0 10.0\n" );
-					stream << cuT( "	}\n" );
+					stream << cuT( "\tlight \"SunLight\"\n" );
+					stream << cuT( "\t{\n" );
+					stream << cuT( "\t\tparent \"LightNode\"\n" );
+					stream << cuT( "\t\ttype directional\n" );
+					stream << cuT( "\t\tcolour 1.00000 1.00000 1.00000\n" );
+					stream << cuT( "\t\tintensity 8.0 10.0\n" );
+					stream << cuT( "\t}\n" );
 					stream << cuT( "}\n" );
 					printRenderWindow( name, cuT( "MainCamera" ), stream );
 				}
@@ -1749,15 +1572,12 @@ namespace c3d::exporter
 			, filePath
 			, scene
 			, options );
-
-		if ( carryOn( result ) )
-		{
-			result = writeMaterials( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeMaterials( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
 
 		if ( carryOn( result ) )
 		{
@@ -1774,7 +1594,6 @@ namespace c3d::exporter
 			if ( m_options.splitPerMaterial )
 			{
 				if ( skeleton )
-				{
 					result = writeObjectT< true >( SkeletonWriterOptions{ m_options
 							, *skeleton
 							, scene.getGeometryCache()
@@ -1789,11 +1608,8 @@ namespace c3d::exporter
 							, true
 							, options.forceText }
 						, { nullptr, nullptr } );
-				}
-
-				if ( carryOn( result ) )
-				{
-					result = writeObjectT< true >( MeshWriterOptions{ m_options
+				result = carryOn( result )
+					&& writeObjectT< true >( MeshWriterOptions{ m_options
 							, mesh
 							, scene.getGeometryCache()
 							, skeletons
@@ -1807,12 +1623,10 @@ namespace c3d::exporter
 							, true
 							, options.forceText }
 						, { nullptr, nullptr } );
-				}
 			}
 			else
 			{
 				if ( skeleton )
-				{
 					result = writeObjectT< false >( SkeletonWriterOptions{ m_options
 							, *skeleton
 							, scene.getGeometryCache()
@@ -1827,11 +1641,8 @@ namespace c3d::exporter
 							, true
 							, options.forceText }
 						, { nullptr, nullptr } );
-				}
-
-				if ( carryOn( result ) )
-				{
-					result = writeObjectT< false >( MeshWriterOptions{ m_options
+				result = carryOn( result )
+					&& writeObjectT< false >( MeshWriterOptions{ m_options
 							, mesh
 							, scene.getGeometryCache()
 							, skeletons
@@ -1845,12 +1656,10 @@ namespace c3d::exporter
 							, true
 							, options.forceText }
 						, { nullptr, nullptr } );
-				}
 			}
 
-			if ( carryOn( result ) )
-			{
-				result = finaliseExport( m_options
+			result = carryOn( result )
+				&& finaliseExport( m_options
 					, &mesh
 					, options
 					, skeletons
@@ -1860,7 +1669,6 @@ namespace c3d::exporter
 					, scene
 					, folder
 					, filePath );
-			}
 		}
 
 		return result;
@@ -1884,93 +1692,67 @@ namespace c3d::exporter
 			, filePath
 			, scene
 			, options );
-
-		if ( carryOn( result ) )
-		{
-			result = writeSamplers( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeSamplers( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
-
-		if ( carryOn( result ) )
-		{
-			result = writeMaterials( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeMaterials( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
-
-		if ( carryOn( result ) )
-		{
-			result = writeFonts( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeFonts( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
-
-		if ( carryOn( result ) )
-		{
-			result = writeGuiThemes( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeGuiThemes( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
-
-		if ( carryOn( result ) )
-		{
-			result = writeGuiStyles( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeGuiStyles( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
-
-		if ( carryOn( result ) )
-		{
-			result = writeGuiControls( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeGuiControls( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
-		}
-
-		if ( carryOn( result ) )
-		{
-			result = writeLights( m_options.ignoreFailures
+		result = carryOn( result )
+			&& writeLights( m_options.ignoreFailures
 				, folder
 				, filePath
 				, scene
 				, options );
 
+		if ( carryOn( result ) )
+		{
 			StringStream skeletons;
 			StringStream meshes;
 			StringStream nodes;
 			StringStream objects;
-
-			if ( carryOn( result ) )
-			{
-				result = writeNodes( folder
-					, filePath
-					, scene
-					, options
-					, m_options
-					, nodes );
-			}
+			result = writeNodes( scene
+				, options
+				, m_options
+				, nodes );
 
 			if ( m_options.splitPerMaterial )
 			{
 				auto lock( makeUniqueLock( scene.getMeshCache() ) );
 
 				for ( auto const & [name, skeleton] : scene.getSkeletonCache() )
-				{
-					if ( carryOn( result ) )
-					{
-						result = writeObjectT< true >( SkeletonWriterOptions{ m_options
+					result = carryOn( result )
+						&& writeObjectT< true >( SkeletonWriterOptions{ m_options
 								, *skeleton
 								, scene.getGeometryCache()
 								, skeletons
@@ -1984,13 +1766,9 @@ namespace c3d::exporter
 								, false
 								, options.forceText }
 							, { nullptr, nullptr } );
-					}
-				}
 
 				for ( auto const & [name, mesh] : scene.getMeshCache() )
-				{
 					if ( carryOn( result ) && mesh->isSerialisable() )
-					{
 						result = writeObjectT< true >( MeshWriterOptions{ m_options
 								, *mesh
 								, scene.getGeometryCache()
@@ -2005,47 +1783,31 @@ namespace c3d::exporter
 								, false
 								, options.forceText }
 							, { nullptr, nullptr } );
-					}
-				}
 			}
 			else
 			{
-				result = unsplitted::writeSkeletons( m_options.ignoreFailures
-					, folder
-					, filePath
-					, scene
-					, options
-					, skeletons );
-
-				if ( carryOn( result ) )
-				{
-					result = unsplitted::writeMeshes( m_options.ignoreFailures
-						, folder
-						, filePath
+				result = carryOn( result )
+					&& unsplitted::writeSkeletons( m_options.ignoreFailures
+						, scene
+						, options
+						, skeletons );
+				result = carryOn( result )
+					&& unsplitted::writeMeshes( m_options.ignoreFailures
 						, scene
 						, options
 						, meshes );
-				}
-
-				if ( carryOn( result ) )
-				{
-					result = unsplitted::writeObjects( m_options.ignoreFailures
-						, folder
-						, filePath
+				result = carryOn( result )
+					&& unsplitted::writeObjects( m_options.ignoreFailures
 						, scene
-						, options
 						, objects );
-				}
 
 				if ( result )
 				{
 					auto lock( makeUniqueLock( scene.getMeshCache() ) );
 
 					for ( auto const & [name, skeleton] : scene.getSkeletonCache() )
-					{
-						if ( carryOn( result ) )
-						{
-							result = writeObjectT< false >( SkeletonWriterOptions{ m_options
+						result = carryOn( result )
+							&& writeObjectT< false >( SkeletonWriterOptions{ m_options
 									, *skeleton
 									, scene.getGeometryCache()
 									, skeletons
@@ -2059,13 +1821,9 @@ namespace c3d::exporter
 									, false
 									, options.forceText }
 								, { nullptr, nullptr } );
-						}
-					}
 
 					for ( auto const & [name, mesh] : scene.getMeshCache() )
-					{
 						if ( carryOn( result ) && mesh->isSerialisable() )
-						{
 							result = writeObjectT< false >( MeshWriterOptions{ m_options
 									, *mesh
 									, scene.getGeometryCache()
@@ -2080,14 +1838,11 @@ namespace c3d::exporter
 									, false
 									, options.forceText }
 								, { nullptr, nullptr } );
-						}
-					}
 				}
 			}
 
-			if ( carryOn( result ) )
-			{
-				result = finaliseExport( m_options
+			result = carryOn( result )
+				&& finaliseExport( m_options
 					, nullptr
 					, options
 					, skeletons
@@ -2097,7 +1852,6 @@ namespace c3d::exporter
 					, scene
 					, folder
 					, filePath );
-			}
 		}
 
 		return result;

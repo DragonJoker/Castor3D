@@ -17,7 +17,7 @@ extern "C"
 	C3D_AnisotropicMaterial_API void getType( c3d::PluginType * type );
 	C3D_AnisotropicMaterial_API void isDebug( int * value );
 	C3D_AnisotropicMaterial_API void getName( char const ** name );
-	C3D_AnisotropicMaterial_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_AnisotropicMaterial_API void onLoad( c3d::Engine * engine );
 	C3D_AnisotropicMaterial_API void onUnload( c3d::Engine * engine );
 
 	C3D_AnisotropicMaterial_API void getRequiredVersion( c3d::Version * version )
@@ -40,7 +40,7 @@ extern "C"
 		*name = "Anisotropic Material";
 	}
 
-	C3D_AnisotropicMaterial_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
+	C3D_AnisotropicMaterial_API void onLoad( c3d::Engine * engine )
 	{
 		engine->registerPassComponent< anisotropy::AnisotropyComponent >();
 		engine->registerPassComponent< anisotropy::AnisotropyDirectionMapComponent >();

@@ -539,7 +539,7 @@ namespace c3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t const * getBuffer( Coords< T, Count > const & value )
+	static inline uint8_t const * getBuffer( PointView< T, Count > const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -554,7 +554,7 @@ namespace c3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t * getBuffer( Coords< T, Count > & value )
+	static inline uint8_t * getBuffer( PointView< T, Count > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -569,7 +569,7 @@ namespace c3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( [[maybe_unused]] Coords< T, Count > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] PointView< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -1093,7 +1093,7 @@ namespace c3d
 	 *\param[in,out]	value	La valeur.
 	 */
 	template< typename T, uint32_t Count >
-	static inline void prepareChunkData( Coords< T, Count > & value )
+	static inline void prepareChunkData( PointView< T, Count > & value )
 	{
 		for ( auto & component : value )
 		{

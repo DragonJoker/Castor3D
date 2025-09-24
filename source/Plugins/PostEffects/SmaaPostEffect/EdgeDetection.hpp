@@ -55,7 +55,7 @@ namespace smaa
 			, uint32_t passCount );
 		~EdgeDetection();
 
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer
 			, SmaaData const & smaaData );

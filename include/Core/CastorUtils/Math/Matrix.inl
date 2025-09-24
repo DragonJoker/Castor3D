@@ -140,7 +140,7 @@ namespace c3d
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline void Matrix< T, Columns, Rows >::setRow( uint32_t index, Coords< T, Columns > const & row )
+	inline void Matrix< T, Columns, Rows >::setRow( uint32_t index, PointView< T, Columns > const & row )
 	{
 		setRow( index, row.constPtr() );
 	}
@@ -182,13 +182,13 @@ namespace c3d
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline void Matrix< T, Columns, Rows >::setColumn( uint32_t index, Coords< T const, Rows > const & col )
+	inline void Matrix< T, Columns, Rows >::setColumn( uint32_t index, PointView< T const, Rows > const & col )
 	{
 		setColumn( index, col.constPtr() );
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline void Matrix< T, Columns, Rows >::setColumn( uint32_t index, Coords< T, Rows > const & col )
+	inline void Matrix< T, Columns, Rows >::setColumn( uint32_t index, PointView< T, Rows > const & col )
 	{
 		setColumn( index, col.constPtr() );
 	}
@@ -215,7 +215,7 @@ namespace c3d
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline void Matrix< T, Columns, Rows >::getColumn( uint32_t index, Coords< T, Rows > & result )
+	inline void Matrix< T, Columns, Rows >::getColumn( uint32_t index, PointView< T, Rows > & result )
 	{
 		CU_Require( index < Columns );
 		result = m_columns[index];
@@ -465,224 +465,6 @@ namespace c3d
 	}
 
 //*************************************************************************************************
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline bool operator==( Matrix< T, Columns, Rows > const & lhs, Matrix< T, Columns, Rows > const & rhs )
-	{
-		bool result = true;
-
-		for ( uint32_t i = 0; i < Columns && result; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows && result; j++ )
-			{
-				result = lhs[i][j] == rhs[i][j];
-			}
-		}
-
-		return result;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline bool operator!=( Matrix< T, Columns, Rows > const & lhs, Matrix< T, Columns, Rows > const & rhs )
-	{
-		return ! operator==( lhs, rhs );
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator+( Matrix< T, Columns, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx += rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
-	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx -= rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t ColumnsU >
-	Matrix< T, ColumnsU, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Matrix< U, ColumnsU, Columns > const & rhs )
-	{
-		Matrix< T, ColumnsU, Rows > result;
-
-		for ( uint32_t i = 0; i < ColumnsU; i++ )
-		{
-			for ( uint32_t j = 0; j < Columns; j++ )
-			{
-				for ( uint32_t k = 0; k < Rows; k++ )
-				{
-					result[i][k] += T( lhs[j][k] * rhs[i][j] );
-				}
-			}
-		}
-
-		return result;
-	}
-
-	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
-	inline Point< T, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Point< U, Columns > const & rhs )
-	{
-		Point< T, Rows > result;
-
-		for ( uint32_t i = 0; i < Columns; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				result[j] += T( lhs[i][j] * rhs[i] );
-			}
-		}
-
-		return result;
-	}
-
-	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
-	inline Point< T, Columns > operator*( Point< T, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs )
-	{
-		return rhs * lhs;
-	}
-
-	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
-	Matrix <T, Columns, Rows> operator+( Matrix< T, Columns, Rows > const & lhs, U const * rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx += rhs;
-		return mtx;
-	}
-
-	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
-	Matrix <T, Columns, Rows> operator-( Matrix< T, Columns, Rows > const & lhs, U const * rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx -= rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix <T, Columns, Rows> operator+( Matrix< T, Columns, Rows > const & lhs, T const & rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx += rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix <T, Columns, Rows> operator-( Matrix< T, Columns, Rows > const & lhs, T const & rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx -= rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix <T, Columns, Rows> operator*( Matrix< T, Columns, Rows > const & lhs, T const & rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx *= rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix <T, Columns, Rows> operator/( Matrix< T, Columns, Rows > const & lhs, T const & rhs )
-	{
-		Matrix< T, Columns, Rows > mtx( lhs );
-		mtx /= rhs;
-		return mtx;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix <T, Columns, Rows> operator+( T const & lhs, Matrix< T, Columns, Rows > const & rhs )
-	{
-		return rhs + lhs;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix <T, Columns, Rows> operator-( T const & lhs, Matrix< T, Columns, Rows > const & rhs )
-	{
-		return rhs - lhs;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix <T, Columns, Rows> operator*( T const & lhs, Matrix< T, Columns, Rows > const & rhs )
-	{
-		return rhs * lhs;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix <T, Columns, Rows> operator-( Matrix< T, Columns, Rows > const & matrix )
-	{
-		Matrix< T, Columns, Rows > result;
-
-		for ( uint32_t i = 0; i < Columns; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				result[i][j] = -matrix[i][j];
-			}
-		}
-
-		return result;
-	}
-
-//*************************************************************************************************
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline String & operator<<( String & text, Matrix< T, Columns, Rows > const & matrix )
-	{
-		StringStream stream{ makeStringStream() };
-		stream.precision( 10 );
-		stream << matrix;
-		text += stream.str();
-		return text;
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline String & operator>>( String & text, Matrix< T, Columns, Rows > & matrix )
-	{
-		StringStream stream( text );
-		stream >> matrix;
-		text = stream.str();
-		return text;
-	}
-
-	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Matrix< T, Columns, Rows > const & matrix )
-	{
-		auto precision = stream.precision( 10 );
-
-		for ( uint32_t i = 0; i < Columns; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				stream.width( 15 );
-				stream << std::right << matrix[i][j];
-			}
-
-			stream << std::endl;
-		}
-
-		stream.precision( precision );
-		return stream;
-	}
-
-	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, Matrix< T, Columns, Rows > & matrix )
-	{
-		for ( uint32_t i = 0; i < Columns; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				stream >> matrix[i][j];
-			}
-
-			stream.ignore();
-		}
-
-		return stream;
-	}
 }
 
 #pragma warning( pop )

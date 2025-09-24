@@ -64,16 +64,16 @@ namespace c3d
 		{
 			void update( ProgressCtrlRPtr progress );
 			void initRange( int32_t mod );
-			void setTitle( String value );
-			void setLabel( String value );
-			void step( String label );
+			void setTitle( StringView value );
+			void setLabel( StringView value );
+			void step( StringView label );
 			void step();
-			void setStep( String label, int32_t value );
+			void setStep( StringView label, int32_t value );
 			void setStep( int32_t value );
 			void setRange( int32_t max );
 			int32_t incRange( int32_t mod );
 			int32_t getIndex()const;
-			void set( String label
+			void set( StringView label
 				, int32_t rangeMax
 				, int32_t value );
 

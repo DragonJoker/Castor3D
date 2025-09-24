@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 
 #include <ShaderWriter/BaseTypes/Int.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec2.hpp>
 
 namespace draw_edges
@@ -21,15 +21,22 @@ namespace draw_edges
 	};
 
 	struct DrawEdgesData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_DrawEdgesData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::IntField< "normalDepthWidth" >
+			, sdw::IntField< "objectWidth" > >
 	{
 	public:
-		DrawEdgesData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
 		SDW_DeclStructInstance( , DrawEdgesData );
 
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+		DrawEdgesData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+			, normalDepthWidth{ StructInstanceHelperT::getMember< "normalDepthWidth" >() }
+			, objectWidth{ StructInstanceHelperT::getMember< "objectWidth" >() }
+		{
+		}
 
 	public:
 		sdw::Int normalDepthWidth;
@@ -44,6 +51,10 @@ namespace draw_edges
 	{
 	private:
 		using Configuration = DrawEdgesUboConfiguration;
+		DrawEdgesUbo( DrawEdgesUbo const & ) = delete;
+		DrawEdgesUbo & operator=( DrawEdgesUbo const & ) = delete;
+		DrawEdgesUbo( DrawEdgesUbo && )noexcept = delete;
+		DrawEdgesUbo & operator=( DrawEdgesUbo && )noexcept = delete;
 
 	public:
 		explicit DrawEdgesUbo( c3d::RenderDevice const & device );
@@ -51,8 +62,9 @@ namespace draw_edges
 		void cpuUpdate( int normalDepthWidth
 			, int objectWidth );
 
+		template< typename BindingT >
 		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
+			, BindingT binding )const
 		{
 			m_ubo.createPassBinding( pass, binding );
 		}
@@ -84,7 +96,7 @@ namespace draw_edges
 }
 
 #define C3D_DrawEdges( writer, binding, set )\
-	sdw::UniformBuffer drawEdges{ writer, draw_edges::DrawEdgesUbo::Buffer, binding, set };\
+	sdw::UniformBuffer drawEdges{ writer, draw_edges::DrawEdgesUbo::Buffer, uint32_t( binding ), uint32_t( set ) };\
 	auto c3d_drawEdgesData = drawEdges.declMember< draw_edges::DrawEdgesData >( draw_edges::DrawEdgesUbo::Data );\
 	drawEdges.end()
 

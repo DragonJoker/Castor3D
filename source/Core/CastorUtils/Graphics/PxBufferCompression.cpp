@@ -411,7 +411,7 @@ namespace c3d
 
 	uint32_t BC4x4Compressor::extractBlock( uint8_t const * inPtr
 		, uint32_t width
-		, Block & colorBlock )
+		, Block & colorBlock )const
 	{
 		auto rgba = colorBlock.data();
 		uint32_t read = 0u;
@@ -437,27 +437,27 @@ namespace c3d
 		return read;
 	}
 
-	uint16_t BC4x4Compressor::colorTo565( Color const & color )
+	uint16_t BC4x4Compressor::colorTo565( Color const & color )const
 	{
 		return ( ( color[0] >> 3 ) << 11 )
 			| ( ( color[1] >> 2 ) << 5 )
 			| ( color[2] >> 3 );
 	}
 
-	void BC4x4Compressor::emitByte( uint8_t *& dstBuffer, uint8_t b )
+	void BC4x4Compressor::emitByte( uint8_t *& dstBuffer, uint8_t b )const
 	{
 		dstBuffer[0] = b;
 		dstBuffer += 1;
 	}
 
-	void BC4x4Compressor::emitWord( uint8_t *& dstBuffer, uint16_t s )
+	void BC4x4Compressor::emitWord( uint8_t *& dstBuffer, uint16_t s )const
 	{
 		dstBuffer[0] = ( s >> 0 ) & 255;
 		dstBuffer[1] = ( s >> 8 ) & 255;
 		dstBuffer += 2;
 	}
 
-	void BC4x4Compressor::emitDoubleWord( uint8_t *& dstBuffer, uint32_t i )
+	void BC4x4Compressor::emitDoubleWord( uint8_t *& dstBuffer, uint32_t i )const
 	{
 		dstBuffer[0] = ( i >> 0 ) & 255;
 		dstBuffer[1] = ( i >> 8 ) & 255;
@@ -469,12 +469,12 @@ namespace c3d
 	void BC4x4Compressor::emitColorIndices( uint8_t *& dstBuffer
 		, Block const & colorBlock
 		, Color const & minColor
-		, Color const & maxColor )
+		, Color const & maxColor )const
 	{
-		static uint8_t constexpr maskC565_5 = 0xF8;    // 0xFF minus last three bits
-		static uint8_t constexpr maskC565_6 = 0xFC;    // 0xFF minus last two bits
+		static byte constexpr maskC565_5 = 0xF8;    // 0xFF minus last three bits
+		static byte constexpr maskC565_6 = 0xFC;    // 0xFF minus last two bits
 
-		uint8_t colors[4][4];
+		Array< Array< uint8_t, 4u >, 4u > colors;
 		uint32_t result = 0u;
 		colors[0][0] = ( maxColor[0] & maskC565_5 ) | ( maxColor[0] >> 5 );
 		colors[0][1] = ( maxColor[1] & maskC565_6 ) | ( maxColor[1] >> 6 );
@@ -536,7 +536,6 @@ namespace c3d
 				std::memcpy( dstBuffer, srcBuffer, pixelSize );
 				dstBuffer += pixelSize;
 				std::memcpy( dstBuffer, srcBuffer, pixelSize );
-				dstBuffer += pixelSize;
 				break;
 			case 2u:
 				// Duplicate first source pixel into the 2 first pixels of the block line
@@ -549,7 +548,6 @@ namespace c3d
 				std::memcpy( dstBuffer, srcBuffer, pixelSize );
 				dstBuffer += pixelSize;
 				std::memcpy( dstBuffer, srcBuffer, pixelSize );
-				dstBuffer += pixelSize;
 				break;
 			case 3u:
 				// Duplicate first source pixel into the first pixel of the block line
@@ -564,7 +562,6 @@ namespace c3d
 				std::memcpy( dstBuffer, srcBuffer, pixelSize );
 				dstBuffer += pixelSize;
 				std::memcpy( dstBuffer, srcBuffer, pixelSize );
-				dstBuffer += pixelSize;
 				break;
 			default:
 				std::memcpy( dstBuffer, srcBuffer, pixelSize * width );
@@ -643,11 +640,11 @@ namespace c3d
 	}
 
 	void BC1Compressor::compress( Size const & srcDimensions
-		, Size const & dstDimensions
+		, [[maybe_unused]] Size const & dstDimensions
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
 		, uint8_t * dstBuffer
-		, uint32_t dstSize )
+		, uint32_t dstSize )const
 	{
 		Block block;
 		Color minColor;
@@ -688,10 +685,10 @@ namespace c3d
 
 	void BC1Compressor::getMinMaxColors( Block const & colorBlock
 		, Color & minColor
-		, Color & maxColor )
+		, Color & maxColor )const
 	{
 		static int constexpr insetShift = 4;       // inset the bounding box with ( range >> shift )
-		uint8_t inset[3];
+		Array< uint8_t, 3 > inset;
 		minColor[0] = minColor[1] = minColor[2] = 255;
 		maxColor[0] = maxColor[1] = maxColor[2] = 0;
 
@@ -747,11 +744,11 @@ namespace c3d
 	}
 
 	void BC3Compressor::compress( Size const & srcDimensions
-		, Size const & dstDimensions
+		, [[maybe_unused]] Size const & dstDimensions
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
 		, uint8_t * dstBuffer
-		, uint32_t dstSize )
+		, uint32_t dstSize )const
 	{
 		Block block;
 		Color minColor;
@@ -796,7 +793,7 @@ namespace c3d
 
 	void BC3Compressor::getMinMaxColors( Block const & colorBlock
 		, Color & minColor
-		, Color & maxColor )
+		, Color & maxColor )const
 	{
 		static int constexpr insetShift = 4;       // inset the bounding box with ( range >> shift )
 		Color inset;
@@ -856,10 +853,10 @@ namespace c3d
 	void BC3Compressor::emitAlphaIndices( uint8_t *& dstBuffer
 		, Block const & colorBlock
 		, uint8_t const minAlpha
-		, uint8_t const maxAlpha )
+		, uint8_t const maxAlpha )const
 	{
 		assert( maxAlpha > minAlpha );
-		uint8_t indices[16];
+		Array< uint8_t, 16u > indices;
 		uint8_t mid = ( maxAlpha - minAlpha ) / ( 2 * 7 );
 		uint8_t ab1 = minAlpha + mid;
 		uint8_t ab2 = ( 6 * maxAlpha + 1 * minAlpha ) / 7 + mid;

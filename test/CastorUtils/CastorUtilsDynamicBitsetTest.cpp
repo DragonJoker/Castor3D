@@ -13,14 +13,14 @@ namespace Testing
 
 	void CastorUtilsDynamicBitsetTest::doRegisterTests()
 	{
-		doRegisterTest( "DynamicBitsetSizeTest", std::bind( &CastorUtilsDynamicBitsetTest::sizeTest, this ) );
-		doRegisterTest( "DynamicBitsetInitValueTest", std::bind( &CastorUtilsDynamicBitsetTest::initValueTest, this ) );
-		doRegisterTest( "DynamicBitsetLeftShiftTest", std::bind( &CastorUtilsDynamicBitsetTest::leftShiftTest, this ) );
-		doRegisterTest( "DynamicBitsetRightShiftTest", std::bind( &CastorUtilsDynamicBitsetTest::rightShiftTest, this ) );
-		doRegisterTest( "DynamicBitsetAndTest", std::bind( &CastorUtilsDynamicBitsetTest::andTest, this ) );
-		doRegisterTest( "DynamicBitsetOrTest", std::bind( &CastorUtilsDynamicBitsetTest::orTest, this ) );
-		doRegisterTest( "DynamicBitsetXorTest", std::bind( &CastorUtilsDynamicBitsetTest::xorTest, this ) );
-		doRegisterTest( "DynamicBitsetSetTest", std::bind( &CastorUtilsDynamicBitsetTest::setTest, this ) );
+		doRegisterTest( "DynamicBitsetSizeTest", [this](){ sizeTest(); } );
+		doRegisterTest( "DynamicBitsetInitValueTest", [this](){ initValueTest(); } );
+		doRegisterTest( "DynamicBitsetLeftShiftTest", [this](){ leftShiftTest(); } );
+		doRegisterTest( "DynamicBitsetRightShiftTest", [this](){ rightShiftTest(); } );
+		doRegisterTest( "DynamicBitsetAndTest", [this](){ andTest(); } );
+		doRegisterTest( "DynamicBitsetOrTest", [this](){ orTest(); } );
+		doRegisterTest( "DynamicBitsetXorTest", [this](){ xorTest(); } );
+		doRegisterTest( "DynamicBitsetSetTest", [this](){ setTest(); } );
 	}
 
 	void CastorUtilsDynamicBitsetTest::sizeTest()

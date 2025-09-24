@@ -32,15 +32,15 @@ namespace Bloom
 			auto c3d_mapPasses = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapPasses, 0u, 0u );
 			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, 1u, 0u );
 
-			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&c3d_mapScene, &c3d_mapPasses, blurPassesCount]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = c3d_mapScene.sample( in.uv() );
 
@@ -97,7 +97,7 @@ namespace Bloom
 		result.setLastAttach( pass.addOutputColourTarget( { result.getTargetViewId(), sceneView.getTargetViewId() } ) );
 	}
 
-	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )
+	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

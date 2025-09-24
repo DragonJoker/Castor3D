@@ -375,6 +375,13 @@ namespace c3d
 		PxBufferBaseUPtr m_buffer;
 		PxBufferBaseUPtr m_alphaChannel;
 		ImageMemoryLayout m_layout;
+
+	private:
+		friend OutputStream & operator<<( OutputStream & stream, Image const & rhs )
+		{
+			stream << rhs.getLayout();
+			return stream;
+		}
 	};
 }
 

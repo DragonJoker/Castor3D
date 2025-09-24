@@ -10,13 +10,13 @@ namespace castortd
 		Hud( Game const & game
 			, c3d::Scene const & scene );
 
-		void initialise();
-		void start();
-		void pause();
-		void resume();
-		void Help();
-		void GameOver();
-		void update();
+		void initialise()const;
+		void start()const;
+		void pause()const;
+		void resume()const;
+		void Help()const;
+		void GameOver()const;
+		void update()const;
 
 	private:
 		Game const & m_game;

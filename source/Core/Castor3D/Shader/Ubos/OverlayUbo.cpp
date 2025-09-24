@@ -9,14 +9,14 @@ namespace c3d::shader
 		, sdw::Float const & pssAbsBoundSize
 		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & puvRange
-		, sdw::Float pssRelBound
-		, sdw::Float puv )
+		, sdw::Float const & outSsRelBound
+		, sdw::Float const & outUv )
 	{
 		if ( !m_cropMinValue )
 		{
 			m_cropMinValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMinValue"
-				, [&]( sdw::Float const & ssAbsOvPosition
-					, sdw::Float const & ssAbsParentSize
+				, [this]( sdw::Float const & ssAbsOvPosition
+					, [[maybe_unused]] sdw::Float const & ssAbsParentSize
 					, sdw::Float const & ssAbsBoundSize
 					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & uvRange
@@ -57,8 +57,8 @@ namespace c3d::shader
 			, pssAbsBoundSize
 			, pssCropRange
 			, puvRange
-			, pssRelBound
-			, puv );
+			, outSsRelBound
+			, outUv );
 	}
 
 	void OverlayData::cropMaxValue( sdw::Float const & pssAbsOvPosition
@@ -66,14 +66,14 @@ namespace c3d::shader
 		, sdw::Float const & pssAbsBoundSize
 		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & puvRange
-		, sdw::Float pssRelBound
-		, sdw::Float puv )
+		, sdw::Float const & outSsRelBound
+		, sdw::Float const & outUv )
 	{
 		if ( !m_cropMaxValue )
 		{
 			m_cropMaxValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMaxValue"
-				, [&]( sdw::Float const & ssAbsOvPosition
-					, sdw::Float const & ssAbsParentSize
+				, [this]( sdw::Float const & ssAbsOvPosition
+					, [[maybe_unused]] sdw::Float const & ssAbsParentSize
 					, sdw::Float const & ssAbsBoundSize
 					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & uvRange
@@ -114,8 +114,8 @@ namespace c3d::shader
 			, pssAbsBoundSize
 			, pssCropRange
 			, puvRange
-			, pssRelBound
-			, puv );
+			, outSsRelBound
+			, outUv );
 	}
 
 	void OverlayData::cropMinMinValue( sdw::Float const & pssAbsOvPosition
@@ -125,16 +125,16 @@ namespace c3d::shader
 		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
-		, sdw::Float pssRelBound
-		, sdw::Float ptexUv
-		, sdw::Float pfontUv )
+		, sdw::Float const & outSsRelBound
+		, sdw::Float const & outTexUv
+		, sdw::Float const & outFontUv )
 	{
 		if ( !m_cropMinMinValue )
 		{
 			m_cropMinMinValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMinMinValue"
-				, [&]( sdw::Float const & ssAbsOvPosition
-					, sdw::Float const & ssAbsParentSize
-					, sdw::Float const & ssAbsBoundSize
+				, [this]( sdw::Float const & ssAbsOvPosition
+					, [[maybe_unused]] sdw::Float const & ssAbsParentSize
+					, [[maybe_unused]] sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
 					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
@@ -186,9 +186,9 @@ namespace c3d::shader
 			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
-			, pssRelBound
-			, ptexUv
-			, pfontUv );
+			, outSsRelBound
+			, outTexUv
+			, outFontUv );
 	}
 
 	void OverlayData::cropMinMaxValue( sdw::Float const & pssAbsOvPosition
@@ -198,16 +198,16 @@ namespace c3d::shader
 		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
-		, sdw::Float pssRelBound
-		, sdw::Float ptexUv
-		, sdw::Float pfontUv )
+		, sdw::Float const & outSsRelBound
+		, sdw::Float const & outTexUv
+		, sdw::Float const & outFontUv )
 	{
 		if ( !m_cropMinMaxValue )
 		{
 			m_cropMinMaxValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMinMaxValue"
-				, [&]( sdw::Float const & ssAbsOvPosition
-					, sdw::Float const & ssAbsParentSize
-					, sdw::Float const & ssAbsBoundSize
+				, [this]( sdw::Float const & ssAbsOvPosition
+					, [[maybe_unused]] sdw::Float const & ssAbsParentSize
+					, [[maybe_unused]] sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
 					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
@@ -259,9 +259,9 @@ namespace c3d::shader
 			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
-			, pssRelBound
-			, ptexUv
-			, pfontUv );
+			, outSsRelBound
+			, outTexUv
+			, outFontUv );
 	}
 
 	void OverlayData::cropMaxMinValue( sdw::Float const & pssAbsOvPosition
@@ -271,16 +271,16 @@ namespace c3d::shader
 		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
-		, sdw::Float pssRelBound
-		, sdw::Float ptexUv
-		, sdw::Float pfontUv )
+		, sdw::Float const & outSsRelBound
+		, sdw::Float const & outTexUv
+		, sdw::Float const & outFontUv )
 	{
 		if ( !m_cropMaxMinValue )
 		{
 			m_cropMaxMinValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMaxMinValue"
-				, [&]( sdw::Float const & ssAbsOvPosition
-					, sdw::Float const & ssAbsParentSize
-					, sdw::Float const & ssAbsBoundSize
+				, [this]( sdw::Float const & ssAbsOvPosition
+					, [[maybe_unused]] sdw::Float const & ssAbsParentSize
+					, [[maybe_unused]] sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
 					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
@@ -332,9 +332,9 @@ namespace c3d::shader
 			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
-			, pssRelBound
-			, ptexUv
-			, pfontUv );
+			, outSsRelBound
+			, outTexUv
+			, outFontUv );
 	}
 
 	void OverlayData::cropMaxMaxValue( sdw::Float const & pssAbsOvPosition
@@ -344,16 +344,16 @@ namespace c3d::shader
 		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
-		, sdw::Float pssRelBound
-		, sdw::Float ptexUv
-		, sdw::Float pfontUv )
+		, sdw::Float const & outSsRelBound
+		, sdw::Float const & outTexUv
+		, sdw::Float const & outFontUv )
 	{
 		if ( !m_cropMaxMaxValue )
 		{
 			m_cropMaxMaxValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMaxMaxValue"
-				, [&]( sdw::Float const & ssAbsOvPosition
-					, sdw::Float const & ssAbsParentSize
-					, sdw::Float const & ssAbsBoundSize
+				, [this]( sdw::Float const & ssAbsOvPosition
+					, [[maybe_unused]] sdw::Float const & ssAbsParentSize
+					, [[maybe_unused]] sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
 					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
@@ -405,8 +405,8 @@ namespace c3d::shader
 			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
-			, pssRelBound
-			, ptexUv
-			, pfontUv );
+			, outSsRelBound
+			, outTexUv
+			, outFontUv );
 	}
 }

@@ -24,7 +24,7 @@ namespace c3d
 
 	namespace buksrt
 	{
-		enum BindingPoints
+		enum class Bindings
 		{
 			eInputKeys,
 			eInputValues,
@@ -36,29 +36,19 @@ namespace c3d
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
-				, uint32_t( eInputKeys )
+			auto c3d_inputKeys = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_inputKeys"
+				, Bindings::eInputKeys
 				, 0u );
-			auto c3d_inputKeys = inputKeysBuffer.declMemberArray< sdw::UInt >( "ik" );
-			inputKeysBuffer.end();
+			auto c3d_inputValues = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_inputValues"
+				, Bindings::eInputValues
+				, 0u );
 
-			auto inputValuesBuffer = writer.declStorageBuffer( "c3d_inputValuesBuffer"
-				, uint32_t( eInputValues )
+			auto c3d_outputKeys = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_outputKeys"
+				, Bindings::eOutputKeys
 				, 0u );
-			auto c3d_inputValues = inputValuesBuffer.declMemberArray< sdw::UInt >( "iv" );
-			inputValuesBuffer.end();
-
-			auto outputKeysBuffer = writer.declStorageBuffer( "c3d_outputKeysBuffer"
-				, uint32_t( eOutputKeys )
+			auto c3d_outputValues = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_outputValues"
+				, Bindings::eOutputValues
 				, 0u );
-			auto c3d_outputKeys = outputKeysBuffer.declMemberArray< sdw::UInt >( "ok" );
-			outputKeysBuffer.end();
-
-			auto outputValuesBuffer = writer.declStorageBuffer( "c3d_outputValuesBuffer"
-				, uint32_t( eOutputValues )
-				, 0u );
-			auto c3d_outputValues = outputValuesBuffer.declMemberArray< sdw::UInt >( "ov" );
-			outputValuesBuffer.end();
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DispatchData", "c3d_dispatchData" };
 			auto c3d_numElements = pcb.declMember< sdw::UInt >( "c3d_numElements" );
@@ -67,7 +57,7 @@ namespace c3d
 			shader::RadixSortT< 4u > bucket{ writer, 30u };
 
 			writer.implementMainT< sdw::VoidT >( bucket.threadsCount
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &bucket, &c3d_numElements, &c3d_inputKeys, &c3d_inputValues, &c3d_outputKeys, &c3d_outputValues]( sdw::ComputeIn const & in )
 				{
 					//// In our case, the input keys are 30-bit morton codes.
 					bucket.sortT( writer
@@ -95,7 +85,7 @@ namespace c3d
 					, graph
 					, { [this]( uint32_t index ){ doInitialise( index ); }
 						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
+						, [this]( crg::RecordContext const & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 						, GetPassIndexCallback( [](){ return 0u; } )
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
 						, IsComputePassCallback( [](){ return true; } ) }
@@ -176,7 +166,7 @@ namespace c3d
 					&& m_lightCache.getLightsBufferCount( m_lightType ) > 0;
 			}
 
-			void doRecordInto( crg::RecordContext & context
+			void doRecordInto( crg::RecordContext const & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
@@ -185,8 +175,8 @@ namespace c3d
 				auto numThreadGroups = divRoundUp( lightsCount, FrustumClusters::getBucketSortBucketSize() );
 				DispatchData data{ lightsCount };
 				m_pipeline.pipeline.recordInto( context, commandBuffer, index );
-				m_context.vkCmdPushConstants( commandBuffer, m_pipeline.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &data );
-				m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
+				context->vkCmdPushConstants( commandBuffer, m_pipeline.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &data );
+				context->vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 			}
 
 			void doCreatePipeline( uint32_t index
@@ -234,10 +224,10 @@ namespace c3d
 						, runPass->getTimer() );
 					return runPass;
 				} );
-			point.addInputStorage( *sortAttachs.pointLightMortonCodes, uint32_t( buksrt::eInputKeys ) );
-			point.addInputStorage( *sortAttachs.pointLightIndices, uint32_t( buksrt::eInputValues ) );
-			result.pointLightMortonCodes = point.addClearableOutputStorageBuffer( pointLightMortonCodes, uint32_t( buksrt::eOutputKeys ) );
-			result.pointLightIndices = point.addClearableOutputStorageBuffer( pointLightIndices, uint32_t( buksrt::eOutputValues ) );
+			point.addInputStorageT( *sortAttachs.pointLightMortonCodes, buksrt::Bindings::eInputKeys );
+			point.addInputStorageT( *sortAttachs.pointLightIndices, buksrt::Bindings::eInputValues );
+			result.pointLightMortonCodes = point.addClearableOutputStorageBufferT( pointLightMortonCodes, buksrt::Bindings::eOutputKeys );
+			result.pointLightIndices = point.addClearableOutputStorageBufferT( pointLightIndices, buksrt::Bindings::eOutputValues );
 		}
 		{
 			// Spot lights
@@ -246,20 +236,20 @@ namespace c3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					auto result = makeRawUnique< buksrt::FramePass >( framePass
+					auto runPass = makeRawUnique< buksrt::FramePass >( framePass
 						, context
 						, runnableGraph
 						, device
 						, clusters
 						, LightType::eSpot );
 					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-						, result->getTimer() );
-					return result;
+						, runPass->getTimer() );
+					return runPass;
 				} );
-			spot.addInputStorage( *sortAttachs.spotLightMortonCodes, uint32_t( buksrt::eInputKeys ) );
-			spot.addInputStorage( *sortAttachs.spotLightIndices, uint32_t( buksrt::eInputValues ) );
-			result.spotLightMortonCodes = spot.addClearableOutputStorageBuffer( spotLightMortonCodes, uint32_t( buksrt::eOutputKeys ) );
-			result.spotLightIndices = spot.addClearableOutputStorageBuffer( spotLightIndices, uint32_t( buksrt::eOutputValues ) );
+			spot.addInputStorageT( *sortAttachs.spotLightMortonCodes, buksrt::Bindings::eInputKeys );
+			spot.addInputStorageT( *sortAttachs.spotLightIndices, buksrt::Bindings::eInputValues );
+			result.spotLightMortonCodes = spot.addClearableOutputStorageBufferT( spotLightMortonCodes, buksrt::Bindings::eOutputKeys );
+			result.spotLightIndices = spot.addClearableOutputStorageBufferT( spotLightIndices, buksrt::Bindings::eOutputValues );
 		}
 		return result;
 	}

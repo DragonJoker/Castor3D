@@ -24,13 +24,14 @@ namespace c3d
 
 		ChangeTracked< float > indirectAttenuation;
 		ChangeTracked< float > texelAreaModifier;
-	};
 
-	inline bool operator==( LpvConfig const & lhs, LpvConfig const & rhs )noexcept
-	{
-		return lhs.indirectAttenuation == rhs.indirectAttenuation
-			&& lhs.texelAreaModifier == rhs.texelAreaModifier;
-	}
+	private:
+		friend bool operator==( LpvConfig const & lhs, LpvConfig const & rhs )noexcept
+		{
+			return lhs.indirectAttenuation == rhs.indirectAttenuation
+				&& lhs.texelAreaModifier == rhs.texelAreaModifier;
+		}
+	};
 }
 
 #endif

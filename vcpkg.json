@@ -79,6 +79,14 @@
         }
       ]
     },
+    "record": {
+      "description": "Enable recording capability in CastorViewer tool project.",
+      "dependencies": [
+        {
+          "name": "ffmpeg"
+        }
+      ]
+    },
     "demos": {
       "description": "Build demo projects.",
       "dependencies": [

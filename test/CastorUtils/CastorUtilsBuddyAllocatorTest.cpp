@@ -11,9 +11,9 @@ namespace Testing
 
 	void CastorUtilsBuddyAllocatorTest::doRegisterTests()
 	{
-		doRegisterTest( "SizeTest", std::bind( &CastorUtilsBuddyAllocatorTest::SizeTest, this ) );
-		doRegisterTest( "AllocationTest", std::bind( &CastorUtilsBuddyAllocatorTest::AllocationTest, this ) );
-		doRegisterTest( "DeallocationTest", std::bind( &CastorUtilsBuddyAllocatorTest::DeallocationTest, this ) );
+		doRegisterTest( "SizeTest", [this](){ SizeTest(); } );
+		doRegisterTest( "AllocationTest", [this](){ AllocationTest(); } );
+		doRegisterTest( "DeallocationTest", [this](){ DeallocationTest(); } );
 	}
 
 	void CastorUtilsBuddyAllocatorTest::SizeTest()

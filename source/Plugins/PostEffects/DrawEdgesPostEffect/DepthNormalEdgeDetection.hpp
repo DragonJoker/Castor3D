@@ -18,7 +18,7 @@ namespace draw_edges
 	class DepthNormalEdgeDetection
 	{
 	public:
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eMaterials,
 			eModels,
@@ -39,7 +39,7 @@ namespace draw_edges
 			, bool const * enabled );
 		~DepthNormalEdgeDetection();
 
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		c3d::Texture const & getResult()const
 		{

@@ -84,7 +84,7 @@ namespace c3d
 			, graph
 			, 1u
 			, size }
-		, m_renderer{ makeUnique< OverlayRenderer >( device, output, renderUbo, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_renderer{ makeUnique< OverlayRenderer >( device, output, renderUbo, getTimer(), VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 		, m_drawGlobal{ drawGlobal }
 	{
 	}
@@ -97,7 +97,7 @@ namespace c3d
 			auto preparer = m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )
 				, m_renderPass.getFramebuffer( 0u )
-				, m_graph.getFence() );
+				, getGraph().getFence() );
 			preparer.setDrawCounts( m_counts.drawCalls );
 
 			if ( m_drawGlobal )
@@ -139,7 +139,7 @@ namespace c3d
 			m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )
 				, m_renderPass.getFramebuffer( 0u )
-				, m_graph.getFence() );
+				, getGraph().getFence() );
 		}
 
 		context.getContext().vkCmdBeginDebugBlock( commandBuffer
@@ -153,7 +153,7 @@ namespace c3d
 			, commandBuffer
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
 			, 0u );
-		m_context.vkCmdExecuteCommands( commandBuffer
+		context->vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
 		m_renderPass.end( context

@@ -24,11 +24,11 @@ namespace c3d
 	template< typename T >
 	class QuaternionT
 		: public DataHolderT< QuaternionDataT< T > >
-		, public Coords4< T >
+		, public PointView4< T >
 	{
 	private:
 		using DataHolder = DataHolderT< QuaternionDataT< T > >;
-		using BaseType = Coords4< T >;
+		using BaseType = PointView4< T >;
 
 	private:
 		explicit QuaternionT( NoInit const & );
@@ -534,135 +534,71 @@ namespace c3d
 		{
 			return &DataHolder::getData();
 		}
+
+	private:
+		friend QuaternionT operator+( QuaternionT const & lhs, QuaternionT const & rhs )
+		{
+			QuaternionT result( lhs );
+			result += rhs;
+			return result;
+		}
+
+		friend QuaternionT operator-( QuaternionT const & lhs, QuaternionT const & rhs )
+		{
+			QuaternionT result( lhs );
+			result -= rhs;
+			return result;
+		}
+
+		friend QuaternionT operator*( QuaternionT const & lhs, QuaternionT const & rhs )
+		{
+			QuaternionT result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		friend QuaternionT operator*( QuaternionT const & lhs, double rhs )
+		{
+			QuaternionT result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		friend QuaternionT operator*( QuaternionT const & lhs, float rhs )
+		{
+			QuaternionT result( lhs );
+			result *= rhs;
+			return result;
+		}
+
+		friend QuaternionT operator*( double lhs, QuaternionT const & rhs )
+		{
+			QuaternionT result( rhs );
+			result *= lhs;
+			return result;
+		}
+
+		friend QuaternionT operator*( float lhs, QuaternionT const & rhs )
+		{
+			QuaternionT result( rhs );
+			result *= lhs;
+			return result;
+		}
+
+		friend QuaternionT operator-( QuaternionT const & rhs )
+		{
+			QuaternionT result( rhs );
+			result->w = -result->w;
+			return result;
+		}
+
+		template< typename CharT >
+		friend std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, QuaternionT const & quat )
+		{
+			stream << quat->x << ", " << quat->y << ", " << quat->z << ", " << quat->w;
+			return stream;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		addition operator
-	 *\param[in]	lhs	The first Quaternion object to add
-	 *\param[in]	rhs	The second Quaternion object to add
-	 *\return		The addition result
-	 *\~french
-	 *\brief		Opérateur d'addition
-	 *\param[in]	lhs	Le premier objet Quaternion à ajouter
-	 *\param[in]	rhs	Le second objet Quaternion à ajouter
-	 *\return		Le résultat de l'addtion
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator+( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Substraction operator
-	 *\param[in]	lhs	The first Quaternion object to subtract
-	 *\param[in]	rhs	The second Quaternion object to subtract
-	 *\return		The substraction result
-	 *\~french
-	 *\brief		Opérateur de soustraction
-	 *\param[in]	lhs	Le premier objet Quaternion à soustraire
-	 *\param[in]	rhs	Le second objet Quaternion à soustraire
-	 *\return		Le résultat de la soustraction
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator-( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	The first Quaternion object to multiply
-	 *\param[in]	rhs	The second Quaternion object to multiply
-	 *\return		The multiplication result
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	Le premier objet Quaternion à multiplier
-	 *\param[in]	rhs	Le second objet Quaternion à multiplier
-	 *\return		Le résultat de la multiplication
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator*( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	The Quaternion object to multiply
-	 *\param[in]	rhs	The scalar to multiply
-	 *\return		The multiplication result
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	L'objet Quaternion à multiplier
-	 *\param[in]	rhs	Le scalaire à multiplier
-	 *\return		Le résultat de la multiplication
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator*( QuaternionT< T > const & lhs, double rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	The Quaternion object to multiply
-	 *\param[in]	rhs	The scalar to multiply
-	 *\return		The multiplication result
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	L'objet Quaternion à multiplier
-	 *\param[in]	rhs	Le scalaire à multiplier
-	 *\return		Le résultat de la multiplication
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator*( QuaternionT< T > const & lhs, float rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	The scalar to multiply
-	 *\param[in]	rhs	The Quaternion object to multiply
-	 *\return		The multiplication result
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	Le scalaire à multiplier
-	 *\param[in]	rhs	L'objet Quaternion à multiplier
-	 *\return		Le résultat de la multiplication
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator*( double lhs, QuaternionT< T > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	The scalar to multiply
-	 *\param[in]	rhs	The Quaternion object to multiply
-	 *\return		The multiplication result
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	Le scalaire à multiplier
-	 *\param[in]	rhs	L'objet Quaternion à multiplier
-	 *\return		Le résultat de la multiplication
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator*( float lhs, QuaternionT< T > const & rhs );
-	/**
-	 *\~english
-	 *\brief		Negation operator
-	 *\param[in]	quat	The Quaternion object to negate
-	 *\return		The negation result
-	 *\~french
-	 *\brief		Opérateur de négation
-	 *\param[in]	quat	L'objet Quaternion à négativer
-	 *\return		Le résultat de la négation
-	 */
-	template< typename T >
-	inline QuaternionT< T > operator-( QuaternionT< T > const & quat );
-	/**
-	 *\~english
-	 *\brief			Stream operator.
-	 *\param[in,out]	stream	The stream.
-	 *\param[in]		quat	The Quaternion object to put in stream.
-	 *\return			The stream.
-	 *\~french
-	 *\brief			Opérateur de flux.
-	 *\param[in,out]	stream	Le flux.
-	 *\param[in]		quat	L'objet Quaternion à mettre dans le flux
-	 *\return			Le flux.
-	 */
-	template< typename CharT, typename T >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, QuaternionT< T > const & quat )
-	{
-		stream << quat->x << ", " << quat->y << ", " << quat->z << ", " << quat->w;
-		return stream;
-	}
 }
 
 #include "Quaternion.inl"

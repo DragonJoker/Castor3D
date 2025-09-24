@@ -163,47 +163,26 @@ namespace c3d
 			}
 		}
 
+		friend bool operator==( ChangeTrackedT const & lhs, ChangeTrackedT const & rhs )noexcept
+		{
+			return lhs.value() == rhs.value();
+		}
+
+		friend bool operator==( ChangeTrackedT const & lhs, ValueT const & rhs )noexcept
+		{
+			return lhs.value() == rhs;
+		}
+
+		friend bool operator==( ValueT const & lhs, ChangeTrackedT const & rhs )noexcept
+		{
+			return lhs == rhs.value();
+		}
+
 	private:
 		ValueT m_value{};
 		ControlT m_dirty{ true };
 		c3d::Function< void() > m_callback;
 	};
-
-	template< typename ValueT, typename ControlT >
-	bool operator==( ChangeTrackedT< ValueT, ControlT > const & lhs, ValueT const & rhs )
-	{
-		return lhs.value() == rhs;
-	}
-
-	template< typename ValueT, typename ControlT >
-	bool operator==( ValueT const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
-	{
-		return lhs == rhs.value();
-	}
-
-	template< typename ValueT, typename ControlT >
-	bool operator==( ChangeTrackedT< ValueT, ControlT > const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
-	{
-		return lhs.value() == rhs.value();
-	}
-
-	template< typename ValueT, typename ControlT >
-	bool operator!=( ChangeTrackedT< ValueT, ControlT > const & lhs, ValueT const & rhs )
-	{
-		return !operator==( lhs, rhs );
-	}
-
-	template< typename ValueT, typename ControlT >
-	bool operator!=( ValueT const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
-	{
-		return !operator==( lhs, rhs );
-	}
-
-	template< typename ValueT, typename ControlT >
-	bool operator!=( ChangeTrackedT< ValueT, ControlT > const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
-	{
-		return !operator==( lhs, rhs );
-	}
 
 	template< typename ControlT, typename ValueT >
 	ChangeTrackedT< ValueT, ControlT > makeChangeTrackedT( ValueT const & value )

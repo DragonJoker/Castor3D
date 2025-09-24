@@ -379,6 +379,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserUpscaling, RootContext )
 		{
+			// Nothing to do here
 		}
 		CU_EndAttributePushBlock( CSCNSection::eUpscaling, blockContext )
 
@@ -814,7 +815,7 @@ namespace c3d
 				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
 			}
 
-			for ( auto & [_, window] : m_renderWindows )
+			for ( auto const & [_, window] : m_renderWindows )
 			{
 				postEvent( makeCpuCleanupEvent( *window ) );
 			}

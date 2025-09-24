@@ -15,97 +15,97 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	enum eBMP
+	enum class eBMP
 	{
-		eBMP_ANIMATED_OBJECTGROUP,
-		eBMP_ANIMATED_OBJECTGROUP_SEL,
-		eBMP_ANIMATED_OBJECT,
-		eBMP_ANIMATED_OBJECT_SEL,
-		eBMP_ANIMATION,
-		eBMP_ANIMATION_SEL,
-		eBMP_SCENE,
-		eBMP_SCENE_SEL,
-		eBMP_VIEWPORT,
-		eBMP_VIEWPORT_SEL,
-		eBMP_RENDER_TARGET,
-		eBMP_RENDER_TARGET_SEL,
-		eBMP_RENDER_WINDOW,
-		eBMP_RENDER_WINDOW_SEL,
-		eBMP_FRAME_VARIABLE,
-		eBMP_FRAME_VARIABLE_SEL,
-		eBMP_FRAME_VARIABLE_BUFFER,
-		eBMP_FRAME_VARIABLE_BUFFER_SEL,
-		eBMP_NODE,
-		eBMP_NODE_SEL,
-		eBMP_CAMERA,
-		eBMP_CAMERA_SEL,
-		eBMP_GEOMETRY,
-		eBMP_GEOMETRY_SEL,
-		eBMP_DIRECTIONAL_LIGHT,
-		eBMP_DIRECTIONAL_LIGHT_SEL,
-		eBMP_POINT_LIGHT,
-		eBMP_POINT_LIGHT_SEL,
-		eBMP_SPOT_LIGHT,
-		eBMP_SPOT_LIGHT_SEL,
-		eBMP_SUBMESH,
-		eBMP_SUBMESH_SEL,
-		eBMP_PANEL_OVERLAY,
-		eBMP_PANEL_OVERLAY_SEL,
-		eBMP_BORDER_PANEL_OVERLAY,
-		eBMP_BORDER_PANEL_OVERLAY_SEL,
-		eBMP_TEXT_OVERLAY,
-		eBMP_TEXT_OVERLAY_SEL,
-		eBMP_MATERIAL,
-		eBMP_MATERIAL_SEL,
-		eBMP_PASS,
-		eBMP_PASS_SEL,
-		eBMP_TEXTURE,
-		eBMP_TEXTURE_SEL,
-		eBMP_BILLBOARD,
-		eBMP_BILLBOARD_SEL,
-		eBMP_POST_EFFECT,
-		eBMP_POST_EFFECT_SEL,
-		eBMP_TONE_MAPPING,
-		eBMP_TONE_MAPPING_SEL,
-		eBMP_SKELETON,
-		eBMP_SKELETON_SEL,
-		eBMP_BONE,
-		eBMP_BONE_SEL,
-		eBMP_BACKGROUND,
-		eBMP_BACKGROUND_SEL,
-		eBMP_SSAO_CONFIG,
-		eBMP_SSAO_CONFIG_SEL,
-		eBMP_COLOURGRADING_CONFIG,
-		eBMP_COLOURGRADING_CONFIG_SEL,
-		eBMP_CLUSTERS_CONFIG,
-		eBMP_CLUSTERS_CONFIG_SEL,
-		eBMP_VCT_CONFIG,
-		eBMP_VCT_CONFIG_SEL,
-		eBMP_COLLAPSE_ALL,
-		eBMP_EXPAND_ALL,
-		eBMP_CONTROLS,
-		eBMP_CONTROLS_SEL,
-		eBMP_CONTROL,
-		eBMP_CONTROL_SEL,
-		eBMP_STYLES,
-		eBMP_STYLES_SEL,
-		eBMP_STYLE,
-		eBMP_STYLE_SEL,
-		eBMP_THEME,
-		eBMP_THEME_SEL,
-		eBMP_PARTICLE,
-		eBMP_PARTICLE_SEL,
-		eBMP_COUNT,
+		eAnimatedObjectGroup,
+		eAnimatedObjectGroupSelected,
+		eAnimatedObject,
+		eAnimatedObjectSelected,
+		eAnimation,
+		eAnimationSelected,
+		eScene,
+		eSceneSelected,
+		eViewport,
+		eViewportSelected,
+		eRenderTarget,
+		eRenderTargetSelected,
+		eRenderWindow,
+		eRenderWindowSelected,
+		eFrameVariable,
+		eFrameVariableSelected,
+		eFrameVariableBuffer,
+		eFrameVariableBufferSelected,
+		eNode,
+		eNodeSelected,
+		eCamera,
+		eCameraSelected,
+		eGeometry,
+		eGeometrySelected,
+		eDirectionalLight,
+		eDirectionalLightSelected,
+		ePointLight,
+		ePointLightSelected,
+		eSpotLight,
+		eSpotLightSelected,
+		eSubmesh,
+		eSubmeshSelected,
+		ePanelOverlay,
+		ePanelOverlaySelected,
+		eBorderPanelOverlay,
+		eBorderPanelOverlaySelected,
+		eTextOverlay,
+		eTextOverlaySelected,
+		eMaterial,
+		eMaterialSelected,
+		ePass,
+		ePassSelected,
+		eTexture,
+		eTextureSelected,
+		eBillboard,
+		eBillboardSelected,
+		ePostEffect,
+		ePostEffectSelected,
+		eToneMapping,
+		eToneMappingSelected,
+		eSkeleton,
+		eSkeletonSelected,
+		eBone,
+		eBoneSelected,
+		eBackground,
+		eBackgroundSelected,
+		eSSAOConfig,
+		eSSAOConfigSelected,
+		eColourGradingConfig,
+		eColourGradingConfigSelected,
+		eClustersConfig,
+		eClustersConfigSelected,
+		eVCTConfig,
+		eVCTConfigSelected,
+		eCollapseAll,
+		eExpandAll,
+		eControls,
+		eControlsSelected,
+		eControl,
+		eControlSelected,
+		eStyles,
+		eStylesSelected,
+		eStyle,
+		eStyleSelected,
+		eTheme,
+		eThemeSelected,
+		eParticle,
+		eParticleSelected,
+		eCount,
 	};
 
 	enum class ShaderLanguage
 	{
-		SPIRV,
+		eSPIRV,
 #if GC_HasGLSL
-		GLSL,
+		eGLSL,
 #endif
 #if GC_HasHLSL
-		HLSL,
+		eHLSL,
 #endif
 	};
 
@@ -152,7 +152,6 @@ namespace GuiCommon
 	CU_DeclareSmartPtr( GuiCommon, I3DController, );
 	CU_DeclareSmartPtr( GuiCommon, TreeItemProperty, );
 
-	CU_DeclareMap( uint32_t, wxImage *, ImageId );
 	CU_DeclareVector( LanguageInfoUPtr, LanguageInfo );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
@@ -254,7 +253,7 @@ namespace GuiCommon
 		, c3d::String const & appName
 		, c3d::Path const & fileName
 		, c3d::ProgressBar * progress
-		, wxWindow * window
+		, wxWindow const * window
 		, int eventID );
 	/**
 	 *\~english
@@ -319,7 +318,7 @@ namespace GuiCommon
 		return result;
 	}
 
-	ashes::WindowHandle makeWindowHandle( wxWindow * window );
+	ashes::WindowHandle makeWindowHandle( wxWindow const * window );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

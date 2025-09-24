@@ -8,24 +8,22 @@
 
 namespace GuiCommon
 {
-	namespace
+	enum class eIDS
 	{
-		enum eIDS
-		{
-			eCollapseAll,
-			eExpandAll,
-		};
-	}
+		eCollapseAll,
+		eExpandAll,
+	};
 
-	TreeHolder::TreeHolder( wxWindow * parent
+	TreeHolder::TreeHolder( ImagesLoader & imagesLoader
+		, wxWindow * parent
 		, wxPoint const & position
 		, wxSize const & size )
 		: wxPanel( parent, wxID_ANY, position, size )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		wxPanel::SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		wxPanel::SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_toolBar = new wxAuiToolBar( this
 			, wxID_ANY
 			, wxDefaultPosition
@@ -35,13 +33,13 @@ namespace GuiCommon
 		m_toolBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_toolBar->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_toolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-		m_toolBar->AddTool( eCollapseAll
+		m_toolBar->AddTool( int( eIDS::eCollapseAll )
 			, _( "Collapse all" )
-			, ImagesLoader::getBitmap( eBMP_COLLAPSE_ALL )->Scale( 16, 16, wxIMAGE_QUALITY_HIGH )
+			, imagesLoader.getBitmapT( eBMP::eCollapseAll )->Scale( 16, 16, wxIMAGE_QUALITY_HIGH )
 			, _( "Collapse all the nodes of the tree" ) );
-		m_toolBar->AddTool( eExpandAll
+		m_toolBar->AddTool( int( eIDS::eExpandAll )
 			, _( "Expand all" )
-			, ImagesLoader::getBitmap( eBMP_EXPAND_ALL )->Scale( 16, 16, wxIMAGE_QUALITY_HIGH )
+			, imagesLoader.getBitmapT( eBMP::eExpandAll )->Scale( 16, 16, wxIMAGE_QUALITY_HIGH )
 			, _( "Expands all the nodes of the tree" ) );
 		m_toolBar->Realize();
 
@@ -79,20 +77,20 @@ namespace GuiCommon
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( TreeHolder, wxPanel )
-		EVT_TOOL( eCollapseAll, TreeHolder::onCollapseAll )
-		EVT_TOOL( eExpandAll, TreeHolder::onExpandAll )
+		EVT_TOOL( int( eIDS::eCollapseAll ), TreeHolder::onCollapseAll )
+		EVT_TOOL( int( eIDS::eExpandAll ), TreeHolder::onExpandAll )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
 	void TreeHolder::onCollapseAll( wxCommandEvent & event )
 	{
 		m_tree->CollapseAll();
-		//event.Skip();
+		event.Skip( false );
 	}
 
 	void TreeHolder::onExpandAll( wxCommandEvent & event )
 	{
 		m_tree->ExpandAll();
-		//event.Skip();
+		event.Skip( false );
 	}
 }

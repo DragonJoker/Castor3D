@@ -61,8 +61,17 @@ namespace c3d
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
-		 *\copydoc		RenderTechniquePass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
 		 *\~english

@@ -22,7 +22,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 	public:
 		static c3d::MbString const CombineMapPasses;

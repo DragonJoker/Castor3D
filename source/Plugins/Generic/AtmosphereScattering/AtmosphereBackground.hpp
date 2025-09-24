@@ -224,9 +224,8 @@ namespace atmosphere_scattering
 
 		auto findCameraPass( c3d::Texture const * image )const
 		{
-			auto it = m_cameraPasses.find( image );
-
-			if ( it != m_cameraPasses.end() )
+			if ( auto it = m_cameraPasses.find( image );
+				it != m_cameraPasses.end() )
 			{
 				return it;
 			}
@@ -261,7 +260,7 @@ namespace atmosphere_scattering
 
 			void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
-			void update( c3d::CpuUpdater & updater
+			void update( c3d::CpuUpdater const & updater
 				, c3d::Point3f const & sunDirection
 				, c3d::Vector3f const & planetPosition )const;
 			void update( c3d::Size const & renderSize

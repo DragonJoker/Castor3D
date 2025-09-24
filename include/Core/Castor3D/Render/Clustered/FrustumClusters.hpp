@@ -50,7 +50,7 @@ namespace c3d
 		 *\brief			Mise à jour du debug.
 		 *\param[in, out]	drawer	Le debug drawer.
 		 */
-		C3D_API void updateDebug( DebugDrawer & drawer );
+		C3D_API void updateDebug( DebugDrawer & drawer )const;
 		/**
 		 *\~english
 		 *\brief		Registers the clusters related frame passes.
@@ -58,7 +58,6 @@ namespace c3d
 		 *\brief		Enregistre les passes liées aux clusters.
 		 */
 		C3D_API void createFramePasses( crg::FramePassGroup & graph
-			, RenderTechnique & technique
 			, RenderUbo const & renderUbo );
 		/**
 		 *\~english
@@ -199,7 +198,7 @@ namespace c3d
 		bool m_clustersDirty{ true };
 		bool m_lightsDirty{ true };
 		int32_t m_first{ 5 };
-		Point3ui m_dimensions;
+		Point3ui m_dimensions{ 32u, 16u, 64u };
 		GroupChangeTracked< Point2ui > m_clusterSize;
 		GroupChangeTracked< Matrix4x4f > m_cameraProjection;
 		GroupChangeTracked< Matrix4x4f > m_cameraView;

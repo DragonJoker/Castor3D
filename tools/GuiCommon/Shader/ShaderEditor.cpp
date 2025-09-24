@@ -106,6 +106,7 @@ namespace GuiCommon
 	}
 
 	ShaderEditor::ShaderEditor( c3d::Engine * engine
+		, ImagesLoader & imagesLoader
 		, bool canEdit
 		, StcContext & stcContext
 		, ShaderEntryPoint const & shader
@@ -122,7 +123,7 @@ namespace GuiCommon
 		, m_canEdit( canEdit )
 	{
 		doListAvailableLanguages();
-		doInitialiseLayout( engine );
+		doInitialiseLayout( engine, imagesLoader );
 		loadLanguage( language );
 		m_frameVariablesList->loadVariables( c3d::getVkShaderStage( m_shader.entryPoint ), m_ubos );
 	}
@@ -133,7 +134,8 @@ namespace GuiCommon
 		m_auiManager.UnInit();
 	}
 
-	void ShaderEditor::doInitialiseLayout( c3d::Engine * engine )
+	void ShaderEditor::doInitialiseLayout( c3d::Engine * engine
+		, ImagesLoader & imagesLoader )
 	{
 		static int constexpr ListWidth = 200;
 		wxSize size = GetClientSize();
@@ -158,7 +160,7 @@ namespace GuiCommon
 		m_frameVariablesProperties->SetMarginColour( BORDER_COLOUR );
 //
 		// The frame variables list
-		m_frameVariablesList = wxMakeWindowPtr< FrameVariablesList >( engine, &*m_frameVariablesProperties, this, wxPoint( 0, 25 ), wxSize( ListWidth, 0 ) );
+		m_frameVariablesList = wxMakeWindowPtr< FrameVariablesList >( engine, imagesLoader, &*m_frameVariablesProperties, this, wxPoint( 0, 25 ), wxSize( ListWidth, 0 ) );
 		m_frameVariablesList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_frameVariablesList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_frameVariablesList->Enable( m_canEdit );
@@ -222,7 +224,7 @@ namespace GuiCommon
 
 		if ( it == m_sources.end() )
 		{
-			language = ShaderLanguage::SPIRV;
+			language = ShaderLanguage::eSPIRV;
 			it = m_sources.find( language );
 		}
 
@@ -232,16 +234,16 @@ namespace GuiCommon
 
 			switch ( language )
 			{
-			case ShaderLanguage::SPIRV:
+			case ShaderLanguage::eSPIRV:
 				extension = wxT( ".spirv" );
 				break;
 #if GC_HasGLSL
-			case ShaderLanguage::GLSL:
+			case ShaderLanguage::eGLSL:
 				extension = wxT( ".glsl" );
 				break;
 #endif
 #if GC_HasHLSL
-			case ShaderLanguage::HLSL:
+			case ShaderLanguage::eHLSL:
 				extension = wxT( ".hlsl" );
 				break;
 #endif
@@ -291,7 +293,7 @@ namespace GuiCommon
 				, *m_shader.shader->getStatements() );
 
 			spirv::SpirVConfig spvConfig{ spirv::v1_5 };
-			m_sources.try_emplace( ShaderLanguage::SPIRV
+			m_sources.try_emplace( ShaderLanguage::eSPIRV
 				, make_wxString( spirv::writeSpirv( *allocator
 					, *m_shader.shader
 					, statements.get()
@@ -308,7 +310,7 @@ namespace GuiCommon
 				, true
 				, true
 				, true };
-			m_sources.try_emplace( ShaderLanguage::GLSL
+			m_sources.try_emplace( ShaderLanguage::eGLSL
 				, make_wxString( glsl::compileGlsl( *allocator
 					, *m_shader.shader
 					, statements.get()
@@ -320,7 +322,7 @@ namespace GuiCommon
 			hlsl::HlslConfig hlslConfig{ hlsl::v6_6
 				, stage
 				, false };
-			m_sources.try_emplace( ShaderLanguage::HLSL
+			m_sources.try_emplace( ShaderLanguage::eHLSL
 				, make_wxString( hlsl::compileHlsl( *allocator
 					, *m_shader.shader
 					, statements.get()
@@ -339,10 +341,10 @@ namespace GuiCommon
 				&& spirvIndex > glslIndex )
 		{
 #if GC_HasGLSL
-			m_sources.try_emplace( ShaderLanguage::GLSL
+			m_sources.try_emplace( ShaderLanguage::eGLSL
 				, make_wxString( m_shader.source.text.substr( 0u, spirvIndex ) ) );
 #endif
-			m_sources.try_emplace( ShaderLanguage::SPIRV
+			m_sources.try_emplace( ShaderLanguage::eSPIRV
 				, make_wxString( m_shader.source.text.substr( spirvIndex ) ) );
 			return;
 		}
@@ -350,7 +352,7 @@ namespace GuiCommon
 		spirv::SpirVConfig spvConfig{ spirv::v1_5 };
 		ast::ShaderAllocator shaderAllocator{ ast::AllocationMode::eIncremental };
 		auto allocator = shaderAllocator.getBlock();
-		m_sources.try_emplace( ShaderLanguage::SPIRV
+		m_sources.try_emplace( ShaderLanguage::eSPIRV
 			, make_wxString( spirv::displaySpirv( *allocator
 				, m_shader.source.spirv ) ) );
 	}

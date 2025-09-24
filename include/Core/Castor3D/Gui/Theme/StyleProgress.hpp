@@ -68,7 +68,7 @@ namespace c3d
 			return m_labelStyle.getForegroundMaterial();
 		}
 
-		void setTitleFontName( String value )
+		void setTitleFontName( StringView value )
 		{
 			m_titleFontName = c3d::move( value );
 		}

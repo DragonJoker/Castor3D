@@ -458,7 +458,7 @@ namespace c3d
 				, crg::RunnableGraph & runnable )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO " ) + prefix + cuT( " blur pass" ) );
-				auto bentResIt = pass.targets.rbegin();
+				auto bentResIt = pass.getTargets().rbegin();
 				auto resIt = std::next( bentResIt );
 				auto result = makeRawUnique< RenderQuad >( pass
 					, context

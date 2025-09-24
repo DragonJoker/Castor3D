@@ -29,7 +29,7 @@ namespace smaa
 			, bool const * enabled );
 		~Reproject();
 
-		void accept( c3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		c3d::Texture const & getResult()const
 		{
