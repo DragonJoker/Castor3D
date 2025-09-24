@@ -339,8 +339,8 @@ namespace c3d::shader
 
 	struct BufferData
 		: public sdw::StructInstanceHelperT < "C3D_BufferData"
-		, sdw::type::MemoryLayout::eStd430
-		, sdw::Vec4Field< "data" > >
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec4Field< "data" > >
 	{
 		SDW_DeclStructInstance( C3D_API, BufferData );
 

@@ -25,13 +25,28 @@ namespace smaa
 	struct SmaaUboConfiguration
 	{
 		c3d::Point4f rtMetrics;
-		c3d::Point4f predication;
+		c3d::f32 threshold;
+		c3d::f32 predicationThreshold;
+		c3d::f32 predicationScale;
+		c3d::f32 predicationStrength;
 		c3d::Point4f subsampleIndices;
-		c3d::Point4f searchSizes;
-		c3d::Point4f areaTexPixelSizeAndLocalContrast;
-		c3d::Point4f areaTexSizesReprojWS;
-		c3d::Point4i maxsSearchSteps;
-		c3d::Point4i tweaks;
+		c3d::Point2f searchTexSize;
+		c3d::Point2f searchTexPackedSize;
+		c3d::Point2f areaTexPixelSize;
+		c3d::f32 localContrastAdaptationFactor;
+		c3d::s32 cornerRounding;
+		c3d::f32 areaTexMaxDistance;
+		c3d::f32 areaTexMaxDistanceDiag;
+		c3d::f32 areaTexSubtexSize;
+		c3d::f32 reprojectionWeightScale;
+		c3d::s32 maxSearchSteps;
+		c3d::s32 maxSearchStepsDiag;
+		c3d::s32 disableCornerDetection;
+		c3d::s32 disableDiagonalDetection;
+		c3d::s32 enableReprojection;
+		c3d::f32 cornerRoundingNorm;
+		c3d::f32 depthThreshold;
+		c3d::f32 pad{};
 	};
 
 	struct SmaaData
@@ -54,12 +69,12 @@ namespace smaa
 			, sdw::FloatField< "reprojectionWeightScale" >
 			, sdw::IntField< "maxSearchSteps" >
 			, sdw::IntField< "maxSearchStepsDiag" >
-			, sdw::IntField< "pad0" >
-			, sdw::IntField< "pad1" >
 			, sdw::IntField< "disableCornerDetection" >
 			, sdw::IntField< "disableDiagonalDetection" >
 			, sdw::IntField< "enableReprojection" >
-			, sdw::IntField< "pad2" > >
+			, sdw::FloatField< "cornerRoundingNorm" >
+			, sdw::FloatField< "depthThreshold" >
+			, sdw::FloatField< "pad" > >
 	{
 		SDW_DeclStructInstance( , SmaaData );
 

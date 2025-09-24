@@ -34,8 +34,8 @@ namespace smaa
 		, disableCornerDetection{ getMember < "disableCornerDetection" >() }
 		, disableDiagonalDetection{ getMember < "disableDiagonalDetection" >() }
 		, enableReprojection{ getMember < "enableReprojection" >() }
-		, cornerRoundingNorm{ writer.cast< sdw::Float >( cornerRounding ) / 100.0_f }
-		, depthThreshold{ threshold * 0.1_f }
+		, cornerRoundingNorm{ getMember < "cornerRoundingNorm" >() }
+		, depthThreshold{ getMember < "depthThreshold" >() }
 	{
 	}
 
@@ -63,31 +63,27 @@ namespace smaa
 			, 1.0f / float( renderSize.getHeight() )
 			, float( renderSize.getWidth() )
 			, float( renderSize.getHeight() ) };
-		data.predication = { config.data.threshold
-			, config.data.predicationThreshold
-			, config.data.predicationScale
-			, config.data.predicationStrength };
+		data.threshold = config.data.threshold;
+		data.predicationThreshold = config.data.predicationThreshold;
+		data.predicationScale = config.data.predicationScale;
+		data.predicationStrength = config.data.predicationStrength;
 		data.subsampleIndices = config.subsampleIndices[config.subsampleIndex];
-		data.searchSizes = { config.data.searchTexSize->x
-			, config.data.searchTexSize->y
-			, config.data.searchTexPackedSize->x
-			, config.data.searchTexPackedSize->y };
-		data.areaTexPixelSizeAndLocalContrast = { config.data.areaTexPixelSize->x
-			, config.data.areaTexPixelSize->y
-			, config.data.localContrastAdaptationFactor
-			, config.data.cornerRounding };
-		data.areaTexSizesReprojWS = { config.data.areaTexMaxDistance
-			, config.data.areaTexMaxDistanceDiag
-			, config.data.areaTexSubtexSize
-			, config.data.reprojectionWeightScale };
-		data.maxsSearchSteps = { config.data.maxSearchSteps
-			, config.data.maxSearchStepsDiag
-			, 0
-			, 0 };
-		data.tweaks = { config.data.disableCornerDetection ? 1 : 0
-			, config.data.disableDiagonalDetection ? 1 : 0
-			, config.data.enableReprojection ? 1 : 0
-			, 0 };
+		data.searchTexSize = config.data.searchTexSize;
+		data.searchTexPackedSize = config.data.searchTexPackedSize;
+		data.areaTexPixelSize = config.data.areaTexPixelSize;
+		data.localContrastAdaptationFactor = config.data.localContrastAdaptationFactor;
+		data.cornerRounding = config.data.cornerRounding;
+		data.areaTexMaxDistance = config.data.areaTexMaxDistance;
+		data.areaTexMaxDistanceDiag = config.data.areaTexMaxDistanceDiag;
+		data.areaTexSubtexSize = config.data.areaTexSubtexSize;
+		data.reprojectionWeightScale = config.data.reprojectionWeightScale;
+		data.maxSearchSteps = config.data.maxSearchSteps;
+		data.maxSearchStepsDiag = config.data.maxSearchStepsDiag;
+		data.disableCornerDetection = ( config.data.disableCornerDetection ? 1 : 0 );
+		data.disableDiagonalDetection = ( config.data.disableDiagonalDetection ? 1 : 0 );
+		data.enableReprojection = ( config.data.enableReprojection ? 1 : 0 );
+		data.cornerRoundingNorm = float( config.data.cornerRounding ) / 100.0f;
+		data.depthThreshold = config.data.threshold * 0.1f;
 	}
 
 	//*********************************************************************************************
