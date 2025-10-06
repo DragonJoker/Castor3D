@@ -213,6 +213,12 @@ namespace c3d
 		, sdw::Vec4 const & sampled )
 	{
 		auto & writer{ *sampled.getWriter() };
+		auto reconstructedNormal = writer.declLocale( "c3d_reconstructedNormalMikkt"
+			, writer.ternary( nml2Chan != 0_u
+				, shader::Utils::reconstructNormal( sampled[mask], sampled[mask + 1u] )
+				, shader::TextureConfigData::getVec3( sampled, mask ) ) );
+		reconstructedNormal = fma( vec3( 2.0_f ), reconstructedNormal, -vec3( 1.0_f ) );
+		reconstructedNormal.g() = reconstructedNormal.g() * nmlGMul;
 
 		if ( components.usesDerivativeValues() )
 		{
@@ -222,13 +228,6 @@ namespace c3d
 			auto tbn00 = shader::Utils::getTBN( normal.value(), tangent.value().xyz(), bitangent.value() );
 			auto tbn10 = shader::Utils::getTBN( normal.value() + normal.dPdx(), tangent.value().xyz() + tangent.dPdx().xyz(), bitangent.value() + bitangent.dPdx() );
 			auto tbn01 = shader::Utils::getTBN( normal.value() + normal.dPdy(), tangent.value().xyz() + tangent.dPdy().xyz(), bitangent.value() + bitangent.dPdy() );
-
-			sampled[mask + 1u] = nmlGMul * sampled[mask + 1u];
-			auto reconstructedNormal = writer.declLocale( "c3d_reconstructedNormalMikkt"
-				, writer.ternary( nml2Chan != 0_u
-					, shader::Utils::reconstructNormal( sampled[mask], sampled[mask + 1u] )
-					, shader::TextureConfigData::getVec3( sampled, mask ) ) );
-			reconstructedNormal = fma( vec3( 2.0_f ), reconstructedNormal, -vec3( 1.0_f ) );
 
 			auto res00 = writer.declLocale( "c3d_mikktDerivRes00"
 				, normalize( tbn00 * reconstructedNormal ) );
@@ -246,13 +245,7 @@ namespace c3d
 			auto tangent = components.getMember< sdw::Vec4 >( "tangent" );
 			auto bitangent = components.getMember< sdw::Vec3 >( "bitangent" );
 			auto tbn = shader::Utils::getTBN( normal, tangent.xyz(), bitangent );
-			sampled[mask + 1u] = nmlGMul * sampled[mask + 1u];
-			normal = normalize( tbn
-				* fma( vec3( 2.0_f )
-					, writer.ternary( nml2Chan != 0_u
-						, shader::Utils::reconstructNormal( sampled[mask], sampled[mask + 1u] )
-						, shader::TextureConfigData::getVec3( sampled, mask ) )
-					, -vec3( 1.0_f ) ) );
+			normal = normalize( tbn * reconstructedNormal );
 		}
 	}
 
