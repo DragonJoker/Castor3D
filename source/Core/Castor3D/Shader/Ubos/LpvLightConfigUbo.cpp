@@ -24,9 +24,12 @@ namespace c3d
 		static Matrix4x4f snapMatrix( float lpvCellSize
 			, Matrix4x4f mtx )
 		{
-			mtx[0][3] = float( mtx[0][3] - fmod( mtx[0][3], lpvCellSize ) );
-			mtx[1][3] = float( mtx[1][3] - fmod( mtx[1][3], lpvCellSize ) );
-			mtx[2][3] = float( mtx[2][3] - fmod( mtx[2][3], lpvCellSize ) );
+			if ( mtx[0][3] != 0.0f )
+				mtx[0][3] = float( mtx[0][3] - fmod( mtx[0][3], lpvCellSize ) );
+			if ( mtx[1][3] != 0.0f )
+				mtx[1][3] = float( mtx[1][3] - fmod( mtx[1][3], lpvCellSize ) );
+			if ( mtx[2][3] != 0.0f )
+				mtx[2][3] = float( mtx[2][3] - fmod( mtx[2][3], lpvCellSize ) );
 			return mtx;
 		}
 	}
@@ -59,9 +62,9 @@ namespace c3d
 		switch ( ltType )
 		{
 		case LightType::eDirectional:
-			CU_Require( faceIndex == 0u );
+			CU_Require( faceIndex < static_cast< DirectionalLightInstance const & >( light ).getCascadeCount() );
 			configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
-				, static_cast< DirectionalLightInstance const & >( light ).getViewMatrix( MaxDirectionalCascadesCount - 1u ) );
+				, static_cast< DirectionalLightInstance const & >( light ).getViewMatrix( faceIndex ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
 			break;

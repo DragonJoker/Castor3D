@@ -136,6 +136,11 @@ namespace c3d
 			return m_direction;
 		}
 
+		uint32_t getCascadeCount()const noexcept
+		{
+			return uint32_t( m_cascades.size() );
+		}
+
 		float getSplitDepth( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].splitDepthScale->x;

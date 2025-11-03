@@ -59,6 +59,7 @@ namespace c3d
 					auto view = attach->view( index );
 					auto image = getGraph().createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
+					subresourceRange.layerCount = 1; // Image is 3D, hence no layers.
 					assert( attach->isTransferOutputImageView() );
 					context->vkCmdClearColorImage( commandBuffer
 						, image
@@ -169,7 +170,7 @@ namespace c3d
 
 			for ( auto & lpvLightConfigUbo : lpvLightConfigUbos )
 			{
-				lpvLightConfigUbo.cpuUpdate( light, lpvCellSizes[index], 0u );
+				lpvLightConfigUbo.cpuUpdate( light, lpvCellSizes[index], index );
 				++index;
 			}
 		}
