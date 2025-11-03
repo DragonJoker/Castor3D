@@ -145,11 +145,6 @@ namespace CastorViewer
 		}
 	}
 
-	MainFrame::~MainFrame()
-	{
-		m_auiManager.UnInit();
-	}
-
 	bool MainFrame::initialise( GuiCommon::SplashScreen & splashScreen )
 	{
 		c3d::Logger::registerCallback( [this]( c3d::MbString const & logText
@@ -884,7 +879,7 @@ namespace CastorViewer
 			}
 		}
 
-		event.Skip();
+		event.Skip( false );
 	}
 
 	void MainFrame::onTimer( wxTimerEvent & event )
@@ -894,11 +889,11 @@ namespace CastorViewer
 		else if ( event.GetId() == int( main::eID::eERRLOG_TIMER ) && m_errorLog.listBox )
 			main::updateLog( m_errorLog );
 #ifndef NDEBUG
-		else if ( event.GetId() == main::eID::eDBGLOG_TIMER && m_debugLog.listBox )
+		else if ( event.GetId() == int( main::eID::eDBGLOG_TIMER ) && m_debugLog.listBox )
 			main::updateLog( m_debugLog );
 #endif
 
-		event.Skip();
+		event.Skip( false );
 	}
 
 	void MainFrame::onFpsTimer( wxTimerEvent & event )
@@ -929,6 +924,8 @@ namespace CastorViewer
 #if CV_MainFrameToolbar
 		m_auiManager.DetachPane( m_toolBar );
 #endif
+		m_auiManager.UnInit();
+
 		m_messageLog.listBox = {};
 		m_errorLog.listBox = {};
 #ifndef NDEBUG
@@ -1029,7 +1026,7 @@ namespace CastorViewer
 			loadScene( fileDialog.GetPath() );
 		}
 
-		event.Skip();
+		event.Skip( false );
 	}
 
 	void MainFrame::onExportScene( wxCommandEvent & event )

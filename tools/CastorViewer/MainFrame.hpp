@@ -48,7 +48,6 @@ namespace CastorViewer
 	{
 	public:
 		explicit MainFrame( wxString const & title );
-		~MainFrame()override;
 
 		bool initialise( GuiCommon::SplashScreen & splashScreen );
 		void loadScene( wxString const & fileName = wxEmptyString );
