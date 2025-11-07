@@ -178,7 +178,7 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	String const AmbientColourMapComponent::TypeName = C3D_MakePassMapComponentName( "ambient" );
+	String const AmbientColourMapComponent::TypeName = C3D_MakePassMapComponentName( "ambient_colour" );
 
 	AmbientColourMapComponent::AmbientColourMapComponent( Pass & pass )
 		: PassMapComponent{ pass
