@@ -11,6 +11,7 @@
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
@@ -23,6 +24,7 @@
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/AmbientColourMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
@@ -97,10 +99,16 @@ namespace c3d_assimp
 	static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
 	static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 	static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
-	static auto constexpr TextureType_OCCLUSION_ROUGHNESS_METALNESS = aiTextureType_UNKNOWN;
 	static auto constexpr TextureType_SHEEN = aiTextureType( 19 );
 	static auto constexpr TextureType_CLEARCOAT = aiTextureType( 20 );
 	static auto constexpr TextureType_TRANSMISSION = aiTextureType( 21 );
+	static auto constexpr TextureType_GLTF_METALLIC_ROUGHNESS = aiTextureType( 27 );
+
+#if AI_TEXTURE_TYPE_MAX == TextureType_GLTF_METALLIC_ROUGHNESS
+	static auto constexpr TextureType_OCCLUSION_ROUGHNESS_METALNESS = aiTextureType( 27 );
+#else
+	static auto constexpr TextureType_OCCLUSION_ROUGHNESS_METALNESS = aiTextureType( 18 );
+#endif
 
 	//*********************************************************************************************
 
@@ -156,6 +164,7 @@ namespace c3d_assimp
 				, m_isPbr{ detectPbr() }
 				, m_result{ result }
 				, m_colourMapPlugin{ m_result.getComponentPlugin< c3d::ColourMapComponent >() }
+				, m_ambientMapPlugin{ m_result.getComponentPlugin< c3d::AmbientColourMapComponent >() }
 				, m_emissiveMapPlugin{ m_result.getComponentPlugin< c3d::EmissiveMapComponent >() }
 				, m_heightMapPlugin{ m_result.getComponentPlugin< c3d::HeightMapComponent >() }
 				, m_metalnessMapPlugin{ m_result.getComponentPlugin< c3d::MetalnessMapComponent >() }
@@ -173,6 +182,7 @@ namespace c3d_assimp
 				, m_sheenMapPlugin{ m_result.getComponentPlugin< c3d::SheenMapComponent >() }
 				, m_sheenRoughnessMapPlugin{ m_result.getComponentPlugin< c3d::SheenRoughnessMapComponent >() }
 				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
+				, m_ambientMapFlags{ m_ambientMapPlugin.getTextureFlags() }
 				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
 				, m_heightMapFlags{ m_heightMapPlugin.getTextureFlags() }
 				, m_metalnessMapFlags{ m_metalnessMapPlugin.getTextureFlags() }
@@ -190,6 +200,7 @@ namespace c3d_assimp
 				, m_sheenMapFlags{ m_sheenMapPlugin.getTextureFlags() }
 				, m_sheenRoughnessMapFlags{ m_sheenRoughnessMapPlugin.getTextureFlags() }
 				, m_colourBaseConfiguration{ m_colourMapPlugin.getBaseTextureConfiguration() }
+				, m_ambientBaseConfiguration{ m_ambientMapPlugin.getBaseTextureConfiguration() }
 				, m_emissiveBaseConfiguration{ m_emissiveMapPlugin.getBaseTextureConfiguration() }
 				, m_heightBaseConfiguration{ m_heightMapPlugin.getBaseTextureConfiguration() }
 				, m_metalnessBaseConfiguration{ m_metalnessMapPlugin.getBaseTextureConfiguration() }
@@ -247,11 +258,8 @@ namespace c3d_assimp
 
 				parseComponentDataT< c3d::MetalnessComponent, float >( AI_MATKEY_METALLIC_FACTOR );
 
-				if ( !parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
-				{
-					parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_COLOR_DIFFUSE );
-				}
-
+				parseColour();
+				parseAmbient();
 				parseSpecular();
 				parseSpecularFactor();
 				parseEmissive();
@@ -279,6 +287,7 @@ namespace c3d_assimp
 				TextureInfo mtlInfo{};
 				TextureInfo shnInfo{};
 				TextureInfo rghInfo{};
+				auto ambInfo = getTextureInfo( aiTextureType_AMBIENT, 0u );
 				auto trsInfo = getTextureInfo( TextureType_TRANSMISSION, 0u );
 				auto thkInfo = getTextureInfo( TextureType_TRANSMISSION, 1u );
 				auto cctInfo = getTextureInfo( TextureType_CLEARCOAT, 0u );
@@ -300,6 +309,8 @@ namespace c3d_assimp
 				auto hasOpacityTex = finishOpacity( opaInfo );
 
 				loadTexture( colInfo, getRemap( m_colourMapFlags, m_colourBaseConfiguration )
+					, hasOpacityTex );
+				loadTexture( ambInfo, getRemap( m_ambientMapFlags, m_ambientBaseConfiguration )
 					, hasOpacityTex );
 				loadTexture( emiInfo, getRemap( m_emissiveMapFlags, m_emissiveBaseConfiguration )
 					, hasOpacityTex );
@@ -585,6 +596,27 @@ namespace c3d_assimp
 				return result;
 			}
 
+			void parseColour()
+			{
+				if ( !parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
+				{
+					parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_COLOR_DIFFUSE );
+				}
+			}
+
+			void parseAmbient()
+			{
+				aiColor3D colour = { 1, 1, 1 };
+				bool hasColour = m_material.Get( AI_MATKEY_COLOR_AMBIENT, colour ) == aiReturn_SUCCESS;
+
+				if ( hasColour )
+				{
+					auto component = m_result.createComponent< c3d::AmbientComponent >();
+					component->setAmbient( c3d::RgbColour{ colour.r, colour.g, colour.b } );
+					component->setAmbientFactor( 1.0f );
+				}
+			}
+
 			void parseSpecular()
 			{
 				aiColor3D colour = { 1, 1, 1 };
@@ -593,9 +625,7 @@ namespace c3d_assimp
 				if ( hasColour )
 				{
 					auto component = m_result.createComponent< c3d::SpecularComponent >();
-					component->setSpecular( c3d::RgbColour{ colour.r
-						, colour.g
-						, colour.b } );
+					component->setSpecular( c3d::RgbColour{ colour.r, colour.g, colour.b } );
 				}
 			}
 
@@ -638,9 +668,7 @@ namespace c3d_assimp
 				if ( hasColour || hasDistance )
 				{
 					auto component = m_result.createComponent< c3d::AttenuationComponent >();
-					component->setAttenuationColour( c3d::RgbColour{ colour.r
-						, colour.g
-						, colour.b } );
+					component->setAttenuationColour( c3d::RgbColour{ colour.r, colour.g, colour.b } );
 					component->setAttenuationDistance( distance );
 				}
 			}
@@ -670,9 +698,7 @@ namespace c3d_assimp
 				if ( hasSheen || hasRoughness )
 				{
 					auto component = m_result.createComponent< c3d::SheenComponent >();
-					component->setSheenColour( c3d::HdrRgbColour{ sheen.r
-						, sheen.g
-						, sheen.b } );
+					component->setSheenColour( c3d::HdrRgbColour{ sheen.r, sheen.g, sheen.b } );
 					component->setRoughnessFactor( roughness );
 				}
 			}
@@ -1199,6 +1225,7 @@ namespace c3d_assimp
 			bool m_hasRefr{};
 			c3d::Pass & m_result;
 			c3d::PassComponentPlugin const & m_colourMapPlugin;
+			c3d::PassComponentPlugin const & m_ambientMapPlugin;
 			c3d::PassComponentPlugin const & m_emissiveMapPlugin;
 			c3d::PassComponentPlugin const & m_heightMapPlugin;
 			c3d::PassComponentPlugin const & m_metalnessMapPlugin;
@@ -1216,6 +1243,7 @@ namespace c3d_assimp
 			c3d::PassComponentPlugin const & m_sheenMapPlugin;
 			c3d::PassComponentPlugin const & m_sheenRoughnessMapPlugin;
 			c3d::PassComponentTextureFlag m_colourMapFlags;
+			c3d::PassComponentTextureFlag m_ambientMapFlags;
 			c3d::PassComponentTextureFlag m_emissiveMapFlags;
 			c3d::PassComponentTextureFlag m_heightMapFlags;
 			c3d::PassComponentTextureFlag m_metalnessMapFlags;
@@ -1233,6 +1261,7 @@ namespace c3d_assimp
 			c3d::PassComponentTextureFlag m_sheenMapFlags;
 			c3d::PassComponentTextureFlag m_sheenRoughnessMapFlags;
 			c3d::TextureConfiguration m_colourBaseConfiguration;
+			c3d::TextureConfiguration m_ambientBaseConfiguration;
 			c3d::TextureConfiguration m_emissiveBaseConfiguration;
 			c3d::TextureConfiguration m_heightBaseConfiguration;
 			c3d::TextureConfiguration m_metalnessBaseConfiguration;
