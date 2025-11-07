@@ -78,7 +78,7 @@ namespace c3d_fbx
 			return m_fbxManager && m_fbxScene;
 		}
 
-		auto & getMaterials()const noexcept
+		auto & getFbxMaterials()const noexcept
 		{
 			return m_sceneData.materials;
 		}

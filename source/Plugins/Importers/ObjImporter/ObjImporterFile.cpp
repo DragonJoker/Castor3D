@@ -2,9 +2,6 @@
 
 #include "ObjImporter/ObjMaterialImporter.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Miscellaneous/Logger.hpp>
-
 namespace c3d_obj
 {
 	//*********************************************************************************************

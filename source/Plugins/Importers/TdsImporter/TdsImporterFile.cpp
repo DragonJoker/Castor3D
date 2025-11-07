@@ -2,7 +2,6 @@
 
 #include "TdsImporter/TdsMaterialImporter.hpp"
 
-#include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
 namespace c3d_3ds
@@ -997,8 +996,7 @@ namespace c3d_3ds
 				{
 					if ( currentChunk.chunkId == TdsChunkID::MAT_ENTRY )
 						processMaterialChunk( importerFile, file, currentChunk, sceneData );
-					else if ( currentChunk.chunkId == TdsChunkID::MDATA
-						|| currentChunk.chunkId == TdsChunkID::MDATA )
+					else if ( currentChunk.chunkId == TdsChunkID::MDATA )
 						processChunk( importerFile, file, currentChunk, sceneData );
 					else if ( currentChunk.chunkId == TdsChunkID::AMBIENT_LIGHT )
 						getRgbColour( file, currentChunk, sceneData.ambient );
