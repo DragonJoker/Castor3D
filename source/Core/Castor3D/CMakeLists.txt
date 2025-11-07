@@ -588,6 +588,8 @@ source_group( "Header Files\\Material\\Pass\\Component\\Lighting" FILES ${${PROJ
 source_group( "Source Files\\Material\\Pass\\Component\\Lighting" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/AmbientColourMapComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/AmbientFactorMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatNormalMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.cpp
@@ -612,6 +614,8 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/TransmittanceMapComponent.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/AmbientColourMapComponent.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/AmbientFactorMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp

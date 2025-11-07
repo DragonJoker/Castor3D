@@ -27,6 +27,8 @@
 #include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmittanceComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/AmbientColourMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/AmbientFactorMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp"
@@ -205,6 +207,8 @@ namespace c3d
 		registerComponent< SheenRoughnessMapComponent >();
 		registerComponent< IridescenceMapComponent >();
 		registerComponent< IridescenceThicknessMapComponent >();
+		registerComponent< AmbientColourMapComponent >();
+		registerComponent< AmbientFactorMapComponent >();
 
 		m_pauseOrder = false;
 		reorderBuffer();
