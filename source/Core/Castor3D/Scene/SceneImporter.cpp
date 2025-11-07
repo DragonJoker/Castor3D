@@ -174,12 +174,14 @@ namespace c3d
 
 				for ( auto const & name : toImport )
 				{
+					log::info << materialImporter->getPrefix() << cuT( "Loading Material [" ) << name << cuT( "]" ) << std::endl;
 					++index;
 					stepProgressBarLocal( m_file->getProgressBar()
 						, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 					auto material = materialImporter->createMaterial( name );
 					if ( materialImporter->importMaterial( *material ) )
 						imported.emplace_back( c3d::move( material ) );
+					log::info << materialImporter->getPrefix() << cuT( "Loaded Material [" ) << name << cuT( "]" ) << std::endl;
 				}
 
 				for ( auto & material : imported )

@@ -16,7 +16,7 @@ namespace
 
 		if ( extensions.empty() )
 		{
-			extensions.emplace_back( cuT( "3ds" ), Extension{ cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) } );
+			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) } );
 			extensions.emplace_back( cuT( "ac" ), Extension{ cuT( "AC" ), cuT( "AC3D" ) } );
 			extensions.emplace_back( cuT( "acc" ), Extension{ cuT( "ACC" ), cuT( "AC3D" ) } );
 			extensions.emplace_back( cuT( "ac3d" ), Extension{ cuT( "AC3D" ), cuT( "AC3D" ) } );
@@ -64,7 +64,7 @@ namespace
 			extensions.emplace_back( cuT( "xgl" ), Extension{ cuT( "XGL" ), cuT( "XGL" ) } );
 			extensions.emplace_back( cuT( "xml" ), Extension{ cuT( "XML" ), cuT( "Irrlicht Scene" ) } );
 			extensions.emplace_back( cuT( "zgl" ), Extension{ cuT( "ZGL" ), cuT( "XGL" ) } );
-			extensions.emplace_back( cuT( "obj" ), Extension{ cuT( "OBJ" ), cuT( "Wavefront Object" ) } );
+			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "OBJ" ), cuT( "Wavefront Object" ) } );
 			extensions.emplace_back( cuT( "ply" ), Extension{ cuT( "PLY" ), cuT( "Stanford Polygon Library" ) } );
 
 			if ( aiGetVersionMajor() > 3

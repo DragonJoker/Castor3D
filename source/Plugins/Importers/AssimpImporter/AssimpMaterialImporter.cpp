@@ -600,7 +600,9 @@ namespace c3d_assimp
 			{
 				if ( !parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
 				{
-					parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_COLOR_DIFFUSE );
+					if ( aiColor3D value{};
+						parseDataT( AI_MATKEY_COLOR_DIFFUSE, value ) )
+						m_result.createComponent< c3d::ColourComponent >()->setColour( c3d::RgbColour::fromComponents( value.r, value.g, value.b ) );
 				}
 			}
 

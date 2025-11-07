@@ -122,7 +122,7 @@ namespace c3d_fbx
 
 			if ( !data.empty() )
 			{
-				c3d::log::debug << "    Texture: " << fbxTexture->GetName() << "\n";
+				c3d::log::debug << "    Texture: " << c3d::makeString( fbxTexture->GetName() ) << "\n";
 				return c3d::makeRawUnique< c3d::TextureSourceInfo >( importer.loadTexture( fbxTexture->GetName()
 					, formatName, c3d::move( data )
 					, texConfig, loadConfig ) );

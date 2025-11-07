@@ -21,7 +21,7 @@ namespace
 		std::cout << "Usage:" << std::endl;
 		std::cout << "HeightMapToNormalMap -s strength FILE" << std::endl;
 		std::cout << "  FILE must be an image file." << std::endl;
-		std::cout << "  strength is a floating point value defining the normals strength (default is 8.0)." << std::endl;
+		std::cout << "  strength is a floating point value defining the normals strength (default is 3.0)." << std::endl;
 	}
 
 	struct Options
