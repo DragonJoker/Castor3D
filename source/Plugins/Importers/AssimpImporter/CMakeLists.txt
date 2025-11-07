@@ -114,15 +114,15 @@ if( assimp_FOUND )
 			${ImporterIncludes}
 	)
 	target_include_directories( ${PROJECT_NAME} SYSTEM
-		PRIVATE
+		PUBLIC
 			${assimp_INCLUDE_DIR}
 	)
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC
 			castor::Castor3D
+			${assimp_LIBRARIES}
 		PRIVATE
 			${ImporterDependencies}
-			${assimp_LIBRARIES}
 	)
 	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}

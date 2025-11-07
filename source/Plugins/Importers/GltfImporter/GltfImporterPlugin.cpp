@@ -5,8 +5,6 @@
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 
-#include <assimp/version.h>
-
 namespace
 {
 	c3d::Plugin::ExtensionArray getExtensions()

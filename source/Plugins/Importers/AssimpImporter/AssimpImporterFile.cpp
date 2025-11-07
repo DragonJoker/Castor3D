@@ -194,7 +194,12 @@ namespace c3d_assimp
 				it != names.namesByIndex.end() )
 				return it->second;
 
-			auto result = getRawName( element );
+			auto rawName = getRawName( element );
+			if ( auto it = names.namesByRawName.find( rawName );
+				it != names.namesByRawName.end() )
+				return it->second;
+
+			auto result = rawName;
 			if ( result.empty() )
 				result = baseName;
 			else
@@ -204,6 +209,7 @@ namespace c3d_assimp
 				it != names.names.end() )
 				result += cuT( "-" ) + c3d::string::toString( index );
 
+			names.namesByRawName.try_emplace( rawName, result );
 			names.namesByIndex.try_emplace( index, result );
 			names.names.emplace( result );
 			return result;
@@ -449,6 +455,14 @@ namespace c3d_assimp
 	c3d::String AssimpImporterFile::getMaterialName( c3d::u32 index )const
 	{
 		return getInternalName( file::getElementName( *m_aiScene->mMaterials[index], index, getName(), m_materialNames ) );
+	}
+
+	c3d::String AssimpImporterFile::getMaterialName( c3d::String const & rawName )const
+	{
+		auto it = m_materialNames.namesByRawName.find( rawName );
+		return it == m_materialNames.namesByRawName.end()
+			? rawName
+			: it->second;
 	}
 
 	c3d::String AssimpImporterFile::getMeshName( c3d::u32 index )const

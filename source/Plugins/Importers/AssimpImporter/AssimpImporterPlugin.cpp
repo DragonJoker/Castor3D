@@ -7,16 +7,6 @@
 
 #include <assimp/version.h>
 
-#ifndef CU_PlatformWindows
-#	define C3D_Assimp_API
-#else
-#	ifdef AssimpImporter_EXPORTS
-#		define C3D_Assimp_API __declspec(dllexport)
-#	else
-#		define C3D_Assimp_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace
 {
 	c3d::Vector< c3d::Pair< c3d::String, c3d::Plugin::Extension > > getExtensions()
@@ -39,7 +29,7 @@ namespace
 			extensions.emplace_back( cuT( "dae" ), Extension{ cuT( "DAE" ), cuT( "Collada" ) } );
 			extensions.emplace_back( cuT( "dxf" ), Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) } );
 			extensions.emplace_back( cuT( "enff" ), Extension{ cuT( "ENFF" ), cuT( "Neutral File Format" ) } );
-			extensions.emplace_back( cuT( "fbx" ), Extension{ cuT( "FBX" ), cuT( "Autodesk FBX" ) } );
+			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "FBX" ), cuT( "Autodesk FBX" ) } );
 			extensions.emplace_back( cuT( "hmp" ), Extension{ cuT( "HMP" ), cuT( "3D GameStudio Heightmap" ) } );
 			extensions.emplace_back( cuT( "ifc" ), Extension{ cuT( "IFC" ), cuT( "IFC-STEP, Industry Foundation Classes" ) } );
 			extensions.emplace_back( cuT( "ifczip" ), Extension{ cuT( "IFCZIP" ), cuT( "IFC-STEP, Industry Foundation Classes" ) } );
