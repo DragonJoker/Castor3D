@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_TdsMaterialImporter___
 #define ___C3D_TdsMaterialImporter___
 
-#include "TdsImporter/TdsImporterFile.hpp"
-
 #include <Castor3D/Material/MaterialImporter.hpp>
 
 namespace c3d_3ds

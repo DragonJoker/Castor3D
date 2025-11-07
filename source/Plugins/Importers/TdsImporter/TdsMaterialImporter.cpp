@@ -1,62 +1,26 @@
 #include "TdsImporter/TdsMaterialImporter.hpp"
+#include "TdsImporter/TdsImporterFile.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Limits.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
-#include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
-#include <Castor3D/Material/Pass/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/DiffuseTransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/AmbientColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/AmbientFactorMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/OpacityMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/SpecularFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/ColourComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/HeightComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp>
-#include <Castor3D/Miscellaneous/Logger.hpp>
-#include <Castor3D/Shader/LightingModelFactory.hpp>
-
-#include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
 
 namespace c3d_3ds
 {
@@ -176,6 +140,25 @@ namespace c3d_3ds
 			}
 			return result;
 		}
+
+		static void setMixedInterpolative( c3d::Pass & pass )
+		{
+			pass.createComponent< c3d::OpacityComponent >();
+
+			auto twoSided = pass.createComponent< c3d::TwoSidedComponent >();
+			twoSided->setTwoSided( true );
+
+			if ( !pass.hasComponent< c3d::AlphaTestComponent >() )
+			{
+				auto alphaTest = pass.createComponent< c3d::AlphaTestComponent >();
+				alphaTest->setAlphaRefValue( 0.95f );
+				alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+				alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
+			}
+
+			auto blend = pass.createComponent< c3d::BlendComponent >();
+			blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
+		}
 	}
 
 	//*********************************************************************************************
@@ -210,14 +193,20 @@ namespace c3d_3ds
 		if ( tdsMaterial.twoSided.has_value() )
 			pass->createComponent< c3d::TwoSidedComponent >()->setTwoSided( *tdsMaterial.twoSided );
 		if ( tdsMaterial.transparency.has_value() )
-			pass->createComponent< c3d::OpacityComponent >()->setOpacity( 1.0f - *tdsMaterial.transparency );
+		{
+			float opacity = 1.0f - *tdsMaterial.transparency;
+			pass->createComponent< c3d::OpacityComponent >()->setOpacity( opacity );
+			if ( opacity != 0.0 && opacity != 1.0 )
+				materials::setMixedInterpolative( *pass );
+		}
 
 		materials::parseTexture< c3d::ColourMapComponent >( file, m_textureRemaps, tdsMaterial.diffuseMap, m_loadConfig, *this, *pass );
 		materials::parseTexture< c3d::SpecularMapComponent >( file, m_textureRemaps, tdsMaterial.specularMap, m_loadConfig, *this, *pass );
 		materials::parseTexture< c3d::RoughnessMapComponent >( file, m_textureRemaps, tdsMaterial.shininessMap, m_loadConfig, *this, *pass );
-		materials::parseTexture< c3d::OpacityMapComponent >( file, m_textureRemaps, tdsMaterial.opacityMap, m_loadConfig, *this, *pass );
 		materials::parseTexture< c3d::EmissiveMapComponent >( file, m_textureRemaps, tdsMaterial.emissiveFactorMap, m_loadConfig, *this, *pass );
 		materials::parseTexture< c3d::NormalMapComponent >( file, m_textureRemaps, tdsMaterial.heightMap, m_loadConfig, *this, *pass );
+		if ( materials::parseTexture< c3d::OpacityMapComponent >( file, m_textureRemaps, tdsMaterial.opacityMap, m_loadConfig, *this, *pass ) )
+			materials::setMixedInterpolative( *pass );
 
 		pass->prepareTextures();
 

@@ -1,38 +1,22 @@
 #include "FbxImporter/FbxMaterialImporter.hpp"
+#include "FbxImporter/FbxImporterFile.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Limits.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
-#include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
-#include <Castor3D/Material/Pass/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/DiffuseTransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/AmbientColourMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/AmbientFactorMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp>
@@ -40,19 +24,12 @@
 #include <Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/OpacityMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/ColourComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/HeightComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Shader/LightingModelFactory.hpp>
 
@@ -120,10 +97,11 @@ namespace c3d_fbx
 				++index;
 			}
 
-			if ( !data.empty() )
+			if ( !data.empty() && fbxTexture )
 			{
-				c3d::log::debug << "    Texture: " << c3d::makeString( fbxTexture->GetName() ) << "\n";
-				return c3d::makeRawUnique< c3d::TextureSourceInfo >( importer.loadTexture( fbxTexture->GetName()
+				auto name = c3d::makeString( fbxTexture->GetName() );
+				c3d::log::debug << "    Texture: " << name << "\n";
+				return c3d::makeRawUnique< c3d::TextureSourceInfo >( importer.loadTexture( name
 					, formatName, c3d::move( data )
 					, texConfig, loadConfig ) );
 			}
@@ -441,12 +419,12 @@ namespace c3d_fbx
 			if ( isValid( factor, 1.0 ) )
 				pass.createComponent< c3d::SpecularFactorComponent >()->setFactor( float( factor.Get() ) );
 			if ( isValid( color ) )
-				pass.createComponent< c3d::ColourComponent >()->setColour( getHdrRgbColour( color.Get() ) );
+				pass.createComponent< c3d::SpecularComponent >()->setColour( getRgbColour( color.Get() ) );
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "SpecularColor" )
 				, fbxMaterial.FindProperty( "Maya|SpecularTexture" )
 				, fbxMaterial.FindProperty( "3dsMax|main|specular_map" ) };
 			parseTexture< c3d::SpecularFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
-			parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
+			parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
 		}
 
 		static void importShininessData( FbxImporterFile const & file
@@ -551,13 +529,11 @@ namespace c3d_fbx
 			else if ( opacity.IsValid() )
 			{
 				opacityValue = float( opacity.Get() );
+				pass.createComponent< c3d::OpacityComponent >()->setOpacity( opacityValue );
 			}
 
 			if ( opacityValue != 0.0f && opacityValue != 1.0f )
-			{
-				pass.createComponent< c3d::OpacityComponent >()->setOpacity( float( opacity.Get() ) );
 				setMixedInterpolative( pass );
-			}
 
 			if ( parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, opacity, loadConfig, importer )
 				|| parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, transparency, loadConfig, importer )
@@ -609,8 +585,8 @@ namespace c3d_fbx
 	{
 		auto & file = static_cast< FbxImporterFile const & >( *m_file );
 		auto name = material.getName();
-		auto it = file.getMaterials().find( name );
-		if ( it == file.getMaterials().end() )
+		auto it = file.getFbxMaterials().find( name );
+		if ( it == file.getFbxMaterials().end() )
 			return false;
 
 		fbx::FbxSurfaceMaterial const * fbxMaterial = it->second.fbxMaterial;

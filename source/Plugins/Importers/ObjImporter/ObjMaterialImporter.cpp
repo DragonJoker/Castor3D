@@ -1,60 +1,35 @@
 #include "ObjImporter/ObjMaterialImporter.hpp"
+#include "ObjImporter/ObjImporterFile.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Limits.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
-#include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
-#include <Castor3D/Material/Pass/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/DiffuseTransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/AmbientColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/AmbientFactorMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionColourMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/OpacityMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/SpecularFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/ColourComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/HeightComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp>
-#include <Castor3D/Miscellaneous/Logger.hpp>
-#include <Castor3D/Shader/LightingModelFactory.hpp>
 
 namespace c3d_obj
 {
@@ -234,12 +209,7 @@ namespace c3d_obj
 			, c3d::Pass & pass )
 		{
 			bool result{};
-			c3d::Point3f turbulence{ 0, 0, 0 };
 			parseTextureParameters( parameters, texConfig.transform, texConfig.heightFactor );
-			c3d::log::debug << cuT( "-	Texture :    " ) << parameters << cuT( "\n" );
-			c3d::log::debug << cuT( "-	Offset :     " ) << texConfig.transform.translate << cuT( "\n" );
-			c3d::log::debug << cuT( "-	Scale :      " ) << texConfig.transform.scale << cuT( "\n" );
-			c3d::log::debug << cuT( "-	Turbulence : " ) << turbulence << cuT( "\n" );
 
 			if ( auto sourceInfo = loadTexture( importer, parameters, texConfig, loadConfig ) )
 			{
@@ -290,6 +260,25 @@ namespace c3d_obj
 			c3d::StringStream stream{ value };
 			stream >> colorComponents[0] >> colorComponents[1] >> colorComponents[2];
 			return c3d::HdrRgbColour::fromComponents( colorComponents[0], colorComponents[1], colorComponents[2] );
+		}
+
+		static void setMixedInterpolative( c3d::Pass & pass )
+		{
+			pass.createComponent< c3d::OpacityComponent >();
+
+			auto twoSided = pass.createComponent< c3d::TwoSidedComponent >();
+			twoSided->setTwoSided( true );
+
+			if ( !pass.hasComponent< c3d::AlphaTestComponent >() )
+			{
+				auto alphaTest = pass.createComponent< c3d::AlphaTestComponent >();
+				alphaTest->setAlphaRefValue( 0.95f );
+				alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+				alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
+			}
+
+			auto blend = pass.createComponent< c3d::BlendComponent >();
+			blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
 		}
 	}
 
@@ -354,8 +343,9 @@ namespace c3d_obj
 						materials::parseTexture< c3d::NormalMapComponent >( file, m_textureRemaps, value, m_loadConfig, *this, *pass );
 					else if ( section == cuT( "map_kn" ) || section == cuT( "norm" ) )
 						materials::parseTexture< c3d::NormalMapComponent >( file, m_textureRemaps, value, m_loadConfig, *this, *pass );
-					else if ( section == cuT( "map_d" ) || section == cuT( "map_opacity" ) )
-						materials::parseTexture< c3d::OpacityMapComponent >( file, m_textureRemaps, value, m_loadConfig, *this, *pass );
+					else if ( section == cuT( "map_d" ) || section == cuT( "map_opacity" )
+						&& materials::parseTexture< c3d::OpacityMapComponent >( file, m_textureRemaps, value, m_loadConfig, *this, *pass ) )
+						materials::setMixedInterpolative( *pass );
 					else if ( section == cuT( "map_ks" ) )
 						materials::parseTexture< c3d::SpecularMapComponent >( file, m_textureRemaps, value, m_loadConfig, *this, *pass );
 					else if ( section == cuT( "map_ka" ) )

@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_FbxMaterialImporter___
 #define ___C3D_FbxMaterialImporter___
 
-#include "FbxImporter/FbxImporterFile.hpp"
-
 #include <Castor3D/Material/MaterialImporter.hpp>
 
 namespace c3d_fbx
