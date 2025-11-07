@@ -1,10 +1,15 @@
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
 option( CASTOR_BUILD_IMPORTER_GLTF "Build GLTF Importer plugin (needs fastgltf library)" TRUE )
 option( CASTOR_BUILD_IMPORTER_FBX "Build FBX Importer plugin (needs FBX SDK)" TRUE )
+option( CASTOR_BUILD_IMPORTER_OBJ "Build OBJ Importer plugin" TRUE )
+option( CASTOR_BUILD_IMPORTER_3DS "Build 3DS Importer plugin" TRUE )
 
 function( ImportersInit )
 	set( Assimp "no (Not wanted)" PARENT_SCOPE )
 	set( Gltf "no (Not wanted)" PARENT_SCOPE )
+	set( Fbx "no (Not wanted)" PARENT_SCOPE )
+	set( Obj "no (Not wanted)" PARENT_SCOPE )
+	set( 3ds "no (Not wanted)" PARENT_SCOPE )
 endfunction( ImportersInit )
 
 function( ImportersBuild )
@@ -44,6 +49,22 @@ function( ImportersBuild )
 			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+			set( Build ${Obj} )
+			add_subdirectory( Plugins/Importers/ObjImporter )
+			set( Obj ${Build} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_IMPORTER_3DS} )
+			set( Build ${3ds} )
+			add_subdirectory( Plugins/Importers/TdsImporter )
+			set( 3ds ${Build} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -75,6 +96,12 @@ function( ImportersSummary msg )
 		if( ${CASTOR_BUILD_IMPORTER_FBX} )
 			set( msg_tmp "${msg_tmp}\n    FBX                  ${Fbx}" )
 		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+			set( msg_tmp "${msg_tmp}\n    OBJ                  ${Obj}" )
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_3DS} )
+			set( msg_tmp "${msg_tmp}\n    3DS                  ${3ds}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( ImportersSummary )
@@ -102,7 +129,25 @@ function( ImportersSetup )
 		if( ${CASTOR_BUILD_IMPORTER_FBX} )
 			cpack_add_component( FbxImporter
 				DISPLAY_NAME "FbxImporter"
-				DESCRIPTION "Allows the mesh import using FBX SDK in Castor3D."
+				DESCRIPTION "Allows the materials import using FBX SDK in Castor3D."
+				GROUP Importers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+			cpack_add_component( ObjImporter
+				DISPLAY_NAME "ObjImporter"
+				DESCRIPTION "Allows the OBJ materials import in Castor3D."
+				GROUP Importers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_3DS} )
+			cpack_add_component( TdsImporter
+				DISPLAY_NAME "TdsImporter"
+				DESCRIPTION "Allows the 3DS materials import in Castor3D."
 				GROUP Importers
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
