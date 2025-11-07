@@ -313,7 +313,7 @@ namespace c3d_gltf
 	bool GltfMeshImporter::doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< GltfImporterFile & >( *m_file );
-		auto name = mesh.getName();
+		auto const & name = mesh.getName();
 		auto it = file.getMeshes().find( name );
 
 		if ( it == file.getMeshes().end() )

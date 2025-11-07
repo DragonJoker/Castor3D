@@ -14,6 +14,16 @@ See LICENSE file in root folder
 #include <assimp/types.h>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
+#ifndef CU_PlatformWindows
+#	define C3D_Assimp_API
+#else
+#	ifdef AssimpImporter_EXPORTS
+#		define C3D_Assimp_API __declspec(dllexport)
+#	else
+#		define C3D_Assimp_API __declspec(dllimport)
+#	endif
+#endif
+
 namespace c3d_assimp
 {
 	using SkeletonAnimations = c3d::StringMap< aiAnimation const * >;
@@ -24,6 +34,7 @@ namespace c3d_assimp
 	struct NameContainer
 	{
 		c3d::HashMap< c3d::u32, c3d::String > namesByIndex;
+		c3d::HashMap< c3d::String, c3d::String > namesByRawName;
 		c3d::HashSet< c3d::String > names;
 	};
 
@@ -105,7 +116,7 @@ namespace c3d_assimp
 		: public c3d::ImporterFile
 	{
 	public:
-		AssimpImporterFile( c3d::Engine & engine
+		C3D_Assimp_API AssimpImporterFile( c3d::Engine & engine
 			, c3d::Scene * scene
 			, c3d::Path const & path
 			, c3d::Parameters const & parameters
@@ -119,38 +130,39 @@ namespace c3d_assimp
 
 		using c3d::ImporterFile::getInternalName;
 
-		c3d::String getMaterialName( c3d::u32 index )const;
-		c3d::String getMeshName( c3d::u32 index )const;
-		c3d::String getSkinName( c3d::u32 index )const;
-		c3d::String getLightName( c3d::u32 index )const;
-		c3d::String getCameraName( c3d::u32 index )const;
-		c3d::String getAnimationName( c3d::u32 index )const;
+		C3D_Assimp_API c3d::String getMaterialName( c3d::u32 index )const;
+		C3D_Assimp_API c3d::String getMaterialName( c3d::String const & rawName )const;
+		C3D_Assimp_API c3d::String getMeshName( c3d::u32 index )const;
+		C3D_Assimp_API c3d::String getSkinName( c3d::u32 index )const;
+		C3D_Assimp_API c3d::String getLightName( c3d::u32 index )const;
+		C3D_Assimp_API c3d::String getCameraName( c3d::u32 index )const;
+		C3D_Assimp_API c3d::String getAnimationName( c3d::u32 index )const;
 
-		c3d::StringArray listMaterials()override;
-		c3d::Vector< MeshData > listMeshes()override;
-		c3d::StringArray listSkeletons()override;
-		c3d::Vector< NodeData > listSceneNodes()override;
-		c3d::Vector< LightData > listLights()override;
-		c3d::Vector< LightGroupData > listLightGroups()override;
-		c3d::Vector< GeometryData > listGeometries()override;
-		c3d::Vector< CameraData > listCameras()override;
-		c3d::StringArray listMeshAnimations( c3d::Mesh const & mesh )override;
-		c3d::StringArray listSkeletonAnimations( c3d::Skeleton const & skeleton )override;
-		c3d::StringArray listSceneNodeAnimations( c3d::SceneNode const & node )override;
-		c3d::Vector< uint32_t > listTextureAnimations( c3d::Material const & material
+		C3D_Assimp_API c3d::StringArray listMaterials()override;
+		C3D_Assimp_API c3d::Vector< MeshData > listMeshes()override;
+		C3D_Assimp_API c3d::StringArray listSkeletons()override;
+		C3D_Assimp_API c3d::Vector< NodeData > listSceneNodes()override;
+		C3D_Assimp_API c3d::Vector< LightData > listLights()override;
+		C3D_Assimp_API c3d::Vector< LightGroupData > listLightGroups()override;
+		C3D_Assimp_API c3d::Vector< GeometryData > listGeometries()override;
+		C3D_Assimp_API c3d::Vector< CameraData > listCameras()override;
+		C3D_Assimp_API c3d::StringArray listMeshAnimations( c3d::Mesh const & mesh )override;
+		C3D_Assimp_API c3d::StringArray listSkeletonAnimations( c3d::Skeleton const & skeleton )override;
+		C3D_Assimp_API c3d::StringArray listSceneNodeAnimations( c3d::SceneNode const & node )override;
+		C3D_Assimp_API c3d::Vector< uint32_t > listTextureAnimations( c3d::Material const & material
 			, uint32_t pass )override;
-		uint32_t countAllMeshAnimations()const override;
-		uint32_t countAllSkeletonAnimations()const override;
-		uint32_t countAllSceneNodeAnimations()const override;
-		uint32_t countAllTextureAnimations()const override;
+		C3D_Assimp_API uint32_t countAllMeshAnimations()const override;
+		C3D_Assimp_API uint32_t countAllSkeletonAnimations()const override;
+		C3D_Assimp_API uint32_t countAllSceneNodeAnimations()const override;
+		C3D_Assimp_API uint32_t countAllTextureAnimations()const override;
 
-		c3d::MaterialImporterUPtr createMaterialImporter()override;
-		c3d::AnimationImporterUPtr createAnimationImporter()override;
-		c3d::SkeletonImporterUPtr createSkeletonImporter()override;
-		c3d::MeshImporterUPtr createMeshImporter()override;
-		c3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
-		c3d::LightImporterUPtr createLightImporter()override;
-		c3d::CameraImporterUPtr createCameraImporter()override;
+		C3D_Assimp_API c3d::MaterialImporterUPtr createMaterialImporter()override;
+		C3D_Assimp_API c3d::AnimationImporterUPtr createAnimationImporter()override;
+		C3D_Assimp_API c3d::SkeletonImporterUPtr createSkeletonImporter()override;
+		C3D_Assimp_API c3d::MeshImporterUPtr createMeshImporter()override;
+		C3D_Assimp_API c3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
+		C3D_Assimp_API c3d::LightImporterUPtr createLightImporter()override;
+		C3D_Assimp_API c3d::CameraImporterUPtr createCameraImporter()override;
 
 		NodeAnimations const & getNodesAnimations( c3d::SceneNode const & node )const;
 		SkeletonAnimations const & getSkeletonsAnimations( c3d::Skeleton const & skeleton )const;

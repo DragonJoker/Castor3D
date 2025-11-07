@@ -265,17 +265,29 @@ namespace c3d_gltf
 				fastgltf::Sampler const & impSampler = impAsset.samplers[*samplerIndex];
 				auto defaultSampler = engine.getDefaultSampler();
 				auto & cache = engine.getSamplerCache();
-				auto name = file.getSamplerName( impSampler );
+				auto compareOp = defaultSampler->getCompareOp();
+				auto minFilter = impSampler.minFilter ? convert( *impSampler.minFilter ) : defaultSampler->getMinFilter();
+				auto magFilter = impSampler.magFilter ? convert( *impSampler.magFilter ) : defaultSampler->getMagFilter();
+				auto mipFilter = impSampler.minFilter ? getMipFilter( *impSampler.minFilter ) : defaultSampler->getMipFilter();
+				auto wrapS = convert( impSampler.wrapS );
+				auto wrapT = convert( impSampler.wrapT );
+				auto wrapR = defaultSampler->getWrapR();
+				auto borderColour = defaultSampler->getBorderColour();
+				auto name = c3d::getSamplerName( compareOp
+					, minFilter, magFilter, mipFilter
+					, wrapS, wrapT, wrapR
+					, borderColour );
 
 				if ( !cache.has( name ) )
 				{
 					auto sampler = engine.createSampler( name, engine );
-					sampler->setMinFilter( impSampler.minFilter ? convert( *impSampler.minFilter ) : defaultSampler->getMinFilter() );
-					sampler->setMagFilter( impSampler.magFilter ? convert( *impSampler.magFilter ) : defaultSampler->getMagFilter() );
-					sampler->setMipFilter( impSampler.minFilter ? getMipFilter( *impSampler.minFilter ) : defaultSampler->getMipFilter() );
-					sampler->setWrapS( convert( impSampler.wrapS ) );
-					sampler->setWrapT( convert( impSampler.wrapT ) );
-					sampler->setWrapR( defaultSampler->getWrapR() );
+					sampler->setMinFilter( minFilter );
+					sampler->setMagFilter( magFilter );
+					sampler->setMipFilter( mipFilter );
+					sampler->setWrapS( wrapS );
+					sampler->setWrapT( wrapT );
+					sampler->setWrapR( wrapR );
+					sampler->setBorderColour( borderColour );
 					cache.add( name, sampler, false );
 				}
 
@@ -293,7 +305,7 @@ namespace c3d_gltf
 			, c3d::TextureConfiguration const & texConfig
 			, c3d::ImageLoaderConfig const & loadConfig
 			, fastgltf::MimeType defaultMimeType
-			, c3d::MaterialImporter & importer
+			, c3d::MaterialImporter const & importer
 			, size_t offset = 0u
 			, size_t size = 0xFFFFFFFFFFFFFFFF )
 		{
@@ -330,7 +342,7 @@ namespace c3d_gltf
 			, fastgltf::TextureInfo const & texInfo
 			, c3d::TextureConfiguration const & texConfig
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			c3d::RawUniquePtr< c3d::TextureSourceInfo > result;
 

@@ -176,7 +176,7 @@ namespace c3d_gltf
 		c3d::StringArray nodeNames{};
 	};
 
-	struct GlSkeletonData
+	struct GltfSkeletonData
 	{
 		Animations anims;
 	};
@@ -187,7 +187,7 @@ namespace c3d_gltf
 		c3d::Vector< GltfNodeData * > sortedNodes;
 		c3d::Vector< GltfNodeData const * > skeletonNodes;
 		c3d::StringMap< GltfMeshData > meshes;
-		c3d::StringMap< GlSkeletonData > skeletons;
+		c3d::StringMap< GltfSkeletonData > skeletons;
 		c3d::Vector< GltfLightData > lights;
 		c3d::StringMap< GltfLightGroupData > lightGroups;
 	};
