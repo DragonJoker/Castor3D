@@ -723,6 +723,7 @@ namespace c3d
 				m_loadVertices( pnodeId, pprimitiveId, pmeshletId, pmodelData, pv0, pv1, pv2 );
 			}
 
+			template< template< typename DataT > typename ArrayT >
 			void loadBillboardVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, shader::ModelData const & pmodelData
@@ -731,7 +732,7 @@ namespace c3d
 				, shader::MeshVertex const & pv2
 				, shader::CameraData const & c3d_cameraData
 				, shader::RenderData const & c3d_renderData
-				, sdw::ArrayStorageBufferT< shader::BillboardData > const & c3d_billboardData )
+				, ArrayT< shader::BillboardData > const & c3d_billboardData )
 			{
 				if ( !m_loadVertices )
 				{
@@ -819,6 +820,7 @@ namespace c3d
 				m_loadVertices( pnodeId, pprimitiveId, 0_u, pmodelData, pv0, pv1, pv2 );
 			}
 
+			template< template< typename DataT > typename ArrayT >
 			void loadSurface( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, sdw::UInt const & pmeshletId
@@ -828,7 +830,7 @@ namespace c3d
 				, sdw::Float const & pdepth
 				, shader::CameraData const & c3d_cameraData
 				, shader::RenderData const & c3d_renderData
-				, sdw::ArrayStorageBufferT< shader::BillboardData > const & c3d_billboardData
+				, ArrayT< shader::BillboardData > const & c3d_billboardData
 				, shader::AllDerivFragmentSurface const & presult )
 			{
 				if ( !m_loadSurface )

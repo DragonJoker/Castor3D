@@ -11,5 +11,12 @@ namespace c3d::shader
 		return data[pipelineID].getNodeId( drawID );
 	}
 
+	sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+		, sdw::UInt const & pipelineID
+		, sdw::UInt const & drawID )
+	{
+		return data[pipelineID].getNodeId( drawID );
+	}
+
 	//*********************************************************************************************
 }

@@ -36,19 +36,29 @@ namespace c3d
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto c3d_inputKeys = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_inputKeys"
+			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
 				, Bindings::eInputKeys
 				, 0u );
-			auto c3d_inputValues = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_inputValues"
+			auto c3d_inputKeys = inputKeysBuffer.declMemberArray< sdw::UInt >( "ik" );
+			inputKeysBuffer.end();
+
+			auto inputValuesBuffer = writer.declStorageBuffer( "c3d_inputValuesBuffer"
 				, Bindings::eInputValues
 				, 0u );
+			auto c3d_inputValues = inputValuesBuffer.declMemberArray< sdw::UInt >( "iv" );
+			inputValuesBuffer.end();
 
-			auto c3d_outputKeys = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_outputKeys"
+			auto outputKeysBuffer = writer.declStorageBuffer( "c3d_outputKeysBuffer"
 				, Bindings::eOutputKeys
 				, 0u );
-			auto c3d_outputValues = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_outputValues"
+			auto c3d_outputKeys = outputKeysBuffer.declMemberArray< sdw::UInt >( "ok" );
+			outputKeysBuffer.end();
+
+			auto outputValuesBuffer = writer.declStorageBuffer( "c3d_outputValuesBuffer"
 				, Bindings::eOutputValues
 				, 0u );
+			auto c3d_outputValues = outputValuesBuffer.declMemberArray< sdw::UInt >( "ov" );
+			outputValuesBuffer.end();
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DispatchData", "c3d_dispatchData" };
 			auto c3d_numElements = pcb.declMember< sdw::UInt >( "c3d_numElements" );

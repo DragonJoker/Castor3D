@@ -122,10 +122,15 @@ namespace c3d::shader
 }
 
 #define C3D_ModelsData( writer, binding, set )\
-	auto c3d_modelsData = writer.declArrayStorageBuffer< c3d::shader::ModelData >( "c3d_modelsDataBuffer"\
+	sdw::StorageBuffer c3d_modelsDataBuffer{ writer\
+		, "C3D_ModelsDataBuffer"\
+		, "c3d_modelsDataBuffer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, true )
+		, ast::type::MemoryLayout::eStd430\
+		, true };\
+	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< c3d::shader::ModelData >( "d" );\
+	c3d_modelsDataBuffer.end()
 
 #define C3D_ModelData( writer, binding, set )\
 	sdw::UniformBuffer c3d_modelDataBuffer{ writer\

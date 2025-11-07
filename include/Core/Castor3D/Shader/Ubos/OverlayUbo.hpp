@@ -213,18 +213,48 @@ namespace c3d::shader
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_cropMaxMaxValue;
 	};
+
+	struct OverlaysIDs
+		: public sdw::StructInstanceHelperT < "C3D_OverlaysIDs"
+		, sdw::type::MemoryLayout::eStd430
+		, sdw::UIntArrayField< "v", MaxWordsPerBuffer > >
+	{
+		SDW_DeclStructInstance( C3D_API, OverlaysIDs );
+
+		OverlaysIDs( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
+		{
+		}
+
+		auto operator[]( sdw::UInt const & index )const
+		{
+			return getMember< "v" >()[index];
+		}
+	};
 }
 
 #define C3D_Overlays( writer, binding, set )\
-	auto c3d_overlaysData = writer.declArrayStorageBuffer< c3d::shader::OverlayData >( "c3d_overlaysData"\
+	sdw::StorageBuffer c3d_overlaysDataBuffer{ writer\
+		, "C3D_OverlaysDataBuffer"\
+		, "c3d_overlaysDataBuffer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, true )
+		, ast::type::MemoryLayout::eStd430\
+		, true };\
+	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< c3d::shader::OverlayData >( "d" );\
+	c3d_overlaysDataBuffer.end()
 
 #define C3D_OverlaysIDs( writer, binding, set )\
-	auto c3d_overlaysIDs = writer.declArrayStorageBuffer< sdw::UInt >( "c3d_overlaysIDs"\
+	sdw::StorageBuffer c3d_overlaysIDsBuffer{ writer\
+		, "C3D_OverlaysIDsBuffer"\
+		, "c3d_overlaysIDsBuffer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
-		, true )
+		, ast::type::MemoryLayout::eStd430\
+		, true };\
+	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< c3d::shader::OverlaysIDs >( "d" );\
+	c3d_overlaysIDsBuffer.end()
 
 #endif
