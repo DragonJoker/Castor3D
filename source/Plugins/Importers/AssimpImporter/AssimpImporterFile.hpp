@@ -5,6 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_AssimpImporterFile___
 
 #include "AssimpImporter/AssimpHelpers.hpp"
+#if C3D_HasFbxMaterialImporter
+#	include <FbxMaterialImporter/FbxMaterialsFile.hpp>
+#endif
+#if C3D_HasPlyMeshImporter
+#	include <PlyMeshImporter/PlyMeshFile.hpp>
+#endif
 
 #include <Castor3D/ImporterFile.hpp>
 
@@ -131,7 +137,6 @@ namespace c3d_assimp
 		using c3d::ImporterFile::getInternalName;
 
 		C3D_Assimp_API c3d::String getMaterialName( c3d::u32 index )const;
-		C3D_Assimp_API c3d::String getMaterialName( c3d::String const & rawName )const;
 		C3D_Assimp_API c3d::String getMeshName( c3d::u32 index )const;
 		C3D_Assimp_API c3d::String getSkinName( c3d::u32 index )const;
 		C3D_Assimp_API c3d::String getLightName( c3d::u32 index )const;
@@ -225,6 +230,11 @@ namespace c3d_assimp
 			return getInternalName( makeString( name ) );
 		}
 
+		auto const & getMaterialsNames()const noexcept
+		{
+			return m_materialNames.namesByRawName;
+		}
+
 	public:
 		static c3d::MbString const Name;
 
@@ -257,6 +267,13 @@ namespace c3d_assimp
 		mutable NameContainer m_cameraNames;
 		mutable NameContainer m_samplerNames;
 		mutable NameContainer m_animationNames;
+
+#if C3D_HasFbxMaterialImporter
+		c3d::RawUniquePtr< c3d_fbx::FbxMaterialsFile > m_fbxMaterials;
+#endif
+#if C3D_HasPlyMeshImporter
+		c3d::RawUniquePtr< c3d_ply::PlyMeshFile > m_plyMesh;
+#endif
 	};
 }
 

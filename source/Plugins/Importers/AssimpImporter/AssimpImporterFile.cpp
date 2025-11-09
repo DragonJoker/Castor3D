@@ -449,20 +449,21 @@ namespace c3d_assimp
 			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
 			doPrelistCameras();
+
+#if C3D_HasFbxMaterialImporter
+			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "fbx" ) )
+				m_fbxMaterials = c3d::makeRawUnique< c3d_fbx::FbxMaterialsFile >( path, parameters, m_materialNames.namesByRawName );
+#endif
+#if C3D_HasPlyMeshImporter
+			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "ply" ) )
+				m_plyMesh = c3d::makeRawUnique< c3d_ply::PlyMeshFile >( path, m_meshNames.namesByRawName );
+#endif
 		}
 	}
 
 	c3d::String AssimpImporterFile::getMaterialName( c3d::u32 index )const
 	{
 		return getInternalName( file::getElementName( *m_aiScene->mMaterials[index], index, getName(), m_materialNames ) );
-	}
-
-	c3d::String AssimpImporterFile::getMaterialName( c3d::String const & rawName )const
-	{
-		auto it = m_materialNames.namesByRawName.find( rawName );
-		return it == m_materialNames.namesByRawName.end()
-			? rawName
-			: it->second;
 	}
 
 	c3d::String AssimpImporterFile::getMeshName( c3d::u32 index )const
@@ -736,6 +737,10 @@ namespace c3d_assimp
 
 	c3d::MaterialImporterUPtr AssimpImporterFile::createMaterialImporter()
 	{
+#if C3D_HasFbxMaterialImporter
+		if ( m_fbxMaterials )
+			return m_fbxMaterials->createMaterialImporter( *getOwner() );
+#endif
 		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getOwner() );
 	}
 
@@ -751,6 +756,10 @@ namespace c3d_assimp
 
 	c3d::MeshImporterUPtr AssimpImporterFile::createMeshImporter()
 	{
+#if C3D_HasPlyMeshImporter
+		if ( m_plyMesh )
+			return m_plyMesh->createMeshImporter( *getOwner() );
+#endif
 		return c3d::makeUniqueDerived< c3d::MeshImporter, AssimpMeshImporter >( *getOwner() );
 	}
 

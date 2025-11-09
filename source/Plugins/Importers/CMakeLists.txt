@@ -1,7 +1,7 @@
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
 option( CASTOR_BUILD_IMPORTER_GLTF "Build GLTF Importer plugin (needs fastgltf library)" TRUE )
-option( CASTOR_BUILD_IMPORTER_FBX "Build FBX Importer plugin (needs FBX SDK)" TRUE )
-option( CASTOR_BUILD_IMPORTER_PLY "Build PLY Importer plugin" TRUE )
+option( CASTOR_BUILD_IMPORTER_FBX "Build FBX Material Importer plugin (needs FBX SDK)" TRUE )
+option( CASTOR_BUILD_IMPORTER_PLY "Build PLY Mesh Importer" TRUE )
 
 function( ImportersInit )
 	set( Assimp "no (Not wanted)" PARENT_SCOPE )
@@ -32,26 +32,24 @@ function( ImportersBuild )
 			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
 		endif()
 
-		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
-			set( Build ${Assimp} )
-			add_subdirectory( Plugins/Importers/AssimpImporter )
-			set( Assimp ${Build} PARENT_SCOPE )
-			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
-			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
-		endif()
-
 		if( ${CASTOR_BUILD_IMPORTER_FBX} )
 			set( Build ${Fbx} )
-			add_subdirectory( Plugins/Importers/FbxImporter )
+			add_subdirectory( Plugins/Importers/FbxMaterialImporter )
 			set( Fbx ${Build} PARENT_SCOPE )
-			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
-			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			set( Build ${Ply} )
-			add_subdirectory( Plugins/Importers/PlyImporter )
+			add_subdirectory( Plugins/Importers/PlyMeshImporter )
 			set( Ply ${Build} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
+			set( Build ${Assimp} )
+			add_subdirectory( Plugins/Importers/AssimpImporter )
+			set( Assimp ${Build} PARENT_SCOPE )
 			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
 			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
 		endif()
@@ -78,17 +76,17 @@ endfunction( ImportersBuild )
 function( ImportersSummary msg )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
 		set( msg_tmp "\n\n  Importer plugins:" )
+		if( ${CASTOR_BUILD_IMPORTER_FBX} )
+			set( msg_tmp "${msg_tmp}\n    FBXMaterial          ${Fbx}" )
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_PLY} )
+			set( msg_tmp "${msg_tmp}\n    PLYMesh              ${Ply}" )
+		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
 		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
 			set( msg_tmp "${msg_tmp}\n    GLTF                 ${Gltf}" )
-		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_FBX} )
-			set( msg_tmp "${msg_tmp}\n    FBX                  ${Fbx}" )
-		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_PLY} )
-			set( msg_tmp "${msg_tmp}\n    PLY                  ${Ply}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -96,6 +94,24 @@ endfunction( ImportersSummary )
 
 function( ImportersSetup )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
+		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} OR ${CASTOR_BUILD_IMPORTER_FBX} )
+			cpack_add_component( FbxMaterialImporter
+				DISPLAY_NAME "FbxMaterialImporter"
+				DESCRIPTION "Allows importing materials from FBX files in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_PLY} )
+			cpack_add_component( PlyImporter
+				DISPLAY_NAME "PlyImporter"
+				DESCRIPTION "Allows importing meshes from Stanford PLY files in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
@@ -109,24 +125,6 @@ function( ImportersSetup )
 			cpack_add_component( GltfImporter
 				DISPLAY_NAME "GltfImporter"
 				DESCRIPTION "Allows the mesh import using fastgltf library in Castor3D."
-				GROUP Plugins
-				DEPENDS Castor3D
-				INSTALL_TYPES Minimal Full
-			)
-		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_FBX} )
-			cpack_add_component( FbxImporter
-				DISPLAY_NAME "FbxImporter"
-				DESCRIPTION "Allows the materials import using FBX SDK in Castor3D."
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_PLY} )
-			cpack_add_component( PlyImporter
-				DISPLAY_NAME "PlyImporter"
-				DESCRIPTION "Allows the Stanford PLY objects import in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full

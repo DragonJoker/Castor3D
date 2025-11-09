@@ -1,4 +1,4 @@
-set( FOLDER_NAME PlyImporter )
+set( FOLDER_NAME PlyMeshImporter )
 project( ${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
@@ -7,7 +7,7 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "Stanford Polygon Library Importer" )
+set( ${PROJECT_NAME}_DESCRIPTION "Stanford Polygon Library Mesh Importer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 8 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
@@ -16,11 +16,12 @@ set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION
 set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyImporter.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyMeshFile.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyMeshImporter.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyImporter.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyImporterPlugin.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyMeshFile.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/PlyMeshImporter.cpp
 )
 source_group( "Header Files"
 	FILES
@@ -32,7 +33,7 @@ source_group( "Source Files"
 )
 add_target_min(
 	${PROJECT_NAME}
-	plugin
+	api_dll
 	""
 	""
 )
@@ -64,7 +65,7 @@ c3d_release_pdbs( ${PROJECT_NAME} )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
 	Plugins
-	plugin
+	api_dll
 	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
 )
 set_target_properties( ${PROJECT_NAME}

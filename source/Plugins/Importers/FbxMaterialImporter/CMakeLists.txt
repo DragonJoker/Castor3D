@@ -1,4 +1,4 @@
-set( FOLDER_NAME FbxImporter )
+set( FOLDER_NAME FbxMaterialImporter )
 project( ${FOLDER_NAME} )
 
 find_package( FbxSDK )
@@ -14,7 +14,7 @@ if( FbxSDK_FOUND OR FBXSDK_FOUND )
 	include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 	include_directories( ${FbxSDK_INCLUDE_DIR} )
 
-	set( ${PROJECT_NAME}_DESCRIPTION "FBX SDK powered importer" )
+	set( ${PROJECT_NAME}_DESCRIPTION "FBX SDK powered materials importer" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 	set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
@@ -23,12 +23,11 @@ if( FbxSDK_FOUND OR FBXSDK_FOUND )
 	set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 	set( ${PROJECT_NAME}_HDR_FILES
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxImporterFile.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxMaterialsFile.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxMaterialImporter.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxImporterFile.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxImporterPlugin.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxMaterialsFile.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/FbxMaterialImporter.cpp
 	)
 	source_group( "Header Files"
@@ -41,7 +40,7 @@ if( FbxSDK_FOUND OR FBXSDK_FOUND )
 	)
 	add_target_min(
 		${PROJECT_NAME}
-		plugin
+		api_dll
 		""
 		""
 	)
@@ -71,15 +70,13 @@ if( FbxSDK_FOUND OR FBXSDK_FOUND )
 		PUBLIC
 			castor::Castor3D
 		PRIVATE
-			${ImporterDependencies}
 			FbxSDK::FbxSDK
-			castor::AssimpImporter
 	)
 	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D
 		Plugins
-		plugin
+		api_dll
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
 	)
 	set_target_properties( ${PROJECT_NAME}
