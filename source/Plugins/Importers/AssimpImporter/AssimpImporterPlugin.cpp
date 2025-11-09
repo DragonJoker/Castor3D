@@ -16,7 +16,6 @@ namespace
 
 		if ( extensions.empty() )
 		{
-			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) } );
 			extensions.emplace_back( cuT( "ac" ), Extension{ cuT( "AC" ), cuT( "AC3D" ) } );
 			extensions.emplace_back( cuT( "acc" ), Extension{ cuT( "ACC" ), cuT( "AC3D" ) } );
 			extensions.emplace_back( cuT( "ac3d" ), Extension{ cuT( "AC3D" ), cuT( "AC3D" ) } );
@@ -29,7 +28,6 @@ namespace
 			extensions.emplace_back( cuT( "dae" ), Extension{ cuT( "DAE" ), cuT( "Collada" ) } );
 			extensions.emplace_back( cuT( "dxf" ), Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) } );
 			extensions.emplace_back( cuT( "enff" ), Extension{ cuT( "ENFF" ), cuT( "Neutral File Format" ) } );
-			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "FBX" ), cuT( "Autodesk FBX" ) } );
 			extensions.emplace_back( cuT( "hmp" ), Extension{ cuT( "HMP" ), cuT( "3D GameStudio Heightmap" ) } );
 			extensions.emplace_back( cuT( "ifc" ), Extension{ cuT( "IFC" ), cuT( "IFC-STEP, Industry Foundation Classes" ) } );
 			extensions.emplace_back( cuT( "ifczip" ), Extension{ cuT( "IFCZIP" ), cuT( "IFC-STEP, Industry Foundation Classes" ) } );
@@ -64,8 +62,10 @@ namespace
 			extensions.emplace_back( cuT( "xgl" ), Extension{ cuT( "XGL" ), cuT( "XGL" ) } );
 			extensions.emplace_back( cuT( "xml" ), Extension{ cuT( "XML" ), cuT( "Irrlicht Scene" ) } );
 			extensions.emplace_back( cuT( "zgl" ), Extension{ cuT( "ZGL" ), cuT( "XGL" ) } );
+			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) } );
+			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "FBX" ), cuT( "Autodesk FBX" ) } );
 			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "OBJ" ), cuT( "Wavefront Object" ) } );
-			extensions.emplace_back( cuT( "ply" ), Extension{ cuT( "PLY" ), cuT( "Stanford Polygon Library" ) } );
+			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "PLY" ), cuT( "Stanford Polygon Library" ) } );
 
 			if ( aiGetVersionMajor() > 3
 				|| ( aiGetVersionMajor() == 3 && aiGetVersionMajor() >= 2 ) )
