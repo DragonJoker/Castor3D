@@ -34,7 +34,7 @@ namespace c3d
 		{
 			auto maxComp = std::max( { aabb.getMax()->z, aabb.getMax()->x, aabb.getMax()->y } );
 			auto z = ( maxComp * 3.0f );
-			farPlane = std::abs( z );
+			farPlane = std::abs( z ) + aabb.getMax()->z;
 			return { aabb.getCenter()->x
 				, aabb.getCenter()->y
 				, z };
@@ -755,7 +755,7 @@ namespace c3d
 				Viewport const & vp = camera->getViewport();
 				camera->getViewport().setPerspective( vp.getFovY()
 					, vp.getRatio()
-					, std::max( 0.01f, farPlane / 1000.0f )
+					, std::max( 0.01f, farPlane / 10000.0f )
 					, std::max( farPlane, 1000.0f ) );
 			}
 		}
