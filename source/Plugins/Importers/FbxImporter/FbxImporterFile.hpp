@@ -87,7 +87,7 @@ namespace c3d_fbx
 		static c3d::MbString const Name;
 
 	private:
-		void doPrelistMaterials();
+		void doPrelistMaterials( c3d::Parameters const & parameters );
 
 	private:
 		FbxManager * m_fbxManager;

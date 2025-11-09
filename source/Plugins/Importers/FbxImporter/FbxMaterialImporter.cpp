@@ -419,7 +419,7 @@ namespace c3d_fbx
 			if ( isValid( factor, 1.0 ) )
 				pass.createComponent< c3d::SpecularFactorComponent >()->setFactor( float( factor.Get() ) );
 			if ( isValid( color ) )
-				pass.createComponent< c3d::SpecularComponent >()->setColour( getRgbColour( color.Get() ) );
+				pass.createComponent< c3d::SpecularComponent >()->setSpecular( getRgbColour( color.Get() ) );
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "SpecularColor" )
 				, fbxMaterial.FindProperty( "Maya|SpecularTexture" )
 				, fbxMaterial.FindProperty( "3dsMax|main|specular_map" ) };
