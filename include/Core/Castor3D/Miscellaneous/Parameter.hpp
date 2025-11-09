@@ -396,6 +396,12 @@ namespace c3d
 			return result;
 		}
 
+		void append( ParametersT const & rhs )
+		{
+			for ( auto const & [key, value] : rhs.m_values )
+				m_values.try_emplace( key, value );
+		}
+
 		size_t size()const
 		{
 			return m_values.size();

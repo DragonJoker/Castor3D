@@ -275,7 +275,23 @@ namespace c3d
 				{
 					CU_ParsingError( cuT( "Malformed parameter -submesh=<uint>." ) );
 				}
+			}
+			else
+			{
+				if ( auto eqIndex = param.find( cuT( '=' ) );
+					eqIndex != String::npos )
+				{
+					auto paramValue = param.substr( eqIndex + 1 );
+					auto paramName = param.substr( 0, eqIndex );
+					string::trim( paramValue );
+					string::trim( paramName );
+					parameters.add( paramName, paramValue );
 				}
+				else
+				{
+					parameters.add( param, true );
+				}
+			}
 		}
 	}
 
