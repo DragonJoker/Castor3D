@@ -136,7 +136,15 @@ namespace GuiCommon
 						{
 							c3d::TextureConfiguration configuration;
 							configuration.components[0].flag = component->getTextureFlags();
-							configuration.components[0].startIndex = 0u;
+							if ( auto it = std::find_if( config.components.begin(), config.components.end()
+								, [&component]( c3d::TextureFlagConfiguration const & flagConfig )
+								{
+									return flagConfig.flag == component->getTextureFlags();
+								} );
+								it != config.components.end() )
+								configuration.components[0].startIndex = it->startIndex;
+							else
+								configuration.components[0].startIndex = 0u;
 							auto passCompProps = c3d::makeRawUnique< TextureTreeItemProperty::Properties >( component->getTextureFlags()
 								, configuration.components[0]
 								, c3d::move( ownComponent )
@@ -354,106 +362,32 @@ namespace GuiCommon
 				, c3d::TextureFlagConfiguration const & configuration
 				, uint32_t componentsCount )
 			{
-				static wxString PROPERTY_COMPONENT_A = wxT( "A" );
-				static wxString PROPERTY_COMPONENT_R = wxT( "R" );
-				static wxString PROPERTY_COMPONENT_G = wxT( "G" );
-				static wxString PROPERTY_COMPONENT_B = wxT( "B" );
-				static wxString PROPERTY_COMPONENT_RGB = wxT( "RGB" );
-				static wxString PROPERTY_COMPONENT_GBA = wxT( "GBA" );
-
 				wxString selected;
 
 				if ( componentsCount == 1u )
 				{
-					if ( c3d::isABGRFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-					}
-					else if ( c3d::isBGRAFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
-					}
-					else if ( c3d::isRGBAFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
-					}
-					else if ( c3d::isARGBFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-					}
-					else if ( c3d::isBGRFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-					}
-					else if ( c3d::isRGFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-					}
-					else
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-					}
+					static wxString PROPERTY_COMPONENT_R = wxT( "R" );
+					static wxString PROPERTY_COMPONENT_G = wxT( "G" );
+					static wxString PROPERTY_COMPONENT_B = wxT( "B" );
+					static wxString PROPERTY_COMPONENT_A = wxT( "A" );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 				}
 				else if ( componentsCount == 2u )
 				{
-					if ( c3d::isABGRFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-					}
-					else if ( c3d::isBGRAFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-					}
-					else if ( c3d::isRGBAFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-					}
-					else if ( c3d::isARGBFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-					}
-					else if ( c3d::isBGRFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-					}
-					else if ( c3d::isRGFormat( m_format ) )
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-					}
-					else
-					{
-						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
-						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
-					}
+					static wxString PROPERTY_COMPONENT_AR = wxT( "AR" );
+					static wxString PROPERTY_COMPONENT_RG = wxT( "RG" );
+					static wxString PROPERTY_COMPONENT_GB = wxT( "GB" );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_AR );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_RG );
+					m_compProps->choices.Add( PROPERTY_COMPONENT_GB );
 				}
 				else
 				{
+					static wxString PROPERTY_COMPONENT_RGB = wxT( "RGB" );
+					static wxString PROPERTY_COMPONENT_GBA = wxT( "GBA" );
 					if ( c3d::isABGRFormat( m_format )
 						|| c3d::isBGRAFormat( m_format )
 						|| c3d::isARGBFormat( m_format )
