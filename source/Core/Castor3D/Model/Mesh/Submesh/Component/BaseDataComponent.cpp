@@ -4,9 +4,10 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -575,6 +576,13 @@ namespace c3d
 			CU_UnsupportedError( "Upsupported submesh data type for Point4f" );
 
 		return smshbase::writeBinary( ChunkType::eSubmeshTangentsMikkt, data, chunk );
+	}
+
+	void acceptBaseData( ConfigurationVisitorBase & vis
+		, c3d::String const & name
+		, size_t count )
+	{
+		vis.visit( name + cuT( " (" ) + string::toString( count ) + cuT( ")" ) );
 	}
 
 	//*********************************************************************************************

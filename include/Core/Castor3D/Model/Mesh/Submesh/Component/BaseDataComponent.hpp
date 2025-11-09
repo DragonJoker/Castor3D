@@ -57,6 +57,9 @@ namespace c3d
 	C3D_API bool writeBaseDataBinary( SubmeshData submeshData
 		, Point4fArray const & data
 		, BinaryChunk & chunk );
+	C3D_API void acceptBaseData( ConfigurationVisitorBase & vis
+		, c3d::String const & name
+		, size_t count );
 
 	template< SubmeshData SubmeshDataT, typename DataT >
 	class BaseDataComponentT
@@ -263,6 +266,11 @@ namespace c3d
 		ComponentData & getData()const noexcept
 		{
 			return *getDataT< ComponentData >();
+		}
+
+		void accept( ConfigurationVisitorBase & vis )
+		{
+			acceptBaseData( vis, TypeName, getData().getData().size() );
 		}
 
 	private:
