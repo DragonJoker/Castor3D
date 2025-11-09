@@ -162,8 +162,6 @@ namespace c3d_obj
 			if ( parameters.empty() )
 				return nullptr;
 			c3d::Path imagePath{ parameters };
-			if ( !c3d::File::fileExists( imagePath ) )
-				return nullptr;
 			return c3d::makeRawUnique< c3d::TextureSourceInfo >( importer.loadTexture( imagePath, texConfig, loadConfig ) );
 		}
 
