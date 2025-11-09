@@ -161,7 +161,6 @@ namespace c3d_assimp
 				, m_loadConfig{ c3d::move( loadConfig ) }
 				, m_textureRemaps{ textureRemaps }
 				, m_shadingModel{ shadingMode }
-				, m_isPbr{ detectPbr() }
 				, m_result{ result }
 				, m_colourMapPlugin{ m_result.getComponentPlugin< c3d::ColourMapComponent >() }
 				, m_metalnessMapPlugin{ m_result.getComponentPlugin< c3d::MetalnessMapComponent >() }
@@ -222,11 +221,9 @@ namespace c3d_assimp
 				parseSheen();
 				parseComponentDataT< c3d::ThicknessComponent, float >( AI_MATKEY_VOLUME_THICKNESS_FACTOR );
 				parseComponentDataT< c3d::TransmissionComponent, float >( AI_MATKEY_TRANSMISSION_FACTOR );
-				m_hasRefr = parseRefractionRatio();
-
+				parseRefractionRatio();
 				if ( !parseComponentOpaDataT< c3d::OpacityComponent >( AI_MATKEY_OPACITY ) )
 					parseComponentInvOpaDataT< c3d::OpacityComponent >( AI_MATKEY_TRANSPARENCYFACTOR, 1.0f );
-
 				parseAlphaRefValue();
 			}
 
@@ -576,14 +573,12 @@ namespace c3d_assimp
 								getComponentsMask( texConfig, m_opacityMapFlags )
 									&& c3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
-								if ( aiString alphaMode;
-									m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
-								{
+								if ( auto [alphaMode, hasAlphaMode] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE );
+									hasAlphaMode && makeString( alphaMode ) != "OPAQUE" )
 									mixedInterpolative( true );
-								}
 
 								if ( auto & image = loadImage( *sourceInfo );
-									!hasAlphaChannel( image ) )
+									texFlags.size() == 1u && !hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 									*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
@@ -595,11 +590,9 @@ namespace c3d_assimp
 								if ( auto & image = loadImage( *sourceInfo );
 									hasAlphaChannel( image ) )
 								{
-									if ( aiString alphaMode;
-										m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
-									{
+									if ( auto [alphaMode, hasAlphaMode] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE );
+										hasAlphaMode && makeString( alphaMode ) != "OPAQUE" )
 										mixedInterpolative( true );
-									}
 
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
 									*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
@@ -743,36 +736,6 @@ namespace c3d_assimp
 				return aiGetMaterialTextureCount( &m_material, type ) > 0;
 			}
 
-			bool detectPbr()
-			{
-				return ( m_material.Get( AI_MATKEY_SHADING_MODEL, m_shadingModel ) == aiReturn_SUCCESS
-						&& ( m_shadingModel == ShadingMode_PBR_BRDF || m_shadingModel == aiShadingMode_CookTorrance ) )
-					|| hasMatKey( AI_MATKEY_USE_COLOR_MAP )
-					|| hasMatKey( AI_MATKEY_BASE_COLOR )
-					|| hasMatKey( AI_MATKEY_USE_METALLIC_MAP )
-					|| hasMatKey( AI_MATKEY_METALLIC_FACTOR )
-					|| hasMatKey( AI_MATKEY_USE_ROUGHNESS_MAP )
-					|| hasMatKey( AI_MATKEY_ROUGHNESS_FACTOR )
-					|| hasMatKey( AI_MATKEY_ANISOTROPY_FACTOR )
-					|| hasMatKey( AI_MATKEY_SPECULAR_FACTOR )
-					|| hasMatKey( AI_MATKEY_GLOSSINESS_FACTOR )
-					|| hasMatKey( AI_MATKEY_SHEEN_COLOR_FACTOR )
-					|| hasMatKey( AI_MATKEY_SHEEN_ROUGHNESS_FACTOR )
-					|| hasMatKey( AI_MATKEY_CLEARCOAT_FACTOR )
-					|| hasMatKey( AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR )
-					|| hasMatKey( AI_MATKEY_TRANSMISSION_FACTOR )
-					|| hasMatKey( AI_MATKEY_VOLUME_THICKNESS_FACTOR )
-					|| hasMatKey( AI_MATKEY_VOLUME_ATTENUATION_DISTANCE )
-					|| hasMatKey( AI_MATKEY_VOLUME_ATTENUATION_COLOR )
-					|| hasMatKey( AI_MATKEY_USE_EMISSIVE_MAP )
-					|| hasMatKey( AI_MATKEY_EMISSIVE_INTENSITY )
-					|| hasTexKey( TextureType_BASE_COLOR )
-					|| hasTexKey( TextureType_METALNESS )
-					|| hasTexKey( TextureType_SHEEN )
-					|| hasTexKey( TextureType_CLEARCOAT )
-					|| hasTexKey( TextureType_TRANSMISSION );
-			}
-
 			void finishColour( TextureInfo & colInfo
 				, TextureInfo & nmlInfo
 				, TextureInfo & opaInfo
@@ -881,13 +844,10 @@ namespace c3d_assimp
 				}
 				else
 				{
-					aiString value;
-
-					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
+					if ( auto [value, hasValue] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE ); hasValue )
 					{
-						auto mode = makeString( value );
-
-						if ( mode != cuT( "OPAQUE" ) )
+						if ( auto mode = makeString( value );
+							mode != cuT( "OPAQUE" ) )
 						{
 							auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
 							addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
@@ -899,21 +859,15 @@ namespace c3d_assimp
 				}
 
 				if ( hasOpacityTex && !opacity )
-				{
 					opacity = m_result.createComponent< c3d::OpacityComponent >();
-				}
 
 				// force non 0.0 opacity when an opacity map is set
 				if ( hasOpacityTex && opacity->getOpacity() == 0.0f )
-				{
 					opacity->setOpacity( 1.0f );
-				}
 
 				if ( hasOpacityTex
 					&& m_result.getAlphaFunc() == c3d::ComparisonFunc::eAlways )
-				{
 					mixedInterpolative( true );
-				}
 
 				return hasOpacityTex;
 			}
@@ -921,24 +875,16 @@ namespace c3d_assimp
 			TextureInfo finishEmissive()
 			{
 				TextureInfo emiInfo = getTextureInfo( TextureType_EMISSION_COLOR );
-
 				if ( emiInfo.name.empty() )
-				{
 					emiInfo = getTextureInfo( aiTextureType_EMISSIVE );
-				}
-
 				return emiInfo;
 			}
 
 			TextureInfo finishHeight()
 			{
 				auto hgtInfo = getTextureInfo( aiTextureType_DISPLACEMENT );
-
 				if ( hgtInfo.name.empty() )
-				{
 					hgtInfo = getTextureInfo( aiTextureType_HEIGHT );
-				}
-
 				return hgtInfo;
 			}
 
@@ -951,8 +897,6 @@ namespace c3d_assimp
 			c3d::ImageLoaderConfig m_loadConfig;
 			c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
-			bool m_isPbr;
-			bool m_hasRefr{};
 			c3d::Pass & m_result;
 			c3d::PassComponentPlugin const & m_colourMapPlugin;
 			c3d::PassComponentPlugin const & m_metalnessMapPlugin;
