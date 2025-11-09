@@ -1,8 +1,12 @@
-#include "FbxImporter/FbxImporterFile.hpp"
+#include "FbxMaterialImporter/FbxMaterialsFile.hpp"
 
-#include "FbxImporter/FbxMaterialImporter.hpp"
+#include "FbxMaterialImporter/FbxMaterialImporter.hpp"
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
+
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <fbxsdk.h>
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace c3d_fbx
 {
@@ -410,22 +414,17 @@ namespace c3d_fbx
 
 	//*********************************************************************************************
 
-	c3d::MbString const FbxImporterFile::Name = "FBX Importer";
-
-	FbxImporterFile::FbxImporterFile( c3d::Engine & engine
-		, c3d::Scene * scene
-		, c3d::Path const & path
+	FbxMaterialsFile::FbxMaterialsFile( c3d::Path const & path
 		, c3d::Parameters const & parameters
-		, c3d::ProgressBar * progress )
-		: c3d_assimp::AssimpImporterFile{ engine, scene, path, parameters, progress }
-		, m_fbxManager{ file::createFbxManager() }
+		, c3d::HashMap< c3d::String, c3d::String > const & materialsNames )
+		: m_fbxManager{ file::createFbxManager() }
 		, m_fbxScene{ file::loadScene( m_fbxManager, path ) }
 	{
 		if ( isValid() )
-			doPrelistMaterials( parameters );
+			doPrelistMaterials( parameters, materialsNames );
 	}
 
-	FbxImporterFile::~FbxImporterFile()noexcept
+	FbxMaterialsFile::~FbxMaterialsFile()noexcept
 	{
 		if ( m_fbxScene )
 			m_fbxScene->Destroy();
@@ -433,37 +432,29 @@ namespace c3d_fbx
 			m_fbxManager->Destroy();
 	}
 
-	c3d::ImporterFileUPtr FbxImporterFile::create( c3d::Engine & engine
-		, c3d::Scene * scene
-		, c3d::Path const & path
-		, c3d::Parameters const & parameters
-		, c3d::ProgressBar * progress )
-	{
-		return c3d::makeUniqueDerived< c3d::ImporterFile, FbxImporterFile >( engine, scene, path, parameters, progress );
-	}
-
-	c3d::StringArray FbxImporterFile::listMaterials()
+	c3d::StringArray FbxMaterialsFile::listMaterials()
 	{
 		c3d::StringArray result;
 		if ( isValid() )
-			for ( auto const & [name, _] : m_sceneData.materials )
+			for ( auto const & [name, _] : m_materials )
 				result.emplace_back( name );
 		return result;
 	}
 
-	c3d::Vector< uint32_t > FbxImporterFile::listTextureAnimations( c3d::Material const & material
-		, uint32_t pass )
+	c3d::Vector< uint32_t > FbxMaterialsFile::listTextureAnimations( [[maybe_unused]] c3d::Material const & material
+		, [[maybe_unused]] uint32_t pass )
 	{
 		c3d::Vector< uint32_t > result;
 		return result;
 	}
 
-	c3d::MaterialImporterUPtr FbxImporterFile::createMaterialImporter()
+	c3d::MaterialImporterUPtr FbxMaterialsFile::createMaterialImporter( c3d::Engine & engine )
 	{
-		return c3d::makeUniqueDerived< c3d::MaterialImporter, FbxMaterialImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::MaterialImporter, FbxMaterialImporter >( engine, *this );
 	}
 
-	void FbxImporterFile::doPrelistMaterials( c3d::Parameters const & parameters )
+	void FbxMaterialsFile::doPrelistMaterials( c3d::Parameters const & parameters
+		, c3d::HashMap< c3d::String, c3d::String > const & materialsNames )
 	{
 		FbxArray< fbx::FbxSurfaceMaterial * > materials;
 		m_fbxScene->FillMaterialArray( materials );
@@ -471,8 +462,11 @@ namespace c3d_fbx
 		for ( int i = 0; i < materials.Size(); ++i )
 		{
 			fbx::FbxSurfaceMaterial * fbxMaterial = materials[i];
-			auto name = getMaterialName( c3d::makeString( fbxMaterial->GetName() ) );
-			m_sceneData.materials.try_emplace( name, fbxMaterial );
+			auto name = c3d::makeString( fbxMaterial->GetName() );
+			if ( auto it = materialsNames.find( name );
+				it != materialsNames.end() )
+				name = it->second;
+			m_materials.try_emplace( name, fbxMaterial );
 
 			if ( parameters.get< bool >( "list_properties" ) )
 			{

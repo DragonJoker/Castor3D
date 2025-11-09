@@ -124,6 +124,26 @@ if( assimp_FOUND )
 		PRIVATE
 			${ImporterDependencies}
 	)
+	if ( TARGET castor::FbxMaterialImporter )
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				castor::FbxMaterialImporter
+		)
+		target_compile_definitions( ${PROJECT_NAME}
+			PRIVATE
+				C3D_HasFbxMaterialImporter
+		)
+	endif ()
+	if ( TARGET castor::PlyMeshImporter )
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				castor::PlyMeshImporter
+		)
+		target_compile_definitions( ${PROJECT_NAME}
+			PRIVATE
+				C3D_HasPlyMeshImporter
+		)
+	endif ()
 	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D

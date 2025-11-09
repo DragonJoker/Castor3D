@@ -1,8 +1,9 @@
-#include "FbxImporter/FbxMaterialImporter.hpp"
-#include "FbxImporter/FbxImporterFile.hpp"
+#include "FbxMaterialImporter/FbxMaterialImporter.hpp"
+#include "FbxMaterialImporter/FbxMaterialsFile.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Limits.hpp>
+#include <Castor3D/ImporterFile.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
@@ -36,6 +37,10 @@
 // Materials
 #include <EdgesComponent.hpp>
 #include <Shaders/GlslToonLighting.hpp>
+
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <fbxsdk.h>
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace c3d_fbx
 {
@@ -109,7 +114,7 @@ namespace c3d_fbx
 			return nullptr;
 		}
 
-		static c3d::SamplerRPtr loadSampler( FbxImporterFile const & file
+		static c3d::SamplerRPtr loadSampler( c3d::ImporterFile const & file
 			, fbx::FbxTexture const * fbxTexture )
 		{
 			static const c3d::Array< c3d::WrapMode, 2u > mode =
@@ -187,7 +192,7 @@ namespace c3d_fbx
 			result.translate->y = ( 0.5f * result.scale->y ) * ( rsin + rcos - 1 ) + 1 - result.scale->y - float( fbxTexture->GetTranslationV() );
 		}
 
-		static bool parseTexture( FbxImporterFile const & file
+		static bool parseTexture( c3d::ImporterFile const & file
 			, c3d::Pass & pass
 			, c3d::TextureConfiguration texConfig
 			, fbx::FbxProperty const & property
@@ -226,7 +231,7 @@ namespace c3d_fbx
 		}
 
 		template< typename ComponentT >
-		static bool parseTexture( FbxImporterFile const & file
+		static bool parseTexture( c3d::ImporterFile const & file
 			, c3d::Pass & pass
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, fbx::FbxProperty const & property
@@ -248,7 +253,7 @@ namespace c3d_fbx
 		}
 
 		template< typename ComponentT, typename DataT >
-		static bool parseTexture( FbxImporterFile const & file
+		static bool parseTexture( c3d::ImporterFile const & file
 			, c3d::Pass & pass
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::Vector< fbx::FbxPropertyT< DataT > > const & properties
@@ -337,19 +342,19 @@ namespace c3d_fbx
 			}
 		}
 
-		static void importNormalsData( FbxImporterFile const & file
-			, c3d::Pass & pass
+		static void importNormalsData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
-			, fbx::FbxSurfaceMaterial const & fbxMaterial )
+			, fbx::FbxSurfaceMaterial const & fbxMaterial
+			, c3d::Pass & pass )
 		{
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > property = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sNormalMap )
 				, fbxMaterial.FindProperty( "Maya|NormalTexture" ) };
 			parseTexture< c3d::NormalMapComponent >( file, pass, textureRemaps, property, loadConfig, importer );
 		}
 
-		static void importHeightData( FbxImporterFile const & file
+		static void importHeightData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -370,7 +375,7 @@ namespace c3d_fbx
 			}
 		}
 
-		static void importAmbientData( FbxImporterFile const & file
+		static void importAmbientData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -387,7 +392,7 @@ namespace c3d_fbx
 			parseTexture< c3d::AmbientColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
 		}
 
-		static void importColourData( FbxImporterFile const & file
+		static void importColourData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -407,7 +412,7 @@ namespace c3d_fbx
 			parseTexture< c3d::ColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
 		}
 
-		static void importSpecularData( FbxImporterFile const & file
+		static void importSpecularData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -427,7 +432,7 @@ namespace c3d_fbx
 			parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
 		}
 
-		static void importShininessData( FbxImporterFile const & file
+		static void importShininessData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -453,7 +458,7 @@ namespace c3d_fbx
 					parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, shininessMap, loadConfig, importer );
 		}
 
-		static void importEmissiveData( FbxImporterFile const & file
+		static void importEmissiveData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -501,7 +506,7 @@ namespace c3d_fbx
 			blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
 		}
 
-		static void importOpacityData( FbxImporterFile const & file
+		static void importOpacityData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -541,7 +546,7 @@ namespace c3d_fbx
 				setMixedInterpolative( pass );
 		}
 
-		static void importMetalnessData( FbxImporterFile const & file
+		static void importMetalnessData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -560,7 +565,7 @@ namespace c3d_fbx
 			parseTexture< c3d::MetalnessMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
 		}
 
-		static void importAmbientOcclusionData( FbxImporterFile const & file
+		static void importAmbientOcclusionData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
@@ -576,17 +581,18 @@ namespace c3d_fbx
 
 	//*********************************************************************************************
 
-	FbxMaterialImporter::FbxMaterialImporter( c3d::Engine & engine )
+	FbxMaterialImporter::FbxMaterialImporter( c3d::Engine & engine
+		, FbxMaterialsFile const & materialsFile )
 		: c3d::MaterialImporter{ engine, cuT( "Fbx" ) }
+		, m_materialsFile{ materialsFile }
 	{
 	}
 
 	bool FbxMaterialImporter::importMaterial( c3d::Material & material )
 	{
-		auto & file = static_cast< FbxImporterFile const & >( *m_file );
 		auto name = material.getName();
-		auto it = file.getFbxMaterials().find( name );
-		if ( it == file.getFbxMaterials().end() )
+		auto it = m_materialsFile.getMaterials().find( name );
+		if ( it == m_materialsFile.getMaterials().end() )
 			return false;
 
 		fbx::FbxSurfaceMaterial const * fbxMaterial = it->second.fbxMaterial;
@@ -598,16 +604,16 @@ namespace c3d_fbx
 		if ( fbxMaterial->GetClassId() == fbx::FbxSurfaceLambert::ClassId
 			|| fbxMaterial->GetClassId() == fbx::FbxSurfacePhong::ClassId )
 		{
-			materials::importNormalsData( file, *pass, m_textureRemaps, m_loadConfig, *this, *fbxMaterial );
-			materials::importHeightData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importAmbientData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importColourData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importSpecularData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importShininessData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importEmissiveData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass, m_emissiveMult );
-			materials::importOpacityData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importMetalnessData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importAmbientOcclusionData( file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importNormalsData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importHeightData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importAmbientData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importColourData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importSpecularData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importShininessData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importEmissiveData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass, m_emissiveMult );
+			materials::importOpacityData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importMetalnessData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
+			materials::importAmbientOcclusionData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
 			pass->prepareTextures();
 		}
 

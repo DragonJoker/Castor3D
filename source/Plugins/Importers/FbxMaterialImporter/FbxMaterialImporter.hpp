@@ -8,13 +8,19 @@ See LICENSE file in root folder
 
 namespace c3d_fbx
 {
+	class FbxMaterialsFile;
+
 	class FbxMaterialImporter
 		: public c3d::MaterialImporter
 	{
 	public:
-		explicit FbxMaterialImporter( c3d::Engine & engine );
+		explicit FbxMaterialImporter( c3d::Engine & engine
+			, FbxMaterialsFile const & materialsFile );
 
 		bool importMaterial( c3d::Material & material )override;
+
+	private:
+		FbxMaterialsFile const & m_materialsFile;
 	};
 }
 

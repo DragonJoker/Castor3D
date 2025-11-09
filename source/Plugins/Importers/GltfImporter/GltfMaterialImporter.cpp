@@ -462,7 +462,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer
+			, c3d::MaterialImporter const & importer
 			, bool checkAlpha )
 		{
 			if ( texInfo )
@@ -509,7 +509,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::TextureInfo const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			try
 			{
@@ -539,7 +539,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			if ( texInfo )
 			{
@@ -558,7 +558,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			if ( texInfo )
 			{
@@ -582,7 +582,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			if ( texInfo )
 			{
@@ -602,7 +602,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			if ( texInfo )
 			{
@@ -618,7 +618,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::NormalTextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			if ( texInfo )
 			{
@@ -633,7 +633,7 @@ namespace c3d_gltf
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::OcclusionTextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter & importer )
+			, c3d::MaterialImporter const & importer )
 		{
 			if ( texInfo )
 			{
