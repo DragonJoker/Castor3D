@@ -432,17 +432,23 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserImportFile, SceneImportContext )
 		{
-			Path path;
-			Path pathFile = context.file.getPath() / params[0]->get( path );
-			blockContext->files.push_back( pathFile );
+			Parameters parameters;
+			if ( params.size() > 1 )
+				fillMeshImportParameters( context, params[1]->get< String >(), parameters );
+
+			Path pathFile = context.file.getPath() / params[0]->get< Path >();
+			blockContext->files.emplace_back( pathFile, parameters );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportAnimFile, SceneImportContext )
 		{
-			Path path;
-			Path pathFile = context.file.getPath() / params[0]->get( path );
-			blockContext->animFiles.push_back( pathFile );
+			Parameters parameters;
+			if ( params.size() > 1 )
+				fillMeshImportParameters( context, params[1]->get< String >(), parameters );
+
+			Path pathFile = context.file.getPath() / params[0]->get< Path >();
+			blockContext->animFiles.emplace_back( pathFile, parameters );
 		}
 		CU_EndAttribute()
 
@@ -573,11 +579,13 @@ namespace c3d
 
 				SceneImporter importer{ *engine };
 
-				for ( auto const & file : blockContext->files )
+				for ( auto const & [file, fileParameters] : blockContext->files )
 				{
+					Parameters importParameters{ parameters };
+					importParameters.append( fileParameters );
 					if ( !importer.importData( *blockContext->scene->scene
 						, file
-						, parameters
+						, importParameters
 						, blockContext->textureRemaps
 						, blockContext->scene->root->progress ) )
 					{
@@ -585,11 +593,13 @@ namespace c3d
 					}
 				}
 
-				for ( auto const & file : blockContext->animFiles )
+				for ( auto const & [file, fileParameters] : blockContext->animFiles )
 				{
+					Parameters importParameters{ parameters };
+					importParameters.append( fileParameters );
 					if ( !importer.importAnimationsData( *blockContext->scene->scene
 						, file
-						, parameters
+						, importParameters
 						, blockContext->scene->root->progress ) )
 					{
 						CU_ParsingError( cuT( "External scene Import failed" ) );
@@ -1361,8 +1371,8 @@ namespace c3d
 		sceneCtx.addPushParser( cuT( "mesh" ), CSCNSection::eMesh, scene::parserMesh, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPopParser( cuT( "}" ), scene::parserEnd );
 
-		importCtx.addParser( cuT( "file" ), scene::parserImportFile, { makeParameter< ParameterType::ePath >() } );
-		importCtx.addParser( cuT( "file_anim" ), scene::parserImportAnimFile, { makeParameter< ParameterType::ePath >() } );
+		importCtx.addParser( cuT( "file" ), scene::parserImportFile, { makeParameter< ParameterType::ePath >(), makeDefaultedParameter< ParameterType::eText >( cuEmptyString ) } );
+		importCtx.addParser( cuT( "file_anim" ), scene::parserImportAnimFile, { makeParameter< ParameterType::ePath >(), makeDefaultedParameter< ParameterType::eText >( cuEmptyString ) } );
 		importCtx.addParser( cuT( "prefix" ), scene::parserImportPrefix, { makeParameter< ParameterType::eText >() } );
 		importCtx.addParser( cuT( "rescale" ), scene::parserImportRescale, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "pitch" ), scene::parserImportPitch, { makeParameter< ParameterType::eFloat >() } );

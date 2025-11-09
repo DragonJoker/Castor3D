@@ -163,8 +163,8 @@ namespace c3d
 	struct SceneImportContext
 	{
 		SceneContext * scene{};
-		PathArray files{};
-		PathArray animFiles{};
+		Vector< Pair< Path, Parameters > > files{};
+		Vector< Pair< Path, Parameters > > animFiles{};
 		String prefix{};
 		Map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
 		float rescale{ 1.0f };
