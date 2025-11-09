@@ -164,59 +164,19 @@ namespace c3d_assimp
 				, m_isPbr{ detectPbr() }
 				, m_result{ result }
 				, m_colourMapPlugin{ m_result.getComponentPlugin< c3d::ColourMapComponent >() }
-				, m_ambientMapPlugin{ m_result.getComponentPlugin< c3d::AmbientColourMapComponent >() }
-				, m_emissiveMapPlugin{ m_result.getComponentPlugin< c3d::EmissiveMapComponent >() }
-				, m_heightMapPlugin{ m_result.getComponentPlugin< c3d::HeightMapComponent >() }
 				, m_metalnessMapPlugin{ m_result.getComponentPlugin< c3d::MetalnessMapComponent >() }
-				, m_normalMapPlugin{ m_result.getComponentPlugin< c3d::NormalMapComponent >() }
 				, m_occlusionMapPlugin{ m_result.getComponentPlugin< c3d::OcclusionMapComponent >() }
 				, m_opacityMapPlugin{ m_result.getComponentPlugin< c3d::OpacityMapComponent >() }
 				, m_roughnessMapPlugin{ m_result.getComponentPlugin< c3d::RoughnessMapComponent >() }
 				, m_specularMapPlugin{ m_result.getComponentPlugin< c3d::SpecularMapComponent >() }
-				, m_transmissionMapPlugin{ m_result.getComponentPlugin< c3d::TransmissionMapComponent >() }
-				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< c3d::TransmittanceMapComponent >() }
-				, m_thicknessMapPlugin{ m_result.getComponentPlugin< c3d::ThicknessMapComponent >() }
-				, m_clearcoatMapPlugin{ m_result.getComponentPlugin< c3d::ClearcoatMapComponent >() }
-				, m_clearcoatNormalMapPlugin{ m_result.getComponentPlugin< c3d::ClearcoatNormalMapComponent >() }
-				, m_clearcoatRoughnessMapPlugin{ m_result.getComponentPlugin< c3d::ClearcoatRoughnessMapComponent >() }
-				, m_sheenMapPlugin{ m_result.getComponentPlugin< c3d::SheenMapComponent >() }
-				, m_sheenRoughnessMapPlugin{ m_result.getComponentPlugin< c3d::SheenRoughnessMapComponent >() }
 				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
-				, m_ambientMapFlags{ m_ambientMapPlugin.getTextureFlags() }
-				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
-				, m_heightMapFlags{ m_heightMapPlugin.getTextureFlags() }
 				, m_metalnessMapFlags{ m_metalnessMapPlugin.getTextureFlags() }
-				, m_normalMapFlags{ m_normalMapPlugin.getTextureFlags() }
 				, m_occlusionMapFlags{ m_occlusionMapPlugin.getTextureFlags() }
 				, m_opacityMapFlags{ m_opacityMapPlugin.getTextureFlags() }
 				, m_roughnessMapFlags{ m_roughnessMapPlugin.getTextureFlags() }
 				, m_specularMapFlags{ m_specularMapPlugin.getTextureFlags() }
-				, m_transmissionMapFlags{ m_transmissionMapPlugin.getTextureFlags() }
-				, m_transmittanceMapFlags{ m_transmittanceMapPlugin.getTextureFlags() }
-				, m_thicknessMapFlags{ m_thicknessMapPlugin.getTextureFlags() }
-				, m_clearcoatMapFlags{ m_clearcoatMapPlugin.getTextureFlags() }
-				, m_clearcoatNormalMapFlags{ m_clearcoatNormalMapPlugin.getTextureFlags() }
-				, m_clearcoatRoughnessMapFlags{ m_clearcoatRoughnessMapPlugin.getTextureFlags() }
-				, m_sheenMapFlags{ m_sheenMapPlugin.getTextureFlags() }
-				, m_sheenRoughnessMapFlags{ m_sheenRoughnessMapPlugin.getTextureFlags() }
 				, m_colourBaseConfiguration{ m_colourMapPlugin.getBaseTextureConfiguration() }
-				, m_ambientBaseConfiguration{ m_ambientMapPlugin.getBaseTextureConfiguration() }
-				, m_emissiveBaseConfiguration{ m_emissiveMapPlugin.getBaseTextureConfiguration() }
-				, m_heightBaseConfiguration{ m_heightMapPlugin.getBaseTextureConfiguration() }
-				, m_metalnessBaseConfiguration{ m_metalnessMapPlugin.getBaseTextureConfiguration() }
-				, m_normalBaseConfiguration{ m_normalMapPlugin.getBaseTextureConfiguration() }
-				, m_occlusionBaseConfiguration{ m_occlusionMapPlugin.getBaseTextureConfiguration() }
 				, m_opacityBaseConfiguration{ m_opacityMapPlugin.getBaseTextureConfiguration() }
-				, m_roughnessBaseConfiguration{ m_roughnessMapPlugin.getBaseTextureConfiguration() }
-				, m_specularBaseConfiguration{ m_specularMapPlugin.getBaseTextureConfiguration() }
-				, m_transmissionBaseConfiguration{ m_transmissionMapPlugin.getBaseTextureConfiguration() }
-				, m_transmittanceBaseConfiguration{ m_transmittanceMapPlugin.getBaseTextureConfiguration() }
-				, m_thicknessBaseConfiguration{ m_thicknessMapPlugin.getBaseTextureConfiguration() }
-				, m_clearcoatBaseConfiguration{ m_clearcoatMapPlugin.getBaseTextureConfiguration() }
-				, m_clearcoatNormalBaseConfiguration{ m_clearcoatNormalMapPlugin.getBaseTextureConfiguration() }
-				, m_clearcoatRoughnessBaseConfiguration{ m_clearcoatRoughnessMapPlugin.getBaseTextureConfiguration() }
-				, m_sheenBaseConfiguration{ m_sheenMapPlugin.getBaseTextureConfiguration() }
-				, m_sheenRoughnessBaseConfiguration{ m_sheenRoughnessMapPlugin.getBaseTextureConfiguration() }
 			{
 				if ( m_shadingModel == aiShadingMode_Toon )
 				{
@@ -248,16 +208,10 @@ namespace c3d_assimp
 		private:
 			void parseDatas()
 			{
-				parseComponentBoolData< c3d::TwoSidedComponent >( AI_MATKEY_TWOSIDED );
-
-				if ( !parseRoughness()
-					&& !parseGlossiness() )
-				{
+				parseTwoSided();
+				if ( !parseRoughness() && !parseGlossiness() )
 					parseShininess();
-				}
-
 				parseComponentDataT< c3d::MetalnessComponent, float >( AI_MATKEY_METALLIC_FACTOR );
-
 				parseColour();
 				parseAmbient();
 				parseSpecular();
@@ -271,9 +225,7 @@ namespace c3d_assimp
 				m_hasRefr = parseRefractionRatio();
 
 				if ( !parseComponentOpaDataT< c3d::OpacityComponent >( AI_MATKEY_OPACITY ) )
-				{
 					parseComponentInvOpaDataT< c3d::OpacityComponent >( AI_MATKEY_TRANSPARENCYFACTOR, 1.0f );
-				}
 
 				parseAlphaRefValue();
 			}
@@ -296,11 +248,8 @@ namespace c3d_assimp
 				auto shcInfo = getTextureInfo( TextureType_SHEEN, 0u );
 				auto shrInfo = getTextureInfo( TextureType_SHEEN, 1u );
 				auto occInfo = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
-
 				if ( occInfo.name.empty() )
-				{
 					occInfo = getTextureInfo( aiTextureType_LIGHTMAP );
-				}
 
 				auto hgtInfo = finishHeight();
 				auto emiInfo = finishEmissive();
@@ -308,76 +257,68 @@ namespace c3d_assimp
 				finishSpecular( spcInfo, occInfo, mtlInfo, shnInfo, rghInfo );
 				auto hasOpacityTex = finishOpacity( opaInfo );
 
-				loadTexture( colInfo, getRemap( m_colourMapFlags, m_colourBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( ambInfo, getRemap( m_ambientMapFlags, m_ambientBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( emiInfo, getRemap( m_emissiveMapFlags, m_emissiveBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( spcInfo, getRemap( m_specularMapFlags, m_specularBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( mtlInfo, getRemap( m_metalnessMapFlags, m_metalnessBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( rghInfo, getRemap( m_roughnessMapFlags, m_roughnessBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( shnInfo, getRemap( m_roughnessMapFlags, m_roughnessBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( occInfo, getRemap( m_occlusionMapFlags, m_occlusionBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( trsInfo, getRemap( m_transmissionMapFlags, m_transmissionBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( thkInfo, getRemap( m_thicknessMapFlags, m_thicknessBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( cctInfo, getRemap( m_clearcoatMapFlags, m_clearcoatBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( ccrInfo, getRemap( m_clearcoatRoughnessMapFlags, m_clearcoatRoughnessBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( ccnInfo, getRemap( m_clearcoatNormalMapFlags, m_clearcoatNormalBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( shcInfo, getRemap( m_sheenMapFlags, m_sheenBaseConfiguration )
-					, hasOpacityTex );
-				loadTexture( shrInfo, getRemap( m_sheenRoughnessMapFlags, m_sheenRoughnessBaseConfiguration )
-					, hasOpacityTex );
+				loadTextureT< c3d::ColourMapComponent >( colInfo, hasOpacityTex );
+				loadTextureT< c3d::AmbientColourMapComponent >( ambInfo, hasOpacityTex );
+				loadTextureT< c3d::EmissiveMapComponent >( emiInfo, hasOpacityTex );
+				loadTextureT< c3d::SpecularMapComponent >( spcInfo, hasOpacityTex );
+				loadTextureT< c3d::MetalnessMapComponent >( mtlInfo, hasOpacityTex );
+				loadTextureT< c3d::RoughnessMapComponent >( rghInfo, hasOpacityTex );
+				loadTextureT< c3d::RoughnessMapComponent >( shnInfo, hasOpacityTex );
+				loadTextureT< c3d::OcclusionMapComponent >( occInfo, hasOpacityTex );
+				loadTextureT< c3d::TransmissionMapComponent >( trsInfo, hasOpacityTex );
+				loadTextureT< c3d::ThicknessMapComponent >( thkInfo, hasOpacityTex );
+				loadTextureT< c3d::ClearcoatMapComponent >( cctInfo, hasOpacityTex );
+				loadTextureT< c3d::ClearcoatRoughnessMapComponent >( ccrInfo, hasOpacityTex );
+				loadTextureT< c3d::ClearcoatNormalMapComponent >( ccnInfo, hasOpacityTex );
+				loadTextureT< c3d::SheenMapComponent >( shcInfo, hasOpacityTex );
+				loadTextureT< c3d::SheenRoughnessMapComponent >( shrInfo, hasOpacityTex );
 
 				if ( !nmlInfo.name.empty() )
 				{
-					loadTexture( nmlInfo, getRemap( m_normalMapFlags, m_normalBaseConfiguration )
-						, hasOpacityTex );
-					loadTexture( hgtInfo, getRemap( m_heightMapFlags, m_heightBaseConfiguration )
-						, hasOpacityTex );
+					loadTextureT< c3d::NormalMapComponent >( nmlInfo, hasOpacityTex );
+					loadTextureT< c3d::HeightMapComponent >( hgtInfo, hasOpacityTex );
 				}
-				else
+				else if ( !hgtInfo.name.empty() )
 				{
-					auto texConfig = m_normalBaseConfiguration;
+					// Convert bump map to combination of normal and height map.
+					auto & plugin = m_result.getComponentPlugin< c3d::NormalMapComponent >();
+					auto texFlags = plugin.getTextureFlags();
+					auto texConfig = plugin.getBaseTextureConfiguration();
 					convertToNormalMap( hgtInfo, texConfig );
-					loadTexture( hgtInfo
-						, getRemap( m_normalMapFlags
-							, texConfig )
-						, hasOpacityTex );
+					loadTexture( hgtInfo, getRemap( texFlags, texConfig ), hasOpacityTex );
 				}
 			}
 
 			template< typename ValueT >
-			bool parseDataT( const char * pKey, unsigned int type, unsigned int idx
-				, ValueT & value )
+			std::pair< ValueT, bool > getValueT( const char * key, unsigned int type, unsigned int idx )
 			{
-				ValueT ret{};
-				bool result = ( m_material.Get( pKey, type, idx, ret ) == aiReturn_SUCCESS );
+				ValueT value{};
+				bool result = ( m_material.Get( key, type, idx, value ) == aiReturn_SUCCESS );
+				return { value, result };
+			}
 
+			std::pair< c3d::RgbColour, bool > getRgbColour( const char * key, unsigned int type, unsigned int idx )
+			{
+				c3d::RgbColour colour;
+				auto [value, result] = getValueT< aiColor3D >( key, type, idx );
 				if ( result )
-				{
-					value = ret;
-				}
+					colour = c3d::RgbColour::fromComponents( value.r, value.g, value.b );
+				return { colour, result };
+			}
 
-				return result;
+			std::pair< c3d::HdrRgbColour, bool > getHdrRgbColour( const char * key, unsigned int type, unsigned int idx )
+			{
+				c3d::HdrRgbColour colour;
+				auto [value, result] = getValueT< aiColor3D >( key, type, idx );
+				if ( result )
+					colour = c3d::HdrRgbColour::fromComponents( value.r, value.g, value.b );
+				return { colour, result };
 			}
 
 			template< typename ComponentT, typename ValueT >
-			bool parseComponentDataT( const char * pKey, unsigned int type, unsigned int idx )
+			bool parseComponentDataT( const char * key, unsigned int type, unsigned int idx )
 			{
-				ValueT value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
+				auto [value, result] = getValueT< ValueT >( key, type, idx );
 				if ( result )
 				{
 					auto component = m_result.createComponent< ComponentT >();
@@ -385,303 +326,118 @@ namespace c3d_assimp
 					*data = value;
 					component->setData( *data );
 				}
+				return result;
+			}
 
+			template< typename ComponentT >
+			bool parseComponentOpaDataT( const char * key, unsigned int type, unsigned int idx )
+			{
+				auto [value, result] = getValueT< float >( key, type, idx );
+				if ( result )
+					m_result.createComponent< ComponentT >()->setOpacity( value );
+				return result;
+			}
+
+			template< typename ComponentT >
+			bool parseComponentInvOpaDataT( const char * key, unsigned int type, unsigned int idx
+				, float point )
+			{
+				auto [value, result] = getValueT< float >( key, type, idx );
+				if ( result )
+					m_result.createComponent< ComponentT >()->setOpacity( point - value );
+				return result;
+			}
+
+			bool parseTwoSided()
+			{
+				auto [value, result] = getValueT< int >( AI_MATKEY_TWOSIDED );
+				if ( result )
+					m_result.createComponent< c3d::TwoSidedComponent >()->setTwoSided( value != 0 );
 				return result;
 			}
 
 			bool parseRoughness()
 			{
-				float value{};
-				bool result = parseDataT( AI_MATKEY_ROUGHNESS_FACTOR, value );
-
+				auto [value, result] = getValueT< float >( AI_MATKEY_ROUGHNESS_FACTOR );
 				if ( result )
-				{
-					auto component = m_result.createComponent< c3d::RoughnessComponent >();
-					component->setRoughness( value );
-				}
-
+					m_result.createComponent< c3d::RoughnessComponent >()->setRoughness( value );
 				return result;
 			}
 
 			bool parseGlossiness()
 			{
-				float value{};
-				bool result = parseDataT( AI_MATKEY_GLOSSINESS_FACTOR, value );
-
+				auto [value, result] = getValueT< float >( AI_MATKEY_GLOSSINESS_FACTOR );
 				if ( result )
-				{
-					auto component = m_result.createComponent< c3d::RoughnessComponent >();
-					component->setGlossiness( 1.0f - value );
-				}
-
+					m_result.createComponent< c3d::RoughnessComponent >()->setGlossiness( 1.0f - value );
 				return result;
 			}
 
 			bool parseShininess()
 			{
-				float value{};
-				bool result = parseDataT( AI_MATKEY_SHININESS, value );
-
+				auto [value, result] = getValueT< float >( AI_MATKEY_SHININESS );
 				if ( result )
 				{
 					float factor{ 1.0f };
 					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, factor );
-					auto component = m_result.createComponent< c3d::RoughnessComponent >();
-					component->setShininess( value * factor );
+					m_result.createComponent< c3d::RoughnessComponent >()->setShininess( value * factor );
 				}
-
-				return result;
-			}
-
-			template< typename ComponentT, typename ValueT, typename FuncT >
-			bool parseComponentDataT( const char * pKey, unsigned int type, unsigned int idx, FuncT transform )
-			{
-				ValueT value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = transform( value );
-					component->setData( *data );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT >
-			bool parseComponentOpaDataT( const char * pKey, unsigned int type, unsigned int idx )
-			{
-				float value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					component->setOpacity( value );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT >
-			bool parseComponentInvOpaDataT( const char * pKey, unsigned int type, unsigned int idx
-				, float point )
-			{
-				float value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					component->setOpacity( point - value );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT, typename ValueT, typename FuncT >
-			bool parseComponentDataFactorT( const char * pKey0, unsigned int type0, unsigned int idx0
-				, const char * pKey1, unsigned int type1, unsigned int idx1
-				, FuncT transform )
-			{
-				ValueT value{};
-				bool result = parseDataT( pKey0, type0, idx0, value );
-
-				if ( result )
-				{
-					ValueT factor{ 1.0f };
-					m_material.Get( pKey1, type1, idx1, factor );
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = transform( value * factor );
-					component->setData( *data );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT, typename ValueT >
-			bool parseComponentDataFactorT( const char * pKey0, unsigned int type0, unsigned int idx0
-				, const char * pKey1, unsigned int type1, unsigned int idx1 )
-			{
-				ValueT value{};
-				bool result = parseDataT( pKey0, type0, idx0, value );
-
-				if ( result )
-				{
-					ValueT factor{ 1.0f };
-					m_material.Get( pKey1, type1, idx1, factor );
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = value * factor;
-					component->setData( *data );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT >
-			bool parseComponentBoolData( const char * pKey, unsigned int type, unsigned int idx )
-			{
-				int value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = value != 0;
-					component->setData( *data );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT >
-			bool parseComponentHdrRgbData( const char * pKey, unsigned int type, unsigned int idx )
-			{
-				aiColor3D value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = c3d::HdrRgbColour::fromComponents( value.r
-						, value.g
-						, value.b );
-					component->setData( *data );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT >
-			bool parseComponentRgbData( const char * pKey, unsigned int type, unsigned int idx )
-			{
-				aiColor3D value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = c3d::RgbColour::fromComponents( value.r
-						, value.g
-						, value.b );
-					component->setData( *data );
-				}
-
-				return result;
-			}
-
-			template< typename ComponentT >
-			bool parseComponentRgbFloatData( const char * pKey, unsigned int type, unsigned int idx )
-			{
-				aiColor3D value{};
-				bool result = parseDataT( pKey, type, idx, value );
-
-				if ( result )
-				{
-					auto component = m_result.createComponent< ComponentT >();
-					auto data = component->getData();
-					*data = float( c3d::point::length( c3d::Point3f{ value.r
-						, value.g
-						, value.b } ) );
-					component->setData( *data );
-				}
-
 				return result;
 			}
 
 			void parseColour()
 			{
-				if ( !parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
-				{
-					if ( aiColor3D value{};
-						parseDataT( AI_MATKEY_COLOR_DIFFUSE, value ) )
-						m_result.createComponent< c3d::ColourComponent >()->setColour( c3d::RgbColour::fromComponents( value.r, value.g, value.b ) );
-				}
+				if ( auto [valueHdr, resultHdr] = getHdrRgbColour( AI_MATKEY_BASE_COLOR ); resultHdr )
+					m_result.createComponent< c3d::ColourComponent >()->setColour( valueHdr );
+				else if ( auto [value, result] = getRgbColour( AI_MATKEY_COLOR_DIFFUSE ); result )
+					m_result.createComponent< c3d::ColourComponent >()->setColour( value );
 			}
 
 			void parseAmbient()
 			{
-				aiColor3D colour = { 1, 1, 1 };
-				bool hasColour = m_material.Get( AI_MATKEY_COLOR_AMBIENT, colour ) == aiReturn_SUCCESS;
-
-				if ( hasColour )
-				{
-					auto component = m_result.createComponent< c3d::AmbientComponent >();
-					component->setAmbient( c3d::RgbColour{ colour.r, colour.g, colour.b } );
-					component->setAmbientFactor( 1.0f );
-				}
+				if ( auto [value, result] = getRgbColour( AI_MATKEY_COLOR_AMBIENT ); result )
+					m_result.createComponent< c3d::AmbientComponent >()->setAmbient( value );
 			}
 
 			void parseSpecular()
 			{
-				aiColor3D colour = { 1, 1, 1 };
-				bool hasColour = m_material.Get( AI_MATKEY_COLOR_SPECULAR, colour ) == aiReturn_SUCCESS;
-
-				if ( hasColour )
-				{
-					auto component = m_result.createComponent< c3d::SpecularComponent >();
-					component->setSpecular( c3d::RgbColour{ colour.r, colour.g, colour.b } );
-				}
+				if ( auto [value, result] = getRgbColour( AI_MATKEY_COLOR_SPECULAR ); result )
+					m_result.createComponent< c3d::SpecularComponent >()->setSpecular( value );
 			}
 
 			void parseSpecularFactor()
 			{
-				float factor{ 1.0f };
-				bool hasFactor = m_material.Get( AI_MATKEY_SPECULAR_FACTOR, factor ) == aiReturn_SUCCESS;
-
-				if ( hasFactor )
-				{
-					auto component = m_result.createComponent< c3d::SpecularFactorComponent >();
-					component->setFactor( factor );
-				}
+				if ( auto [value, result] = getValueT< float >( AI_MATKEY_SPECULAR_FACTOR ); result )
+					m_result.createComponent< c3d::SpecularFactorComponent >()->setFactor( value );
 			}
 
 			void parseEmissive()
 			{
-				aiColor3D emissive = { 1, 1, 1 };
-
-				if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS
-					&& ( emissive.r != 0 || emissive.g != 0 || emissive.b != 0 ) )
+				if ( auto [value, result] = getRgbColour( AI_MATKEY_COLOR_EMISSIVE );
+					result && ( value.red() != 0.0f || value.green() != 0.0f || value.blue() != 0.0f ) )
 				{
 					auto component = m_result.createComponent< c3d::EmissiveComponent >();
-					component->setEmissive( c3d::RgbColour{ m_emissiveMult * emissive.r
-						, m_emissiveMult * emissive.g
-						, m_emissiveMult * emissive.b } );
-					float emissiveIntensity = 1.0f;
-					m_material.Get( AI_MATKEY_EMISSIVE_INTENSITY, emissiveIntensity );
-					component->setEmissiveFactor( emissiveIntensity );
+					component->setEmissive( value * m_emissiveMult );
+					if ( auto [valueI, resultI] = getValueT< float >( AI_MATKEY_EMISSIVE_INTENSITY ); resultI )
+						component->setEmissiveFactor( valueI );
 				}
 			}
 
 			void parseAttenuation()
 			{
-				aiColor3D colour = { 1, 1, 1 };
-				float distance{};
-				bool hasColour = m_material.Get( AI_MATKEY_VOLUME_ATTENUATION_COLOR, colour ) == aiReturn_SUCCESS;
-				bool hasDistance = m_material.Get( AI_MATKEY_VOLUME_ATTENUATION_DISTANCE, distance ) == aiReturn_SUCCESS;
-
+				auto [colour, hasColour] = getRgbColour( AI_MATKEY_VOLUME_ATTENUATION_COLOR );
+				auto [distance, hasDistance] = getValueT< float >( AI_MATKEY_VOLUME_ATTENUATION_DISTANCE );
 				if ( hasColour || hasDistance )
 				{
 					auto component = m_result.createComponent< c3d::AttenuationComponent >();
-					component->setAttenuationColour( c3d::RgbColour{ colour.r, colour.g, colour.b } );
+					component->setAttenuationColour( colour );
 					component->setAttenuationDistance( distance );
 				}
 			}
 
 			void parseClearcoat()
 			{
-				float clearcoat{};
-				float roughness{};
-				bool hasClearcoat = m_material.Get( AI_MATKEY_CLEARCOAT_FACTOR, clearcoat ) == aiReturn_SUCCESS;
-				bool hasRoughness = m_material.Get( AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR, roughness ) == aiReturn_SUCCESS;
-
+				auto [clearcoat, hasClearcoat] = getValueT< float >( AI_MATKEY_CLEARCOAT_FACTOR );
+				auto [roughness, hasRoughness] = getValueT< float >( AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR );
 				if ( hasClearcoat || hasRoughness )
 				{
 					auto component = m_result.createComponent< c3d::ClearcoatComponent >();
@@ -692,29 +448,23 @@ namespace c3d_assimp
 
 			void parseSheen()
 			{
-				aiColor3D sheen{};
-				float roughness{};
-				bool hasSheen = m_material.Get( AI_MATKEY_SHEEN_COLOR_FACTOR, sheen ) == aiReturn_SUCCESS;
-				bool hasRoughness = m_material.Get( AI_MATKEY_SHEEN_ROUGHNESS_FACTOR, roughness ) == aiReturn_SUCCESS;
-
+				auto [sheen, hasSheen] = getHdrRgbColour( AI_MATKEY_SHEEN_COLOR_FACTOR );
+				auto [roughness, hasRoughness] = getValueT< float >( AI_MATKEY_SHEEN_ROUGHNESS_FACTOR );
 				if ( hasSheen || hasRoughness )
 				{
 					auto component = m_result.createComponent< c3d::SheenComponent >();
-					component->setSheenColour( c3d::HdrRgbColour{ sheen.r, sheen.g, sheen.b } );
+					component->setSheenColour( sheen );
 					component->setRoughnessFactor( roughness );
 				}
 			}
 
 			void parseAlphaRefValue()
 			{
-				aiString value;
-
-				if ( float ref{ 1.0f };
-					m_material.Get( AI_MATKEY_GLTF_ALPHACUTOFF, ref ) == aiReturn_SUCCESS
-						&& m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
+				auto [modeName, hasMode] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE );
+				auto [ref, hasRef] = getValueT< float >( AI_MATKEY_GLTF_ALPHACUTOFF );
+				if ( hasRef && hasMode )
 				{
-					auto mode = makeString( value );
-
+					auto mode = makeString( modeName );
 					if ( mode == cuT( "MASK" ) )
 					{
 						auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
@@ -727,20 +477,12 @@ namespace c3d_assimp
 
 			bool parseRefractionRatio()
 			{
-				if ( float ior{ 1.0f };
-					m_material.Get( AI_MATKEY_REFRACTI, ior ) == aiReturn_SUCCESS )
+				if ( auto [ior, hasIor] = getValueT< float >( AI_MATKEY_REFRACTI ); hasIor )
 				{
-					auto component = m_result.createComponent< c3d::RefractionComponent >();
-					component->setRefractionRatio( ior );
-
+					m_result.createComponent< c3d::RefractionComponent >()->setRefractionRatio( ior );
 					if ( auto transmission = m_result.getComponent< c3d::TransmissionComponent >();
 						!transmission )
-					{
-						transmission = m_result.createComponent< c3d::TransmissionComponent >();
-						transmission->setTransmission( 0.0f );
-						return true;
-					}
-
+						m_result.createComponent< c3d::TransmissionComponent >()->setTransmission( 0.0f );
 					return true;
 				}
 
@@ -751,12 +493,8 @@ namespace c3d_assimp
 				, c3d::TextureConfiguration texConfig )
 			{
 				auto it = m_textureRemaps.find( flag );
-
 				if ( it == m_textureRemaps.end() )
-				{
 					return texConfig;
-				}
-
 				return it->second;
 			}
 
@@ -765,22 +503,24 @@ namespace c3d_assimp
 				c3d::Image const * result{};
 
 				if ( source.isBufferImage() )
-				{
 					result = m_importer.loadImage( source.name()
 						, c3d::ImageCreateParams{ source.type(), source.buffer() } );
-				}
 				else if ( source.isFileImage() )
-				{
 					result = m_importer.loadImage( source.name()
 						, c3d::ImageCreateParams{ source.folder() / source.relative() } );
-				}
 
 				if ( !result )
-				{
 					CU_LoaderError( "Couldn't load image" + c3d::toUtf8( source.name() ) + "." );
-				}
-
 				return *result;
+			}
+
+			template< typename ComponentT >
+			void loadTextureT( TextureInfo const & info, bool hasOpacityTex )
+			{
+				auto & plugin = m_result.getComponentPlugin< ComponentT >();
+				auto texFlags = plugin.getTextureFlags();
+				auto texConfig = plugin.getBaseTextureConfiguration();
+				loadTexture( info, getRemap( texFlags, texConfig ), hasOpacityTex );
 			}
 
 			void loadTexture( TextureInfo const & info
@@ -884,19 +624,12 @@ namespace c3d_assimp
 				, uint32_t index )
 			{
 				TextureInfo result{};
-				aiString name;
-				m_material.Get( AI_MATKEY_TEXTURE( type, index ), name );
-
+				auto [name, hasName] = getValueT< aiString >( AI_MATKEY_TEXTURE( type, index ) );
 				if ( name.length > 0 )
 				{
 					result.name = makeString( name );
-
-					if ( int texcoordSet{};
-						m_material.Get( AI_MATKEY_UVWSRC( type, index ), texcoordSet ) == AI_SUCCESS )
-					{
+					if ( auto [texcoordSet, hasSet] = getValueT< int >( AI_MATKEY_UVWSRC( type, index ) ); hasSet )
 						result.texcoordSet = uint32_t( texcoordSet );
-					}
-
 					m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
 				}
 
@@ -905,20 +638,15 @@ namespace c3d_assimp
 					if ( type == aiTextureType_REFLECTION )
 						m_result.createComponent< c3d::ReflectionComponent >()->enableReflections();
 
-					auto & engine = *m_result.getOwner()->getEngine();
-					auto const & cache = engine.getSamplerCache();
-
-					GlFilter minFilter{ GlFilter::LINEAR };
-					GlFilter magFilter{ GlFilter::LINEAR };
-					aiTextureMapMode addressModeU{ aiTextureMapMode_Wrap };
-					aiTextureMapMode addressModeV{ aiTextureMapMode_Wrap };
-					auto hasMinFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MIN( type, index ), minFilter ) == aiReturn_SUCCESS;
-					auto hasMagFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MAG( type, index ), magFilter ) == aiReturn_SUCCESS;
-					auto hasAddressModeU = m_material.Get( AI_MATKEY_MAPPINGMODE_U( type, index ), addressModeU ) == aiReturn_SUCCESS;
-					auto hasAddressModeV = m_material.Get( AI_MATKEY_MAPPINGMODE_V( type, index ), addressModeV ) == aiReturn_SUCCESS;
+					auto [minFilter, hasMinFilter] = getValueT< GlFilter >( AI_MATKEY_GLTF_MAPPINGFILTER_MIN( type, index ) );
+					auto [magFilter, hasMagFilter] = getValueT< GlFilter >( AI_MATKEY_GLTF_MAPPINGFILTER_MAG( type, index ) );
+					auto [addressModeU, hasAddressModeU] = getValueT< aiTextureMapMode >( AI_MATKEY_MAPPINGMODE_U( type, index ) );
+					auto [addressModeV, hasAddressModeV] = getValueT< aiTextureMapMode >( AI_MATKEY_MAPPINGMODE_V( type, index ) );
 
 					if ( hasMinFilter || hasMagFilter || hasAddressModeU || hasAddressModeV )
 					{
+						auto & engine = *m_result.getOwner()->getEngine();
+						auto const & cache = engine.getSamplerCache();
 						auto samplerName = c3d::getSamplerName( c3d::ComparisonFunc::eNever
 							, hasMinFilter ? fromAssimp( minFilter ) : m_sampler->getMinFilter()
 							, hasMagFilter ? fromAssimp( magFilter ) : m_sampler->getMagFilter()
@@ -1003,10 +731,10 @@ namespace c3d_assimp
 				}
 			}
 
-			bool hasMatKey( const char * pKey, unsigned int type, unsigned int idx )const
+			bool hasMatKey( const char * key, unsigned int type, unsigned int idx )const
 			{
 				aiMaterialProperty const * p{};
-				return aiGetMaterialProperty( &m_material, pKey, type, idx, &p ) == aiReturn_SUCCESS
+				return aiGetMaterialProperty( &m_material, key, type, idx, &p ) == aiReturn_SUCCESS
 					&& p;
 			}
 
@@ -1227,59 +955,19 @@ namespace c3d_assimp
 			bool m_hasRefr{};
 			c3d::Pass & m_result;
 			c3d::PassComponentPlugin const & m_colourMapPlugin;
-			c3d::PassComponentPlugin const & m_ambientMapPlugin;
-			c3d::PassComponentPlugin const & m_emissiveMapPlugin;
-			c3d::PassComponentPlugin const & m_heightMapPlugin;
 			c3d::PassComponentPlugin const & m_metalnessMapPlugin;
-			c3d::PassComponentPlugin const & m_normalMapPlugin;
 			c3d::PassComponentPlugin const & m_occlusionMapPlugin;
 			c3d::PassComponentPlugin const & m_opacityMapPlugin;
 			c3d::PassComponentPlugin const & m_roughnessMapPlugin;
 			c3d::PassComponentPlugin const & m_specularMapPlugin;
-			c3d::PassComponentPlugin const & m_transmissionMapPlugin;
-			c3d::PassComponentPlugin const & m_transmittanceMapPlugin;
-			c3d::PassComponentPlugin const & m_thicknessMapPlugin;
-			c3d::PassComponentPlugin const & m_clearcoatMapPlugin;
-			c3d::PassComponentPlugin const & m_clearcoatNormalMapPlugin;
-			c3d::PassComponentPlugin const & m_clearcoatRoughnessMapPlugin;
-			c3d::PassComponentPlugin const & m_sheenMapPlugin;
-			c3d::PassComponentPlugin const & m_sheenRoughnessMapPlugin;
 			c3d::PassComponentTextureFlag m_colourMapFlags;
-			c3d::PassComponentTextureFlag m_ambientMapFlags;
-			c3d::PassComponentTextureFlag m_emissiveMapFlags;
-			c3d::PassComponentTextureFlag m_heightMapFlags;
 			c3d::PassComponentTextureFlag m_metalnessMapFlags;
-			c3d::PassComponentTextureFlag m_normalMapFlags;
 			c3d::PassComponentTextureFlag m_occlusionMapFlags;
 			c3d::PassComponentTextureFlag m_opacityMapFlags;
 			c3d::PassComponentTextureFlag m_roughnessMapFlags;
 			c3d::PassComponentTextureFlag m_specularMapFlags;
-			c3d::PassComponentTextureFlag m_transmissionMapFlags;
-			c3d::PassComponentTextureFlag m_transmittanceMapFlags;
-			c3d::PassComponentTextureFlag m_thicknessMapFlags;
-			c3d::PassComponentTextureFlag m_clearcoatMapFlags;
-			c3d::PassComponentTextureFlag m_clearcoatNormalMapFlags;
-			c3d::PassComponentTextureFlag m_clearcoatRoughnessMapFlags;
-			c3d::PassComponentTextureFlag m_sheenMapFlags;
-			c3d::PassComponentTextureFlag m_sheenRoughnessMapFlags;
 			c3d::TextureConfiguration m_colourBaseConfiguration;
-			c3d::TextureConfiguration m_ambientBaseConfiguration;
-			c3d::TextureConfiguration m_emissiveBaseConfiguration;
-			c3d::TextureConfiguration m_heightBaseConfiguration;
-			c3d::TextureConfiguration m_metalnessBaseConfiguration;
-			c3d::TextureConfiguration m_normalBaseConfiguration;
-			c3d::TextureConfiguration m_occlusionBaseConfiguration;
 			c3d::TextureConfiguration m_opacityBaseConfiguration;
-			c3d::TextureConfiguration m_roughnessBaseConfiguration;
-			c3d::TextureConfiguration m_specularBaseConfiguration;
-			c3d::TextureConfiguration m_transmissionBaseConfiguration;
-			c3d::TextureConfiguration m_transmittanceBaseConfiguration;
-			c3d::TextureConfiguration m_thicknessBaseConfiguration;
-			c3d::TextureConfiguration m_clearcoatBaseConfiguration;
-			c3d::TextureConfiguration m_clearcoatNormalBaseConfiguration;
-			c3d::TextureConfiguration m_clearcoatRoughnessBaseConfiguration;
-			c3d::TextureConfiguration m_sheenBaseConfiguration;
-			c3d::TextureConfiguration m_sheenRoughnessBaseConfiguration;
 		};
 
 		static c3d::LightingModelID getLightingModel( c3d::Engine const & engine
