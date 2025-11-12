@@ -7,7 +7,7 @@ GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Size )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( SizeProperty, wxPGProperty, c3d::Size, const c3d::Size &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( SizeProperty, wxPGProperty, TextCtrl )
 
 	SizeProperty::SizeProperty( wxString const & label
 		, wxString const & name

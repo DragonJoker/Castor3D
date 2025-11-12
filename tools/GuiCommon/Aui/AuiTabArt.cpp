@@ -77,11 +77,11 @@ namespace GuiCommon
 	AuiTabArt::AuiTabArt()
 		: m_disabledColour{ 128, 128, 128 }
 	{
-		wxAuiDefaultTabArt::SetColour( INACTIVE_TAB_COLOUR );
-		wxAuiDefaultTabArt::SetActiveColour( ACTIVE_TAB_COLOUR );
-		wxAuiDefaultTabArt::SetMeasuringFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
-		wxAuiDefaultTabArt::SetNormalFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
-		wxAuiDefaultTabArt::SetSelectedFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+		wxAuiGenericTabArt::SetColour( INACTIVE_TAB_COLOUR );
+		wxAuiGenericTabArt::SetActiveColour( ACTIVE_TAB_COLOUR );
+		wxAuiGenericTabArt::SetMeasuringFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+		wxAuiGenericTabArt::SetNormalFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+		wxAuiGenericTabArt::SetSelectedFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
 
 		m_activeLeftBmp = aui::bitmapFromBits( aui::leftBits.data(), 16, 16, ACTIVE_TAB_COLOUR );
 		m_disabledLeftBmp = aui::bitmapFromBits( aui::leftBits.data(), 16, 16, m_disabledColour );
@@ -373,7 +373,7 @@ namespace GuiCommon
 		, wxRect * outRect )
 	{
 		if ( bitmapId == wxAUI_BUTTON_CLOSE || bitmapId == wxAUI_BUTTON_WINDOWLIST )
-			wxAuiDefaultTabArt::DrawButton( dc, wnd, inRect, bitmapId, buttonState, orientation, outRect );
+			wxAuiGenericTabArt::DrawButton( dc, wnd, inRect, bitmapId, buttonState, orientation, outRect );
 
 		wxBitmap bmp;
 

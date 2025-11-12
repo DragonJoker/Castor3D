@@ -39,7 +39,6 @@ namespace GuiCommon
 
 	private:
 		wxBitmap m_bmpSplash;
-		wxPanel * m_pPanelBmp{};
 		wxGauge * m_pGauge{};
 		wxPoint m_ptTitlePosition;
 		wxPoint m_ptCopyrightPosition;

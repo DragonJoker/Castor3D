@@ -7,7 +7,7 @@ GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Quaternion )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( QuaternionProperty, wxPGProperty, c3d::Quaternion, c3d::Quaternion const &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( QuaternionProperty, wxPGProperty, TextCtrl )
 
 	QuaternionProperty::QuaternionProperty( wxString const & label
 		, wxString const & name

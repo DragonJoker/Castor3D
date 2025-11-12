@@ -9,7 +9,7 @@ GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Rectangle )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, c3d::Rectangle, c3d::Rectangle const &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, TextCtrl )
 
 	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, c3d::Rectangle const & value )
 		: wxPGProperty( label, name )

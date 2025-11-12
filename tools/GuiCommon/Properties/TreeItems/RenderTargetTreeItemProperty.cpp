@@ -142,7 +142,7 @@ namespace GuiCommon
 		{
 			if ( renderPass->isPassEnabled() )
 			{
-				addProperty( grid, wxT( "Render pass " ) + renderPass->getName() );
+				addProperty( grid, cuT( "Render pass " ) + renderPass->getName() );
 				setPrefix( renderPass->getName() );
 				fillRenderPassConfiguration( grid, *this, *renderPass );
 			}
