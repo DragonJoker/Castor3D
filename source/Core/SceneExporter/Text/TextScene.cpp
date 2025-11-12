@@ -85,7 +85,7 @@ namespace c3d
 		template<>
 		bool writable< AnimatedObjectGroup >( AnimatedObjectGroup const & object )
 		{
-			return object.getName() != cuT( "C3D_Textures" );
+			return object.isSerialisable();
 		}
 
 		template<>

@@ -135,12 +135,13 @@ namespace GuiCommon
 			m_animationProperties = std::make_unique< AnimationTreeItemProperty >( m_imagesLoader, m_propertiesHolder->isEditable(), m_engine );
 			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( c3d::AnimatedObjectGroup & elem )
 				{
-					doAddAnimatedObjectGroup( AppendItemT( catId
-							, elem.getName()
-							, eBMP::eAnimatedObjectGroup
-							, eBMP::eAnimatedObjectGroupSelected
-							, new DataType{ &elem } )
-						, elem );
+					if ( elem.isSerialisable() )
+						doAddAnimatedObjectGroup( AppendItemT( catId
+								, elem.getName()
+								, eBMP::eAnimatedObjectGroup
+								, eBMP::eAnimatedObjectGroupSelected
+								, new DataType{ &elem } )
+							, elem );
 				} );
 
 			CollapseAll();

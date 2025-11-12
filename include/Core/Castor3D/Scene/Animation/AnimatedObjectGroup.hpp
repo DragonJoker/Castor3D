@@ -26,15 +26,18 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	scene	The scene
-		 *\param[in]	name	The group name
+		 *\param[in]	scene			The scene
+		 *\param[in]	name			The group name
+		 *\param[in]	serialisable	\p true to allow the serialisation of the group.
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	scene	La scène
-		 *\param[in]	name	Le nom du groupe
+		 *\param[in]	scene			La scène.
+		 *\param[in]	name			Le nom du groupe.
+		 *\param[in]	serialisable	\p true pour autoriser la sérialisation du groupe.
 		 */
 		C3D_API AnimatedObjectGroup( String const & name
-			, Scene & scene );
+			, Scene & scene
+			, bool serialisable = true );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -271,6 +274,11 @@ namespace c3d
 			return m_objects;
 		}
 
+		bool isSerialisable()const noexcept
+		{
+			return m_serialisable;
+		}
+
 		C3D_API static void addParsers( AttributeParsers & result );
 
 	public:
@@ -287,6 +295,7 @@ namespace c3d
 		GroupAnimationMap m_animations;
 		AnimatedObjectMap m_objects;
 		PreciseTimer m_timer;
+		bool m_serialisable;
 	};
 
 	struct SceneContext;
