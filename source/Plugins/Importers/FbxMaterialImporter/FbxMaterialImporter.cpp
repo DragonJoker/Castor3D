@@ -210,6 +210,16 @@ namespace c3d_fbx
 					parseTransform( fbxTexture, texConfig.transform );
 					*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 
+					if ( isOpacity )
+					{
+						if ( auto & image = loadImage( *sourceInfo, importer );
+							!hasAlphaChannel( image ) )
+						{
+							texConfig.components.front().componentsMask = 0x00FF0000;
+							*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+						}
+					}
+
 					c3d::PassTextureConfig passTexConfig{ loadSampler( file, fbxTexture ), 0u };
 					pass.registerTexture( c3d::move( *sourceInfo ), passTexConfig );
 				}
@@ -348,6 +358,7 @@ namespace c3d_fbx
 		static void importNormalsData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -355,6 +366,7 @@ namespace c3d_fbx
 			if ( loadImages )
 			{
 				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > property = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sNormalMap )
+					, fbxMaterial.FindProperty( "bump_map" )
 					, fbxMaterial.FindProperty( "Maya|NormalTexture" ) };
 				parseTexture< c3d::NormalMapComponent >( file, pass, textureRemaps, property, loadConfig, importer );
 			}
@@ -415,6 +427,7 @@ namespace c3d_fbx
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > color = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sDiffuse )
 				, fbxMaterial.FindProperty( "Maya|base_color" )
 				, fbxMaterial.FindProperty( "Maya|TEX_color_map" )
+				, fbxMaterial.FindProperty( "base_color_map" )
 				, fbxMaterial.FindProperty( "3dsMax|Parameters|base_color_map" )
 				, fbxMaterial.FindProperty( "3dsMax|main|base_color_map" ) };
 			applyToFirstValid( color
@@ -469,6 +482,7 @@ namespace c3d_fbx
 			{
 				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > shininessMap = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sShininess ) };
 				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > roughnessMap = { fbxMaterial.FindProperty( "Maya|TEX_roughness_map" )
+					, fbxMaterial.FindProperty( "roughness_map" )
 					, fbxMaterial.FindProperty( "Maya|diffuseRoughness" )
 					, fbxMaterial.FindProperty( "Maya|specularRoughness" )
 					, fbxMaterial.FindProperty( "3dsMax|main|roughness_map" )
