@@ -62,10 +62,10 @@ namespace
 			extensions.emplace_back( cuT( "xgl" ), Extension{ cuT( "XGL" ), cuT( "XGL" ) } );
 			extensions.emplace_back( cuT( "xml" ), Extension{ cuT( "XML" ), cuT( "Irrlicht Scene" ) } );
 			extensions.emplace_back( cuT( "zgl" ), Extension{ cuT( "ZGL" ), cuT( "XGL" ) } );
-			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) } );
-			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "FBX" ), cuT( "Autodesk FBX" ) } );
-			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "OBJ" ), cuT( "Wavefront Object" ) } );
-			extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "PLY" ), cuT( "Stanford Polygon Library" ) } );
+			extensions.emplace_back( cuT( "3ds" ), Extension{ cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) } );
+			extensions.emplace_back( cuT( "fbx" ), Extension{ cuT( "FBX" ), cuT( "Autodesk FBX" ) } );
+			extensions.emplace_back( cuT( "obj" ), Extension{ cuT( "OBJ" ), cuT( "Wavefront Object" ) } );
+			extensions.emplace_back( cuT( "ply" ), Extension{ cuT( "PLY" ), cuT( "Stanford Polygon Library" ) } );
 
 			if ( aiGetVersionMajor() > 3
 				|| ( aiGetVersionMajor() == 3 && aiGetVersionMajor() >= 2 ) )
