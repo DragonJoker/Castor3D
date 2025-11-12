@@ -34,7 +34,6 @@ namespace GuiCommon
 	{
 		SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 		wxSize size = GetClientSize();
-		m_pPanelBmp = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( size.x, size.y - 20 ) );
 		m_pGauge = new wxGauge( this, wxID_ANY, m_range, wxPoint( 0, size.y - 20 ), wxSize( size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );
 		Show();
 		Update();
@@ -51,51 +50,15 @@ namespace GuiCommon
 	{
 		m_pGauge->SetValue( m_pGauge->GetValue() + iIncrement );
 		m_strSubStatus.clear();
-		wxClientDC clientDC( m_pPanelBmp );
-		doDraw( &clientDC );
+		Refresh();
+		Update();
 	}
 
 	void SplashScreen::SubStatus( wxString const & strText )
 	{
 		m_strSubStatus = strText;
-		wxClientDC clientDC( m_pPanelBmp );
-		doDraw( &clientDC );
-	}
-
-	void SplashScreen::doDraw( wxDC * pDC )const
-	{
-		if ( IsVisible() )
-		{
-			wxString name = GetTitle();
-			name.Replace( wxT( " " ), wxT( "\n" ) );
-			wxSize size;
-			wxFont font( 40, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial" ) );
-			pDC->SetBackgroundMode( wxTRANSPARENT );
-			pDC->DrawBitmap( m_bmpSplash, wxPoint( 0, 0 ) );
-			pDC->SetTextForeground( wxColour( 92, 92, 92 ) );
-			font.SetPointSize( 70 );
-			pDC->SetFont( font );
-			pDC->DrawText( m_strAppVersion, m_ptVersionPosition );
-			pDC->SetTextForeground( *wxWHITE );
-			font.SetPointSize( 40 );
-			pDC->SetFont( font );
-			pDC->DrawText( name, m_ptTitlePosition );
-			pDC->SetTextForeground( *wxWHITE );
-			font.SetPointSize( 10 );
-			pDC->SetFont( font );
-			pDC->DrawText( m_strCopyright, m_ptCopyrightPosition );
-			pDC->SetTextForeground( *wxWHITE );
-			font.SetPointSize( 8 );
-			pDC->SetFont( font );
-			pDC->DrawText( m_strEngineVersion, wxPoint( 350, 350 ) );
-			pDC->SetFont( font );
-			pDC->DrawText( m_strStatus, wxPoint( 10, 350 ) );
-			pDC->SetTextForeground( *wxWHITE );
-			font.SetPointSize( 8 );
-			pDC->SetFont( font );
-			size = pDC->GetTextExtent( m_strSubStatus );
-			pDC->DrawText( m_strSubStatus, wxPoint( ( 502 - size.x ), 350 ) );
-		}
+		Refresh();
+		Update();
 	}
 
 #pragma GCC diagnostic push
@@ -108,8 +71,39 @@ namespace GuiCommon
 
 	void SplashScreen::onPaint( wxPaintEvent & event )
 	{
-		wxPaintDC paintDC( this );
-		doDraw( &paintDC );
+		if ( IsVisible() )
+		{
+			wxPaintDC paintDC{ this };
+			wxString name = GetTitle();
+			name.Replace( wxT( " " ), wxT( "\n" ) );
+			wxSize size;
+			wxFont font( 40, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial" ) );
+			paintDC.SetBackgroundMode( wxTRANSPARENT );
+			paintDC.DrawBitmap( m_bmpSplash, wxPoint( 0, 0 ) );
+			paintDC.SetTextForeground( wxColour( 92, 92, 92 ) );
+			font.SetPointSize( 70 );
+			paintDC.SetFont( font );
+			paintDC.DrawText( m_strAppVersion, m_ptVersionPosition );
+			paintDC.SetTextForeground( *wxWHITE );
+			font.SetPointSize( 40 );
+			paintDC.SetFont( font );
+			paintDC.DrawText( name, m_ptTitlePosition );
+			paintDC.SetTextForeground( *wxWHITE );
+			font.SetPointSize( 10 );
+			paintDC.SetFont( font );
+			paintDC.DrawText( m_strCopyright, m_ptCopyrightPosition );
+			paintDC.SetTextForeground( *wxWHITE );
+			font.SetPointSize( 8 );
+			paintDC.SetFont( font );
+			paintDC.DrawText( m_strEngineVersion, wxPoint( 350, 350 ) );
+			paintDC.SetFont( font );
+			paintDC.DrawText( m_strStatus, wxPoint( 10, 350 ) );
+			paintDC.SetTextForeground( *wxWHITE );
+			font.SetPointSize( 8 );
+			paintDC.SetFont( font );
+			size = paintDC.GetTextExtent( m_strSubStatus );
+			paintDC.DrawText( m_strSubStatus, wxPoint( ( 502 - size.x ), 350 ) );
+		}
 		event.Skip();
 	}
 

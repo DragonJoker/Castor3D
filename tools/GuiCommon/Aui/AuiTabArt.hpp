@@ -11,7 +11,7 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	class AuiTabArt
-		: public wxAuiDefaultTabArt
+		: public wxAuiGenericTabArt
 	{
 	public:
 		AuiTabArt();

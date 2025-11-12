@@ -29,7 +29,6 @@ namespace GuiCommon
 		wxListBox * doFillRenderers();
 		wxListBox * doInitialiseDevices();
 		void doFillDevices( c3d::Renderer const & renderer );
-		void doDraw( wxDC * dc )const;
 		void doSelectRenderer( bool next );
 		void doSelectDevice( bool next);
 

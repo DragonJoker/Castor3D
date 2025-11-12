@@ -10,7 +10,7 @@ namespace GuiCommon
 {
 	//*********************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( HdrRgbColourProperty, wxPGProperty, c3d::HdrRgbColour, c3d::HdrRgbColour const &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( HdrRgbColourProperty, wxPGProperty, TextCtrl )
 
 		HdrRgbColourProperty::HdrRgbColourProperty( wxString const & label, wxString const & name, c3d::HdrRgbColour const & value )
 		: wxPGProperty( label, name )
@@ -65,7 +65,7 @@ namespace GuiCommon
 
 	//*********************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( HdrRgbaColourProperty, wxPGProperty, c3d::HdrRgbaColour, c3d::HdrRgbaColour const &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( HdrRgbaColourProperty, wxPGProperty, TextCtrl )
 
 	HdrRgbaColourProperty::HdrRgbaColourProperty( wxString const & label, wxString const & name, c3d::HdrRgbaColour const & value )
 		: wxPGProperty( label, name )

@@ -74,8 +74,9 @@ namespace GuiCommon
 		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
 		SetSizer( sizer );
 		sizer->SetSizeHints( this );
-		wxClientDC clientDC( this );
-		doDraw( &clientDC );
+
+		Refresh();
+		Update();
 	}
 
 	c3d::Renderer RendererSelector::getSelected()
@@ -154,11 +155,6 @@ namespace GuiCommon
 		m_devicesList->Update();
 	}
 
-	void RendererSelector::doDraw( wxDC * dc )const
-	{
-		dc->DrawBitmap( *m_castorImg, wxPoint( 0, 0 ), true );
-	}
-
 	void RendererSelector::doSelectRenderer( bool next )
 	{
 		if ( !m_renderers.empty() )
@@ -219,7 +215,7 @@ namespace GuiCommon
 	void RendererSelector::onPaint( wxPaintEvent & event )
 	{
 		wxPaintDC paintDC( this );
-		doDraw( & paintDC );
+		paintDC.DrawBitmap( *m_castorImg, wxPoint( 0, 0 ), true );
 		event.Skip();
 	}
 

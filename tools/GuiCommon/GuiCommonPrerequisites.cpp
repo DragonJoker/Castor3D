@@ -818,7 +818,7 @@ window "MainWindow"
 
 	wxString make_wxString( c3d::WString const & value )
 	{
-		return wxString( value.c_str(), wxConvUTF8 );
+		return wxString( value.c_str() );
 	}
 
 	wxString make_wxString( c3d::U32String const & value )

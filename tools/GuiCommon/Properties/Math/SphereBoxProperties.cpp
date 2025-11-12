@@ -9,7 +9,7 @@ GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, BoundingSphere )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingSphereProperty, wxPGProperty, c3d::BoundingSphere, c3d::BoundingSphere const &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( BoundingSphereProperty, wxPGProperty, TextCtrl )
 
 		BoundingSphereProperty::BoundingSphereProperty( wxString const & label
 			, wxString const & name

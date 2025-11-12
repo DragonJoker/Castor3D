@@ -366,17 +366,14 @@ namespace GuiCommon
 		bool result = doParseCommandLine();
 		wxDisplay display;
 		wxRect rect = display.GetClientArea();
-		SplashScreen splashScreen
-		{
-			m_displayName,
-			wxPoint{ 10, 230 },
-			wxPoint{ 200, 300 },
-			wxPoint{ 180, 260 },
-			wxPoint{ ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 },
-			int( m_steps ),
-			m_version,
-			c3d::Version{}
-		};
+		SplashScreen splashScreen{ m_displayName
+			, wxPoint{ 10, 230 }
+			, wxPoint{ 200, 300 }
+			, wxPoint{ 180, 260 }
+			, wxPoint{ ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 }
+			, int( m_steps )
+			, m_version
+			, c3d::Version{} };
 		m_splashScreen = &splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
 		wxWindow * window = nullptr;

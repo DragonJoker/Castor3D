@@ -7,7 +7,7 @@ GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Position )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( PositionProperty, wxPGProperty, c3d::Position, c3d::Position const &, TextCtrl )
+	wxPG_IMPLEMENT_PROPERTY_CLASS( PositionProperty, wxPGProperty, TextCtrl )
 
 	PositionProperty::PositionProperty( wxString const & label
 		, wxString const & name
