@@ -182,13 +182,9 @@ namespace c3d_assimp
 				, m_opacityBaseConfiguration{ m_opacityMapPlugin.getBaseTextureConfiguration() }
 			{
 				if ( m_shadingModel == aiShadingMode_Toon )
-				{
 					m_result.createComponent< toon::EdgesComponent >();
-				}
 				else if ( m_shadingModel == aiShadingMode_NoShading )
-				{
 					m_result.enableLighting( false );
-				}
 			}
 
 		public:
@@ -374,7 +370,7 @@ namespace c3d_assimp
 			{
 				auto [value, result] = getValueT< float >( AI_MATKEY_GLOSSINESS_FACTOR );
 				if ( result )
-					m_result.createComponent< c3d::RoughnessComponent >()->setGlossiness( 1.0f - value );
+					m_result.createComponent< c3d::RoughnessComponent >()->setGlossiness( value );
 				return result;
 			}
 
@@ -385,6 +381,8 @@ namespace c3d_assimp
 				{
 					float factor{ 1.0f };
 					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, factor );
+					if ( m_isObjFile )
+						value *= (c3d::MaxPhongShininess / 2048.0f); // 2048 is arbitrary, OBJ is funnnnnn...
 					m_result.createComponent< c3d::RoughnessComponent >()->setShininess( value * factor );
 				}
 				return result;
