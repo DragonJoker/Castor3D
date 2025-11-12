@@ -400,9 +400,14 @@ namespace c3d
 			return m_file;
 		}
 
-		String getPrefix()const noexcept
+		String const & getPrefix()const noexcept
 		{
 			return m_prefix;
+		}
+
+		Parameters const & getParameters()const noexcept
+		{
+			return m_parameters;
 		}
 
 	private:

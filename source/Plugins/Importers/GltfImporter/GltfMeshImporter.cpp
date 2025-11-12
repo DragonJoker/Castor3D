@@ -380,9 +380,9 @@ namespace c3d_gltf
 	{
 		auto submesh = mesh.createSubmesh();
 		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
+		if ( auto const & impAsset = file.getAsset();
+			doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
 			submesh->createComponent< c3d::DefaultRenderComponent >();
@@ -403,9 +403,9 @@ namespace c3d_gltf
 	{
 		auto submesh = mesh.createSubmesh();
 		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
+		if ( auto const & impAsset = file.getAsset();
+			doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->createComponent< c3d::DefaultRenderComponent >();
@@ -455,9 +455,9 @@ namespace c3d_gltf
 	{
 		auto submesh = mesh.createSubmesh();
 		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
+		if ( auto const & impAsset = file.getAsset();
+			doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->createComponent< c3d::DefaultRenderComponent >();
@@ -507,9 +507,9 @@ namespace c3d_gltf
 	{
 		auto submesh = mesh.createSubmesh();
 		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
+		if ( auto const & impAsset = file.getAsset();
+			doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->createComponent< c3d::DefaultRenderComponent >();
 
@@ -581,9 +581,9 @@ namespace c3d_gltf
 	{
 		auto submesh = mesh.createSubmesh();
 		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
+		if ( auto const & impAsset = file.getAsset();
+			doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->createComponent< c3d::DefaultRenderComponent >();
 
@@ -658,9 +658,9 @@ namespace c3d_gltf
 	{
 		auto submesh = mesh.createSubmesh();
 		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto const & impAsset = file.getAsset();
 
-		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
+		if ( auto const & impAsset = file.getAsset();
+			doProcessMeshVertices( impAsset, impMesh, impPrimitive, *submesh, material ) )
 		{
 			submesh->createComponent< c3d::DefaultRenderComponent >();
 
@@ -845,34 +845,37 @@ namespace c3d_gltf
 			}
 		}
 
-		c3d::Point4uiArray joints;
-
-		if ( !meshes::parseAttributeData< 4u, uint8_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() ) )
+		if ( m_parameters.get< bool >( "no_skeleton" ) )
 		{
-			meshes::parseAttributeData< 4u, uint16_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() );
-		}
+			c3d::Point4uiArray joints;
 
-		if ( !joints.empty() )
-		{
-			c3d::Point4fArray weights;
-
-			if ( meshes::parseAttributeData< 4u, float >( impAsset, impPrimitive.attributes, "WEIGHTS_0", weights, file.getAdapter() )
-				&& weights.size() == joints.size() )
+			if ( !meshes::parseAttributeData< 4u, uint8_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() ) )
 			{
-				c3d::VertexBoneDataArray datas;
-				datas.reserve( weights.size() );
+				meshes::parseAttributeData< 4u, uint16_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() );
+			}
 
-				for ( size_t i = 0u; i < weights.size(); ++i )
+			if ( !joints.empty() )
+			{
+				c3d::Point4fArray weights;
+
+				if ( meshes::parseAttributeData< 4u, float >( impAsset, impPrimitive.attributes, "WEIGHTS_0", weights, file.getAdapter() )
+					&& weights.size() == joints.size() )
 				{
-					c3d::VertexBoneData data;
-					data.addBoneData( joints[i][0], weights[i][0] );
-					data.addBoneData( joints[i][1], weights[i][1] );
-					data.addBoneData( joints[i][2], weights[i][2] );
-					data.addBoneData( joints[i][3], weights[i][3] );
-					datas.push_back( data );
-				}
+					c3d::VertexBoneDataArray datas;
+					datas.reserve( weights.size() );
 
-				submesh.createComponent< c3d::SkinComponent >()->getData().addDatas( datas );
+					for ( size_t i = 0u; i < weights.size(); ++i )
+					{
+						c3d::VertexBoneData data;
+						data.addBoneData( joints[i][0], weights[i][0] );
+						data.addBoneData( joints[i][1], weights[i][1] );
+						data.addBoneData( joints[i][2], weights[i][2] );
+						data.addBoneData( joints[i][3], weights[i][3] );
+						datas.push_back( data );
+					}
+
+					submesh.createComponent< c3d::SkinComponent >()->getData().addDatas( datas );
+				}
 			}
 		}
 

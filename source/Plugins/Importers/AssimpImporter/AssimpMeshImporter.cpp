@@ -120,7 +120,7 @@ namespace c3d_assimp
 
 						if ( importer->importData( *mat
 								, &file
-								, c3d::Parameters{}
+								, file.getParameters()
 							, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration >{} ) )
 						{
 							scene.getMaterialView().add( matName, mat, true );
@@ -147,11 +147,8 @@ namespace c3d_assimp
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = mesh.getName();
 		auto it = file.getMeshes().find( name );
-
 		if ( it == file.getMeshes().end() )
-		{
 			return false;
-		}
 
 		auto & aiScene = file.getAiScene();
 
@@ -278,7 +275,8 @@ namespace c3d_assimp
 			}
 		}
 
-		if ( aiMesh.HasBones() )
+		if ( aiMesh.HasBones()
+			&& !m_parameters.get< bool >( "no_skeleton" ) )
 		{
 			c3d::Vector< c3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
 			auto meshNode = findMeshNode( aiMeshIndex, *aiScene.mRootNode );

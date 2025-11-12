@@ -175,8 +175,7 @@ namespace c3d_gltf
 			, size_t lookupIndex )
 		{
 			bool result{};
-			parseNodes( impAsset.nodes[rootIndex].children
-				, impAsset.nodes
+			parseNodes( impAsset.nodes[rootIndex].children, impAsset.nodes
 				, [&result, &lookupIndex]( fastgltf::Node const & /*node*/, size_t nodeIndex, size_t /*parentIndex*/, size_t /*parentInstanceCount*/, bool )
 				{
 					if ( nodeIndex == lookupIndex )
@@ -196,12 +195,10 @@ namespace c3d_gltf
 			, c3d::Vector< size_t > const & skinsRootNodes )
 		{
 			return skinsRootNodes.end() != std::find( skinsRootNodes.begin(), skinsRootNodes.end(), nodeIndex )
-				|| std::any_of( skeletons.begin()
-					, skeletons.end()
+				|| std::any_of( skeletons.begin(), skeletons.end()
 					, [&impAsset, nodeIndex]( fastgltf::Skin const & lookup )
 					{
-						return lookup.joints.end() != std::find_if( lookup.joints.begin()
-							, lookup.joints.end()
+						return lookup.joints.end() != std::find_if( lookup.joints.begin(), lookup.joints.end()
 							, [&impAsset, nodeIndex]( size_t lookupIndex )
 							{
 								return lookupIndex == nodeIndex
@@ -826,24 +823,27 @@ namespace c3d_gltf
 		Animations result;
 		size_t index{};
 
-		for ( auto & animation : m_asset->animations )
+		if ( !getParameters().get< bool >( "no_skeleton" ) )
 		{
-			for ( auto & channel : animation.channels )
+			for ( auto & animation : m_asset->animations )
 			{
-				if ( ( channel.path == fastgltf::AnimationPath::Rotation
-						|| channel.path == fastgltf::AnimationPath::Scale
-						|| channel.path == fastgltf::AnimationPath::Translation )
-					&& channel.nodeIndex
-					&& isSkeletonNode( *channel.nodeIndex )
-					&& skeleton.findNode( getNodeName( *channel.nodeIndex, 0u ) ) != nullptr )
+				for ( auto & channel : animation.channels )
 				{
-					auto & channelSamplers = result.try_emplace( getAnimationName( index ) ).first->second;
-					auto & nodeSamplers = channelSamplers.try_emplace( channel.path ).first->second;
-					nodeSamplers.emplace_back( channel, animation.samplers[channel.samplerIndex] );
+					if ( ( channel.path == fastgltf::AnimationPath::Rotation
+							|| channel.path == fastgltf::AnimationPath::Scale
+							|| channel.path == fastgltf::AnimationPath::Translation )
+						&& channel.nodeIndex
+						&& isSkeletonNode( *channel.nodeIndex )
+						&& skeleton.findNode( getNodeName( *channel.nodeIndex, 0u ) ) != nullptr )
+					{
+						auto & channelSamplers = result.try_emplace( getAnimationName( index ) ).first->second;
+						auto & nodeSamplers = channelSamplers.try_emplace( channel.path ).first->second;
+						nodeSamplers.emplace_back( channel, animation.samplers[channel.samplerIndex] );
+					}
 				}
-			}
 
-			++index;
+				++index;
+			}
 		}
 
 		return result;
@@ -1007,7 +1007,8 @@ namespace c3d_gltf
 	{
 		c3d::Set< c3d::String > result;
 
-		if ( isValid() )
+		if ( isValid()
+			&& !getParameters().get< bool >( "no_skeleton" ) )
 		{
 			size_t index{};
 
@@ -1077,7 +1078,8 @@ namespace c3d_gltf
 	{
 		c3d::Set< c3d::String > result;
 
-		if ( isValid() )
+		if ( isValid()
+			&& !getParameters().get< bool >( "no_skeleton" ) )
 		{
 			size_t index{};
 
@@ -1163,11 +1165,15 @@ namespace c3d_gltf
 	{
 		c3d::Vector< c3d::Matrix4x4f > cumulativeTransforms;
 		c3d::Vector< size_t > skinsRootNodes;
+		bool noSkeleton = getParameters().get< bool >( "no_skeleton" );
 
-		for ( auto & skin : m_asset->skins )
+		if ( noSkeleton )
 		{
-			auto skinRootNodes = findSkinRootNodes( *this, skin );
-			skinsRootNodes.insert( skinsRootNodes.end(), skinRootNodes.begin(), skinRootNodes.end() );
+			for ( auto & skin : m_asset->skins )
+			{
+				auto skinRootNodes = findSkinRootNodes( *this, skin );
+				skinsRootNodes.insert( skinsRootNodes.end(), skinRootNodes.begin(), skinRootNodes.end() );
+			}
 		}
 
 		// First, list all nodes, with their own transforms and instances
@@ -1180,8 +1186,11 @@ namespace c3d_gltf
 			if ( node.cameraIndex )
 				transform.rotate *= c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0f, 1.0f, 0.0f }, c3d::Angle::fromDegrees( 180.0f ) );
 
+			bool isSkeletonNode = ( noSkeleton
+				? false
+				: file::isSkeletonNode( *m_asset, m_asset->skins, nodeIndex, skinsRootNodes ) );
 			auto & nodeData = m_sceneData.nodes.emplace_back( node.cameraIndex.has_value()
-				, file::isSkeletonNode( *m_asset, m_asset->skins, nodeIndex, skinsRootNodes )
+				, isSkeletonNode
 				, nodeIndex
 				, &node );
 			c3d::matrix::setTransform( cumulativeTransforms[nodeIndex]
@@ -1287,13 +1296,9 @@ namespace c3d_gltf
 			}
 
 			if ( nodeData->isSkeleton )
-			{
 				m_sceneData.skeletonNodes.emplace_back( nodeData );
-			}
 			else
-			{
 				file::listDataAnimations( *this, *nodeData );
-			}
 		}
 
 		// Fill helper containers.

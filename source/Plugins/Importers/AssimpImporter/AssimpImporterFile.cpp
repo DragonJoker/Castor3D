@@ -40,12 +40,12 @@ namespace c3d_assimp
 				| aiProcess_FindDegenerates };
 			if ( !parameters.get< bool >( cuT( "no_validation" ) ) )
 				importFlags |= aiProcess_ValidateDataStructure
-					| aiProcess_FindInvalidData;
+				| aiProcess_FindInvalidData;
 			if ( !parameters.get< bool >( cuT( "no_optimisations" ) ) )
 				importFlags |= aiProcess_JoinIdenticalVertices
-					| aiProcess_OptimizeMeshes
-					| aiProcess_OptimizeGraph
-					| aiProcess_ImproveCacheLocality;
+				| aiProcess_OptimizeMeshes
+				| aiProcess_OptimizeGraph
+				| aiProcess_ImproveCacheLocality;
 			if ( parameters.get< c3d::String >( cuT( "normals" ) ) == cuT( "smooth" ) )
 				importFlags |= aiProcess_GenSmoothNormals;
 			if ( parameters.get< bool >( cuT( "tangent_space" ) ) )
@@ -437,10 +437,11 @@ namespace c3d_assimp
 	{
 		if ( m_aiScene )
 		{
-			for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
-				for ( auto aiBone : c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
-					m_bonesNodes.try_emplace( makeString( aiBone->mName )
-						, fromAssimp( aiBone->mOffsetMatrix ) );
+			if ( !getParameters().get< bool >( "no_skeleton" ) )
+				for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
+					for ( auto aiBone : c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
+						m_bonesNodes.try_emplace( makeString( aiBone->mName )
+							, fromAssimp( aiBone->mOffsetMatrix ) );
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
@@ -741,7 +742,7 @@ namespace c3d_assimp
 		if ( m_fbxMaterials )
 			return m_fbxMaterials->createMaterialImporter( *getOwner() );
 #endif
-		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getOwner(), getParameters() );
 	}
 
 	c3d::AnimationImporterUPtr AssimpImporterFile::createAnimationImporter()
@@ -801,6 +802,9 @@ namespace c3d_assimp
 
 	c3d::Map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
 	{
+		if ( getParameters().get< bool >( "no_skeleton" ) )
+			return {};
+
 		c3d::Map< aiMesh const *, aiNode const * > result;
 		uint32_t meshIndex = 0u;
 

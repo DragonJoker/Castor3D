@@ -14,9 +14,13 @@ namespace c3d_assimp
 		: public c3d::MaterialImporter
 	{
 	public:
-		explicit AssimpMaterialImporter( c3d::Engine & engine );
+		explicit AssimpMaterialImporter( c3d::Engine & engine
+			, c3d::Parameters const & parameters );
 
 		bool importMaterial( c3d::Material & material )override;
+
+	private:
+		c3d::Parameters const & m_parameters;
 	};
 }
 

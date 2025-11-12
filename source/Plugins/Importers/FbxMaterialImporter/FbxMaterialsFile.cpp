@@ -383,6 +383,14 @@ namespace c3d_fbx
 			return stream.str();
 		}
 
+		c3d::OutputStream & operator<<( c3d::OutputStream & stream, fbx::FbxObject const & v )
+		{
+			stream << v.GetClassId().GetName() << cuT( " " ) << v.GetName();
+			if ( v.GetClassId() == fbx::FbxFileTexture::ClassId )
+				stream << cuT( " " ) << static_cast< fbx::FbxFileTexture const & >( v ).GetRelativeFileName();
+			return stream;
+		}
+
 		c3d::String getEnums( fbx::FbxProperty const & fbxProperty )
 		{
 			auto stream = c3d::makeStringStream();
@@ -400,11 +408,19 @@ namespace c3d_fbx
 		{
 			auto fbxDataType = fbxProperty.GetPropertyDataType();
 			auto stream = c3d::makeStringStream();
-			stream << indent << "[" << fbxProperty.GetName() << "]:" << std::endl
-				<< indent << "  - Flags [" << fbxProperty.GetFlags() << "]" << std::endl
-				<< indent << "  - DataType [" << fbxDataType.GetName() << "], " << getName( fbxDataType.GetType() ) << std::endl
-				<< indent << "  - DataValue [" << getValue( fbxProperty, fbxDataType ) << "]" << std::endl
-				<< indent << "  - EnumList [" << getEnums( fbxProperty ) << "]" << std::endl;
+			stream << "[" << fbxProperty.GetName() << "](" << fbxProperty.GetFlags() << ")" << std::endl
+				<< indent << "  - Data [" << fbxDataType.GetName() << "], " << getName( fbxDataType.GetType() ) << cuT( " = " ) << getValue( fbxProperty, fbxDataType ) << std::endl;
+			if ( fbxProperty.GetEnumCount() > 0 )
+				stream << indent << "  - EnumList [" << getEnums( fbxProperty ) << "]" << std::endl;
+			int index{};
+			auto fbxObject = fbxProperty.GetSrcObject( index );
+			++index;
+			while ( fbxObject )
+			{
+				stream << indent << "  - SrcObject " << *fbxObject << std::endl;
+				fbxObject = fbxProperty.GetSrcObject( index );
+				++index;
+			}
 			if ( auto fbxChild = fbxProperty.GetChild();
 				fbxChild.IsValid() )
 				stream << indent << " - Child " << displayProperty( fbxProperty.GetChild(), indent + "  " );
@@ -470,9 +486,20 @@ namespace c3d_fbx
 
 			if ( parameters.get< bool >( "list_properties" ) )
 			{
-				c3d::log::info << "Listing source properties for material [" << name << "]:" << std::endl;
+				c3d::log::info << cuT( "Material [" ) << fbxMaterial->GetName() << cuT( "] Class [" ) << fbxMaterial->GetClassId().GetName() << cuT( "]:" ) << std::endl;
+				c3d::log::info << cuT( "  Listing source properties (" ) << fbxMaterial->GetSrcPropertyCount() << cuT( ") for material [" ) << name << cuT( "]:" ) << std::endl;
 				for ( int j = 0; j < fbxMaterial->GetSrcPropertyCount(); ++j )
-					c3d::log::info << cuT( "Property " ) << file::displayProperty( fbxMaterial->GetSrcProperty( j ), cuT( "  " ) ) << std::endl;
+					c3d::log::info << cuT( "    Property " ) << file::displayProperty( fbxMaterial->GetSrcProperty( j ), cuT( "    " ) ) << std::endl;
+				c3d::log::info << cuT( "  Listing destination properties (" ) << fbxMaterial->GetDstPropertyCount() << cuT( ") for material [" ) << name << cuT( "]:" ) << std::endl;
+				for ( int j = 0; j < fbxMaterial->GetDstPropertyCount(); ++j )
+					c3d::log::info << cuT( "    Property " ) << file::displayProperty( fbxMaterial->GetDstProperty( j ), cuT( "    " ) ) << std::endl;
+				c3d::log::info << cuT( "  Listing other properties for material [" ) << name << cuT( "]:" ) << std::endl;
+				auto fbxProperty = fbxMaterial->GetFirstProperty();
+				while ( fbxProperty.IsValid() )
+				{
+					c3d::log::info << cuT( "    Property " ) << file::displayProperty( fbxProperty, cuT( "    " ) ) << std::endl;
+					fbxProperty = fbxMaterial->GetNextProperty( fbxProperty );
+				}
 			}
 		}
 	}

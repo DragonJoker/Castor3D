@@ -150,6 +150,8 @@ namespace c3d_assimp
 				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
+				, bool isObjFile
+				, bool loadImages
 				, c3d::ImageLoaderConfig loadConfig
 				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 				, c3d::Pass & result )
@@ -158,6 +160,8 @@ namespace c3d_assimp
 				, m_sampler{ sampler }
 				, m_importer{ importer }
 				, m_emissiveMult{ emissiveMult }
+				, m_isObjFile{ isObjFile }
+				, m_loadImages{ loadImages }
 				, m_loadConfig{ c3d::move( loadConfig ) }
 				, m_textureRemaps{ textureRemaps }
 				, m_shadingModel{ shadingMode }
@@ -194,11 +198,13 @@ namespace c3d_assimp
 				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
+				, bool isObjFile
+				, bool loadImages
 				, c3d::ImageLoaderConfig loadConfig
 				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 				, c3d::Pass & pass )
 			{
-				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, c3d::move( loadConfig ), textureRemaps, pass };
+				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, isObjFile, loadImages, c3d::move( loadConfig ), textureRemaps, pass };
 				parser.parseDatas();
 				parser.finish();
 				pass.prepareTextures();
@@ -254,35 +260,38 @@ namespace c3d_assimp
 				finishSpecular( spcInfo, occInfo, mtlInfo, shnInfo, rghInfo );
 				auto hasOpacityTex = finishOpacity( opaInfo );
 
-				loadTextureT< c3d::ColourMapComponent >( colInfo, hasOpacityTex );
-				loadTextureT< c3d::AmbientColourMapComponent >( ambInfo, hasOpacityTex );
-				loadTextureT< c3d::EmissiveMapComponent >( emiInfo, hasOpacityTex );
-				loadTextureT< c3d::SpecularMapComponent >( spcInfo, hasOpacityTex );
-				loadTextureT< c3d::MetalnessMapComponent >( mtlInfo, hasOpacityTex );
-				loadTextureT< c3d::RoughnessMapComponent >( rghInfo, hasOpacityTex );
-				loadTextureT< c3d::RoughnessMapComponent >( shnInfo, hasOpacityTex );
-				loadTextureT< c3d::OcclusionMapComponent >( occInfo, hasOpacityTex );
-				loadTextureT< c3d::TransmissionMapComponent >( trsInfo, hasOpacityTex );
-				loadTextureT< c3d::ThicknessMapComponent >( thkInfo, hasOpacityTex );
-				loadTextureT< c3d::ClearcoatMapComponent >( cctInfo, hasOpacityTex );
-				loadTextureT< c3d::ClearcoatRoughnessMapComponent >( ccrInfo, hasOpacityTex );
-				loadTextureT< c3d::ClearcoatNormalMapComponent >( ccnInfo, hasOpacityTex );
-				loadTextureT< c3d::SheenMapComponent >( shcInfo, hasOpacityTex );
-				loadTextureT< c3d::SheenRoughnessMapComponent >( shrInfo, hasOpacityTex );
+				if ( m_loadImages )
+				{
+					loadTextureT< c3d::ColourMapComponent >( colInfo, hasOpacityTex );
+					loadTextureT< c3d::AmbientColourMapComponent >( ambInfo, hasOpacityTex );
+					loadTextureT< c3d::EmissiveMapComponent >( emiInfo, hasOpacityTex );
+					loadTextureT< c3d::SpecularMapComponent >( spcInfo, hasOpacityTex );
+					loadTextureT< c3d::MetalnessMapComponent >( mtlInfo, hasOpacityTex );
+					loadTextureT< c3d::RoughnessMapComponent >( rghInfo, hasOpacityTex );
+					loadTextureT< c3d::RoughnessMapComponent >( shnInfo, hasOpacityTex );
+					loadTextureT< c3d::OcclusionMapComponent >( occInfo, hasOpacityTex );
+					loadTextureT< c3d::TransmissionMapComponent >( trsInfo, hasOpacityTex );
+					loadTextureT< c3d::ThicknessMapComponent >( thkInfo, hasOpacityTex );
+					loadTextureT< c3d::ClearcoatMapComponent >( cctInfo, hasOpacityTex );
+					loadTextureT< c3d::ClearcoatRoughnessMapComponent >( ccrInfo, hasOpacityTex );
+					loadTextureT< c3d::ClearcoatNormalMapComponent >( ccnInfo, hasOpacityTex );
+					loadTextureT< c3d::SheenMapComponent >( shcInfo, hasOpacityTex );
+					loadTextureT< c3d::SheenRoughnessMapComponent >( shrInfo, hasOpacityTex );
 
-				if ( !nmlInfo.name.empty() )
-				{
-					loadTextureT< c3d::NormalMapComponent >( nmlInfo, hasOpacityTex );
-					loadTextureT< c3d::HeightMapComponent >( hgtInfo, hasOpacityTex );
-				}
-				else if ( !hgtInfo.name.empty() )
-				{
-					// Convert bump map to combination of normal and height map.
-					auto & plugin = m_result.getComponentPlugin< c3d::NormalMapComponent >();
-					auto texFlags = plugin.getTextureFlags();
-					auto texConfig = plugin.getBaseTextureConfiguration();
-					convertToNormalMap( hgtInfo, texConfig );
-					loadTexture( hgtInfo, getRemap( texFlags, texConfig ), hasOpacityTex );
+					if ( !nmlInfo.name.empty() )
+					{
+						loadTextureT< c3d::NormalMapComponent >( nmlInfo, hasOpacityTex );
+						loadTextureT< c3d::HeightMapComponent >( hgtInfo, hasOpacityTex );
+					}
+					else if ( !hgtInfo.name.empty() )
+					{
+						// Convert bump map to combination of normal and height map.
+						auto & plugin = m_result.getComponentPlugin< c3d::NormalMapComponent >();
+						auto texFlags = plugin.getTextureFlags();
+						auto texConfig = plugin.getBaseTextureConfiguration();
+						convertToNormalMap( hgtInfo, texConfig );
+						loadTexture( hgtInfo, getRemap( texFlags, texConfig ), hasOpacityTex );
+					}
 				}
 			}
 
@@ -894,6 +903,8 @@ namespace c3d_assimp
 			c3d::SamplerObs m_sampler;
 			AssimpMaterialImporter const & m_importer;
 			float m_emissiveMult;
+			bool m_isObjFile;
+			bool m_loadImages;
 			c3d::ImageLoaderConfig m_loadConfig;
 			c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
@@ -982,8 +993,10 @@ namespace c3d_assimp
 
 	//*********************************************************************************************
 
-	AssimpMaterialImporter::AssimpMaterialImporter( c3d::Engine & engine )
+	AssimpMaterialImporter::AssimpMaterialImporter( c3d::Engine & engine
+		, c3d::Parameters const & parameters )
 		: c3d::MaterialImporter{ engine, cuT( "Assimp" ) }
+		, m_parameters{ parameters }
 	{
 	}
 
@@ -1009,6 +1022,8 @@ namespace c3d_assimp
 			, getEngine()->getDefaultSampler()
 			, *this
 			, m_emissiveMult
+			, c3d::string::lowerCase( file.getFileName().getExtension() ) == "obj"
+			, ( m_parameters.get< bool >( "no_images" ) == false )
 			, m_loadConfig
 			, m_textureRemaps
 			, *pass );
