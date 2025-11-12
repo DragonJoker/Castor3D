@@ -197,7 +197,8 @@ namespace c3d_fbx
 			, c3d::TextureConfiguration texConfig
 			, fbx::FbxProperty const & property
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter const & importer )
+			, c3d::MaterialImporter const & importer
+			, bool isOpacity = false )
 		{
 			bool result{};
 			try
@@ -236,7 +237,8 @@ namespace c3d_fbx
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, fbx::FbxProperty const & property
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter const & importer )
+			, c3d::MaterialImporter const & importer
+			, bool isOpacity = false )
 		{
 			bool result{};
 
@@ -246,7 +248,7 @@ namespace c3d_fbx
 				auto texFlags = plugin.getTextureFlags();
 				auto texConfig = plugin.getBaseTextureConfiguration();
 				result = parseTexture( file, pass, getRemap( texFlags, texConfig, textureRemaps )
-					, property, loadConfig, importer );
+					, property, loadConfig, importer, isOpacity );
 			}
 
 			return result;
@@ -258,13 +260,14 @@ namespace c3d_fbx
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::Vector< fbx::FbxPropertyT< DataT > > const & properties
 			, c3d::ImageLoaderConfig const & loadConfig
-			, c3d::MaterialImporter const & importer )
+			, c3d::MaterialImporter const & importer
+			, bool isOpacity = false )
 		{
 			bool result{};
 			auto it = properties.begin();
 			while ( it != properties.end() && !result )
 			{
-				result = parseTexture< ComponentT >( file, pass, textureRemaps, *it, loadConfig, importer );
+				result = parseTexture< ComponentT >( file, pass, textureRemaps, *it, loadConfig, importer, isOpacity );
 				++it;
 			}
 			return result;
@@ -349,14 +352,18 @@ namespace c3d_fbx
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
-			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > property = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sNormalMap )
-				, fbxMaterial.FindProperty( "Maya|NormalTexture" ) };
-			parseTexture< c3d::NormalMapComponent >( file, pass, textureRemaps, property, loadConfig, importer );
+			if ( loadImages )
+			{
+				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > property = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sNormalMap )
+					, fbxMaterial.FindProperty( "Maya|NormalTexture" ) };
+				parseTexture< c3d::NormalMapComponent >( file, pass, textureRemaps, property, loadConfig, importer );
+			}
 		}
 
 		static void importHeightData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -370,7 +377,8 @@ namespace c3d_fbx
 				if ( fbx::FbxPropertyT< fbx::FbxDouble > factor = fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sBumpFactor );
 					factor.IsValid() )
 					texConfig.heightFactor = float( factor.Get() );
-				if ( parseTexture( file, pass, getRemap( texFlags, texConfig, textureRemaps ), map, loadConfig, importer ) )
+				if ( loadImages
+					&& parseTexture( file, pass, getRemap( texFlags, texConfig, textureRemaps ), map, loadConfig, importer ) )
 					pass.createComponent< c3d::HeightComponent >()->setParallaxOcclusion( c3d::ParallaxOcclusionMode::eRepeat );
 			}
 		}
@@ -378,6 +386,7 @@ namespace c3d_fbx
 		static void importAmbientData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -388,13 +397,17 @@ namespace c3d_fbx
 				pass.createComponent< c3d::AmbientComponent >()->setAmbientFactor( float( factor.Get() ) );
 			if ( isValid( color ) )
 				pass.createComponent< c3d::AmbientComponent >()->setAmbient( getRgbColour( color.Get() ) );
-			parseTexture< c3d::AmbientFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
-			parseTexture< c3d::AmbientColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
+			if ( loadImages )
+			{
+				parseTexture< c3d::AmbientFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
+				parseTexture< c3d::AmbientColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
+			}
 		}
 
 		static void importColourData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -409,12 +422,14 @@ namespace c3d_fbx
 				{
 					pass.createComponent< c3d::ColourComponent >()->setColour( getHdrRgbColour( prop.Get() ) );
 				} );
-			parseTexture< c3d::ColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
+			if ( loadImages )
+				parseTexture< c3d::ColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
 		}
 
 		static void importSpecularData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -425,27 +440,24 @@ namespace c3d_fbx
 				pass.createComponent< c3d::SpecularFactorComponent >()->setFactor( float( factor.Get() ) );
 			if ( isValid( color ) )
 				pass.createComponent< c3d::SpecularComponent >()->setSpecular( getRgbColour( color.Get() ) );
-			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "SpecularColor" )
-				, fbxMaterial.FindProperty( "Maya|SpecularTexture" )
-				, fbxMaterial.FindProperty( "3dsMax|main|specular_map" ) };
-			parseTexture< c3d::SpecularFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
-			parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+			if ( loadImages )
+			{
+				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "SpecularColor" )
+					, fbxMaterial.FindProperty( "Maya|SpecularTexture" )
+					, fbxMaterial.FindProperty( "3dsMax|main|specular_map" ) };
+				parseTexture< c3d::SpecularFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
+				parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+			}
 		}
 
 		static void importShininessData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
-			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > shininessMap = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sShininess ) };
-			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > roughnessMap = { fbxMaterial.FindProperty( "Maya|TEX_roughness_map" )
-				, fbxMaterial.FindProperty( "Maya|diffuseRoughness" )
-				, fbxMaterial.FindProperty( "Maya|specularRoughness" )
-				, fbxMaterial.FindProperty( "3dsMax|main|roughness_map" )
-				, fbxMaterial.FindProperty( "3dsMax|Parameters|roughness_map" ) };
-			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > glossinessMap = { fbxMaterial.FindProperty( "3dsMax|main|glossiness_map" ) };
 
 			if ( fbx::FbxPropertyT< fbx::FbxDouble > roughness = fbxMaterial.FindProperty( "Maya|roughness" );
 				roughness.IsValid() )
@@ -453,14 +465,25 @@ namespace c3d_fbx
 			else if ( fbx::FbxPropertyT< fbx::FbxDouble > shininess = fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sShininess );
 				shininess.IsValid() )
 				pass.createComponent< c3d::RoughnessComponent >()->setShininess( float( shininess.Get() ) );
-			if ( !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, glossinessMap, loadConfig, importer )
+			if ( loadImages )
+			{
+				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > shininessMap = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sShininess ) };
+				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > roughnessMap = { fbxMaterial.FindProperty( "Maya|TEX_roughness_map" )
+					, fbxMaterial.FindProperty( "Maya|diffuseRoughness" )
+					, fbxMaterial.FindProperty( "Maya|specularRoughness" )
+					, fbxMaterial.FindProperty( "3dsMax|main|roughness_map" )
+					, fbxMaterial.FindProperty( "3dsMax|Parameters|roughness_map" ) };
+			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > glossinessMap = { fbxMaterial.FindProperty( "3dsMax|main|glossiness_map" ) };
+				if ( !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, glossinessMap, loadConfig, importer )
 				&& !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, roughnessMap, loadConfig, importer ) )
 					parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, shininessMap, loadConfig, importer );
+			}
 		}
 
 		static void importEmissiveData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass
@@ -484,7 +507,8 @@ namespace c3d_fbx
 				{
 					pass.createComponent< c3d::EmissiveComponent >()->setEmissive( getRgbColour( prop.Get() ) );
 				} );
-			parseTexture< c3d::EmissiveMapComponent >( file, pass, textureRemaps, emissive, loadConfig, importer );
+			if ( loadImages )
+				parseTexture< c3d::EmissiveMapComponent >( file, pass, textureRemaps, emissive, loadConfig, importer );
 		}
 
 		static void setMixedInterpolative( c3d::Pass & pass )
@@ -509,6 +533,7 @@ namespace c3d_fbx
 		static void importOpacityData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -540,15 +565,19 @@ namespace c3d_fbx
 			if ( opacityValue != 0.0f && opacityValue != 1.0f )
 				setMixedInterpolative( pass );
 
-			if ( parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, opacity, loadConfig, importer )
-				|| parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, transparency, loadConfig, importer )
-					|| parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, color, loadConfig, importer ) )
+			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "transparency_map" )
+				, opacity
+				, transparency
+				, color };
+			if ( loadImages
+				&& parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, map, loadConfig, importer, true ) )
 				setMixedInterpolative( pass );
 		}
 
 		static void importMetalnessData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -557,17 +586,22 @@ namespace c3d_fbx
 			if ( fbx::FbxPropertyT< fbx::FbxDouble > factor = fbxMaterial.FindProperty( "Maya|metallic" );
 				factor.IsValid() )
 				pass.createComponent< c3d::MetalnessComponent >()->setMetalness( float( factor.Get() ) );
-			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "ReflectionFactor" )
-				, fbxMaterial.FindProperty( "Maya|metalness" )
-				, fbxMaterial.FindProperty( "Maya|TEX_metallic_map" )
-				, fbxMaterial.FindProperty( "3dsMax|Parameters|metalness_map" )
-				, fbxMaterial.FindProperty( "3dsMax|main|metalness_map" ) };
-			parseTexture< c3d::MetalnessMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+			if ( loadImages )
+			{
+				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "ReflectionFactor" )
+					, fbxMaterial.FindProperty( "reflectivity_map" )
+					, fbxMaterial.FindProperty( "Maya|metalness" )
+					, fbxMaterial.FindProperty( "Maya|TEX_metallic_map" )
+					, fbxMaterial.FindProperty( "3dsMax|Parameters|metalness_map" )
+					, fbxMaterial.FindProperty( "3dsMax|main|metalness_map" ) };
+				parseTexture< c3d::MetalnessMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+			}
 		}
 
 		static void importAmbientOcclusionData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
+			, bool loadImages
 			, c3d::MaterialImporter const & importer
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
@@ -575,7 +609,8 @@ namespace c3d_fbx
 
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "Maya|TEX_ao_map" )
 				, fbxMaterial.FindProperty( "3dsMax|main|ao_map" ) };
-			parseTexture< c3d::OcclusionMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+			if ( loadImages )
+				parseTexture< c3d::OcclusionMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
 		}
 	}
 
@@ -595,6 +630,7 @@ namespace c3d_fbx
 		if ( it == m_materialsFile.getMaterials().end() )
 			return false;
 
+		bool loadImages = ( m_parameters.get< bool >( "no_images" ) == false );
 		fbx::FbxSurfaceMaterial const * fbxMaterial = it->second.fbxMaterial;
 		auto pass = material.createPass();
 		c3d::log::debug << "Material: " << fbxMaterial->GetName() << "\n";
@@ -604,18 +640,19 @@ namespace c3d_fbx
 		if ( fbxMaterial->GetClassId() == fbx::FbxSurfaceLambert::ClassId
 			|| fbxMaterial->GetClassId() == fbx::FbxSurfacePhong::ClassId )
 		{
-			materials::importNormalsData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importHeightData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importAmbientData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importColourData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importSpecularData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importShininessData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importEmissiveData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass, m_emissiveMult );
-			materials::importOpacityData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importMetalnessData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			materials::importAmbientOcclusionData( *m_file, m_textureRemaps, m_loadConfig, *this, *fbxMaterial, *pass );
-			pass->prepareTextures();
+			materials::importAmbientData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
 		}
+
+		materials::importNormalsData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importHeightData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importColourData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importSpecularData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importShininessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importEmissiveData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass, m_emissiveMult );
+		materials::importOpacityData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importMetalnessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		materials::importAmbientOcclusionData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+		pass->prepareTextures();
 
 		auto const & engine = *getOwner();
 		material.setLightingModelId( engine.getDefaultLightingModel() );

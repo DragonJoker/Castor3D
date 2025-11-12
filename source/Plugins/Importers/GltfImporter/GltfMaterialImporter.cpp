@@ -465,6 +465,8 @@ namespace c3d_gltf
 			, c3d::MaterialImporter const & importer
 			, bool checkAlpha )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				try
@@ -511,6 +513,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			try
 			{
 				if ( auto sourceInfo = loadTexture( impAsset, texInfo, texConfig, loadConfig, importer ) )
@@ -541,6 +545,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				auto texConfig = pass.getComponentPlugin< c3d::RoughnessMapComponent >().getBaseTextureConfiguration();
@@ -560,6 +566,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				auto texConfig = pass.getComponentPlugin< c3d::SpecularMapComponent >().getBaseTextureConfiguration();
@@ -584,6 +592,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				auto texConfig = pass.getComponentPlugin< anisotropy::AnisotropyDirectionMapComponent>().getBaseTextureConfiguration();
@@ -604,6 +614,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				parseTexture( file, pass
@@ -620,6 +632,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				parseTexture( file, pass
@@ -635,6 +649,8 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
 			if ( texInfo )
 			{
 				parseTexture( file, pass
