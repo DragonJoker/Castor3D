@@ -38,7 +38,7 @@ namespace c3d
 
 	uint32_t AnimatedSkeleton::fillBuffer( SkinningTransformsConfiguration * buffer )const
 	{
-		Skeleton & skeleton = m_skeleton;
+		Skeleton const & skeleton = m_skeleton;
 
 		if ( m_playingAnimations.empty() )
 		{

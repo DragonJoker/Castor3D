@@ -38,7 +38,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Applique la keyframe.
 		 */
-		C3D_API void apply();
+		C3D_API void apply()const;
 		/**
 		 *\~english
 		 *\return		The start time index.

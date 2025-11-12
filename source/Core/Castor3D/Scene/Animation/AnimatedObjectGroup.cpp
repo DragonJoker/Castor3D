@@ -88,13 +88,10 @@ namespace c3d
 
 						if ( auto skeleton = mesh->getSkeleton() )
 						{
-							if ( skeleton->hasAnimation() )
-							{
-								blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
-									, *mesh
-									, *geometry
-									, geometry->getName() );
-							}
+							blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
+								, *mesh
+								, *geometry
+								, geometry->getName() );
 						}
 					}
 				}
@@ -175,13 +172,10 @@ namespace c3d
 					{
 						if ( auto skeleton = mesh->getSkeleton() )
 						{
-							if ( skeleton->hasAnimation() )
-							{
-								blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
-									, *mesh
-									, *geometry
-									, geometry->getName() );
-							}
+							blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
+								, *mesh
+								, *geometry
+								, geometry->getName() );
 						}
 						else
 						{
@@ -393,9 +387,10 @@ namespace c3d
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::AnimatedObjectGroup( String const & name, Scene & scene )
-		: Named( name )
-		, OwnedBy< Scene >( scene )
+	AnimatedObjectGroup::AnimatedObjectGroup( String const & name, Scene & scene, bool serialisable )
+		: Named{ name }
+		, OwnedBy< Scene >{ scene }
+		, m_serialisable{ serialisable }
 	{
 		m_timer.getElapsed();
 	}

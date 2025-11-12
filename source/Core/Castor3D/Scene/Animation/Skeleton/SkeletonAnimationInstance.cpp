@@ -61,7 +61,7 @@ namespace c3d
 			}
 		}
 
-		for ( auto & keyFrame : animation )
+		for ( auto const & keyFrame : animation )
 		{
 			m_keyFrames.emplace_back( *this
 				, static_cast< SkeletonAnimationKeyFrame const & >( *keyFrame )

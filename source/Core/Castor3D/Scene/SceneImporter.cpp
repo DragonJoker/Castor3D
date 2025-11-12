@@ -178,8 +178,8 @@ namespace c3d
 					++index;
 					stepProgressBarLocal( m_file->getProgressBar()
 						, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
-					auto material = materialImporter->createMaterial( name );
-					if ( materialImporter->importMaterial( *material ) )
+					if ( auto material = materialImporter->createMaterial( name );
+						materialImporter->importMaterial( *material ) )
 						imported.emplace_back( c3d::move( material ) );
 					log::info << materialImporter->getPrefix() << cuT( "Loaded Material [" ) << name << cuT( "]" ) << std::endl;
 				}

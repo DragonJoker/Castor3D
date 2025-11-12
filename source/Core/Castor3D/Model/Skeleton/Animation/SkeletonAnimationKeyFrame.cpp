@@ -116,7 +116,7 @@ namespace c3d
 	{
 		for ( auto & transform : m_transforms )
 		{
-			transform.cumulative = Matrix4x4f{ 1.0f };
+			transform.cumulative = Matrix4x4f::getIdentity();
 		}
 
 		for ( auto & transform : m_transforms )

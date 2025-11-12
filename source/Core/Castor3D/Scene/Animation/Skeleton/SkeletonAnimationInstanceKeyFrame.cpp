@@ -25,7 +25,7 @@ namespace c3d
 		, m_skeleton{ skeleton }
 		, m_keyFrame{ keyFrame }
 	{
-		for ( auto & object : skeletonAnimation )
+		for ( auto const & object : skeletonAnimation )
 		{
 			auto it = keyFrame.find( object->getObject() );
 			m_objects.emplace_back( object.get()
@@ -37,7 +37,7 @@ namespace c3d
 		m_boxes = m_keyFrame.computeBoundingBoxes( m_skeleton.getMesh(), m_skeleton.getSkeleton() );
 	}
 
-	void SkeletonAnimationInstanceKeyFrame::apply()
+	void SkeletonAnimationInstanceKeyFrame::apply()const
 	{
 		for ( auto const & [object, transform] : m_objects )
 		{
