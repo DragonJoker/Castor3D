@@ -61,14 +61,17 @@ namespace c3d_assimp
 	struct AssimpSubmeshData
 	{
 		AssimpSubmeshData( aiMesh const * pmesh
+			, aiNode const * psubmeshNode
 			, uint32_t pmeshIndex )
 			: mesh{ pmesh }
+			, submeshNode{ psubmeshNode }
 			, meshIndex{ pmeshIndex }
 		{
 		}
 
-		aiMesh const * mesh;
-		uint32_t meshIndex;
+		aiMesh const * mesh{};
+		aiNode const * submeshNode{};
+		uint32_t meshIndex{};
 		MeshAnimations anims;
 	};
 
@@ -245,8 +248,10 @@ namespace c3d_assimp
 		void doPrelistMaterials();
 		c3d::Map< aiMesh const *, aiNode const * > doPrelistSkeletons();
 		void doPrelistMeshes( c3d::Map< aiMesh const *, aiNode const * > const & meshSkeletons );
-		void doPrelistSceneNodes( aiNode const & node
+		void doPrelistSceneNodes();
+		void doPrelistSceneNodesRec( aiNode const & node
 			, c3d::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
+			, c3d::Map< AssimpMeshData const *, aiNodeArray > & postponedMeshes
 			, c3d::Map< aiNode const *, c3d::Matrix4x4f > & cumulativeTransforms
 			, c3d::String parentName = c3d::String{}
 			, c3d::Matrix4x4f transform = c3d::Matrix4x4f{ 1.0f } );
@@ -257,7 +262,6 @@ namespace c3d_assimp
 		Assimp::Importer m_importer;
 		aiScene const * m_aiScene{};
 		c3d::StringMap< c3d::Matrix4x4f > m_bonesNodes;
-		c3d::Set< uint32_t > m_meshes;
 		c3d::StringArray m_listedMeshes;
 		c3d::StringArray m_listedSkeletons;
 
