@@ -30,6 +30,7 @@ namespace c3d_assimp
 			, c3d::Milliseconds maxTime
 			, int64_t ticksPerSecond
 			, c3d::Skeleton const & skeleton
+			, SkeletonNodesTransforms const & nodesTransforms
 			, aiAnimation const & aiAnimation
 			, SkeletonAnimationKeyFrameMap & keyFrames
 			, SkeletonAnimationObjectSet & notAnimated )const;

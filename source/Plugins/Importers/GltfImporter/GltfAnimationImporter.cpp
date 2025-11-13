@@ -41,125 +41,6 @@ namespace c3d_gltf
 		template< typename KeyT >
 		using KeyDataTypeT = typename KeyDataTyperT< KeyT >::Type;
 
-		template< typename KeyFrameT, typename AnimationT >
-		static KeyFrameT & getKeyFrame( c3d::Milliseconds const & time
-			, AnimationT & animation
-			, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes )
-		{
-			auto it = keyframes.find( time );
-
-			if ( it == keyframes.end() )
-			{
-				it = keyframes.emplace( time
-					, c3d::makeUnique< KeyFrameT >( animation, time ) ).first;
-			}
-
-			return *it->second;
-		}
-
-		template< typename T >
-		static void findValue( c3d::Milliseconds time
-			, typename c3d::Map< c3d::Milliseconds, T > const & map
-			, typename c3d::Map< c3d::Milliseconds, T >::const_iterator & prv
-			, typename c3d::Map< c3d::Milliseconds, T >::const_iterator & cur )
-		{
-			if ( map.empty() )
-			{
-				prv = map.end();
-				cur = map.end();
-			}
-			else
-			{
-				cur = std::find_if( map.begin()
-					, map.end()
-					, [&time]( c3d::Pair< c3d::Milliseconds, T > const & pair )
-					{
-						return pair.first > time;
-					} );
-
-				if ( cur == map.end() )
-				{
-					--cur;
-				}
-
-				prv = cur;
-
-				if ( prv != map.begin() )
-				{
-					prv--;
-				}
-			}
-		}
-
-		template< typename T >
-		static T interpolate( c3d::Milliseconds const & time
-			, c3d::Interpolator< T > const & interpolator
-			, c3d::Map< c3d::Milliseconds, T > const & values
-			, T const & defaultValue )
-		{
-			T result;
-
-			if ( values.empty() )
-			{
-				result = defaultValue;
-			}
-			else if ( values.size() == 1 )
-			{
-				result = values.begin()->second;
-			}
-			else
-			{
-				auto prv = values.begin();
-				auto cur = values.begin();
-				findValue( time, values, prv, cur );
-
-				if ( prv != cur )
-				{
-					auto dt = cur->first - prv->first;
-					float factor = float( ( time - prv->first ).count() ) / float( dt.count() );
-					result = interpolator.interpolate( prv->second, cur->second, factor );
-				}
-				else
-				{
-					result = prv->second;
-				}
-			}
-
-			return result;
-		}
-
-		template< typename AnimationT, typename KeyFrameT, typename FuncT >
-		static void synchroniseKeys( c3d::Map< c3d::Milliseconds, c3d::Point3f > const & translates
-			, c3d::Map< c3d::Milliseconds, c3d::Quaternion > const & rotates
-			, c3d::Map< c3d::Milliseconds, c3d::Point3f > const & scales
-			, [[maybe_unused]] c3d::Set< c3d::Milliseconds > const & times
-			, uint32_t fps
-			, c3d::Milliseconds minTime
-			, c3d::Milliseconds maxTime
-			, AnimationT & animation
-			, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes
-			, c3d::NodeTransform const & defaultTransform
-			, FuncT fillKeyFrame )
-		{
-			c3d::InterpolatorT< c3d::Point3f, c3d::InterpolatorType::eLinear > pointInterpolator;
-			c3d::InterpolatorT< c3d::Quaternion, c3d::InterpolatorType::eLinear > quatInterpolator;
-
-			// Limit the key frames per second to 60, to spare RAM...
-			auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
-			c3d::Milliseconds step{ 1000 / wantedFps };
-
-			for ( auto time = minTime; time <= maxTime; time += step )
-			{
-				auto translate = interpolate( time, pointInterpolator, translates, defaultTransform.translate );
-				auto rotate = interpolate( time, quatInterpolator, rotates, defaultTransform.rotate );
-				auto scale = interpolate( time, pointInterpolator, scales, defaultTransform.scale );
-				fillKeyFrame( getKeyFrame( time, animation, keyframes )
-					, translate
-					, rotate
-					, scale );
-			}
-		}
-
 		template< typename KeyT >
 		static void processKeys( fastgltf::Asset const & impAsset
 			, NodeAnimationChannelSampler const & animChannels
@@ -229,17 +110,9 @@ namespace c3d_gltf
 			processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, adapter );
 			processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, adapter );
 			processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, adapter );
-			synchroniseKeys( translates
-				, rotates
-				, scales
-				, times
-				, wantedFps
-				, minTime
-				, maxTime
-				, animation
-				, keyframes
-				, defaultTransform
-				, fillKeyFrame );
+			c3d::AnimationImporter::synchroniseKeys( translates, rotates, scales
+				, defaultTransform,  wantedFps, minTime, maxTime
+				, animation, keyframes, fillKeyFrame );
 		}
 
 		static void processAnimationNodeKeysTimes( fastgltf::Asset const & impAsset
