@@ -297,20 +297,25 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static auto findNodeMesh( uint32_t meshIndex
+		static c3d::Pair< AssimpMeshData const *, AssimpSubmeshData const * > findNodeMesh( uint32_t meshIndex
 			, c3d::StringMap< AssimpMeshData > const & meshes )
 		{
-			return std::find_if( meshes.begin()
-				, meshes.end()
-				, [&meshIndex]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
-				{
-					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin()
-						, lookup.second.submeshes.end()
-						, [&meshIndex]( AssimpSubmeshData const & submesh )
-						{
-							return submesh.meshIndex == meshIndex;
-						} );
-				} );
+			auto meshIt = meshes.begin();
+
+			while ( meshIt != meshes.end() )
+			{
+				auto const & meshData = meshIt->second;
+				if ( auto submeshIt = std::find_if( meshData.submeshes.begin(), meshData.submeshes.end()
+					, [&meshIndex]( AssimpSubmeshData const & submesh )
+					{
+						return submesh.meshIndex == meshIndex;
+					} );
+					submeshIt != meshData.submeshes.end() )
+					return { &meshData, std::to_address( submeshIt ) };
+				++meshIt;
+			}
+
+			return {};
 		}
 
 		static bool hasNodeAnim( aiScene const & scene
@@ -330,52 +335,55 @@ namespace c3d_assimp
 				&& c3d_assimp::isValidMesh( *scene.mMeshes[meshIndex] );
 		}
 
-		static void accumulateTransformsRec( aiNode const * node
-			, c3d::Vector< AssimpNodeData > const & nodes
-			, c3d::Vector< c3d::Matrix4x4f > & transforms )
+		namespace node
 		{
-			if ( !node )
-				return;
+			static c3d::Matrix4x4f accumulateTransforms( c3d::String const & objectName
+				, aiNode const & aiRootNode
+				, c3d::Matrix4x4f transform )
+			{
+				if ( auto aiCurrentNode = aiRootNode.FindNode( objectName.c_str() ) )
+					transform = computeCumulativeTransform( aiRootNode, *aiCurrentNode ) * transform;
+				return transform;
+			}
 
-			auto it = std::find_if( nodes.begin()
-				, nodes.end()
-				, [&node]( AssimpNodeData const & lookup )
+			aiNode const * findCommonNode( aiNode const & node, AssimpMeshData const & meshData )
+			{
+				if ( std::all_of( meshData.submeshes.begin(), meshData.submeshes.end()
+					, [&node]( AssimpSubmeshData const & lookup )
+					{
+						// Check that the current node (or is children, recursively), has the submeshes in its mesh list
+						return findMeshNode( lookup.meshIndex, node );
+					} ) )
+					return &node;
+
+				if ( node.mParent )
+					return findCommonNode( *node.mParent, meshData );
+
+				c3d::log::error << "Couldn't find a common node for mesh." << std::endl;
+				return nullptr;
+			}
+
+			static void addNodeMeshToProcessedMeshes( aiNode const & aiCurrentNode
+				, c3d::Map< aiNode const *, c3d::Matrix4x4f > & cumulativeTransforms
+				, c3d::Matrix4x4f const & transform
+				, AssimpMeshData const & meshData
+				, AssimpNodeData & nodeData
+				, c3d::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes )
+			{
+				// Don't add the mesh if it has already been added to a node with the same transform.
+				auto & nodeArray = processedMeshes.try_emplace( &meshData ).first->second;
+				if ( auto nodeIt = std::find_if( nodeArray.begin(), nodeArray.end()
+					, [&cumulativeTransforms, &transform]( aiNode const * lookup )
+					{
+						auto lookupIt = cumulativeTransforms.find( lookup );
+						return lookupIt->second == transform;
+					} );
+					nodeIt == nodeArray.end() )
 				{
-					return node == lookup.node;
-				} );
-
-			if ( it == nodes.end() )
-			{
-				transforms.push_back( fromAssimp( node->mTransformation ) );
-				accumulateTransformsRec( node->mParent, nodes, transforms );
+					nodeArray.push_back( &aiCurrentNode );
+					nodeData.meshes.emplace_back( &meshData );
+				}
 			}
-			else
-			{
-				c3d::Matrix4x4f matrix;
-				c3d::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
-				transforms.push_back( matrix );
-			}
-		}
-
-		static c3d::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
-			, c3d::String const & name
-			, aiNode const & rootNode
-			, c3d::Vector< AssimpNodeData > const & nodes
-			, c3d::Matrix4x4f transform )
-		{
-			if ( auto node = rootNode.FindNode( c3d::toUtf8( file.getExternalName( name ) ).c_str() ) )
-			{
-				c3d::Vector< c3d::Matrix4x4f > transforms;
-				accumulateTransformsRec( node->mParent, nodes, transforms );
-				std::reverse( transforms.begin(), transforms.end() );
-				c3d::Matrix4x4f cumulative{ 1.0f };
-
-				for ( auto const & t : transforms )
-					cumulative *= t;
-				transform = cumulative * transform;
-			}
-
-			return transform;
 		}
 	}
 
@@ -401,9 +409,7 @@ namespace c3d_assimp
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
-			c3d::Map< AssimpMeshData const *, aiNodeArray > processed;
-			c3d::Map< aiNode const *, c3d::Matrix4x4f > cumulativeTransforms;
-			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
+			doPrelistSceneNodes();
 			doPrelistLights();
 			doPrelistCameras();
 
@@ -570,15 +576,15 @@ namespace c3d_assimp
 	{
 		c3d::Vector< GeometryData > result;
 
-		for ( auto & node : m_sceneData.nodes )
+		for ( auto const & node : m_sceneData.nodes )
 		{
-			for ( auto & mesh : node.meshes )
+			for ( auto meshData : node.meshes )
 			{
 				auto it = std::find_if( m_sceneData.meshes.begin()
 					, m_sceneData.meshes.end()
-					, [mesh]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
+					, [meshData]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
 					{
-						return mesh == &lookup.second;
+						return meshData == &lookup.second;
 					} );
 				CU_Require( it != m_sceneData.meshes.end() );
 				auto meshName = getInternalName( it->first );
@@ -772,6 +778,7 @@ namespace c3d_assimp
 			return {};
 
 		c3d::Map< aiMesh const *, aiNode const * > result;
+		c3d::Map< aiMesh const *, aiNode const * > rejected;
 		uint32_t meshIndex = 0u;
 
 		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
@@ -787,8 +794,27 @@ namespace c3d_assimp
 				m_sceneData.skeletons.try_emplace( skelName, rootNode );
 				result.emplace( aiMesh, rootNode );
 			}
+			else if ( meshNode )
+			{
+				rejected.emplace( aiMesh, meshNode );
+			}
 
 			++meshIndex;
+		}
+
+		for ( auto [aiMesh, meshNode] : rejected )
+		{
+			if ( auto it = std::find_if( result.begin(), result.end()
+				, [meshNode]( auto const & lookup )
+				{
+					return lookup.second->FindNode( meshNode->mName ) != nullptr;
+				} );
+				it != result.end() )
+			{
+				auto rootNode = it->second;
+				// The mesh node is contained in the children of a bone node, include this mesh the skeleton.
+				result.emplace( aiMesh, rootNode );
+			}
 		}
 
 		uint32_t animIndex{};
@@ -818,10 +844,10 @@ namespace c3d_assimp
 		uint32_t meshIndex = 0u;
 		auto noMeshMerge = getParameters().get< bool >( "no_merge" );
 
-		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
+		for ( auto aiCurrentMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
-			if (auto meshNode = findMeshNode( meshIndex, *m_aiScene->mRootNode );
-				meshNode && isValidMesh( *aiMesh ) )
+			if ( auto aiMeshNode = findMeshNode( meshIndex, *m_aiScene->mRootNode );
+				aiMeshNode && isValidMesh( *aiCurrentMesh ) )
 			{
 				auto meshName = getMeshName( meshIndex );
 				if ( file::hasNodeAnim( *m_aiScene, meshIndex ) )
@@ -839,13 +865,11 @@ namespace c3d_assimp
 					&& !noMeshMerge )
 				{
 					// Merge meshes that use the same skeleton
-					auto it = meshSkeletons.find( aiMesh );
-
-					if ( it != meshSkeletons.end() )
+					if ( auto skelIt = meshSkeletons.find( aiCurrentMesh );
+						skelIt != meshSkeletons.end() )
 					{
-						skelNode = it->second;
-						regIt = std::find_if( m_sceneData.meshes.begin()
-							, m_sceneData.meshes.end()
+						skelNode = skelIt->second;
+						regIt = std::find_if( m_sceneData.meshes.begin(), m_sceneData.meshes.end()
 							, [&skelNode]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
 							{
 								return skelNode == lookup.second.skelNode;
@@ -858,20 +882,20 @@ namespace c3d_assimp
 				if ( regIt == m_sceneData.meshes.end() )
 					regIt = m_sceneData.meshes.try_emplace( meshName, skelNode ).first;
 
-				auto & submeshData = regIt->second.submeshes.emplace_back( aiMesh, meshIndex );
-				m_meshes.insert( meshIndex );
+				auto & submeshData = regIt->second.submeshes.emplace_back( aiCurrentMesh, aiMeshNode, meshIndex );
 
-				if ( aiMesh->mNumAnimMeshes )
+				// Parse mesh animations
+				if ( aiCurrentMesh->mNumAnimMeshes )
 				{
 					auto anims = file::findMorphAnims( meshIndex
-						, aiMesh->mNumAnimMeshes
+						, aiCurrentMesh->mNumAnimMeshes
 						, *m_aiScene->mRootNode
 						, c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
 					for ( auto const & [name, animData] : anims )
 					{
 						c3d::String animName{ normalizeName( name ) };
-						submeshData.anims.try_emplace( animName, aiMesh, animData );
+						submeshData.anims.try_emplace( animName, aiCurrentMesh, animData );
 					}
 				}
 			}
@@ -880,35 +904,45 @@ namespace c3d_assimp
 		}
 	}
 
-	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & node
+	void AssimpImporterFile::doPrelistSceneNodes()
+	{
+		c3d::Map< AssimpMeshData const *, aiNodeArray > processed;
+		c3d::Map< aiNode const *, c3d::Matrix4x4f > cumulativeTransforms;
+		c3d::Map< AssimpMeshData const *, aiNodeArray > postponedMeshes;
+		doPrelistSceneNodesRec( *m_aiScene->mRootNode, processed, postponedMeshes, cumulativeTransforms );
+	}
+
+	void AssimpImporterFile::doPrelistSceneNodesRec( aiNode const & aiCurrentNode
 		, c3d::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
+		, c3d::Map< AssimpMeshData const *, aiNodeArray > & postponedMeshes
 		, c3d::Map< aiNode const *, c3d::Matrix4x4f > & cumulativeTransforms
 		, c3d::String parentName
 		, c3d::Matrix4x4f transform )
 	{
-		auto aiNodeName = makeString( node.mName );
+		auto aiNodeName = makeString( aiCurrentNode.mName );
 		if ( m_bonesNodes.find( aiNodeName ) != m_bonesNodes.end() )
 			return;
 
 		aiVector3D translate;
 		aiVector3D scale;
 		aiQuaternion rotate;
-		node.mTransformation.Decompose( scale, rotate, translate );
-		transform *= fromAssimp( node.mTransformation );
-		cumulativeTransforms.try_emplace( &node, transform );
+		aiCurrentNode.mTransformation.Decompose( scale, rotate, translate );
+		auto currentTransform = fromAssimp( aiCurrentNode.mTransformation );
+		transform *= currentTransform;
+		cumulativeTransforms.try_emplace( &aiCurrentNode, transform );
 		bool isSkeletonNode = file::isSkeletonNode( aiNodeName, m_bonesNodes, m_sceneData.skeletons );
 		auto nodeName = getInternalName( aiNodeName );
 		AssimpNodeData nodeData{ parentName
 			, nodeName
 			, false
-			, &node
+			, &aiCurrentNode
 			, fromAssimp( translate )
 			, fromAssimp( rotate )
 			, fromAssimp( scale ) };
 
 		if ( !isSkeletonNode )
 		{
-			auto anims = file::findNodeAnims( node
+			auto anims = file::findNodeAnims( aiCurrentNode
 				, c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
 			for ( auto const & [anim, channelIndex] : anims )
@@ -919,32 +953,42 @@ namespace c3d_assimp
 			}
 		}
 
-		for ( auto meshIndex : c3d::makeArrayView( node.mMeshes, node.mNumMeshes ) )
+		for ( auto meshIndex : c3d::makeArrayView( aiCurrentNode.mMeshes, aiCurrentNode.mNumMeshes ) )
 		{
 			if ( !file::isValidMesh( *m_aiScene, meshIndex ) )
 				continue;
 
-			if ( auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
-				it != m_sceneData.meshes.end() )
+			if ( auto [meshData, submeshData] = file::findNodeMesh( meshIndex, m_sceneData.meshes );
+				meshData && submeshData )
 			{
-				if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
-					, nodeData.meshes.end()
-					, &it->second ) )
+				if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin(), nodeData.meshes.end(), meshData ) )
 				{
-					// Don't add the mesh if it has already been added to a node with the same transform.
-					auto & nodeArray = processedMeshes.try_emplace( &it->second ).first->second;
-
-					if ( auto nodeIt = std::find_if( nodeArray.begin()
-						, nodeArray.end()
-						, [&cumulativeTransforms, &transform]( aiNode const * lookup )
-						{
-							auto lookupIt = cumulativeTransforms.find( lookup );
-							return lookupIt->second == transform;
-						} );
-						nodeIt == nodeArray.end() )
+					if ( meshData->submeshes.size() > 1u )
 					{
-						nodeArray.push_back( &node );
-						nodeData.meshes.push_back( &it->second );
+						// If the aiMesh is part of a more complex mesh,
+						// we need to find an aiNode, from the current one, which fits for all
+						// the mesh's submeshes.
+						if ( aiNode const * aiCommonNode = file::node::findCommonNode( aiCurrentNode, *meshData ) )
+						{
+							if ( aiCommonNode != &aiCurrentNode )
+							{
+								// Since we're in a recursive call, forward to caller.
+								auto & nodeArray = postponedMeshes.try_emplace( meshData ).first->second;
+								nodeArray.push_back( aiCommonNode );
+							}
+							else
+							{
+								// No need to postpone, add it now
+								file::node::addNodeMeshToProcessedMeshes( aiCurrentNode, cumulativeTransforms, transform
+									, *meshData, nodeData, processedMeshes );
+							}
+						}
+					}
+					else
+					{
+						// If not, add the aiMesh to the processed ones.
+						file::node::addNodeMeshToProcessedMeshes( aiCurrentNode, cumulativeTransforms, transform
+							, *meshData, nodeData, processedMeshes );
 					}
 				}
 			}
@@ -954,17 +998,43 @@ namespace c3d_assimp
 			}
 		}
 
+		size_t index = m_sceneData.nodes.size();
 		m_sceneData.nodes.emplace_back( c3d::move( nodeData ) );
 		parentName = nodeName;
 
-		// continue for all child nodes
-		for ( auto aiChild : c3d::makeArrayView( node.mChildren, node.mNumChildren ) )
+		// continue for all children nodes
+		for ( auto aiChildNode : c3d::makeArrayView( aiCurrentNode.mChildren, aiCurrentNode.mNumChildren ) )
 		{
-			doPrelistSceneNodes( *aiChild
+			c3d::Map< AssimpMeshData const *, aiNodeArray > currentPostponedMeshes;
+			doPrelistSceneNodesRec( *aiChildNode
 				, processedMeshes
+				, currentPostponedMeshes
 				, cumulativeTransforms
 				, parentName
 				, transform );
+
+			// Process the child postponed nodes that are for the current node
+			for ( auto & [meshData, postponedNodeArray] : currentPostponedMeshes )
+			{
+				auto it = postponedNodeArray.begin();
+				while ( it != postponedNodeArray.end() )
+				{
+					if ( auto aiCommonNode = *it;
+						aiCommonNode == &aiCurrentNode )
+					{
+						// If the child postponed node is for aiCurrentNode, process its aiMesh
+						file::node::addNodeMeshToProcessedMeshes( aiCurrentNode, cumulativeTransforms, transform
+							, *meshData, m_sceneData.nodes[index], processedMeshes );
+					}
+					else
+					{
+						// If not, postpone again, completing the cumulative matrix.
+						auto & dest = postponedMeshes.try_emplace( meshData ).first->second;
+						dest.push_back( aiCommonNode );
+					}
+					++it;
+				}
+			}
 		}
 	}
 
@@ -1008,10 +1078,8 @@ namespace c3d_assimp
 
 				if ( it == m_sceneData.nodes.end() )
 				{
-					file::accumulateTransforms( *this
-						, name
+					file::node::accumulateTransforms( makeString( aiLight->mName )
 						, *m_aiScene->mRootNode
-						, m_sceneData.nodes
 						, transform );
 					c3d::Point3f translate;
 					c3d::Point3f scale;
@@ -1067,10 +1135,8 @@ namespace c3d_assimp
 				} );
 				it == m_sceneData.nodes.end() )
 			{
-				file::accumulateTransforms( *this
-					, name
+				file::node::accumulateTransforms( makeString( aiCamera->mName )
 					, *m_aiScene->mRootNode
-					, m_sceneData.nodes
 					, transform );
 				c3d::Point3f translate;
 				c3d::Point3f scale;

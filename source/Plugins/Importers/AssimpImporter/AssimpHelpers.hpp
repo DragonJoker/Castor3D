@@ -161,6 +161,18 @@ namespace c3d_assimp
 		return count > 0 && mesh.HasPositions();
 	}
 
+	inline c3d::Matrix4x4f computeCumulativeTransform( aiNode const & aiParentNode, aiNode const & aiChildNode )
+	{
+		c3d::Matrix4x4f cumulative{ c3d::Matrix4x4f::getIdentity() };
+		auto aiCurrentNode = &aiChildNode;
+		while ( aiCurrentNode && aiCurrentNode != &aiParentNode )
+		{
+			cumulative = fromAssimp( aiCurrentNode->mTransformation ) * cumulative;
+			aiCurrentNode = aiCurrentNode->mParent;
+		}
+		return cumulative;
+	}
+
 	template< typename aiMeshType >
 	inline void createVertexBuffer( aiMeshType const & aiMesh
 		, c3d::Point3fArray & positions
