@@ -581,8 +581,8 @@ namespace c3d
 
 				for ( auto const & [file, fileParameters] : blockContext->files )
 				{
-					Parameters importParameters{ parameters };
-					importParameters.append( fileParameters );
+					Parameters importParameters{ fileParameters };
+					importParameters.append( parameters );
 					if ( !importer.importData( *blockContext->scene->scene
 						, file
 						, importParameters
@@ -595,8 +595,8 @@ namespace c3d
 
 				for ( auto const & [file, fileParameters] : blockContext->animFiles )
 				{
-					Parameters importParameters{ parameters };
-					importParameters.append( fileParameters );
+					Parameters importParameters{ fileParameters };
+					importParameters.append( parameters );
 					if ( !importer.importAnimationsData( *blockContext->scene->scene
 						, file
 						, importParameters

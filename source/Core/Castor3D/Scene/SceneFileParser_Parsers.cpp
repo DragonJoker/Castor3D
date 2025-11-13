@@ -207,27 +207,17 @@ namespace c3d
 				if ( auto eqIndex = param.find( cuT( '=' ) );
 					eqIndex != String::npos )
 				{
-					if ( String value = param.substr( eqIndex + 1 );
-						value.size() > 2 && value.front() == '\"' && value.back() == '\"' )
-					{
-						String prefix;
-						if ( parameters.get( cuT( "prefix" ), prefix ) )
-						{
-							parameters.add( cuT( "prefix" ), prefix + value.substr( 1, value.size() - 2 ) );
-						}
-						else
-						{
-							parameters.add( cuT( "prefix" ), value.substr( 1, value.size() - 2 ) );
-						}
-					}
+					String value = param.substr( eqIndex + 1 );
+					string::trim( value );
+					String prefix;
+					if ( parameters.get( cuT( "prefix" ), prefix ) )
+						parameters.add( cuT( "prefix" ), prefix + value );
 					else
-					{
-						CU_ParsingError( cuT( "Malformed parameter -prefix=\"name\"." ) );
-					}
+						parameters.add( cuT( "prefix" ), value );
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Malformed parameter -prefix=\"name\"." ) );
+					CU_ParsingError( cuT( "Malformed parameter -prefix=name." ) );
 				}
 			}
 			else if ( param.find( cuT( "no_optimisations" ) ) == 0 )
@@ -247,15 +237,9 @@ namespace c3d
 				if ( auto eqIndex = param.find( cuT( '=' ) );
 					eqIndex != String::npos )
 				{
-					if ( String value = param.substr( eqIndex + 1 );
-						value.size() > 2 && value.front() == '\"' && value.back() == '\"' )
-					{
-						parameters.add( cuT( "preferred_importer" ), value.substr( 1, value.size() - 2 ) );
-					}
-					else
-					{
-						CU_ParsingError( cuT( "Malformed parameter -preferred_importer=\"name\"." ) );
-					}
+					String value = param.substr( eqIndex + 1 );
+					string::trim( value );
+					parameters.add( cuT( "preferred_importer" ), value );
 				}
 				else
 				{

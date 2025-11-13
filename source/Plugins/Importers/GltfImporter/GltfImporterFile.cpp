@@ -1334,6 +1334,7 @@ namespace c3d_gltf
 	void GltfImporterFile::doPrelistMeshes()
 	{
 		uint32_t meshIndex = 0u;
+		auto noMeshMerge = getParameters().get< bool >( "no_merge" );
 
 		for ( auto & impMesh : m_asset->meshes )
 		{
@@ -1351,6 +1352,7 @@ namespace c3d_gltf
 
 			// Try to merge the mesh with other ones (if they share the same skin)
 			if ( regIt == m_sceneData.meshes.end() )
+			if ( regIt == m_sceneData.meshes.end() && !noMeshMerge )
 				regIt = file::mergeMeshes( *this, meshIndex, meshName
 					, m_sceneData.meshes, skinIndex, skin );
 

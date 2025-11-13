@@ -24,7 +24,7 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	bool parseImportParameters( Parameters const & parameters
+	C3D_API bool parseImportParameters( Parameters const & parameters
 		, Point3f & scale
 		, Quaternion & orientation );
 
