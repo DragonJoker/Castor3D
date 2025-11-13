@@ -45,9 +45,6 @@ namespace c3d_fbx
 			, c3d::Parameters const & parameters
 			, c3d::HashMap< c3d::String, c3d::String > const & materialsNames );
 		C3D_FbxMat_API ~FbxMaterialsFile()noexcept;
-		C3D_FbxMat_API c3d::StringArray listMaterials();
-		C3D_FbxMat_API c3d::Vector< uint32_t > listTextureAnimations( c3d::Material const & material
-			, uint32_t pass );
 		C3D_FbxMat_API c3d::MaterialImporterUPtr createMaterialImporter( c3d::Engine & engine );
 
 		fbx::FbxManager & getFbxManager()const noexcept

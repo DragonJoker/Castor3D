@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GltfImporterFile___
 #define ___C3D_GltfImporterFile___
 
+#include <GltfMaterialImporter/GltfMaterialsFile.hpp>
+
 #include <Castor3D/ImporterFile.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
@@ -60,8 +62,6 @@ namespace fastgltf
 
 namespace c3d_gltf
 {
-	inline const c3d::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
-
 	c3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::math::fmat4x4> const & transform );
 	c3d::Point3f convert( fastgltf::math::fvec3 const & value );
 	c3d::Quaternion convert( fastgltf::math::fquat const & value );
@@ -70,12 +70,6 @@ namespace c3d_gltf
 	using NodeAnimationChannelSampler = c3d::Vector< AnimationChannelSampler >;
 	using AnimationChannelSamplers = c3d::Map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
 	using Animations = c3d::StringMap< AnimationChannelSamplers >;
-
-	struct NameContainer
-	{
-		c3d::HashMap< size_t, c3d::String > namesByIndex;
-		c3d::HashSet< c3d::String > names;
-	};
 
 	struct GltfSubmeshPrimitiveData
 	{
@@ -187,7 +181,6 @@ namespace c3d_gltf
 		c3d::Vector< GltfNodeData * > sortedNodes;
 		c3d::Vector< GltfNodeData const * > skeletonNodes;
 		c3d::StringMap< GltfMeshData > meshes;
-		c3d::StringMap< GltfSkeletonData > skeletons;
 		c3d::Vector< GltfLightData > lights;
 		c3d::StringMap< GltfLightGroupData > lightGroups;
 	};
@@ -291,12 +284,12 @@ namespace c3d_gltf
 
 		fastgltf::Asset const & getAsset()const noexcept
 		{
-			return *m_asset;
+			return m_materialsFile.getAsset();
 		}
 
 		bool isValid()const noexcept
 		{
-			return m_expAsset.error() == fastgltf::Error::None;
+			return m_materialsFile.isValid();
 		}
 
 		auto & getMeshes()
@@ -313,6 +306,7 @@ namespace c3d_gltf
 		static c3d::MbString const Name;
 
 	private:
+		void doPrelistMaterials();
 		void doPrelistNodes();
 		void doPrelistMeshes();
 		void doAddNode( GltfNodeData nodeData
@@ -321,13 +315,11 @@ namespace c3d_gltf
 			, size_t & parentInstanceCount );
 
 	private:
-		fastgltf::Expected< fastgltf::Asset > m_expAsset;
-		fastgltf::Asset const * m_asset{};
+		GltfMaterialsFile m_materialsFile;
 		c3d::Vector< size_t > m_sceneIndices{};
 		c3d::StringMap< c3d::NodeTransform const * > m_nodes{};
 		CompressedBufferDataAdapter m_adapter;
 		GltfSceneData m_sceneData;
-		mutable NameContainer m_materialNames;
 		mutable NameContainer m_meshNames;
 		mutable NameContainer m_nodeNames;
 		mutable NameContainer m_skinNames;

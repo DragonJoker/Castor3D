@@ -1,7 +1,5 @@
 #include "GltfImporter/GltfMeshImporter.hpp"
 
-#include "GltfImporter/GltfMaterialImporter.hpp"
-
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>

@@ -8,6 +8,9 @@ See LICENSE file in root folder
 #if C3D_HasFbxMaterialImporter
 #	include <FbxMaterialImporter/FbxMaterialsFile.hpp>
 #endif
+#if C3D_HasGltfMaterialImporter
+#	include <GltfMaterialImporter/GltfMaterialsFile.hpp>
+#endif
 #if C3D_HasPlyMeshImporter
 #	include <PlyMeshImporter/PlyMeshFile.hpp>
 #endif
@@ -270,6 +273,9 @@ namespace c3d_assimp
 
 #if C3D_HasFbxMaterialImporter
 		c3d::RawUniquePtr< c3d_fbx::FbxMaterialsFile > m_fbxMaterials;
+#endif
+#if C3D_HasGltfMaterialImporter
+		c3d::RawUniquePtr< c3d_gltf::GltfMaterialsFile > m_gltfMaterials;
 #endif
 #if C3D_HasPlyMeshImporter
 		c3d::RawUniquePtr< c3d_ply::PlyMeshFile > m_plyMesh;

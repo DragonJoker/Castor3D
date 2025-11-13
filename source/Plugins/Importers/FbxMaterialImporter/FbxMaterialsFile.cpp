@@ -448,22 +448,6 @@ namespace c3d_fbx
 			m_fbxManager->Destroy();
 	}
 
-	c3d::StringArray FbxMaterialsFile::listMaterials()
-	{
-		c3d::StringArray result;
-		if ( isValid() )
-			for ( auto const & [name, _] : m_materials )
-				result.emplace_back( name );
-		return result;
-	}
-
-	c3d::Vector< uint32_t > FbxMaterialsFile::listTextureAnimations( [[maybe_unused]] c3d::Material const & material
-		, [[maybe_unused]] uint32_t pass )
-	{
-		c3d::Vector< uint32_t > result;
-		return result;
-	}
-
 	c3d::MaterialImporterUPtr FbxMaterialsFile::createMaterialImporter( c3d::Engine & engine )
 	{
 		return c3d::makeUniqueDerived< c3d::MaterialImporter, FbxMaterialImporter >( engine, *this );
