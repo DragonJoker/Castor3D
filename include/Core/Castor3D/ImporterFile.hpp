@@ -152,6 +152,10 @@ namespace c3d
 		C3D_API virtual LightImporterUPtr createLightImporter() = 0;
 		C3D_API virtual CameraImporterUPtr createCameraImporter() = 0;
 
+		C3D_API static c3d::String reworkName( c3d::String const & name
+			, c3d::StringView baseName
+			, size_t index );
+
 		String const & getExtension()const noexcept
 		{
 			return m_extension;
