@@ -124,51 +124,6 @@ namespace c3d_assimp
 			return makeString( element.mName );
 		}
 
-		static c3d::String reworkName( c3d::String const & name
-			, c3d::StringView baseName
-			, uint32_t index )
-		{
-			c3d::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
-			auto split = c3d::string::split( name, separators, ~0u, false );
-			c3d::Set< int > numbers;
-			c3d::Set< c3d::String > names;
-
-			for ( auto s : split )
-			{
-				c3d::string::trim( s, true, true, separators );
-
-				if ( !s.empty() )
-				{
-					if ( c3d::string::isInteger( s ) )
-						numbers.emplace( c3d::string::toInt( s ) );
-					else
-						names.insert( s );
-				}
-			}
-
-			c3d::String result;
-			c3d::String sep;
-
-			for ( auto & s : names )
-			{
-				result += sep + s;
-				sep = cuT( "_" );
-			}
-
-			for ( auto i : numbers )
-			{
-				result += sep + c3d::string::toString( i );
-				sep = cuT( "_" );
-			}
-
-			if ( result.empty() )
-				result = c3d::string::toString( index );
-
-			if ( result.size() > 150u )
-				result = c3d::String{ baseName } + c3d::string::toString( index );
-			return normalizeName( result );
-		}
-
 		template< typename aiElementT >
 		static c3d::String getElementName( aiElementT const & element
 			, uint32_t index
@@ -179,7 +134,7 @@ namespace c3d_assimp
 			if ( result.empty() )
 				result = c3d::String{ baseName } + cuT( "-" ) + c3d::string::toString( index );
 			else
-				result = reworkName( result, baseName, index );
+				result = c3d::ImporterFile::reworkName( result, baseName, index );
 
 			return result;
 		}
@@ -203,7 +158,7 @@ namespace c3d_assimp
 			if ( result.empty() )
 				result = baseName;
 			else
-				result = reworkName( result, baseName, index );
+				result = c3d::ImporterFile::reworkName( result, baseName, index );
 
 			if ( auto it = names.names.find( result );
 				it != names.names.end() )

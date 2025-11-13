@@ -77,7 +77,55 @@ namespace c3d
 			m_prefix = prefix + cuT( "-" );
 		}
 	}
-	
+
+	c3d::String ImporterFile::reworkName( c3d::String const & name
+		, c3d::StringView baseName
+		, size_t index )
+	{
+		c3d::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
+		auto split = c3d::string::split( name, separators, ~0u, false );
+		c3d::Set< int > insNumbers;
+		c3d::Set< c3d::String > insNames;
+		c3d::Vector< c3d::String > numbers;
+		c3d::Vector< c3d::String > names;
+
+		for ( auto s : split )
+		{
+			c3d::string::trim( s, true, true, separators );
+
+			if ( !s.empty() )
+			{
+				if ( c3d::string::isInteger( s ) && insNumbers.emplace( c3d::string::toInt( s ) ).second )
+					numbers.push_back( s );
+				else if ( insNames.insert( s ).second )
+					names.push_back( s );
+			}
+		}
+
+		c3d::String result;
+		c3d::String sep;
+
+		for ( auto const & s : names )
+		{
+			result += sep + s;
+			sep = cuT( "_" );
+		}
+
+		for ( auto const & s : numbers )
+		{
+			result += sep + s;
+			sep = cuT( "_" );
+		}
+
+		if ( result.empty() )
+			result = c3d::string::toString( index );
+
+		if ( result.size() > 150u )
+			result = c3d::String{ baseName } + c3d::string::toString( index );
+
+		return c3d::File::normaliseFileName( result, cuT( "-"_sv ) );
+	}
+
 	//*********************************************************************************************
 
 	ImporterFileFactory::ImporterFileFactory()
