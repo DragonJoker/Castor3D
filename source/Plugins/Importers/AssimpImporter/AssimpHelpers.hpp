@@ -664,118 +664,6 @@ namespace c3d_assimp
 		return result;
 	}
 
-	template< typename KeyFrameT, typename AnimationT >
-	inline KeyFrameT & getKeyFrame( c3d::Milliseconds const & time
-		, AnimationT & animation
-		, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes )
-	{
-		auto it = keyframes.find( time );
-
-		if ( it == keyframes.end() )
-		{
-			it = keyframes.emplace( time
-				, c3d::makeUnique< KeyFrameT >( animation, time ) ).first;
-		}
-
-		return *it->second;
-	}
-
-	template< typename T >
-	inline void findValue( c3d::Milliseconds time
-		, typename c3d::Map< c3d::Milliseconds, T > const & map
-		, typename c3d::Map< c3d::Milliseconds, T >::const_iterator & prv
-		, typename c3d::Map< c3d::Milliseconds, T >::const_iterator & cur )
-	{
-		if ( map.empty() )
-		{
-			prv = map.end();
-			cur = map.end();
-		}
-		else
-		{
-			cur = std::find_if( map.begin()
-				, map.end()
-				, [&time]( c3d::Pair< c3d::Milliseconds, T > const & pair )
-				{
-					return pair.first > time;
-				} );
-
-			if ( cur == map.end() )
-			{
-				--cur;
-			}
-
-			prv = cur;
-
-			if ( prv != map.begin() )
-			{
-				prv--;
-			}
-		}
-	}
-
-	template< typename T >
-	inline T interpolate( c3d::Milliseconds const & time
-		, c3d::Interpolator< T > const & interpolator
-		, c3d::Map< c3d::Milliseconds, T > const & values )
-	{
-		T result;
-
-		if ( values.size() == 1 )
-		{
-			result = values.begin()->second;
-		}
-		else
-		{
-			auto prv = values.begin();
-			auto cur = values.begin();
-			findValue( time, values, prv, cur );
-
-			if ( prv != cur )
-			{
-				auto dt = cur->first - prv->first;
-				float factor = float( ( time - prv->first ).count() ) / float( dt.count() );
-				result = interpolator.interpolate( prv->second, cur->second, factor );
-			}
-			else
-			{
-				result = prv->second;
-			}
-		}
-
-		return result;
-	}
-
-	template< typename AnimationT, typename KeyFrameT, typename FuncT >
-	inline void synchroniseKeys( c3d::Map< c3d::Milliseconds, c3d::Point3f > const & translates
-		, c3d::Map< c3d::Milliseconds, c3d::Point3f > const & scales
-		, c3d::Map< c3d::Milliseconds, c3d::Quaternion > const & rotates
-		, [[maybe_unused]] c3d::Set< c3d::Milliseconds > const & times
-		, uint32_t fps
-		, c3d::Milliseconds minTime
-		, c3d::Milliseconds maxTime
-		, AnimationT & animation
-		, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes
-		, FuncT fillKeyFrame )
-	{
-		c3d::InterpolatorT< c3d::Point3f, c3d::InterpolatorType::eLinear > pointInterpolator;
-		c3d::InterpolatorT< c3d::Quaternion, c3d::InterpolatorType::eLinear > quatInterpolator;
-		// Limit the key frames per second to 60, to spare RAM...
-		auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
-		c3d::Milliseconds step{ 1000 / wantedFps };
-
-		for ( auto time = minTime; time <= maxTime; time += step )
-		{
-			auto translate = interpolate( time, pointInterpolator, translates );
-			auto scale = interpolate( time, pointInterpolator, scales );
-			auto rotate = interpolate( time, quatInterpolator, rotates );
-			fillKeyFrame( getKeyFrame( time - minTime, animation, keyframes )
-				, translate
-				, rotate
-				, scale );
-		}
-	}
-
 	template< typename aiAnimT
 		, typename AnimationT
 		, typename KeyFrameT
@@ -784,40 +672,25 @@ namespace c3d_assimp
 		, uint32_t wantedFps
 		, c3d::Milliseconds minTime
 		, c3d::Milliseconds maxTime
+		, c3d::NodeTransform const & defaultTransform
 		, int64_t ticksPerSecond
 		, AnimationT & animation
 		, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
 		c3d::Set< c3d::Milliseconds > times;
-		auto translates = processKeys( c3d::makeArrayView( aiAnim.mPositionKeys
-				, aiAnim.mNumPositionKeys )
-			, minTime
-			, maxTime
-			, ticksPerSecond
+		auto translates = processKeys( c3d::makeArrayView( aiAnim.mPositionKeys, aiAnim.mNumPositionKeys )
+			, minTime, maxTime, ticksPerSecond
 			, times );
-		auto scales = processKeys( c3d::makeArrayView( aiAnim.mScalingKeys
-				, aiAnim.mNumScalingKeys )
-			, minTime
-			, maxTime
-			, ticksPerSecond
+		auto scales = processKeys( c3d::makeArrayView( aiAnim.mScalingKeys, aiAnim.mNumScalingKeys )
+			, minTime, maxTime, ticksPerSecond
 			, times );
-		auto rotates = processKeys( c3d::makeArrayView( aiAnim.mRotationKeys
-				, aiAnim.mNumRotationKeys )
-			, minTime
-			, maxTime
-			, ticksPerSecond
+		auto rotates = processKeys( c3d::makeArrayView( aiAnim.mRotationKeys, aiAnim.mNumRotationKeys )
+			, minTime, maxTime, ticksPerSecond
 			, times );
-		synchroniseKeys( translates
-			, scales
-			, rotates
-			, times
-			, wantedFps
-			, minTime
-			, maxTime
-			, animation
-			, keyframes
-			, fillKeyFrame );
+		c3d::AnimationImporter::synchroniseKeys( translates, rotates, scales
+			, defaultTransform, wantedFps, minTime, maxTime
+			, animation, keyframes, fillKeyFrame );
 	}
 }
 

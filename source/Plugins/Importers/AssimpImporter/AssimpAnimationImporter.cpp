@@ -96,6 +96,7 @@ namespace c3d_assimp
 			, fromAssimp( maxFrameTicks, ticksPerSecond )
 			, ticksPerSecond
 			, skeleton
+			, nodesTransforms
 			, aiAnimation
 			, keyframes
 			, notAnimated );
@@ -202,6 +203,7 @@ namespace c3d_assimp
 			, getEngine()->getWantedFps()
 			, fromAssimp( minFrameTicks, ticksPerSecond )
 			, fromAssimp( maxFrameTicks, ticksPerSecond )
+			, c3d::NodeTransform{}
 			, ticksPerSecond
 			, animation
 			, keyframes
@@ -226,6 +228,7 @@ namespace c3d_assimp
 		, c3d::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, c3d::Skeleton const & skeleton
+		, SkeletonNodesTransforms const & nodesTransforms
 		, aiAnimation const & aiAnimation
 		, SkeletonAnimationKeyFrameMap & keyFrames
 		, SkeletonAnimationObjectSet & notAnimated )const
@@ -268,10 +271,12 @@ namespace c3d_assimp
 
 			if ( aiNodeAnim )
 			{
+				auto const & objTransform = nodesTransforms.find( skelNode.get() )->second;
 				processAnimationNodeKeys( *aiNodeAnim
 					, getEngine()->getWantedFps()
 					, minTime
 					, maxTime
+					, objTransform
 					, ticksPerSecond
 					, animation
 					, keyFrames
