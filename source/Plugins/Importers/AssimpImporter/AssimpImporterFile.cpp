@@ -411,6 +411,12 @@ namespace c3d_assimp
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "fbx" ) )
 				m_fbxMaterials = c3d::makeRawUnique< c3d_fbx::FbxMaterialsFile >( path, parameters, m_materialNames.namesByRawName );
 #endif
+#if C3D_HasGltfMaterialImporter
+			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "gltf" )
+				|| c3d::string::lowerCase( path.getExtension() ) == cuT( "glb" ) )
+				m_gltfMaterials = c3d::makeRawUnique< c3d_gltf::GltfMaterialsFile >( engine, path, parameters, getPrefix(), getName()
+					, m_materialNames.namesByRawName );
+#endif
 #if C3D_HasPlyMeshImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "ply" ) )
 				m_plyMesh = c3d::makeRawUnique< c3d_ply::PlyMeshFile >( path, m_meshNames.namesByRawName );
@@ -697,6 +703,10 @@ namespace c3d_assimp
 #if C3D_HasFbxMaterialImporter
 		if ( m_fbxMaterials )
 			return m_fbxMaterials->createMaterialImporter( *getOwner() );
+#endif
+#if C3D_HasGltfMaterialImporter
+		if ( m_gltfMaterials )
+			return m_gltfMaterials->createMaterialImporter( *getOwner() );
 #endif
 		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getOwner(), getParameters() );
 	}

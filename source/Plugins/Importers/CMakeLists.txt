@@ -24,6 +24,10 @@ function( ImportersBuild )
 			${Castor3D_MATERIAL_DEPS}
 		)
 
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} OR ${CASTOR_BUILD_IMPORTER_ASSIMP} )
+			add_subdirectory( Plugins/Importers/GltfMaterialImporter )
+		endif()
+
 		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
 			set( Build ${Gltf} )
 			add_subdirectory( Plugins/Importers/GltfImporter )
@@ -107,6 +111,15 @@ function( ImportersSetup )
 			cpack_add_component( PlyImporter
 				DISPLAY_NAME "PlyImporter"
 				DESCRIPTION "Allows importing meshes from Stanford PLY files in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} OR ${CASTOR_BUILD_IMPORTER_GLTF} )
+			cpack_add_component( GltfMaterialImporter
+				DISPLAY_NAME "GltfMaterialImporter"
+				DESCRIPTION "Allows the material import using fastgltf library in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full

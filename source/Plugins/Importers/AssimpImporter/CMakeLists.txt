@@ -144,6 +144,16 @@ if( assimp_FOUND )
 				C3D_HasPlyMeshImporter
 		)
 	endif ()
+	if ( TARGET castor::GltfMaterialImporter )
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				castor::GltfMaterialImporter
+		)
+		target_compile_definitions( ${PROJECT_NAME}
+			PRIVATE
+				C3D_HasGltfMaterialImporter
+		)
+	endif ()
 	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D

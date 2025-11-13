@@ -3,10 +3,11 @@
 #include "GltfImporter/GltfAnimationImporter.hpp"
 #include "GltfImporter/GltfCameraImporter.hpp"
 #include "GltfImporter/GltfLightImporter.hpp"
-#include "GltfImporter/GltfMaterialImporter.hpp"
 #include "GltfImporter/GltfMeshImporter.hpp"
 #include "GltfImporter/GltfSceneNodeImporter.hpp"
 #include "GltfImporter/GltfSkeletonImporter.hpp"
+
+#include <GltfMaterialImporter/GltfMaterialsFile.hpp>
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
@@ -23,66 +24,14 @@
 #include <meshoptimizer.h>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
+#pragma optimize("", off)
+
 namespace c3d_gltf
 {
 	//*********************************************************************************************
 
 	namespace file
 	{
-		static fastgltf::Expected< fastgltf::Asset > loadScene( c3d::Path const & filePath )
-		{
-			fastgltf::Parser parser{ fastgltf::Extensions::KHR_texture_transform
-				| fastgltf::Extensions::MSFT_texture_dds
-				| fastgltf::Extensions::KHR_mesh_quantization
-				| fastgltf::Extensions::EXT_mesh_gpu_instancing
-				| fastgltf::Extensions::EXT_meshopt_compression
-				| fastgltf::Extensions::KHR_texture_basisu
-				| fastgltf::Extensions::EXT_texture_webp
-				| fastgltf::Extensions::KHR_lights_punctual
-				| fastgltf::Extensions::KHR_materials_specular
-				| fastgltf::Extensions::KHR_materials_pbrSpecularGlossiness
-				| fastgltf::Extensions::KHR_materials_ior
-				| fastgltf::Extensions::KHR_materials_iridescence
-				| fastgltf::Extensions::KHR_materials_volume
-				| fastgltf::Extensions::KHR_materials_transmission
-				| fastgltf::Extensions::KHR_materials_clearcoat
-				| fastgltf::Extensions::KHR_materials_emissive_strength
-				| fastgltf::Extensions::KHR_materials_sheen
-				| fastgltf::Extensions::KHR_materials_unlit
-				| fastgltf::Extensions::KHR_materials_anisotropy
-				| fastgltf::Extensions::KHR_materials_dispersion
-				| fastgltf::Extensions::KHR_materials_diffuse_transmission };
-			auto path = c3d::makePath( filePath );
-
-			constexpr auto gltfOptions = fastgltf::Options::DontRequireValidAssetMember
-				| fastgltf::Options::AllowDouble
-				| fastgltf::Options::LoadExternalBuffers
-				| fastgltf::Options::DecomposeNodeMatrices
-				| fastgltf::Options::LoadExternalImages;
-
-			auto dataResult = fastgltf::GltfDataBuffer::FromPath( path );
-
-			if ( !dataResult )
-			{
-				c3d::log::error << "Failed to to load glTF buffer" << std::endl;
-				return fastgltf::Expected< fastgltf::Asset >( dataResult.error() );
-			}
-
-			auto & data = dataResult.get();
-
-			if ( auto type = fastgltf::determineGltfFileType( data );
-				type != fastgltf::GltfType::glTF && type != fastgltf::GltfType::GLB )
-			{
-				c3d::log::error << "Failed to determine glTF container" << std::endl;
-				return fastgltf::Expected< fastgltf::Asset >( fastgltf::Error::InvalidPath );
-			}
-
-			auto result = parser.loadGltf( data, path.parent_path(), gltfOptions );
-			if ( result.error() != fastgltf::Error::None )
-				c3d::log::error << "Failed to load glTF: " << c3d::makeString( fastgltf::getErrorMessage( result.error() ) ) << std::endl;
-			return result;
-		}
-
 		static void parseNodesRec( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
 			, size_t parentNodeIndex
 			, c3d::Vector< fastgltf::Node > const & allNodes
@@ -205,43 +154,6 @@ namespace c3d_gltf
 									|| hasChildNode( impAsset, lookupIndex, nodeIndex );
 							} );
 					} );
-		}
-
-		static c3d::String getElementName( auto const & elements
-			, size_t index
-			, c3d::StringView baseName )
-		{
-			c3d::String result = c3d::makeString( elements[index].name );
-
-			if ( result.empty() )
-			{
-				result += baseName;
-				result += cuT( "-" ) + c3d::string::toString( index );
-			}
-
-			return result;
-		}
-
-		static c3d::String getElementName( auto const & elements
-			, size_t index
-			, c3d::StringView baseName
-			, NameContainer & names )
-		{
-			if ( auto it = names.namesByIndex.find( index );
-				it != names.namesByIndex.end() )
-				return it->second;
-
-			auto result = c3d::makeString( elements[index].name );
-			if ( result.empty() )
-				result = baseName;
-
-			if ( auto it = names.names.find( result );
-				it != names.names.end() )
-				result += cuT( "-" ) + c3d::string::toString( index );
-
-			names.namesByIndex.emplace( index, result );
-			names.names.emplace( result );
-			return result;
 		}
 
 		static c3d::String getLongestCommonSubstring( c3d::String const & a, c3d::String const & b )
@@ -598,32 +510,27 @@ namespace c3d_gltf
 		, c3d::Parameters const & parameters
 		, c3d::ProgressBar * progress )
 		: c3d::ImporterFile{ engine, scene, path, parameters, progress }
-		, m_expAsset{ file::loadScene( getFileName() ) }
+		, m_materialsFile{ engine, path, parameters, getPrefix(), getName() }
 	{
 		if ( isValid() )
 		{
-			m_asset = &m_expAsset.get< 1 >();
-			m_adapter.decompress( *m_asset );
+			auto const & gltfAsset = getAsset();
+			m_adapter.decompress( getAsset() );
 
 			if ( auto sceneIndex = getParameters().get< uint32_t >( cuT( "sceneIndex" ) ) )
 			{
 				m_sceneIndices.push_back( sceneIndex );
 			}
-			else if ( m_asset->defaultScene )
+			else if ( gltfAsset.defaultScene )
 			{
-				m_sceneIndices.push_back( *m_asset->defaultScene );
+				m_sceneIndices.push_back( *gltfAsset.defaultScene );
 			}
 			else
 			{
-				m_sceneIndices.resize( m_asset->scenes.size() );
+				m_sceneIndices.resize( gltfAsset.scenes.size() );
 				std::iota( m_sceneIndices.begin(), m_sceneIndices.end(), 0u );
 			}
 
-			engine.getMaterialCache().forEach( [this]( c3d::Material const & element )
-				{
-					m_materialNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ULL + m_materialNames.namesByIndex.size(), element.getName() );
-					m_materialNames.names.emplace( element.getName() );
-				} );
 			engine.getSamplerCache().forEach( [this]( c3d::Sampler const & element )
 				{
 					m_samplerNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ULL + m_samplerNames.namesByIndex.size(), element.getName() );
@@ -667,17 +574,19 @@ namespace c3d_gltf
 
 	c3d::String GltfImporterFile::getMaterialName( size_t index )const
 	{
-		return getInternalName( file::getElementName( m_asset->materials, index, getName(), m_materialNames ) );
+		return m_materialsFile.getMaterialName( index );
 	}
 
 	c3d::String GltfImporterFile::getMeshName( size_t index )const
 	{
-		return getInternalName( file::getElementName( m_asset->meshes, index, getName(), m_meshNames ) );
+		auto const & gltfAsset = getAsset();
+		return getInternalName( getElementName( gltfAsset.meshes, index, getName(), m_meshNames ) );
 	}
 
 	c3d::String GltfImporterFile::getNodeName( size_t index, size_t instance )const
 	{
-		auto result = file::getElementName( m_asset->nodes, index, getName(), m_nodeNames );
+		auto const & gltfAsset = getAsset();
+		auto result = getElementName( gltfAsset.nodes, index, getName(), m_nodeNames );
 
 		if ( instance )
 		{
@@ -689,39 +598,35 @@ namespace c3d_gltf
 
 	c3d::String GltfImporterFile::getSkinName( size_t index )const
 	{
-		return getInternalName( file::getElementName( m_asset->skins, index, getName(), m_skinNames ) );
+		auto const & gltfAsset = getAsset();
+		return getInternalName( getElementName( gltfAsset.skins, index, getName(), m_skinNames ) );
 	}
 
 	c3d::String GltfImporterFile::getLightName( size_t index )const
 	{
-		return getInternalName( file::getElementName( m_asset->lights, index, getName(), m_lightNames ) );
+		auto const & gltfAsset = getAsset();
+		return getInternalName( getElementName( gltfAsset.lights, index, getName(), m_lightNames ) );
 	}
 
 	c3d::String GltfImporterFile::getCameraName( size_t index )const
 	{
-		return getInternalName( file::getElementName( m_asset->cameras, index, getName(), m_cameraNames ) );
+		auto const & gltfAsset = getAsset();
+		return getInternalName( getElementName( gltfAsset.cameras, index, getName(), m_cameraNames ) );
 	}
 
 	c3d::String GltfImporterFile::getSamplerName( fastgltf::Sampler const & impSampler )const
 	{
-		auto const & engine = *getOwner();
-		auto const & defaultSampler = *engine.getDefaultSampler();
-		return c3d::getSamplerName( c3d::ComparisonFunc::eNever
-			, impSampler.minFilter ? convert( *impSampler.minFilter ) : defaultSampler.getMinFilter()
-			, impSampler.magFilter ? convert( *impSampler.magFilter ) : defaultSampler.getMagFilter()
-			, impSampler.minFilter ? getMipFilter( *impSampler.minFilter ) : defaultSampler.getMipFilter()
-			, convert( impSampler.wrapS )
-			, convert( impSampler.wrapT )
-			, defaultSampler.getWrapR() );
+		return m_materialsFile.getSamplerName( *getOwner(), impSampler );
 	}
 
 	c3d::String GltfImporterFile::getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const
 	{
-		auto nodeName = file::getElementName( m_asset->nodes, nodeIndex, getName(), m_nodeNames );
+		auto const & gltfAsset = getAsset();
+		auto nodeName = getElementName( gltfAsset.nodes, nodeIndex, getName(), m_nodeNames );
 		if ( instance )
 			nodeName += cuT( "_" ) + c3d::string::toString( instance );
 
-		auto meshName = file::getElementName( m_asset->meshes, meshIndex, getName(), m_meshNames );
+		auto meshName = getElementName( gltfAsset.meshes, meshIndex, getName(), m_meshNames );
 		c3d::String result;
 
 		if ( nodeName == meshName )
@@ -739,7 +644,8 @@ namespace c3d_gltf
 
 	c3d::String GltfImporterFile::getAnimationName( size_t index )const
 	{
-		return getInternalName( file::getElementName( m_asset->animations, index, getName() ) );
+		auto const & gltfAsset = getAsset();
+		return getInternalName( getElementName( gltfAsset.animations, index, getName() ) );
 	}
 
 	size_t GltfImporterFile::getNodeIndex( c3d::String const & name )const
@@ -825,7 +731,8 @@ namespace c3d_gltf
 
 		if ( !getParameters().get< bool >( "no_skeleton" ) )
 		{
-			for ( auto & animation : m_asset->animations )
+			auto const & gltfAsset = getAsset();
+			for ( auto & animation : gltfAsset.animations )
 			{
 				for ( auto & channel : animation.channels )
 				{
@@ -885,8 +792,11 @@ namespace c3d_gltf
 	{
 		c3d::StringArray result;
 		if ( isValid() )
-			for ( size_t i = 0u; i < m_asset->materials.size(); ++i )
+		{
+			auto const & gltfAsset = getAsset();
+			for ( size_t i = 0u; i < gltfAsset.materials.size(); ++i )
 				result.emplace_back( getMaterialName( i ) );
+		}
 		return result;
 	}
 
@@ -903,8 +813,11 @@ namespace c3d_gltf
 	{
 		c3d::StringArray result;
 		if ( isValid() )
-			for ( size_t i = 0u; i < m_asset->skins.size(); ++i )
+		{
+			auto const & gltfAsset = getAsset();
+			for ( size_t i = 0u; i < gltfAsset.skins.size(); ++i )
 				result.emplace_back( getSkinName( i ) );
+		}
 		return result;
 	}
 
@@ -974,9 +887,10 @@ namespace c3d_gltf
 
 		if ( isValid() )
 		{
+			auto const & gltfAsset = getAsset();
 			size_t idx{};
 
-			for ( auto & camera : m_asset->cameras )
+			for ( auto & camera : gltfAsset.cameras )
 			{
 				result.emplace_back( getCameraName( idx )
 					, ( camera.camera.index() == 1u
@@ -1010,12 +924,15 @@ namespace c3d_gltf
 		if ( isValid()
 			&& !getParameters().get< bool >( "no_skeleton" ) )
 		{
+			auto const & gltfAsset = getAsset();
 			size_t index{};
 
-			for ( auto & animation : m_asset->animations )
+			for ( auto & animation : gltfAsset.animations )
 			{
-				for ( auto & channel : animation.channels )
+				auto it = animation.channels.begin();
+				while ( it != animation.channels.end() )
 				{
+					auto & channel = *it;
 					if ( ( channel.path == fastgltf::AnimationPath::Rotation
 							|| channel.path == fastgltf::AnimationPath::Scale
 							|| channel.path == fastgltf::AnimationPath::Translation )
@@ -1023,6 +940,11 @@ namespace c3d_gltf
 						&& isSkeletonNode( *channel.nodeIndex ) )
 					{
 						result.insert( getAnimationName( index ) );
+						it = animation.channels.end();
+					}
+					else
+					{
+						++it;
 					}
 				}
 
@@ -1081,12 +1003,15 @@ namespace c3d_gltf
 		if ( isValid()
 			&& !getParameters().get< bool >( "no_skeleton" ) )
 		{
+			auto const & gltfAsset = getAsset();
 			size_t index{};
 
-			for ( auto & animation : m_asset->animations )
+			for ( auto & animation : gltfAsset.animations )
 			{
-				for ( auto & channel : animation.channels )
+				auto it = animation.channels.begin();
+				while ( it != animation.channels.end() )
 				{
+					auto & channel = *it;
 					if ( ( channel.path == fastgltf::AnimationPath::Rotation
 						|| channel.path == fastgltf::AnimationPath::Scale
 						|| channel.path == fastgltf::AnimationPath::Translation )
@@ -1094,6 +1019,11 @@ namespace c3d_gltf
 						&& isSkeletonNode( *channel.nodeIndex ) )
 					{
 						result.insert( getAnimationName( index ) );
+						it = animation.channels.end();
+					}
+					else
+					{
+						++it;
 					}
 				}
 
@@ -1119,7 +1049,7 @@ namespace c3d_gltf
 
 	c3d::MaterialImporterUPtr GltfImporterFile::createMaterialImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::MaterialImporter, GltfMaterialImporter >( *getOwner() );
+		return m_materialsFile.createMaterialImporter( *getOwner() );
 	}
 
 	c3d::AnimationImporterUPtr GltfImporterFile::createAnimationImporter()
@@ -1166,10 +1096,11 @@ namespace c3d_gltf
 		c3d::Vector< c3d::Matrix4x4f > cumulativeTransforms;
 		c3d::Vector< size_t > skinsRootNodes;
 		bool noSkeleton = getParameters().get< bool >( "no_skeleton" );
+		auto const & gltfAsset = getAsset();
 
-		if ( noSkeleton )
+		if ( !noSkeleton )
 		{
-			for ( auto & skin : m_asset->skins )
+			for ( auto & skin : gltfAsset.skins )
 			{
 				auto skinRootNodes = findSkinRootNodes( *this, skin );
 				skinsRootNodes.insert( skinsRootNodes.end(), skinRootNodes.begin(), skinRootNodes.end() );
@@ -1177,10 +1108,10 @@ namespace c3d_gltf
 		}
 
 		// First, list all nodes, with their own transforms and instances
-		m_sceneData.nodes.reserve( m_asset->nodes.size() );
-		cumulativeTransforms.resize( m_asset->nodes.size() );
+		m_sceneData.nodes.reserve( gltfAsset.nodes.size() );
+		cumulativeTransforms.resize( gltfAsset.nodes.size() );
 		size_t nodeIndex{};
-		for ( auto & node : m_asset->nodes )
+		for ( auto & node : gltfAsset.nodes )
 		{
 			auto transform = convert( node.transform );
 			if ( node.cameraIndex )
@@ -1188,7 +1119,7 @@ namespace c3d_gltf
 
 			bool isSkeletonNode = ( noSkeleton
 				? false
-				: file::isSkeletonNode( *m_asset, m_asset->skins, nodeIndex, skinsRootNodes ) );
+				: file::isSkeletonNode( getAsset(), gltfAsset.skins, nodeIndex, skinsRootNodes ) );
 			auto & nodeData = m_sceneData.nodes.emplace_back( node.cameraIndex.has_value()
 				, isSkeletonNode
 				, nodeIndex
@@ -1196,7 +1127,7 @@ namespace c3d_gltf
 			c3d::matrix::setTransform( cumulativeTransforms[nodeIndex]
 				, transform.translate, transform.scale, transform.rotate );
 			nodeData.instances.emplace_back( NodeData{ c3d::String{}, getNodeName( nodeIndex, 0u ), nodeData.isCamera }, transform );
-			auto instances = file::listInstances( *m_asset, m_adapter, nodeData );
+			auto instances = file::listInstances( getAsset(), m_adapter, nodeData );
 
 			// List this node's instances.
 			size_t instanceIndex{ 1u };
@@ -1216,7 +1147,7 @@ namespace c3d_gltf
 		for ( auto const & sceneIndex : m_sceneIndices )
 		{
 			c3d::Vector< size_t > work;
-			for ( auto index : m_asset->scenes[sceneIndex].nodeIndices )
+			for ( auto index : gltfAsset.scenes[sceneIndex].nodeIndices )
 			{
 				work.emplace_back( index );
 				m_sceneData.sortedNodes.emplace_back( &m_sceneData.nodes[index] );
@@ -1228,7 +1159,7 @@ namespace c3d_gltf
 				work.pop_back();
 				auto const & parentNodeData = m_sceneData.nodes[parentNodeIndex];
 
-				for ( auto childNodeIndex : m_asset->nodes[parentNodeIndex].children )
+				for ( auto childNodeIndex : gltfAsset.nodes[parentNodeIndex].children )
 				{
 					work.emplace_back( childNodeIndex );
 					m_sceneData.sortedNodes.emplace_back( &m_sceneData.nodes[childNodeIndex] );
@@ -1275,9 +1206,9 @@ namespace c3d_gltf
 			if ( node.lightIndex )
 			{
 				if ( auto lightIndex = *node.lightIndex;
-					lightIndex < m_asset->lights.size() )
+					lightIndex < gltfAsset.lights.size() )
 				{
-					auto light = m_asset->lights[lightIndex];
+					auto light = gltfAsset.lights[lightIndex];
 					auto lightName = getLightName( lightIndex );
 					auto & lightGroup = m_sceneData.lightGroups.try_emplace( lightName
 						, lightName
@@ -1335,8 +1266,9 @@ namespace c3d_gltf
 	{
 		uint32_t meshIndex = 0u;
 		auto noMeshMerge = getParameters().get< bool >( "no_merge" );
+		auto const & gltfAsset = getAsset();
 
-		for ( auto & impMesh : m_asset->meshes )
+		for ( auto & impMesh : gltfAsset.meshes )
 		{
 			auto meshName = getMeshName( meshIndex );
 
@@ -1351,7 +1283,6 @@ namespace c3d_gltf
 			}
 
 			// Try to merge the mesh with other ones (if they share the same skin)
-			if ( regIt == m_sceneData.meshes.end() )
 			if ( regIt == m_sceneData.meshes.end() && !noMeshMerge )
 				regIt = file::mergeMeshes( *this, meshIndex, meshName
 					, m_sceneData.meshes, skinIndex, skin );

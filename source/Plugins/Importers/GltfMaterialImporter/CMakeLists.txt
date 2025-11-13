@@ -1,4 +1,4 @@
-set( FOLDER_NAME GltfImporter )
+set( FOLDER_NAME GltfMaterialImporter )
 project( ${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
@@ -17,35 +17,21 @@ if( fastgltf_FOUND )
 		PARENT_SCOPE
 	)
 
-	set( ${PROJECT_NAME}_DESCRIPTION "fastgltf powered importer" )
+	set( ${PROJECT_NAME}_DESCRIPTION "fastgltf powered material importer" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR 2 )
+	set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 	set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
 	set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
-	set( ${PROJECT_NAME}_NVS_FILES
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporter.natvis
-	)
 	set( ${PROJECT_NAME}_HDR_FILES
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfAnimationImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfCameraImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporterFile.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfLightImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMeshImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfSceneNodeImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfSkeletonImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMaterialImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMaterialsFile.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfAnimationImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfCameraImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporterFile.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporterPlugin.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfLightImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMeshImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfSceneNodeImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfSkeletonImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMaterialImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMaterialsFile.cpp
 	)
 	source_group( "Header Files"
 		FILES
@@ -61,7 +47,7 @@ if( fastgltf_FOUND )
 	)
 	add_target_min(
 		${PROJECT_NAME}
-		plugin
+		api_dll
 		""
 		""
 	)
@@ -82,10 +68,10 @@ if( fastgltf_FOUND )
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC
 			castor::Castor3D
+			fastgltf::fastgltf
 		PRIVATE
 			${ImporterDependencies}
-			castor::GltfMaterialImporter
-			meshoptimizer::meshoptimizer
+			simdjson::simdjson
 	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES
@@ -98,7 +84,7 @@ if( fastgltf_FOUND )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D
 		Plugins
-		plugin
+		api_dll
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
 	)
 	set( CASTOR_INSTEXP_PLUGINS
