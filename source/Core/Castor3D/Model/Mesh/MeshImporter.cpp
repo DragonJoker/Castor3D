@@ -107,7 +107,6 @@ namespace c3d
 			Quaternion orientation{ Quaternion::identity() };
 			uint32_t submeshIndex{};
 			auto needsTransform = meshimp::parseMeshImportParameters( m_parameters, scale, orientation, submeshIndex );
-
 			log::info << getPrefix() << cuT( "Loading Mesh [" ) << mesh.getName() << cuT( "]" ) << std::endl;
 			result = doImportMesh( mesh, submeshIndex );
 

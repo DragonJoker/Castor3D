@@ -536,12 +536,13 @@ namespace c3d_assimp
 	}
 
 	inline aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
-		, c3d::ArrayView< aiBone * > bones
+		, c3d::ArrayView< aiBone * > meshBones
 		, aiNode const * meshNode )
 	{
 		c3d::Vector< aiNode const * > bonesRootNodes;
 		auto insertNode = [&bonesRootNodes]( aiNode const * node )
 		{
+			// Only insert the new node if it's not a child of already added nodes
 			if ( std::all_of( bonesRootNodes.begin()
 				, bonesRootNodes.end()
 				, [node]( aiNode const * lookup )
@@ -549,31 +550,34 @@ namespace c3d_assimp
 					return lookup->FindNode( node->mName ) == nullptr;
 				} ) )
 			{
+				// Remove all nodes that are child to this new node
 				std::erase_if( bonesRootNodes
 					, [node]( aiNode const * lookup )
 					{
 						return node->FindNode( lookup->mName ) != nullptr;
 					} );
+
+				// Add the node
 				bonesRootNodes.push_back( node );
 			}
 		};
 
-		for ( auto bone : bones )
+		for ( auto meshBone : meshBones )
 		{
-			auto node = sceneRootNode.FindNode( bone->mName );
-			insertNode( node );
+			auto boneNode = sceneRootNode.FindNode( meshBone->mName );
+			insertNode( boneNode );
 
-			while ( node->mParent )
+			while ( boneNode->mParent )
 			{
-				node = node->mParent;
+				boneNode = boneNode->mParent;
 
-				if ( node == meshNode
-					|| node->FindNode( meshNode->mName ) )
+				if ( boneNode == meshNode
+					|| boneNode->FindNode( meshNode->mName ) )
 				{
 					break;
 				}
 
-				insertNode( node );
+				insertNode( boneNode );
 			}
 		}
 

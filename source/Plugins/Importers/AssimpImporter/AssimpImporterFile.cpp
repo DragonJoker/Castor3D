@@ -253,7 +253,10 @@ namespace c3d_assimp
 			for ( auto aiAnimation : animations )
 			{
 				auto channels = c3d::makeArrayView( aiAnimation->mChannels, aiAnimation->mNumChannels );
-				if ( auto it = std::find_if( channels.begin(), channels.end(), [&aiNode]( aiNodeAnim const * lookup ){ return lookup->mNodeName == aiNode.mName; } );
+				if ( auto it = std::find_if( channels.begin(), channels.end(), [&aiNode]( aiNodeAnim const * lookup )
+					{
+						return lookup->mNodeName == aiNode.mName;
+					} );
 					it != channels.end() )
 					result.try_emplace( aiAnimation, *it, index );
 				++index;
@@ -324,15 +327,13 @@ namespace c3d_assimp
 
 						if ( res )
 						{
-							auto meshes = c3d::makeArrayView( node->mMeshes, node->mNumMeshes );
-							res = meshes.end() != std::find( meshes.begin()
-								, meshes.end()
-								, aiMeshIndex );
+							auto aiNodeMeshes = c3d::makeArrayView( node->mMeshes, node->mNumMeshes );
+							res = aiNodeMeshes.end() != std::find( aiNodeMeshes.begin(), aiNodeMeshes.end(), aiMeshIndex );
 						}
 
 						return res;
 					} );
-					morphIt != morphChannels.end() )
+				morphIt != morphChannels.end() )
 				{
 					result.try_emplace( makeString( anim->mName ), *morphIt );
 				}
@@ -850,6 +851,7 @@ namespace c3d_assimp
 	void AssimpImporterFile::doPrelistMeshes( c3d::Map< aiMesh const *, aiNode const * > const & meshSkeletons )
 	{
 		uint32_t meshIndex = 0u;
+		auto noMeshMerge = getParameters().get< bool >( "no_merge" );
 
 		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
@@ -861,15 +863,15 @@ namespace c3d_assimp
 					meshName += c3d::string::toString( meshIndex );
 
 				auto regIt = m_sceneData.meshes.find( meshName );
-				aiNode const * skelNode{};
-
 				if ( regIt != m_sceneData.meshes.end() )
 				{
 					meshName += c3d::string::toString( meshIndex );
 					regIt = m_sceneData.meshes.find( meshName );
 				}
 
-				if ( regIt == m_sceneData.meshes.end() )
+				aiNode const * skelNode{};
+				if ( regIt == m_sceneData.meshes.end()
+					&& !noMeshMerge )
 				{
 					// Merge meshes that use the same skeleton
 					auto it = meshSkeletons.find( aiMesh );

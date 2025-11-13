@@ -845,7 +845,7 @@ namespace c3d_gltf
 			}
 		}
 
-		if ( m_parameters.get< bool >( "no_skeleton" ) )
+		if ( !m_parameters.get< bool >( "no_skeleton" ) )
 		{
 			c3d::Point4uiArray joints;
 
