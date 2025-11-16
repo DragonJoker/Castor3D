@@ -1,7 +1,7 @@
 #include "Castor3D/Animation/AnimationImporter.hpp"
 
 #include "Castor3D/Engine.hpp"
-
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"

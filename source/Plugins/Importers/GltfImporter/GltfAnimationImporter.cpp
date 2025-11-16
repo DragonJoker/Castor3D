@@ -288,11 +288,8 @@ namespace c3d_gltf
 		auto & skeleton = static_cast< c3d::Skeleton const & >( *animation.getAnimable() );
 		auto animations = file.getSkinAnimations( skeleton );
 		auto animIt = animations.find( name );
-
 		if ( animIt == animations.end() )
-		{
 			return false;
-		}
 
 		SkeletonAnimationKeyFrameMap keyframes;
 		SkeletonAnimationObjectSet notAnimated;

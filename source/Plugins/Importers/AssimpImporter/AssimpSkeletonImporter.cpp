@@ -89,19 +89,13 @@ namespace c3d_assimp
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = skeleton.getName();
-
 		if ( file.getListedMeshes().empty()
 			&& !file.getSkeletons().empty() )
-		{
 			name = file.getSkeletons().begin()->first;
-		}
 
 		auto it = file.getSkeletons().find( name );
-
 		if ( it == file.getSkeletons().end() )
-		{
 			return false;
-		}
 
 		auto & skelData = it->second;
 		skeleton.setGlobalInverseTransform( fromAssimp( skelData.rootNode->mTransformation ).getInverse() );
