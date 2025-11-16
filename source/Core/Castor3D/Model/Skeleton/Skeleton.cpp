@@ -1,7 +1,10 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/ImporterFile.hpp"
+#include "Castor3D/Animation/AnimationImporter.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonNode.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"

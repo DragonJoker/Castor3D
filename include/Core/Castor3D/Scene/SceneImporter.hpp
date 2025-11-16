@@ -4,13 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneImporter_H___
 #define ___C3D_SceneImporter_H___
 
-#include "SceneModule.hpp"
+#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Animation/AnimationModule.hpp"
 
-#include "Castor3D/ImporterFile.hpp"
-#include "Castor3D/Animation/AnimationImporter.hpp"
-#include "Castor3D/Material/MaterialImporter.hpp"
-#include "Castor3D/Model/Mesh/MeshImporter.hpp"
-#include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
+#include "Castor3D/Miscellaneous/Parameter.hpp"
 
 namespace c3d
 {

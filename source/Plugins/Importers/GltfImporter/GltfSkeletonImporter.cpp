@@ -112,7 +112,7 @@ namespace c3d_gltf
 		}
 
 		template< typename FuncT >
-		static void findSkinRootNodeInOtherNodes( GltfImporterFile const & file
+		static void findSkinRootNodeInOtherNodes( [[maybe_unused]] GltfImporterFile const & file
 			, c3d::Set< size_t > & currentNodes
 			, c3d::Set< size_t > & parentNodes
 			, FuncT findParentNode )
@@ -128,11 +128,8 @@ namespace c3d_gltf
 				for ( auto nodeIndex : currentNodes )
 				{
 					auto parentIndex = findParentNode( nodeIndex );
-
 					if ( parentIndex != size_t{ ~0u } )
-					{
 						parentNodes.insert( parentIndex );
-					}
 				}
 			}
 			while ( parentNodes.size() > 1 && currentNodes != parentNodes );
@@ -154,13 +151,13 @@ namespace c3d_gltf
 
 	bool GltfSkeletonImporter::doImportSkeleton( c3d::Skeleton & skeleton )
 	{
-		auto & file = static_cast< GltfImporterFile & >( *m_file );
+		auto const & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 		auto name = skeleton.getName();
 		uint32_t skinIndex{};
 		auto it = std::find_if( impAsset.skins.begin()
 			, impAsset.skins.end()
-			, [&file, &name, &skinIndex]( fastgltf::Skin const & lookup )
+			, [&file, &name, &skinIndex]( fastgltf::Skin const & )
 			{
 				auto result = ( name == file.getSkinName( skinIndex ) );
 				++skinIndex;
@@ -237,7 +234,7 @@ namespace c3d_gltf
 
 		auto findParentNode = [&impAsset]( size_t nodeIndex )
 			{
-				auto pit = std::find_if( impAsset.nodes.begin()
+				if ( auto pit = std::find_if( impAsset.nodes.begin()
 					, impAsset.nodes.end()
 					, [&nodeIndex]( fastgltf::Node const & lookup )
 					{
@@ -246,8 +243,7 @@ namespace c3d_gltf
 							, nodeIndex );
 						return cit != lookup.children.end();
 					} );
-
-				if ( pit != impAsset.nodes.end() )
+					pit != impAsset.nodes.end() )
 				{
 					return size_t( std::distance( impAsset.nodes.begin(), pit ) );
 				}

@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneImporter.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Animation/AnimationImporter.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/MaterialImporter.hpp"

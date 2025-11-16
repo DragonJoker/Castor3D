@@ -10,7 +10,6 @@
 			<Item Name="nodes">m_sceneData.nodes</Item>
 			<Item Name="skeletonNodes">m_sceneData.skeletonNodes</Item>
 			<Item Name="meshes">m_sceneData.meshes</Item>
-			<Item Name="skeletons">m_sceneData.skeletons</Item>
 		</Expand>
 	</Type>
 
