@@ -30,7 +30,7 @@ namespace c3d_gltf
 	struct NameContainer
 	{
 		c3d::HashMap< size_t, c3d::String > namesByIndex;
-		c3d::HashMap< c3d::String, c3d::String > namesByRawName;
+		c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > namesByRawName;
 		c3d::HashSet< c3d::String > names;
 	};
 
@@ -42,7 +42,7 @@ namespace c3d_gltf
 			, c3d::Parameters const & parameters
 			, c3d::String const & prefix
 			, c3d::String const & name
-			, c3d::HashMap< c3d::String, c3d::String > const & materialsNames );
+			, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
 		C3D_GltfMat_API GltfMaterialsFile( c3d::Engine & engine
 			, c3d::Path const & path
 			, c3d::Parameters const & parameters
@@ -77,7 +77,7 @@ namespace c3d_gltf
 
 	private:
 		void doPrelistMaterials( c3d::Parameters const & parameters
-			, c3d::HashMap< c3d::String, c3d::String > const & materialsNames );
+			, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
 		void doPrelistMaterials( c3d::Parameters const & parameters );
 
 		c3d::String getInternalName( c3d::String const & name )const
@@ -117,10 +117,6 @@ namespace c3d_gltf
 			return it->second;
 
 		auto rawName = c3d::makeString( elements[index].name );
-		if ( auto it = names.namesByRawName.find( rawName );
-			it != names.namesByRawName.end() )
-			return it->second;
-
 		auto result = rawName;
 		if ( result.empty() )
 			result = baseName;
@@ -131,7 +127,7 @@ namespace c3d_gltf
 			it != names.names.end() )
 			result += cuT( "-" ) + c3d::string::toString( index );
 
-		names.namesByRawName.try_emplace( rawName, result );
+		names.namesByRawName.try_emplace( rawName ).first->second.try_emplace( c3d::u32( index ), result );
 		names.namesByIndex.emplace( index, result );
 		names.names.emplace( result );
 		return result;

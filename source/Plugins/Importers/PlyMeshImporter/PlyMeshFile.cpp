@@ -4,12 +4,12 @@
 namespace c3d_ply
 {
 	PlyMeshFile::PlyMeshFile( c3d::Path const & path
-		, c3d::HashMap< c3d::String, c3d::String > const & meshesNames )
+		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & meshesNames )
 	{
 		m_meshName = path.getFileName();
 		if ( auto it = meshesNames.find( m_meshName );
 			it != meshesNames.end() )
-			m_meshName = it->second;
+			m_meshName = it->second.begin()->second;
 	}
 
 	c3d::Vector< c3d::ImporterFile::MeshData > PlyMeshFile::listMeshes()

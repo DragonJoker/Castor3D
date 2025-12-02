@@ -43,7 +43,7 @@ namespace c3d_assimp
 	struct NameContainer
 	{
 		c3d::HashMap< c3d::u32, c3d::String > namesByIndex;
-		c3d::HashMap< c3d::String, c3d::String > namesByRawName;
+		c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > namesByRawName;
 		c3d::HashSet< c3d::String > names;
 	};
 
