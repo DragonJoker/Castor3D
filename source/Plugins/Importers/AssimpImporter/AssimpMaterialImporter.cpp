@@ -317,6 +317,15 @@ namespace c3d_assimp
 				return { colour, result };
 			}
 
+			std::pair< c3d::String, bool > getString( const char * key, unsigned int type, unsigned int idx )
+			{
+				c3d::String str;
+				auto [value, result] = getValueT< aiString >( key, type, idx );
+				if ( result )
+					str = makeString( value );
+				return { str, result };
+			}
+
 			template< typename ComponentT, typename ValueT >
 			bool parseComponentDataT( const char * key, unsigned int type, unsigned int idx )
 			{
@@ -464,18 +473,18 @@ namespace c3d_assimp
 
 			void parseAlphaRefValue()
 			{
-				auto [modeName, hasMode] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE );
+				auto modeName = getString( AI_MATKEY_GLTF_ALPHAMODE ).first;
 				auto [ref, hasRef] = getValueT< float >( AI_MATKEY_GLTF_ALPHACUTOFF );
-				if ( hasRef && hasMode )
+				if ( hasRef && modeName == cuT( "MASK" ) )
 				{
-					auto mode = makeString( modeName );
-					if ( mode == cuT( "MASK" ) )
-					{
-						auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
-						alphaTest->setAlphaRefValue( ref );
-						alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
-						alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
-					}
+					auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
+					alphaTest->setAlphaRefValue( ref );
+					alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+					alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
+				}
+				else if ( modeName == cuT( "BLEND" ) )
+				{
+					mixedInterpolative( true );
 				}
 			}
 
@@ -580,8 +589,8 @@ namespace c3d_assimp
 								getComponentsMask( texConfig, m_opacityMapFlags )
 									&& c3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
-								if ( auto [alphaMode, hasAlphaMode] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE );
-									hasAlphaMode && makeString( alphaMode ) != "OPAQUE" )
+								if ( auto [alphaMode, hasAlphaMode] = getString( AI_MATKEY_GLTF_ALPHAMODE );
+									!hasAlphaMode || alphaMode == cuT( "BLEND" ) )
 									mixedInterpolative( true );
 
 								if ( auto & image = loadImage( *sourceInfo );
@@ -597,8 +606,8 @@ namespace c3d_assimp
 								if ( auto & image = loadImage( *sourceInfo );
 									hasAlphaChannel( image ) )
 								{
-									if ( auto [alphaMode, hasAlphaMode] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE );
-										hasAlphaMode && makeString( alphaMode ) != "OPAQUE" )
+									if ( auto [alphaMode, hasAlphaMode] = getString( AI_MATKEY_GLTF_ALPHAMODE );
+										!hasAlphaMode || alphaMode == cuT( "BLEND" ) )
 										mixedInterpolative( true );
 
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
@@ -624,10 +633,10 @@ namespace c3d_assimp
 				, uint32_t index )
 			{
 				TextureInfo result{};
-				auto [name, hasName] = getValueT< aiString >( AI_MATKEY_TEXTURE( type, index ) );
-				if ( name.length > 0 )
+				auto [name, hasName] = getString( AI_MATKEY_TEXTURE( type, index ) );
+				if ( !name.empty() )
 				{
-					result.name = makeString( name );
+					result.name = name;
 					if ( auto [texcoordSet, hasSet] = getValueT< int >( AI_MATKEY_UVWSRC( type, index ) ); hasSet )
 						result.texcoordSet = uint32_t( texcoordSet );
 					m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
@@ -851,17 +860,14 @@ namespace c3d_assimp
 				}
 				else
 				{
-					if ( auto [value, hasValue] = getValueT< aiString >( AI_MATKEY_GLTF_ALPHAMODE ); hasValue )
+					if ( auto [value, hasValue] = getString( AI_MATKEY_GLTF_ALPHAMODE );
+						hasValue && value != cuT( "OPAQUE" ) )
 					{
-						if ( auto mode = makeString( value );
-							mode != cuT( "OPAQUE" ) )
-						{
-							auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
-							addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
-							m_textureRemaps.try_emplace( m_colourMapFlags, config );
-							hasOpacityTex = true;
-							mixedInterpolative( mode == cuT( "BLEND" ) );
-						}
+						auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
+						addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
+						m_textureRemaps.try_emplace( m_colourMapFlags, config );
+						hasOpacityTex = true;
+						mixedInterpolative( value == cuT( "BLEND" ) );
 					}
 				}
 

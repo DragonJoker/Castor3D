@@ -77,7 +77,7 @@ namespace c3d_gltf
 		, c3d::Parameters const & parameters
 		, c3d::String const & prefix
 		, c3d::String const & name
-		, c3d::HashMap< c3d::String, c3d::String > const & materialsNames )
+		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
 		: m_asset{ file::loadScene( path ) }
 		, m_prefix{ prefix }
 		, m_name{ name }
@@ -137,7 +137,7 @@ namespace c3d_gltf
 	}
 
 	void GltfMaterialsFile::doPrelistMaterials( [[maybe_unused]] c3d::Parameters const & parameters
-		, c3d::HashMap< c3d::String, c3d::String > const & materialsNames )
+		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
 	{
 		uint32_t materialIndex = 0u;
 
@@ -146,8 +146,13 @@ namespace c3d_gltf
 			auto name = c3d::makeString( gltfMaterial.name );
 			if ( auto it = materialsNames.find( name );
 				it != materialsNames.end() )
-				name = it->second;
-			m_materials.try_emplace( name, materialIndex );
+			{
+				if ( it->second.size() > 1 )
+					name = it->second.find( materialIndex )->second;
+				else
+					name = it->second.begin()->second;
+			}
+			m_materials.try_emplace( getInternalName( name ), materialIndex );
 			++materialIndex;
 		}
 	}

@@ -54,25 +54,19 @@ namespace c3d_assimp
 		case aiLightSource_POINT:
 			{
 				auto point = light.getPointLight();
-				point->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
-
 				if ( max != 0.0 )
-				{
 					point->setIntensity( c3d::LuminousIntensity{ max } );
-				}
+				point->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
 			}
 			break;
 		case aiLightSource_SPOT:
 			{
 				auto spot = light.getSpotLight();
+				if ( max != 0.0 )
+					spot->setIntensity( c3d::LuminousIntensity{ max } );
 				spot->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
 				spot->setInnerCutOff( c3d::Angle::fromRadians( aiLight.mAngleInnerCone ) );
 				spot->setOuterCutOff( c3d::Angle::fromRadians( aiLight.mAngleOuterCone ) );
-
-				if ( max != 0.0 )
-				{
-					spot->setIntensity( c3d::LuminousIntensity{ max } );
-				}
 			}
 			break;
 		case aiLightSource_DIRECTIONAL:

@@ -74,50 +74,34 @@ namespace c3d_gltf
 		if ( impLight.type == fastgltf::LightType::Point )
 		{
 			auto point = &static_cast< c3d::PointLight & >( category );
-			point->setIntensity( c3d::LuminousIntensity{ impLight.intensity / 1000.0f } );
+			point->setIntensity( c3d::LuminousIntensity{ impLight.intensity } );
 
 			if ( impLight.range )
-			{
 				point->setRange( *impLight.range );
-			}
 			else
-			{
-				point->setRange( 1.0f );
-			}
+				point->setRange( c3d::computeRange( point->getIntensity(), 0.0f ) );
 		}
 		else
 		{
 			if ( impLight.type == fastgltf::LightType::Spot )
 			{
 				auto spot = &static_cast< c3d::SpotLight & >( category );
-				spot->setIntensity( c3d::LuminousIntensity{ impLight.intensity / 1000.0f } );
+				spot->setIntensity( c3d::LuminousIntensity{ impLight.intensity } );
 
 				if ( impLight.range )
-				{
 					spot->setRange( *impLight.range );
-				}
 				else
-				{
-					spot->setRange( 1.0f );
-				}
+					spot->setRange( c3d::computeRange( spot->getIntensity(), 0.0f ) );
 
 				if ( impLight.innerConeAngle )
-				{
 					spot->setInnerCutOff( c3d::Angle::fromRadians( *impLight.innerConeAngle ) );
-				}
 				else if ( impLight.outerConeAngle )
-				{
 					spot->setInnerCutOff( c3d::Angle::fromRadians( *impLight.outerConeAngle ) );
-				}
 
 				if ( impLight.outerConeAngle )
-				{
 					spot->setOuterCutOff( c3d::Angle::fromRadians( *impLight.outerConeAngle ) );
-				}
 				else if ( impLight.innerConeAngle )
-				{
 					spot->setOuterCutOff( c3d::Angle::fromRadians( *impLight.innerConeAngle ) );
-				}
 			}
 			else
 			{

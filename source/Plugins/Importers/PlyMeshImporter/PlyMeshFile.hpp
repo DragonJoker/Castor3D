@@ -24,7 +24,7 @@ namespace c3d_ply
 	{
 	public:
 		C3D_Ply_API PlyMeshFile( c3d::Path const & path
-		, c3d::HashMap< c3d::String, c3d::String > const & meshesNames );
+		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & meshesNames );
 
 		C3D_Ply_API c3d::Vector< c3d::ImporterFile::MeshData > listMeshes();
 		C3D_Ply_API c3d::MeshImporterUPtr createMeshImporter( c3d::Engine & engine );

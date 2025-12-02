@@ -432,7 +432,7 @@ namespace c3d_fbx
 
 	FbxMaterialsFile::FbxMaterialsFile( c3d::Path const & path
 		, c3d::Parameters const & parameters
-		, c3d::HashMap< c3d::String, c3d::String > const & materialsNames )
+		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
 		: m_fbxManager{ file::createFbxManager() }
 		, m_fbxScene{ file::loadScene( m_fbxManager, path ) }
 	{
@@ -454,7 +454,7 @@ namespace c3d_fbx
 	}
 
 	void FbxMaterialsFile::doPrelistMaterials( c3d::Parameters const & parameters
-		, c3d::HashMap< c3d::String, c3d::String > const & materialsNames )
+		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
 	{
 		FbxArray< fbx::FbxSurfaceMaterial * > materials;
 		m_fbxScene->FillMaterialArray( materials );
@@ -465,7 +465,12 @@ namespace c3d_fbx
 			auto name = c3d::makeString( fbxMaterial->GetName() );
 			if ( auto it = materialsNames.find( name );
 				it != materialsNames.end() )
-				name = it->second;
+			{
+				if ( it->second.size() > 1 )
+					name = it->second.find( c3d::u32( i ) )->second;
+				else
+					name = it->second.begin()->second;
+			}
 			m_materials.try_emplace( name, fbxMaterial );
 
 			if ( parameters.get< bool >( "list_properties" ) )

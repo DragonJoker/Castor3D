@@ -43,7 +43,7 @@ namespace c3d_fbx
 	public:
 		C3D_FbxMat_API FbxMaterialsFile( c3d::Path const & path
 			, c3d::Parameters const & parameters
-			, c3d::HashMap< c3d::String, c3d::String > const & materialsNames );
+			, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
 		C3D_FbxMat_API ~FbxMaterialsFile()noexcept;
 		C3D_FbxMat_API c3d::MaterialImporterUPtr createMaterialImporter( c3d::Engine & engine );
 
@@ -69,7 +69,7 @@ namespace c3d_fbx
 
 	private:
 		void doPrelistMaterials( c3d::Parameters const & parameters
-			, c3d::HashMap< c3d::String, c3d::String > const & materialsNames );
+			, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
 
 	private:
 		fbx::FbxManager * m_fbxManager;

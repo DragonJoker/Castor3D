@@ -35,8 +35,6 @@ namespace c3d_assimp
 			uint32_t importFlags{ aiProcess_Triangulate
 				| aiProcess_FixInfacingNormals
 				| aiProcess_LimitBoneWeights
-				//| aiProcess_SplitByBoneCount
-				| aiProcess_RemoveRedundantMaterials
 				| aiProcess_FindDegenerates };
 			if ( !parameters.get< bool >( cuT( "no_validation" ) ) )
 				importFlags |= aiProcess_ValidateDataStructure
@@ -45,7 +43,8 @@ namespace c3d_assimp
 				importFlags |= aiProcess_JoinIdenticalVertices
 				| aiProcess_OptimizeMeshes
 				| aiProcess_OptimizeGraph
-				| aiProcess_ImproveCacheLocality;
+				| aiProcess_ImproveCacheLocality
+				| aiProcess_RemoveRedundantMaterials;
 			if ( parameters.get< c3d::String >( cuT( "normals" ) ) == cuT( "smooth" ) )
 				importFlags |= aiProcess_GenSmoothNormals;
 			if ( parameters.get< bool >( cuT( "tangent_space" ) ) )
@@ -150,10 +149,6 @@ namespace c3d_assimp
 				return it->second;
 
 			auto rawName = getRawName( element );
-			if ( auto it = names.namesByRawName.find( rawName );
-				it != names.namesByRawName.end() )
-				return it->second;
-
 			auto result = rawName;
 			if ( result.empty() )
 				result = baseName;
@@ -164,7 +159,7 @@ namespace c3d_assimp
 				it != names.names.end() )
 				result += cuT( "-" ) + c3d::string::toString( index );
 
-			names.namesByRawName.try_emplace( rawName, result );
+			names.namesByRawName.try_emplace( rawName ).first->second.try_emplace( index, result );
 			names.namesByIndex.try_emplace( index, result );
 			names.names.emplace( result );
 			return result;
@@ -415,7 +410,8 @@ namespace c3d_assimp
 
 #if C3D_HasFbxMaterialImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "fbx" ) )
-				m_fbxMaterials = c3d::makeRawUnique< c3d_fbx::FbxMaterialsFile >( path, parameters, m_materialNames.namesByRawName );
+				m_fbxMaterials = c3d::makeRawUnique< c3d_fbx::FbxMaterialsFile >( path, parameters
+					, m_materialNames.namesByRawName );
 #endif
 #if C3D_HasGltfMaterialImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "gltf" )
@@ -425,7 +421,8 @@ namespace c3d_assimp
 #endif
 #if C3D_HasPlyMeshImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "ply" ) )
-				m_plyMesh = c3d::makeRawUnique< c3d_ply::PlyMeshFile >( path, m_meshNames.namesByRawName );
+				m_plyMesh = c3d::makeRawUnique< c3d_ply::PlyMeshFile >( path
+					, m_meshNames.namesByRawName );
 #endif
 		}
 	}
