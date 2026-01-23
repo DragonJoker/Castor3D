@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/CompositeTypes/Function.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace Uncharted2
@@ -41,6 +42,8 @@ namespace Uncharted2
 		{
 		}
 
+		sdw::RetVec3 toneMap( sdw::Vec3 const & x );
+
 		sdw::Float shoulderStrength;
 		sdw::Float linearStrength;
 		sdw::Float linearAngle;
@@ -49,10 +52,16 @@ namespace Uncharted2
 		sdw::Float toeDenominator;
 		sdw::Float linearWhitePointValue;
 		sdw::Float exposureBias;
+
+	private:
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3 > m_toneMap;
 	};
 
 	struct Uncharted2UboConfiguration
 	{
+		void accept( c3d::ConfigurationVisitorBase & visitor );
+
 		float shoulderStrength{ 0.15f };
 		float linearStrength{ 0.50f };
 		float linearAngle{ 0.10f };
@@ -75,6 +84,8 @@ namespace Uncharted2
 		Uncharted2Ubo & operator=( Uncharted2Ubo && rhs ) = delete;
 		explicit Uncharted2Ubo( c3d::RenderDevice const & device );
 		~Uncharted2Ubo();
+
+		void update( Configuration const & config );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -105,7 +116,7 @@ namespace Uncharted2
 
 #define C3D_Uncharted2( writer, binding, set )\
 	sdw::UniformBuffer uncharted2{ writer\
-		, Uncharted2::Uncharted2Ubo::Name\
+		, Uncharted2::Uncharted2Ubo::Buffer\
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140\

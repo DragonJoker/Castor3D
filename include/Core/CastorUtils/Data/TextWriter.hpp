@@ -13,11 +13,10 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/ChangeTracked.hpp"
 #include "CastorUtils/Math/RangedValue.hpp"
 
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <cmath>
 #include <cstring>
 #include <numeric>
-
-#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <iomanip>
 #include <iostream>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"

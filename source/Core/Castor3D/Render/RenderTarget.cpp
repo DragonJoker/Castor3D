@@ -586,15 +586,12 @@ namespace c3d
 				log::info << "Loaded target [" << target->getName()
 					<< ", FMT(" << getFormatName( target->getPixelFormat() ) << ")"
 					<< ", DIM(" << target->getDisplaySize() << ")]" << std::endl;
+				target->setToneMappingParameters( blockContext->toneMappingParams );
 
 				if ( blockContext->window )
-				{
 					blockContext->window->window.renderTarget = c3d::move( blockContext->renderTarget );
-				}
 				else
-				{
 					blockContext->texture->renderTarget = c3d::move( blockContext->renderTarget );
-				}
 			}
 		}
 		CU_EndAttributePop()
@@ -1238,8 +1235,8 @@ namespace c3d
 		targetCtx.addParser( cuT( "srgb_format" ), rendtgt::parserSRGBFormat, { makeParameter< ParameterType::ePixelFormat >() } );
 		targetCtx.addParser( cuT( "stereo" ), rendtgt::parserStereo, { makeParameter< ParameterType::eFloat >() } );
 		targetCtx.addParser( cuT( "postfx" ), rendtgt::parserPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
-		targetCtx.addParser( cuT( "tone_mapping" ), rendtgt::parserToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 		targetCtx.addParser( cuT( "enable_full_loading" ), rendtgt::parserFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		targetCtx.addParser( cuT( "tone_mapping" ), rendtgt::parserToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 		targetCtx.addPopParser( cuT( "}" ), rendtgt::parserEnd );
 	}
 
@@ -1312,6 +1309,7 @@ namespace c3d
 				, m_srgbObjects.front()
 				, m_renderUbo
 				, *m_colourGradingUbo
+				, m_toneMappingParameters
 				, progress );
 			m_toneMapping->initialise( m_toneMappingName
 				, m_hdrObjects.back() );

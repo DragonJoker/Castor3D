@@ -16,7 +16,16 @@ namespace Linear
 	c3d::String ToneMapping::Type = cuT( "linear" );
 	c3d::MbString ToneMapping::Name = "Linear Tone Mapping";
 
-	void ToneMapping::create( ast::ShaderBuilder & builder )
+	ToneMapping::~ToneMapping()noexcept = default;
+
+	ToneMapping::ToneMapping( c3d::ToneMapping const & parent
+		, c3d::RenderDevice const &
+		, c3d::Parameters )
+		: c3d::ToneMappingImpl{ parent }
+	{
+	}
+
+	void ToneMapping::getFragmentProgram( ast::ShaderBuilder & builder )
 	{
 		sdw::TraditionalGraphicsWriter writer{ builder };
 
@@ -24,13 +33,22 @@ namespace Linear
 		C3D_ColourGrading( writer, 1u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
-		writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
-			, sdw::FragmentOutT< c3ds::Colour4FT > out )
+		writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &c3d_colourGrading, &c3d_renderData, &c3d_mapHdr]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+			, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_colourGrading.colourGrade( c3d_mapHdr.sample( in.uv() ).rgb() ) );
 				hdrColor *= vec3( c3d_renderData.exposure() );
 				out.colour() = vec4( c3d_renderData.applyGamma( hdrColor ), 1.0_f );
 			} );
+	}
+
+	void ToneMapping::accept( c3d::ToneMappingVisitor & visitor )
+	{
+	}
+
+	c3d::ToneMappingImplUPtr ToneMapping::create( c3d::ToneMapping const & parent, c3d::RenderDevice const & device, c3d::Parameters parameters )
+	{
+		return c3d::ToneMappingImplUPtr( c3d::makeRawUnique< ToneMapping >( parent, device, c3d::move( parameters ) ).release() );
 	}
 }

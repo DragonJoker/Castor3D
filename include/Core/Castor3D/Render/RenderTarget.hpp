@@ -418,6 +418,11 @@ namespace c3d
 		{
 			return *m_debugDrawer;
 		}
+
+		Parameters const & getToneMappingParameters()const noexcept
+		{
+			return m_toneMappingParameters;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -466,6 +471,11 @@ namespace c3d
 		void setClustersConfig( ClustersConfig config )noexcept
 		{
 			m_clustersConfig = c3d::move( config );
+		}
+
+		void setToneMappingParameters( Parameters params )noexcept
+		{
+			m_toneMappingParameters = c3d::move( params );
 		}
 		/**@}*/
 		/**
@@ -561,6 +571,7 @@ namespace c3d
 		crg::AttachmentPtr m_hdrTarget;
 		crg::AttachmentPtr m_srgbSource;
 		crg::AttachmentPtr m_srgbTarget;
+		Parameters m_toneMappingParameters;
 
 		struct StereoConfig
 		{
@@ -584,6 +595,7 @@ namespace c3d
 		PixelFormat hdrPixelFormat{};
 		PixelFormat srgbPixelFormat{};
 		RenderTargetRPtr renderTarget{};
+		Parameters toneMappingParams;
 	};
 
 	C3D_API String getPrefix( TargetContext const & context );

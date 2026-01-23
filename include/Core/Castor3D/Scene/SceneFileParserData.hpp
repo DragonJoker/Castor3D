@@ -98,6 +98,7 @@ namespace c3d
 		eMeshAnimationKeyframeWeights = c3d::makeSectionName( 'M', 'H', 'A', 'N', 'K', 'F', 'W', 'T' ),
 		eNodeAnimation = c3d::makeSectionName( 'N', 'O', 'D', 'E', 'A', 'N', 'I', 'M' ),
 		eNodeAnimationKeyframe = c3d::makeSectionName( 'N', 'O', 'D', 'A', 'N', 'K', 'F', 'M' ),
+		eToneMapping = c3d::makeSectionName( 'T', 'O', 'N', 'E', 'M', 'A', 'P', 'G' ),
 	};
 
 	struct SceneContext;

@@ -31,20 +31,29 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
-	*	Base class for ToneMapping plug-ins.
+	*	Tone mapping wrapper.
+	*\~french
+	*\brief
+	*	Classe de tone mapping.
+	*/
+	class ToneMapping;
+	/**
+	*\~english
+	*\brief
+	*	Base class for tone mapping implementation.
 	*\remarks
 	*	The inheriting classes will have to write their fragment shader.
 	*	This one will have the uniform buffer slot 0 reserved for
 	*	a provided RenderUbo (whether it uses it or not).
 	*\~french
 	*\brief
-	*	Classe de base pour les plug-ins de tone mapping.
+	*	Classe de base pour les implémentations de tone mapping.
 	*\remarks
 	*	Les classes héritières devront écrire leur fragment shader.
 	*	Celui-ci devra réserver le slot 0 d'uniform buffer pour
 	*	un RenderUbo, qu'il l'utilise ou pas.
 	*/
-	class ToneMapping;
+	class ToneMappingImpl;
 	/**
 	\~english
 	\brief		Post effect visitor base class.
@@ -52,6 +61,11 @@ namespace c3d
 	\brief		Classe de base d'un visiteur d'effet post rendu.
 	*/
 	class ToneMappingVisitor;
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( c3d, ToneMapping, C3D_API );
+	CU_DeclareSmartPtr( c3d, ToneMappingImpl, C3D_API );
+	/** @endcond */
 	/**
 	*\~english
 	*\brief
@@ -62,12 +76,8 @@ namespace c3d
 	*/
 	using ToneMappingFactory = Factory< ToneMapping
 		, String
-		, void
-		, Function< void( ast::ShaderBuilder & ) > >;
-
-	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( c3d, ToneMapping, C3D_API );
-	/** @endcond */
+		, ToneMappingImplUPtr
+		, Function< ToneMappingImplUPtr( c3d::ToneMapping const &, c3d::RenderDevice const &, Parameters ) > >;
 
 	//@}
 	//@}
