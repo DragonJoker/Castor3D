@@ -14,11 +14,20 @@ namespace HaarmPieterDuiker
 	\~french
 	\brief		Implàmente l'algorithme de mappage de ton de Haarm-Peter Duiker.
 	*/
-	struct ToneMapping
+	class ToneMapping
+		: public c3d::ToneMappingImpl
 	{
+	public:
+		ToneMapping( c3d::ToneMapping const & parent
+			, c3d::RenderDevice const & device
+			, c3d::Parameters parameters );
+		~ToneMapping()noexcept;
+		void getFragmentProgram( ast::ShaderBuilder & builder )override;
+		void accept( c3d::ToneMappingVisitor & visitor )override;
+
 		static c3d::String Type;
 		static c3d::MbString Name;
-		static void create( ast::ShaderBuilder & builder );
+		static c3d::ToneMappingImplUPtr create( c3d::ToneMapping const & parent, c3d::RenderDevice const & device, c3d::Parameters parameters );
 	};
 }
 

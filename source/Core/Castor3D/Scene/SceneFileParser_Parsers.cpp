@@ -385,6 +385,7 @@ namespace c3d
 			, { SectionId( CSCNSection::eSkeletonAnimationKeyframeObject ), cuT( "skeleton_animation_keyframe_object" ) }
 			, { SectionId( CSCNSection::eMeshAnimationKeyframe ), cuT( "mesh_animation_keyframe" ) }
 			, { SectionId( CSCNSection::eMeshAnimationKeyframeWeights ), cuT( "mesh_animation_keyframe_weights" ) }
+			, { SectionId( CSCNSection::eToneMapping ), cuT( "tone_mapping" ) }
 		};
 	}
 

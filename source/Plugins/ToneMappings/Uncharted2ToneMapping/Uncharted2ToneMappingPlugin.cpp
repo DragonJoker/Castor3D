@@ -53,10 +53,15 @@ extern "C"
 			, &Uncharted2::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( Uncharted2::ToneMapping::Type
 			, c3d::makeString( Uncharted2::ToneMapping::Name ) );
+		engine->registerParsers( Uncharted2::ToneMapping::Type
+			, Uncharted2::ToneMapping::createParsers()
+			, Uncharted2::ToneMapping::createSections()
+			, nullptr );
 	}
 
 	C3D_Uncharted2ToneMapping_API void onUnload( c3d::Engine * engine )
 	{
+		engine->unregisterParsers( Uncharted2::ToneMapping::Type );
 		engine->getToneMappingFactory().unregisterType( Uncharted2::ToneMapping::Type );
 	}
 }

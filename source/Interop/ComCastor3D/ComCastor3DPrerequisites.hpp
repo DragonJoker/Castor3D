@@ -34,6 +34,7 @@
 #pragma warning( disable: 4191 )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
+#pragma warning( disable: 4865 )
 #pragma warning( disable: 5204 )
 #include <atlbase.h>
 #include <atlcom.h>

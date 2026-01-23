@@ -22,9 +22,12 @@ See LICENSE file in root folder
 #endif
 
 #if defined( _WIN32 )
+#	pragma warning( push )
+#	pragma warning( disable: 4865 )
 #	include <Windows.h>
 #	define C3D_CAPIMETHOD( FuncName ) C3D_CAPI C3D_RESULT __stdcall FuncName
 #	define C3D_CAPIMETHODIMP C3D_RESULT __stdcall
+#	pragma warning( pop )
 #else
 #	define C3D_CAPIMETHOD( FuncName ) C3D_CAPI C3D_RESULT FuncName
 #	define C3D_CAPIMETHODIMP C3D_RESULT

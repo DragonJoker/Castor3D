@@ -18,9 +18,12 @@
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, ToneMapping )
+CU_ImplementSmartPtr( c3d, ToneMappingImpl )
 
 namespace c3d
 {
+	//*********************************************************************************************
+
 	namespace rendtonmap
 	{
 		static uint32_t constexpr HdrCfgUboIdx = 0u;
@@ -28,17 +31,28 @@ namespace c3d
 		static uint32_t constexpr HdrMapIdx = 2u;
 	}
 
+	//*********************************************************************************************
+
+	VkPipelineLayout ToneMappingImpl::getPipelineLayout()const
+	{
+		return getOwner()->getPipelineLayout();
+	}
+
+	//*********************************************************************************************
+
 	ToneMapping::ToneMapping( Engine & engine
 		, crg::FramePassGroup & graph
 		, Texture const & source
 		, Texture & target
 		, RenderUbo const & renderUbo
 		, ColourGradingUbo & colourGradingUbo
+		, Parameters parameters
 		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }
 		, m_renderUbo{ renderUbo }
 		, m_colourGradingUbo{ colourGradingUbo }
 		, m_source{ source }
+		, m_parameters{ c3d::move( parameters ) }
 	{
 		auto & pass = graph.createPass( "ToneMapping"
 			, [this, progress, &target]( crg::FramePass const & framePass
@@ -46,13 +60,21 @@ namespace c3d
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising tone mapping pass" ) );
-				auto result = crg::RenderQuadBuilder{}
+				auto builder = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( target.getExtent() ) )
 					.texcoordConfig( {} )
 					.passIndex( &m_passIndex )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
-					.build( framePass, context, graph, crg::ru::Config{ 2u } );
+					.recordInto( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t idx ) { m_impl->recordInto( ctx, cb, idx ); } )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) );
+
+				if ( m_impl )
+				{
+					builder.layouts( m_impl->getDescriptorLayouts() )
+						.pushConstants( m_impl->getPushConstantRanges() );
+				}
+
+				auto result = builder.build( framePass, context, graph, crg::ru::Config{ 2u } );
 				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				m_quad = result.get();
@@ -75,6 +97,8 @@ namespace c3d
 		, Texture const & source )
 	{
 		doUpdatePassIndex( source );
+		if ( m_impl )
+			m_impl->update();
 	}
 
 	String const & ToneMapping::getFullName()const
@@ -82,20 +106,27 @@ namespace c3d
 		return getEngine()->getRenderTargetCache().getToneMappingName( m_name );
 	}
 
+	VkPipelineLayout ToneMapping::getPipelineLayout()const
+	{
+		CU_Require( m_quad );
+		return m_quad
+			? m_quad->getPipelineLayout()
+			: nullptr;
+	}
+
 	void ToneMapping::updatePipeline( String const & name )
 	{
-		if ( name != m_name
-			&& m_quad )
+		if ( name != m_name && m_quad )
 		{
 			doCreate( name );
-			m_quad->resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program )
-				, m_passIndex );
 		}
 	}
 
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
 		visitor.visit( m_shader );
+		if ( m_impl )
+			m_impl->accept( visitor );
 	}
 
 	void ToneMapping::getVertexProgram( ast::ShaderBuilder & builder )
@@ -112,13 +143,21 @@ namespace c3d
 	void ToneMapping::doCreate( String const & name )
 	{
 		m_name = name;
+		m_impl = getEngine()->getToneMappingFactory().create( name, *this, *getEngine()->getRenderDevice(), m_parameters );
 		ast::ShaderBuilder builder{ ast::ShaderStage::eTraditionalGraphics
 			, &getEngine()->getShaderAllocator() };
+
 		ToneMapping::getVertexProgram( builder );
-		getEngine()->getToneMappingFactory().create( name, builder );
+		m_impl->getFragmentProgram( builder );
 		m_shader.shader = builder.releaseShader();
 		auto const & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_program = makeProgramStates( device, m_shader );
+
+		if ( m_quad )
+			m_quad->resetPipelineLayout( m_impl->getDescriptorLayouts()
+				, m_impl->getPushConstantRanges()
+				, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program )
+				, m_passIndex );
 	}
 
 	void ToneMapping::doUpdatePassIndex( Texture const & source )

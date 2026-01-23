@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_TONE_MAPPING_H___
 #define ___C3D_TONE_MAPPING_H___
 
-#include "Castor3D/Render/ToneMapping/ToneMappingVisitor.hpp"
-
+#include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
+#include "Castor3D/Render/ToneMapping/ToneMappingVisitor.hpp"
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
@@ -23,6 +23,37 @@ namespace sdw
 
 namespace c3d
 {
+	class ToneMappingImpl
+		: public OwnedBy< ToneMapping const >
+	{
+	public:
+		ToneMappingImpl( ToneMapping const & parent )
+			: OwnedBy{ parent }
+		{
+		}
+
+		C3D_API VkPipelineLayout getPipelineLayout()const;
+		virtual ~ToneMappingImpl()noexcept = default;
+		virtual void getFragmentProgram( ast::ShaderBuilder & builder ) = 0;
+		virtual void update()
+		{
+		}
+		virtual void accept( ToneMappingVisitor & visitor )
+		{
+		}
+		virtual Vector< VkDescriptorSetLayout > getDescriptorLayouts()const
+		{
+			return {};
+		}
+		virtual Vector< VkPushConstantRange > getPushConstantRanges()const
+		{
+			return {};
+		}
+		virtual void recordInto( crg::RecordContext const &, VkCommandBuffer, uint32_t )const
+		{
+		}
+	};
+
 	class ToneMapping
 		: public OwnedBy< Engine >
 	{
@@ -34,9 +65,9 @@ namespace c3d
 		 *\param[in]	graph				The render graph.
 		 *\param[in]	source				L'image source.
 		 *\param[in]	target				L'image cible.
-		 *\param[in]	previousPass		The previous frame pass.
 		 *\param[in]	renderUbo			The render configuration data.
 		 *\param[in]	colourGradingUbo	The colour grading configuration data.
+		 *\param[in]	parameters			The tone mapping parameters.
 		 *\param[in]	progress			The progress bar.
 		 *\~french
 		 *\brief		Constructeur spécifié.
@@ -44,9 +75,9 @@ namespace c3d
 		 *\param[in]	graph				Le render graph.
 		 *\param[in]	source				The source image.
 		 *\param[in]	target				The target image.
-		 *\param[in]	previousPass		La frame pass précédente.
 		 *\param[in]	renderUbo			Les données de configuration du rendu.
 		 *\param[in]	colourGradingUbo	Les données de configuration de colour grading.
+		 *\param[in]	parameters			Les paramètres de tone mapping.
 		 *\param[in]	progress			La barre de progression.
 		 */
 		C3D_API ToneMapping( Engine & engine
@@ -55,6 +86,7 @@ namespace c3d
 			, Texture & target
 			, RenderUbo const & renderUbo
 			, ColourGradingUbo & colourGradingUbo
+			, Parameters parameters
 			, ProgressBar * progress );
 		/**
 		 *\~english
@@ -115,6 +147,7 @@ namespace c3d
 		**/
 		/**@{*/
 		C3D_API String const & getFullName()const;
+		C3D_API VkPipelineLayout getPipelineLayout()const;
 
 		String const & getName()const noexcept
 		{
@@ -132,9 +165,11 @@ namespace c3d
 		ColourGradingUbo & m_colourGradingUbo;
 		ProgramModule m_shader{ cuT( "ToneMapping" ) };
 		Texture const & m_source;
+		ToneMappingImplUPtr m_impl;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		crg::RenderQuad * m_quad{};
 		uint32_t m_passIndex{};
+		Parameters m_parameters;
 	};
 }
 
