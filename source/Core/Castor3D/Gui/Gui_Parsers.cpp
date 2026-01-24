@@ -2,7 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlButton.hpp"
 #include "Castor3D/Gui/Controls/CtrlComboBox.hpp"
@@ -16,8 +15,6 @@
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 #include "Castor3D/Gui/Layout/LayoutBox.hpp"
 #include "Castor3D/Gui/Theme/StylesHolder.hpp"
-#include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 

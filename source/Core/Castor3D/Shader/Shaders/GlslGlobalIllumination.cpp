@@ -1,8 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
-#include "Castor3D/Shader/Shaders/GlslDiffuseBRDF.hpp"
-#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"

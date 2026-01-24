@@ -1,15 +1,10 @@
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
-#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-
-#include <CastorUtils/Graphics/Grid.hpp>
-
-#include <ShaderWriter/Writer.hpp>
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 

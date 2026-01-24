@@ -1,14 +1,9 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-
-#include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
 namespace c3d::shader
 {

@@ -1,12 +1,9 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
-#include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>

@@ -4,7 +4,6 @@
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
-#include "CastorUtils/Multithreading/AsyncJobQueue.hpp"
 
 namespace c3d
 {

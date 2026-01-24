@@ -10,7 +10,6 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"

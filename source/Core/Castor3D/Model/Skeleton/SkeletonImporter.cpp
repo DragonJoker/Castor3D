@@ -5,7 +5,6 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneImporter.hpp"
 
 CU_ImplementSmartPtr( c3d, SkeletonImporter )
 

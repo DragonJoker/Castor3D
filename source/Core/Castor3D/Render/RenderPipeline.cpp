@@ -1,25 +1,17 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/PipelineFlags.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, RenderPipeline )
 

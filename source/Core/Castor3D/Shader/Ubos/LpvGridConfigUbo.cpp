@@ -1,12 +1,7 @@
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include <CastorUtils/Graphics/Grid.hpp>
 

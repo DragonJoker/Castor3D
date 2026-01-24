@@ -5,15 +5,12 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
-#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
-#include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 
 CU_ImplementSmartPtr( c3d, AnimationImporter )

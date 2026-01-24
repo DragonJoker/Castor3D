@@ -14,16 +14,16 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Scene/Light/LightCategory.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnablePass.hpp>
 #include <RenderGraph/RunnablePasses/ImageBlit.hpp>
+
+CU_ImplementSmartPtr( c3d, LayeredLightPropagationVolumes )
+CU_ImplementSmartPtr( c3d, LayeredLightPropagationVolumesG )
 
 namespace c3d
 {

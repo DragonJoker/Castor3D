@@ -1,8 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslClearcoatBRDF.hpp"
@@ -16,8 +14,6 @@
 #include "Castor3D/Shader/Shaders/GlslSheenBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementDeleter( c3d::shader, LightingModel )
 CU_ImplementDeleter( c3d::shader, ScatteringModel )

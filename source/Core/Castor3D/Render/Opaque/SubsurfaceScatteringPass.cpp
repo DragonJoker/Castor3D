@@ -5,32 +5,19 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
-#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
@@ -38,8 +25,6 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
-
-#include <random>
 
 CU_ImplementSmartPtr( c3d, SubsurfaceScatteringPass )
 

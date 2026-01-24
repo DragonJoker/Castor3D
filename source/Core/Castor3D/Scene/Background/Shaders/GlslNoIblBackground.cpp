@@ -1,9 +1,6 @@
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>

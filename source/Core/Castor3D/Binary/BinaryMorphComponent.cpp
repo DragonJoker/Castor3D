@@ -1,9 +1,7 @@
 #include "Castor3D/Binary/BinaryMorphComponent.hpp"
-#include "Castor3D/Binary/BinarySubmesh.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
 namespace c3d

@@ -1,7 +1,5 @@
 #include "Castor3D/Render/Ssao/SsaoPass.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"

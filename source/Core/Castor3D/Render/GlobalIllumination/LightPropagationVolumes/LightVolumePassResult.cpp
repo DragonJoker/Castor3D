@@ -1,8 +1,6 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 
 CU_ImplementSmartPtr( c3d, LightVolumePassResult )
 

@@ -3,17 +3,12 @@
 #include "Castor3D/Config.hpp"
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
@@ -24,7 +19,6 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Overlays/OverlayPass.hpp"
-#include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 #include "Castor3D/Render/Upscale/UpscalePass.hpp"
@@ -34,20 +28,15 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <RenderGraph/FramePassTimer.hpp>
-#include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( c3d, RenderTarget )

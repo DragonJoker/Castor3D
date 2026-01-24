@@ -1,9 +1,7 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 #include "CastorUtils/Graphics/BoxFilterKernel.hpp"
-#include "CastorUtils/Graphics/LanczosFilterKernel.hpp"
 #include "CastorUtils/Graphics/PxBufferCompression.hpp"
-#include "CastorUtils/Miscellaneous/BitSize.hpp"
 
 #include <ashes/common/Format.hpp>
 

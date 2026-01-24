@@ -3,32 +3,22 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Buffer/BufferView.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Pipeline/PipelineRasterizationStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 #include <algorithm>
 

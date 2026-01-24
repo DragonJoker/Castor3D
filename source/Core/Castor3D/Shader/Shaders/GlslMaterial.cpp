@@ -1,19 +1,11 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Limits.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
-#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
 CU_ImplementSmartPtr( c3d::shader, Material )
 

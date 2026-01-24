@@ -9,7 +9,6 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
-#include "Castor3D/Scene/SceneImporter.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 

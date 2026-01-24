@@ -1,17 +1,11 @@
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
 
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-
-#include <ashes/ashes.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
 

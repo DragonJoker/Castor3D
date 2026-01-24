@@ -8,16 +8,12 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>
 
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>

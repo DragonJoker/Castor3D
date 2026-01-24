@@ -5,12 +5,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
@@ -19,7 +17,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Overlays/OverlayPreparer.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -32,14 +29,10 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
-#include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
-
-#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <RenderGraph/RecordContext.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( c3d, OverlayRenderer )

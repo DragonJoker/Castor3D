@@ -1,7 +1,5 @@
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 
-#include "Castor3D/Material/Texture/Sampler.hpp"
-
 #include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 

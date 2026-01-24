@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>

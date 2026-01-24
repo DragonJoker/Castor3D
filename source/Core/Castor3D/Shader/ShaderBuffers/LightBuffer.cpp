@@ -1,12 +1,9 @@
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Math/Math.hpp>
 

@@ -5,29 +5,17 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputs.hpp"
 #include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

@@ -3,30 +3,16 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/ToTexture/EquirectangularToCube.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
-#include "Castor3D/Scene/Background/Visitor.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
-
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Shader/ShaderModule.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 CU_ImplementSmartPtr( c3d, SkyboxBackground )
 

@@ -8,11 +8,7 @@
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader
 {

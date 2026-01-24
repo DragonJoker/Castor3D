@@ -1,17 +1,9 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderNodesPass.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 

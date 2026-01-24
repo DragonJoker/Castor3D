@@ -1,9 +1,7 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
 
 CU_ImplementSmartPtr( c3d, PointLight )
 

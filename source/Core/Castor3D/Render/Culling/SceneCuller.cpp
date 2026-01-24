@@ -2,18 +2,10 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Skeleton/Skeleton.hpp"
-#include "Castor3D/Render/RenderNodesPass.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Culling/PipelineNodes.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
@@ -23,13 +15,6 @@
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
-#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
-
-#include <CastorUtils/Miscellaneous/BitSize.hpp>
-#include <CastorUtils/Miscellaneous/BlockTimer.hpp>
-#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 CU_ImplementSmartPtr( c3d, SceneCuller )
 

@@ -1,10 +1,8 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 

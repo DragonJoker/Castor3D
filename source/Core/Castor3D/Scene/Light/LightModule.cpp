@@ -1,10 +1,5 @@
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-#include "Castor3D/Cache/ObjectCache.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-
 #include <CastorUtils/Math/LuminousIntensity.hpp>
 
 namespace c3d

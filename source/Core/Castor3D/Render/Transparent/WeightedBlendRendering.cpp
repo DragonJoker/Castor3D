@@ -5,7 +5,6 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Transparent/TransparentPassResult.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
@@ -14,7 +13,6 @@
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>

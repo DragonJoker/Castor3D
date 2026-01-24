@@ -4,8 +4,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
-#include <CastorUtils/Design/ArrayView.hpp>
-
 CU_ImplementSmartPtr( c3d, MeshMorphTarget )
 
 namespace c3d

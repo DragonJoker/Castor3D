@@ -1,23 +1,16 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Material/Texture/TextureSource.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
-#include <CastorUtils/Miscellaneous/Hash.hpp>
-#include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
-#include <CastorUtils/Graphics/Size.hpp>
 
-#include <ashes/ashes.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 CU_ImplementSmartPtr( c3d, TextureLayout )
 CU_ImplementSmartPtr( c3d, TextureSource )

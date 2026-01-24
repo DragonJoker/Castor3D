@@ -1,7 +1,6 @@
 #include "CastorUtils/Graphics/Ktx2ImageLoader.hpp"
 
 #include "CastorUtils/Data/LoaderException.hpp"
-#include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Design/BlockGuard.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 

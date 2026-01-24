@@ -1,14 +1,12 @@
 #include "Castor3D/Overlay/FontTexture.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Shader/Ubos/FontUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 

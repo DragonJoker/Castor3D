@@ -4,9 +4,7 @@
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
 
-#include <CastorUtils/Graphics/PixelBuffer.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 CU_ImplementSmartPtr( c3d, SpotLight )

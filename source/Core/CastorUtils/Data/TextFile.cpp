@@ -1,7 +1,5 @@
 #include "CastorUtils/Data/TextFile.hpp"
 
-#include "CastorUtils/Miscellaneous/Utils.hpp"
-
 namespace c3d
 {
 	TextFile::TextFile( Path const & fileName

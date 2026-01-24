@@ -1,11 +1,9 @@
 #include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
-#include "CastorUtils/Config/SmartPtr.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Math/Point.hpp"
 #include "CastorUtils/Math/SquareMatrix.hpp"
-#include "CastorUtils/Math/Angle.hpp"
 
 namespace c3d
 {

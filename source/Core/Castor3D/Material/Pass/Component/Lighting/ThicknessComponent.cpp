@@ -6,12 +6,9 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
 namespace c3d
 {

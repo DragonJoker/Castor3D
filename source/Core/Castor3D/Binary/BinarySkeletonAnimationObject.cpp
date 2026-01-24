@@ -8,7 +8,6 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimationBone.hpp"
-#include "Castor3D/Binary/BinarySkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimationNode.hpp"
 
 namespace c3d

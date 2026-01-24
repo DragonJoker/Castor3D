@@ -2,14 +2,7 @@
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
-
-#include <CastorUtils/Miscellaneous/BitSize.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d
 {

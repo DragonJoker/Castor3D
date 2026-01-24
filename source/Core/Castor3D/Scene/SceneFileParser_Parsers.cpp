@@ -21,7 +21,6 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 
 using c3d::operator<<;

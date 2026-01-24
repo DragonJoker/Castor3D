@@ -1,11 +1,11 @@
 #include "Castor3D/Gui/GuiModule.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Gui/Theme/StyleButton.hpp"
 #include "Castor3D/Gui/Theme/StyleComboBox.hpp"
 #include "Castor3D/Gui/Theme/StyleEdit.hpp"
 #include "Castor3D/Gui/Theme/StyleExpandablePanel.hpp"
+#include "Castor3D/Gui/Theme/StyleFrame.hpp"
 #include "Castor3D/Gui/Theme/StyleListBox.hpp"
 #include "Castor3D/Gui/Theme/StylePanel.hpp"
 #include "Castor3D/Gui/Theme/StyleProgress.hpp"
@@ -16,13 +16,6 @@
 #include "Castor3D/Gui/Theme/Theme.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/PanelOverlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
 

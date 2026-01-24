@@ -2,32 +2,21 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMapping.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
 
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/RenderPass/SubpassDescription.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
-
-#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 CU_ImplementSmartPtr( c3d, RsmInterpolatePass )
 

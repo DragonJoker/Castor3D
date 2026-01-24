@@ -59,7 +59,6 @@
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 
 CU_ImplementSmartPtr( c3d, PassComponentRegister )
 

@@ -2,7 +2,6 @@
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 
 #include <ShaderWriter/Source.hpp>

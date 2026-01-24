@@ -2,20 +2,13 @@
 
 #include "Castor3D/Binary/ChunkWriter.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Vertex.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
 
 namespace c3d
 {

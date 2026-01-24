@@ -1,11 +1,8 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-
-#include <ShaderWriter/Writer.hpp>
+#include "Castor3D/Render/RenderDevice.hpp"
 
 CU_ImplementSmartPtr( c3d, LayeredLpvGridConfigUbo )
 

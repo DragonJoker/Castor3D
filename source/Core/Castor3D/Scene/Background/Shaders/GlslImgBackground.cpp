@@ -1,11 +1,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include <ShaderWriter/BaseTypes/Float.hpp>
-#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/Writer.hpp>
 
 namespace c3d::shader

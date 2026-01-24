@@ -5,7 +5,6 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
 CU_ImplementSmartPtr( c3d, ShaderProgram )
 

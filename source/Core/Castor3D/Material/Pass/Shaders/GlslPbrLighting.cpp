@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 
 #include "Castor3D/Material/Pass/PbrPass.hpp"
-#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"

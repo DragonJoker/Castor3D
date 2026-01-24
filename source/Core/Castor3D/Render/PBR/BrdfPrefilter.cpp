@@ -4,26 +4,19 @@
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 
-#include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
-#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace c3d

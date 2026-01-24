@@ -3,12 +3,10 @@
 #if defined( CU_PlatformWindows )
 
 #include "CastorUtils/Data/File.hpp"
-#include "CastorUtils/Math/Math.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 
 #include <cstdio>
-#include <cstring>
 #include <filesystem>
 #include <sys/types.h>
 #include <sys/stat.h>

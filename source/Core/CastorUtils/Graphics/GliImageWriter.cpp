@@ -1,12 +1,9 @@
 #include "CastorUtils/Graphics/GliImageWriter.hpp"
 
-#include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
-#include "CastorUtils/Graphics/Rectangle.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
-#include "CastorUtils/Log/Logger.hpp"
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <gli/gli.hpp>

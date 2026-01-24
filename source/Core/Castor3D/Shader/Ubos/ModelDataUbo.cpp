@@ -1,10 +1,7 @@
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
-#include "Castor3D/Limits.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader
 {

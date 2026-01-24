@@ -1,11 +1,8 @@
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
-#include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslBuffer.hpp"
 
-#include <ShaderWriter/CompositeTypes/Struct.hpp>
-#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 

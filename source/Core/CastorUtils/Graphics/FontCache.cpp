@@ -3,7 +3,6 @@
 #include "CastorUtils/Design/Resource.hpp"
 #include "CastorUtils/Graphics/Font.hpp"
 #include "CastorUtils/Log/Logger.hpp"
-#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 CU_ImplementSmartPtr( c3d, FontCache )
 

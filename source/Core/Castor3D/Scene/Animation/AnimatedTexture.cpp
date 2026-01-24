@@ -1,14 +1,11 @@
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 CU_ImplementSmartPtr( c3d, AnimatedTexture )
 

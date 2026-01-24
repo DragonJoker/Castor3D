@@ -7,14 +7,10 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -31,12 +27,9 @@
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 #include <ShaderWriter/CompositeTypes/MixedStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/MixedStructInstanceHelper.hpp>
-
-#include <algorithm>
 
 CU_ImplementSmartPtr( c3d, Texture3DTo2D )
 

@@ -1,17 +1,8 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslRay.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderAST/Expr/ExprComma.hpp>
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d::shader, Shadow )
 CU_ImplementSmartPtr( c3d::shader, ShadowsBuffer )

@@ -2,10 +2,8 @@
 
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
-#include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 
 namespace c3d
 {

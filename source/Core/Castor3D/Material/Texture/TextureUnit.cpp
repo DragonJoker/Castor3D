@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -9,14 +8,10 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( c3d, TextureData )

@@ -1,22 +1,13 @@
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Render/Opaque/VisibilityReorderPass.hpp"
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
@@ -25,11 +16,6 @@
 #include "Castor3D/Render/Prepass/VisibilityPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/ShaderBuffer.hpp"
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-
-#include <RenderGraph/FramePassTimer.hpp>
 
 CU_ImplementSmartPtr( c3d, OpaqueRendering )
 

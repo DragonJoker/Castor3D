@@ -1,7 +1,6 @@
 #include "Castor3D/Gui/Controls/CtrlScrollable.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 #include "Castor3D/Gui/Controls/CtrlScrollBar.hpp"

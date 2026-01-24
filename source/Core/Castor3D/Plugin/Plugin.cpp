@@ -1,6 +1,5 @@
 #include "Castor3D/Plugin/Plugin.hpp"
 
-#include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
 #include "Castor3D/Plugin/PluginException.hpp"
 

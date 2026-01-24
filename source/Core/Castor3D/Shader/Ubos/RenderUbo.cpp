@@ -1,8 +1,6 @@
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 

@@ -1,13 +1,5 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
-
-CU_ImplementSmartPtr( c3d, LightPropagationVolumes )
-CU_ImplementSmartPtr( c3d, LightPropagationVolumesG )
-CU_ImplementSmartPtr( c3d, LayeredLightPropagationVolumes )
-CU_ImplementSmartPtr( c3d, LayeredLightPropagationVolumesG )
-
 namespace c3d
 {
 	String getTextureName( LpvTexture texture

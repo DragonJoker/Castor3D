@@ -16,8 +16,6 @@
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 
-#include <CastorUtils/Design/DataHolder.hpp>
-
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 

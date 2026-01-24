@@ -1,29 +1,15 @@
 #include "Castor3D/Render/Passes/PickingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/Picking.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
-#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
-#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -33,17 +19,8 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
-
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

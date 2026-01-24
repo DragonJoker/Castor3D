@@ -1,14 +1,12 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( c3d, Sampler )

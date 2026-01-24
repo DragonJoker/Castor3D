@@ -4,7 +4,6 @@
 #include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
 
 #include <ShaderWriter/Writer.hpp>
-#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace c3d::shader
 {

@@ -2,9 +2,7 @@
 
 #include "Castor3D/Binary/BinaryMorphComponent.hpp"
 #include "Castor3D/Binary/BinarySkinComponent.hpp"
-#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp"

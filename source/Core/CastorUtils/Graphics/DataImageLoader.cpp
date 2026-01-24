@@ -1,7 +1,5 @@
 #include "CastorUtils/Graphics/DataImageLoader.hpp"
 
-#include "CastorUtils/Data/LoaderException.hpp"
-#include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 namespace c3d

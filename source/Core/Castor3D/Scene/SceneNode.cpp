@@ -2,10 +2,7 @@
 
 #include "Castor3D/Binary/BinarySceneNodeAnimation.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"

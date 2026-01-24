@@ -6,7 +6,6 @@ See LICENSE file in root folder.
 
 #include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/RequiredVersion.hpp"
 
 #if C3D_HasGlslang
 #include "Castor3D/Miscellaneous/Logger.hpp"
@@ -23,7 +22,6 @@ See LICENSE file in root folder.
 #include <glslang/SPIRV/GlslangToSpv.h>
 
 #include <locale>
-#include <regex>
 
 namespace c3d
 {

@@ -4,53 +4,24 @@
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMapping.hpp"
-#include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/RsmConfig.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslFog.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-
-#include <CastorUtils/Design/ArrayView.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/RenderPass/SubpassDescription.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
-#include <numeric>
 #include <random>
 
 CU_ImplementSmartPtr( c3d, RsmGIPass )

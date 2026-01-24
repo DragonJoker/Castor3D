@@ -1,9 +1,7 @@
 #include "Castor3D/Gui/ControlsManager.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Gui/Gui_Parsers.hpp"
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
 #include "Castor3D/Gui/Controls/CtrlButton.hpp"
@@ -13,7 +11,6 @@
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlScrollBar.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
-#include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 #include "Castor3D/Gui/Layout/Layout.hpp"
 #include "Castor3D/Gui/Theme/StyleButton.hpp"
 #include "Castor3D/Gui/Theme/StyleComboBox.hpp"
@@ -23,12 +20,8 @@
 #include "Castor3D/Gui/Theme/StylePanel.hpp"
 #include "Castor3D/Gui/Theme/StyleSlider.hpp"
 #include "Castor3D/Gui/Theme/StyleStatic.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
-
-#include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Graphics/FontCache.hpp>
 
 CU_ImplementSmartPtr( c3d, ControlsManager )
 CU_ImplementSmartPtr( c3d, GuiContext )

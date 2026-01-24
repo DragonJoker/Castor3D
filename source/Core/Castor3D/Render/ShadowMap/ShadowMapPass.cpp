@@ -3,22 +3,11 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-
-#include <ShaderAST/Shader.hpp>
 
 CU_ImplementSmartPtr( c3d, ShadowMapPass )
 

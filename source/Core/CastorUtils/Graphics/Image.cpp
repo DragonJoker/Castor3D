@@ -2,9 +2,6 @@
 
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Graphics/ImageLoader.hpp"
-#include "CastorUtils/Graphics/Rectangle.hpp"
-#include "CastorUtils/Log/Logger.hpp"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"

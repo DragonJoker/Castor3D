@@ -2,26 +2,17 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
-#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/StagedUploadData.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Render/RenderTechnique.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
-#include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 CU_ImplementSmartPtr( c3d, RenderLoop )

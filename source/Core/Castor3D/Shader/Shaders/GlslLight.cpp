@@ -5,7 +5,6 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/LightingModelFactory.hpp"
-#include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
@@ -16,8 +15,6 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d::shader, LightsBuffer )
 

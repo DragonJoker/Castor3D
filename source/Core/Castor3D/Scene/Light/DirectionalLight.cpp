@@ -4,18 +4,11 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Math/TransformationMatrix.hpp>
-
-#include <ashespp/Core/Device.hpp>
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 

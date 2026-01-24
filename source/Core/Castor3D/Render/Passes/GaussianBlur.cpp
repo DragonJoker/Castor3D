@@ -2,20 +2,11 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
-
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>

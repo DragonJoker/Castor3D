@@ -1,13 +1,8 @@
 #include "CastorUtils/Graphics/FreeImageLoader.hpp"
 
-#include "CastorUtils/Data/BinaryFile.hpp"
 #include "CastorUtils/Data/LoaderException.hpp"
-#include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
-#include "CastorUtils/Miscellaneous/BitSize.hpp"
-
-#include <ashes/common/Format.hpp>
 
 #if C3D_UseFreeImage
 #	pragma warning( disable: 4828 )

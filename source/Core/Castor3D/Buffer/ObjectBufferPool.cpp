@@ -1,15 +1,10 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Model/VertexGroup.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
-
-#include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Core/Device.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 #include <numeric>
 

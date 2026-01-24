@@ -1,7 +1,6 @@
 #include "CastorUtils/Miscellaneous/BlockTracker.hpp"
 
 #include "CastorUtils/Log/Logger.hpp"
-#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace c3d
 {

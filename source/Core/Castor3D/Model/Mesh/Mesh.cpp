@@ -2,7 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
@@ -10,7 +9,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Geometry.hpp"

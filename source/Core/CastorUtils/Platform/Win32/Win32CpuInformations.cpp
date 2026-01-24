@@ -2,8 +2,6 @@
 
 #if defined( CU_PlatformWindows )
 
-#include "CastorUtils/Exception/Assertion.hpp"
-#include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <Windows.h>

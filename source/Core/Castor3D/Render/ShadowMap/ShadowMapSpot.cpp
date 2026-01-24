@@ -10,23 +10,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>

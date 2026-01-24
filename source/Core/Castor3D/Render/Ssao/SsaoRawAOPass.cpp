@@ -1,44 +1,18 @@
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
 
-#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
-
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-#include <CastorUtils/Math/Angle.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
-
-#include <random>
 
 CU_ImplementSmartPtr( c3d, SsaoRawAOPass )
 

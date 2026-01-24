@@ -1,11 +1,9 @@
 #include "Castor3D/Scene/Animation/AnimatedSceneNode.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 #include "Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 CU_ImplementSmartPtr( c3d, AnimatedSceneNode )
 

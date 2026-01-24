@@ -2,7 +2,6 @@
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
-#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
 namespace c3d

@@ -6,7 +6,6 @@
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 

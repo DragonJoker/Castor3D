@@ -11,19 +11,10 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Shader/ShaderBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Miscellaneous/BitSize.hpp>
-
-#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/GraphContext.hpp>

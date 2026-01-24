@@ -1,9 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
-#include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 

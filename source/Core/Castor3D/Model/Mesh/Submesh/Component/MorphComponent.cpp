@@ -1,21 +1,12 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Binary/BinaryMorphComponent.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
-#include "Castor3D/Model/Vertex.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Miscellaneous/Hash.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
 
 CU_ImplementSmartPtr( c3d, MorphComponent )
 

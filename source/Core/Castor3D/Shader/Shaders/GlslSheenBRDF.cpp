@@ -5,8 +5,6 @@
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include <CastorUtils/Math/Angle.hpp>
-
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementDeleter( c3d::shader, SheenBRDF )

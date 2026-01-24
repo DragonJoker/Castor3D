@@ -3,9 +3,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 

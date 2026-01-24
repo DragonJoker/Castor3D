@@ -7,17 +7,12 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
-#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Math/Angle.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>

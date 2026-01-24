@@ -3,13 +3,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-
 #include <RenderGraph/FrameGraph.hpp>
-#include <RenderGraph/GraphContext.hpp>
-#include <RenderGraph/RunnableGraph.hpp>
 
 CU_ImplementSmartPtr( c3d, PostEffect )
 

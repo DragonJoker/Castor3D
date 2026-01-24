@@ -2,18 +2,14 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
-
-#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 CU_ImplementSmartPtr( c3d, MeshletComponent )
 

@@ -1,11 +1,9 @@
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/Frustum.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 

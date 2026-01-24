@@ -1,7 +1,5 @@
 #include "Castor3D/Render/Frustum.hpp"
 
-#include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"

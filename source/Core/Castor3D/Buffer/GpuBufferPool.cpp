@@ -4,11 +4,8 @@
 #include "Castor3D/Buffer/GpuBufferBuddyAllocator.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <RenderGraph/FramePass.hpp>
-
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Core/Device.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 CU_ImplementSmartPtr( c3d, GpuBufferPool )
 

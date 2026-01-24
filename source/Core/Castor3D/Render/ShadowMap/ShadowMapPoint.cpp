@@ -3,32 +3,14 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>

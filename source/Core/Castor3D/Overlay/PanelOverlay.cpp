@@ -1,7 +1,6 @@
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslOverlaySurface.hpp"

@@ -1,7 +1,6 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/ImporterFile.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
@@ -16,10 +15,8 @@
 #include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
-#include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
@@ -29,12 +26,10 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
 #include "Castor3D/Scene/CscnImporterFile.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
@@ -54,7 +49,6 @@
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
 #include <CastorUtils/Graphics/WebPImageLoader.hpp>
 #include <CastorUtils/Graphics/XpmImageLoader.hpp>
-#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 #include <ashespp/Image/StagingTexture.hpp>
 

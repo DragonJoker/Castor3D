@@ -2,10 +2,7 @@
 
 #if defined( CU_PlatformWindows )
 
-#include "CastorUtils/Miscellaneous/StringUtils.hpp"
-
 #include <Windows.h>
-#include <tchar.h>
 #include <iomanip>
 
 namespace c3d
