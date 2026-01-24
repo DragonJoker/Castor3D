@@ -1,7 +1,5 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
-#include "Castor3D/Render/RenderModule.hpp"
-
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 

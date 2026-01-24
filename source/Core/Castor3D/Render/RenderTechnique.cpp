@@ -4,16 +4,10 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
@@ -24,35 +18,20 @@
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMaps.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
-#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/ComputeDiffusionProfilesPass.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
-#include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
-#include "Castor3D/Render/Prepass/DepthPass.hpp"
-#include "Castor3D/Render/Prepass/VisibilityPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-#include "Castor3D/Render/Ssao/SsaoPass.hpp"
 #include "Castor3D/Render/Transparent/TransparentPass.hpp"
-#include "Castor3D/Render/Transparent/TransparentPassResult.hpp"
-#include "Castor3D/Render/Transparent/WeightedBlendRendering.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-
 #include <RenderGraph/FramePassGroup.hpp>
-#include <RenderGraph/FramePassTimer.hpp>
 
 CU_ImplementSmartPtr( c3d, RenderTechnique )
 

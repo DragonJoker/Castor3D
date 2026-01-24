@@ -1,7 +1,5 @@
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationKeyFrame.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"

@@ -1,12 +1,5 @@
 #include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 
-#include "CastorUtils/Data/LoaderException.hpp"
-#include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Graphics/ImageLoader.hpp"
-#include "CastorUtils/Graphics/Rectangle.hpp"
-#include "CastorUtils/Graphics/Size.hpp"
-#include "CastorUtils/Log/Logger.hpp"
-
 #include <ashes/common/Format.hpp>
 
 namespace c3d

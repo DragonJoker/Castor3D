@@ -1,17 +1,6 @@
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Layout/Layout.hpp"
-#include "Castor3D/Gui/Theme/StyleScrollable.hpp"
-#include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 
 CU_ImplementSmartPtr( c3d, LayoutControl )
 

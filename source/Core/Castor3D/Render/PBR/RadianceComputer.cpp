@@ -6,19 +6,13 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Math/Angle.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/ResourceHandler.hpp>

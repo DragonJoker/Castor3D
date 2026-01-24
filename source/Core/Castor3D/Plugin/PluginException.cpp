@@ -1,7 +1,5 @@
 #include "Castor3D/Plugin/PluginException.hpp"
 
-#include "Castor3D/Miscellaneous/Logger.hpp"
-
 namespace c3d
 {
 	PluginException::PluginException( bool critical

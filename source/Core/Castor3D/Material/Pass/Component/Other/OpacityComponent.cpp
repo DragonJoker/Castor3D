@@ -1,6 +1,5 @@
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
@@ -8,11 +7,11 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Data/Text/TextRgbColour.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 namespace c3d
 {

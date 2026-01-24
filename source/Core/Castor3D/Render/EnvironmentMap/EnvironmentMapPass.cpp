@@ -13,8 +13,6 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 #include <RenderGraph/RunnableGraph.hpp>

@@ -5,11 +5,6 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
-#include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/GraphicsPipelineWriter.hpp>
-
-#include <ashespp/Core/Device.hpp>
-
 namespace c3d
 {
 	ShaderProgramCache::ShaderProgramCache( Engine & engine )

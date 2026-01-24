@@ -1,7 +1,6 @@
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 

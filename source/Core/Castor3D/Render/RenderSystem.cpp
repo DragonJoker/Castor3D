@@ -2,29 +2,21 @@
 
 #include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
-#include <CastorUtils/Math/Angle.hpp>
-#include <CastorUtils/Math/SquareMatrix.hpp>
-#include <CastorUtils/Align/Aligned.hpp>
 
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Core/RendererList.hpp>
-#include <ashespp/Core/Surface.hpp>
-#include <ashespp/Image/Image.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <CompilerSpirV/compileSpirV.hpp>
 #if C3D_HasGLSL
 #	include <CompilerGlsl/compileGlsl.hpp>
 #endif
 
-#include <atomic>
 #include <random>
 
 CU_ImplementSmartPtr( c3d, RenderSystem )

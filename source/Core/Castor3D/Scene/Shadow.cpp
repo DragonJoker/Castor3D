@@ -1,7 +1,6 @@
 #include "Castor3D/Scene/Shadow.hpp"
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"

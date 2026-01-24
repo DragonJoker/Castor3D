@@ -6,12 +6,8 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
@@ -28,10 +24,8 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
-#include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
-#include <CastorUtils/Miscellaneous/BlockTimer.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <RenderGraph/RecordContext.hpp>

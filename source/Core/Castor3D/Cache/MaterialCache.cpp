@@ -3,12 +3,10 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
@@ -16,8 +14,6 @@
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 CU_ImplementSmartPtr( c3d, MaterialCache )
 

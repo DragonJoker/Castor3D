@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongBRDF.hpp"

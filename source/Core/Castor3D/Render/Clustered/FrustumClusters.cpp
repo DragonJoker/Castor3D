@@ -1,7 +1,6 @@
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -17,11 +16,6 @@
 #include "Castor3D/Render/Debug/DebugModule.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslBitonicSort.hpp"
 #include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 

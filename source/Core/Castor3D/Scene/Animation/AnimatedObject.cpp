@@ -1,8 +1,5 @@
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 
-#include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
-
 CU_ImplementSmartPtr( c3d, AnimatedObject )
 
 namespace c3d

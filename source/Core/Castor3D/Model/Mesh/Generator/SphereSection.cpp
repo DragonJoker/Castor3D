@@ -1,7 +1,6 @@
 #include "Castor3D/Model/Mesh/Generator/SphereSection.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Vertex.hpp"
 
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 

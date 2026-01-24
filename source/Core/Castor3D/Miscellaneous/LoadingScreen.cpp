@@ -1,33 +1,22 @@
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Overlays/OverlayPass.hpp"
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/Program.hpp"
 
-#include <CastorUtils/Design/CacheView.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
-
-#include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( c3d, LoadingScreen )
 

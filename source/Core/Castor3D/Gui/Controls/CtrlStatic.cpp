@@ -1,11 +1,8 @@
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 
-#include "Castor3D/Gui/ControlsManager.hpp"
-
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 

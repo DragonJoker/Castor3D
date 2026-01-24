@@ -4,38 +4,27 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlProgress.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Picking.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
-#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
-#include <CastorUtils/Design/BlockGuard.hpp>
-#include <CastorUtils/Design/CacheView.hpp>
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
-#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -46,7 +35,6 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( c3d, RenderWindow )

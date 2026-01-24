@@ -7,22 +7,17 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
-#include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
-#include <CastorUtils/Miscellaneous/BitSize.hpp>
-
-#include <ShaderWriter/Source.hpp>
-
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, VoxelSecondaryBounce )
 

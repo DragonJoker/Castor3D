@@ -4,23 +4,15 @@
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include <Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp>
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/Sync/Fence.hpp>
-#include <ashespp/Sync/Queue.hpp>
 
 CU_ImplementSmartPtr( c3d, DebugDrawer )
 

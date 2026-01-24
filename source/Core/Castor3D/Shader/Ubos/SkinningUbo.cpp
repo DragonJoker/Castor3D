@@ -1,10 +1,6 @@
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Model/Skeleton/Skeleton.hpp"
-#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

@@ -1,10 +1,7 @@
 #include "Castor3D/Scene/SceneModule.hpp"
 
-#include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
 
 CU_ImplementExportedOwnedBy( Scene, Scene )
 CU_ImplementSmartPtr( c3d, CameraCache )

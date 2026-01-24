@@ -1,7 +1,5 @@
 #include "CastorUtils/Data/TextWriter.hpp"
 
-#include "CastorUtils/Miscellaneous/Utils.hpp"
-
 namespace c3d
 {
 	//*********************************************************************************************

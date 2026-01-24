@@ -5,10 +5,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
-#include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
-
-#include <ashes/ashes.hpp>
 
 namespace c3d
 {

@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 
 CU_ImplementSmartPtr( c3d, SamplerCache )
 

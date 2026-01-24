@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 CU_ImplementSmartPtr( c3d, SssProfileBuffer )
 

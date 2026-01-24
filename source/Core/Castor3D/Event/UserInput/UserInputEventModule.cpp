@@ -1,10 +1,6 @@
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
 
 #include "Castor3D/Event/UserInput/EventHandler.hpp"
-#include "Castor3D/Event/UserInput/HandlerEvent.hpp"
-#include "Castor3D/Event/UserInput/KeyboardEvent.hpp"
-#include "Castor3D/Event/UserInput/MouseEvent.hpp"
-#include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
 CU_ImplementSmartPtr( c3d, EventHandler )
 

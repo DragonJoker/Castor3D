@@ -4,10 +4,8 @@
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -23,14 +21,11 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/DataHolder.hpp>
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Core/Device.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( c3d, SceneBackground )

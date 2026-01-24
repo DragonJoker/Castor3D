@@ -2,18 +2,10 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Material/Pass/PbrPass.hpp"
-#include "Castor3D/Material/Pass/PhongPass.hpp"
-#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 

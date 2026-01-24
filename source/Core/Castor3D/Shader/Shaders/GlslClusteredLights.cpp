@@ -1,18 +1,11 @@
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
-
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader
 {

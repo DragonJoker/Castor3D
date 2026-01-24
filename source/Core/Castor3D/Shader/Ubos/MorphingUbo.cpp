@@ -1,7 +1,8 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader
 {

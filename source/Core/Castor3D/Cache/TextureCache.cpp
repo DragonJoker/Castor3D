@@ -2,8 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"

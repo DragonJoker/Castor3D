@@ -1,10 +1,5 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
-
 namespace c3d::shader
 {
 	TextureAnimations::TextureAnimations( sdw::ShaderWriter & writer

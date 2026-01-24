@@ -1,11 +1,9 @@
 #include "Castor3D/Render/RenderLoopAsync.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 #include <CastorUtils/Design/ScopeGuard.hpp>
-#include <CastorUtils/Design/BlockGuard.hpp>
 
 namespace c3d
 {

@@ -1,7 +1,6 @@
 #include "Castor3D/Render/Prepass/PrepassRendering.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -13,10 +12,7 @@
 #include "Castor3D/Render/Prepass/VisibilityPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-
 #include <RenderGraph/FramePass.hpp>
-#include <RenderGraph/FramePassTimer.hpp>
 
 CU_ImplementSmartPtr( c3d, PrepassRendering )
 

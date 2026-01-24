@@ -1,7 +1,6 @@
 #include "Castor3D/Scene/RenderedObject.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"

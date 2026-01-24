@@ -4,7 +4,6 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -12,14 +11,6 @@
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>

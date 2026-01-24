@@ -1,11 +1,9 @@
 #include "Castor3D/Material/Material.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 

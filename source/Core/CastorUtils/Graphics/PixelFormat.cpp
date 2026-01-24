@@ -4,8 +4,6 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Graphics/PxBufferCompression.hpp"
 
-#include <ashes/common/Format.hpp>
-
 #define BCDEC_IMPLEMENTATION
 #define BCDEC_BC4BC5_PRECISE
 #include <bcdec.h>

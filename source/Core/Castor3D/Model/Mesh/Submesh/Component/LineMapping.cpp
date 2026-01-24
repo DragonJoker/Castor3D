@@ -1,9 +1,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Binary/ChunkWriter.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"

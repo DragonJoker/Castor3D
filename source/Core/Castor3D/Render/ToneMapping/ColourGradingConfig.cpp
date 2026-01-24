@@ -1,7 +1,6 @@
 #include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 

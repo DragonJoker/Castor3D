@@ -4,11 +4,6 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Gui/Controls/CtrlProgress.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Miscellaneous/Debug.hpp>
 
 CU_ImplementSmartPtr( c3d, ProgressBar )
 

@@ -3,20 +3,12 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
-
-#include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>

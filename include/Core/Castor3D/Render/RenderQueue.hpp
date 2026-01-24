@@ -12,6 +12,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
+#include <ashespp/Command/CommandBuffer.hpp>
+
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>

@@ -2,23 +2,12 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
-#include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
-#include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
-#include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-
-#include <ashespp/Image/StagingTexture.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 CU_ImplementSmartPtr( c3d, ColourBackground )
 

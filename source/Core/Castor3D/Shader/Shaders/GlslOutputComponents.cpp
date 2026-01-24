@@ -1,9 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 
-#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader
 {

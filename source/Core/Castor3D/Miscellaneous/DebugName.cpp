@@ -3,15 +3,10 @@ See LICENSE file in root folder
 */
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 
-#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-
-#include <CastorUtils/Log/Logger.hpp>
 
 #include <ashespp/Core/Device.hpp>
-#include <ashespp/Miscellaneous/DeviceMemory.hpp>
 
 namespace c3d
 {

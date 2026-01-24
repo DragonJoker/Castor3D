@@ -7,16 +7,12 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Transparent/TransparentPass.hpp"
 #include "Castor3D/Render/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Render/Transparent/WeightedBlendRendering.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-
-#include <RenderGraph/FramePassTimer.hpp>
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 

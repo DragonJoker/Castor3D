@@ -1,15 +1,10 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader
 {

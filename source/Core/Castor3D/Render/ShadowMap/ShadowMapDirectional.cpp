@@ -2,36 +2,15 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Sync/Fence.hpp>
-
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>

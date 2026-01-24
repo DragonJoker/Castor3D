@@ -1,47 +1,26 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Limits.hpp"
-#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Math/TransformationMatrix.hpp>
-
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
-
-#include <numeric>
-#include <random>
 
 CU_ImplementSmartPtr( c3d, GeometryInjectionPass )
 

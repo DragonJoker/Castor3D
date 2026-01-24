@@ -1,22 +1,8 @@
 #include "Castor3D/Scene/CscnImporterFile.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Binary/CmshImporter.hpp"
 #include "Castor3D/Gui/Gui_Parsers.hpp"
-#include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Model/Skeleton/Skeleton.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-
-#include <CastorUtils/Design/ArrayView.hpp>
 
 namespace c3d
 {

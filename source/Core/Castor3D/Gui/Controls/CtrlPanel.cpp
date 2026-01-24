@@ -1,14 +1,5 @@
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Gui/ControlsManager.hpp"
-#include "Castor3D/Gui/Controls/CtrlScrollBar.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-
 #include <CastorUtils/Graphics/Font.hpp>
 
 CU_ImplementSmartPtr( c3d, PanelCtrl )

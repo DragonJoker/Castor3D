@@ -2,8 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
@@ -14,11 +12,9 @@
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
-#include <ShaderWriter/Source.hpp>
-
 #include <CastorUtils/Graphics/Font.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Graphics/Rectangle.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, TextOverlay )
 

@@ -2,7 +2,6 @@
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
-#include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
 #include <ShaderWriter/Writer.hpp>
 

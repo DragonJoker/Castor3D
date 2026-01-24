@@ -2,11 +2,8 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
-
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
 

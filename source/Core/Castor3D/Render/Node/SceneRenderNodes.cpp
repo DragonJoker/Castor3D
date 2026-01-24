@@ -4,17 +4,12 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
-#include "Castor3D/Render/RenderNodesPass.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
@@ -25,14 +20,9 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
-#include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
-#include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
-#include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
-#include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 
 CU_ImplementSmartPtr( c3d, SceneRenderNodes )
 

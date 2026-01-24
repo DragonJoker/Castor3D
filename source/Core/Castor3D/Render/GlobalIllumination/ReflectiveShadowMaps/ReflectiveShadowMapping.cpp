@@ -1,12 +1,7 @@
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMapping.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d
 {

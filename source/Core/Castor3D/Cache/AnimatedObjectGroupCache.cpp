@@ -4,7 +4,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -13,7 +12,6 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>

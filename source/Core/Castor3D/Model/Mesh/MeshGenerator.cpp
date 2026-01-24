@@ -1,7 +1,5 @@
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 
-#include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"

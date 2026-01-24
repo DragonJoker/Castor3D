@@ -1,6 +1,5 @@
 #include "Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSceneNode.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"

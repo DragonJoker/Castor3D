@@ -1,8 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
-#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

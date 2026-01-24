@@ -1,18 +1,11 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Animation/Interpolator.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
 
 namespace c3d
 {

@@ -4,14 +4,10 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <meshoptimizer.h>

@@ -2,7 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -16,8 +15,6 @@
 #include <RenderGraph/RecordContext.hpp>
 
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Pipeline/ComputePipeline.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
 
 CU_ImplementSmartPtr( c3d, VertexTransformPass )
 

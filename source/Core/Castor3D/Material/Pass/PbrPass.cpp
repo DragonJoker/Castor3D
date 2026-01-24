@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/PbrPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"

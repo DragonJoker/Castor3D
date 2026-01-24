@@ -1,29 +1,16 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
-#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/Render/RenderTechniquePass.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include <Castor3D/Shader/Shaders/GlslMeshVertex.hpp>
 #include "Castor3D/Shader/Shaders/GlslOutputs.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -33,11 +20,6 @@
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-
-#include <CastorUtils/Graphics/Image.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

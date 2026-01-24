@@ -1,20 +1,12 @@
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlExpandablePanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 #include "Castor3D/Gui/Layout/LayoutBox.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
-#include "Castor3D/Overlay/PanelOverlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-
-#include <ashespp/Core/Device.hpp>
-#include <ashespp/Miscellaneous/QueryPool.hpp>
 
 #include <RenderGraph/FramePassTimer.hpp>
 

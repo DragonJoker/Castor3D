@@ -1,11 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Writer.hpp>
 
 namespace c3d::shader
 {

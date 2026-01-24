@@ -1,8 +1,5 @@
 #include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
-#include "CastorUtils/Exception/Assertion.hpp"
-#include "CastorUtils/Miscellaneous/StringUtils.hpp"
-
 namespace c3d
 {
 	namespace platform

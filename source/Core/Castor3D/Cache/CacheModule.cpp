@@ -1,5 +1,3 @@
-#include "Castor3D/Cache/CacheModule.hpp"
-
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 

@@ -3,7 +3,6 @@
 #include "CastorUtils/Log/LoggerConsole.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Data/TextFile.hpp"
-#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 

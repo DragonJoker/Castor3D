@@ -1,6 +1,5 @@
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
-#include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Animation/Animation.hpp"
 
 CU_ImplementSmartPtr( c3d, AnimationInstance )

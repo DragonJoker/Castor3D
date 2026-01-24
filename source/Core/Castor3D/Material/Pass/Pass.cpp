@@ -15,13 +15,11 @@
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
@@ -34,22 +32,14 @@
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Render/PipelineFlags.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
-#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/Graphics/PixelFormat.hpp>
 
 #include <algorithm>
 

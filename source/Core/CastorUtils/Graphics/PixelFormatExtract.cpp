@@ -1,8 +1,6 @@
 #include "CastorUtils/Graphics/PixelFormat.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
-#include <ashes/common/Format.hpp>
-
 namespace c3d
 {
 	namespace pfext

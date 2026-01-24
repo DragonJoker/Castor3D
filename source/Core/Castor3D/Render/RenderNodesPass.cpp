@@ -1,22 +1,11 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 
 #include "Castor3D/Config.hpp"
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
-#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -27,50 +16,25 @@
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
-#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslCullData.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
-#include <Castor3D/Shader/Shaders/GlslMeshVertex.hpp>
-#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
-#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslTaskPayload.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/VertexBuffer.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 #include <RenderGraph/FramePass.hpp>
 #include <RenderGraph/FramePassGroup.hpp>

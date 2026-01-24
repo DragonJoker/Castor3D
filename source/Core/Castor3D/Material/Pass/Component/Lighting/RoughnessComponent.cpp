@@ -4,14 +4,14 @@
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 namespace c3d
 {

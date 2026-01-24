@@ -7,7 +7,6 @@
 
 #include <RenderGraph/FramePassTimer.hpp>
 
-#include <ashespp/Image/Image.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
 namespace c3d

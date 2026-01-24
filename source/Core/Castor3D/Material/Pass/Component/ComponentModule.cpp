@@ -1,8 +1,5 @@
 #include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 
-#include "Castor3D/Material/Pass/Component/PassComponent.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
-
 namespace c3d
 {
 	bool hasAny( PassComponentCombine const & lhs

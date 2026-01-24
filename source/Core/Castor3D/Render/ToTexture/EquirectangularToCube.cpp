@@ -10,23 +10,15 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Graphics/Position.hpp>
-#include <CastorUtils/Math/TransformationMatrix.hpp>
 
 #include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace c3d

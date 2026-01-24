@@ -12,7 +12,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
 
 CU_ImplementSmartPtr( c3d, SubmeshComponentRegister )
 

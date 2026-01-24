@@ -9,7 +9,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneImporter.hpp"
 
 CU_ImplementSmartPtr( c3d, MeshImporter )
 

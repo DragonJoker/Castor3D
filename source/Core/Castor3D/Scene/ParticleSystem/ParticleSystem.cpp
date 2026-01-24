@@ -2,8 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
-#include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"

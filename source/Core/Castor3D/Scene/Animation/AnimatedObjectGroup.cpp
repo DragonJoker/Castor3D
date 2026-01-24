@@ -5,7 +5,6 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"

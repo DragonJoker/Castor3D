@@ -1,11 +1,9 @@
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
 CU_ImplementSmartPtr( c3d, SubmeshRenderNode )

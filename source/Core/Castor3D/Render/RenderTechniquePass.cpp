@@ -2,42 +2,16 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
-#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
-#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
-#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
-#include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
-#include <CastorUtils/Design/ArrayView.hpp>
-
-#include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Image/Sampler.hpp>
-
-#include <RenderGraph/RecordContext.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, RenderTechniquePass )
 

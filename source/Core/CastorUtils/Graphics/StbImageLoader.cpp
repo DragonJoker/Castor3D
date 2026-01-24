@@ -3,9 +3,6 @@
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
-#include "CastorUtils/Miscellaneous/BitSize.hpp"
-
-#include <ashes/common/Format.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG

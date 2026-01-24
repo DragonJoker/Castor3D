@@ -1,7 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -18,11 +17,10 @@
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/ModernGraphicsWriterEXT.hpp>
 #include <ShaderWriter/ModernGraphicsWriterNV.hpp>
+#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, DefaultRenderComponent )
 

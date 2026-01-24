@@ -4,18 +4,14 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-#include <ShaderWriter/Source.hpp>
-
 #include <ashespp/Buffer/Buffer.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d, VisibilityReorderPass )
 

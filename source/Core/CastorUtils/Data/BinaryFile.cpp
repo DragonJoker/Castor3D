@@ -1,7 +1,5 @@
 #include "CastorUtils/Data/BinaryFile.hpp"
 
-#include "CastorUtils/Miscellaneous/Utils.hpp"
-
 namespace c3d
 {
 	BinaryFile::BinaryFile( Path const & fileName

@@ -4,13 +4,8 @@
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( c3d::shader, SssTransmittance )
 

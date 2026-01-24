@@ -10,12 +10,8 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
-#include <CastorUtils/Graphics/RgbaColour.hpp>
-
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Sync/Fence.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
 
 CU_ImplementSmartPtr( c3d, ShadowMap )
 

@@ -2,7 +2,6 @@
 
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
-#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 
 namespace c3d

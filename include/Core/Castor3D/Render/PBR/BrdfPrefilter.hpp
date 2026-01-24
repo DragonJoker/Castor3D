@@ -12,6 +12,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 namespace c3d
 {

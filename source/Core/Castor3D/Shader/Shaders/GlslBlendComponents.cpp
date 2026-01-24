@@ -7,7 +7,6 @@
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
-#include <ShaderWriter/Source.hpp>
 #include <ShaderAST/Type/TypeStruct.hpp>
 
 namespace c3d::shader

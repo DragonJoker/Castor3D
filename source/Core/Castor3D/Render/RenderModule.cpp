@@ -5,14 +5,9 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
@@ -26,6 +21,7 @@
 
 CU_ImplementExportedOwnedBy( RenderSystem, RenderSystem )
 CU_ImplementExportedOwnedBy( RenderDevice, RenderDevice )
+CU_ImplementSmartPtr( c3d, RenderPassRegisterInfo )
 
 namespace c3d
 {

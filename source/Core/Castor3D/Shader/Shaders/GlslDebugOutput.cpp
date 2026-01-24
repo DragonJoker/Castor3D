@@ -2,8 +2,6 @@
 
 #include "Castor3D/Miscellaneous/DebugConfig.hpp"
 
-#include <CastorUtils/Data/Path.hpp>
-
 #include <ShaderWriter/Source.hpp>
 
 namespace c3d::shader

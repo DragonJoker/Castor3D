@@ -6,7 +6,6 @@
 #include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Core/Instance.hpp>
-#include <ashespp/Core/RendererList.hpp>
 
 namespace c3d
 {

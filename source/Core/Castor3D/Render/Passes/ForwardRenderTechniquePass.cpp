@@ -1,23 +1,12 @@
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/ShaderCache.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
-#include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
@@ -30,23 +19,17 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
-
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 namespace c3d
 {

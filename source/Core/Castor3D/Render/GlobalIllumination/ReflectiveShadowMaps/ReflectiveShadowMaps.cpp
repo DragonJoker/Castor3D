@@ -1,7 +1,6 @@
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMaps.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
@@ -9,18 +8,12 @@
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/RsmGIPass.hpp"
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/RsmInterpolatePass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/BufferView.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>

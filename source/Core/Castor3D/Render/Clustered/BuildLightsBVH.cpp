@@ -7,18 +7,12 @@
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
-#include "Castor3D/Shader/Shaders/GlslAppendBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
-
-#include <CastorUtils/Design/DataHolder.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>

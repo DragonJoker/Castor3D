@@ -1,7 +1,6 @@
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -9,11 +8,7 @@
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
-#include <RenderGraph/ImageData.hpp>
-#include <RenderGraph/ImageViewData.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
-
-#include <CastorUtils/Graphics/Size.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -93,7 +88,7 @@ namespace c3d
 		doUpdatePassIndex( source );
 	}
 
-	void ToneMapping::update( CpuUpdater & updater
+	void ToneMapping::update( CpuUpdater &
 		, Texture const & source )
 	{
 		doUpdatePassIndex( source );
