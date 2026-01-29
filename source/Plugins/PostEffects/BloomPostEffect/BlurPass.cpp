@@ -30,7 +30,7 @@ namespace Bloom
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto config = writer.declUniformBuffer( c3d::GaussianBlur::Config, Bindings::GaussCfgUboIdx, 0u );
 			auto c3d_pixelSize = config.declMember< sdw::Vec2 >( c3d::GaussianBlur::TextureSize );
@@ -176,7 +176,7 @@ namespace Bloom
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 							.enabled( enabled )
 							.build( framePass, context, graph );
-						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 				} );

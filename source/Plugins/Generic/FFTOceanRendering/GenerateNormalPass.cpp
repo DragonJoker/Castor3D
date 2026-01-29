@@ -97,7 +97,7 @@ namespace ocean_fft
 
 		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
 
 			C3D_FftOcean( writer, GenerateNormalPass::Bindings::eConfig, 0u );

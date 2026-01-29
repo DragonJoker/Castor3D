@@ -250,7 +250,7 @@ namespace c3d
 		log::debug << "Creating pipeline for " << getName() << std::endl;
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
-			, m_device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( m_device ).getGraphResourceCache()
 			, 4u
 			, BufferUsageFlags::eNone
 			, MemoryPropertyFlags::eHostVisible
@@ -284,7 +284,7 @@ namespace c3d
 
 		// Initialise the V inverted vertex buffer.
 		m_uvInvVertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
-			, m_device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( m_device ).getGraphResourceCache()
 			, 4u
 			, BufferUsageFlags::eNone
 			, MemoryPropertyFlags::eHostVisible

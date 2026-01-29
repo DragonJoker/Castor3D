@@ -280,7 +280,7 @@ namespace c3d
 		, ProgressBar * progress
 		, bool visbuffer
 		, bool weightedBlended )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
@@ -438,7 +438,7 @@ namespace c3d
 
 		if ( auto runnable = m_clearLpvRunnable.get() )
 		{
-			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+			c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [runnable]( RenderDevice const &
 					, QueueData const & )
 				{

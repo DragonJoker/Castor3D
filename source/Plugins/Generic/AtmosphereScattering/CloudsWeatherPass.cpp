@@ -197,7 +197,7 @@ namespace atmosphere_scattering
 		, WeatherUbo const & weatherUbo
 		, c3d::Texture & result
 		, bool const & enabled )
-		: m_shader{ cuT( "Clouds/WeatherPass" ), weather::getProgram( *device.renderSystem.getEngine(), result.getExtent().width ) }
+		: m_shader{ cuT( "Clouds/WeatherPass" ), weather::getProgram( c3d::getEngine( device ), result.getExtent().width ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = result.getExtent();
@@ -229,7 +229,7 @@ namespace atmosphere_scattering
 						.build( framePass, context, graph );
 				}
 
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

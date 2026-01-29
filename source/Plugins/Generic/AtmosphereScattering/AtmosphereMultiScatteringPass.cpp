@@ -252,7 +252,7 @@ namespace atmosphere_scattering
 		, c3d::Texture const & transmittanceLut
 		, c3d::Texture & result
 		, bool const & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "MultiScatteringPass" ), multiscatter::getProgram( *device.renderSystem.getEngine(), result.getExtent().width, transmittanceLut.getExtent() ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "MultiScatteringPass" ), multiscatter::getProgram( c3d::getEngine( device ), result.getExtent().width, transmittanceLut.getExtent() ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = result.getExtent();
@@ -270,7 +270,7 @@ namespace atmosphere_scattering
 						.groupCountY( renderSize.height )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

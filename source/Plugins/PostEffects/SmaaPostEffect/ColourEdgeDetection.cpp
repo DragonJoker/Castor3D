@@ -36,7 +36,7 @@ namespace smaa
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, bool predication )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Shader inputs
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );

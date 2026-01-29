@@ -109,7 +109,7 @@ namespace c3d
 			, TransformPipeline const & pipeline )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
-			auto const & engine = *device.renderSystem.getEngine();
+			auto const & engine = c3d::getEngine( device );
 			auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eModelsData
@@ -266,7 +266,7 @@ namespace c3d
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
-			auto const & engine = *device.renderSystem.getEngine();
+			auto const & engine = c3d::getEngine( device );
 			return device->createPipelineLayout( toUtf8( pipeline.getName( engine ) ) + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( Point4ui ) } );
@@ -284,7 +284,7 @@ namespace c3d
 			, TransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
-			auto const & engine = *device.renderSystem.getEngine();
+			auto const & engine = c3d::getEngine( device );
 			return device->createPipeline( toUtf8( pipeline.getName( engine ) ) + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
@@ -304,8 +304,8 @@ namespace c3d
 		static ShaderPtr getShaderSource( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
-			auto combine = device.renderSystem.getEngine()->getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			auto combine = c3d::getEngine( device ).getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Common
 			auto objectIDs = writer.declPushConstantsBuffer<>( "ObjectIDs" );
@@ -548,7 +548,7 @@ namespace c3d
 		static ShaderPtr getShaderSource( RenderDevice const & device
 			, BoundsTransformPipeline const & pipeline )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 			bool computeCones = pipeline.normals;
 
 			// Inputs
@@ -759,7 +759,7 @@ namespace c3d
 					, m_device
 					, modelsBuffer );
 				m_pass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 
 				return res;
@@ -775,7 +775,7 @@ namespace c3d
 					, runnableGraph
 					, m_device );
 				m_boundsPass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				doProcessPending();
 
@@ -813,7 +813,7 @@ namespace c3d
 
 			if ( pipeline.meshletsBounds )
 			{
-				auto combine = m_device.renderSystem.getEngine()->getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
+				auto combine = c3d::getEngine( m_device ).getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 				m_boundsPass->registerNode( node
 					, *m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] );
 			}
@@ -823,7 +823,7 @@ namespace c3d
 	TransformPipeline const & VertexTransforming::doGetPipeline( uint32_t index )
 	{
 		auto [it, res] = m_pipelines.try_emplace( index, index );
-		auto const & engine = *m_device.renderSystem.getEngine();
+		auto const & engine = c3d::getEngine( m_device );
 		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( it->second.combineID );
 
 		if ( res )

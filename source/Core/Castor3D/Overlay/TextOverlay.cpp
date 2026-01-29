@@ -212,7 +212,7 @@ namespace c3d
 	ashes::PipelineShaderStageCreateInfo TextOverlay::createProgram( RenderDevice const & device )
 	{
 		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "TextOverlayCompute" ) };
-		sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+		sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 		{
 			C3D_Camera( writer
 				, TextOverlay::ComputeBindingIdx::eCamera

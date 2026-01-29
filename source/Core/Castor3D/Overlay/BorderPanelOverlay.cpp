@@ -88,7 +88,7 @@ namespace c3d
 	ashes::PipelineShaderStageCreateInfo BorderPanelOverlay::createProgram( RenderDevice const & device )
 	{
 		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "BorderOverlayCompute" ) };
-		sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+		sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 		{
 			C3D_Camera( writer
 				, uint32_t( ComputeBindingIdx::eCamera )

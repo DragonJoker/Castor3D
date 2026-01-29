@@ -75,7 +75,7 @@ namespace c3d
 		{
 			ProgramModule programModule{ cuT( "RadianceCompute" ) };
 			{
-				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+				sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 				auto matrix = writer.declUniformBuffer( "Matrix", 0u, 0u );
 				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
@@ -283,7 +283,7 @@ namespace c3d
 		auto const & cmd = *m_commands.commandBuffer;
 		cmd.begin();
 		cmd.beginDebugBlock( { "Generating irradiance map"
-			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+			, makeFloatArray( c3d::getEngine( m_device ).getNextRainbowColour() ) } );
 
 		auto clearColor = convert( ClearValue{ transparentBlackClearColor } );
 		for ( auto face = 0u; face < 6u; ++face )

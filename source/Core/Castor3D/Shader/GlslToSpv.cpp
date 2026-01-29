@@ -217,7 +217,7 @@ namespace c3d
 		glshader.setStrings( &str, 1 );
 
 		glslang::SpvOptions spvOptions{};
-		if ( device.renderSystem.getEngine()->getShaderDebugLevel() == 2u )
+		if ( c3d::getEngine( device ).getShaderDebugLevel() == 2u )
 		{
 			spvOptions.generateDebugInfo = true;
 			spvOptions.emitNonSemanticShaderDebugInfo = true;

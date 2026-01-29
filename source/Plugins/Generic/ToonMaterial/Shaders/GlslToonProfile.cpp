@@ -41,7 +41,7 @@ namespace toon::shader
 	c3d::ShaderBufferUPtr ToonProfiles::create( c3d::RenderDevice const & device )
 	{
 		return c3d::makeUnique< c3d::ShaderBuffer >( device
-			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( device ).getGraphResourceCache()
 			, c3d::MaxMaterialsCount * sizeof( ToonProfileData )
 			, cuT( "ToonProfilesBuffer" ) );
 	}

@@ -40,7 +40,7 @@ namespace c3d
 		{
 			static float constexpr FltMax = std::numeric_limits< float >::max();
 
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -247,7 +247,7 @@ namespace c3d
 
 		static ShaderPtr createDebugDisplayShader( RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_CameraNamed( writer
 				, Main
@@ -318,7 +318,7 @@ namespace c3d
 					, crg::cp::Config{}
 						.groupCountX( MaxLightsCount / 1024u )
 						.enabled( &clusters.needsClustersUpdate() ) );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

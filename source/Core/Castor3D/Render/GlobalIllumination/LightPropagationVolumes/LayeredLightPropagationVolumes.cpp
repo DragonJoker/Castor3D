@@ -196,7 +196,7 @@ namespace c3d
 				auto res = makeRawUnique< LightInjectionPass >( framePass, context, runnableGraph
 					, device, lightType, lightCache.getScene()->getLpvGridSize(), rsmSize );
 				lightInjectionPasses.emplace_back( res.get() );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -230,7 +230,7 @@ namespace c3d
 				auto res = makeRawUnique< GeometryInjectionPass >( framePass, context, runnableGraph
 					, device, lightType, lightCache.getScene()->getLpvGridSize(), rsmSize );
 				geometryInjectionPasses.emplace_back( res.get() );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -328,7 +328,7 @@ namespace c3d
 			m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() ) + cuT( "/Graph" )
 				, m_runnable->getTimer() );
 			printGraph( *m_runnable );
-			m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+			m_recordEvent = c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [this]( RenderDevice const &
 					, QueueData const & )
 				{
@@ -388,7 +388,7 @@ namespace c3d
 
 				if ( m_recordEvent )
 					m_recordEvent->skip();
-				m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+				m_recordEvent = c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [this]( RenderDevice const &
 						, QueueData const & )
 					{
@@ -620,7 +620,7 @@ namespace c3d
 					, m_device, m_geometryVolumes && index > 0u, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
 				m_lightPropagationPasses.emplace_back( res.get() );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

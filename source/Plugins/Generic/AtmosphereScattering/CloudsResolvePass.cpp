@@ -182,7 +182,7 @@ namespace atmosphere_scattering
 		, c3d::Texture & result
 		, uint32_t index )
 		: c3d::Named{ cuT( "Clouds/ResolvePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), cloudsres::getProgram( *device.renderSystem.getEngine(), result.getExtent() ) }
+		, m_shader{ getName(), cloudsres::getProgram( c3d::getEngine( device ), result.getExtent() ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = result.getExtent();
@@ -195,7 +195,7 @@ namespace atmosphere_scattering
 					.renderSize( { renderSize.width, renderSize.height } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, runPass->getTimer() );
 				return runPass;
 			} );

@@ -226,7 +226,7 @@ namespace c3d
 			m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() ) + cuT( "/Graph" )
 				, m_runnable->getTimer() );
 			printGraph( *m_runnable );
-			m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
+			m_recordEvent = c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
 				, [this]( RenderDevice const &
 					, QueueData const & )
 				{
@@ -281,7 +281,7 @@ namespace c3d
 
 				if ( m_recordEvent )
 					m_recordEvent->skip();
-				m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
+				m_recordEvent = c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
 					, [this]( RenderDevice const &
 						, QueueData const & )
 					{

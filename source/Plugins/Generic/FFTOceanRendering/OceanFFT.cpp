@@ -45,7 +45,7 @@ namespace ocean_fft
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -77,7 +77,7 @@ namespace ocean_fft
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
 				} );
@@ -96,7 +96,7 @@ namespace ocean_fft
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );

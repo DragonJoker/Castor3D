@@ -336,7 +336,7 @@ namespace c3d
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
-		auto rng = device.renderSystem.getEngine()->createRandomEngine();
+		auto rng = c3d::getEngine( device ).createRandomEngine();
 		std::uniform_real_distribution< float > dist( 0.0f, 1.0f );
 
 		for ( auto & point : m_rsmSamplesSsbo.getData() )
@@ -367,7 +367,7 @@ namespace c3d
 					, crg::ru::Config{ 1u, false }
 					, rsmgi::getConfig( { size.width, size.height }
 						, m_stages ) );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

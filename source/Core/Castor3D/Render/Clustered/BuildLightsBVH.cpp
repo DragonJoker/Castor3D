@@ -43,7 +43,7 @@ namespace c3d
 			, LightType lightType
 			, bool bottomLevel )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto c3d_numLevelNodes = writer.declConstantArray< sdw::UInt >( "c3d_numLevelNodes"
 				, { 1_u			/* Level 0 ( 32^0 ) */
@@ -471,7 +471,7 @@ namespace c3d
 
 		static ShaderPtr createDebugDisplayShader( RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_CameraNamed( writer
 				, Main
@@ -580,7 +580,7 @@ namespace c3d
 						, device
 						, clusters
 						, LightType::ePoint );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );
@@ -604,7 +604,7 @@ namespace c3d
 						, device
 						, clusters
 						, LightType::eSpot );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );

@@ -54,20 +54,11 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include "Castor3D/Event/Frame/CpuFrameEvent.hpp"
-#include "Castor3D/Event/Frame/GpuFrameEvent.hpp"
-#include "Castor3D/Event/UserInput/UserInputEvent.hpp"
+#include <CastorUtils/CastorUtilsPrerequisites.hpp>
 
-#include "Castor3D/Miscellaneous/Logger.hpp"
+#include <ShaderWriter/ShaderWriterPrerequisites.hpp>
 
-#include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Math/Quaternion.hpp>
-#include <CastorUtils/Math/SquareMatrix.hpp>
-#include <CastorUtils/Miscellaneous/StringUtils.hpp>
-
-#include <ShaderWriter/Source.hpp>
-
-#include <ashespp/Core/Device.hpp>
+#include <ashespp/AshesPPPrerequisites.hpp>
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 

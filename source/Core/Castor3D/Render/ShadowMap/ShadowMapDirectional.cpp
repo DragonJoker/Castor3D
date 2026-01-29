@@ -244,7 +244,7 @@ namespace c3d
 						, rsm
 						, isStatic );
 					passData.pass = res.get();
-					m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
 				} );

@@ -92,7 +92,7 @@ namespace ocean_fft
 		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device
 			, bool normals )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
 
 			C3D_FftOcean( writer, GenerateDistributionPass::Bindings::eConfig, 0u );
@@ -267,7 +267,7 @@ namespace ocean_fft
 					, extent
 					, normals
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

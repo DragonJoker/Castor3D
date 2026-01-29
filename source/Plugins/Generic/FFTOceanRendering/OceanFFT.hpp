@@ -53,7 +53,7 @@ namespace ocean_fft
 					, device
 					, extent
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -74,19 +74,19 @@ namespace ocean_fft
 			, c3d::BufferT< cfloat > const & distribution )
 			: fftConfig{ pfftConfig }
 			, frequency{ c3d::makeBuffer< cfloat >( fftConfig.device
-					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
+					, c3d::getEngine( fftConfig.device ).getGraphResourceCache()
 					, dimensions.width * dimensions.height
 					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
 					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Frequency" ) ) }
 			, result{ c3d::makeBufferBase( pfftConfig.device
-					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
+					, c3d::getEngine( fftConfig.device ).getGraphResourceCache()
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
 					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Result0" ) )
 				, c3d::makeBufferBase( pfftConfig.device
-					, fftConfig.device.renderSystem.getEngine()->getGraphResourceCache()
+					, c3d::getEngine( fftConfig.device ).getGraphResourceCache()
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
 					, c3d::MemoryPropertyFlags::eDeviceLocal

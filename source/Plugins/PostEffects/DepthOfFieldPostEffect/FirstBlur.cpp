@@ -26,7 +26,7 @@ namespace dof
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto c3d_mapColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColour", 0u, 0u );
 			auto c3d_mapCoC = writer.declCombinedImg< FImg2DR32 >( "c3d_mapCoC", 1u, 0u );
@@ -134,7 +134,7 @@ namespace dof
 						.renderSize( c3d::makeExtent2D( extent ) )
 						.isEnabled( isEnabled )
 						.passIndex( passIndex ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

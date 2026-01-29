@@ -86,7 +86,7 @@ namespace c3d
 			, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 		if ( auto const & buffer = *m_buffers.emplace_back( makeBufferBase( getDevice()
-				, getDevice().renderSystem.getEngine()->getGraphResourceCache()
+				, getEngine( getDevice() ).getGraphResourceCache()
 				, mappedSize
 				, BufferUsageFlags::eTransferSrc
 				, MemoryPropertyFlags::eHostVisible

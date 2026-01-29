@@ -82,7 +82,7 @@ namespace GuiCommon
 		{
 			namespace c3ds = c3d::shader;
 
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Camera( writer
 				, BindingPoints::eCamera
@@ -136,7 +136,7 @@ namespace GuiCommon
 		{
 			namespace c3ds = c3d::shader;
 
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Camera( writer
 				, BindingPoints::eCamera

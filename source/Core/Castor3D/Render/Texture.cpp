@@ -43,7 +43,7 @@ namespace c3d
 		static ashes::Sampler const * getSampler( RenderDevice const & device
 			, TextureSamplerCreateInfo const & createInfo )
 		{
-			auto & engine = *device.renderSystem.getEngine();
+			auto & engine = c3d::getEngine( device );
 			Sampler const * c3dSampler{};
 
 			if ( auto splName = getSamplerName( createInfo.compareOp

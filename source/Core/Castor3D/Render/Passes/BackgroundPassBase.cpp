@@ -17,7 +17,7 @@ namespace c3d
 		, bool forceVisible )
 		: m_device{ device }
 		, m_background{ &background }
-		, m_viewport{ *device.renderSystem.getEngine() }
+		, m_viewport{ c3d::getEngine( device ) }
 		, m_onBackgroundChanged{ background.onChanged.connect( [this, forceVisible]( SceneBackground const & bg )
 			{
 				doResetPipeline( bg.getPassIndex( forceVisible ) );

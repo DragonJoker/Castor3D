@@ -51,7 +51,7 @@ namespace motion_blur
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto configuration = writer.declUniformBuffer( "Configuration", BlurCfgUboIdx, 0u );
 			auto c3d_samplesCount = configuration.declMember< sdw::UInt >( "c3d_samplesCount" );
@@ -157,7 +157,7 @@ namespace motion_blur
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

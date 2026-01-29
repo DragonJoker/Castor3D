@@ -29,7 +29,7 @@ namespace atmosphere_scattering
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, uint32_t dimension )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto outputTexture = writer.declStorageImg< sdw::WImage3DRgba32 >("outputTexture"
 				, uint32_t( Bindings::eOutput )
@@ -408,7 +408,7 @@ namespace atmosphere_scattering
 						.groupCountZ( renderSize.depth / 4u )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -425,7 +425,7 @@ namespace atmosphere_scattering
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [&enabled](){ return enabled; } ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

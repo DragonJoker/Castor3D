@@ -226,7 +226,7 @@ namespace draw_edges
 		, c3d::Texture const & source
 		, c3d::Texture & target )
 	{
-		auto & engine = *device.renderSystem.getEngine();
+		auto & engine = c3d::getEngine( device );
 		auto const & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & depthObj = technique.getDepthObj();
@@ -265,7 +265,7 @@ namespace draw_edges
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -279,7 +279,7 @@ namespace draw_edges
 		pass.addInputSampledT( *m_objectID->getResult().getSampledLastAttach(), px::Bindings::eEdgeO );
 		m_ubo.createPassBinding( pass, px::Bindings::eDrawEdges );
 		auto index = uint32_t( px::Bindings::eSpecifics );
-		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
+		c3d::getEngine( device ).createSpecificsBuffersPassBindings( pass, index );
 		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 
 		return true;

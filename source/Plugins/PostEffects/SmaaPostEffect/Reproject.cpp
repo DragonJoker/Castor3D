@@ -36,7 +36,7 @@ namespace smaa
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, bool reprojection )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
 			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", uint32_t( Idx::CurColTexIdx ), 0u );
@@ -171,7 +171,7 @@ namespace smaa
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
 					.build( framePass, graphContext, graph, { config.maxSubsampleIndices } );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

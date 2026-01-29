@@ -329,7 +329,7 @@ namespace c3d
 			auto const & cmd = *result.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock( { "Texture3D To Texture2D"
-				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+				, makeFloatArray( c3d::getEngine( device ).getNextRainbowColour() ) } );
 
 			if ( sampler )
 			{
@@ -764,7 +764,7 @@ namespace c3d
 		, m_renderPass{ t3dto2d::createRenderPass( device, cuT( "Texture3DTo2D" ), m_target, m_depthBuffer ) }
 		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, cuT( "Texture3DTo2D" ), m_target, m_depthBuffer ) }
 		, m_sampler{ makeUnique< Sampler >( cuT( "Slice" )
-			, *device.renderSystem.getEngine()
+			, c3d::getEngine( device )
 			, ashes::SamplerCreateInfo{ 0u
 				, VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR

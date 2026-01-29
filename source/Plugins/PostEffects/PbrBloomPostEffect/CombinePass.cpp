@@ -32,7 +32,7 @@ namespace PbrBloom
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto c3d_mapScene = writer.declCombinedImg< Img2DRgba >( CombinePass::CombineMapScene, uint32_t( Idx::SceneMapIdx ), 0u );
 			auto c3d_mapPasses = writer.declCombinedImg< Img2DRgba >( CombinePass::CombineMapPasses, uint32_t( Idx::BlurredMapIdx ), 0u );
@@ -90,7 +90,7 @@ namespace PbrBloom
 					.passIndex( passIndex )
 					.build( framePass, context, runGraph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 				return result;
 			} );

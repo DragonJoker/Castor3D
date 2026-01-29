@@ -44,7 +44,7 @@ namespace smaa
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, SmaaConfig const & config )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
 			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", Bindings::Texture, 0u );

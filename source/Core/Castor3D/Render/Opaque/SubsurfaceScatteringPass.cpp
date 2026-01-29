@@ -347,7 +347,7 @@ namespace c3d
 		, Texture const & depthObj
 		, Texture const & diffuse
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, m_device{ device }
 		, m_cameraUbo{ cameraUbo }
 		, m_diffuse{ diffuse }
@@ -362,11 +362,11 @@ namespace c3d
 		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSResult" ) ) }
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( MemoryPropertyFlags::eNone ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( MemoryPropertyFlags::eNone ) }
-		, m_blurHorizProgram{ cuT( "SSSBlurX" ), sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
+		, m_blurHorizProgram{ cuT( "SSSBlurX" ), sssss::getBlurProgram( c3d::getEngine( device ), false ) }
 		, m_blurXShader{ makeProgramStates( m_device, m_blurHorizProgram ) }
-		, m_blurVerticProgram{ cuT( "SSSBlurY" ), sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
+		, m_blurVerticProgram{ cuT( "SSSBlurY" ), sssss::getBlurProgram( c3d::getEngine( device ), true ) }
 		, m_blurYShader{ makeProgramStates( m_device, m_blurVerticProgram ) }
-		, m_combineProgram{ cuT( "SSSCombine" ), sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
+		, m_combineProgram{ cuT( "SSSCombine" ), sssss::getCombineProgram( c3d::getEngine( device ) ) }
 		, m_combineShader{ makeProgramStates( m_device, m_combineProgram ) }
 	{
 		auto & configuration = m_blurCfgUbo.getData();

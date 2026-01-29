@@ -89,7 +89,7 @@ namespace smaa
 					, context
 					, graph
 					, crg::ru::Config{ passCount } );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }

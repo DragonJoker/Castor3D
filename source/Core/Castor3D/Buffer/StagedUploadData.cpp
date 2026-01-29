@@ -27,12 +27,12 @@ namespace c3d
 		, m_gpuBuffers{ &m_buffers[0] }
 		, m_timer{ makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", crg::TimerScope::eUpdate ) }
 	{
-		getDevice().renderSystem.getEngine()->registerTimer( cuT( "Upload" ), *m_timer );
+		getEngine( getDevice() ).registerTimer( cuT( "Upload" ), *m_timer );
 	}
 
 	StagedUploadData::~StagedUploadData()noexcept
 	{
-		getDevice().renderSystem.getEngine()->unregisterTimer( cuT( "Upload" ), *m_timer );
+		getEngine( getDevice() ).unregisterTimer( cuT( "Upload" ), *m_timer );
 		VkDeviceSize totalSize{};
 
 		for ( auto const & [buffer, mapped] : m_wholeBuffers )
@@ -370,7 +370,7 @@ namespace c3d
 			}
 
 			StagingBuffer buffer{ makeUnique< GpuPackedBaseBuffer >( getDevice()
-				, getDevice().renderSystem.getEngine()->getGraphResourceCache()
+				, getEngine( getDevice() ).getGraphResourceCache()
 				, BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
 				, MemoryPropertyFlags::eHostVisible | MemoryPropertyFlags::eHostCoherent
 				, getName() + cuT( "Staging" ) + string::toString( pool.size() )

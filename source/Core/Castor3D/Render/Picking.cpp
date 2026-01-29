@@ -105,7 +105,7 @@ namespace c3d
 		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, m_device{ device }
 		, m_bandSize{ getSafeBandSize( size ) }
 		, m_realSize{ getSafeBandedSize( size ) }

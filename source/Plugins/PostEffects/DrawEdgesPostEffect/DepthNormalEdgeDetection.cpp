@@ -35,8 +35,8 @@ namespace draw_edges
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, c3d::Extent3D const & extent )
 		{
-			auto const & engine = *device.renderSystem.getEngine();
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			auto const & engine = c3d::getEngine( device );
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			c3d::shader::Utils utils{ writer };
 			c3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
@@ -228,7 +228,7 @@ namespace draw_edges
 					.depthStencilState( dsState )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -239,7 +239,7 @@ namespace draw_edges
 		pass.addInputSampledT( *nmlOcc.getSampledLastAttach(), Bindings::eNmlOcc );
 		pass.addInputStorageT( *depthRange.getLastAttach(), Bindings::eDepthRange );
 		auto index = uint32_t( Bindings::eSpecifics );
-		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
+		c3d::getEngine( device ).createSpecificsBuffersPassBindings( pass, index );
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId()
 			, c3d::transparentBlackClearColor ) );
 		m_result.create();

@@ -33,7 +33,7 @@ namespace c3d
 		static ShaderPtr createShader( RenderDevice const & device
 			, ClustersConfig const & config )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 			shader::BitonicSortT< 4u > bitonic{ writer, 8u };
 
 			C3D_Clusters( writer
@@ -126,7 +126,7 @@ namespace c3d
 							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::ePoint ).empty(); } ) )
 						, clusters
 						, LightType::ePoint );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );
@@ -152,7 +152,7 @@ namespace c3d
 							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::eSpot ).empty(); } ) )
 						, clusters
 						, LightType::eSpot );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );

@@ -290,7 +290,7 @@ namespace atmosphere_scattering
 					, size
 					, forceVisible );
 				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

@@ -143,11 +143,11 @@ namespace c3d
 		}
 
 		context.getContext().vkCmdBeginDebugBlock( commandBuffer
-			, { "Compute", makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+			, { "Compute", makeFloatArray( c3d::getEngine( m_device ).getNextRainbowColour() ) } );
 		m_renderer->registerComputeCommands( context, commandBuffer );
 		context.getContext().vkCmdEndDebugBlock( commandBuffer );
 		context.getContext().vkCmdBeginDebugBlock( commandBuffer
-			, { "Draw", makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+			, { "Draw", makeFloatArray( c3d::getEngine( m_device ).getNextRainbowColour() ) } );
 		VkCommandBuffer secondary = m_renderer->getCommands();
 		m_renderPass.begin( context
 			, commandBuffer

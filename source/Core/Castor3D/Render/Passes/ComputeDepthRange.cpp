@@ -77,7 +77,7 @@ namespace c3d
 
 		static ShaderPtr createShader( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
 			auto input( writer.declStorageImg< RFImg2DRgba32 >( "input"

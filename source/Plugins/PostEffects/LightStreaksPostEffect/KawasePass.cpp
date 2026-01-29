@@ -30,7 +30,7 @@ namespace light_streaks
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Kawase( writer, Bindings::KawaseUboIdx, 0u );
 			auto c3d_mapHiPass = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHiPass", Bindings::DifImgIdx, 0u );
@@ -92,7 +92,7 @@ namespace light_streaks
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 						.enabled( enabled )
 						.build( framePass, context, graph );
-					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

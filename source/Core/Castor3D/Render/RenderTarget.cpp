@@ -1360,7 +1360,7 @@ namespace c3d
 			m_velocity.create();
 			m_combined.create();
 			auto runnable = m_runnable.get();
-			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+			c3d::getEngine( device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [runnable, result, this]( RenderDevice const &
 					, QueueData const & )
 				{

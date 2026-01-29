@@ -109,7 +109,7 @@ namespace c3d
 		, Camera & camera
 		, VoxelizerUbo & voxelizerUbo
 		, VctConfig const & voxelConfig )
-		: m_engine{ *device.renderSystem.getEngine() }
+		: m_engine{ c3d::getEngine( device ) }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
 		, m_scene{ scene }
@@ -148,7 +148,7 @@ namespace c3d
 		m_graph.addOutput( m_secondaryBounce.getWholeViewId()
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		auto runnable = m_runnable.get();
-		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+		c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [runnable]( RenderDevice const &
 				, QueueData const & )
 			{
@@ -290,7 +290,7 @@ namespace c3d
 					m_staticsVoxelizePass = res.get();
 				else
 					m_dynamicsVoxelizePass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -317,7 +317,7 @@ namespace c3d
 					, context
 					, runnableGraph
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableClearStatic(); } ) );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -341,7 +341,7 @@ namespace c3d
 					, crg::ru::Config{}
 					, crg::BufferCopy::GetPassIndexCallback( []() { return 0u; } )
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -366,7 +366,7 @@ namespace c3d
 					, m_voxelConfig
 					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableVoxelToTexture(); } ) );
 				m_voxelToTexture = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -393,7 +393,7 @@ namespace c3d
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 					, enable );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -417,7 +417,7 @@ namespace c3d
 					, m_voxelConfig
 					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableSecondaryBounce(); } ) );
 				m_voxelSecondaryBounce = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

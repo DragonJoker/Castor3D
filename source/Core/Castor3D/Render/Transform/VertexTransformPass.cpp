@@ -162,7 +162,7 @@ namespace c3d
 		, m_morphTargets{ morphTargets }
 		, m_morphingWeights{ morphingWeights }
 		, m_skinTransforms{ skinTransforms }
-		, m_descriptorSet{ vtxtrs::createDescriptorSet( *device.renderSystem.getEngine()
+		, m_descriptorSet{ vtxtrs::createDescriptorSet( c3d::getEngine( device )
 			, pipeline
 			, m_input
 			, m_output

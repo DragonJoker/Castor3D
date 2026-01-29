@@ -25,7 +25,7 @@ namespace PbrBloom
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto constants = writer.declPushConstantsBuffer<>( "constants" );
 			auto srcTexelSize = constants.declMember< sdw::Vec2 >( "srcTexelSize" );
@@ -161,7 +161,7 @@ namespace PbrBloom
 					auto result = builder.build( framePass, context, runGraph
 						, crg::ru::Config{ count } );
 					m_quads.push_back( result.get() );
-					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

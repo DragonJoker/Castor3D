@@ -53,7 +53,7 @@ namespace c3d
 		: OwnedBy< EnvironmentMap >{ environmentMap }
 		, Named{ cuT( "Env" ) + environmentMap.getScene().getName() + string::toString( index ) + cuT( "/" ) + c3d::getName( face ) }
 		, m_device{ device }
-		, m_graph{ device.renderSystem.getEngine()->getGraphResourceHandler(), toUtf8( getName() ) }
+		, m_graph{ c3d::getEngine( device ).getGraphResourceHandler(), toUtf8( getName() ) }
 		, m_background{ background }
 		, m_node{ c3d::move( faceNode ) }
 		, m_index{ index }
@@ -64,13 +64,13 @@ namespace c3d
 		, m_renderUbo{ m_device }
 		, m_sceneUbo{ &environmentMap.getScene().getUbo() }
 		, m_colourRender{ device
-			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( device ).getGraphResourceCache()
 			, environmentMap.getTmpImage( m_index, m_face ) }
 		, m_colourResult{ device
-			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( device ).getGraphResourceCache()
 			, environmentMap.getColourViewId( m_index, m_face ) }
 		, m_depth{ device
-			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( device ).getGraphResourceCache()
 			, getOwner()->getDepthViewId( m_index, m_face ) }
 		, m_backgroundRenderer{ makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
 			, m_device

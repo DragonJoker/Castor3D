@@ -103,7 +103,7 @@ namespace atmosphere_scattering
 		, c3d::Extent2D const & size
 		, uint32_t passIndex )
 	{
-		auto & engine = *device.renderSystem.getEngine();
+		auto & engine = c3d::getEngine( device );
 		c3d::DataHolderT< Shaders >::getData().shader = { atmos::Name
 			, atmos::getProgram( engine, size, passIndex == 0u ) };
 		c3d::DataHolderT< Shaders >::getData().stages = c3d::makeProgramStates( device, c3d::DataHolderT< Shaders >::getData().shader );

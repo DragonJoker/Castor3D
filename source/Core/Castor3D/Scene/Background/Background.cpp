@@ -215,7 +215,7 @@ namespace c3d
 
 				if ( program.stages.empty() )
 				{
-					auto & engine = *device.renderSystem.getEngine();
+					auto & engine = c3d::getEngine( device );
 					program.shader = ProgramModule{ cuT( "Background" ) };
 					{
 						sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
@@ -458,7 +458,7 @@ namespace c3d
 					, depth
 					, forceVisible );
 				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

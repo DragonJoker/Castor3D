@@ -57,7 +57,7 @@ namespace c3d
 						auto j = writer.declLocale( "j"
 							, screenPos.y() / writer.cast< sdw::Float >( clusterSize().y() ) );
 
-						sdw::UInt const Exponential= 0_u;
+						sdw::UInt const Exponential = 0_u;
 						sdw::UInt const Linear = 1_u;
 						sdw::UInt const Hybrid = 2_u;
 
