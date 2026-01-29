@@ -258,7 +258,7 @@ namespace atmosphere_scattering
 		, c3d::Texture & cloudsResult
 		, uint32_t index )
 		: c3d::Named{ cuT( "Clouds/VolumePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), volclouds::getProgram( *device.renderSystem.getEngine(), skyResult.getExtent(), transmittance.getExtent(), depthObj != nullptr ) }
+		, m_shader{ getName(), volclouds::getProgram( c3d::getEngine( device ), skyResult.getExtent(), transmittance.getExtent(), depthObj != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = skyResult.getExtent();
@@ -288,7 +288,7 @@ namespace atmosphere_scattering
 						.build( framePass, context, graph );
 				}
 
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

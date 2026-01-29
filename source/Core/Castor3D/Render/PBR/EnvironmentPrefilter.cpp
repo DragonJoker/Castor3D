@@ -104,7 +104,7 @@ namespace c3d
 			String prefix = isCharlie ? String{ cuT( "Sheen" ) } : String{};
 			ProgramModule program{ prefix + cuT( "EnvironmentPrefilter" ) };
 			{
-				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+				sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 				shader::BRDFHelpers brdf{ writer };
 
@@ -353,7 +353,7 @@ namespace c3d
 		auto const & cmd = *m_commands.commandBuffer;
 		cmd.begin();
 		cmd.beginDebugBlock( { "Prefiltering " + toUtf8( m_prefix ) + " Environment map"
-			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+			, makeFloatArray( c3d::getEngine( m_device ).getNextRainbowColour() ) } );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{

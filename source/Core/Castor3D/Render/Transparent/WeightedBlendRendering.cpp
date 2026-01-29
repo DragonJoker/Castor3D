@@ -38,7 +38,7 @@ namespace c3d
 
 		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 			shader::Fog fog{ writer };
@@ -147,7 +147,7 @@ namespace c3d
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &m_enabled )
 					.build( framePass, context, runGraph, crg::ru::Config{ 1u } );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

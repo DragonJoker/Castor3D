@@ -63,7 +63,7 @@ namespace c3d
 		, Texture * targetImage
 		, Texture * targetDepth
 		, NodesPassDesc const & desc )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, Named{ makeString( fullName ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }

@@ -254,7 +254,7 @@ namespace atmosphere_scattering
 		, uint32_t index
 		, bool const & enabled )
 		: c3d::Named{ cuT( "CameraVolumePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), volume::getProgram( *device.renderSystem.getEngine(), result.getExtent(), transmittance.getExtent() ) }
+		, m_shader{ getName(), volume::getProgram( c3d::getEngine( device ), result.getExtent(), transmittance.getExtent() ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = result.getExtent();
@@ -269,7 +269,7 @@ namespace atmosphere_scattering
 					.instances( renderSize.depth )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

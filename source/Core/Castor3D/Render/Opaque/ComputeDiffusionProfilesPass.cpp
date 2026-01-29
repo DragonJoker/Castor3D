@@ -90,7 +90,7 @@ namespace c3d
 			{
 				if ( m_stages.empty() )
 				{
-					m_shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeDiffusionProfiles" ), getProgram( *m_device.renderSystem.getEngine() ) };
+					m_shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeDiffusionProfiles" ), getProgram( c3d::getEngine( m_device ) ) };
 					m_stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, m_shaderModule ) };
 				}
 
@@ -153,7 +153,7 @@ namespace c3d
 						.groupCountX( imageWidth / 32u )
 						.groupCountY( imageHeight / 32u )
 						.groupCountZ( 1u ) );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

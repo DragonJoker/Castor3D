@@ -390,7 +390,7 @@ namespace c3d
 					, crg::ru::Config{ 1u, false }
 					, rsminterp::getConfig( { size.width, size.height }
 						, m_stages ) );
-				device.renderSystem.getEngine()->registerTimer( runGraph.getName() + "/RsmInterpolate"
+				c3d::getEngine( device ).registerTimer( runGraph.getName() + "/RsmInterpolate"
 					, result->getTimer() );
 				return result;
 			} );

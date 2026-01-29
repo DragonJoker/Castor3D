@@ -113,7 +113,7 @@ namespace c3d
 				, fontTexture
 				, *pipelineData.overlaysIDsBuffer->buffer );
 			descs.all.push_back( *descs.draw );
-			descs.all.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
+			descs.all.push_back( *c3d::getEngine( device ).getTextureUnitCache().getDescriptorSet() );
 
 			if ( textDescriptorSet )
 			{

@@ -7,6 +7,7 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
@@ -300,6 +301,11 @@ namespace c3d
 	}
 
 	//*************************************************************************************************
+
+	Engine & getEngine( RenderDevice const & device )
+	{
+		return *device.renderSystem.getEngine();
+	}
 
 	uint32_t getSafeBandsSize( Size const & size )
 	{

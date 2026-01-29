@@ -114,7 +114,7 @@ namespace ocean_fft
 
 		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto pcb = writer.declPushConstantsBuffer( "MipmapsData" );
 			auto invSize = pcb.declMember< sdw::Vec2 >( "invSize" );
@@ -328,7 +328,7 @@ namespace ocean_fft
 				, crg::RunnableGraph & graph )
 			{
 				auto res = c3d::makeRawUnique< genmips::GenerateMipmapsPass >( framePass, context, graph, device );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

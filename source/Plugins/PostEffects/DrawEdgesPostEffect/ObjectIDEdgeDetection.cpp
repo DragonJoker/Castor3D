@@ -194,7 +194,7 @@ namespace draw_edges
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -203,7 +203,7 @@ namespace draw_edges
 		pass.addInputStorageT( *modelBuffer.getLastAttach(), oied::Bindings::eModels );
 		pass.addInputSampledT( *depthObj.getSampledLastAttach(), oied::Bindings::eDepthObj );
 		auto index = uint32_t( oied::Bindings::eSpecifics );
-		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
+		c3d::getEngine( device ).createSpecificsBuffersPassBindings( pass, index );
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), c3d::transparentBlackClearColor ) );
 		m_result.create();
 	}

@@ -238,7 +238,7 @@ namespace c3d
 	{
 		if ( m_commandBuffer )
 		{
-			auto const & engine = *getDevice().renderSystem.getEngine();
+			auto const & engine = getEngine( getDevice() );
 			m_commandBuffer->beginDebugBlock( { std::string{ name }
 				, makeFloatArray( engine.getNextRainbowColour() ) } );
 			timer.beginPass( *m_commandBuffer );

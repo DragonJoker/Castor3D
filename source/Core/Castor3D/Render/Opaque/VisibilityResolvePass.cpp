@@ -1072,7 +1072,7 @@ namespace c3d
 			, bool areDebugTargetsEnabled )
 		{
 			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
-			auto & engine = *device.renderSystem.getEngine();
+			auto & engine = c3d::getEngine( device );
 			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
@@ -1568,7 +1568,7 @@ namespace c3d
 					, stages ) );
 			}
 
-			auto const & engine = *device.renderSystem.getEngine();
+			auto const & engine = c3d::getEngine( device );
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersBindings( bindings
 				, stages

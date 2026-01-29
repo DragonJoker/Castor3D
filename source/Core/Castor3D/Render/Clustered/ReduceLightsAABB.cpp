@@ -41,7 +41,7 @@ namespace c3d
 			, ClustersConfig const & config
 			, bool first )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -465,7 +465,7 @@ namespace c3d
 					, device
 					, clusters
 					, crg::cp::Config{} );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -485,7 +485,7 @@ namespace c3d
 					, device
 					, clusters
 					, crg::cp::Config{} );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

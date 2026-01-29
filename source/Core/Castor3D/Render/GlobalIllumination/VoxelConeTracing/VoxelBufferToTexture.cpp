@@ -89,7 +89,7 @@ namespace c3d
 			, bool temporalSmoothing
 			, uint32_t voxelGridSize )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"

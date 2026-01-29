@@ -174,7 +174,7 @@ namespace c3d
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, m_source{ attach }
 		, m_device{ device }
 		, m_prefix{ prefix }
@@ -183,8 +183,8 @@ namespace c3d
 		, m_intermediateView{ intermediateView }
 		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
 		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
-		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( *device.renderSystem.getEngine(), isDepthFormat( m_format ), false ) }
-		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( *device.renderSystem.getEngine(), isDepthFormat( m_format ), true ) }
+		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( c3d::getEngine( device ), isDepthFormat( m_format ), false ) }
+		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( c3d::getEngine( device ), isDepthFormat( m_format ), true ) }
 		, m_stagesX{ makeProgramStates( device, m_shaderX ) }
 		, m_stagesY{ makeProgramStates( device, m_shaderY ) }
 	{
@@ -211,7 +211,7 @@ namespace c3d
 					.isEnabled( isEnabled )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
 					.build( framePass, context, runnable );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 				} );
@@ -233,7 +233,7 @@ namespace c3d
 					.isEnabled( isEnabled )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
 					.build( framePass, context, runnable );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 				} );

@@ -110,7 +110,7 @@ namespace c3d
 			auto result = graph.compile( device.makeContext() );
 			auto runnable = result.get();
 			printGraph( *result );
-			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+			c3d::getEngine( device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [runnable]( RenderDevice const &
 					, QueueData const & )
 				{
@@ -158,7 +158,7 @@ namespace c3d
 		doCreateTransparentPass();
 		doCreateOverlayPass();
 		m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
-		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
+		getEngine( m_device ).getControlsManager()->setSize( m_renderSize );
 	}
 
 	LoadingScreen::~LoadingScreen()noexcept
@@ -245,7 +245,7 @@ namespace c3d
 	{
 		m_renderPass = renderPass;
 		m_renderSize = renderSize;
-		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
+		getEngine( m_device ).getControlsManager()->setSize( m_renderSize );
 
 		if ( m_swapchainFormat != swapchainFormat )
 		{

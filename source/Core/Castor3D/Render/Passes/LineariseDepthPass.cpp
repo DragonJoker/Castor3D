@@ -130,15 +130,15 @@ namespace c3d
 		, Texture const & depthObj )
 		: m_device{ device }
 		, m_graph{ graph }
-		, m_engine{ *m_device.renderSystem.getEngine() }
+		, m_engine{ c3d::getEngine( m_device ) }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_prefix{ makeString( graph.getName() ) + prefix }
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< Point3f >( MemoryPropertyFlags::eNone ) }
-		, m_extractShader{ m_prefix + cuT( "ExtractDepth" ), passlindpth::getLineariseProgram( *device.renderSystem.getEngine() ) }
+		, m_extractShader{ m_prefix + cuT( "ExtractDepth" ), passlindpth::getLineariseProgram( c3d::getEngine( device ) ) }
 		, m_extractStages{ makeProgramStates( m_device, m_extractShader ) }
-		, m_minifyShader{ m_prefix + cuT( "MinifyDepth" ), passlindpth::getMinifyProgram( *device.renderSystem.getEngine() ) }
+		, m_minifyShader{ m_prefix + cuT( "MinifyDepth" ), passlindpth::getMinifyProgram( c3d::getEngine( device ) ) }
 		, m_minifyStages{ makeProgramStates( m_device, m_minifyShader ) }
 	{
 		doInitialiseExtractPass( progress, depthObj );
@@ -213,7 +213,7 @@ namespace c3d
 					.renderSize( m_size )
 					.enabled( &m_ssaoConfig.enabled )
 					.build( framePass, context, graph );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -248,7 +248,7 @@ namespace c3d
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
 						.build( framePass, context, graph );
-					m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );

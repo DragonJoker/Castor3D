@@ -1745,7 +1745,7 @@ namespace c3d
 
 	void RenderWindow::doProcessDeviceLost()
 	{
-#ifdef VK_EXT_device_fault
+#if defined( VK_EXT_device_fault ) && 0
 		auto faultInfo = m_device->getDeviceFaultInfo();
 		log::error << "Device lost error: " << faultInfo.description << "\n";
 

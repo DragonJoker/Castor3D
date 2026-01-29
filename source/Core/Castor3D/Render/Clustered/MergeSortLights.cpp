@@ -37,7 +37,7 @@ namespace c3d
 		static ShaderPtr createShader( RenderDevice const & device
 			, bool mergePathPartitions )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
 				, Bindings::eInputKeys
@@ -617,7 +617,7 @@ namespace c3d
 						, device
 						, clusters
 						, LightType::ePoint );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );
@@ -640,7 +640,7 @@ namespace c3d
 						, device
 						, clusters
 						, LightType::eSpot );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
 					return runPass;
 				} );

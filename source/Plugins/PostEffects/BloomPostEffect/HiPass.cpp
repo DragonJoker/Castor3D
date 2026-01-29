@@ -26,7 +26,7 @@ namespace Bloom
 
 		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 
@@ -68,7 +68,7 @@ namespace Bloom
 		, m_shader{ cuT( "BloomHiPass" ), hi::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ device
-			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, c3d::getEngine( device ).getGraphResourceCache()
 			, "BLHi"
 			, { c3d::ImageCreateFlags::eNone
 				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, DebugHiPass ? 1u : blurPassesCount
@@ -96,7 +96,7 @@ namespace Bloom
 						.enabled( enabled )
 						.passIndex( passIndex )
 						.renderSize( c3d::makeExtent2D( extent ) ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -121,7 +121,7 @@ namespace Bloom
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [enabled](){ return *enabled; } ) );
-						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );

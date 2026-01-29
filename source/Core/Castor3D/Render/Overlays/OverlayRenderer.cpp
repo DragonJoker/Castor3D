@@ -198,7 +198,7 @@ namespace c3d
 
 		static ashes::DescriptorSetLayoutPtr createBaseDescriptorLayout( RenderDevice const & device )
 		{
-			auto const & engine = *device.renderSystem.getEngine();
+			auto const & engine = c3d::getEngine( device );
 			auto const & materials = engine.getMaterialCache();
 			ashes::VkDescriptorSetLayoutBindingArray baseBindings;
 			baseBindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
@@ -242,28 +242,28 @@ namespace c3d
 		, renderUbo{ device }
 		, parentRenderUbo{ prenderUbo }
 		, cameraUbo{ device }
-		, panelVertexBuffer{ makeRawUnique< PanelVertexBufferPool >( *device.renderSystem.getEngine()
+		, panelVertexBuffer{ makeRawUnique< PanelVertexBufferPool >( c3d::getEngine( device )
 			, cuT( "PanelOverlays" )
 			, device
 			, cameraUbo
 			, renderUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
-		, borderVertexBuffer{ makeRawUnique< BorderPanelVertexBufferPool >( *device.renderSystem.getEngine()
+		, borderVertexBuffer{ makeRawUnique< BorderPanelVertexBufferPool >( c3d::getEngine( device )
 			, cuT( "BorderOverlays" )
 			, device
 			, cameraUbo
 			, renderUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
-		, textVertexBuffer{ makeRawUnique< TextVertexBufferPool >( *device.renderSystem.getEngine()
+		, textVertexBuffer{ makeRawUnique< TextVertexBufferPool >( c3d::getEngine( device )
 			, cuT( "TextOverlays" )
 			, device
 			, cameraUbo
 			, renderUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer
-			, makeUnique< OverlayTextBufferPool >( *device.renderSystem.getEngine()
+			, makeUnique< OverlayTextBufferPool >( c3d::getEngine( device )
 				, cuT( "TextsGlyphs" )
 				, device ) ) }
 	{
@@ -742,7 +742,7 @@ namespace c3d
 		, bool sdfFont )
 	{
 		// Remove unwanted flags
-		auto const & passComponents = m_device.renderSystem.getEngine()->getPassComponentsRegister();
+		auto const & passComponents = c3d::getEngine( m_device ).getPassComponentsRegister();
 		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
 			, pass.getTexturesMask() );
 		auto key = ovrlrend::makeKey( passComponents, textures, renderPass, borderOverlay, textOverlay, sdfFont );
@@ -770,7 +770,7 @@ namespace c3d
 		, bool textOverlay
 		, bool sdfFont )
 	{
-		auto const & engine = *m_device.renderSystem.getEngine();
+		auto const & engine = c3d::getEngine( m_device );
 		auto const & passComponents = engine.getPassComponentsRegister();
 		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
 			, VK_BLEND_FACTOR_SRC_ALPHA
@@ -836,7 +836,7 @@ namespace c3d
 		, bool textOverlay
 		, bool sdfFont )const
 	{
-		auto & engine = *m_device.renderSystem.getEngine();
+		auto & engine = c3d::getEngine( m_device );
 		bool hasTexture = texturesFlags.configCount != 0u;
 		ProgramModule programModule{ cuT( "Overlay" ) };
 		{

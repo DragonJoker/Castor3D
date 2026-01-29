@@ -29,7 +29,7 @@ namespace c3d
 	{
 		static ashes::PipelineShaderStageCreateInfoArray createProgram( RenderDevice const & device )
 		{
-			auto & engine = *device.renderSystem.getEngine();
+			auto & engine = c3d::getEngine( device );
 			ProgramModule programModule{ cuT( "EquirectangularToCube" ) };
 			{
 				sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
@@ -177,7 +177,7 @@ namespace c3d
 				uint32_t face = 0u;
 				m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 				m_commandBuffer->beginDebugBlock( { "Equirectangular to cube"
-					, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+					, makeFloatArray( c3d::getEngine( m_device ).getNextRainbowColour() ) } );
 
 				for ( auto const & frameBuffer : m_frameBuffers )
 				{

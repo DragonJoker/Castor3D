@@ -29,7 +29,7 @@ namespace c3d
 
 		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
 			auto constexpr maxPipelinesSize = uint32_t( getBitSize( MaxPipelines ) );
@@ -86,7 +86,7 @@ namespace c3d
 							.groupCountX( divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -108,7 +108,7 @@ namespace c3d
 
 		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -169,9 +169,9 @@ namespace c3d
 						, crg::ru::Config{}
 						, crg::cp::Config{}
 							.isEnabled( enable )
-							.groupCountX( device.renderSystem.getEngine()->getMaxPassTypeCount() / 64u )
+							.groupCountX( c3d::getEngine( device ).getMaxPassTypeCount() / 64u )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -195,7 +195,7 @@ namespace c3d
 
 		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
 			auto constexpr maxPipelinesSize = uint32_t( getBitSize( MaxPipelines ) );
@@ -264,7 +264,7 @@ namespace c3d
 							.groupCountX( divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

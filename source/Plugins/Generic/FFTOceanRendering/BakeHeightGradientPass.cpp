@@ -115,7 +115,7 @@ namespace ocean_fft
 
 		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			auto pcb = writer.declPushConstantsBuffer( "BakeData" );
 			auto invSize = pcb.declMember< sdw::Vec4 >( "invSize" );
@@ -338,7 +338,7 @@ namespace ocean_fft
 					, heightMapSize
 					, displacementDownsample
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

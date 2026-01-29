@@ -1070,6 +1070,8 @@ namespace c3d
 		bool allowHdr{};
 	};
 
+
+	C3D_API Engine & getEngine( RenderDevice const & device );
 	C3D_API uint32_t getSafeBandsSize( Size const & size );
 	C3D_API uint32_t getSafeBandSize( Size const & size );
 	C3D_API Size getSafeBandedSize( Size const & size );

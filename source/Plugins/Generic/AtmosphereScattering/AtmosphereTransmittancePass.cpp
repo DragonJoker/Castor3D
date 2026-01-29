@@ -98,7 +98,7 @@ namespace atmosphere_scattering
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, c3d::Texture & result
 		, bool const & enabled )
-		: m_shader{ cuT( "TransmittancePass" ), transmittance::getProgram( *device.renderSystem.getEngine(), result.getExtent() ) }
+		: m_shader{ cuT( "TransmittancePass" ), transmittance::getProgram( c3d::getEngine( device ), result.getExtent() ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = result.getExtent();
@@ -112,7 +112,7 @@ namespace atmosphere_scattering
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

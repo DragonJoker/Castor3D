@@ -31,7 +31,7 @@ namespace c3d
 		static ShaderPtr getProgram( RenderDevice const & device
 			, bool useNormalsBuffer )
 		{
-			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_SsaoConfig( writer, Bindings::SsaoCfgUboIdx, 0u );
 			C3D_Camera( writer, Bindings::CameraUboIdx, 0u );
@@ -583,7 +583,7 @@ namespace c3d
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

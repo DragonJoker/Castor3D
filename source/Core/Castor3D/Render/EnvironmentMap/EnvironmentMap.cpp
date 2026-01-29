@@ -166,7 +166,7 @@ namespace c3d
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Scene & scene )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_environmentMap{ envmap::createTexture( device, resources, cuT( "Env" ) + scene.getName(), envmap::MapSize ) }
@@ -183,7 +183,7 @@ namespace c3d
 						, index
 						, *m_scene.getBackground() );
 					auto const & passes = m_passes[index];
-					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+					c3d::getEngine( m_device ).postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [&passes]( RenderDevice const &
 							, QueueData const & )
 						{

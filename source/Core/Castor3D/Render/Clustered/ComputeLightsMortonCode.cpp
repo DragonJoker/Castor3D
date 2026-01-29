@@ -46,7 +46,7 @@ namespace c3d
 
 		static ShaderPtr createShader( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
 			C3D_Clusters( writer
@@ -215,7 +215,7 @@ namespace c3d
 					, clusters
 					, crg::cp::Config{}
 						.groupCountX( numThreadGroups ) );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

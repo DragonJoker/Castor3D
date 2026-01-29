@@ -415,7 +415,7 @@ namespace c3d
 					, extent
 					, passIndex );
 				m_framePass = result.get();
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
