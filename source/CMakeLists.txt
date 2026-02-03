@@ -38,6 +38,7 @@ else ()
 	set( ASHES_BUILD_TESTS OFF )
 	set( ASHES_BUILD_SAMPLES OFF )
 	set( ASHES_BUILD_SW_SAMPLES OFF )
+	set( ASHES_UNITY_BUILD ON )
 
 	if ( WIN32 )
 		set( Ashes_BINARY_DEFINITIONS
@@ -178,7 +179,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	else ()
 		# ShaderWriter external library
 		set( SDW_BUILD_EXPORTERS ON )
-		set( SDW_UNITY_BUILD ${PROJECTS_UNITY_BUILD} )
+		set( SDW_UNITY_BUILD ON )
 		set( SDW_BUILD_STATIC OFF )
 		set( SDW_BUILD_STATIC_SDAST OFF )
 		set( SDW_BUILD_STATIC_SDW OFF )
