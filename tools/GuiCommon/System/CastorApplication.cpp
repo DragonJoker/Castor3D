@@ -134,6 +134,7 @@ namespace GuiCommon
 				const wxString MaxImgSize{ wxT( "max_image_size" ) };
 				const wxString WaitDebugger{ wxT( "wait_debugger" ) };
 				const wxString DebugTargets{ wxT( "debug_targets" ) };
+				const wxString RenderDoc{ wxT( "render_doc" ) };
 			}
 
 			namespace st
@@ -155,6 +156,7 @@ namespace GuiCommon
 				const wxString EnShaderVal{ wxT( "v" ) };
 				const wxString WaitDebugger{ wxT( "w" ) };
 				const wxString DebugTargets{ wxT( "dt" ) };
+				const wxString RenderDoc{ wxT( "rd" ) };
 			}
 		}
 
@@ -186,6 +188,7 @@ namespace GuiCommon
 				static const wxString SceneFile{ _( "The initial scene file." ) };
 				static const wxString WaitDebugger{ _( "Wait for debugger at startup." ) };
 				static const wxString DebugTargets{ _( "Enable debug targets." ) };
+				static const wxString RenderDoc{ _( "Enable RenderDoc shaders support." ) };
 
 				parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
 				parser.AddOption( option::st::Config, option::lg::Config, Config, wxCMD_LINE_VAL_STRING, 0 );
@@ -204,6 +207,7 @@ namespace GuiCommon
 				parser.AddOption( option::st::MaxImgSize, option::lg::MaxImgSize, MaxImgSize, wxCMD_LINE_VAL_NUMBER );
 				parser.AddSwitch( option::st::WaitDebugger, option::lg::WaitDebugger, WaitDebugger );
 				parser.AddSwitch( option::st::DebugTargets, option::lg::DebugTargets, DebugTargets );
+				parser.AddSwitch( option::st::RenderDoc, option::lg::RenderDoc, RenderDoc );
 				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 				for ( auto & plugin : list )
@@ -282,6 +286,7 @@ namespace GuiCommon
 				config.enableApiTrace = has( option::st::EnApiTrace );
 				config.keepTextShaders = has( option::st::KeepTextShd );
 				config.enableDebugTargets = has( option::st::DebugTargets );
+				config.enableRenderDoc = has( option::st::RenderDoc );
 
 				if ( !config.syncRender )
 				{
@@ -521,7 +526,8 @@ namespace GuiCommon
 			, m_config.enableShaderValidation
 			, m_config.enableApiTrace
 			, m_config.keepTextShaders
-			, m_config.enableDebugTargets };
+			, m_config.enableDebugTargets
+			, m_config.enableRenderDoc };
 		m_castor = c3d::makeUnique< c3d::Engine >( c3d::move( config ) );
 		doloadPlugins( splashScreen );
 

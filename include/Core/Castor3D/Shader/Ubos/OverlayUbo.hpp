@@ -217,7 +217,7 @@ namespace c3d::shader
 	struct OverlaysIDs
 		: public sdw::StructInstanceHelperT < "C3D_OverlaysIDs"
 		, sdw::type::MemoryLayout::eStd430
-		, sdw::UIntArrayField< "v", MaxWordsPerBuffer > >
+		, sdw::U32Vec4ArrayField< "v", MaxWordsPerBuffer / 4U > >
 	{
 		SDW_DeclStructInstance( C3D_API, OverlaysIDs );
 
@@ -230,7 +230,7 @@ namespace c3d::shader
 
 		auto operator[]( sdw::UInt const & index )const
 		{
-			return getMember< "v" >()[index];
+			return getMember< "v" >()[index / 4U][index % 4U];
 		}
 	};
 }

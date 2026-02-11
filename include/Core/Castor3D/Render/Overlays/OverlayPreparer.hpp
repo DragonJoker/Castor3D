@@ -26,20 +26,15 @@ namespace c3d
 	class OverlayPreparer
 	{
 	public:
-		C3D_API OverlayPreparer( OverlayPreparer const & ) = delete;
-		C3D_API OverlayPreparer & operator=( OverlayPreparer const & ) = delete;
-
 		C3D_API OverlayPreparer( OverlayRenderer & renderer
 			, RenderDevice const & device
 			, VkRenderPass renderPass
 			, VkFramebuffer framebuffer
 			, crg::Fence & fence );
-		C3D_API OverlayPreparer( OverlayPreparer && rhs )noexcept;
-		C3D_API OverlayPreparer & operator=( OverlayPreparer && rhs )noexcept;
-		C3D_API ~OverlayPreparer()noexcept;
 
 		C3D_API OverlaysCounts registerOverlay( Overlay const & overlay );
 		C3D_API void fillDrawData()noexcept;
+		C3D_API void finalise()noexcept;
 
 		void setDrawCounts( uint32_t & value )noexcept
 		{
@@ -77,11 +72,13 @@ namespace c3d
 			, OverlayTextBufferIndex const & textBuffer )const;
 
 	private:
+		using OverlayDataArray = Vector< OverlayDrawData >;
+		using OverlayDatasMap = Map< OverlayPipelineData *, OverlayDataArray >;
+
+	private:
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
 		crg::Fence & m_fence;
-		using OverlayDataArray = Vector< OverlayDrawData >;
-		using OverlayDatasMap = Map< OverlayPipelineData *, OverlayDataArray >;
 		Map< uint32_t, OverlayDatasMap > m_levelsOverlays;
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;

@@ -114,6 +114,8 @@ namespace c3d
 				, preparer );
 			m_counts.overlays += counts.overlays;
 			m_counts.quads += counts.quads;
+
+			preparer.finalise();
 		}
 		reRecordCurrent();
 	}
@@ -153,9 +155,10 @@ namespace c3d
 			, commandBuffer
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
 			, 0u );
-		context->vkCmdExecuteCommands( commandBuffer
-			, 1u
-			, &secondary );
+		if ( m_counts.drawCalls != 0 )
+			context->vkCmdExecuteCommands( commandBuffer
+				, 1u
+				, &secondary );
 		m_renderPass.end( context
 			, commandBuffer );
 		context.getContext().vkCmdEndDebugBlock( commandBuffer );
