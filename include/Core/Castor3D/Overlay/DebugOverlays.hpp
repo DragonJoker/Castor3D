@@ -242,14 +242,9 @@ namespace c3d
 			~PassOverlays()noexcept;
 			void retrieveGpuTime()const;
 			void compute();
-			bool update( uint32_t & top );
+			void update( uint32_t & top );
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
-
-			bool isVisible()const noexcept
-			{
-				return m_visible;
-			}
 
 			Nanoseconds getGpuTime()const noexcept
 			{
@@ -269,8 +264,6 @@ namespace c3d
 		private:
 			PanelCtrl * m_parent{};
 			String m_name;
-			bool m_visible{ true };
-			uint32_t m_visibleCount{};
 			Map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
 			PanelCtrlRPtr m_panel;
 			StaticCtrlRPtr m_passName;
@@ -313,9 +306,7 @@ namespace c3d
 				, FramePassTimer & timer );
 			void retrieveGpuTime()const;
 			void compute();
-			bool update( uint32_t & top );
-			void setVisible( bool visible );
-			bool hasVisibleChild()const noexcept;
+			void update( uint32_t & top );
 			PanelCtrl * getContainer()const;
 			void dumpFrameTimes( String prefix
 				, Parameters & params )const;
@@ -351,8 +342,6 @@ namespace c3d
 			String m_categoryName{};
 			uint32_t m_leftOffset{};
 			int m_posX{};
-			bool m_visible{ true };
-			bool m_parentVisible{ true };
 			Vector< PassOverlaysPtr > m_passes{};
 			CategoriesOverlays m_categories{};
 			ExpandablePanelCtrlRPtr m_container{};

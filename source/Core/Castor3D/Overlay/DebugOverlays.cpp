@@ -33,14 +33,6 @@ namespace c3d
 		{
 			return static_cast< ControlsManager & >( *engine.getUserInputListener() );
 		}
-
-		template< typename DataT, typename RatioT >
-		static bool areRelevantTimes( Nanoseconds const & cpu
-			, Nanoseconds const & gpu
-			, std::chrono::duration< DataT, RatioT > const & threshold )
-		{
-			return cpu >= threshold || gpu >= threshold;
-		}
 	}
 
 	//*********************************************************************************************
@@ -415,7 +407,6 @@ namespace c3d
 	DebugOverlays::PassOverlays::PassOverlays( PassOverlays && rhs )noexcept
 		: m_parent{ c3d::move( rhs.m_parent ) }
 		, m_name{ c3d::move( rhs.m_name ) }
-		, m_visible{ rhs.m_visible }
 		, m_timers{ c3d::move( rhs.m_timers ) }
 		, m_panel{ c3d::move( rhs.m_panel ) }
 		, m_passName{ c3d::move( rhs.m_passName ) }
@@ -423,7 +414,6 @@ namespace c3d
 		, m_gpu{ c3d::move( rhs.m_gpu ) }
 	{
 		rhs.m_parent = {};
-		rhs.m_visible = {};
 		rhs.m_panel = {};
 		rhs.m_passName = {};
 		rhs.m_cpu.name = {};
@@ -486,33 +476,11 @@ namespace c3d
 		}
 	}
 
-	bool DebugOverlays::PassOverlays::update( uint32_t & top )
+	void DebugOverlays::PassOverlays::update( uint32_t & top )
 	{
-		m_visible = m_visibleCount > 100u
-			|| dbgovl::areRelevantTimes( m_cpu.time, m_gpu.time, 100_us );
-
-		if ( m_visible )
-		{
-			++m_visibleCount;
-		}
-
-		if ( m_panel->isVisible() != m_visible )
-		{
-			m_panel->setVisible( m_visible );
-		}
-
-		if ( !m_cpu.value
-			|| !m_gpu.value
-			|| !m_visible )
-		{
-			return false;
-		}
-
 		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
 		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
 		top += PanelHeight;
-
-		return m_visible;
 	}
 
 	void DebugOverlays::PassOverlays::retrieveGpuTime()const
@@ -546,7 +514,6 @@ namespace c3d
 	//*********************************************************************************************
 
 	DebugOverlays::CategoryOverlays::CategoryOverlays()
-		: m_visible{ false }
 	{
 	}
 
@@ -645,8 +612,6 @@ namespace c3d
 		m_categoryName = c3d::move( rhs.m_categoryName );
 		m_leftOffset = rhs.m_leftOffset;
 		m_posX = rhs.m_posX;
-		m_visible = rhs.m_visible;
-		m_parentVisible = rhs.m_parentVisible;
 		m_passes = c3d::move( rhs.m_passes );
 		m_categories = c3d::move( rhs.m_categories );
 		m_container = c3d::move( rhs.m_container );
@@ -658,8 +623,6 @@ namespace c3d
 		rhs.m_parent = {};
 		rhs.m_leftOffset = {};
 		rhs.m_posX = {};
-		rhs.m_visible = {};
-		rhs.m_parentVisible = {};
 		rhs.m_container = {};
 		rhs.m_name = {};
 		rhs.m_cpu.name = {};
@@ -676,8 +639,6 @@ namespace c3d
 		, m_categoryName{ c3d::move( rhs.m_categoryName ) }
 		, m_leftOffset{ rhs.m_leftOffset }
 		, m_posX{ rhs.m_posX }
-		, m_visible{ rhs.m_visible }
-		, m_parentVisible{ rhs.m_parentVisible }
 		, m_passes{ c3d::move( rhs.m_passes ) }
 		, m_categories{ c3d::move( rhs.m_categories ) }
 		, m_container{ c3d::move( rhs.m_container ) }
@@ -689,8 +650,6 @@ namespace c3d
 		rhs.m_parent = {};
 		rhs.m_leftOffset = {};
 		rhs.m_posX = {};
-		rhs.m_visible = {};
-		rhs.m_parentVisible = {};
 		rhs.m_container = {};
 		rhs.m_name = {};
 		rhs.m_cpu.name = {};
@@ -884,16 +843,8 @@ namespace c3d
 		}
 	}
 
-	bool DebugOverlays::CategoryOverlays::update( uint32_t & top )
+	void DebugOverlays::CategoryOverlays::update( uint32_t & top )
 	{
-		if ( !m_cpu.value
-			|| !m_gpu.value )
-		{
-			return false;
-		}
-
-		bool hasVisibleChildren{};
-
 		if ( m_container->isExpanded() )
 		{
 			uint32_t height = PanelHeight;
@@ -901,15 +852,11 @@ namespace c3d
 			for ( auto const & pass : m_passes )
 			{
 				if ( pass )
-				{
-					hasVisibleChildren = pass->update( height ) || hasVisibleChildren;
-				}
+					pass->update( height );
 			}
 
 			for ( auto const & cat : m_categories )
-			{
-				hasVisibleChildren = cat->update( height ) || hasVisibleChildren;
-			}
+				cat->update( height );
 
 			top += height;
 			m_container->setSize( { CategoryLineWidth, height } );
@@ -917,26 +864,10 @@ namespace c3d
 		else
 		{
 			top += PanelHeight;
-			hasVisibleChildren = hasVisibleChild();
-		}
-
-		m_visible = hasVisibleChildren
-			|| dbgovl::areRelevantTimes( m_cpu.time, m_gpu.time, 1_ms );
-
-		if ( m_container->isVisible() != ( m_visible && m_parentVisible ) )
-		{
-			m_container->setVisible( m_visible && m_parentVisible );
-		}
-
-		if ( !m_container->isVisible() )
-		{
-			return false;
 		}
 
 		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
 		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
-
-		return m_visible;
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()const
@@ -953,34 +884,6 @@ namespace c3d
 		{
 			cat->retrieveGpuTime();
 		}
-	}
-
-	void DebugOverlays::CategoryOverlays::setVisible( bool visible )
-	{
-		m_parentVisible = visible;
-		m_container->setVisible( m_visible && m_parentVisible );
-	}
-
-	bool DebugOverlays::CategoryOverlays::hasVisibleChild()const noexcept
-	{
-		auto result = std::any_of( m_passes.begin()
-			, m_passes.end()
-			, []( PassOverlaysPtr const & lookup )
-			{
-				return lookup && lookup->isVisible();
-			} );
-
-		if ( !result )
-		{
-			result = std::any_of( m_categories.begin()
-				, m_categories.end()
-				, []( CategoryOverlaysPtr const & lookup )
-				{
-					return lookup->hasVisibleChild();
-				} );
-		}
-
-		return result;
 	}
 
 	PanelCtrl * DebugOverlays::CategoryOverlays::getContainer()const

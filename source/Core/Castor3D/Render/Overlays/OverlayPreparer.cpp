@@ -94,29 +94,7 @@ namespace c3d
 		m_renderer.doResetCompute();
 	}
 
-	OverlayPreparer::OverlayPreparer( OverlayPreparer && rhs )noexcept
-		: m_renderer{ rhs.m_renderer }
-		, m_device{ rhs.m_device }
-		, m_fence{ rhs.m_fence }
-		, m_renderPass{ rhs.m_renderPass }
-		, m_framebuffer{ rhs.m_framebuffer }
-	{
-		rhs.m_renderPass = VkRenderPass{};
-		rhs.m_framebuffer = VkFramebuffer{};
-	}
-
-	OverlayPreparer & OverlayPreparer::operator=( OverlayPreparer && rhs )noexcept
-	{
-		m_renderPass = rhs.m_renderPass;
-		m_framebuffer = rhs.m_framebuffer;
-
-		rhs.m_renderPass = VkRenderPass{};
-		rhs.m_framebuffer = VkFramebuffer{};
-
-		return *this;
-	}
-
-	OverlayPreparer::~OverlayPreparer()noexcept
+	void OverlayPreparer::finalise()noexcept
 	{
 		if ( m_renderPass )
 		{

@@ -154,6 +154,13 @@ namespace c3d
 		*	\p true pour activer la visualisation des debug targets.
 		*/
 		bool enableDebugTargets{ false };
+		/**
+		*\~english
+		*	\p true to enable RenderDoc shader versions, when available.
+		*\~french
+		*	\p true pour activer les versions RenderDoc des shaders, quand elles sont disponibles.
+		*/
+		bool enableRenderDoc{ false };
 	};
 
 	class Engine
@@ -894,6 +901,11 @@ namespace c3d
 			return m_config.enableDebugTargets;
 		}
 
+		bool isRenderDocSupportEnabled()const noexcept
+		{
+			return m_config.enableRenderDoc;
+		}
+
 		UserInputListenerRPtr getUserInputListener()noexcept
 		{
 			return m_userInputListener.get();
@@ -1099,6 +1111,11 @@ namespace c3d
 		void enableDebugTargets( bool value )noexcept
 		{
 			m_config.enableDebugTargets = value;
+		}
+
+		void enableRenderDocSupport( bool value )noexcept
+		{
+			m_config.enableRenderDoc = value;
 		}
 
 		void setMaxImageSize( uint32_t size )noexcept

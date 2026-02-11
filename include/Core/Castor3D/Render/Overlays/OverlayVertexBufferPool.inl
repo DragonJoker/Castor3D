@@ -83,12 +83,12 @@ namespace c3d
 		, ashes::DescriptorSet const * textDescriptorSet )
 	{
 		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
-		auto [it, res] = pipelines.try_emplace( &pipeline );
-		auto debugName = name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} );
-		debugName += cuT( "-" ) + makeString( pipeline.pipeline->getName() );
+		auto [it, inserted] = pipelines.try_emplace( &pipeline );
 
-		if ( res )
+		if ( inserted )
 		{
+			auto debugName = name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} );
+			debugName += cuT( "-" ) + makeString( pipeline.pipeline->getName() );
 			auto & pipelineData = it->second;
 			pipelineData.overlaysIDsBuffer = makeBuffer< uint32_t >( device
 				, engine.getGraphResourceCache()
@@ -274,7 +274,7 @@ namespace c3d
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlays ) )
 			, overlaysData->getBuffer()
 			, 0u
-			, uint32_t( overlaysData->getCount() ) );
+			, uint32_t( overlaysData->getSize() ) );
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysIDs ) )
 			, idsBuffer
 			, 0u

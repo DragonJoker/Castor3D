@@ -63,6 +63,7 @@ namespace GuiCommon
 			bool enableApiTrace{ false };
 			bool keepTextShaders{ false };
 			bool enableDebugTargets{ false };
+			bool enableRenderDoc{ false };
 			uint32_t maxImageSize{ 0u };
 			c3d::String fileName{};
 		};
