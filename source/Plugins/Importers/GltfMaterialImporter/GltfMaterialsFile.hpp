@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include <Castor3D/Material/MaterialModule.hpp>
 #include <Castor3D/Miscellaneous/MiscellaneousModule.hpp>
 
+#include <Castor3D/ImporterFile.hpp>
+
 #ifndef CU_PlatformWindows
 #	define C3D_GltfMat_API
 #else

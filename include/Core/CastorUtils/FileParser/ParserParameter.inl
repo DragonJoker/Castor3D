@@ -977,7 +977,10 @@ namespace c3d
 						params = value.substr( delim + 1u );
 						string::trim( params );
 						value = value.substr( 0, delim );
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 						sep = cuT( "|" );
+#pragma GCC diagnostic pop
 					}
 
 					auto it = m_values.find( value );
@@ -991,7 +994,10 @@ namespace c3d
 				else
 				{
 					params += sep + value;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 					sep = cuT( "|" );
+#pragma GCC diagnostic pop
 				}
 			}
 		}
@@ -1058,7 +1064,10 @@ namespace c3d
 						params = value.substr( delim + 1u );
 						string::trim( params );
 						value = value.substr( 0, delim );
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 						sep = cuT( "|" );
+#pragma GCC diagnostic pop
 					}
 
 					auto it = m_values.find( value );
@@ -1072,7 +1081,10 @@ namespace c3d
 				else
 				{
 					params += sep + value;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 					sep = cuT( "|" );
+#pragma GCC diagnostic pop
 				}
 			}
 		}

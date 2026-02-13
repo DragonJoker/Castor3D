@@ -265,7 +265,10 @@ namespace c3d
 
 		ComponentData & getData()const noexcept
 		{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 			return *getDataT< ComponentData >();
+#pragma GCC diagnostic pop
 		}
 
 		void accept( ConfigurationVisitorBase & vis )

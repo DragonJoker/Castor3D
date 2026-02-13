@@ -29,9 +29,10 @@ namespace c3d
 
 		for ( auto & submesh : mesh )
 		{
-			if ( submesh->hasComponent( SkinComponent::TypeName ) )
+			if ( auto component = submesh->hasComponent( SkinComponent::TypeName )
+				? submesh->getComponent< SkinComponent >()
+				: nullptr )
 			{
-				auto component = submesh->getComponent< SkinComponent >();
 				uint32_t i = 0u;
 
 				for ( auto & boneData : component->getData().getData() )
