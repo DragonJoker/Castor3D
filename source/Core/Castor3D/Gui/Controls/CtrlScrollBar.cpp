@@ -55,6 +55,11 @@ namespace c3d
 			{
 				onKeyDown( event );
 			} );
+		EventHandler::connect( MouseEventType::eWheel
+			, [this]( MouseEvent const & event )
+			{
+				onMouseWheel( event );
+			} );
 
 		m_begin = manager.registerControlT( makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Begin" )
@@ -64,6 +69,11 @@ namespace c3d
 			, Position{}
 			, Size{} ) );
 		m_begin->setVisible( visible );
+		m_begin->connectNC( MouseEventType::eWheel
+			, [this]( Control const *, MouseEvent const & event )
+			{
+				onMouseWheel( event );
+			} );
 		m_onBeginClick = m_begin->connect( ButtonEvent::eClicked
 			, [this]()
 			{
@@ -78,6 +88,11 @@ namespace c3d
 			, Position{}
 			, Size{} ) );
 		m_end->setVisible( visible );
+		m_end->connectNC( MouseEventType::eWheel
+			, [this]( Control const *, MouseEvent const & event )
+			{
+				onMouseWheel( event );
+			} );
 		m_onEndClick = m_end->connect( ButtonEvent::eClicked
 			, [this]()
 			{
@@ -91,6 +106,11 @@ namespace c3d
 			, Position{}
 			, Size{} ) );
 		m_bar->setVisible( visible );
+		m_bar->connectNC( MouseEventType::eWheel
+			, [this]( Control const *, MouseEvent const & event )
+			{
+				onMouseWheel( event );
+			} );
 		m_bar->connectNC( KeyboardEventType::ePushed
 			, [this]( Control const *, KeyboardEvent const & event )
 			{
@@ -120,6 +140,11 @@ namespace c3d
 			, [this]( Control const *, MouseEvent const & event )
 			{
 				onThumbMouseButtonUp( event );
+			} );
+		m_thumb->connectNC( MouseEventType::eWheel
+			, [this]( Control const *, MouseEvent const & event )
+			{
+				onMouseWheel( event );
 			} );
 		m_thumb->connectNC( KeyboardEventType::ePushed
 			, [this]( Control const *, KeyboardEvent const & event )
@@ -290,17 +315,58 @@ namespace c3d
 		doOnMouseButtonUp( event );
 	}
 
+	void ScrollBarCtrl::onMouseWheel( MouseEvent const & event )
+	{
+		if ( event.getPosition().y() > 0 )
+			doScroll( -10 );
+		else if ( event.getPosition().y() < 0 )
+			doScroll( 10 );
+	}
+
 	void ScrollBarCtrl::onKeyDown( KeyboardEvent const & event )
 	{
 		if ( !m_scrolling )
 		{
-			if ( event.getKey() == KeyboardKey::eUp )
+			if ( event.getKey() == KeyboardKey::eUp
+				|| event.getKey() == KeyboardKey::eLeft )
 			{
 				doScroll( -1 );
 			}
-			else if ( event.getKey() == KeyboardKey::eDown )
+			else if ( event.getKey() == KeyboardKey::eDown
+				|| event.getKey() == KeyboardKey::eRight )
 			{
 				doScroll( 1 );
+			}
+			else if ( auto thumb = m_thumb )
+			{
+				if ( event.getKey() == KeyboardKey::ePageUp )
+				{
+					if ( isVertical() )
+						doScroll( -s32( thumb->getSize()->y ) );
+					else
+						doScroll( -s32( thumb->getSize()->x ) );
+				}
+				else if ( event.getKey() == KeyboardKey::ePageDown )
+				{
+					if ( isVertical() )
+						doScroll( s32( thumb->getSize()->y ) );
+					else
+						doScroll( s32( thumb->getSize()->x ) );
+				}
+				else if ( event.getKey() == KeyboardKey::eHome )
+				{
+					if ( isVertical() )
+						doScroll( -s32( thumb->getPosition().y() ) );
+					else
+						doScroll( -s32( thumb->getPosition().x() ) );
+				}
+				else if ( event.getKey() == KeyboardKey::eEnd )
+				{
+					if ( isVertical() )
+						doScroll( s32( getSize()->y ) );
+					else
+						doScroll( s32( getSize()->x ) );
+				}
 			}
 		}
 	}
