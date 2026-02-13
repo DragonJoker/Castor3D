@@ -321,11 +321,24 @@ namespace c3d
 
 	//*********************************************************************************************
 
+	void DebugOverlays::PassTime::addTime( Nanoseconds v )
+	{
+		++count;
+		accumulator -= times[index];
+		accumulator += v;
+		times[index] = v;
+		auto realCount = std::min( count, uint64_t( times.size() ) );
+		average = accumulator / realCount;
+		index = ( index + 1u ) % SamplesCount;
+	}
+
+	//*********************************************************************************************
+
 	DebugOverlays::PassOverlays::PassOverlays( Engine & engine
 		, PanelCtrl & parent
 		, String const & name
 		, uint32_t leftOffset
-		, uint32_t )
+		, HdrRgbColour const & colour )
 		: m_parent{ &parent }
 		, m_name{ name }
 	{
@@ -333,6 +346,10 @@ namespace c3d
 		auto panelStyle = manager.getStyle< PanelStyle >( cuT( "Debug/RenderPasses/Pass" ) );
 		auto nameStyle = panelStyle->getStyle< StaticStyle >( cuT( "Name" ) );
 		auto counterStyle = panelStyle->getStyle< StaticStyle >( cuT( "Counter" ) );
+
+		panelStyle = &static_cast< PanelStyle & >( *panelStyle->clone( cuT( "Debug/RenderPasses/" ) + name ) );
+		panelStyle->setBackgroundMaterial( createMaterial( engine, name, colour ) );
+
 		auto maxWidth = CategoryLineWidth - leftOffset;
 		m_panel = manager.registerControlT( makeUnique< PanelCtrl >( nullptr
 			, m_name + cuT( "Pass" )
@@ -461,25 +478,28 @@ namespace c3d
 
 	void DebugOverlays::PassOverlays::compute()
 	{
-		m_cpu.time = 0_ns;
-		m_gpu.time = 0_ns;
+		Nanoseconds cpuTime{};
+		Nanoseconds gpuTime{};
 
 		for ( auto const & [timer, _] : m_timers )
 		{
 			if ( timer->getScope() != crg::TimerScope::eGraph )
 			{
-				m_cpu.time += timer->getCpuTime();
-				m_gpu.time += timer->getGpuTime();
+				cpuTime += timer->getCpuTime();
+				gpuTime += timer->getGpuTime();
 			}
 
 			timer->reset();
 		}
+
+		m_cpu.time.addTime( cpuTime );
+		m_gpu.time.addTime( gpuTime );
 	}
 
 	void DebugOverlays::PassOverlays::update( uint32_t & top )
 	{
-		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
+		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time.average ) ) );
+		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time.average ) ) );
 		top += PanelHeight;
 	}
 
@@ -513,9 +533,7 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	DebugOverlays::CategoryOverlays::CategoryOverlays()
-	{
-	}
+	DebugOverlays::CategoryOverlays::CategoryOverlays() = default;
 
 	DebugOverlays::CategoryOverlays::CategoryOverlays( String const & category
 		, Engine & engine
@@ -715,16 +733,14 @@ namespace c3d
 			{
 				if ( it == m_passes.end() )
 				{
-					auto index = uint32_t( m_passes.size() );
-
-						auto passOverlays = makeRawUnique< PassOverlays >( *m_engine
-							, *m_container->getContent()
-							, name
-							, m_leftOffset + 5u
-							, index );
-						m_passes.push_back( c3d::move( passOverlays ) );
-						it = std::next( m_passes.begin()
-							, ptrdiff_t( m_passes.size() - 1 ) );
+					auto passOverlays = makeRawUnique< PassOverlays >( *m_engine
+						, *m_container->getContent()
+						, name
+						, m_leftOffset + SubpassOffset
+						, HdrRgbColour::fromComponents( timer.getColour()[0], timer.getColour()[1], timer.getColour()[2] ) );
+					m_passes.push_back( c3d::move( passOverlays ) );
+					it = std::next( m_passes.begin()
+						, ptrdiff_t( m_passes.size() - 1 ) );
 				}
 
 				( *it )->addTimer( timer );
@@ -752,7 +768,7 @@ namespace c3d
 					m_categories.emplace_back( makeRawUnique< CategoryOverlays >( current
 						, *m_engine
 						, *m_container->getContent()
-						, m_leftOffset + 5u ) );
+						, m_leftOffset + SubpassOffset ) );
 					it = std::next( m_categories.begin()
 						, ptrdiff_t( m_categories.size() - 1 ) );
 				}
@@ -822,25 +838,28 @@ namespace c3d
 
 	void DebugOverlays::CategoryOverlays::compute()
 	{
-		m_cpu.time = 0_ns;
-		m_gpu.time = 0_ns;
+		Nanoseconds cpuTime{};
+		Nanoseconds gpuTime{};
 
 		for ( auto const & pass : m_passes )
 		{
 			if ( pass )
 			{
 				pass->compute();
-				m_cpu.time += pass->getCpuTime();
-				m_gpu.time += pass->getGpuTime();
+				cpuTime += pass->getCpuTime();
+				gpuTime += pass->getGpuTime();
 			}
 		}
 
 		for ( auto const & cat : m_categories )
 		{
 			cat->compute();
-			m_cpu.time += cat->getCpuTime();
-			m_gpu.time += cat->getGpuTime();
+			cpuTime += cat->getCpuTime();
+			gpuTime += cat->getGpuTime();
 		}
+
+		m_cpu.time.addTime( cpuTime );
+		m_gpu.time.addTime( gpuTime );
 	}
 
 	void DebugOverlays::CategoryOverlays::update( uint32_t & top )
@@ -866,8 +885,8 @@ namespace c3d
 			top += PanelHeight;
 		}
 
-		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
+		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time.average ) ) );
+		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time.average ) ) );
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()const
@@ -928,7 +947,7 @@ namespace c3d
 		if ( m_totalTime > 0_ns )
 		{
 			log::info << cuT( "Counts:\n" )
-				<< cuT( "  Average Frame Time: " ) << ( float( std::chrono::duration_cast< Microseconds >( m_averageTime ).count() ) / 1000.0f ) << cuT( " ms\n" )
+				<< cuT( "  Average Frame Time: " ) << ( float( std::chrono::duration_cast< Microseconds >( m_frameTime.average ).count() ) / 1000.0f ) << cuT( " ms\n" )
 				<< cuT( "  Average Frames per second: " ) <<  m_averageFps << std::endl;
 		}
 
@@ -989,7 +1008,7 @@ namespace c3d
 	void DebugOverlays::dumpFrameTimes( Parameters & params )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
-		params.add( cuT( "Average" ), m_averageTime );
+		params.add( cuT( "Average" ), m_frameTime.average );
 		m_renderPasses.dumpFrameTimes( String{}, params );
 	}
 
@@ -1000,15 +1019,8 @@ namespace c3d
 		if ( !first )
 		{
 			 // Prevent initialisation frame from being counted in average time.
-			++m_frameCount;
-			m_framesTimes[m_frameIndex] = m_totalTime;
-			auto count = std::min( m_frameCount, uint64_t( m_framesTimes.size() ) );
-			m_averageTime = std::accumulate( m_framesTimes.begin()
-				, std::next( m_framesTimes.begin(), ptrdiff_t( count ) )
-				, 0_ns ) / count;
-			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< Microseconds >( m_averageTime ).count() );
-			auto v = ( ++m_frameIndex ) % FrameSamplesCount;
-			m_frameIndex = v;
+			m_frameTime.addTime( m_totalTime );
+			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< Microseconds >( m_frameTime.average ).count() );
 		}
 
 		auto result = std::chrono::duration_cast< Microseconds >( m_totalTime );
@@ -1027,15 +1039,14 @@ namespace c3d
 			}
 		}
 
+		m_debugTime = m_frameTimer.getElapsed();
 		return result;
 	}
 
 	void DebugOverlays::endGpuTasks()
 	{
-		{
-			auto lock( makeUniqueLock( m_mutex ) );
-			m_renderPasses.retrieveGpuTime();
-		}
+		auto lock( makeUniqueLock( m_mutex ) );
+		m_renderPasses.retrieveGpuTime();
 	}
 
 	void DebugOverlays::endCpuTask()
@@ -1067,8 +1078,8 @@ namespace c3d
 			, manager.getPanelStyle( cuT( "Debug/RenderPasses" ) )
 			, nullptr
 			, Position{ PassPanelLeft, 0 }
-			, Size{ CategoryLineWidth, 600u }
-			, ControlFlagType( ControlFlag::eAlwaysOnTop ) ) );
+			, Size{ CategoryLineWidth + 20u, 600u }
+			, ControlFlagType( ControlFlag::eAlwaysOnTop ) | ControlFlagType( ScrollBarFlag::eVertical ) ) );
 		m_passesContainer->setLayout( makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer ) );
 		manager.create( m_passesContainer );
 
@@ -1090,6 +1101,9 @@ namespace c3d
 		m_debugPanel->addTimePanel( cuT( "GpuTime" )
 			, cuT( "GPU:" )
 			, m_gpuTime );
+		m_debugPanel->addTimePanel( cuT( "DebugTime" )
+			, cuT( "Debug:" )
+			, m_debugTime );
 		m_debugPanel->addTimePanel( cuT( "ExternalTime" )
 			, cuT( "External:" )
 			, m_externalTime );
@@ -1098,7 +1112,7 @@ namespace c3d
 			, m_totalTime );
 		m_debugPanel->addTimePanel( cuT( "AverageTime" )
 			, cuT( "Average:" )
-			, m_averageTime );
+			, m_frameTime.average );
 		m_debugPanel->addFpsPanel( cuT( "FPS" )
 			, cuT( "Last:" )
 			, m_fps );
@@ -1158,12 +1172,10 @@ namespace c3d
 
 	void DebugOverlays::doCompute()
 	{
-		{
-			auto lock( makeUniqueLock( m_mutex ) );
-			m_renderPasses.compute();
-			m_gpuTime += m_renderPasses.getGpuTime();
-			m_cpuTime -= m_gpuTime;
-		}
+		auto lock( makeUniqueLock( m_mutex ) );
+		m_renderPasses.compute();
+		m_gpuTime += m_renderPasses.getGpuTime();
+		m_cpuTime -= m_gpuTime;
 	}
 
 	//*********************************************************************************************

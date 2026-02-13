@@ -125,7 +125,7 @@ namespace c3d
 
 		Nanoseconds getAvgFrameTime()const
 		{
-			return m_averageTime;
+			return m_frameTime.average;
 		}
 
 	private:
@@ -219,12 +219,28 @@ namespace c3d
 			DebugPanelsPtr m_stats;
 		};
 
+		struct PassTime
+		{
+#if defined( NDEBUG )
+			static uint32_t constexpr SamplesCount = 100u;
+#else
+			static uint32_t constexpr SamplesCount = 20u;
+#endif
+			Vector< Nanoseconds > times{ SamplesCount, Nanoseconds{} };
+			uint32_t index{};
+			uint64_t count{};
+			Nanoseconds average{};
+			Nanoseconds accumulator{};
+
+			void addTime( Nanoseconds v );
+		};
+
 		class PassOverlays
 		{
 		private:
 			struct TimeOverlays
 			{
-				Nanoseconds time{ 0_ns };
+				PassTime time;
 				StaticCtrlRPtr name;
 				StaticCtrlRPtr value;
 			};
@@ -237,7 +253,7 @@ namespace c3d
 				, PanelCtrl & parent
 				, String const & name
 				, uint32_t leftOffset
-				, uint32_t index );
+				, HdrRgbColour const & colour );
 			PassOverlays( PassOverlays && rhs )noexcept;
 			~PassOverlays()noexcept;
 			void retrieveGpuTime()const;
@@ -248,12 +264,12 @@ namespace c3d
 
 			Nanoseconds getGpuTime()const noexcept
 			{
-				return m_gpu.time;
+				return m_gpu.time.average;
 			}
 
 			Nanoseconds getCpuTime()const noexcept
 			{
-				return m_cpu.time;
+				return m_cpu.time.average;
 			}
 
 			String const & getName()const noexcept
@@ -281,7 +297,7 @@ namespace c3d
 		private:
 			struct TimeOverlays
 			{
-				Nanoseconds time{ 0_ns };
+				PassTime time;
 				StaticCtrlRPtr name;
 				StaticCtrlRPtr value;
 			};
@@ -313,12 +329,12 @@ namespace c3d
 
 			Nanoseconds getGpuTime()const noexcept
 			{
-				return m_gpu.time;
+				return m_gpu.time.average;
 			}
 
 			Nanoseconds getCpuTime()const noexcept
 			{
-				return m_cpu.time;
+				return m_cpu.time.average;
 			}
 
 			auto & getName()const noexcept
@@ -351,11 +367,6 @@ namespace c3d
 		};
 
 	private:
-#if defined( NDEBUG )
-		static uint32_t constexpr FrameSamplesCount = 100u;
-#else
-		static uint32_t constexpr FrameSamplesCount = 20u;
-#endif
 		static uint32_t constexpr PanelHeight = 20u;
 		static uint32_t constexpr DebugPanelWidth = 320u;
 		static uint32_t constexpr DebugLabelWidth = 190u;
@@ -363,7 +374,7 @@ namespace c3d
 		static uint32_t constexpr DebugLineWidth = DebugLabelWidth + DebugValueWidth;
 		static uint32_t constexpr PassMainPanelLeft = 20u;
 		static uint32_t constexpr PassPanelLeft = DebugPanelWidth + 10u;
-		static uint32_t constexpr CategoryNameWidth = 250u;
+		static uint32_t constexpr CategoryNameWidth = 300u;
 		static uint32_t constexpr CpuNameWidth = 30u;
 		static uint32_t constexpr CpuValueWidth = 75u;
 		static uint32_t constexpr GpuNameWidth = 30u;
@@ -373,6 +384,7 @@ namespace c3d
 			+ CpuValueWidth
 			+ GpuNameWidth
 			+ GpuValueWidth;
+		static uint32_t constexpr SubpassOffset = 10u;
 		static uint32_t constexpr PanelBaseLevel = 65536u;
 
 		Mutex m_mutex;
@@ -382,17 +394,15 @@ namespace c3d
 		RawUniquePtr< MainDebugPanel > m_debugPanel;
 		PanelCtrlRPtr m_passesContainer;
 		CategoryOverlays m_renderPasses;
-		Array< Nanoseconds, FrameSamplesCount > m_framesTimes{};
-		uint32_t m_frameIndex{ 0 };
-		uint64_t m_frameCount{ 0 };
+		PassTime m_frameTime;
 		bool m_visible{ false };
 		Nanoseconds m_cpuTime{ 0 };
 		Nanoseconds m_gpuTime{ 0 };
 		Nanoseconds m_totalTime{ 0 };
 		Nanoseconds m_externalTime{ 0 };
+		Nanoseconds m_debugTime{ 0 };
 		float m_fps{ 0.0f };
 		float m_averageFps{ 0.0f };
-		Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale{};
 		RenderInfo m_renderInfo;
 		DeviceCounts m_allocations;
