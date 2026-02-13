@@ -44,7 +44,8 @@ namespace c3d
 			, size
 			, flags
 			, visible }
-		, m_value{ value }
+		, m_value{ double( value.value() )
+			, makeRange< double >( value.range().getMin(), value.range().getMax() ) }
 	{
 		CU_Require( isScrollableControl( *parent ) );
 		auto & manager = *getEngine().getControlsManager();
@@ -148,11 +149,11 @@ namespace c3d
 
 		if ( isVertical() )
 		{
-			doUpdateThumb( { 0.0f, diff } );
+			doUpdateThumb( { 0.0f, float( diff ) } );
 		}
 		else
 		{
-			doUpdateThumb( { diff, 0.0f } );
+			doUpdateThumb( { float( diff ), 0.0f } );
 		}
 	}
 
@@ -340,13 +341,13 @@ namespace c3d
 
 				if ( isVertical() )
 				{
-					m_value = std::min( float( size->y ), std::max( 0.0f, position[1] ) );
-					position[1] = m_value.value();
+					m_value = std::min( double( size->y ), std::max( 0.0, double( position[1] ) ) );
+					position[1] = float( m_value.value() );
 				}
 				else
 				{
-					m_value = std::min( float( size->x ), std::max( 0.0f, position[0] ) );
-					position[0] = m_value.value();
+					m_value = std::min( double( size->x ), std::max( 0.0, double( position[0] ) ) );
+					position[0] = float( m_value.value() );
 				}
 
 				m_scrollPosition = -int32_t( m_totalRange.value( m_value.percent() ) );
@@ -364,7 +365,7 @@ namespace c3d
 		auto barPosition{ offset };
 		auto thumbPosition{ offset };
 		auto endPosition{ offset };
-		auto percent = m_value.percent();
+		double percent = m_value.percent();
 		uint32_t minSize{};
 		Size thumbSize{};
 
@@ -381,7 +382,7 @@ namespace c3d
 			thumbSize->x = minSize;
 			thumbSize->y = std::max( minSize, uint32_t( double( barSize->y ) * rangeRatio ) );
 
-			m_value.updateRange( makeRange( 0.0f, float( barSize->y - thumbSize->y ) ) );
+			m_value.updateRange( makeRange( 0.0, double( barSize->y - thumbSize->y ) ) );
 			m_value = m_value.range().getMax() * percent;
 			thumbPosition.y() += int32_t( m_value.value() );
 		}
@@ -398,7 +399,7 @@ namespace c3d
 			thumbSize->x = std::max( minSize, uint32_t( double( barSize->x ) * rangeRatio ) );
 			thumbSize->y = minSize;
 
-			m_value.updateRange( makeRange( 0.0f, float( barSize->x - thumbSize->x ) ) );
+			m_value.updateRange( makeRange( 0.0, double( barSize->x - thumbSize->x ) ) );
 			m_value = m_value.range().getMax() * percent;
 			thumbPosition.x() += int32_t( m_value.value() );
 		}
