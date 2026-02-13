@@ -189,6 +189,7 @@ namespace c3d
 
 		struct OverlaysComputeData
 		{
+			RenderDevice const & device;
 			ComputePipeline panelPipeline;
 			ComputePipeline borderPipeline;
 			TextComputePipeline textPipeline;

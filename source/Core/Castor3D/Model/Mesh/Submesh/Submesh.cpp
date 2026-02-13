@@ -990,8 +990,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< PositionsComponent >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getNormals()const
@@ -1009,8 +1012,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< NormalsComponent >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point4fArray const & Submesh::getTangents()const
@@ -1028,8 +1034,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< TangentsComponent >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getBitangents()const
@@ -1047,8 +1056,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< BitangentsComponent >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getTexcoords0()const
@@ -1066,8 +1078,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords0Component >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getTexcoords1()const
@@ -1085,8 +1100,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords1Component >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getTexcoords2()const
@@ -1104,8 +1122,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords2Component >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getTexcoords3()const
@@ -1123,8 +1144,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords3Component >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getColours()const
@@ -1142,8 +1166,11 @@ namespace c3d
 	{
 		m_dirty = true;
 		auto component = getComponent< ColoursComponent >();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 		CU_Require( component );
 		return component->getData().getData();
+#pragma GCC diagnostic pop
 	}
 
 	Point3fArray const & Submesh::getBaseData( SubmeshData submeshData )const

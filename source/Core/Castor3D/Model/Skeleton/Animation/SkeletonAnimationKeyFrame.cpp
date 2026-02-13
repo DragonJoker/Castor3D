@@ -163,14 +163,10 @@ namespace c3d
 				Point3f min{ rmax, rmax, rmax };
 				Point3f max{ rmin, rmin, rmin };
 
-				if ( !submesh->hasComponent( SkinComponent::TypeName ) )
+				if ( auto component = submesh->hasComponent( SkinComponent::TypeName )
+					? submesh->getComponent< SkinComponent >()
+					: nullptr )
 				{
-					min = submesh->getBoundingBox().getMin();
-					max = submesh->getBoundingBox().getMax();
-				}
-				else
-				{
-					auto component = submesh->getComponent< SkinComponent >();
 					auto vtxPosition = std::to_address( submesh->getPositions().begin() );
 
 					for ( auto & boneData : component->getData().getData() )
@@ -206,6 +202,11 @@ namespace c3d
 
 						++vtxPosition;
 					}
+				}
+				else
+				{
+					min = submesh->getBoundingBox().getMin();
+					max = submesh->getBoundingBox().getMax();
 				}
 
 				CU_Ensure( !std::isnan( min[0] ) && !std::isnan( min[1] ) && !std::isnan( min[2] ) );
