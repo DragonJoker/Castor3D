@@ -57,6 +57,15 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< SliderStyle & >( copy );
+			m_lineStyle.copyInto( target.m_lineStyle );
+			m_tickStyle.copyInto( target.m_tickStyle );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}

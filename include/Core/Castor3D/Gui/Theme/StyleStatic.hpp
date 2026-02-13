@@ -55,6 +55,15 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< StaticStyle & >( copy );
+			target.m_fontName = m_fontName;
+			target.m_textMaterial = m_textMaterial;
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}

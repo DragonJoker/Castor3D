@@ -112,6 +112,23 @@ namespace c3d
 			return *m_scene;
 		}
 
+		ControlStyleRPtr clone( String const & cloneName )const
+		{
+			auto result = doCreate( cloneName );
+			copyInto( *result );
+			return result;
+		}
+
+		void copyInto( ControlStyle & copy )const
+		{
+			copy.m_cursor = m_cursor;
+			copy.m_backgroundMaterial = m_backgroundMaterial;
+			copy.m_foregroundMaterial = m_foregroundMaterial;
+			copy.m_backgroundInvisible = m_backgroundInvisible;
+			copy.m_foregroundInvisible = m_foregroundInvisible;
+			doCopyInto( copy );
+		}
+
 	protected:
 		MaterialObs doCreateMaterial( MaterialObs material
 			, float offset
@@ -134,6 +151,8 @@ namespace c3d
 	private:
 		virtual void doUpdateBackgroundMaterial() = 0;
 		virtual void doUpdateForegroundMaterial() = 0;
+		virtual ControlStyleRPtr doCreate( String const & cloneName )const = 0;
+		virtual void doCopyInto( ControlStyle & copy )const = 0;
 
 	private:
 		Scene * m_scene{};

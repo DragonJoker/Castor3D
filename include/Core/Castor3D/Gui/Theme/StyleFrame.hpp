@@ -61,6 +61,15 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< FrameStyle & >( copy );
+			m_headerStyle.copyInto( target.m_headerStyle );
+			m_contentStyle.copyInto( target.m_contentStyle );
+		}
+
 		StaticStyle const & getHeaderStyle()const
 		{
 			return m_headerStyle;

@@ -58,6 +58,11 @@ namespace c3d
 			return m_progressStyle;
 		}
 
+		StaticStyle const & getLabelStyle()const
+		{
+			return m_labelStyle;
+		}
+
 		String const & getTextFontName()const
 		{
 			return m_labelStyle.getFontName();
@@ -104,6 +109,18 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< ProgressStyle & >( copy );
+			target.m_titleFontName = m_titleFontName;
+			target.m_titleMaterial = m_titleMaterial;
+			m_containerStyle.copyInto( target.m_containerStyle );
+			m_progressStyle.copyInto( target.m_progressStyle );
+			m_labelStyle.copyInto( target.m_labelStyle );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}

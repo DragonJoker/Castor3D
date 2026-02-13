@@ -68,6 +68,16 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< ExpandablePanelStyle & >( copy );
+			m_headerStyle.copyInto( target.m_headerStyle );
+			m_expandStyle.copyInto( target.m_expandStyle );
+			m_contentStyle.copyInto( target.m_contentStyle );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}

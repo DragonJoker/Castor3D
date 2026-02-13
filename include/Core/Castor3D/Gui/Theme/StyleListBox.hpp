@@ -66,6 +66,16 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< ListBoxStyle & >( copy );
+			m_itemStyle.copyInto( target.m_itemStyle );
+			m_selectedItemStyle.copyInto( target.m_selectedItemStyle );
+			m_highlightedItemStyle.copyInto( target.m_highlightedItemStyle );
+		}
+
 		HdrRgbColour doGetHighlightedColour( HdrRgbColour colour )const noexcept
 		{
 			colour.red() = std::min( 1.0f, colour.red() / 2.0f );

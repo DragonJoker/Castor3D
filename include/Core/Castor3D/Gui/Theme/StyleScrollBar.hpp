@@ -79,6 +79,17 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< ScrollBarStyle & >( copy );
+			m_barStyle.copyInto( target.m_barStyle );
+			m_thumbStyle.copyInto( target.m_thumbStyle );
+			m_beginStyle.copyInto( target.m_beginStyle );
+			m_endStyle.copyInto( target.m_endStyle );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}
