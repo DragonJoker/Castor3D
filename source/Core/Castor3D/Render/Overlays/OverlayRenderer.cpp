@@ -227,6 +227,11 @@ namespace c3d
 				, c3d::move( baseBindings ) );
 		}
 
+		struct BatchData
+		{
+			uint32_t overlayCount;
+		};
+
 		struct TextBatchData
 		{
 			uint32_t batchOffset;
@@ -271,9 +276,10 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	OverlayRenderer::OverlaysComputeData::OverlaysComputeData( RenderDevice const & device
+	OverlayRenderer::OverlaysComputeData::OverlaysComputeData( RenderDevice const & pdevice
 		, OverlaysCommonData & commonData )
-		: panelPipeline{ doCreatePanelPipeline( device, *commonData.panelVertexBuffer, commonData.cameraUbo ) }
+		: device{ pdevice }
+		, panelPipeline{ doCreatePanelPipeline( device, *commonData.panelVertexBuffer, commonData.cameraUbo ) }
 		, borderPipeline{ doCreateBorderPipeline( device, *commonData.borderVertexBuffer, commonData.cameraUbo ) }
 		, textPipeline{ doCreateTextPipeline( device ) }
 		, m_commonData{ commonData }
@@ -365,7 +371,7 @@ namespace c3d
 		return it->second;
 	}
 
-	OverlayRenderer::ComputePipeline OverlayRenderer::OverlaysComputeData::doCreatePanelPipeline( RenderDevice const & device
+	OverlayRenderer::ComputePipeline OverlayRenderer::OverlaysComputeData::doCreatePanelPipeline( RenderDevice const & renderDevice
 		, PanelVertexBufferPool & vertexBuffer
 		, CameraUbo const & cameraUbo )const
 	{
@@ -380,14 +386,15 @@ namespace c3d
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eVertex )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		result.descriptorLayout = device->createDescriptorSetLayout( "PanelOverlayCompute"
+		result.descriptorLayout = renderDevice->createDescriptorSetLayout( "PanelOverlayCompute"
 			, layoutBindings );
 
-		result.pipelineLayout = device->createPipelineLayout( "PanelOverlayCompute"
-			, *result.descriptorLayout );
-		result.pipeline = device->createPipeline( "PanelOverlayCompute"
+		result.pipelineLayout = renderDevice->createPipelineLayout( "PanelOverlayCompute"
+			, *result.descriptorLayout
+			, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( ovrlrend::BatchData ) } );
+		result.pipeline = renderDevice->createPipeline( "PanelOverlayCompute"
 			, ashes::ComputePipelineCreateInfo{ 0u
-			, PanelOverlay::createProgram( device )
+			, PanelOverlay::createProgram( renderDevice )
 			, * result.pipelineLayout } );
 
 		result.descriptorPool = result.descriptorLayout->createPool( "PanelOverlayCompute"
@@ -409,7 +416,7 @@ namespace c3d
 		return result;
 	}
 
-	OverlayRenderer::ComputePipeline OverlayRenderer::OverlaysComputeData::doCreateBorderPipeline( RenderDevice const & device
+	OverlayRenderer::ComputePipeline OverlayRenderer::OverlaysComputeData::doCreateBorderPipeline( RenderDevice const & renderDevice
 		, BorderPanelVertexBufferPool & vertexBuffer
 		, CameraUbo const & cameraUbo )const
 	{
@@ -425,14 +432,15 @@ namespace c3d
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eVertex )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		result.descriptorLayout = device->createDescriptorSetLayout( name
+		result.descriptorLayout = renderDevice->createDescriptorSetLayout( name
 			, layoutBindings );
 
-		result.pipelineLayout = device->createPipelineLayout( name
-			, *result.descriptorLayout );
-		result.pipeline = device->createPipeline( name
+		result.pipelineLayout = renderDevice->createPipelineLayout( name
+			, *result.descriptorLayout
+			, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( ovrlrend::BatchData ) } );
+		result.pipeline = renderDevice->createPipeline( name
 			, ashes::ComputePipelineCreateInfo{ 0u
-			, BorderPanelOverlay::createProgram( device )
+			, BorderPanelOverlay::createProgram( renderDevice )
 			, * result.pipelineLayout } );
 
 		result.descriptorPool = result.descriptorLayout->createPool( name
@@ -454,7 +462,7 @@ namespace c3d
 		return result;
 	}
 
-	OverlayRenderer::TextComputePipeline OverlayRenderer::OverlaysComputeData::doCreateTextPipeline( RenderDevice const & device )const
+	OverlayRenderer::TextComputePipeline OverlayRenderer::OverlaysComputeData::doCreateTextPipeline( RenderDevice const & renderDevice )const
 	{
 		MbString name = "TextOverlayCompute";
 		OverlayRenderer::TextComputePipeline result;
@@ -483,15 +491,15 @@ namespace c3d
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		result.descriptorLayout = device->createDescriptorSetLayout( name
+		result.descriptorLayout = renderDevice->createDescriptorSetLayout( name
 			, layoutBindings );
 
-		result.pipelineLayout = device->createPipelineLayout( name
+		result.pipelineLayout = renderDevice->createPipelineLayout( name
 			, *result.descriptorLayout
 			, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( ovrlrend::TextBatchData ) } );
-		result.pipeline = device->createPipeline( name
+		result.pipeline = renderDevice->createPipeline( name
 			, ashes::ComputePipelineCreateInfo{ 0u
-				, TextOverlay::createProgram( device )
+				, TextOverlay::createProgram( renderDevice )
 				, *result.pipelineLayout } );
 
 		result.descriptorPool = result.descriptorLayout->createPool( name
@@ -550,8 +558,16 @@ namespace c3d
 			, &descriptorSet
 			, 0u
 			, nullptr );
+		ovrlrend::TextBatchData data{ pipeline.count };
+		context.getContext().vkCmdPushConstants( commandBuffer
+			, *pipeline.pipelineLayout
+			, VK_SHADER_STAGE_COMPUTE_BIT
+			, 0u
+			, sizeof( ovrlrend::BatchData )
+			, &data );
+		auto threadCount = getEngine( device ).isRenderDocSupportEnabled() ? 1U : 256U;
 		context.getContext().vkCmdDispatch( commandBuffer
-			, pipeline.count, 1u, 1u );
+			, divRoundUp( pipeline.count, threadCount ), 1u, 1u );
 		context.memoryBarrier( commandBuffer
 			, vertexBuffer.bufferViewId
 			, ComputeShaderWriteState, VertexAttributeInputState );
