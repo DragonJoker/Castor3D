@@ -33,6 +33,14 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< PanelStyle & >( copy );
+			copyScrollableInto( target );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}

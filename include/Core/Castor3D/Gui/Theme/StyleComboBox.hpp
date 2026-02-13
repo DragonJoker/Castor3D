@@ -56,6 +56,15 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			ComboBoxStyle & target = static_cast< ComboBoxStyle & >( copy );
+			m_buttonStyle.copyInto( target.m_buttonStyle );
+			m_listBoxStyle.copyInto( target.m_listBoxStyle );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 			m_listBoxStyle.setBackgroundMaterial( getBackgroundMaterial() );

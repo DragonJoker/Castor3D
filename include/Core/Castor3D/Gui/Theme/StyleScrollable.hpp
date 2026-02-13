@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ScrollableStyle_H___
 #define ___C3D_ScrollableStyle_H___
 
-#include "StyleScrollable.hpp"
+#include "Castor3D/Gui/GuiModule.hpp"
 
 namespace c3d
 {
@@ -42,6 +42,9 @@ namespace c3d
 			CU_Require( hasHorizontalStyle() );
 			return *m_horizontalStyle;
 		}
+
+	protected:
+		void copyScrollableInto( ScrollableStyle & copy )const;
 
 	private:
 		ScrollBarStyle * m_verticalStyle{};

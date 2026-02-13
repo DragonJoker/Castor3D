@@ -155,6 +155,24 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< ButtonStyle & >( copy );
+			target.m_textMaterial = m_textMaterial;
+			target.m_highlightedBackgroundMaterial = m_highlightedBackgroundMaterial;
+			target.m_highlightedForegroundMaterial = m_highlightedForegroundMaterial;
+			target.m_highlightedTextMaterial = m_highlightedTextMaterial;
+			target.m_pushedBackgroundMaterial = m_pushedBackgroundMaterial;
+			target.m_pushedForegroundMaterial = m_pushedForegroundMaterial;
+			target.m_pushedTextMaterial = m_pushedTextMaterial;
+			target.m_disabledBackgroundMaterial = m_disabledBackgroundMaterial;
+			target.m_disabledForegroundMaterial = m_disabledForegroundMaterial;
+			target.m_disabledTextMaterial = m_disabledTextMaterial;
+			target.m_fontName = m_fontName;
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 			m_highlightedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f, cuT( "_BHG" ) );

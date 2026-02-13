@@ -69,6 +69,17 @@ namespace c3d
 		}
 
 	private:
+		ControlStyleRPtr doCreate( String const & cloneName )const override;
+
+		void doCopyInto( ControlStyle & copy )const override
+		{
+			auto & target = static_cast< EditStyle & >( copy );
+			target.m_fontName = m_fontName;
+			target.m_textMaterial = m_textMaterial;
+			target.m_selectionMaterial = m_selectionMaterial;
+			copyScrollableInto( target );
+		}
+
 		void doUpdateBackgroundMaterial()override
 		{
 		}
