@@ -116,15 +116,15 @@ namespace c3d
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eChars ) )
 			, *charsBuffer.buffer->buffer
 			, 0u
-			, uint32_t( charsBuffer.buffer->getCount() ) );
+			, uint32_t( charsBuffer.buffer->getSize() ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eWords ) )
 			, *wordsBuffer.buffer->buffer
 			, 0u
-			, uint32_t( wordsBuffer.buffer->getCount() ) );
+			, uint32_t( wordsBuffer.buffer->getSize() ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eLines ) )
 			, *linesBuffer.buffer->buffer
 			, 0u
-			, uint32_t( linesBuffer.buffer->getCount() ) );
+			, uint32_t( linesBuffer.buffer->getSize() ) );
 	}
 
 	//*************************************************************************

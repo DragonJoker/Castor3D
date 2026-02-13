@@ -246,7 +246,7 @@ namespace c3d
 			auto c3d_charCount = batchData.declMember< sdw::UInt >( "c3d_charCount" );
 			batchData.end();
 
-			auto processChar = [&]( shader::OverlayData & overlay
+			auto processChar = [&writer, &c3d_words, &c3d_lines, &c3d_renderData, &c3d_overlaysSurfaces]( shader::OverlayData & overlay
 				, ovrltxt::TextChar const & character
 				, sdw::Vec2 const & texDim
 				, auto generateUvs )
@@ -327,11 +327,13 @@ namespace c3d
 				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zy(), texUv.zy(), fontUv.zy() ); ++index;
 			};
 
+			auto batchCountY = 16u;
 			writer.implementMain( 1u, 1u
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &c3d_batchOffset, &c3d_charCount, &c3d_chars, &c3d_overlaysData, &c3d_fontData
+					, &processChar, batchCountY]( sdw::ComputeIn const & in )
 				{
 					auto charIndex = writer.declLocale( "charIndex"
-						, c3d_batchOffset + in.globalInvocationID.x() * 16u + in.globalInvocationID.y() );
+						, c3d_batchOffset + in.globalInvocationID.x() * batchCountY + in.globalInvocationID.y() );
 
 					sdwIF( writer, charIndex < MaxCharsPerBuffer
 						&& charIndex < c3d_charCount )
