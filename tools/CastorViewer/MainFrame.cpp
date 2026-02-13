@@ -968,6 +968,7 @@ namespace CastorViewer
 			if ( castor && castor->isThreaded() )
 				castor->getRenderLoop().pause();
 			m_renderPanel->reset();
+			doDumpFrameTimes();
 			if ( castor && castor->isThreaded() )
 				castor->getRenderLoop().resume();
 		}
@@ -1156,5 +1157,23 @@ namespace CastorViewer
 		}
 
 		event.Skip();
+	}
+
+	void MainFrame::doDumpFrameTimes()
+	{
+		if ( auto castor = wxGetApp().getCastor() )
+		{
+			c3d::Parameters times;
+			castor->getRenderLoop().dumpFrameTimes( times );
+			c3d::Logger::logInfo( cuT( "Times:" ) );
+			auto stream = c3d::makeStringStream();
+			for ( auto const & [name, _] : times )
+			{
+				c3d::Nanoseconds time{};
+				times.get( name, time );
+				stream << cuT( "    " ) << name << cuT( ": " ) << ( float( time.count() ) / 1000000.0f ) << cuT( " ms\n" );
+			}
+			c3d::Logger::logInfo( stream );
+		}
 	}
 }

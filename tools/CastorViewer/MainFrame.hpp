@@ -67,6 +67,7 @@ namespace CastorViewer
 		void doRecordFrame();
 		void doStopRecord();
 		void doSceneLoadEnd( c3d::RenderWindowDesc const & window );
+		void doDumpFrameTimes();
 
 	private:
 #pragma clang diagnostic push
