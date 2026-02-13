@@ -238,10 +238,7 @@ namespace c3d
 	{
 		if ( m_commandBuffer )
 		{
-			auto const & engine = getEngine( getDevice() );
-			m_commandBuffer->beginDebugBlock( { std::string{ name }
-				, makeFloatArray( engine.getNextRainbowColour() ) } );
-			timer.beginPass( *m_commandBuffer );
+			timer.beginPass( *m_commandBuffer, std::string{ name }, 0u );
 		}
 	}
 
@@ -250,7 +247,6 @@ namespace c3d
 		if ( m_commandBuffer )
 		{
 			timer.endPass( *m_commandBuffer );
-			m_commandBuffer->endDebugBlock();
 		}
 	}
 

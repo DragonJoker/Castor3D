@@ -123,9 +123,7 @@ namespace c3d
 			auto size = ashes::getAlignedSize( m_parent.getMaxParticlesCount() * m_inputs.stride(), align );
 
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			m_commandBuffer->beginDebugBlock( { toUtf8( m_parent.getName() ) + "/Update"
-				, makeFloatArray( m_parent.getEngine()->getNextRainbowColour() ) } );
-			updater.timer->beginPass( *m_commandBuffer );
+			updater.timer->beginPass( *m_commandBuffer, toUtf8( m_parent.getName() ) + "/Update", 0u );
 
 			// Initialise counts buffer to 0.
 			auto flags = m_generatedCountBuffer->buffer->getCompatibleStageFlags();
@@ -179,7 +177,6 @@ namespace c3d
 				, m_generatedCountBuffer->buffer->makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
 
 			updater.timer->endPass( *m_commandBuffer );
-			m_commandBuffer->endDebugBlock();
 			m_commandBuffer->end();
 			device.graphicsData()->queue->submit( *m_commandBuffer, m_fence.get() );
 			updater.timer->notifyPassRender( updater.index );
