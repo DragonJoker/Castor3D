@@ -171,6 +171,11 @@ namespace c3d
 		 */
 		void onThumbMouseButtonUp( MouseEvent const & event );
 
+		/** Event when mouse wheel is used over the scrollbar control
+		 *\param[in]	event	The mouse event
+		 */
+		void onMouseWheel( MouseEvent const & event );
+
 		/** Event when a keyboard key is pressed
 		 *\param[in]	event	The keyboard event
 		 */
@@ -205,7 +210,7 @@ namespace c3d
 		PanelCtrlRPtr m_bar{};
 		PanelCtrlRPtr m_thumb{};
 		ButtonCtrlRPtr m_end{};
-		RangedValue< float > m_value;
+		RangedValue< double > m_value;
 		Range< uint32_t > m_totalRange{ 0u, 100u };
 		bool m_scrolling{};
 		Point2i m_mouse{};

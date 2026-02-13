@@ -1827,6 +1827,46 @@ namespace c3d
 		}
 		CU_EndAttributePushBlock( GUISection::eScrollBarStyle, getGuiContext( blockContext ) )
 
+		template< typename ContextT >
+		static CU_ImplementAttributeParserBlock( parserStyleVerticalScrollbarStyle, ContextT )
+		{
+			if ( auto scrollableStyle = ( blockContext->panelStyle
+				? static_cast< ScrollableStyle * >( blockContext->panelStyle )
+				: static_cast< ScrollableStyle * >( blockContext->editStyle ) ) )
+			{
+				auto guiContext = getGuiContext( blockContext );
+				guiContext->pushStyle( guiContext->stylesHolder.top()->createScrollBarStyle( cuT( "Vertic" )
+					, getScene( guiContext ) )
+					, guiContext->scrollBarStyle );
+				scrollableStyle->setVerticalStyle( *guiContext->scrollBarStyle );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No edit style initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( GUISection::eScrollBarStyle, getGuiContext( blockContext ) )
+
+		template< typename ContextT >
+		static CU_ImplementAttributeParserBlock( parserStyleHorizontalScrollbarStyle, ContextT )
+		{
+			if ( auto scrollableStyle = ( blockContext->panelStyle
+				? static_cast< ScrollableStyle * >( blockContext->panelStyle )
+				: static_cast< ScrollableStyle * >( blockContext->editStyle ) ) )
+			{
+				auto guiContext = getGuiContext( blockContext );
+				guiContext->pushStyle( guiContext->stylesHolder.top()->createScrollBarStyle( cuT( "Horiz" )
+					, getScene( guiContext ) )
+					, guiContext->scrollBarStyle );
+				scrollableStyle->setHorizontalStyle( *guiContext->scrollBarStyle );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No edit style initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( GUISection::eScrollBarStyle, getGuiContext( blockContext ) )
+
 		static CU_ImplementAttributeParserBlock( parserStyleEnd, GuiContext )
 		{
 			blockContext->popStyle();
@@ -2225,6 +2265,8 @@ namespace c3d
 			addParserT( result, GUISection::eEditStyle, cuT( "text_material" ), &parserStyleEditTextMaterial, { makeParameter< ParameterType::eName >() } );
 			addParserT( result, GUISection::eEditStyle, cuT( "selection_material" ), &parserStyleEditSelectionMaterial, { makeParameter< ParameterType::eName >() } );
 			addParserT( result, GUISection::eEditStyle, GUISection::eScrollBarStyle, cuT( "scrollbar_style" ), &parserStyleScrollBarStyle< GuiContext >, { makeParameter< ParameterType::eName >() } );
+			addParserT( result, GUISection::eEditStyle, GUISection::eScrollBarStyle, cuT( "vertical_scrollbar_style" ), &parserStyleVerticalScrollbarStyle< GuiContext > );
+			addParserT( result, GUISection::eEditStyle, GUISection::eScrollBarStyle, cuT( "horizontal_scrollbar_style" ), &parserStyleHorizontalScrollbarStyle< GuiContext > );
 		}
 
 		static void createExpandablePanelHeaderParsers( AttributeParsers & result )
@@ -2351,6 +2393,8 @@ namespace c3d
 
 			createStylesParsers< GUISection, GuiContext >( result, GUISection::ePanelStyle );
 			createDefaultStyleParsers( result, GUISection::ePanelStyle, PreviousSection );
+			addParserT( result, GUISection::ePanelStyle, GUISection::eScrollBarStyle, cuT( "vertical_scrollbar_style" ), &parserStyleVerticalScrollbarStyle< GuiContext > );
+			addParserT( result, GUISection::ePanelStyle, GUISection::eScrollBarStyle, cuT( "horizontal_scrollbar_style" ), &parserStyleHorizontalScrollbarStyle< GuiContext > );
 		}
 
 		static void createProgressParsers( AttributeParsers & result )
@@ -2380,6 +2424,10 @@ namespace c3d
 
 		static void createScrollBarParsers( AttributeParsers & result )
 		{
+			addParserT( result, GUISection::eScrollBarStyle, cuT( "background_invisible" ), &parserStyleBackgroundInvisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParserT( result, GUISection::eScrollBarStyle, cuT( "foreground_invisible" ), &parserStyleForegroundInvisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParserT( result, GUISection::eScrollBarStyle, cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
+			addParserT( result, GUISection::eScrollBarStyle, cuT( "foreground_material" ), &parserStyleForegroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParserT( result, GUISection::eScrollBarStyle, GUISection::eButtonStyle, cuT( "begin_style" ), &parserStyleScrollBarBeginButton );
 			addParserT( result, GUISection::eScrollBarStyle, GUISection::eButtonStyle, cuT( "end_style" ), &parserStyleScrollBarEndButton );
 			addParserT( result, GUISection::eScrollBarStyle, GUISection::ePanelStyle, cuT( "bar_style" ), &parserStyleScrollBarBar );
