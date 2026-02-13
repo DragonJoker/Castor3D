@@ -40,8 +40,8 @@ namespace diamond_square_terrain
 				auto weight = steepnessRange.range.percent( steepness );
 				auto & beginBiome = biome.steepnessBiomes[steepnessRange.beginIndex];
 				auto & endBiome = biome.steepnessBiomes[steepnessRange.endIndex];
-				result = beginBiome.colour * ( 1.0f - weight )
-					+ endBiome.colour * weight;
+				result = beginBiome.colour * float( 1.0 - weight )
+					+ endBiome.colour * float( weight );
 			}
 
 			return result;
@@ -65,8 +65,8 @@ namespace diamond_square_terrain
 				auto weight = heightRange.range.percent( height );
 				auto & beginBiome = biomes[heightRange.beginIndex];
 				auto & endBiome = biomes[heightRange.endIndex];
-				result = getColour( steepness, beginBiome ) * ( 1.0f - weight )
-					+ getColour( steepness, endBiome ) * weight;
+				result = getColour( steepness, beginBiome ) * float( 1.0 - weight )
+					+ getColour( steepness, endBiome ) * float( weight );
 			}
 
 			return result;
@@ -85,8 +85,8 @@ namespace diamond_square_terrain
 			else
 			{
 				auto weight = steepnessRange.range.percent( steepness );
-				result[biome.steepnessBiomes[steepnessRange.beginIndex].passIndex] += 1.0f - weight;
-				result[biome.steepnessBiomes[steepnessRange.endIndex].passIndex] += weight;
+				result[biome.steepnessBiomes[steepnessRange.beginIndex].passIndex] += float( 1.0 - weight );
+				result[biome.steepnessBiomes[steepnessRange.endIndex].passIndex] += float( weight );
 			}
 
 			return result;
@@ -122,7 +122,7 @@ namespace diamond_square_terrain
 				auto weight = heightRange.range.percent( height );
 				auto beginWeights = getPassWeights( steepness, biomes[heightRange.beginIndex] );
 				auto endWeights = getPassWeights( steepness, biomes[heightRange.endIndex] );
-				result = mergeWeights( beginWeights, endWeights, weight );
+				result = mergeWeights( beginWeights, endWeights, float( weight ) );
 			}
 
 			return result;
@@ -178,7 +178,7 @@ namespace diamond_square_terrain
 			{
 				for ( auto y = 0u; y < width; y++ )
 				{
-					result( x, y ) = range.percent( result( x, y ) ) - 0.5f;
+					result( x, y ) = float( range.percent( result( x, y ) ) - 0.5 );
 				}
 			}
 

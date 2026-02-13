@@ -88,11 +88,11 @@ namespace c3d
 		 *				Une pourcentage allant de 0.0 à 1.0, selon que la valeur est plus
 		 *				proche de \p m_min ou de \p m_max.
 		 */
-		float percent( T const & value )const noexcept
+		double percent( T const & value )const noexcept
 		{
 			return ( m_min == m_max )
-				? 0.0f
-				: float( clamp( value ) - m_min ) / float( m_max - m_min );
+				? 0.0
+				: double( clamp( value ) - m_min ) / double( m_max - m_min );
 		}
 		/**
 		 *\~english
@@ -110,9 +110,9 @@ namespace c3d
 		 *				Une pourcentage allant de 0.0 à 1.0, selon que la valeur est plus
 		 *				proche de \p m_max ou de \p m_min.
 		 */
-		float invPercent( T const & value )const noexcept
+		double invPercent( T const & value )const noexcept
 		{
-			return 1.0f - percent( value );
+			return 1.0 - percent( value );
 		}
 		/**
 		 *\~english
@@ -129,7 +129,7 @@ namespace c3d
 		 *				\p m_max si \p percent vaut 1.0.\n
 		 *				Une valeur comprise entre \p m_min et \p m_max.
 		 */
-		T value( float const & percent )const noexcept
+		T value( double const & percent )const noexcept
 		{
 			return T( float( m_min ) + percent * float( m_max - m_min ) );
 		}
@@ -148,9 +148,9 @@ namespace c3d
 		 *				\p m_min si \p percent vaut 1.0.\n
 		 *				Une valeur comprise entre \p m_min et \p m_max.
 		 */
-		T invValue( float const & percent )const noexcept
+		T invValue( double const & percent )const noexcept
 		{
-			return T{ float( m_min ) + ( 1.0f - percent ) * float( m_max - m_min ) };
+			return T{ double( m_min ) + ( 1.0 - percent ) * double( m_max - m_min ) };
 		}
 		/**
 		 *\~english

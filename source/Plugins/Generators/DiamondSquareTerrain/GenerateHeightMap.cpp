@@ -74,7 +74,7 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 0u; x <= max; x++ )
 				{
-					heightMap( x, z ) = range.percent( heightMap( x, z ) );
+					heightMap( x, z ) = float( range.percent( heightMap( x, z ) ) );
 				}
 			}
 		};

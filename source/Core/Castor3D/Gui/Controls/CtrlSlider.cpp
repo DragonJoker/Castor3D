@@ -136,7 +136,7 @@ namespace c3d
 			tickSize.getWidth() = ( getSize().getWidth() / 2 ) + ( getSize().getWidth() % 2 );
 			tickSize.getHeight() = 5;
 			tickPosition.x() = int32_t( tickSize.getWidth() / 2 );
-			tickPosition.y() = int32_t( float( lineSize.getHeight() ) * m_value.percent() );
+			tickPosition.y() = int32_t( double( lineSize.getHeight() ) * m_value.percent() );
 		}
 		else
 		{
@@ -146,7 +146,7 @@ namespace c3d
 			linePosition.y() = int32_t( ( getSize().getHeight() - 3 ) / 2 );
 			tickSize.getWidth() = 5;
 			tickSize.getHeight() = ( getSize().getHeight() / 2 ) + ( getSize().getHeight() % 2 );
-			tickPosition.x() = int32_t( float( lineSize.getWidth() ) * m_value.percent() );
+			tickPosition.x() = int32_t( double( lineSize.getWidth() ) * m_value.percent() );
 			tickPosition.y() = int32_t( tickSize.getHeight() / 2 );
 		}
 

@@ -110,7 +110,7 @@ namespace diamond_square_terrain
 				, size
 				, heightMap );
 
-			auto zeroPoint = heightRange.percent( 0.0f );
+			auto zeroPoint = float( heightRange.percent( 0.0f ) );
 			// Generate quads 
 			c3d::SubmeshAnimationBuffer submeshBuffers;
 

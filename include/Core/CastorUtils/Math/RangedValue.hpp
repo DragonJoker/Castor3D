@@ -53,7 +53,7 @@ namespace c3d
 		void updateRange( Range< T > const & range )noexcept
 		{
 			m_range = range;
-			m_range.clamp( m_value );
+			m_value = m_range.clamp( m_value );
 		}
 		/**
 		 *\~english
@@ -67,7 +67,7 @@ namespace c3d
 		 *				Une valeur allant de 0.0 à 1.0, selon que la valeur est plus proche
 		 *				de \p m_range.m_min ou de \p m_range.m_max.
 		 */
-		float percent()const noexcept
+		double percent()const noexcept
 		{
 			return m_range.percent( m_value );
 		}
