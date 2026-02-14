@@ -24,8 +24,6 @@
 #include <meshoptimizer.h>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-#pragma optimize("", off)
-
 namespace c3d_gltf
 {
 	//*********************************************************************************************

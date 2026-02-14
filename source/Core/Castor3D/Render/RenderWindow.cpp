@@ -39,6 +39,8 @@
 
 CU_ImplementSmartPtr( c3d, RenderWindow )
 
+#define C3D_SupportDeviceFault 0
+
 namespace c3d
 {
 	namespace rendwndw
@@ -247,7 +249,7 @@ namespace c3d
 			return result;
 		}
 
-#ifdef VK_EXT_device_fault
+#if defined( VK_EXT_device_fault ) && C3D_SupportDeviceFault
 		static String getAddressTypeName( VkDeviceFaultAddressTypeEXT v )
 		{
 			switch ( v )
@@ -1745,7 +1747,7 @@ namespace c3d
 
 	void RenderWindow::doProcessDeviceLost()
 	{
-#if defined( VK_EXT_device_fault ) && 0
+#if defined( VK_EXT_device_fault ) && C3D_SupportDeviceFault
 		auto faultInfo = m_device->getDeviceFaultInfo();
 		log::error << "Device lost error: " << faultInfo.description << "\n";
 

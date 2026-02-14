@@ -223,7 +223,6 @@ namespace smaa
 				, m_config
 				, &m_enabled );
 			break;
-
 		case EdgeDetectionType::eColour:
 			m_edgeDetection = c3d::makeRawUnique< ColourEdgeDetection >( m_graph
 				, m_renderTarget
@@ -235,7 +234,6 @@ namespace smaa
 				, &m_enabled
 				, &m_passIndex );
 			break;
-
 		case EdgeDetectionType::eLuma:
 			m_edgeDetection = c3d::makeRawUnique< LumaEdgeDetection >( m_graph
 				, m_renderTarget
@@ -246,6 +244,9 @@ namespace smaa
 				, m_config
 				, &m_enabled
 				, &m_passIndex );
+			break;
+		default:
+			CU_UnsupportedError( "Unsupported edge detection type" );
 			break;
 		}
 

@@ -271,7 +271,7 @@ namespace c3d
 #pragma GCC diagnostic pop
 		}
 
-		void accept( ConfigurationVisitorBase & vis )
+		void accept( ConfigurationVisitorBase & vis )override
 		{
 			acceptBaseData( vis, TypeName, getData().getData().size() );
 		}

@@ -5,8 +5,6 @@
 #include <Castor3D/ImporterFile.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-#pragma optimize("", off)
-
 namespace c3d_gltf
 {
 	//*********************************************************************************************

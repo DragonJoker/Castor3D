@@ -21,7 +21,7 @@ namespace Reinhard
 		ToneMapping( c3d::ToneMapping const & parent
 			, c3d::RenderDevice const & device
 			, c3d::Parameters parameters );
-		~ToneMapping()noexcept;
+		~ToneMapping()noexcept override;
 		void getFragmentProgram( ast::ShaderBuilder & builder )override;
 		void accept( c3d::ConfigurationVisitor & visitor )override;
 

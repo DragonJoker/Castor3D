@@ -558,7 +558,7 @@ namespace c3d
 			, &descriptorSet
 			, 0u
 			, nullptr );
-		ovrlrend::TextBatchData data{ pipeline.count };
+		ovrlrend::TextBatchData data{ pipeline.count, {} };
 		context.getContext().vkCmdPushConstants( commandBuffer
 			, *pipeline.pipelineLayout
 			, VK_SHADER_STAGE_COMPUTE_BIT

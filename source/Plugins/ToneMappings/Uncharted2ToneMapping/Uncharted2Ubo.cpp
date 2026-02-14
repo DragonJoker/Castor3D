@@ -11,7 +11,7 @@ namespace Uncharted2
 {
 	//*********************************************************************************************
 
-	sdw::RetVec3 Uncharted2Data::toneMap( sdw::Vec3 const & x )
+	sdw::RetVec3 Uncharted2Data::toneMap( sdw::Vec3 const & px )
 	{
 		if ( !m_toneMap )
 		{
@@ -32,7 +32,7 @@ namespace Uncharted2
 				}
 				, sdw::InVec3{ writer, "x" } );
 		}
-		return m_toneMap( x );
+		return m_toneMap( px );
 	}
 
 	//*********************************************************************************************
