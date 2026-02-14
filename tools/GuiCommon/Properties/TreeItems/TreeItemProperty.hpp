@@ -72,9 +72,17 @@ namespace GuiCommon
 		 *\brief		Retrieves the editable status
 		 *\return		The value
 		 */
-		bool IsEditable()const
+		bool isEditable()const
 		{
 			return m_editable;
+		}
+		/**
+		 *\brief		Retrieves the engine
+		 *\return		The value
+		 */
+		c3d::Engine * getEngine()const
+		{
+			return m_engine;
 		}
 
 		void setPrefix( c3d::StringView prefix )

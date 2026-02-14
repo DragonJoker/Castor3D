@@ -210,7 +210,7 @@ namespace Uncharted2
 			} );
 	}
 
-	void ToneMapping::accept( c3d::ToneMappingVisitor & visitor )
+	void ToneMapping::accept( c3d::ConfigurationVisitor & visitor )
 	{
 		m_configuration.accept( visitor );
 	}

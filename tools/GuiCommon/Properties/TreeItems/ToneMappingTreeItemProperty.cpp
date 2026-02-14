@@ -20,12 +20,12 @@ namespace GuiCommon
 	namespace
 	{
 		class ToneMappingShaderGatherer
-			: public c3d::ToneMappingVisitor
+			: public c3d::ConfigurationVisitor
 		{
 		public:
 			ToneMappingShaderGatherer( c3d::RenderDevice const & device
 				, ShaderSources & sources )
-				: c3d::ToneMappingVisitor{ { true } }
+				: c3d::ConfigurationVisitor{ { true } }
 				, m_device{ device }
 				, m_sources{ sources }
 			{
@@ -74,17 +74,6 @@ namespace GuiCommon
 					, entryPoint );
 			}
 
-			void visit( c3d::String const & name
-				, VkShaderStageFlags shaders
-				, c3d::HdrConfig & value )override
-			{
-				auto & source = doGetSource( name );
-				UniformBufferValues ubo{ make_String( wxT( "HdrConfig" ) ), VK_SHADER_STAGE_FRAGMENT_BIT };
-				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Exposure" ), value.exposure ) );
-				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Gamma" ), value.gamma ) );
-				source.ubos.emplace_back( c3d::move( ubo ) );
-			}
-
 		private:
 			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
@@ -122,7 +111,10 @@ namespace GuiCommon
 		: TreeItemProperty{ target.getEngine(), imagesLoader, editable }
 		, m_target{ target }
 		, m_parent{ parent }
+		, m_hdrProperties{ c3d::makeUniqueDerived< TreeItemProperty, TreeItemPropertyT< c3d::HdrConfig > >( m_imagesLoader, isEditable(), getEngine(), m_target.getHdrConfig() ) }
 	{
+		if ( auto toneMapping = m_target.getToneMapping() )
+			m_toneMappingProperties = c3d::makeUniqueDerived< TreeItemProperty, TreeItemPropertyT< c3d::ToneMapping > >( m_imagesLoader, isEditable(), getEngine(), *toneMapping );
 		CreateTreeItemMenu();
 	}
 
@@ -133,6 +125,10 @@ namespace GuiCommon
 		static wxString PROPERTY_TONE_MAPPING_EXPOSURE = _( "Exposure" );
 		static wxString PROPERTY_TONE_MAPPING_GAMMA = _( "Gamma" );
 		static wxString PROPERTY_TONE_MAPPING_SHADER = _( "Shader" );
+
+		if ( auto toneMapping = m_target.getToneMapping();
+			toneMapping && !m_toneMappingProperties )
+			m_toneMappingProperties = c3d::makeUniqueDerived< TreeItemProperty, TreeItemPropertyT< c3d::ToneMapping > >( m_imagesLoader, isEditable(), getEngine(), *toneMapping );
 
 		addProperty( grid, PROPERTY_CATEGORY_TONE_MAPPING );
 
@@ -162,9 +158,9 @@ namespace GuiCommon
 			prop->SetValue( m_choices[m_nameToChoice[m_target.getToneMapping()->getName()]] );
 		}
 
-		c3d::HdrConfig & hdrConfig = m_target.getHdrConfig();
-		addPropertyT( grid, PROPERTY_TONE_MAPPING_EXPOSURE, &hdrConfig.exposure );
-		addPropertyT( grid, PROPERTY_TONE_MAPPING_GAMMA, &hdrConfig.gamma );
+		m_hdrProperties->createProperties( grid );
+		if ( m_toneMappingProperties )
+			m_toneMappingProperties->createProperties( grid );
 		addProperty( grid, PROPERTY_TONE_MAPPING_SHADER
 			, [this]( wxVariant const & var ){ onEditShader( var ); } );
 	}

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_TONE_MAPPING_H___
 #define ___C3D_TONE_MAPPING_H___
 
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
-#include "Castor3D/Render/ToneMapping/ToneMappingVisitor.hpp"
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
@@ -38,7 +38,7 @@ namespace c3d
 		virtual void update()
 		{
 		}
-		virtual void accept( ToneMappingVisitor & visitor )
+		virtual void accept( ConfigurationVisitor & visitor )
 		{
 		}
 		virtual Vector< VkDescriptorSetLayout > getDescriptorLayouts()const
@@ -127,7 +127,7 @@ namespace c3d
 		 *\brief			Fonction d'acceptation de visiteur.
 		 *\param[in, out]	visitor	Le visiteur.
 		 */
-		C3D_API void accept( ToneMappingVisitor & visitor );
+		C3D_API void accept( ConfigurationVisitor & visitor );
 		/**
 		 *\~english
 		 *\brief			Retrieves the vertex shader for tone mapping.
