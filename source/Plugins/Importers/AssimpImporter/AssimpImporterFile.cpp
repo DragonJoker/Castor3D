@@ -341,7 +341,7 @@ namespace c3d_assimp
 				return transform;
 			}
 
-			aiNode const * findCommonNode( aiNode const & node, AssimpMeshData const & meshData )
+			static aiNode const * findCommonNode( aiNode const & node, AssimpMeshData const & meshData )
 			{
 				if ( std::all_of( meshData.submeshes.begin(), meshData.submeshes.end()
 					, [&node]( AssimpSubmeshData const & lookup )

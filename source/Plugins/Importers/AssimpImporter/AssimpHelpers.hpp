@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DAssimp_Helpers___
 #define ___C3DAssimp_Helpers___
 
+#include <Castor3D/Animation/AnimationImporter.hpp>
 #include <Castor3D/Animation/Interpolator.hpp>
 #include <Castor3D/Material/Texture/TextureModule.hpp>
 #include <Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp>

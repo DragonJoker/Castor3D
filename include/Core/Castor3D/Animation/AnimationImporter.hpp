@@ -288,7 +288,7 @@ namespace c3d
 				prv = cur;
 
 				if ( prv != map.begin() )
-					prv--;
+					--prv;
 			}
 		}
 

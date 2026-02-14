@@ -24,7 +24,6 @@ namespace atmosphere_scattering
 	private:
 		c3d::ShaderModule m_computeShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_lastPass;
 	};
 }
 
