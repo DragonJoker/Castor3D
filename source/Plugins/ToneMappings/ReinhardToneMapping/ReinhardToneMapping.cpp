@@ -46,7 +46,7 @@ namespace Reinhard
 			} );
 	}
 
-	void ToneMapping::accept( c3d::ToneMappingVisitor & visitor )
+	void ToneMapping::accept( c3d::ConfigurationVisitor & visitor )
 	{
 	}
 

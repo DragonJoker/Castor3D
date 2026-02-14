@@ -54,13 +54,6 @@ namespace c3d
 	*	un RenderUbo, qu'il l'utilise ou pas.
 	*/
 	class ToneMappingImpl;
-	/**
-	\~english
-	\brief		Post effect visitor base class.
-	\~french
-	\brief		Classe de base d'un visiteur d'effet post rendu.
-	*/
-	class ToneMappingVisitor;
 
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( c3d, ToneMapping, C3D_API );

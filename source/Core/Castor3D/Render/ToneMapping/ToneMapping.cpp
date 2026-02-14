@@ -117,7 +117,7 @@ namespace c3d
 		}
 	}
 
-	void ToneMapping::accept( ToneMappingVisitor & visitor )
+	void ToneMapping::accept( ConfigurationVisitor & visitor )
 	{
 		visitor.visit( m_shader );
 		if ( m_impl )

@@ -24,7 +24,7 @@ namespace Uncharted2
 			, c3d::Parameters parameters );
 		~ToneMapping()noexcept;
 		void getFragmentProgram( ast::ShaderBuilder & builder )override;
-		void accept( c3d::ToneMappingVisitor & visitor )override;
+		void accept( c3d::ConfigurationVisitor & visitor )override;
 		void update()override;
 		c3d::Vector< VkDescriptorSetLayout > getDescriptorLayouts()const override;
 		void recordInto( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t index )const override;

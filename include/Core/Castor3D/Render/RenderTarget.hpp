@@ -327,7 +327,6 @@ namespace c3d
 
 		ToneMappingRPtr getToneMapping()const noexcept
 		{
-			CU_Require( m_toneMapping );
 			return m_toneMapping.get();
 		}
 

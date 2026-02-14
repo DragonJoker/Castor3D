@@ -23,7 +23,7 @@ namespace NoTM
 			, c3d::Parameters parameters );
 		~ToneMapping()noexcept;
 		void getFragmentProgram( ast::ShaderBuilder & builder )override;
-		void accept( c3d::ToneMappingVisitor & visitor )override;
+		void accept( c3d::ConfigurationVisitor & visitor )override;
 
 		static c3d::String Type;
 		static c3d::MbString Name;
