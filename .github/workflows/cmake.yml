@@ -100,7 +100,7 @@ jobs:
     - name: Install necessary packages
       shell: bash
       run: |
-        brew install autoconf automake autoconf-archive
+        brew install autoconf autoconf-archive automake libtool
     - name: Create Build Environment
       run: |
         cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
