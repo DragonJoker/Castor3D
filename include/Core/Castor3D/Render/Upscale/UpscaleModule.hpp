@@ -26,15 +26,11 @@ namespace c3d
 	enum class UpscalingRenderPreset
 	{
 		eDefault,
-		eA,
-		eB,
-		eC,
-		eD,
-		eE,
-		eF,
 		eJ,
 		eK,
-		CU_ScopedEnumBounds( eDefault, eK )
+		eL,
+		eM,
+		CU_ScopedEnumBounds( eDefault, eM )
 	};
 	C3D_API String getName( UpscalingRenderPreset v );
 	/**
@@ -50,6 +46,7 @@ namespace c3d
 		bool enabled{ false };
 		UpscalingPerfQualityMode perfQualityMode{ UpscalingPerfQualityMode::eMaxPerf };
 		UpscalingRenderPreset preset{ UpscalingRenderPreset::eDefault };
+		u32 basePhaseCount{ 8u };
 	};
 	/**
 	*\~english

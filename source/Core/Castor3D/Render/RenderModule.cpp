@@ -94,22 +94,14 @@ namespace c3d
 		{
 		case UpscalingRenderPreset::eDefault:
 			return cuT( "default" );
-		case UpscalingRenderPreset::eA:
-			return cuT( "preset_a" );
-		case UpscalingRenderPreset::eB:
-			return cuT( "preset_b" );
-		case UpscalingRenderPreset::eC:
-			return cuT( "preset_c" );
-		case UpscalingRenderPreset::eD:
-			return cuT( "preset_d" );
-		case UpscalingRenderPreset::eE:
-			return cuT( "preset_e" );
-		case UpscalingRenderPreset::eF:
-			return cuT( "preset_f" );
 		case UpscalingRenderPreset::eJ:
 			return cuT( "preset_j" );
 		case UpscalingRenderPreset::eK:
 			return cuT( "preset_k" );
+		case UpscalingRenderPreset::eL:
+			return cuT( "preset_l" );
+		case UpscalingRenderPreset::eM:
+			return cuT( "preset_m" );
 		default:
 			CU_Failure( "Unsupported UpscalingRenderPreset" );
 			return cuEmptyString;

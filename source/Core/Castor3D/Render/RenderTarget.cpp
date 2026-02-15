@@ -904,7 +904,7 @@ namespace c3d
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
 		updater.renderSize = m_renderSize;
-		updater.jitter = m_jitter;
+		updater.jitter = m_jitter / c3d::Point2f{ m_renderSize->x, m_renderSize->y };
 		updater.scene = &scene;
 		updater.camera = &camera;
 		camera.update();

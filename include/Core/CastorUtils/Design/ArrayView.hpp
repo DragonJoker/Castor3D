@@ -38,6 +38,13 @@ namespace c3d
 		{
 		}
 
+		// Intended non explicit to allow implicit conversions from containers with compatible iterators.
+		template< typename ContT >
+		ArrayView( ContT const & cont )noexcept
+			: ArrayView{ std::to_address( std::begin( cont ) ), std::to_address( std::end( cont ) ) }
+		{
+		}
+
 		reference operator[]( size_t index )noexcept
 		{
 			CU_Require( index < size() );

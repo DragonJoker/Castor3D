@@ -33,9 +33,7 @@ namespace c3d
 
 	void UpscalingInstance::update()
 	{
-		auto jitter = m_sdk->getJitter( m_frameIndex );
-		m_target.setJitter( Point2f{ jitter->x / float( m_target.getRenderSize()->x )
-			, jitter->y / float( m_target.getRenderSize()->y ) } );
+		m_target.setJitter( m_sdk->getJitter( m_frameIndex ) );
 	}
 
 	void UpscalingInstance::evaluateUpscaling( crg::RecordContext & recContext
