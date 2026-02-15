@@ -27,9 +27,6 @@ namespace c3d
 
 	namespace ss
 	{
-		static constexpr uint64_t APP_ID = 231313132;
-		constexpr size_t NUM_OFFSET_SEQUENCES = 64; // Use a large number of Halton sequence offsets to accomodate large scaling ratios.
-
 		StringView getName( NVSDK_NGX_Feature feature )
 		{
 			switch ( feature )
@@ -82,6 +79,132 @@ namespace c3d
 
 			return NVSDK_NGX_Create_ImageView_Resource_VK( imageView, image, subresourceRange, format, extent.width, extent.height, readWrite );
 		}
+
+		static bool checkFeatureExtensions( uint32_t featureExtensionCount
+			, const VkExtensionProperties * featureExtensions
+			, ArrayView< VkExtensionProperties const > availableExtensions )
+		{
+			bool missingExtension = false;
+			for ( uint32_t i = 0; i < featureExtensionCount; i++ )
+			{
+				if ( std::none_of( availableExtensions.begin(), availableExtensions.end()
+					, [featureExtensions, i]( const VkExtensionProperties & lookup )
+					{
+						return strncmp( lookup.extensionName, featureExtensions[i].extensionName, VK_MAX_EXTENSION_NAME_SIZE ) == 0;
+					} ) )
+				{
+					log::error << cuT( "NGX SDK [IsFeatureSupported]: Missing device extension " ) << featureExtensions[i].extensionName << std::endl;
+					missingExtension = true;
+				}
+			}
+
+			return !missingExtension;
+		}
+
+		static NVSDK_NGX_DLSS_Hint_Render_Preset convert( UpscalingRenderPreset preset )
+		{
+			switch ( preset )
+			{
+			case UpscalingRenderPreset::eDefault: return NVSDK_NGX_DLSS_Hint_Render_Preset_Default;
+			case UpscalingRenderPreset::eJ: return NVSDK_NGX_DLSS_Hint_Render_Preset_J;
+			case UpscalingRenderPreset::eK: return NVSDK_NGX_DLSS_Hint_Render_Preset_K;
+			case UpscalingRenderPreset::eL: return NVSDK_NGX_DLSS_Hint_Render_Preset_L;
+			case UpscalingRenderPreset::eM: return NVSDK_NGX_DLSS_Hint_Render_Preset_M;
+			default:
+				CU_Failure( "Unsupported preset" );
+				return NVSDK_NGX_DLSS_Hint_Render_Preset_Default;
+			}
+		}
+
+		static f32 getHaltonNumber( u32 index, u32 base )
+		{
+			f32 result = 0.0f;
+			f32 invBase = 1.0f / f32( base );
+			f32 fraction = invBase;
+
+			for ( u32 nCurrentIndex = index; nCurrentIndex > 0;)
+			{
+				result += f32( nCurrentIndex % base ) * fraction;
+				nCurrentIndex /= base;
+				fraction *= invBase;
+			}
+
+			return result;
+		}
+
+		static bool isFeatureSupported( ashes::Device const & device
+			, NVSDK_NGX_FeatureDiscoveryInfo const & dis )
+		{
+			VkPhysicalDevice vkphysicaldevice = device.getPhysicalDevice();
+			VkInstance vkinstance = device.getInstance();
+
+			uint32_t deviceExtensionsCount;
+			VkExtensionProperties * requiredDeviceExtensions;
+			auto res = NVSDK_NGX_VULKAN_GetFeatureDeviceExtensionRequirements( vkinstance, vkphysicaldevice, &dis, &deviceExtensionsCount, &requiredDeviceExtensions );
+			if ( res != NVSDK_NGX_Result_Success )
+			{
+				log::printError( cuT( "NGX SDK GetFeatureRequirements error: GetFeatureDeviceExtensionRequirements returned 0x%08x info: %ls\n" )
+					, res, GetNGXResultAsString( res ) );
+				return false;
+			}
+			else
+			{
+				auto availableDeviceExtensions = device.getPhysicalDevice().enumerateExtensionProperties( cuEmptyString );
+				if ( !ss::checkFeatureExtensions( deviceExtensionsCount, requiredDeviceExtensions, availableDeviceExtensions ) )
+					return false;
+			}
+
+			uint32_t instanceExtensionsCount;
+			VkExtensionProperties * requiredInstanceExtensions;
+			res = NVSDK_NGX_VULKAN_GetFeatureInstanceExtensionRequirements( &dis, &instanceExtensionsCount, &requiredInstanceExtensions );
+			if ( res != NVSDK_NGX_Result_Success )
+			{
+				log::printError( cuT( "NGX SDK GetFeatureRequirements error: GetFeatureInstanceExtensionRequirements returned 0x%08x info: %ls\n" )
+					, res, GetNGXResultAsString( res ) );
+				return false;
+			}
+			else
+			{
+				auto availableInstanceExtensions = device.getInstance().enumerateExtensionProperties( cuEmptyString );
+				if ( !ss::checkFeatureExtensions( instanceExtensionsCount, requiredInstanceExtensions, availableInstanceExtensions ) )
+					return false;
+			}
+
+			NVSDK_NGX_FeatureRequirement req{};
+			res = NVSDK_NGX_VULKAN_GetFeatureRequirements( vkinstance, vkphysicaldevice, &dis, &req );
+
+			if ( res != NVSDK_NGX_Result_Success && res != NVSDK_NGX_Result_FAIL_NotImplemented )
+			{
+				log::printError( cuT( "NGX SDK GetFeatureRequirements error: 0x%08x info: %ls\n" )
+					, res, GetNGXResultAsString( res ) );
+				return false;
+			}
+
+			log::printInfo( cuT( "NGX SDK GetFeatureRequirements returned 0x%08x: Min GPU Arch: 0x%08x MinOS: %s\n" )
+				, req.FeatureSupported, req.MinHWArchitecture, req.MinOSVersion );
+
+			return true;
+		}
+
+		char const * const PROJECT_ID = "435FDB5D-0290-47D4-96B2-2954BBA7A777";
+
+		const NVSDK_NGX_FeatureCommonInfo CommonInfo{ .PathListInfo = {},
+			.LoggingInfo = { .LoggingCallback = logCallback,
+#if defined( NDEBUG )
+			.MinimumLoggingLevel = NVSDK_NGX_LOGGING_LEVEL_OFF,
+#else
+			.MinimumLoggingLevel = NVSDK_NGX_LOGGING_LEVEL_ON,
+#endif
+			.DisableOtherLoggingSinks = true } };
+
+		const NVSDK_NGX_FeatureDiscoveryInfo UpscaleFeatureInfo{ .SDKVersion = NVSDK_NGX_Version_API,
+			.FeatureID = NVSDK_NGX_Feature_SuperSampling,
+			.Identifier{ .IdentifierType = NVSDK_NGX_Application_Identifier_Type_Project_Id,
+				.v{ .ProjectDesc{ .ProjectId = PROJECT_ID,
+					.EngineType = NVSDK_NGX_ENGINE_TYPE_CUSTOM,
+					.EngineVersion = Castor3D_VERSION_STR } } },
+			.ApplicationDataPath = L".",
+			.FeatureInfo = &CommonInfo };
 	}
 
 	//*********************************************************************************************
@@ -97,11 +220,15 @@ namespace c3d
 		, Extent2D const & displaySize
 		, UpscaleConfig const & config )
 	{
-		auto renderPreset = NVSDK_NGX_DLSS_Hint_Render_Preset_Default;
+		auto renderPreset = ss::convert( config.preset );
 		unsigned int creationNodeMask = 1;
 		unsigned int visibilityNodeMask = 1;
 
-		// Next create features
+		const f32 basePhaseCount = f32( config.basePhaseCount );
+		const float fPhasesCount = basePhaseCount * pow( f32( displaySize.width ) / f32( renderSize.width ), 2.0f );
+		m_phaseCount = u32( std::round( fPhasesCount ) );
+
+		// Create features
 		int dlssCreateFeatureFlags = NVSDK_NGX_DLSS_Feature_Flags_None;
 		dlssCreateFeatureFlags |= NVSDK_NGX_DLSS_Feature_Flags_IsHDR;
 		dlssCreateFeatureFlags |= NVSDK_NGX_DLSS_Feature_Flags_DepthInverted;
@@ -162,33 +289,9 @@ namespace c3d
 	{
 		// Halton jitter
 		Point2f result{ 0.0f, 0.0f };
-
-		constexpr u32 baseX = 2;
-		u32 index = frameIndex + 1;
-		float invBase = 1.0f / baseX;
-		float fraction = invBase;
-		while ( index > 0 )
-		{
-			result->x += float( index % baseX ) * fraction;
-			index /= baseX;
-			fraction *= invBase;
-		}
-
-		constexpr u32 baseY = 3;
-		index = frameIndex + 1;
-		invBase = 1.0f / baseY;
-		fraction = invBase;
-		while ( index > 0 )
-		{
-			result->y += float( index % baseY ) * fraction;
-			index /= baseY;
-			fraction *= invBase;
-		}
-
-		result->x -= 0.5f;
-		result->y -= 0.5f;
-
-		frameIndex = ( frameIndex + 1 ) % ss::NUM_OFFSET_SEQUENCES;
+		result->x = ss::getHaltonNumber( ( frameIndex % m_phaseCount ) + 1, 2 ) - 0.5f;
+		result->y = ss::getHaltonNumber( ( frameIndex % m_phaseCount ) + 1, 3 ) - 0.5f;
+		frameIndex = ( frameIndex + 1 ) % m_phaseCount;
 
 		return result;
 	}
@@ -203,7 +306,7 @@ namespace c3d
 		, Point2f const & jitterOffset
 		, Point2f const & mVScale )const
 	{
-		if ( m_dlssAvailable )
+		if ( !m_dlssAvailable )
 		{
 			log::error << cuT( "DLSS is not available - could not evaluate Upscaling\n" );
 			return;
@@ -290,15 +393,13 @@ namespace c3d
 
 	bool DLSSUpscalingSDK::initialise( RenderDevice const & device )
 	{
-		auto path = makePath( File::getExecutableDirectory() );
-		NVSDK_NGX_FeatureCommonInfo featureInfo{};
-		featureInfo.LoggingInfo = { ss::logCallback, NVSDK_NGX_LOGGING_LEVEL_VERBOSE, true };
-
 		m_device = &device;
 		VkPhysicalDevice vkphysicaldevice = device.gpu;
 		VkInstance vkinstance = device->getInstance();
-		auto result = NVSDK_NGX_VULKAN_Init( ss::APP_ID, path.c_str(), vkinstance, vkphysicaldevice, *m_device->device
-			, device.desc.getInstanceProcAddr, device->getInstance().vkGetDeviceProcAddr, &featureInfo );
+		auto result = NVSDK_NGX_VULKAN_Init_with_ProjectID( ss::PROJECT_ID, NVSDK_NGX_ENGINE_TYPE_CUSTOM , Castor3D_VERSION_STR, L"."
+			, vkinstance, vkphysicaldevice, *m_device->device
+			, device.desc.getInstanceProcAddr, device->getInstance().vkGetDeviceProcAddr
+			, &ss::CommonInfo, NVSDK_NGX_Version_API );
 		m_ngxInitialized = !NVSDK_NGX_FAILED( result );
 		if ( !m_ngxInitialized )
 		{
@@ -356,6 +457,14 @@ namespace c3d
 			return false;
 		}
 
+		if ( !ss::isFeatureSupported( *m_device->device, ss::UpscaleFeatureInfo ) )
+		{
+			log::printError( cuT( "NVIDIA DLSS cannot be loaded due to outdated driver. Minimum Driver Version required : %u.%u\n" )
+				, minDriverVersionMajor, minDriverVersionMinor );
+			cleanup();
+			return false;
+		}
+
 		return true;
 	}
 
@@ -375,6 +484,9 @@ namespace c3d
 		, Extent2D & recommendedSize )const
 	{
 		recommendedSize = displaySize;
+
+		if ( config.perfQualityMode == UpscalingPerfQualityMode::eDLAA )
+			return true;
 
 		if ( !isNGXInitialized() )
 		{
@@ -427,67 +539,6 @@ namespace c3d
 		}
 
 		recommendedSize = recommendedOptimalRenderSize;
-		return true;
-	}
-
-	bool DLSSUpscalingSDK::isFeatureSupported( NVSDK_NGX_FeatureDiscoveryInfo const * dis )const
-	{
-		VkPhysicalDevice vkphysicaldevice = m_device->gpu;
-		VkInstance vkinstance = m_device->device->getInstance();
-
-		uint32_t nDeviceExtensions;
-		VkExtensionProperties * deviceExtensions;
-		auto res = NVSDK_NGX_VULKAN_GetFeatureDeviceExtensionRequirements( vkinstance, vkphysicaldevice, dis, &nDeviceExtensions, &deviceExtensions );
-		if ( res != NVSDK_NGX_Result_Success )
-		{
-			log::printError( cuT( "NGX SDK GetFeatureRequirements error: GetFeatureDeviceExtensionRequirements returned 0x%08x info: %ls\n" )
-				, res, GetNGXResultAsString( res ) );
-			return false;
-		}
-		else
-		{
-			log::printInfo( cuT( "NGX SDK GetFeatureDeviceExtensionRequirements returned %d device extension requirements: " )
-				, nDeviceExtensions );
-			for ( uint32_t i = 0; i < nDeviceExtensions; i++ )
-			{
-				log::printInfo( cuT( "%s, " ), deviceExtensions[i].extensionName );
-			}
-			log::info << cuT( "\n" );
-		}
-
-		uint32_t nInstanceExtensions;
-		VkExtensionProperties * instanceExtensions;
-		res = NVSDK_NGX_VULKAN_GetFeatureInstanceExtensionRequirements( dis, &nInstanceExtensions, &instanceExtensions );
-		if ( res != NVSDK_NGX_Result_Success )
-		{
-			log::printError( cuT( "NGX SDK GetFeatureRequirements error: GetFeatureInstanceExtensionRequirements returned 0x%08x info: %ls\n" )
-				, res, GetNGXResultAsString( res ) );
-			return false;
-		}
-		else
-		{
-			log::printInfo( cuT( "NGX SDK GetFeatureInstanceExtensionRequirements returned %d instance extension requirements: " )
-				, nInstanceExtensions );
-			for ( uint32_t i = 0; i < nInstanceExtensions; i++ )
-			{
-				log::printInfo( cuT( "%s, " ), instanceExtensions[i].extensionName );
-			}
-			log::info << cuT( "\n" );
-		}
-
-		NVSDK_NGX_FeatureRequirement req{};
-		res = NVSDK_NGX_VULKAN_GetFeatureRequirements( vkinstance, vkphysicaldevice, dis, &req );
-
-		if ( res != NVSDK_NGX_Result_Success && res != NVSDK_NGX_Result_FAIL_NotImplemented )
-		{
-			log::printError( cuT( "NGX SDK GetFeatureRequirements error: 0x%08x info: %ls\n" )
-				, res, GetNGXResultAsString( res ) );
-			return false;
-		}
-
-		log::printInfo( cuT( "NGX SDK GetFeatureRequirements returned 0x%08x: Min GPU Arch: 0x%08x MinOS: %s\n" )
-			, req.FeatureSupported, req.MinHWArchitecture, req.MinOSVersion );
-
 		return true;
 	}
 

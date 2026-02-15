@@ -70,12 +70,56 @@ gui
 
 		panel_style "RenderPasses"
 		{
-			background_invisible true
+			background_material "TransparentBlack"
 			foreground_invisible true
+
+			vertical_scrollbar_style
+			{
+				background_material "AlphaDarkBlue"
+				foreground_material "White"
+
+				begin_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_material "White"
+					text_material "White"
+					highlighted_background_material "DarkBlue"
+					highlighted_foreground_material "White"
+					highlighted_text_material "White"
+					pushed_background_material "DarkBlue"
+					pushed_foreground_material "White"
+					pushed_text_material "White"
+				}
+
+				end_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_material "White"
+					text_material "White"
+					highlighted_background_material "DarkBlue"
+					highlighted_foreground_material "White"
+					highlighted_text_material "White"
+					pushed_background_material "DarkBlue"
+					pushed_foreground_material "White"
+					pushed_text_material "White"
+				}
+
+				bar_style
+				{
+					background_invisible true
+					foreground_invisible true
+				}
+
+				thumb_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_material "White"
+				}
+			}
 
 			panel_style "Pass"
 			{
-				background_invisible true
+				background_material "TransparentBlack"
 				foreground_invisible true
 
 				static_style "Name"

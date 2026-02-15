@@ -39,9 +39,10 @@ namespace c3d
 
 	private:
 		RenderDevice const & m_device;
-		NVSDK_NGX_Parameter * m_ngxParameters;
+		NVSDK_NGX_Parameter * m_ngxParameters{};
 		bool m_dlssAvailable{};
 		NVSDK_NGX_Handle * m_dlssFeature{};
+		u32 m_phaseCount{};
 	};
 
 	class DLSSUpscalingSDK
@@ -54,8 +55,6 @@ namespace c3d
 			, UpscaleConfig const & config
 			, Extent2D & recommendedSize )const override;
 		RawUniquePtr< UpscalingSDKInstance > createInstance()const override;
-
-		bool isFeatureSupported( NVSDK_NGX_FeatureDiscoveryInfo const * dis )const;
 
 		bool isNGXInitialized()const noexcept
 		{
