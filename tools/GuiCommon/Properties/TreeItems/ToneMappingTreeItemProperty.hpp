@@ -48,8 +48,6 @@ namespace GuiCommon
 	private:
 		c3d::RenderTarget & m_target;
 		wxWindow * m_parent;
-		TreeItemPropertyUPtr m_hdrProperties;
-		TreeItemPropertyUPtr m_toneMappingProperties;
 		wxArrayString m_choices;
 		c3d::StringMap< uint32_t > m_nameToChoice;
 	};
