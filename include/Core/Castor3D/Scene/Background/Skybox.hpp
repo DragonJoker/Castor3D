@@ -246,6 +246,21 @@ namespace c3d
 		/**
 		*\~english
 		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+
+		void setOrientation( Quaternion orientation )noexcept
+		{
+			m_orientation = c3d::move( orientation );
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
 		*	Getters.
 		*\~french
 		*name
@@ -270,6 +285,11 @@ namespace c3d
 		Array< Path, 6u > const & getLayerTexturePath()const
 		{
 			return m_layerTexturePath;
+		}
+
+		Quaternion const & getOrientation()const
+		{
+			return m_orientation;
 		}
 		/**@}*/
 
@@ -299,6 +319,7 @@ namespace c3d
 		Path m_equiTexturePath;
 		Size m_equiSize;
 		Path m_crossTexturePath;
+		Quaternion m_orientation{ Quaternion::identity() };
 
 		static ImageUPtr copyCrossImageFace( StringView faceName
 			, Image const & lines

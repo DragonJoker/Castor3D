@@ -177,6 +177,14 @@ namespace c3d
 
 	void ImageBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
+		static c3d::Point3f const Scale{ 1, -1, 1 };
+		static c3d::Quaternion const Orientation{ c3d::Quaternion::identity() };
+
+		auto const & camera = *updater.camera;
+		auto node = camera.getParent();
+		c3d::matrix::setTransform( updater.bgMtxModl
+			, node->getDerivedPosition(), Scale, Orientation );
+
 		auto & viewport = *updater.viewport;
 		viewport.setOrtho( -1.0f
 			, 1.0f
@@ -185,7 +193,6 @@ namespace c3d
 			, 0.1f
 			, 2.0f );
 		viewport.update();
-		auto node = updater.camera->getParent();
 		Matrix4x4f view;
 		matrix::lookAt( view
 			, node->getDerivedPosition()

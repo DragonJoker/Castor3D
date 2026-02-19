@@ -791,6 +791,14 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::doCpuUpdate( c3d::CpuUpdater & updater )const
 	{
+		static c3d::Point3f const Scale{ 1, -1, 1 };
+		static c3d::Quaternion const Orientation{ c3d::Quaternion::identity() };
+
+		auto const & camera = *updater.camera;
+		auto node = camera.getParent();
+		c3d::matrix::setTransform( updater.bgMtxModl
+			, node->getDerivedPosition(), Scale, Orientation );
+
 		m_generateWorley = m_generateWorley && m_first;
 		m_generatePerlinWorley = m_generatePerlinWorley && m_first;
 		m_generateCurl = m_generateCurl && m_first;

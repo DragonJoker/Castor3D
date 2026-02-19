@@ -202,8 +202,20 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserOrientation, SkyboxContext )
+		{
+			if ( params.size() < 1 )
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			else if ( !blockContext->skybox )
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			else
+				blockContext->skybox->setOrientation( Quaternion::fromAxisAngle( params[0]->get< Point3f >()
+					, Angle::fromDegrees( params[1]->get< float >() ) ) );
+		}
+		CU_EndAttribute()
+
 		template< SkyboxFace FaceT >
-		static CU_ImplementAttributeParserBlock( parserFaceImage, IBLSkyboxContext )
+		static CU_ImplementAttributeParserBlock( parserFaceImage, SkyboxContext )
 		{
 			if ( params.size() <= 1 )
 				CU_ParsingError( cuT( "Missing parameter." ) );
@@ -395,13 +407,20 @@ namespace c3d
 
 	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
+		static Point3f const Scale{ 1, -1, 1 };
+
+		auto const & camera = *updater.camera;
+		auto node = camera.getParent();
+		matrix::setTransform( updater.bgMtxModl
+			, node->getDerivedPosition(), Scale, m_orientation );
+
 		auto & viewport = *updater.viewport;
 		viewport.setPerspective( updater.camera->getViewport().getFovY()
-			, updater.camera->getRatio()
-			, updater.camera->getNear()
-			, updater.camera->getFar() );
+			, camera.getRatio()
+			, camera.getNear()
+			, camera.getFar() );
 		viewport.update();
-		updater.bgMtxView = updater.camera->getView();
+		updater.bgMtxView = camera.getView();
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection( updater.renderSize )
 			: viewport.getProjection();
