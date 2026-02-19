@@ -55,11 +55,8 @@ namespace GuiCommon
 						, [&background]( wxVariant const & var )
 						{
 							auto path = variantCast< c3d::Path >( var );
-
 							if ( c3d::File::fileExists( path ) )
-							{
 								background.setEquiTexture( c3d::Path{}, path, background.getEquiSize().getWidth() );
-							}
 						} );
 				}
 				else if ( !background.getCrossTexturePath().empty() )
@@ -70,46 +67,25 @@ namespace GuiCommon
 						, [&background]( wxVariant const & var )
 						{
 							auto path = variantCast< c3d::Path >( var );
-
 							if ( c3d::File::fileExists( path ) )
-							{
 								background.setCrossTexture( c3d::Path{}, path );
-							}
 						} );
 				}
 				else
 				{
-					static wxString PROPERTY_BACKGROUND_SKYBOX_LEFT_IMAGE = _( "Left Image" );
-					static wxString PROPERTY_BACKGROUND_SKYBOX_RIGHT_IMAGE = _( "Right Image" );
-					static wxString PROPERTY_BACKGROUND_SKYBOX_TOP_IMAGE = _( "Top Image" );
-					static wxString PROPERTY_BACKGROUND_SKYBOX_BOTTOM_IMAGE = _( "Bottom Image" );
-					static wxString PROPERTY_BACKGROUND_SKYBOX_FRONT_IMAGE = _( "Front Image" );
-					static wxString PROPERTY_BACKGROUND_SKYBOX_BACK_IMAGE = _( "Back Image" );
-
-					doCreateTextureImageProperty( background
-						, PROPERTY_BACKGROUND_SKYBOX_RIGHT_IMAGE
-						, background.getTexture()
-						, c3d::SkyboxFace::eLeft );
-					doCreateTextureImageProperty( background
-						, PROPERTY_BACKGROUND_SKYBOX_LEFT_IMAGE
-						, background.getTexture()
-						, c3d::SkyboxFace::eRight );
-					doCreateTextureImageProperty( background
-						, PROPERTY_BACKGROUND_SKYBOX_BOTTOM_IMAGE
-						, background.getTexture()
-						, c3d::SkyboxFace::eTop );
-					doCreateTextureImageProperty( background
-						, PROPERTY_BACKGROUND_SKYBOX_TOP_IMAGE
-						, background.getTexture()
-						, c3d::SkyboxFace::eBottom );
-					doCreateTextureImageProperty( background
-						, PROPERTY_BACKGROUND_SKYBOX_BACK_IMAGE
-						, background.getTexture()
-						, c3d::SkyboxFace::eFront );
-					doCreateTextureImageProperty( background
-						, PROPERTY_BACKGROUND_SKYBOX_FRONT_IMAGE
-						, background.getTexture()
-						, c3d::SkyboxFace::eBack );
+					c3d::u32 face{};
+					for ( auto const & layerTexture : background.getLayerTexturePath() )
+					{
+						if ( !layerTexture.empty() )
+							m_properties.addProperty( &m_grid, wxString{} << c3d::getName( c3d::SkyboxFace( face ) ), layerTexture
+								, [&background, face]( wxVariant const & var )
+								{
+									auto path = variantCast< c3d::Path >( var );
+									if ( c3d::File::fileExists( path ) )
+										background.setFaceTexture( c3d::Path{}, path, c3d::SkyboxFace( face ) );
+								} );
+						++face;
+					}
 				}
 			}
 
@@ -117,9 +93,15 @@ namespace GuiCommon
 			{
 				static wxString PROPERTY_BACKGROUND_IMAGE_IMAGE = _( "Image" );
 
-				doCreateTextureImageProperty( background
-					, PROPERTY_BACKGROUND_IMAGE_IMAGE
-					, background.getTexture() );
+				CU_Require( background.getTexture().isStatic() );
+				auto source = background.getTexture().getDefaultSourceString();
+				m_properties.addProperty( &m_grid, PROPERTY_BACKGROUND_IMAGE_IMAGE, source
+					, [&background]( wxVariant const & var )
+					{
+						auto path = variantCast< c3d::Path >( var );
+						if ( c3d::File::fileExists( path ) )
+							background.setImage( c3d::Path{}, path );
+					} );
 			}
 
 			void visit( c3d::String const & name
@@ -258,44 +240,6 @@ namespace GuiCommon
 				m_properties.addPropertyT( &m_grid, name, &value, range, c3d::move( controls ) );
 			}
 
-			void doCreateTextureImageProperty( c3d::ImageBackground & background
-				, wxString const & name
-				, c3d::TextureLayout const & texture )
-			{
-				CU_Require( texture.isStatic() );
-				auto source = texture.getDefaultSourceString();
-				m_properties.addProperty( &m_grid, name, source
-					, [&background]( wxVariant const & var )
-					{
-						auto path = variantCast< c3d::Path >( var );
-
-						if ( c3d::File::fileExists( path ) )
-						{
-							background.setImage( c3d::Path{}, path );
-						}
-					} );
-			}
-
-			void doCreateTextureImageProperty( c3d::SkyboxBackground & background
-				, wxString const & name
-				, c3d::TextureLayout const & texture
-				, c3d::SkyboxFace face )
-			{
-				CU_Require( texture.isStatic() );
-				auto source = c3d::Path{ texture.getLayerCubeFaceSourceString( 0u
-					, c3d::CubeMapFace( uint32_t( face ) ) ) };
-				m_properties.addProperty( &m_grid, name, source
-					, [&background, face]( wxVariant const & var )
-					{
-						auto path = variantCast< c3d::Path >( var );
-
-						if ( c3d::File::fileExists( path ) )
-						{
-							background.setFaceTexture( c3d::Path{}, path, face );
-						}
-					} );
-			}
-
 			using ConfigurationVisitorBase::visit;
 
 		private:
@@ -366,6 +310,8 @@ namespace GuiCommon
 				case 2:
 					m_background.showIrradiance( false );
 					m_background.setVisible( true );
+					break;
+				default:
 					break;
 				}
 			} ) );

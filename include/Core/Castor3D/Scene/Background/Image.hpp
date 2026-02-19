@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace c3d
 {
@@ -73,6 +74,8 @@ namespace c3d
 		*\copydoc	SceneBackground::getModelName
 		*/
 		String const & getModelName()const override;
+
+		static void addParsers( AttributeParsers & result );
 
 		Path const & getImagePath()const noexcept
 		{

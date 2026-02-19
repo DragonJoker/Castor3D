@@ -53,33 +53,6 @@ namespace c3d
 
 	namespace scene
 	{
-		static CU_ImplementAttributeParserBlock( parserBkColour, SceneContext )
-		{
-			if ( !blockContext->scene )
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			else if ( params.empty() )
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			else
-				blockContext->scene->setBackgroundColour( params[0]->get< RgbColour >() );
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserBkImage, SceneContext )
-		{
-			if ( !blockContext->scene )
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			else if ( params.empty() )
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			else
-			{
-				auto imgBackground = makeUnique< ImageBackground >( *getEngine( *blockContext )
-					, *blockContext->scene );
-				imgBackground->setImage( context.file.getPath(), params[0]->get< Path >() );
-				blockContext->scene->setBackground( ptrRefCast< SceneBackground >( imgBackground ) );
-			}
-		}
-		CU_EndAttribute()
-
 		static CU_ImplementAttributeParserNewBlock( parserFont, SceneContext, FontContext )
 		{
 			if ( !blockContext->scene )
@@ -293,16 +266,6 @@ namespace c3d
 			}
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextOverlay, blockContext->overlays.get() )
-
-		static CU_ImplementAttributeParserNewBlock( parserSkybox, SceneContext, SkyboxContext )
-		{
-			if ( !blockContext->scene )
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			else
-				newBlockContext->skybox = makeUnique< SkyboxBackground >( *getEngine( *blockContext )
-					, *blockContext->scene );
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eSkybox )
 
 		static CU_ImplementAttributeParserBlock( parserFogType, SceneContext )
 		{
@@ -1339,8 +1302,6 @@ namespace c3d
 		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
 		BlockParserContextT< SceneImportContext > importCtx{ result, CSCNSection::eSceneImport, CSCNSection::eScene };
 
-		sceneCtx.addParser( cuT( "background_colour" ), scene::parserBkColour, { makeParameter< ParameterType::eRgbColour >() } );
-		sceneCtx.addParser( cuT( "background_image" ), scene::parserBkImage, { makeParameter< ParameterType::ePath >() } );
 		sceneCtx.addParser( cuT( "ambient_light" ), scene::parserAmbientLight, { makeParameter< ParameterType::eRgbColour >() } );
 		sceneCtx.addParser( cuT( "fog_type" ), scene::parserFogType, { makeParameter< ParameterType::eCheckedText, FogType >() } );
 		sceneCtx.addParser( cuT( "fog_density" ), scene::parserFogDensity, { makeParameter< ParameterType::eFloat >() } );
@@ -1357,7 +1318,6 @@ namespace c3d
 		sceneCtx.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, scene::parserPanelOverlay, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, scene::parserBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, scene::parserTextOverlay, { makeParameter< ParameterType::eName >() } );
-		sceneCtx.addPushParser( cuT( "skybox" ), CSCNSection::eSkybox, scene::parserSkybox );
 		sceneCtx.addPushParser( cuT( "particle_system" ), CSCNSection::eParticleSystem, scene::parserParticleSystem, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "skeleton" ), CSCNSection::eSkeleton, scene::parserSkeleton, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "mesh" ), CSCNSection::eMesh, scene::parserMesh, { makeParameter< ParameterType::eName >() } );
@@ -1379,6 +1339,10 @@ namespace c3d
 		importCtx.addParser( cuT( "disable_image_compression" ), scene::parserImportDisableImageCompression, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		importCtx.addPushParser( cuT( "texture_remap_config" ), CSCNSection::eTextureRemap, scene::parserImportTexRemap );
 		importCtx.addPopParser( cuT( "}" ), scene::parserImportEnd );
+
+		ColourBackground::addParsers( result );
+		ImageBackground::addParsers( result );
+		SkyboxBackground::addParsers( result );
 	}
 
 	BackgroundModelID Scene::getBackgroundModelId()const

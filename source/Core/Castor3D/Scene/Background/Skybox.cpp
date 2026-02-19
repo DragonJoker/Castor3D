@@ -120,50 +120,44 @@ namespace c3d
 					| ( attachment ? ImageUsageFlags::eColorAttachment : ImageUsageFlags::eNone ) ) };
 		}
 
+		static CU_ImplementAttributeParserNewBlock( parserRoot, SceneContext, SkyboxContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+				newBlockContext->skybox = makeUnique< SkyboxBackground >( *getEngine( *blockContext )
+					, *blockContext->scene );
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSkybox )
+
 		static CU_ImplementAttributeParserBlock( parserVisible, SkyboxContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else if ( !blockContext->skybox )
-			{
 				CU_ParsingError( cuT( "No skybox initialised." ) );
-			}
 			else
-			{
 				blockContext->skybox->setVisible( params[0]->get< bool >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserIrradiance, SkyboxContext )
 		{
 			if ( params.empty() )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else if ( !blockContext->skybox )
-			{
 				CU_ParsingError( cuT( "No skybox initialised." ) );
-			}
 			else
-			{
 				blockContext->skybox->showIrradiance( params[0]->get< bool >() );
-			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserEqui, SkyboxContext )
 		{
 			if ( params.size() <= 1 )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else if ( !blockContext->skybox )
-			{
 				CU_ParsingError( cuT( "No skybox initialised." ) );
-			}
 			else
 			{
 				auto path = params[0]->get< Path >();
@@ -186,13 +180,9 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserCross, SkyboxContext )
 		{
 			if ( params.size() < 1 )
-			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
 			else if ( !blockContext->skybox )
-			{
 				CU_ParsingError( cuT( "No skybox initialised." ) );
-			}
 			else
 			{
 				auto path = params[0]->get< Path >();
@@ -212,20 +202,21 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserLeft, SkyboxContext )
+		template< SkyboxFace FaceT >
+		static CU_ImplementAttributeParserBlock( parserFaceImage, IBLSkyboxContext )
 		{
-			if ( params.empty() )
-			{
+			if ( params.size() <= 1 )
 				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( blockContext->skybox )
+			else if ( !blockContext->skybox )
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			else
 			{
 				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
 				if ( File::fileExists( filePath / path ) )
 				{
-					blockContext->skybox->setLeftImage( filePath, path );
+					blockContext->skybox->setFaceTexture( filePath, path, FaceT );
 				}
 				else
 				{
@@ -233,155 +224,6 @@ namespace c3d
 					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No skybox initialised" ) );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserRight, SkyboxContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( blockContext->skybox )
-			{
-				auto path = params[0]->get< Path >();
-				auto filePath = context.file.getPath();
-
-				if ( File::fileExists( filePath / path ) )
-				{
-					blockContext->skybox->setRightImage( filePath, path );
-				}
-				else
-				{
-					blockContext->skybox.reset();
-					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-					CU_ParsingError( err );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No skybox initialised" ) );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserTop, SkyboxContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( blockContext->skybox )
-			{
-				auto path = params[0]->get< Path >();
-				auto filePath = context.file.getPath();
-
-				if ( File::fileExists( filePath / path ) )
-				{
-					blockContext->skybox->setTopImage( filePath, path );
-				}
-				else
-				{
-					blockContext->skybox.reset();
-					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-					CU_ParsingError( err );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No skybox initialised" ) );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserBottom, SkyboxContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( blockContext->skybox )
-			{
-				auto path = params[0]->get< Path >();
-				auto filePath = context.file.getPath();
-
-				if ( File::fileExists( filePath / path ) )
-				{
-					blockContext->skybox->setBottomImage( filePath, path );
-				}
-				else
-				{
-					blockContext->skybox.reset();
-					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-					CU_ParsingError( err );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No skybox initialised" ) );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserFront, SkyboxContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( blockContext->skybox )
-			{
-				auto path = params[0]->get< Path >();
-				auto filePath = context.file.getPath();
-
-				if ( File::fileExists( filePath / path ) )
-				{
-					blockContext->skybox->setFrontImage( filePath, path );
-				}
-				else
-				{
-					blockContext->skybox.reset();
-					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-					CU_ParsingError( err );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No skybox initialised" ) );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserBack, SkyboxContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else if ( blockContext->skybox )
-			{
-				auto path = params[0]->get< Path >();
-				auto filePath = context.file.getPath();
-
-				if ( File::fileExists( filePath / path ) )
-				{
-					blockContext->skybox->setBackImage( filePath, path );
-				}
-				else
-				{
-					blockContext->skybox.reset();
-					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-					CU_ParsingError( err );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
 		CU_EndAttribute()
@@ -523,19 +365,22 @@ namespace c3d
 
 	void SkyboxBackground::addParsers( AttributeParsers & result )
 	{
-		BlockParserContextT< SkyboxContext > context{ result, CSCNSection::eSkybox, CSCNSection::eScene };
+		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
+		BlockParserContextT< SkyboxContext > skyboxCtx{ result, CSCNSection::eSkybox, CSCNSection::eScene };
 
-		context.addParser( cuT( "visible" ), skybox::parserVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		context.addParser( cuT( "show_irradiance" ), skybox::parserIrradiance, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
-		context.addParser( cuT( "equirectangular" ), skybox::parserEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
-		context.addParser( cuT( "cross" ), skybox::parserCross, { makeParameter< ParameterType::ePath >() } );
-		context.addParser( cuT( "left" ), skybox::parserLeft, { makeParameter< ParameterType::ePath >() } );
-		context.addParser( cuT( "right" ), skybox::parserRight, { makeParameter< ParameterType::ePath >() } );
-		context.addParser( cuT( "top" ), skybox::parserTop, { makeParameter< ParameterType::ePath >() } );
-		context.addParser( cuT( "bottom" ), skybox::parserBottom, { makeParameter< ParameterType::ePath >() } );
-		context.addParser( cuT( "front" ), skybox::parserFront, { makeParameter< ParameterType::ePath >() } );
-		context.addParser( cuT( "back" ), skybox::parserBack, { makeParameter< ParameterType::ePath >() } );
-		context.addPopParser( cuT( "}" ), skybox::parserEnd );
+		sceneCtx.addPushParser( cuT( "skybox" ), CSCNSection::eSkybox, skybox::parserRoot );
+
+		skyboxCtx.addParser( cuT( "visible" ), skybox::parserVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		skyboxCtx.addParser( cuT( "show_irradiance" ), skybox::parserIrradiance, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
+		skyboxCtx.addParser( cuT( "equirectangular" ), skybox::parserEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
+		skyboxCtx.addParser( cuT( "cross" ), skybox::parserCross, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "left" ), skybox::parserFaceImage< SkyboxFace::eLeft >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "right" ), skybox::parserFaceImage< SkyboxFace::eRight >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "top" ), skybox::parserFaceImage< SkyboxFace::eTop >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "bottom" ), skybox::parserFaceImage< SkyboxFace::eBottom >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "front" ), skybox::parserFaceImage< SkyboxFace::eFront >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "back" ), skybox::parserFaceImage< SkyboxFace::eBack >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addPopParser( cuT( "}" ), skybox::parserEnd );
 	}
 
 	bool SkyboxBackground::doInitialise( RenderDevice const & device )

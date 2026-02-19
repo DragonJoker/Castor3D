@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/HdrColourComponent.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
@@ -56,6 +57,8 @@ namespace c3d
 		C3D_API bool write( String const & tabs
 			, Path const & folder
 			, StringStream & stream )const override;
+
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
