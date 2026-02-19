@@ -25,7 +25,7 @@ namespace c3d
 		eFront = 5,
 		CU_ScopedEnumBounds( eLeft, eBack )
 	};
-	String getName( SkyboxFace face );
+	C3D_API String getName( SkyboxFace face );
 
 	using BackgroundModelID = uint8_t;
 	/**

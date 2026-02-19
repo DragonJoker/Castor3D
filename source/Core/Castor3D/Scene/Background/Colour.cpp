@@ -18,6 +18,17 @@ namespace c3d
 	namespace bgcolour
 	{
 		static uint32_t constexpr Dim = 16u;
+
+		static CU_ImplementAttributeParserBlock( parserRoot, SceneContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( params.empty() )
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			else
+				blockContext->scene->setBackgroundColour( params[0]->get< RgbColour >() );
+		}
+		CU_EndAttribute()
 	}
 
 	//************************************************************************************************
@@ -64,6 +75,13 @@ namespace c3d
 		, StringStream & stream )const
 	{
 		return true;
+	}
+
+	void ColourBackground::addParsers( AttributeParsers & result )
+	{
+		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
+
+		sceneCtx.addParser( cuT( "background_colour" ), bgcolour::parserRoot, { makeParameter< ParameterType::eRgbColour >() } );
 	}
 
 	bool ColourBackground::doInitialise( RenderDevice const & device )

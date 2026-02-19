@@ -64,6 +64,22 @@ namespace c3d
 					| ImageUsageFlags::eTransferDst
 					| ( attachment ? ImageUsageFlags::eColorAttachment : ImageUsageFlags::eNone ) ) };
 		}
+
+		static CU_ImplementAttributeParserBlock( parserRoot, SceneContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else if ( params.empty() )
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			else
+			{
+				auto imgBackground = makeUnique< ImageBackground >( *getEngine( *blockContext )
+					, *blockContext->scene );
+				imgBackground->setImage( context.file.getPath(), params[0]->get< Path >() );
+				blockContext->scene->setBackground( ptrRefCast< SceneBackground >( imgBackground ) );
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//************************************************************************************************
@@ -131,6 +147,13 @@ namespace c3d
 	String const & ImageBackground::getModelName()const
 	{
 		return shader::ImgBackgroundModel::Name;
+	}
+
+	void ImageBackground::addParsers( AttributeParsers & result )
+	{
+		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
+
+		sceneCtx.addParser( cuT( "background_image" ), bgimage::parserRoot, { makeParameter< ParameterType::ePath >() } );
 	}
 
 	bool ImageBackground::doInitialise( RenderDevice const & device )

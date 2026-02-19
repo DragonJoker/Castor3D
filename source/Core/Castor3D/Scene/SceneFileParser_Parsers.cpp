@@ -15,7 +15,6 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Castor3D/Scene/Background/Skybox.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightGroup.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
@@ -296,7 +295,6 @@ namespace c3d
 		RenderTarget::addParsers( parsers );
 		ShaderProgram::addParsers( parsers );
 		BillboardList::addParsers( parsers );
-		SkyboxBackground::addParsers( parsers );
 		ParticleSystem::addParsers( parsers );
 		Mesh::addParsers( parsers );
 		AnimatedObjectGroup::addParsers( parsers );
