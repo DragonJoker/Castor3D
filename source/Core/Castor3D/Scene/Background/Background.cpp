@@ -375,14 +375,6 @@ namespace c3d
 	{
 		if ( m_initialised )
 		{
-			static Point3f const Scale{ 1, -1, 1 };
-			static Matrix3x3f const Identity{ 1.0f };
-
-			auto const & camera = *updater.camera;
-			auto node = camera.getParent();
-
-			matrix::setTranslate( updater.bgMtxModl, node->getDerivedPosition() );
-			matrix::scale( updater.bgMtxModl, Scale );
 			doCpuUpdate( updater );
 		}
 	}

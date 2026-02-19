@@ -44,14 +44,14 @@ namespace GuiCommon
 
 			void visit( c3d::SkyboxBackground & background )override
 			{
+				m_properties.addPropertyT( &m_grid, _( "Orientation" ), background.getOrientation()
+					, &background, &c3d::SkyboxBackground::setOrientation );
+
 				if ( !background.getEquiTexturePath().empty() )
 				{
-					static wxString PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_IMAGE = _( "Equirectangular Image" );
-					static wxString PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_DIMENSIONS = _( "Equirectangular Dimensions" );
-
-					m_properties.addPropertyT( &m_grid, PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_DIMENSIONS, background.getEquiSize().getWidth()
+					m_properties.addPropertyT( &m_grid, _( "Equirectangular Dimensions" ), background.getEquiSize().getWidth()
 						, &background, &c3d::SkyboxBackground::setEquiSize );
-					m_properties.addProperty( &m_grid, PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_IMAGE, background.getEquiTexturePath()
+					m_properties.addProperty( &m_grid, _( "Equirectangular Image" ), background.getEquiTexturePath()
 						, [&background]( wxVariant const & var )
 						{
 							auto path = variantCast< c3d::Path >( var );
@@ -61,9 +61,7 @@ namespace GuiCommon
 				}
 				else if ( !background.getCrossTexturePath().empty() )
 				{
-					static wxString PROPERTY_BACKGROUND_SKYBOX_CROSS_IMAGE = _( "Cross Image" );
-
-					m_properties.addProperty( &m_grid, PROPERTY_BACKGROUND_SKYBOX_CROSS_IMAGE, background.getCrossTexturePath()
+					m_properties.addProperty( &m_grid, _( "Cross Image" ), background.getCrossTexturePath()
 						, [&background]( wxVariant const & var )
 						{
 							auto path = variantCast< c3d::Path >( var );
@@ -91,11 +89,9 @@ namespace GuiCommon
 
 			void visit( c3d::ImageBackground & background )override
 			{
-				static wxString PROPERTY_BACKGROUND_IMAGE_IMAGE = _( "Image" );
-
 				CU_Require( background.getTexture().isStatic() );
 				auto source = background.getTexture().getDefaultSourceString();
-				m_properties.addProperty( &m_grid, PROPERTY_BACKGROUND_IMAGE_IMAGE, source
+				m_properties.addProperty( &m_grid, _( "Image" ), source
 					, [&background]( wxVariant const & var )
 					{
 						auto path = variantCast< c3d::Path >( var );

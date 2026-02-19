@@ -101,6 +101,14 @@ namespace c3d
 
 	void ColourBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
+		static c3d::Point3f const Scale{ 1, -1, 1 };
+		static c3d::Quaternion const Orientation{ c3d::Quaternion::identity() };
+
+		auto const & camera = *updater.camera;
+		auto node = camera.getParent();
+		c3d::matrix::setTransform( updater.bgMtxModl
+			, node->getDerivedPosition(), Scale, Orientation );
+
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & viewport = *updater.viewport;
