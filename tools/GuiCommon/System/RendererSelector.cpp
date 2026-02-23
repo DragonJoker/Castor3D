@@ -69,8 +69,8 @@ namespace GuiCommon
 		buttonSizer->Add( cancel, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
 
 		sizer->Add( 0, 60, 0 );
-		sizer->Add( m_renderersList, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand() );
-		sizer->Add( m_devicesList, wxSizerFlags( 0 ).Border( wxALL, 10 ).Expand() );
+		sizer->Add( m_renderersList, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand().FixedMinSize().ReserveSpaceEvenIfHidden() );
+		sizer->Add( m_devicesList, wxSizerFlags( 0 ).Border( wxALL, 10 ).Expand().FixedMinSize().ReserveSpaceEvenIfHidden() );
 		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
 		SetSizer( sizer );
 		sizer->SetSizeHints( this );
