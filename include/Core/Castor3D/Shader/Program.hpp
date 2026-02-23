@@ -25,7 +25,6 @@ namespace c3d
 	class ShaderProgram
 		: public Named
 		, public OwnedBy< RenderSystem >
-		, public std::enable_shared_from_this< ShaderProgram >
 	{
 		friend class TextWriter< ShaderProgram >;
 

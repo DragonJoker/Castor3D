@@ -2,9 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
@@ -224,7 +222,7 @@ namespace c3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), createShader( device ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeLightsAABB" ), createShader( device ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 				}
 
@@ -324,7 +322,7 @@ namespace c3d
 			} );
 		clustersCameraUbo.createPassBinding( pass, cptlgtb::Bindings::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::Bindings::eClusters );
-		auto const & lights = clusters.getCamera().getScene()->getLightCache();
+		auto const & lights = clusters.getScene().getLightCache();
 		lights.createPassBindingT( pass, cptlgtb::Bindings::eLights );
 		allLightsAABBB.setLastAttach( pass.addClearableOutputStorageBuffer( allLightsAABBB.bufferViewId, uint32_t( cptlgtb::Bindings::eAllLightsAABB ) ) );
 	}

@@ -1,7 +1,6 @@
 #include "Castor3D/Render/Clustered/SortAssignedLights.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
@@ -108,10 +107,11 @@ namespace c3d
 		, BufferBase & pointLightClusterGrid
 		, BufferBase & spotLightClusterGrid )
 	{
+		auto const & scene = getScene( clusters.getCamera() );
 		{
 			// Point lights
 			auto & point = graph.createPass( "SortAssigned/Point"
-				, [&clusters, &device]( crg::FramePass const & framePass
+				, [&clusters, scene, &device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runGraph )
 				{
@@ -123,7 +123,7 @@ namespace c3d
 							.groupCountX( clusters.getDimensions()->x )
 							.groupCountY( clusters.getDimensions()->y )
 							.groupCountZ( clusters.getDimensions()->z )
-							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::ePoint ).empty(); } ) )
+							.isEnabled( crg::RunnablePass::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::ePoint ); } ) )
 						, clusters
 						, LightType::ePoint );
 					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
@@ -137,7 +137,7 @@ namespace c3d
 		{
 			// Spot lights
 			auto & spot = graph.createPass( "SortAssigned/Spot"
-				, [&clusters, &device]( crg::FramePass const & framePass
+				, [&clusters, scene, &device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runGraph )
 				{
@@ -149,7 +149,7 @@ namespace c3d
 							.groupCountX( clusters.getDimensions()->x )
 							.groupCountY( clusters.getDimensions()->y )
 							.groupCountZ( clusters.getDimensions()->z )
-							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::eSpot ).empty(); } ) )
+							.isEnabled( crg::RunnablePass::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::eSpot ); } ) )
 						, clusters
 						, LightType::eSpot );
 					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )

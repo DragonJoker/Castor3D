@@ -68,6 +68,13 @@ namespace c3d
 		C3D_API void createDebugDisplayPrograms( CameraUbo const & cameraUbo );
 		/**
 		 *\~english
+		 *\return		The parent scene.
+		 *\~french
+		 *\brief		La scène parente.
+		 */
+		C3D_API Scene const & getScene()const noexcept;
+		/**
+		 *\~english
 		 *\param[in]	level	The BVH level.
 		 *\return		The number of nodes for given BVH level.
 		 *\~french

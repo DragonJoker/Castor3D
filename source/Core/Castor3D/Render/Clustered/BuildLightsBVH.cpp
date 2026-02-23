@@ -3,9 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
@@ -285,7 +283,7 @@ namespace c3d
 						, IsComputePassCallback( [](){ return true; } ) }
 					, crg::ru::Config{ 2u, true /* resettable */ } }
 				, m_clusters{ clusters }
-				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
+				, m_lightCache{ clusters.getScene().getLightCache() }
 				, m_lightType{ lightType }
 				, m_bottom{ framePass, context, graph, device, true, this, m_lightType }
 				, m_top{ framePass, context, graph, device, false, this, m_lightType }
@@ -393,7 +391,7 @@ namespace c3d
 
 			bool doIsEnabled()const
 			{
-				return m_lightCache.getLightsCount( m_lightType ) > 0u
+				return m_lightCache.hasClusteredLights( m_lightType )
 					&& ( ( m_bottom.cpConfig.isEnabled ? ( *m_bottom.cpConfig.isEnabled )() : false )
 						|| ( m_top.cpConfig.isEnabled ? ( *m_top.cpConfig.isEnabled )() : false ) );
 			}
