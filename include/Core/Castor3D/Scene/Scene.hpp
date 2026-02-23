@@ -323,6 +323,8 @@ namespace c3d
 		C3D_API BufferBase const & getModelBuffer()const;
 		C3D_API BufferBase const & getBillboardsBuffer()const;
 		C3D_API bool hasObjects( LightingModelID lightingModelId )const;
+		C3D_API bool hasClusteredLights( LightType type )const noexcept;
+		C3D_API bool hasClusteredLights()const noexcept;
 
 		BoundingBox const & getBoundingBox()const noexcept
 		{

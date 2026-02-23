@@ -5,7 +5,6 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
@@ -96,7 +95,7 @@ namespace c3d
 						, IsComputePassCallback( [](){ return true; } ) }
 					, crg::ru::Config{ 1u, true /* resettable */ } }
 				, m_clusters{ clusters }
-				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
+				, m_lightCache{ clusters.getScene().getLightCache() }
 				, m_lightType{ lightType }
 				, m_pipeline{ framePass, context, graph, device, this, m_lightType }
 			{
@@ -168,7 +167,7 @@ namespace c3d
 			bool doIsEnabled()const
 			{
 				return m_clusters.needsLightsUpdate()
-					&& m_lightCache.getLightsBufferCount( m_lightType ) > 0;
+					&& m_lightCache.hasClusteredLights( m_lightType );
 			}
 
 			void doRecordInto( crg::RecordContext const & context

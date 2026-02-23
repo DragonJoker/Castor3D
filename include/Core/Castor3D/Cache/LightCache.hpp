@@ -236,6 +236,11 @@ namespace c3d
 			return m_dirty;
 		}
 
+		bool hasClusteredLights( LightType type )const noexcept
+		{
+			return !getLightInstances( type ).empty();
+		}
+
 		bool hasClusteredLights()const noexcept
 		{
 			return !getLightInstances( LightType::ePoint ).empty()

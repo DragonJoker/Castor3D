@@ -1451,6 +1451,16 @@ namespace c3d
 		return m_renderNodes->hasNodes( lightingModelId );
 	}
 
+	bool Scene::hasClusteredLights( LightType type )const noexcept
+	{
+		return m_lightCache && m_lightCache->hasClusteredLights( type );
+	}
+
+	bool Scene::hasClusteredLights()const noexcept
+	{
+		return m_lightCache && m_lightCache->hasClusteredLights();
+	}
+
 	void Scene::setDirectionalShadowCascades( uint32_t value )
 	{
 		CU_Require( value <= MaxDirectionalCascadesCount );

@@ -6,7 +6,6 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -496,7 +495,7 @@ namespace c3d
 			{
 				u32 result = {};
 
-				auto const & lightCache = clusters.getCamera().getScene()->getLightCache();
+				auto const & lightCache = clusters.getScene().getLightCache();
 				auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
 				auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
 				auto totalValues = std::max( pointLightsCount, spoLightsCount );
@@ -523,7 +522,7 @@ namespace c3d
 
 			bool doIsEnabled( FrustumClusters const & clusters )const
 			{
-				return clusters.getCamera().getScene()->getLightCache().hasClusteredLights();
+				return clusters.getScene().hasClusteredLights();
 			}
 
 		private:
@@ -549,7 +548,7 @@ namespace c3d
 		, BufferBase & pointLightClusterGrid
 		, BufferBase & spotLightClusterGrid )
 	{
-		auto const & lights = clusters.getCamera().getScene()->getLightCache();
+		auto const & lights = clusters.getScene().getLightCache();
 
 		auto & pass = graph.createPass( "AssignLightsToClusters"
 			, [&clusters, &device]( crg::FramePass const & framePass

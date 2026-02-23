@@ -211,7 +211,7 @@ namespace c3d
 	{
 		auto scene = m_camera.getScene();
 		auto const & lightCache = scene->getLightCache();
-		m_clustersDirty = lightCache.hasClusteredLights()
+		m_clustersDirty = scene->hasClusteredLights()
 			&& ( m_first > 0 || m_config.dirty );
 		doUpdate( updater.renderSize );
 		m_clustersUbo.cpuUpdate( m_dimensions
@@ -224,7 +224,7 @@ namespace c3d
 			, m_config.minDistance
 			, m_config.enableWaveIntrinsics );
 		auto it = updater.dirtyScenes.find( scene );
-		m_lightsDirty = lightCache.hasClusteredLights()
+		m_lightsDirty = scene->hasClusteredLights()
 			&& ( m_clustersDirty
 				|| lightCache.isDirty()
 				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() )
@@ -315,7 +315,7 @@ namespace c3d
 		createAssignLightsToClustersPass( graph, m_device, *this
 			, m_clustersCameraUbo, m_allLightsAABBBuffer, m_aabbBuffer, m_pointBuffers.bvh, m_spotBuffers.bvh, m_sortAttachs[MortonIndicesOutput]
 			, m_pointBuffers.clusterIndex, m_spotBuffers.clusterIndex, m_pointBuffers.clusterGrid, m_spotBuffers.clusterGrid );
-		return createSortAssignedLightsPass( graph, m_device, *this
+		createSortAssignedLightsPass( graph, m_device, *this
 			, m_pointBuffers.clusterIndex, m_spotBuffers.clusterIndex, m_pointBuffers.clusterGrid, m_spotBuffers.clusterGrid );
 	}
 
@@ -356,6 +356,11 @@ namespace c3d
 				, m_displaySpotLightsBVHWrites
 				, m_spotBuffers.bvh );
 		}
+	}
+
+	Scene const & FrustumClusters::getScene()const noexcept
+	{
+		return *m_camera.getScene();
 	}
 
 	uint32_t FrustumClusters::getNumLevels( uint32_t numLeaves )

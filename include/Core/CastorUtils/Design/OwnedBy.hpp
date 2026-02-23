@@ -74,6 +74,7 @@ namespace c3d
 		private:\
 			Owner * m_owner;\
 		};\
+		Owner * get##Name( OwnedBy< Owner > const & v )noexcept;\
 	}
 
 	/**
@@ -102,6 +103,10 @@ namespace c3d
 		void OwnedBy< Owner >::setOwner( Owner & owner )noexcept\
 		{\
 			m_owner = &owner;\
+		}\
+		Owner * get##Name( OwnedBy< Owner > const & v )noexcept\
+		{\
+			return v.get##Name();\
 		}\
 	}
 }

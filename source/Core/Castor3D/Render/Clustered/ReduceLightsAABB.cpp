@@ -3,9 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
@@ -292,7 +290,7 @@ namespace c3d
 						.getGroupCountX( crg::cp::GetGroupCountCallback( [this]() { return doGetGroupsCountX(); } ) ) }
 				, m_device{ device }
 				, m_clusters{ clusters }
-				, m_lightCache{ m_clusters.getCamera().getScene()->getLightCache() }
+				, m_lightCache{ m_clusters.getScene().getLightCache() }
 			{
 			}
 
@@ -382,7 +380,7 @@ namespace c3d
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } ) }
 				, m_device{ device }
 				, m_clusters{ clusters }
-				, m_lightCache{ m_clusters.getCamera().getScene()->getLightCache() }
+				, m_lightCache{ m_clusters.getScene().getLightCache() }
 			{
 			}
 
