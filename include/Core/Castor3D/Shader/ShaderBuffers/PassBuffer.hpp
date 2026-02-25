@@ -13,8 +13,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
@@ -22,6 +20,7 @@ See LICENSE file in root folder
 namespace c3d
 {
 	class PassBuffer
+		: public ShaderBufferHolder
 	{
 	public:
 		struct PassDataPtr
@@ -226,56 +225,6 @@ namespace c3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Creates the descriptor set layout binding.
-		 *\~french
-		 *\brief		Crée une attache de layout de set de descripteurs.
-		 */
-		template< typename BindingT >
-		VkDescriptorSetLayoutBinding createLayoutBinding( BindingT binding
-			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| VK_SHADER_STAGE_GEOMETRY_BIT
-				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				| VK_SHADER_STAGE_VERTEX_BIT ) )const
-		{
-			return m_buffer.createLayoutBinding( binding, stages );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates a frame pass binding.
-		 *\~french
-		 *\brief		Crée une attache de frame pass.
-		 */
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass, BindingT binding )const
-		{
-			return m_buffer.createPassBinding( pass, binding );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates the descriptor write for this buffer.
-		 *\~french
-		 *\brief		Crée le descriptor write pour ce tampon.
-		 */
-		template< typename BindingT >
-		ashes::WriteDescriptorSet getBinding( BindingT binding )const
-		{
-			return m_buffer.getBinding( binding );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates the descriptor set binding at given point.
-		 *\param[in]	descriptorSet	The descriptor set that receives the binding.
-		 *\param[in]	binding			The descriptor set layout binding.
-		 *\~french
-		 *\brief		Crée une attache de set de descripteurs au point donné.
-		 *\param[in]	descriptorSet	Le set de descripteurs recevant l'attache.
-		 *\param[in]	binding			L'attache de layout de set de descripteurs.
-		 */
-		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & binding )const;
-		/**
-		 *\~english
 		 *\return		The pointer to the data for given pass ID.
 		 *\~french
 		 *\brief		Le pointeur sur les données pour l'ID de passe donné.
@@ -303,16 +252,6 @@ namespace c3d
 		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
 		 */
 		C3D_API std::tuple< PassComponentCombineID, TextureCombineID > getPassTypeDetails( uint32_t passTypeIndex )const;
-		/**
-		 *\~english
-		 *\return		The pointer to the buffer.
-		 *\~french
-		 *\brief		Le pointeur sur le tampon.
-		 */
-		uint8_t * getPtr()
-		{
-			return m_buffer.getPtr();
-		}
 
 		uint32_t getCurrentPassTypeCount()const
 		{
@@ -330,7 +269,6 @@ namespace c3d
 	private:
 		uint32_t m_stride;
 		uint32_t m_maxCount;
-		ShaderBuffer m_buffer;
 		Vector< Pass * > m_passes;
 		Vector< Pass const * > m_dirty;
 		Vector< OnPassChangedConnection > m_connections;

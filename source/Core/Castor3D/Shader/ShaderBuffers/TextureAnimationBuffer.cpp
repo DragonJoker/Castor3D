@@ -30,7 +30,7 @@ namespace c3d
 	TextureAnimationBuffer::TextureAnimationBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "TextureAnimationBuffer" ) }
+		: ShaderBufferHolder{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "TextureAnimationBuffer" ) }
 		, m_data{ texanmbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 		, m_animations{ count + 1u, nullptr }
 	{
@@ -87,11 +87,5 @@ namespace c3d
 				, 0u
 				, VkDeviceSize( sizeof( TextureAnimationData ) * count ) );
 		}
-	}
-
-	void TextureAnimationBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		m_buffer.createBinding( descriptorSet, binding );
 	}
 }

@@ -153,9 +153,7 @@ namespace c3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		m_shadowMap.getScene().getLightCache().addLayoutBinding( bindings
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, index );
+		m_shadowMap.getScene().getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 		addDescriptorSetLayoutBinding( bindings
 			, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -169,7 +167,7 @@ namespace c3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		getCuller().getScene().getLightCache().addBinding( descriptorWrites, index );
+		getCuller().getScene().getLightCache().addDescriptorWrite( descriptorWrites, index );
 		m_shadowMapUbo.addDescriptorWrite( descriptorWrites, index );
 	}
 }

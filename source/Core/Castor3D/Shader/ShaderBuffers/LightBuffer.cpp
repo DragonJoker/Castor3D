@@ -26,14 +26,14 @@ namespace c3d
 	LightBuffer::LightBuffer( RenderDevice const & device
 		, crg::ResourcesCache & resources
 		, uint32_t count )
-		: m_buffer{ device
+		: ShaderBufferHolder{ device
 			, resources
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( Point4f )
 			, cuT( "C3D_LightBuffer" ) }
 		, m_lightSizes{ DirectionalLightInstance::LightDataComponents
 			, PointLightInstance::LightDataComponents
 			, SpotLightInstance::LightDataComponents }
-		, m_data{ makeArrayView( reinterpret_cast< Point4f * >( m_buffer.getPtr() )
+		, m_data{ makeArrayView( reinterpret_cast< Point4f * >( getPtr() )
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount ) }
 	{
 	}
@@ -115,35 +115,6 @@ namespace c3d
 			m_buffer.upload( uploader );
 			m_wasDirty = false;
 		}
-	}
-
-	VkDescriptorSetLayoutBinding LightBuffer::createLayoutBinding( VkShaderStageFlags stages
-		, uint32_t binding )const
-	{
-		return m_buffer.createLayoutBinding( binding, stages );
-	}
-
-	void LightBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
-	{
-		return m_buffer.createPassBinding( pass, binding );
-	}
-
-	void LightBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		m_buffer.createBinding( descriptorSet, binding );
-	}
-
-	ashes::WriteDescriptorSet LightBuffer::getBinding( uint32_t binding )const
-	{
-		return m_buffer.getBinding( binding );
-	}
-
-	ashes::WriteDescriptorSet LightBuffer::getSingleBinding( uint32_t binding
-		, VkDeviceSize offset
-		, VkDeviceSize size )const
-	{
-		return m_buffer.getSingleBinding( binding, offset, size );
 	}
 
 	uint32_t LightBuffer::getLightsBufferCount( LightType lightType )const noexcept

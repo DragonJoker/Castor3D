@@ -71,20 +71,14 @@ namespace c3d
 		, VkShaderStageFlags shaderStages )const
 	{
 		for ( auto & [name, buffer] : m_buffers )
-		{
-			bindings.push_back( buffer.second->createLayoutBinding( index, shaderStages ) );
-			++index;
-		}
+			buffer.second->addLayoutBinding( bindings, index, shaderStages );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		for ( auto & [name, buffer] : m_buffers )
-		{
-			descriptorWrites.push_back( buffer.second->getBinding( index ) );
-			++index;
-		}
+			buffer.second->addDescriptorWrite( descriptorWrites, index );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::createPassBindings( crg::FramePass & pass

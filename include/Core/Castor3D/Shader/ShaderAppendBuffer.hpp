@@ -4,14 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderAppendBuffer_H___
 #define ___C3D_ShaderAppendBuffer_H___
 
-#include "ShaderModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
-
-#include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/BufferView.hpp>
 
 namespace c3d
 {
@@ -45,12 +41,16 @@ namespace c3d
 		 *\param[in]	index	L'indice du point d'attache.
 		 *\param[in]	stages	Les shader stages.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u
+		VkDescriptorSetLayoutBinding getLayoutBinding( uint32_t index
 			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| VK_SHADER_STAGE_GEOMETRY_BIT
 				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				| VK_SHADER_STAGE_VERTEX_BIT ) )const;
+				| VK_SHADER_STAGE_VERTEX_BIT ) )const
+		{
+			return { index, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, 1u, stages, nullptr };
+		}
 		/**
 		 *\~english
 		 *\brief		Creates a frame pass binding.
@@ -67,19 +67,7 @@ namespace c3d
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 *\param[in]	binding	L'attache de layout de set de descripteurs.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
-		/**
-		 *\~english
-		 *\brief			Creates the descriptor set binding at given point.
-		 *\param[in,out]	descriptorSet	Receives the created binding.
-		 *\param[in]		binding			The descriptor set layout binding.
-		 *\~french
-		 *\brief			Crée une attache de set de descripteurs au point donné.
-		 *\param[in,out]	descriptorSet	Reçoit l'attache créée.
-		 *\param[in]		binding			L'attache de layout de set de descripteurs.
-		 */
-		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & binding )const;
+		C3D_API ashes::WriteDescriptorSet getDescriptorWrite( uint32_t binding )const;
 		/**
 		*\~english
 		*name

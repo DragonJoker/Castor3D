@@ -321,7 +321,7 @@ namespace c3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsLayoutBindings( bindings, index );
-		m_scene.getLightCache().addLayoutBinding( bindings, VK_SHADER_STAGE_FRAGMENT_BIT, index );
+		m_scene.getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 		if ( hasSsao() )
 			addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapOcclusion
 		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapBrdf
@@ -342,8 +342,7 @@ namespace c3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsDescriptorWrites( descriptorWrites, index );
-		m_scene.getLightCache().addBinding( descriptorWrites, index );
-
+		m_scene.getLightCache().addDescriptorWrite( descriptorWrites, index );
 		if ( hasSsao() )
 		{
 			bindTexture( m_ssao->getSampledView()

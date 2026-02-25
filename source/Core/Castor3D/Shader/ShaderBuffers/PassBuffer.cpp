@@ -87,9 +87,12 @@ namespace c3d
 	PassBuffer::PassBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
+		: ShaderBufferHolder{ device
+			, engine.getGraphResourceCache()
+			, count * engine.getPassComponentsRegister().getPassBufferStride()
+			, cuT( "PassBuffer" ) }
+		, m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
 		, m_maxCount{ count }
-		, m_buffer{ device, engine.getGraphResourceCache(), count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
 		, m_data{ makeArrayView( m_buffer.getPtr(), count * m_stride ) }
 	{
 	}
@@ -192,12 +195,6 @@ namespace c3d
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		m_dirty.clear();
-	}
-
-	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		m_buffer.createBinding( descriptorSet, binding );
 	}
 
 	PassBuffer::PassDataPtr PassBuffer::getData( uint32_t passID )

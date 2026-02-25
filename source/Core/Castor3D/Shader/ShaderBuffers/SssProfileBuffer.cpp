@@ -25,7 +25,7 @@ namespace c3d
 	SssProfileBuffer::SssProfileBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "SssProfileBuffer" ) }
+		: ShaderBufferHolder{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "SssProfileBuffer" ) }
 		, m_diffusionProfiles{ device
 			, engine.getGraphResourceCache()
 			, cuT( "DiffusionProfiles" )
@@ -111,12 +111,6 @@ namespace c3d
 			m_buffer.setCount( uint32_t( std::min( m_data.size(), m_components.size() ) ) );
 			m_buffer.upload( uploader );
 		}
-	}
-
-	void SssProfileBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		m_buffer.createBinding( descriptorSet, binding );
 	}
 
 	SssProfileBuffer::SssProfileDataPtr SssProfileBuffer::getData( uint32_t profileID )
