@@ -204,24 +204,24 @@ namespace c3d
 			materials.getPassBuffer().addLayoutBindingT( baseBindings, OverlayBindingId::eMaterials );
 			materials.getTexConfigBuffer().addLayoutBindingT( baseBindings, OverlayBindingId::eTexConfigs );
 			materials.getTexAnimBuffer().addLayoutBindingT( baseBindings, OverlayBindingId::eTexAnims );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eCamera )
+			addDescriptorSetLayoutBindingT( baseBindings, OverlayBindingId::eCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eRender )
+				, VK_SHADER_STAGE_VERTEX_BIT );
+			addDescriptorSetLayoutBindingT( baseBindings, OverlayBindingId::eRender
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlays )
+				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );
+			addDescriptorSetLayoutBindingT( baseBindings, OverlayBindingId::eOverlays
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysIDs )
+				, VK_SHADER_STAGE_VERTEX_BIT );
+			addDescriptorSetLayoutBindingT( baseBindings, OverlayBindingId::eOverlaysIDs
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces )
+				, VK_SHADER_STAGE_VERTEX_BIT );
+			addDescriptorSetLayoutBindingT( baseBindings, OverlayBindingId::eOverlaysSurfaces
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysFont )
+				, VK_SHADER_STAGE_VERTEX_BIT );
+			addDescriptorSetLayoutBindingT( baseBindings, OverlayBindingId::eOverlaysFont
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				, VK_SHADER_STAGE_FRAGMENT_BIT );
 
 			return device->createDescriptorSetLayout( "OverlaysBase"
 				, c3d::move( baseBindings ) );
@@ -377,15 +377,15 @@ namespace c3d
 	{
 		ComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eCamera )
+		addDescriptorSetLayoutBindingT( layoutBindings, PanelOverlay::ComputeBindingIdx::eCamera
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eOverlays )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, PanelOverlay::ComputeBindingIdx::eOverlays
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eVertex )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, PanelOverlay::ComputeBindingIdx::eVertex
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			, VK_SHADER_STAGE_COMPUTE_BIT );
 		result.descriptorLayout = renderDevice->createDescriptorSetLayout( "PanelOverlayCompute"
 			, layoutBindings );
 
@@ -417,15 +417,15 @@ namespace c3d
 		MbString name = "BorderOverlayCompute";
 		ComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eCamera )
+		addDescriptorSetLayoutBindingT( layoutBindings, BorderPanelOverlay::ComputeBindingIdx::eCamera
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eOverlays )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, BorderPanelOverlay::ComputeBindingIdx::eOverlays
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eVertex )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, BorderPanelOverlay::ComputeBindingIdx::eVertex
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			, VK_SHADER_STAGE_COMPUTE_BIT );
 		result.descriptorLayout = renderDevice->createDescriptorSetLayout( name
 			, layoutBindings );
 
@@ -455,30 +455,30 @@ namespace c3d
 		MbString name = "TextOverlayCompute";
 		OverlayRenderer::TextComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera )
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eCamera
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eRender )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eRender
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eOverlays
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eChars )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eChars
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eWords )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eWords
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eLines )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eLines
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eFont
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex )
+			, VK_SHADER_STAGE_COMPUTE_BIT );
+		addDescriptorSetLayoutBindingT( layoutBindings, TextOverlay::ComputeBindingIdx::eVertex
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			, VK_SHADER_STAGE_COMPUTE_BIT );
 		result.descriptorLayout = renderDevice->createDescriptorSetLayout( name
 			, layoutBindings );
 

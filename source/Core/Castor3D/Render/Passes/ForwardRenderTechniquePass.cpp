@@ -87,17 +87,13 @@ namespace c3d
 		m_scene.getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 
 		if ( hasSsao() )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_ALL_GRAPHICS ) ); // c3d_mapOcclusion
-			++index;
-		}
+				, VK_SHADER_STAGE_ALL_GRAPHICS ); // c3d_mapOcclusion
 
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
-		++index;
+			, VK_SHADER_STAGE_FRAGMENT_BIT );	// c3d_mapBrdf
 
 		doAddShadowLayoutBindings( m_scene, bindings, index );
 		doAddEnvLayoutBindings( bindings, index );
@@ -108,21 +104,13 @@ namespace c3d
 			doAddClusteredLightingLayoutBindings( m_parent->getRenderTarget(), bindings, index );
 
 		if ( m_mippedColour )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
-			++index;
-		}
+			m_mippedColour->addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapScene
 
-		if ( flags.pass.hasDeferredDiffuseLightingFlag
+		if ( m_parent && flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_imgDiffuse
-			++index;
-		}
+				, VK_SHADER_STAGE_FRAGMENT_BIT );	// c3d_imgDiffuse
 	}
 
 	void ForwardRenderTechniquePass::doFillAdditionalDescriptor( PipelineFlags const & flags
