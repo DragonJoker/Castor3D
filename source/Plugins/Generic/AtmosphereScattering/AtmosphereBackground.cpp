@@ -910,26 +910,11 @@ namespace atmosphere_scattering
 			it->second->cameraUbo.addDescriptorWrite( descriptorWrites, index );
 			m_atmosphereUbo->addDescriptorWrite( descriptorWrites, index );
 			m_cloudsUbo->addDescriptorWrite( descriptorWrites, index );
-			c3d::bindTexture( m_transmittance.getSampledView()
-				, *m_transmittance.sampler
-				, descriptorWrites
-				, index );
-			c3d::bindTexture( m_multiScatter.getSampledView()
-				, *m_multiScatter.sampler
-				, descriptorWrites
-				, index );
-			c3d::bindTexture( it->second->skyView.getSampledView()
-				, *it->second->skyView.sampler
-				, descriptorWrites
-				, index );
-			c3d::bindTexture( it->second->volume.getSampledView()
-				, *it->second->volume.sampler
-				, descriptorWrites
-				, index );
-			c3d::bindTexture( it->second->cloudsResult.getSampledView()
-				, *it->second->volume.sampler
-				, descriptorWrites
-				, index );
+			m_transmittance.addTextureDescriptorWrite( descriptorWrites, index );
+			m_multiScatter.addTextureDescriptorWrite( descriptorWrites, index );
+			it->second->skyView.addTextureDescriptorWrite( descriptorWrites, index );
+			it->second->volume.addTextureDescriptorWrite( descriptorWrites, index );
+			it->second->cloudsResult.addTextureDescriptorWrite( descriptorWrites, *it->second->volume.sampler, index );
 		}
 	}
 

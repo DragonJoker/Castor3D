@@ -154,10 +154,7 @@ namespace c3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		m_shadowMap.getScene().getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
-		addDescriptorSetLayoutBinding( bindings
-			, index
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );	// ShadowMapUbo
+		m_shadowMapUbo.addLayoutBinding( bindings, index, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );
 		m_initialised = true;
 	}
 

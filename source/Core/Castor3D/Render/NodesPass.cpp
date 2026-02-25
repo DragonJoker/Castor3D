@@ -320,21 +320,9 @@ namespace c3d
 			for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
 			{
 				auto const & result = shadowMapRef.get().getShadowPassResult( false );
-				bindTexture( graph
-					, result.getSampledViewId( SmTexture::eLinearDepth )
-					, result.getSampler( SmTexture::eVariance )
-					, descriptorWrites
-					, index );
-				bindTexture( graph
-					, result.getSampledViewId( SmTexture::eLinearDepth )
-					, result.getSampler( SmTexture::eLinearDepth ) // Compare sampler
-					, descriptorWrites
-					, index );
-				bindTexture( graph
-					, result.getSampledViewId( SmTexture::eVariance )
-					, result.getSampler( SmTexture::eVariance )
-					, descriptorWrites
-					, index );
+				result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, result.getSampler( SmTexture::eVariance ), index );
+				result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, index );// Compare sampler
+				result.getTexture( SmTexture::eVariance ).addTextureDescriptorWrite( descriptorWrites, index );
 			}
 		}
 
@@ -361,21 +349,9 @@ namespace c3d
 				for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
 				{
 					auto const & result = shadowMapRef.get().getShadowPassResult( false );
-					bindTexture( graph
-						, result.getSampledViewId( SmTexture::eLinearDepth )
-						, result.getSampler( SmTexture::eVariance )
-						, descriptorWrites
-						, index );
-					bindTexture( graph
-						, result.getSampledViewId( SmTexture::eLinearDepth )
-						, result.getSampler( SmTexture::eLinearDepth ) // Compare sampler
-						, descriptorWrites
-						, index );
-					bindTexture( graph
-						, result.getSampledViewId( SmTexture::eVariance )
-						, result.getSampler( SmTexture::eVariance )
-						, descriptorWrites
-						, index );
+					result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, result.getSampler( SmTexture::eVariance ), index );
+					result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, index );// Compare sampler
+					result.getTexture( SmTexture::eVariance ).addTextureDescriptorWrite( descriptorWrites, index );
 					hasShadows = true;
 				}
 			}
@@ -412,14 +388,8 @@ namespace c3d
 			CU_Require( indirectLighting.vctFirstBounce );
 			CU_Require( indirectLighting.vctSecondaryBounce );
 			indirectLighting.vctConfigUbo->addDescriptorWrite( descriptorWrites, index );
-			bindTexture( indirectLighting.vctFirstBounce->getSampledView()
-				, *indirectLighting.vctFirstBounce->sampler
-				, descriptorWrites
-				, index );
-			bindTexture( indirectLighting.vctSecondaryBounce->getSampledView()
-				, *indirectLighting.vctSecondaryBounce->sampler
-				, descriptorWrites
-				, index );
+			indirectLighting.vctFirstBounce->addTextureDescriptorWrite( descriptorWrites, index );
+			indirectLighting.vctSecondaryBounce->addTextureDescriptorWrite( descriptorWrites, index );
 		}
 		else
 		{
@@ -429,16 +399,9 @@ namespace c3d
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
-			{
-				bindTexture( indirectLighting.rsmResult->getSampledView()
-					, *indirectLighting.rsmResult->sampler
-					, descriptorWrites
-					, index );
-			}
+				indirectLighting.rsmResult->addTextureDescriptorWrite( descriptorWrites, index );
 			else if ( indirectLighting.rsmResult )
-			{
 				++index; // RSM: Result.
-			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
@@ -450,18 +413,9 @@ namespace c3d
 				if ( indirectLighting.lpvResult )
 				{
 					auto const & lpv = *indirectLighting.lpvResult;
-					bindTexture( lpv.getSampledView( LpvTexture::eR )
-						, lpv.getSampler( LpvTexture::eR )
-						, descriptorWrites
-						, index );
-					bindTexture( lpv.getSampledView( LpvTexture::eG )
-						, lpv.getSampler( LpvTexture::eG )
-						, descriptorWrites
-						, index );
-					bindTexture( lpv.getSampledView( LpvTexture::eB )
-						, lpv.getSampler( LpvTexture::eB )
-						, descriptorWrites
-						, index );
+					lpv.getTexture( LpvTexture::eR ).addTextureDescriptorWrite( descriptorWrites, index );
+					lpv.getTexture( LpvTexture::eG ).addTextureDescriptorWrite( descriptorWrites, index );
+					lpv.getTexture( LpvTexture::eB ).addTextureDescriptorWrite( descriptorWrites, index );
 				}
 			}
 			else if ( indirectLighting.lpvConfigUbo )
@@ -481,18 +435,9 @@ namespace c3d
 					for ( auto const & plpv : *indirectLighting.llpvResult )
 					{
 						auto const & lpv = *plpv;
-						bindTexture( lpv.getSampledView( LpvTexture::eR )
-							, lpv.getSampler( LpvTexture::eR )
-							, descriptorWrites
-							, index );
-						bindTexture( lpv.getSampledView( LpvTexture::eG )
-							, lpv.getSampler( LpvTexture::eG )
-							, descriptorWrites
-							, index );
-						bindTexture( lpv.getSampledView( LpvTexture::eB )
-							, lpv.getSampler( LpvTexture::eB )
-							, descriptorWrites
-							, index );
+						lpv.getTexture( LpvTexture::eR ).addTextureDescriptorWrite( descriptorWrites, index );
+						lpv.getTexture( LpvTexture::eG ).addTextureDescriptorWrite( descriptorWrites, index );
+						lpv.getTexture( LpvTexture::eB ).addTextureDescriptorWrite( descriptorWrites, index );
 					}
 				}
 			}

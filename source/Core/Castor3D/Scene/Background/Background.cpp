@@ -530,18 +530,10 @@ namespace c3d
 
 		if ( hasIbl() )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapIrradiance
-			++index;
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapPrefiltered
-			++index;
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapPrefilteredSheen
-			++index;
+			auto & ibl = getIbl();
+			ibl.getIrradianceTexture().addTextureLayoutBinding( bindings, index, shaderStages );
+			ibl.getPrefilteredEnvironmentTexture().addTextureLayoutBinding( bindings, index, shaderStages );
+			ibl.getPrefilteredEnvironmentSheenTexture().addTextureLayoutBinding( bindings, index, shaderStages );
 		}
 	}
 
@@ -554,18 +546,9 @@ namespace c3d
 		if ( hasIbl() )
 		{
 			auto & ibl = getIbl();
-			bindTexture( ibl.getIrradianceTexture().getSampledView()
-				, ibl.getIrradianceSampler()
-				, descriptorWrites
-				, index );
-			bindTexture( ibl.getPrefilteredEnvironmentTexture().getSampledView()
-				, ibl.getPrefilteredEnvironmentSampler()
-				, descriptorWrites
-				, index );
-			bindTexture( ibl.getPrefilteredEnvironmentSheenTexture().getSampledView()
-				, ibl.getPrefilteredEnvironmentSheenSampler()
-				, descriptorWrites
-				, index );
+			ibl.getIrradianceTexture().addTextureDescriptorWrite( descriptorWrites, index );
+			ibl.getPrefilteredEnvironmentTexture().addTextureDescriptorWrite( descriptorWrites, index );
+			ibl.getPrefilteredEnvironmentSheenTexture().addTextureDescriptorWrite( descriptorWrites, index );
 		}
 	}
 

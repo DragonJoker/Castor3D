@@ -37,41 +37,13 @@ namespace c3d
 					, { size[0], size[1], 1u }, 6u, MaxIblReflectionLod + 1u
 					, PixelFormat::eR32G32B32A32_SFLOAT
 					, ImageUsageFlags::eColorAttachment | ImageUsageFlags::eSampled }
-				, {} };
+				, { BorderColour::eFloatTransparentBlack
+					, ComparisonFunc::eNever
+					, WrapMode::eClampToEdge
+					, FilterMode::eLinear
+					, FilterMode::eLinear
+					, MipmapMode::eLinear } };
 			result.create();
-			return result;
-		}
-
-		static SamplerObs doCreateSampler( Engine & engine
-			, RenderDevice const & device
-			, String const & prefix
-			, uint32_t maxLod )
-		{
-			SamplerObs result{};
-			auto stream = makeStringStream();
-			stream << prefix << cuT( "IblTexturesPrefiltered_" ) << maxLod;
-
-			if ( auto name = stream.str();
-				engine.hasSampler( name ) )
-			{
-				result = engine.findSampler( name );
-			}
-			else
-			{
-				auto created = engine.createSampler( name, engine );
-				created->setMinFilter( FilterMode::eLinear );
-				created->setMagFilter( FilterMode::eLinear );
-				created->setMipFilter( MipmapMode::eLinear );
-				created->setWrapS( WrapMode::eClampToEdge );
-				created->setWrapT( WrapMode::eClampToEdge );
-				created->setWrapR( WrapMode::eClampToEdge );
-				created->setMinLod( 0.0f );
-				created->setMaxLod( float( maxLod ) );
-				created->setSerialisable( false );
-				result = engine.addSampler( name, created, false );
-			}
-
-			result->initialise( device );
 			return result;
 		}
 
@@ -397,7 +369,6 @@ namespace c3d
 		, m_srcImage{ m_srcView.image.get() }
 		, m_srcImageView{ m_srcImage->createView( toUtf8( m_prefix ) + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, convert( m_srcView.getFormat() ), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
 		, m_result{ envpref::doCreatePrefilteredTexture( m_device, *m_srcView.resources, size, m_prefix ) }
-		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
 		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }
 	{
 		Extent2D originalSize{ size.getWidth(), size.getHeight() };
