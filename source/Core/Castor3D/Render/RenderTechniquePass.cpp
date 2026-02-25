@@ -91,32 +91,6 @@ namespace c3d
 			, index );
 	}
 
-	void bindBuffer( VkBuffer buffer
-		, VkDeviceSize offset
-		, VkDeviceSize range
-		, ashes::WriteDescriptorSetArray & writes
-		, uint32_t & index )
-	{
-		writes.emplace_back( index
-			, 0u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ buffer
-				, offset
-				, range } } );
-		++index;
-	}
-
-	void bindBuffer( ashes::BufferBase const & buffer
-		, ashes::WriteDescriptorSetArray & writes
-		, uint32_t & index )
-	{
-		bindBuffer( buffer
-			, 0u
-			, buffer.getSize()
-			, writes
-			, index );
-	}
-
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( RenderTechnique * parent

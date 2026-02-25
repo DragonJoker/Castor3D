@@ -39,100 +39,70 @@ namespace c3d
 			modelsBuffer.addDescriptorWriteT( writes, VertexTransformPass::eModelsData );
 
 			if ( morphTargets )
-			{
-				writes.push_back( morphTargets.getStorageBinding( VertexTransformPass::eMorphTargets ) );
-			}
-
+				morphTargets.addDescriptorWriteT( writes, VertexTransformPass::eMorphTargets );
 			if ( morphingWeights )
-			{
-				writes.push_back( morphingWeights.getStorageBinding( VertexTransformPass::eMorphingWeights ) );
-			}
-
+				morphingWeights.addDescriptorWriteT( writes, VertexTransformPass::eMorphingWeights );
 			if ( skinTransforms )
-			{
-				writes.push_back( skinTransforms.getStorageBinding( VertexTransformPass::eSkinTransforms ) );
-			}
+				skinTransforms.addDescriptorWriteT( writes, VertexTransformPass::eSkinTransforms );
 
 			if ( combine.hasPositionFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::ePositions
-					, VertexTransformPass::eInPosition ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::ePositions
-					, VertexTransformPass::eOutPosition ) );
+				input.addDescriptorWriteT( writes, SubmeshData::ePositions, VertexTransformPass::eInPosition );
+				output.addDescriptorWriteT( writes, SubmeshData::ePositions, VertexTransformPass::eOutPosition );
 			}
 
 			if ( combine.hasNormalFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eNormals
-					, VertexTransformPass::eInNormal ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eNormals
-					, VertexTransformPass::eOutNormal ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eNormals, VertexTransformPass::eInNormal );
+				output.addDescriptorWriteT( writes, SubmeshData::eNormals, VertexTransformPass::eOutNormal );
 			}
 
 			if ( combine.hasTangentFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eTangents
-					, VertexTransformPass::eInTangent ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eTangents
-					, VertexTransformPass::eOutTangent ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eTangents, VertexTransformPass::eInTangent );
+				output.addDescriptorWriteT( writes, SubmeshData::eTangents, VertexTransformPass::eOutTangent );
 			}
 
 			if ( combine.hasBitangentFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eBitangents
-					, VertexTransformPass::eInBitangent ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eBitangents
-					, VertexTransformPass::eOutBitangent ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eBitangents, VertexTransformPass::eInBitangent );
+				output.addDescriptorWriteT( writes, SubmeshData::eBitangents, VertexTransformPass::eOutBitangent );
 			}
 
 			if ( combine.hasTexcoord0Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords0
-					, VertexTransformPass::eInTexcoord0 ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords0
-					, VertexTransformPass::eOutTexcoord0 ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eTexcoords0, VertexTransformPass::eInTexcoord0 );
+				output.addDescriptorWriteT( writes, SubmeshData::eTexcoords0, VertexTransformPass::eOutTexcoord0 );
 			}
 
 			if ( combine.hasTexcoord1Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords1
-					, VertexTransformPass::eInTexcoord1 ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords1
-					, VertexTransformPass::eOutTexcoord1 ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eTexcoords1, VertexTransformPass::eInTexcoord1 );
+				output.addDescriptorWriteT( writes, SubmeshData::eTexcoords1, VertexTransformPass::eOutTexcoord1 );
 			}
 
 			if ( combine.hasTexcoord2Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords2
-					, VertexTransformPass::eInTexcoord2 ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords2
-					, VertexTransformPass::eOutTexcoord2 ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eTexcoords2, VertexTransformPass::eInTexcoord2 );
+				output.addDescriptorWriteT( writes, SubmeshData::eTexcoords2, VertexTransformPass::eOutTexcoord2 );
 			}
 
 			if ( combine.hasTexcoord3Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords3
-					, VertexTransformPass::eInTexcoord3 ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords3
-					, VertexTransformPass::eOutTexcoord3 ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eTexcoords3, VertexTransformPass::eInTexcoord3 );
+				output.addDescriptorWriteT( writes, SubmeshData::eTexcoords3, VertexTransformPass::eOutTexcoord3 );
 			}
 
 			if ( combine.hasColourFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eColours
-					, VertexTransformPass::eInColour ) );
-				writes.push_back( output.getStorageBinding( SubmeshData::eColours
-					, VertexTransformPass::eOutColour ) );
+				input.addDescriptorWriteT( writes, SubmeshData::eColours, VertexTransformPass::eInColour );
+				output.addDescriptorWriteT( writes, SubmeshData::eColours, VertexTransformPass::eOutColour );
 			}
 
 			if ( combine.hasSkinFlag )
-			{
-				writes.push_back( input.getStorageBinding( SubmeshData::eSkin
-					, VertexTransformPass::eInSkin ) );
-			}
+				input.addDescriptorWriteT( writes, SubmeshData::eSkin, VertexTransformPass::eInSkin );
 
-			writes.push_back( output.getStorageBinding( SubmeshData::eVelocity
-				, VertexTransformPass::eOutVelocity ) );
+			output.addDescriptorWriteT( writes, SubmeshData::eVelocity, VertexTransformPass::eOutVelocity );
 
 			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( toUtf8( pipeline.getName( engine ) ) );
 			descriptorSet->setBindings( writes );

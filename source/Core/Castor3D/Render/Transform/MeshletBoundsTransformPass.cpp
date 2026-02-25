@@ -31,18 +31,11 @@ namespace c3d
 			, GpuBufferOffsetT< MeshletCullData > const & output )
 		{
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( finalOffsets.getStorageBinding( SubmeshData::ePositions
-				, MeshletBoundsTransformPass::ePositions ) );
-
+			finalOffsets.addDescriptorWriteT( writes, SubmeshData::ePositions, MeshletBoundsTransformPass::ePositions );
 			if ( pipeline.normals )
-			{
-				writes.push_back( finalOffsets.getStorageBinding( SubmeshData::eNormals
-					, MeshletBoundsTransformPass::eNormals ) );
-			}
-
-			writes.push_back( sourceOffsets.getStorageBinding( SubmeshData::eMeshlets
-				, MeshletBoundsTransformPass::eMeshlets ) );
-			writes.push_back( output.getStorageBinding( MeshletBoundsTransformPass::eOutCullData ) );
+				finalOffsets.addDescriptorWriteT( writes, SubmeshData::eNormals, MeshletBoundsTransformPass::eNormals );
+			finalOffsets.addDescriptorWriteT( writes, SubmeshData::eMeshlets, MeshletBoundsTransformPass::eMeshlets );
+			output.addDescriptorWriteT( writes, MeshletBoundsTransformPass::eOutCullData );
 
 			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( toUtf8(  pipeline.getName() ) );
 			descriptorSet->setBindings( writes );

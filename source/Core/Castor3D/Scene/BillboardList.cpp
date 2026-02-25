@@ -255,7 +255,7 @@ namespace c3d
 			m_descriptorSet = m_descriptorPool->createDescriptorSet( "BillboardBaseVtx"
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( m_vertexBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::ePosition ) ) );
+			m_vertexBuffer.addDescriptorWriteT( writes, MeshBuffersIdx::ePosition );
 			m_descriptorSet->setBindings( c3d::move( writes ) );
 			m_descriptorSet->update();
 

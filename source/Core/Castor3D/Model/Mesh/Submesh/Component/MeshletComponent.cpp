@@ -52,85 +52,38 @@ namespace c3d
 			ashes::WriteDescriptorSetArray writes;
 			auto combine = m_submesh.getComponentCombine();
 
-			writes.push_back( getFinalCullBuffer( geometry, pass ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
+			getFinalCullBuffer( geometry, pass ).addDescriptorWriteT( writes, MeshBuffersIdx::eCullData );
 
-			writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eMeshlets
-				, uint32_t( MeshBuffersIdx::eMeshlets ) ) );
-
+			baseBuffers.addDescriptorWriteT( writes, SubmeshData::eMeshlets, MeshBuffersIdx::eMeshlets );
 			if ( combine.hasPositionFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::ePositions
-					, uint32_t( MeshBuffersIdx::ePosition ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::ePositions, MeshBuffersIdx::ePosition );
 			if ( combine.hasNormalFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eNormals
-					, uint32_t( MeshBuffersIdx::eNormal ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eNormals, MeshBuffersIdx::eNormal );
 			if ( combine.hasTangentFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTangents
-					, uint32_t( MeshBuffersIdx::eTangent ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eTangents, MeshBuffersIdx::eTangent );
 			if ( combine.hasBitangentFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eBitangents
-					, uint32_t( MeshBuffersIdx::eBitangent ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eBitangents, MeshBuffersIdx::eBitangent );
 			if ( combine.hasTexcoord0Flag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords0
-					, uint32_t( MeshBuffersIdx::eTexcoord0 ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eTexcoords0, MeshBuffersIdx::eTexcoord0 );
 			if ( combine.hasTexcoord1Flag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords1
-					, uint32_t( MeshBuffersIdx::eTexcoord1 ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eTexcoords1, MeshBuffersIdx::eTexcoord1 );
 			if ( combine.hasTexcoord2Flag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords2
-					, uint32_t( MeshBuffersIdx::eTexcoord2 ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eTexcoords2, MeshBuffersIdx::eTexcoord2 );
 			if ( combine.hasTexcoord3Flag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords3
-					, uint32_t( MeshBuffersIdx::eTexcoord3 ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eTexcoords3, MeshBuffersIdx::eTexcoord3 );
 			if ( combine.hasColourFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eColours
-					, uint32_t( MeshBuffersIdx::eColour ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eColours, MeshBuffersIdx::eColour );
 			if ( combine.hasPassMaskFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::ePassMasks
-					, uint32_t( MeshBuffersIdx::ePassMasks ) ) );
-			}
-
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::ePassMasks, MeshBuffersIdx::ePassMasks );
 			if ( combine.hasVelocityFlag )
-			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eVelocity
-					, uint32_t( MeshBuffersIdx::eVelocity ) ) );
-			}
+				baseBuffers.addDescriptorWriteT( writes, SubmeshData::eVelocity, MeshBuffersIdx::eVelocity );
 
 			auto & data = m_submesh.getInstantiation().getData();
 			auto bufferIt = data.find( pass );
 			CU_Require( bufferIt != data.end() );
 
 			if ( bufferIt->second.buffer )
-			{
-				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
-			}
+				bufferIt->second.buffer.addDescriptorWriteT( writes, MeshBuffersIdx::eInstances );
 
 			descSetIt->second->setBindings( c3d::move( writes ) );
 			descSetIt->second->update();

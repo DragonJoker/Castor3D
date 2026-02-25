@@ -667,93 +667,44 @@ namespace c3d
 			ashes::WriteDescriptorSetArray writes;
 			auto combine = getComponentCombine();
 
-			auto getStorageBinding = [&baseBuffers]( SubmeshData data, MeshBuffersIdx index )
+			auto addDescriptorWrite = [&baseBuffers, &writes]( SubmeshData data, MeshBuffersIdx index )
 				{
-					auto chunk = baseBuffers.getBufferChunk( data );
+					auto & chunkBuffer = baseBuffers.getBufferChunk( data ).buffer->getBuffer();
 					auto binding = ashes::WriteDescriptorSet{ uint32_t( index )
-						, 0u
-						, 1u
-						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-					binding.bufferInfo.push_back( VkDescriptorBufferInfo{ chunk.buffer->getBuffer().getBuffer()
-						, 0u
-						, chunk.buffer->getBuffer().getSize() } );
-					return binding;
+						, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+						, { VkDescriptorBufferInfo{ chunkBuffer.getBuffer(), 0u, chunkBuffer.getSize() } } };
+					writes.push_back( binding );
 				};
 
 			if ( combine.hasPositionFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::ePositions
-					, MeshBuffersIdx::ePosition ) );
-			}
-
+				addDescriptorWrite( SubmeshData::ePositions, MeshBuffersIdx::ePosition );
 			if ( combine.hasNormalFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eNormals
-					, MeshBuffersIdx::eNormal ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eNormals, MeshBuffersIdx::eNormal );
 			if ( combine.hasTangentFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eTangents
-					, MeshBuffersIdx::eTangent ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eTangents, MeshBuffersIdx::eTangent );
 			if ( combine.hasBitangentFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eBitangents
-					, MeshBuffersIdx::eBitangent ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eBitangents, MeshBuffersIdx::eBitangent );
 			if ( combine.hasTexcoord0Flag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eTexcoords0
-					, MeshBuffersIdx::eTexcoord0 ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eTexcoords0, MeshBuffersIdx::eTexcoord0 );
 			if ( combine.hasTexcoord1Flag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eTexcoords1
-					, MeshBuffersIdx::eTexcoord1 ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eTexcoords1, MeshBuffersIdx::eTexcoord1 );
 			if ( combine.hasTexcoord2Flag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eTexcoords2
-					, MeshBuffersIdx::eTexcoord2 ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eTexcoords2, MeshBuffersIdx::eTexcoord2 );
 			if ( combine.hasTexcoord3Flag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eTexcoords3
-					, MeshBuffersIdx::eTexcoord3 ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eTexcoords3, MeshBuffersIdx::eTexcoord3 );
 			if ( combine.hasColourFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eColours
-					, MeshBuffersIdx::eColour ) );
-			}
-
+				addDescriptorWrite( SubmeshData::eColours, MeshBuffersIdx::eColour );
 			if ( combine.hasPassMaskFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::ePassMasks
-					, MeshBuffersIdx::ePassMasks ) );
-			}
-
+				addDescriptorWrite( SubmeshData::ePassMasks, MeshBuffersIdx::ePassMasks );
 			if ( combine.hasVelocityFlag )
-			{
-				writes.push_back( getStorageBinding( SubmeshData::eVelocity
-					, MeshBuffersIdx::eVelocity ) );
-			}
+				addDescriptorWrite( SubmeshData::eVelocity, MeshBuffersIdx::eVelocity );
 
 			auto & data = getInstantiation().getData();
 			auto bufferIt = data.find( pass );
 			CU_Require( bufferIt != data.end() );
 
 			if ( bufferIt->second.buffer )
-			{
-				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
-			}
+				bufferIt->second.buffer.addDescriptorWriteT( writes, MeshBuffersIdx::eInstances );
 
 			descSetIt->second->setBindings( c3d::move( writes ) );
 			descSetIt->second->update();
