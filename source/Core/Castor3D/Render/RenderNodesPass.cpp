@@ -476,15 +476,14 @@ namespace c3d
 			modelDataWrite.bufferInfo.emplace_back() = { *modelBuffer.buffer
 				, 0u, modelBuffer.getSize() };
 
-			auto const & matCache = getOwner()->getMaterialCache();			
-			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
-			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
+			auto const & matCache = getOwner()->getMaterialCache();
+			matCache.getPassBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eMaterials );
+			matCache.getSssProfileBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eSssProfiles );
 			descriptorWrites.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
 				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
 				, uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles ) ) );
-			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
-			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
-
+			matCache.getTexConfigBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eTexConfigs );
+			matCache.getTexAnimBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eTexAnims );
 			if ( pipeline.getFlags().isBillboard() )
 			{
 				auto & billboardDatas = scene.getBillboardsBuffer();
@@ -772,6 +771,7 @@ namespace c3d
 			stageFlags |= VK_SHADER_STAGE_ALL_GRAPHICS;
 		}
 
+		// Common bindings
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eCamera )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -794,18 +794,11 @@ namespace c3d
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );
 		auto const & matCache = getOwner()->getMaterialCache();
-		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials )
-			, stageFlags ) );
-		addBindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eSssProfiles )
-			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles )
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, stageFlags ) );
-		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs )
-			, stageFlags ) );
-		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims )
-			, stageFlags ) );
-
+		matCache.getPassBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eMaterials, stageFlags );
+		matCache.getSssProfileBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eSssProfiles, stageFlags );
+		addDescriptorSetLayoutBindingT( addBindings, GlobalBuffersIdx::eSssDiffusionProfiles, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, stageFlags );
+		matCache.getTexConfigBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eTexConfigs, stageFlags );
+		matCache.getTexAnimBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eTexAnims, stageFlags );
 		if ( flags.isBillboard() )
 		{
 			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eBillboardsData )
@@ -813,14 +806,16 @@ namespace c3d
 				, stageFlags ) );
 		}
 
+		//
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
+		// Submesh bindings
 		if ( auto submeshData = flags.submeshData )
-		{
 			submeshData->fillBindings( flags, addBindings, index );
-		}
 
+		// Specific bindings
 		doFillAdditionalBindings( flags, addBindings );
+
 		return addBindings;
 	}
 
@@ -875,11 +870,8 @@ namespace c3d
 					, doGetProgram( flags )
 					, flags );
 				pipeline->setViewport( makeViewport( m_size ) );
-
 				if ( !flags.writePicking() )
-				{
 					pipeline->setScissor( makeScissor( m_size ) );
-				}
 
 				auto addDescLayoutIt = m_additionalDescriptors.try_emplace( rendndpass::makeHash( flags ) ).first;
 				auto & addDescriptors = addDescLayoutIt->second;
@@ -905,14 +897,9 @@ namespace c3d
 				else
 				{
 					if ( vertexPullingLayouts )
-					{
 						pipeline->setVertexPullingLayouts( *vertexPullingLayouts );
-					}
 					else
-					{
 						pipeline->setVertexLayouts( vertexLayouts );
-					}
-
 					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
 						, sizeof( DrawConstants ) } } );

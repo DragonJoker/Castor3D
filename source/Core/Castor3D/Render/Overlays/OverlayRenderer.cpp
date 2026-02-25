@@ -201,9 +201,9 @@ namespace c3d
 			auto const & engine = c3d::getEngine( device );
 			auto const & materials = engine.getMaterialCache();
 			ashes::VkDescriptorSetLayoutBindingArray baseBindings;
-			baseBindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-			baseBindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
-			baseBindings.emplace_back( materials.getTexAnimBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
+			materials.getPassBuffer().addLayoutBindingT( baseBindings, OverlayBindingId::eMaterials );
+			materials.getTexConfigBuffer().addLayoutBindingT( baseBindings, OverlayBindingId::eTexConfigs );
+			materials.getTexAnimBuffer().addLayoutBindingT( baseBindings, OverlayBindingId::eTexAnims );
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eCamera )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );

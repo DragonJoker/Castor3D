@@ -84,7 +84,7 @@ namespace c3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsLayoutBindings( bindings, index );
-		m_scene.getLightCache().addLayoutBinding( bindings, VK_SHADER_STAGE_FRAGMENT_BIT, index );
+		m_scene.getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 
 		if ( hasSsao() )
 		{
@@ -132,7 +132,7 @@ namespace c3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsDescriptorWrites( descriptorWrites, index );
-		m_scene.getLightCache().addBinding( descriptorWrites, index );
+		m_scene.getLightCache().addDescriptorWrite( descriptorWrites, index );
 
 		if ( hasSsao() )
 		{

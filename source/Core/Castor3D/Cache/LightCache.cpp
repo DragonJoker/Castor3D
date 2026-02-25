@@ -130,40 +130,17 @@ namespace c3d
 		m_lightBuffer->createPassBinding( pass, binding );
 	}
 
-	VkDescriptorSetLayoutBinding ObjectCacheT< Light, String, LightCacheTraits >::createLayoutBinding( VkShaderStageFlags stages
-		, uint32_t index )const
+	VkDescriptorSetLayoutBinding ObjectCacheT< Light, String, LightCacheTraits >::getLayoutBinding( uint32_t index
+		, VkShaderStageFlags stages )const
 	{
 		CU_Require( m_lightBuffer );
-		return m_lightBuffer->createLayoutBinding( stages, index );
+		return m_lightBuffer->getLayoutBinding( index, stages );
 	}
 
-	void ObjectCacheT< Light, String, LightCacheTraits >::addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags stages
-			, uint32_t & index )const
-	{
-		bindings.emplace_back( createLayoutBinding( stages, index ) );
-		++index;
-	}
-
-	ashes::WriteDescriptorSet ObjectCacheT< Light, String, LightCacheTraits >::getBinding( uint32_t binding )const
+	ashes::WriteDescriptorSet ObjectCacheT< Light, String, LightCacheTraits >::getDescriptorWrite( uint32_t binding )const
 	{
 		CU_Require( m_lightBuffer );
-		return m_lightBuffer->getBinding( binding );
-	}
-
-	void ObjectCacheT< Light, String, LightCacheTraits >::addBinding( ashes::WriteDescriptorSetArray & writes
-		, uint32_t & binding )const
-	{
-		writes.emplace_back( getBinding( binding ) );
-		++binding;
-	}
-
-	ashes::WriteDescriptorSet ObjectCacheT< Light, String, LightCacheTraits >::getBinding( uint32_t binding
-		, VkDeviceSize offset
-		, VkDeviceSize size )const
-	{
-		CU_Require( m_lightBuffer );
-		return m_lightBuffer->getSingleBinding( binding, offset, size );
+		return m_lightBuffer->getDescriptorWrite( binding );
 	}
 
 	uint32_t ObjectCacheT< Light, String, LightCacheTraits >::getLightsBufferCount( LightType type )const noexcept

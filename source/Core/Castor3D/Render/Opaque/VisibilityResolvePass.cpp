@@ -1528,17 +1528,13 @@ namespace c3d
 			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eBillboards
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages ) );
-			bindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( InOutBindings::eMaterials
-				, stages ) );
-			bindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( InOutBindings::eSssProfiles
-				, stages ) );
+			matCache.getPassBuffer().addLayoutBindingT( bindings, InOutBindings::eMaterials, stages );
+			matCache.getSssProfileBuffer().addLayoutBindingT( bindings, InOutBindings::eSssProfiles, stages );
 			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eSssDiffusionProfiles
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, stages ) );
-			bindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( InOutBindings::eTexConfigs
-				, stages ) );
-			bindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( InOutBindings::eTexAnims
-				, stages ) );
+			matCache.getTexConfigBuffer().addLayoutBindingT( bindings, InOutBindings::eTexConfigs, stages );
+			matCache.getTexAnimBuffer().addLayoutBindingT( bindings, InOutBindings::eTexAnims, stages );
 			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eInData
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, stages ) );
@@ -1571,7 +1567,7 @@ namespace c3d
 			auto const & engine = c3d::getEngine( device );
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersLayoutBindings( bindings, index, stages );
-			scene.getLightCache().addLayoutBinding( bindings, stages, index );
+			scene.getLightCache().addLayoutBinding( bindings, index, stages );
 
 			if ( ssao )
 			{
@@ -1641,13 +1637,13 @@ namespace c3d
 				, InOutBindings::eModels ) );
 			writes.push_back( makeStorageBufferDescriptorWrite( scene.getBillboardsBuffer()
 				, InOutBindings::eBillboards ) );
-			writes.push_back( matCache.getPassBuffer().getBinding( InOutBindings::eMaterials ) );
-			writes.push_back( matCache.getSssProfileBuffer().getBinding( InOutBindings::eSssProfiles ) );
+			matCache.getPassBuffer().addDescriptorWriteT( writes, InOutBindings::eMaterials );
+			matCache.getSssProfileBuffer().addDescriptorWriteT( writes, InOutBindings::eSssProfiles );
 			writes.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
 				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
 				, InOutBindings::eSssDiffusionProfiles ) );
-			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
-			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
+			matCache.getTexConfigBuffer().addDescriptorWriteT( writes, InOutBindings::eTexConfigs );
+			matCache.getTexAnimBuffer().addDescriptorWriteT( writes, InOutBindings::eTexAnims );
 			auto & visibilityPassResult = technique.getVisibilityResult();
 			writes.push_back( makeStorageImageDescriptorWrite( visibilityPassResult.getTargetView()
 				, InOutBindings::eInData ) );
@@ -1679,7 +1675,7 @@ namespace c3d
 
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersDescriptorWrites( writes, index );
-			scene.getLightCache().addBinding( writes, index );
+			scene.getLightCache().addDescriptorWrite( writes, index );
 			if ( ssao )
 				bindTexture( ssao->getSampledView()
 					, *ssao->sampler

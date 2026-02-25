@@ -29,7 +29,10 @@ namespace c3d
 	TextureConfigurationBuffer::TextureConfigurationBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ device, engine.getGraphResourceCache(), count * VkDeviceSize( DataSize ), cuT( "TextureConfigurationBuffer" ) }
+		: ShaderBufferHolder{ device
+			, engine.getGraphResourceCache()
+			, count * VkDeviceSize( DataSize )
+			, cuT( "TextureConfigurationBuffer" ) }
 		, m_data{ texcfgbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 	{
 	}
@@ -39,7 +42,7 @@ namespace c3d
 		if ( unit.getId() == 0u )
 		{
 			auto lock( makeUniqueLock( m_mutex ) );
-			auto & device = getDevice();
+			auto const & device = getDevice();
 
 			if ( device.hasBindless() )
 			{
@@ -131,16 +134,5 @@ namespace c3d
 			m_buffer.setCount( uint32_t( std::min( m_data.size() * DataSize, m_configurations.size() ) ) );
 			m_buffer.upload( uploader );
 		}
-	}
-
-	void TextureConfigurationBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		m_buffer.createBinding( descriptorSet, binding );
-	}
-
-	RenderDevice const & TextureConfigurationBuffer::getDevice()const
-	{
-		return m_buffer.getDevice();
 	}
 }

@@ -70,26 +70,30 @@ namespace c3d
 			, m_wantedState.pipelineStage );
 	}
 
-	void ShaderBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		descriptorSet.createBinding( binding
-			, *m_buffer->buffer
-			, 0u
-			, uint32_t( m_size ) );
-	}
-
 	void ShaderBuffer::doCreatePasBinding( crg::FramePass & pass
 		, uint32_t binding )const
 	{
 		pass.addInputStorage( *m_buffer->getLastAttach(), binding );
 	}
 
-	ashes::WriteDescriptorSet ShaderBuffer::doGetSingleBinding( uint32_t binding
+	ashes::WriteDescriptorSet ShaderBuffer::doGetDescriptorWrite( uint32_t dstBinding
+		, uint32_t dstArrayElement )const
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, 0u
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.emplace_back() = { *m_buffer->buffer
+			, 0u
+			, m_size };
+		return result;
+	}
+
+	ashes::WriteDescriptorSet ShaderBuffer::doGetSingleDescriptorWrite( uint32_t dstBinding
 		, VkDeviceSize offset
 		, VkDeviceSize size )const
 	{
-		auto result = ashes::WriteDescriptorSet{ binding
+		auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
@@ -99,15 +103,10 @@ namespace c3d
 		return result;
 	}
 
-	ashes::WriteDescriptorSet ShaderBuffer::doGetBinding( uint32_t binding )const
+	VkDescriptorSetLayoutBinding ShaderBuffer::doGetLayoutBinding( uint32_t index
+		, VkShaderStageFlags stages )const
 	{
-		auto result = ashes::WriteDescriptorSet{ binding
-			, 0u
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.emplace_back() = { *m_buffer->buffer
-			, 0u
-			, m_size };
-		return result;
+		return VkDescriptorSetLayoutBinding{ index
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, stages, nullptr };
 	}
 }

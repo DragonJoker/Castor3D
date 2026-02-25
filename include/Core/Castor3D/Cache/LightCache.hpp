@@ -142,8 +142,26 @@ namespace c3d
 		 *\param[in]	stages	Les shader stages impactés.
 		 *\param[in]	index	L'indice du point d'attache.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( VkShaderStageFlags stages
-			, uint32_t index )const;
+		C3D_API VkDescriptorSetLayoutBinding getLayoutBinding( uint32_t index, VkShaderStageFlags stages )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor write for the lights buffer.
+		 *\param[in]	binding	The binding point index.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 *\param[in]	binding	The binding point index.
+		 */
+		C3D_API ashes::WriteDescriptorSet getDescriptorWrite( uint32_t binding )const;
+		/**
+		 *\~english
+		 *\param[in]	type	The light type.
+		 *\return		The number of light sources of the given type, in the buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 *\param[in]	type	Le type de lumière.
+		 *\return		Le nombre de sources lumineuses du type donné, dans le buffer.
+		 */
+		C3D_API uint32_t getLightsBufferCount( LightType type )const noexcept;
 		/**
 		 *\~english
 		 *\brief			Adds the descriptor set layout binding at given point.
@@ -156,43 +174,57 @@ namespace c3d
 		 *\param[in]		stages		Les shader stages impactés.
 		 *\param[in,out]	index		L'indice du point d'attache.
 		 */
-		C3D_API void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags stages
-			, uint32_t & index )const;
+		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.emplace_back( getLayoutBinding( index, stages ) );
+			++index;
+		}
+		/**
+		 *\~english
+		 *\brief			Adds the descriptor set layout binding at given point.
+		 *\param[in,out]	bindings	Receives the binding.
+		 *\param[in]		stages		The impacted shader stages.
+		 *\param[in,out]	index		The binding index.
+		 *\~french
+		 *\brief			Ajoute une attache de layout de set de descripteurs au point donné.
+		 *\param[in,out]	bindings	Reçoit l'attache.
+		 *\param[in]		stages		Les shader stages impactés.
+		 *\param[in,out]	index		L'indice du point d'attache.
+		 */
+		template< typename BindingT >
+		void addLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.emplace_back( getLayoutBinding( index, stages ) );
+			++index;
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for the lights buffer.
 		 *\~french
 		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & binding )const
+		{
+			writes.emplace_back( getDescriptorWrite( binding ) );
+			++binding;
+		}
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for the lights buffer.
 		 *\~french
 		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
 		 */
-		C3D_API void addBinding( ashes::WriteDescriptorSetArray & writes
-			, uint32_t & binding )const;
-		/**
-		 *\~english
-		 *\brief		Creates the descriptor write for the lights buffer.
-		 *\~french
-		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
-		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
-			, VkDeviceSize offset
-			, VkDeviceSize size )const;
-		/**
-		 *\~english
-		 *\param[in]	type	The light type.
-		 *\return		The number of light sources of the given type, in the buffer.
-		 *\~french
-		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
-		 *\param[in]	type	Le type de lumière.
-		 *\return		Le nombre de sources lumineuses du type donné, dans le buffer.
-		 */
-		C3D_API uint32_t getLightsBufferCount( LightType type )const noexcept;
+		template< typename BindingT >
+		void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT binding )const
+		{
+			writes.emplace_back( getDescriptorWrite( binding ) );
+		}
 
 		uint32_t getLightsCount( LightType type )const
 		{

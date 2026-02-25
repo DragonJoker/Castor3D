@@ -1,9 +1,7 @@
 #include "Castor3D/Shader/ShaderAppendBuffer.hpp"
 
-#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/Buffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-
-#include <ashespp/Descriptor/DescriptorSet.hpp>
 
 #include <RenderGraph/FramePass.hpp>
 
@@ -34,21 +32,13 @@ namespace c3d
 		m_buffer->destroy();
 	}
 
-	VkDescriptorSetLayoutBinding ShaderAppendBuffer::createLayoutBinding( uint32_t index
-		, VkShaderStageFlags stages )const
-	{
-		return makeDescriptorSetLayoutBinding( index
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, stages );
-	}
-
 	void ShaderAppendBuffer::createPassBinding( crg::FramePass & pass
 		, uint32_t binding )const
 	{
 		pass.addInputStorage( *m_buffer->getLastAttach(), binding );
 	}
 
-	ashes::WriteDescriptorSet ShaderAppendBuffer::getBinding( uint32_t binding )const
+	ashes::WriteDescriptorSet ShaderAppendBuffer::getDescriptorWrite( uint32_t binding )const
 	{
 		auto result = ashes::WriteDescriptorSet{ binding
 			, 0u
@@ -58,13 +48,5 @@ namespace c3d
 			, 0u
 			, m_size } );
 		return result;
-	}
-
-	void ShaderAppendBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		descriptorSet.createBinding( binding
-			, *m_buffer->buffer
-			, 0u, uint32_t( m_size ) );
 	}
 }

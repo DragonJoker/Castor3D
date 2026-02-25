@@ -253,9 +253,9 @@ namespace c3d
 
 		auto result = descriptorPool->createDescriptorSet( toUtf8( debugName ) );
 		ashes::WriteDescriptorSetArray writes;
-		writes.push_back( engine.getMaterialCache().getPassBuffer().getBinding( OverlayBindingId::eMaterials ) );
-		writes.push_back( engine.getMaterialCache().getTexConfigBuffer().getBinding( OverlayBindingId::eTexConfigs ) );
-		writes.push_back( engine.getMaterialCache().getTexAnimBuffer().getBinding( OverlayBindingId::eTexAnims ) );
+		engine.getMaterialCache().getPassBuffer().addDescriptorWriteT( writes, OverlayBindingId::eMaterials );
+		engine.getMaterialCache().getTexConfigBuffer().addDescriptorWriteT( writes, OverlayBindingId::eTexConfigs );
+		engine.getMaterialCache().getTexAnimBuffer().addDescriptorWriteT( writes, OverlayBindingId::eTexAnims );
 		cameraUbo.addDescriptorWriteT( writes, OverlayBindingId::eCamera );
 		renderUbo.addDescriptorWriteT( writes, OverlayBindingId::eRender );
 		writes.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.getBuffer(), OverlayBindingId::eOverlaysSurfaces ) );
