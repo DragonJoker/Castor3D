@@ -178,7 +178,7 @@ namespace c3d
 		 *\param[in]		shaderStages	Les shader stages impactés.
 		 *\param[in,out]	index			L'index de binding actuel.
 		 */
-		C3D_API static void addShadowBindings( SceneFlags const & sceneFlags
+		C3D_API static void addShadowLayoutBindings( SceneFlags const & sceneFlags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
@@ -194,7 +194,7 @@ namespace c3d
 		 *\param[in]		shaderStages	Les shader stages impactés.
 		 *\param[in,out]	index			L'index de binding actuel.
 		 */
-		C3D_API static void addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API static void addShadowLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**
@@ -211,7 +211,7 @@ namespace c3d
 		 *\param[in]		shaderStages	Les shader stages impactés.
 		 *\param[in,out]	index			L'index de binding actuel.
 		 */
-		C3D_API static void addBackgroundBindings( SceneBackground const & background
+		C3D_API static void addBackgroundLayoutBindings( SceneBackground const & background
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
@@ -231,7 +231,7 @@ namespace c3d
 		 *\param[in]		shaderStages		Les shader stages impactés.
 		 *\param[in,out]	index				L'index de binding actuel.
 		 */
-		C3D_API static void addGIBindings( SceneFlags flags
+		C3D_API static void addGILayoutBindings( SceneFlags flags
 			, IndirectLightingData const & indirectLighting
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
@@ -250,32 +250,32 @@ namespace c3d
 		 *\param[in]		shaderStages	Les shader stages impactés.
 		 *\param[in,out]	index			L'index de binding actuel.
 		 */
-		C3D_API static void addClusteredLightingBindings( FrustumClusters const & frustumClusters
+		C3D_API static void addClusteredLightingLayoutBindings( FrustumClusters const & frustumClusters
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
-		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
+		C3D_API static void addShadowDescriptorWrites( RenderSystem const & renderSystem
 			, crg::RunnableGraph & graph
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const & shadowBuffer
 			, uint32_t & index );
-		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
+		C3D_API static void addShadowDescriptorWrites( RenderSystem const & renderSystem
 			, crg::RunnableGraph & graph
 			, SceneFlags const & sceneFlags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const & shadowBuffer
 			, uint32_t & index );
-		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
+		C3D_API static void addBackgroundDescriptorWrites( SceneBackground const & background
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, Texture * targetImage
 			, uint32_t & index );
-		C3D_API static void addGIDescriptor( SceneFlags sceneFlags
+		C3D_API static void addGIDescriptorWrites( SceneFlags sceneFlags
 			, IndirectLightingData const & indirectLighting
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index );
-		C3D_API static void addClusteredLightingDescriptor( FrustumClusters const & frustumClusters
+		C3D_API static void addClusteredLightingDescriptorWrites( FrustumClusters const & frustumClusters
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index );
 		/**

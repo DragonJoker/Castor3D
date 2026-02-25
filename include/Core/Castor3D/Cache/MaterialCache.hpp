@@ -135,9 +135,9 @@ namespace c3d
 		 *\param[in]		shaderStages	Les indicateurs de shader stage.
 		 *\param[in,out]	index			L'indice de binding.
 		 */
-		C3D_API void addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index )const;
+		C3D_API void addSpecificsBuffersLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags shaderStages )const;
 		/**
 		 *\~english
 		 *\brief			Writes the pass' specific data buffer into the given descriptor writes array.
@@ -148,7 +148,7 @@ namespace c3d
 		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes des buffers.
 		 *\param[in,out]	index				L'indice de binding.
 		 */
-		C3D_API void addSpecificsBuffersDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void addSpecificsBuffersDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 		/**
 		 *\~english
@@ -283,10 +283,10 @@ namespace c3d
 			*	Descriptor layout / set.
 			*/
 			/**@{*/
-			void addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-				, VkShaderStageFlags shaderStages
-				, uint32_t & index )const;
-			void addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			void addLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+				, uint32_t & index
+				, VkShaderStageFlags shaderStages )const;
+			void addDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 				, uint32_t & index )const;
 			void createPassBindings( crg::FramePass & pass
 				, uint32_t & index )const;

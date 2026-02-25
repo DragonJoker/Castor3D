@@ -1270,17 +1270,17 @@ namespace c3d
 		m_materialCache->unregisterSpecificsBuffer( name );
 	}
 
-	void Engine::addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, VkShaderStageFlags shaderStages
-		, uint32_t & index )const
+	void Engine::addSpecificsBuffersLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index
+		, VkShaderStageFlags shaderStages )const
 	{
-		m_materialCache->addSpecificsBuffersBindings( bindings, shaderStages, index );
+		m_materialCache->addSpecificsBuffersLayoutBindings( bindings, index, shaderStages );
 	}
 
-	void Engine::addSpecificsBuffersDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void Engine::addSpecificsBuffersDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		m_materialCache->addSpecificsBuffersDescriptors( descriptorWrites, index );
+		m_materialCache->addSpecificsBuffersDescriptorWrites( descriptorWrites, index );
 	}
 
 	void Engine::createSpecificsBuffersPassBindings( crg::FramePass & pass

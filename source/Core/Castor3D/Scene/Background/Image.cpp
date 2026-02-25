@@ -224,7 +224,7 @@ namespace c3d
 		++index;
 	}
 
-	void ImageBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void ImageBackground::doAddLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
@@ -234,7 +234,7 @@ namespace c3d
 		++index;
 	}
 
-	void ImageBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void ImageBackground::doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
 		, uint32_t & index )const
 	{

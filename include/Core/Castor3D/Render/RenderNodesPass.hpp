@@ -708,25 +708,25 @@ namespace c3d
 		 */
 		C3D_API virtual void doAccept( RenderTechniqueVisitor & visitor );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
-		C3D_API void doAddShadowBindings( Scene const & scene
+		C3D_API void doAddShadowLayoutBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddBackgroundBindings( Scene const & scene
+		C3D_API void doAddBackgroundLayoutBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddClusteredLightingBindings( RenderTarget const & target
+		C3D_API void doAddClusteredLightingLayoutBindings( RenderTarget const & target
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddShadowDescriptor( Scene const & scene
+		C3D_API void doAddShadowDescriptorWrites( Scene const & scene
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, uint32_t & index )const;
-		C3D_API void doAddBackgroundDescriptor( Scene const & scene
+		C3D_API void doAddBackgroundDescriptorWrites( Scene const & scene
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, Texture * targetImage
 			, uint32_t & index )const;
-		C3D_API void doAddClusteredLightingDescriptor( RenderTarget const & target
+		C3D_API void doAddClusteredLightingDescriptorWrites( RenderTarget const & target
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 

@@ -287,7 +287,7 @@ namespace c3d
 		*\param	index
 		*	L'indice de départ des bindings.
 		*/
-		C3D_API void addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void addLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const;
 		/**
@@ -310,7 +310,7 @@ namespace c3d
 		*\param	index
 		*	L'indice de départ des descripteurs.
 		*/
-		C3D_API void addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void addDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, Texture * targetImage
 			, uint32_t & index )const;
 		/**
@@ -509,10 +509,10 @@ namespace c3d
 		virtual void doAddPassBindings( crg::FramePass & pass
 			, Texture * targetImage
 			, uint32_t & index )const = 0;
-		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		virtual void doAddLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const = 0;
-		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		virtual void doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, Texture * targetImage
 			, uint32_t & index )const = 0;
 	};

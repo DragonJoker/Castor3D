@@ -83,10 +83,8 @@ namespace c3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsBindings( bindings, index );
-		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index ) );
-		++index;
+		doAddPassSpecificsLayoutBindings( bindings, index );
+		m_scene.getLightCache().addLayoutBinding( bindings, VK_SHADER_STAGE_FRAGMENT_BIT, index );
 
 		if ( hasSsao() )
 		{
@@ -101,15 +99,13 @@ namespace c3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		++index;
 
-		doAddShadowBindings( m_scene, bindings, index );
-		doAddEnvBindings( bindings, index );
-		doAddBackgroundBindings( m_scene, bindings, index );
-		doAddGIBindings( bindings, index );
+		doAddShadowLayoutBindings( m_scene, bindings, index );
+		doAddEnvLayoutBindings( bindings, index );
+		doAddBackgroundLayoutBindings( m_scene, bindings, index );
+		doAddGILayoutBindings( bindings, index );
 
 		if ( m_parent )
-		{
-			doAddClusteredLightingBindings( m_parent->getRenderTarget(), bindings, index );
-		}
+			doAddClusteredLightingLayoutBindings( m_parent->getRenderTarget(), bindings, index );
 
 		if ( m_mippedColour )
 		{
@@ -135,9 +131,8 @@ namespace c3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsDescriptor( descriptorWrites, index );
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index ) );
-		++index;
+		doAddPassSpecificsDescriptorWrites( descriptorWrites, index );
+		m_scene.getLightCache().addBinding( descriptorWrites, index );
 
 		if ( hasSsao() )
 		{
@@ -151,15 +146,13 @@ namespace c3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
-		doAddEnvDescriptor( descriptorWrites, index );
-		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
-		doAddGIDescriptor( descriptorWrites, index );
+		doAddShadowDescriptorWrites( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
+		doAddEnvDescriptorWrites( descriptorWrites, index );
+		doAddBackgroundDescriptorWrites( m_scene, descriptorWrites, m_targetImage, index );
+		doAddGIDescriptorWrites( descriptorWrites, index );
 
 		if ( m_parent )
-		{
-			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), descriptorWrites, index );
-		}
+			doAddClusteredLightingDescriptorWrites( m_parent->getRenderTarget(), descriptorWrites, index );
 
 		if ( m_mippedColour )
 		{

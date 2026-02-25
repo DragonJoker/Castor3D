@@ -460,7 +460,7 @@ namespace c3d
 		++index;
 	}
 
-	void SkyboxBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void SkyboxBackground::doAddLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
@@ -470,7 +470,7 @@ namespace c3d
 		++index;
 	}
 
-	void SkyboxBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void SkyboxBackground::doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
 		, uint32_t & index )const
 	{

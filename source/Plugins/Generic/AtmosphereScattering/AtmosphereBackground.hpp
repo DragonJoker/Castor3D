@@ -210,15 +210,15 @@ namespace atmosphere_scattering
 			, c3d::Texture * targetImage
 			, uint32_t & index )const override;
 		/**
-		*\copydoc	c3d::SceneBackground::doAddBindings
+		*\copydoc	c3d::SceneBackground::doAddLayoutBindings
 		*/
-		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		void doAddLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const override;
 		/**
-		*\copydoc	c3d::SceneBackground::doAddDescriptors
+		*\copydoc	c3d::SceneBackground::doAddDescriptorWrites
 		*/
-		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		void doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, c3d::Texture * targetImage
 			, uint32_t & index )const override;
 

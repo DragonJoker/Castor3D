@@ -183,16 +183,11 @@ namespace c3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index ) );
-		++index;
+		m_scene.getLightCache().addLayoutBinding( bindings, VK_SHADER_STAGE_FRAGMENT_BIT, index );
 		m_voxelizerUbo.addLayoutBinding( bindings, index, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		++index;
-		doAddShadowBindings( m_scene, bindings, index );
-		doAddBackgroundBindings( m_scene, bindings, index );
+		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
+		doAddShadowLayoutBindings( m_scene, bindings, index );
+		doAddBackgroundLayoutBindings( m_scene, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -218,8 +213,8 @@ namespace c3d
 		++index;
 		m_voxelizerUbo.addDescriptorWrite( descriptorWrites, index );
 		bindBuffer( *m_voxels.buffer, descriptorWrites, index );
-		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
-		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
+		doAddShadowDescriptorWrites( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
+		doAddBackgroundDescriptorWrites( m_scene, descriptorWrites, m_targetImage, index );
 	}
 
 	void VoxelizePass::doGetSubmeshShaderSource( PipelineFlags const & flags
