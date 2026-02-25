@@ -66,9 +66,9 @@ namespace c3d
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, VkShaderStageFlags shaderStages
-		, uint32_t & index )const
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index
+		, VkShaderStageFlags shaderStages )const
 	{
 		for ( auto & [name, buffer] : m_buffers )
 		{
@@ -77,7 +77,7 @@ namespace c3d
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		for ( auto & [name, buffer] : m_buffers )
@@ -248,17 +248,17 @@ namespace c3d
 		m_specificsBuffers.unregisterBuffer( name );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, VkShaderStageFlags shaderStages
-		, uint32_t & index )const
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::addSpecificsBuffersLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index
+		, VkShaderStageFlags shaderStages )const
 	{
-		m_specificsBuffers.addBindings( bindings, shaderStages, index );
+		m_specificsBuffers.addLayoutBindings( bindings, index, shaderStages );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::addSpecificsBuffersDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::addSpecificsBuffersDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		m_specificsBuffers.addDescriptors( descriptorWrites, index );
+		m_specificsBuffers.addDescriptorWrites( descriptorWrites, index );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::createSpecificsBuffersPassBindings( crg::FramePass & pass

@@ -869,7 +869,7 @@ namespace atmosphere_scattering
 		}
 	}
 
-	void AtmosphereBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void AtmosphereBackground::doAddLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
@@ -899,7 +899,7 @@ namespace atmosphere_scattering
 			, shaderStages );	// c3d_mapClouds
 	}
 
-	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void AtmosphereBackground::doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, c3d::Texture * targetImage
 		, uint32_t & index )const
 	{

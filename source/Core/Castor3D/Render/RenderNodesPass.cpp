@@ -453,6 +453,7 @@ namespace c3d
 			auto & descriptorSet = *descriptors.set;
 			ashes::WriteDescriptorSetArray descriptorWrites;
 
+			// Common bindings
 			m_cameraUbo.addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eCamera );
 			m_renderUbo.addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eRender );
 			if ( m_sceneUbo )
@@ -495,17 +496,19 @@ namespace c3d
 					, 0u, billboardDatas.getSize() };
 			}
 
+			//
 			auto index = uint32_t( GlobalBuffersIdx::eCount );
 
+			// Submesh bindings
 			if ( auto submeshData = pipeline.getFlags().submeshData )
 			{
 				submeshData->fillDescriptor( pipeline.getFlags(), descriptorWrites, index );
 			}
 
-			doFillAdditionalDescriptor( pipeline.getFlags()
-				, descriptorWrites
-				, shadowMaps
-				, shadowBuffer );
+			// Specific bindings
+			doFillAdditionalDescriptor( pipeline.getFlags(), descriptorWrites, shadowMaps, shadowBuffer );
+
+			//
 			descriptorSet.setBindings( descriptorWrites );
 			descriptorSet.update();
 		}
@@ -537,47 +540,47 @@ namespace c3d
 	{
 	}
 
-	void RenderNodesPass::doAddShadowBindings( Scene const & scene
+	void RenderNodesPass::doAddShadowLayoutBindings( Scene const & scene
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		if ( scene.hasShadows() )
 		{
-			addShadowBindings( doAdjustSceneFlags( scene.getFlags() )
+			addShadowLayoutBindings( doAdjustSceneFlags( scene.getFlags() )
 				, bindings
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, index );
 		}
 	}
 
-	void RenderNodesPass::doAddBackgroundBindings( Scene const & scene
+	void RenderNodesPass::doAddBackgroundLayoutBindings( Scene const & scene
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		if ( auto background = scene.getBackground() )
 		{
-			addBackgroundBindings( *background
+			addBackgroundLayoutBindings( *background
 				, bindings
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, index );
 		}
 	}
 
-	void RenderNodesPass::doAddClusteredLightingBindings( RenderTarget const & target
+	void RenderNodesPass::doAddClusteredLightingLayoutBindings( RenderTarget const & target
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		if (target.getFrustumClusters()
 			&& allowClusteredLighting( target.getFrustumClusters()->getConfig() ) )
 		{
-			addClusteredLightingBindings( *target.getFrustumClusters()
+			addClusteredLightingLayoutBindings( *target.getFrustumClusters()
 				, bindings
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, index );
 		}
 	}
 
-	void RenderNodesPass::doAddShadowDescriptor( Scene const & scene
+	void RenderNodesPass::doAddShadowDescriptorWrites( Scene const & scene
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer
@@ -585,7 +588,7 @@ namespace c3d
 	{
 		if ( shadowBuffer )
 		{
-			addShadowDescriptor( *getEngine()->getRenderSystem()
+			addShadowDescriptorWrites( *getEngine()->getRenderSystem()
 				, getGraph()
 				, doAdjustSceneFlags( scene.getFlags() )
 				, descriptorWrites
@@ -595,28 +598,28 @@ namespace c3d
 		}
 	}
 
-	void RenderNodesPass::doAddBackgroundDescriptor( Scene const & scene
+	void RenderNodesPass::doAddBackgroundDescriptorWrites( Scene const & scene
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
 		, uint32_t & index )const
 	{
 		if ( auto background = scene.getBackground() )
 		{
-			addBackgroundDescriptor( *background
+			addBackgroundDescriptorWrites( *background
 				, descriptorWrites
 				, targetImage
 				, index );
 		}
 	}
 
-	void RenderNodesPass::doAddClusteredLightingDescriptor( RenderTarget const & target
+	void RenderNodesPass::doAddClusteredLightingDescriptorWrites( RenderTarget const & target
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		if ( target.getFrustumClusters()
 			&& allowClusteredLighting( target.getFrustumClusters()->getConfig() ) )
 		{
-			addClusteredLightingDescriptor( *target.getFrustumClusters()
+			addClusteredLightingDescriptorWrites( *target.getFrustumClusters()
 				, descriptorWrites
 				, index );
 		}

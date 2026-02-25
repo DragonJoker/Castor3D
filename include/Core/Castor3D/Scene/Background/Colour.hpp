@@ -83,10 +83,10 @@ namespace c3d
 		void doAddPassBindings( crg::FramePass & pass
 			, Texture * targetImage
 			, uint32_t & index )const override;
-		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		void doAddLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const override;
-		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		void doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, Texture * targetImage
 			, uint32_t & index )const override;
 

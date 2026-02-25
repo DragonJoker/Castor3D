@@ -114,7 +114,7 @@ namespace c3d
 			, textureCombine );
 	}
 
-	void NodesPass::addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void NodesPass::addShadowLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
 	{
@@ -144,7 +144,7 @@ namespace c3d
 			, shaderStages );
 	}
 
-	void NodesPass::addShadowBindings( SceneFlags const & sceneFlags
+	void NodesPass::addShadowLayoutBindings( SceneFlags const & sceneFlags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
@@ -184,15 +184,15 @@ namespace c3d
 		}
 	}
 
-	void NodesPass::addBackgroundBindings( SceneBackground const & background
+	void NodesPass::addBackgroundLayoutBindings( SceneBackground const & background
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
 	{
-		background.addBindings( bindings, shaderStages, index );
+		background.addLayoutBindings( bindings, shaderStages, index );
 	}
 
-	void NodesPass::addGIBindings( SceneFlags sceneFlags
+	void NodesPass::addGILayoutBindings( SceneFlags sceneFlags
 		, IndirectLightingData const & indirectLighting
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
@@ -283,7 +283,7 @@ namespace c3d
 		}
 	}
 
-	void NodesPass::addClusteredLightingBindings( FrustumClusters const & frustumClusters
+	void NodesPass::addClusteredLightingLayoutBindings( FrustumClusters const & frustumClusters
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
@@ -307,7 +307,7 @@ namespace c3d
 			, shaderStages );
 	}
 
-	void NodesPass::addShadowDescriptor( RenderSystem const & renderSystem
+	void NodesPass::addShadowDescriptorWrites( RenderSystem const & renderSystem
 		, crg::RunnableGraph & graph
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
@@ -345,7 +345,7 @@ namespace c3d
 #endif
 	}
 
-	void NodesPass::addShadowDescriptor( RenderSystem const & renderSystem
+	void NodesPass::addShadowDescriptorWrites( RenderSystem const & renderSystem
 		, crg::RunnableGraph & graph
 		, SceneFlags const & sceneFlags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -393,17 +393,17 @@ namespace c3d
 #endif
 	}
 
-	void NodesPass::addBackgroundDescriptor( SceneBackground const & background
+	void NodesPass::addBackgroundDescriptorWrites( SceneBackground const & background
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
 		, uint32_t & index )
 	{
-		background.addDescriptors( descriptorWrites
+		background.addDescriptorWrites( descriptorWrites
 			, targetImage
 			, index );
 	}
 
-	void NodesPass::addGIDescriptor( SceneFlags sceneFlags
+	void NodesPass::addGIDescriptorWrites( SceneFlags sceneFlags
 		, IndirectLightingData const & indirectLighting
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )
@@ -510,7 +510,7 @@ namespace c3d
 		}
 	}
 
-	void NodesPass::addClusteredLightingDescriptor( FrustumClusters const & frustumClusters
+	void NodesPass::addClusteredLightingDescriptorWrites( FrustumClusters const & frustumClusters
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )
 	{

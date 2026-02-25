@@ -1570,12 +1570,8 @@ namespace c3d
 
 			auto const & engine = c3d::getEngine( device );
 			auto index = uint32_t( InOutBindings::eCount );
-			engine.addSpecificsBuffersBindings( bindings
-				, stages
-				, index );
-			bindings.emplace_back( scene.getLightCache().createLayoutBinding( stages
-				, index ) );
-			++index;
+			engine.addSpecificsBuffersLayoutBindings( bindings, index, stages );
+			scene.getLightCache().addLayoutBinding( bindings, stages, index );
 
 			if ( ssao )
 			{
@@ -1586,7 +1582,7 @@ namespace c3d
 			}
 
 			if ( technique.hasShadowBuffer() )
-				RenderNodesPass::addShadowBindings( bindings
+				RenderNodesPass::addShadowLayoutBindings( bindings
 					, stages
 					, index );
 
@@ -1596,12 +1592,12 @@ namespace c3d
 			++index;
 
 			if ( auto background = scene.getBackground() )
-				RenderNodesPass::addBackgroundBindings( *background
+				RenderNodesPass::addBackgroundLayoutBindings( *background
 					, bindings
 					, stages
 					, index );
 
-			RenderNodesPass::addGIBindings( scene.getFlags()
+			RenderNodesPass::addGILayoutBindings( scene.getFlags()
 				, *indirectLighting
 				, bindings
 				, stages
@@ -1609,7 +1605,7 @@ namespace c3d
 
 			if ( allowClusteredLighting
 				&& technique.getRenderTarget().getFrustumClusters() )
-				RenderNodesPass::addClusteredLightingBindings( *technique.getRenderTarget().getFrustumClusters()
+				RenderNodesPass::addClusteredLightingLayoutBindings( *technique.getRenderTarget().getFrustumClusters()
 					, bindings
 					, stages
 					, index );
@@ -1682,10 +1678,8 @@ namespace c3d
 			}
 
 			auto index = uint32_t( InOutBindings::eCount );
-			engine.addSpecificsBuffersDescriptors( writes, index );
-			writes.push_back( scene.getLightCache().getBinding( index ) );
-			++index;
-
+			engine.addSpecificsBuffersDescriptorWrites( writes, index );
+			scene.getLightCache().addBinding( writes, index );
 			if ( ssao )
 				bindTexture( ssao->getSampledView()
 					, *ssao->sampler
@@ -1693,7 +1687,7 @@ namespace c3d
 					, index );
 
 			if ( technique.hasShadowBuffer() )
-				RenderNodesPass::addShadowDescriptor( *engine.getRenderSystem()
+				RenderNodesPass::addShadowDescriptorWrites( *engine.getRenderSystem()
 					, graph
 					, writes
 					, technique.getShadowMaps()
@@ -1706,19 +1700,19 @@ namespace c3d
 				, index );
 
 			if ( auto background = scene.getBackground() )
-				RenderNodesPass::addBackgroundDescriptor( *background
+				RenderNodesPass::addBackgroundDescriptorWrites( *background
 					, writes
 					, &targetImage
 					, index );
 
-			RenderNodesPass::addGIDescriptor( scene.getFlags()
+			RenderNodesPass::addGIDescriptorWrites( scene.getFlags()
 				, *indirectLighting
 				, writes
 				, index );
 
 			if ( clustersCameraUbo
 				&& technique.getRenderTarget().getFrustumClusters() )
-				RenderNodesPass::addClusteredLightingDescriptor( *technique.getRenderTarget().getFrustumClusters()
+				RenderNodesPass::addClusteredLightingDescriptorWrites( *technique.getRenderTarget().getFrustumClusters()
 					, writes
 					, index );
 

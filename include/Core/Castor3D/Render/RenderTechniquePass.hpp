@@ -370,17 +370,17 @@ namespace c3d
 		C3D_API void doAccept( RenderTechniqueVisitor & visitor )override;
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddEnvLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddGILayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddPassSpecificsLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddEnvDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
-		C3D_API void doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddGIDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
-		C3D_API void doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddPassSpecificsDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
 	private:

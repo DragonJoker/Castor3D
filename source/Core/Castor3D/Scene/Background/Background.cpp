@@ -522,11 +522,11 @@ namespace c3d
 		}
 	}
 
-	void SceneBackground::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void SceneBackground::addLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		doAddBindings( bindings, shaderStages, index );
+		doAddLayoutBindings( bindings, shaderStages, index );
 
 		if ( hasIbl() )
 		{
@@ -545,11 +545,11 @@ namespace c3d
 		}
 	}
 
-	void SceneBackground::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void SceneBackground::addDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		doAddDescriptors( descriptorWrites, targetImage, index );
+		doAddDescriptorWrites( descriptorWrites, targetImage, index );
 
 		if ( hasIbl() )
 		{
