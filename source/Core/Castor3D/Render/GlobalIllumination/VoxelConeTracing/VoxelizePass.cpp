@@ -186,10 +186,7 @@ namespace c3d
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
 			, index ) );
 		++index;
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		++index;
+		m_voxelizerUbo.addLayoutBinding( bindings, index, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -219,8 +216,7 @@ namespace c3d
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index ) );
 		++index;
-		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index ) );
-		++index;
+		m_voxelizerUbo.addDescriptorWrite( descriptorWrites, index );
 		bindBuffer( *m_voxels.buffer, descriptorWrites, index );
 		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );

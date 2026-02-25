@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "PbrBloomPostEffect/UpsamplePass.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 namespace PbrBloom
 {
@@ -23,6 +24,7 @@ namespace PbrBloom
 		PostEffect( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & param );
+
 		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & param );
@@ -66,7 +68,7 @@ namespace PbrBloom
 		c3d::RawUniquePtr< DownsamplePass > m_downsamplePass;
 		c3d::RawUniquePtr< UpsamplePass > m_upsamplePass;
 		c3d::RawUniquePtr< CombinePass > m_combinePass;
-		c3d::UniformBufferOffsetT< c3d::Point2f > m_ubo;
+		c3d::UboT< c3d::Point2f > m_ubo;
 		uint32_t m_blurRadius{ BaseBlurRadius };
 		float m_bloomStrength{ BaseBloomStrength };
 		uint32_t m_duPassesCount{ BaseFilterCount };

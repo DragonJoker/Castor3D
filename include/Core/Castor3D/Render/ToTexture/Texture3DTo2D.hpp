@@ -6,10 +6,9 @@ See LICENSE file in root folder
 
 #include "RenderToTextureModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -57,7 +56,7 @@ namespace c3d
 		CameraUbo const & m_cameraUbo;
 		Texture m_target;
 		Texture m_depthBuffer;
-		UniformBufferOffsetT< Texture3DTo2DData > m_uniformBuffer;
+		UboT< Texture3DTo2DData > m_uniformBuffer;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		SamplerUPtr m_sampler;

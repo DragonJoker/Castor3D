@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3DDE_DrawEdgesUbo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 #include <ShaderWriter/BaseTypes/Int.hpp>
@@ -48,50 +48,20 @@ namespace draw_edges
 	};
 
 	class DrawEdgesUbo
+		: public c3d::UboT< DrawEdgesUboConfiguration >
 	{
 	private:
 		using Configuration = DrawEdgesUboConfiguration;
-		DrawEdgesUbo( DrawEdgesUbo const & ) = delete;
-		DrawEdgesUbo & operator=( DrawEdgesUbo const & ) = delete;
-		DrawEdgesUbo( DrawEdgesUbo && )noexcept = delete;
-		DrawEdgesUbo & operator=( DrawEdgesUbo && )noexcept = delete;
 
 	public:
 		explicit DrawEdgesUbo( c3d::RenderDevice const & device );
-		~DrawEdgesUbo();
+
 		void cpuUpdate( int normalDepthWidth
 			, int objectWidth );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
 
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

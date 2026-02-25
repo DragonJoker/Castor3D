@@ -54,9 +54,8 @@ namespace c3d
 		OverlayPipelineData & getDrawPipelineData( OverlayDrawPipeline const & pipeline
 			, FontTexture const * fontTexture
 			, ashes::DescriptorSet const * textDescriptorSet );
-		void fillComputeDescriptorSet( FontTexture const * fontTexture
-			, ashes::DescriptorSetLayout const & descriptorLayout
-			, ashes::DescriptorSet & descriptorSet )const;
+		void fillComputeDescriptorWrites( FontTexture const * fontTexture
+			, ashes::WriteDescriptorSetArray & descriptorWrites )const;
 		OverlayTextBuffer const * getTextBuffer( FontTexture const & fontTexture )const;
 
 		Engine & engine;

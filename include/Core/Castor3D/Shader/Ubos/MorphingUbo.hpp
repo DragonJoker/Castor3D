@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MorphingUbo_H___
 #define ___C3D_MorphingUbo_H___
 
-#include "UbosModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"

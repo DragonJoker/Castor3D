@@ -4,11 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningUbo_H___
 #define ___C3D_SkinningUbo_H___
 
-#include "UbosModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 

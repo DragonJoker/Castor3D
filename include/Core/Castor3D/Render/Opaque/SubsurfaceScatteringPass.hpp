@@ -8,8 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -106,8 +105,8 @@ namespace c3d
 		Texture m_intermediate;
 		Array< Texture, 3u > m_blurImages;
 		Texture m_result;
-		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
-		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;
+		UboT< BlurConfiguration > m_blurCfgUbo;
+		UboT< BlurWeights > m_blurWgtUbo;
 		ProgramModule m_blurHorizProgram;
 		ashes::PipelineShaderStageCreateInfoArray m_blurXShader;
 		ProgramModule m_blurVerticProgram;

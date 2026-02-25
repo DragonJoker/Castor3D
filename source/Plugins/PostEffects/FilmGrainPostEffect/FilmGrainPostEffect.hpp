@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
@@ -33,7 +34,7 @@ namespace film_grain
 		PostEffect( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
-		~PostEffect()override;
+
 		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
@@ -78,7 +79,7 @@ namespace film_grain
 		c3d::Milliseconds m_time{ 0ull };
 		uint32_t m_timeIndex{ 0u };
 		Configuration m_config;
-		c3d::UniformBufferOffsetT< Configuration > m_configUbo;
+		c3d::UboT< Configuration > m_configUbo;
 		c3d::Array< c3d::Image, NoiseMapCount > m_noiseImages;
 		crg::ImageId m_noiseImg;
 		crg::ImageViewId m_noiseView;

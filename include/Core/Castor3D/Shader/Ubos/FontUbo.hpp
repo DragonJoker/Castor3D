@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FontUbo_H___
 #define ___C3D_FontUbo_H___
 
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
@@ -37,15 +36,13 @@ namespace c3d
 	}
 
 	class FontUbo
+		: public UboT< FontUboConfiguration >
 	{
 	public:
 		using Configuration = FontUboConfiguration;
-		C3D_API FontUbo( FontUbo const & rhs ) = delete;
-		C3D_API FontUbo & operator=( FontUbo const & rhs ) = delete;
-		C3D_API FontUbo( FontUbo && rhs )noexcept = delete;
-		C3D_API FontUbo & operator=( FontUbo && rhs )noexcept = delete;
+
+	public:
 		C3D_API explicit FontUbo( RenderDevice const & device );
-		C3D_API ~FontUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -61,33 +58,6 @@ namespace c3d
 		C3D_API void cpuUpdate( Size const & imgSize
 			, bool sdfFont
 			, float pixelRange );
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

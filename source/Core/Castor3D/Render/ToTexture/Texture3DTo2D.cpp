@@ -228,25 +228,22 @@ namespace c3d
 			, IntermediateView const & texture3D
 			, std::string const & suffix )
 		{
-			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" + suffix );
-			uniformBuffer.createSizedBinding( *descriptorSet
-				, pool.getLayout().getBinding( uint32_t( Bindings::eGridUbo ) ) );
+			ashes::WriteDescriptorSetArray writes;
+			uniformBuffer.addDescriptorWriteT( writes, Bindings::eGridUbo );
 			auto & context = device.makeContext();
 
 			if ( !sampler )
 			{
-				cameraUbo.createSizedBinding( *descriptorSet
-					, pool.getLayout().getBinding( uint32_t( Bindings::eCameraUbo ) ) );
-				descriptorSet->createBinding( pool.getLayout().getBinding( uint32_t( Bindings::eSource ) )
-					, resources.createImageView( context, texture3D.viewId ) );
+				cameraUbo.addDescriptorWriteT( writes, Bindings::eCameraUbo );
+				writes.push_back( makeStorageImageDescriptorWrite( resources.createImageView( context, texture3D.viewId ), Bindings::eSource ) );
 			}
 			else
 			{
-				descriptorSet->createBinding( pool.getLayout().getBinding( uint32_t( Bindings::eSource ) )
-					, resources.createImageView( context, texture3D.viewId )
-					, sampler->getSampler() );
+				writes.push_back( makeImageViewDescriptorWrite( resources.createImageView( context, texture3D.viewId ), sampler->getSampler(), Bindings::eSource ) );
 			}
 
+			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" + suffix );
+			descriptorSet->setBindings( c3d::move( writes ) );
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -760,7 +757,7 @@ namespace c3d
 		, m_cameraUbo{ cameraUbo }
 		, m_target{ t3dto2d::createTarget( device, resources, size ) }
 		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, resources, m_target ) }
-		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( MemoryPropertyFlags::eNone ) }
+		, m_uniformBuffer{ device }
 		, m_renderPass{ t3dto2d::createRenderPass( device, cuT( "Texture3DTo2D" ), m_target, m_depthBuffer ) }
 		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, cuT( "Texture3DTo2D" ), m_target, m_depthBuffer ) }
 		, m_sampler{ makeUnique< Sampler >( cuT( "Slice" )
@@ -795,7 +792,6 @@ namespace c3d
 		m_sampler->cleanup();
 		m_depthBuffer.destroy();
 		m_target.destroy();
-		m_device.uboPool->putBuffer( m_uniformBuffer );
 	}
 
 	void Texture3DTo2D::createPasses( QueueData const & queueData
@@ -819,7 +815,7 @@ namespace c3d
 					m_texture3DToScreen.emplace_back( m_device
 						, queueData
 						, m_resources
-						, m_uniformBuffer
+						, m_uniformBuffer.getUbo()
 						, m_cameraUbo
 						, intermediate
 						, *m_renderPass
@@ -888,7 +884,7 @@ namespace c3d
 					m_texture3DToScreen.emplace_back( m_device
 						, queueData
 						, m_resources
-						, m_uniformBuffer
+						, m_uniformBuffer.getUbo()
 						, m_cameraUbo
 						, intermediate
 						, *m_renderPass
@@ -912,20 +908,22 @@ namespace c3d
 
 		if ( m_textures[m_index].factors.isSlice )
 		{
-			auto & data = m_uniformBuffer.getData();
+			auto data = m_uniformBuffer.getData();
 			data.gridCenterCellSize = Point4f{ 0.0f
 				, 0.0f
 				, m_textures[m_index].factors.slice
 				, m_textures[m_index].viewId.data->image.data->info.extent.depth - 1u };
+			m_uniformBuffer.setData( c3d::move( data ) );
 		}
 		else if ( updater.cellSize != 0.0f )
 		{
-			auto & data = m_uniformBuffer.getData();
+			auto data = m_uniformBuffer.getData();
 			data.gridCenterCellSize = Point4f{ updater.gridCenter->x
 				, updater.gridCenter->y
 				, updater.gridCenter->z
 				, updater.cellSize };
 			data.gridSize = getExtent( m_textures[m_index].viewId ).width;
+			m_uniformBuffer.setData( c3d::move( data ) );
 		}
 	}
 

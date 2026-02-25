@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
@@ -27,7 +27,6 @@ namespace c3d
 		: public OwnedBy< Engine >
 	{
 	public:
-		C3D_API ~GaussianBlur()noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -146,7 +145,7 @@ namespace c3d
 		Extent2D m_size;
 		PixelFormat m_format;
 		crg::ImageViewId m_intermediateView;
-		UniformBufferOffsetT< Configuration > m_blurUbo;
+		UboT< Configuration > m_blurUbo;
 		Vector< float > m_kernel;
 		ProgramModule m_shaderX;
 		ProgramModule m_shaderY;

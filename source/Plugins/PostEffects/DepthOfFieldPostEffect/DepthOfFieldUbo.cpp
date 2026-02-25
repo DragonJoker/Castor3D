@@ -1,8 +1,6 @@
 #include "DepthOfFieldPostEffect/DepthOfFieldUbo.hpp"
 #include "DepthOfFieldPostEffect/DepthOfFieldPostEffect.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
@@ -212,14 +210,8 @@ namespace dof
 	c3d::MbString const DepthOfFieldUbo::Data = "c3d_dofData";
 
 	DepthOfFieldUbo::DepthOfFieldUbo( c3d::RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-
-	DepthOfFieldUbo::~DepthOfFieldUbo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void DepthOfFieldUbo::cpuUpdate( DepthOfFieldConfig const & data )
@@ -257,7 +249,7 @@ namespace dof
 		};
 		static Points points;
 
-		auto & dst = m_ubo.getData();
+		auto & dst = getNCData();
 		dst.focalDistance = data.focalDistance.value();
 		dst.focalLength = data.focalLength.value();
 		dst.bokehScale = data.bokehScale.value();

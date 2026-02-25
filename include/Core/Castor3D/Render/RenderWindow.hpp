@@ -575,7 +575,7 @@ namespace c3d
 		Texture3DTo2DUPtr m_texture3Dto2D;
 		IntermediateView m_tex3DTo2DIntermediate;
 		Vector< IntermediateCommand > m_intermediates;
-		UniformBufferOffsetT< Configuration > m_configUbo;
+		UboT< Configuration > m_configUbo;
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
 		RecursiveMutex m_renderMutex;

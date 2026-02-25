@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslGlobalIllumination_H___
 #define ___C3D_GlslGlobalIllumination_H___
 
-#include "SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"

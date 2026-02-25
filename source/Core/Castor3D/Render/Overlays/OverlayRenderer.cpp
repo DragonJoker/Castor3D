@@ -401,16 +401,10 @@ namespace c3d
 			, 1u );
 		result.descriptorSet = result.descriptorPool->createDescriptorSet( "PanelOverlayCompute" );
 		ashes::WriteDescriptorSetArray setBindings;
-		cameraUbo.createSizedBinding( *result.descriptorSet
-			, result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eCamera ) ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eOverlays ) )
-			, vertexBuffer.overlaysData->getBuffer()
-			, 0u
-			, uint32_t( vertexBuffer.overlaysData->getSize() ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eVertex ) )
-			, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
-			, 0u
-			, uint32_t( vertexBuffer.vertexBuffer.getBuffer().getBuffer().getSize() ) );
+		cameraUbo.addDescriptorWriteT( setBindings, PanelOverlay::ComputeBindingIdx::eCamera );
+		setBindings.push_back( makeStorageBufferDescriptorWrite( *vertexBuffer.overlaysData, PanelOverlay::ComputeBindingIdx::eOverlays ) );
+		setBindings.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.vertexBuffer.getBuffer(), PanelOverlay::ComputeBindingIdx::eVertex ) );
+		result.descriptorSet->setBindings( c3d::move( setBindings ) );
 		result.descriptorSet->update();
 
 		return result;
@@ -447,16 +441,10 @@ namespace c3d
 			, 1u );
 		result.descriptorSet = result.descriptorPool->createDescriptorSet( name );
 		ashes::WriteDescriptorSetArray setBindings;
-		cameraUbo.createSizedBinding( *result.descriptorSet
-			, result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eCamera ) ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eOverlays ) )
-			, vertexBuffer.overlaysData->getBuffer()
-			, 0u
-			, uint32_t( vertexBuffer.overlaysData->getSize() ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eVertex ) )
-			, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
-			, 0u
-			, uint32_t( vertexBuffer.vertexBuffer.getBuffer().getBuffer().getSize() ) );
+		cameraUbo.addDescriptorWriteT( setBindings, BorderPanelOverlay::ComputeBindingIdx::eCamera );
+		setBindings.push_back( makeStorageBufferDescriptorWrite( *vertexBuffer.overlaysData, BorderPanelOverlay::ComputeBindingIdx::eOverlays ) );
+		setBindings.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.vertexBuffer.getBuffer(), BorderPanelOverlay::ComputeBindingIdx::eVertex ) );
+		result.descriptorSet->setBindings( c3d::move( setBindings ) );
 		result.descriptorSet->update();
 
 		return result;
@@ -510,27 +498,17 @@ namespace c3d
 
 	ashes::DescriptorSetPtr OverlayRenderer::OverlaysComputeData::doGetTextDescriptorSet( FontTexture const & fontTexture )
 	{
+		ashes::WriteDescriptorSetArray setBindings;
+		m_commonData.cameraUbo.addDescriptorWriteT( setBindings, TextOverlay::ComputeBindingIdx::eCamera );
+		m_commonData.textVertexBuffer->renderUbo.addDescriptorWriteT( setBindings, TextOverlay::ComputeBindingIdx::eRender );
+		setBindings.push_back( makeStorageBufferDescriptorWrite( *m_commonData.textVertexBuffer->overlaysData, TextOverlay::ComputeBindingIdx::eOverlays ) );
+		m_commonData.textVertexBuffer->fillComputeDescriptorWrites( &fontTexture, setBindings );
+		setBindings.push_back( makeStorageBufferDescriptorWrite( m_commonData.textVertexBuffer->vertexBuffer.getBuffer(), TextOverlay::ComputeBindingIdx::eVertex ) );
+
 		MbString name = "TextOverlayCompute-" + toUtf8( fontTexture.getFontName() );
 		auto result = textPipeline.descriptorPool->createDescriptorSet( name );
-		auto const & descriptorLayout = *textPipeline.descriptorLayout;
-		auto & descriptorSet = *result;
-		ashes::WriteDescriptorSetArray setBindings;
-		m_commonData.cameraUbo.createSizedBinding( descriptorSet
-			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera ) ) );
-		m_commonData.textVertexBuffer->renderUbo.createSizedBinding( descriptorSet
-			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eRender ) ) );
-		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays ) )
-			, m_commonData.textVertexBuffer->overlaysData->getBuffer()
-			, 0u
-			, uint32_t( m_commonData.textVertexBuffer->overlaysData->getSize() ) );
-		m_commonData.textVertexBuffer->fillComputeDescriptorSet( &fontTexture
-			, descriptorLayout
-			, descriptorSet );
-		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex ) )
-			, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
-			, 0u
-			, uint32_t( m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
-		descriptorSet.update();
+		result->setBindings( c3d::move( setBindings ) );
+		result->update();
 		return result;
 	}
 

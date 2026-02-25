@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
-#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -173,8 +172,7 @@ namespace c3d
 
 	private:
 		C3D_API virtual void doFillDescriptorLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings );
-		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet
+		C3D_API virtual void doFillDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t face );
 		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer
 			, uint32_t face )const;

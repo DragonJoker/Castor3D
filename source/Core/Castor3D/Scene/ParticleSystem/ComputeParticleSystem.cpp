@@ -292,24 +292,13 @@ namespace c3d
 			, uint32_t outIndex )
 		{
 			auto & randomStorage = device.renderSystem.getRandomStorage();
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::IndexBufferBinding )
-				, *m_generatedCountBuffer->buffer
-				, 0u
-				, uint32_t( m_generatedCountBuffer->getSize() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::RandomBufferBinding )
-				, *randomStorage.buffer
-				, 0u
-				, uint32_t( randomStorage.getSize() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::InParticlesBufferBinding )
-				, *m_particlesStorages[inIndex]->buffer
-				, 0u
-				, uint32_t( m_particlesStorages[inIndex]->getSize() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::OutParticlesBufferBinding )
-				, *m_particlesStorages[outIndex]->buffer
-				, 0u
-				, uint32_t( m_particlesStorages[outIndex]->getSize() ) );
-			m_ubo.createSizedBinding( descriptorSet
-				, m_descriptorLayout->getBinding( compptcl::ParticleSystemBufferBinding ) );
+			ashes::WriteDescriptorSetArray writes;
+			writes.push_back( makeStorageBufferDescriptorWrite( *m_generatedCountBuffer, compptcl::IndexBufferBinding ) );
+			writes.push_back( makeStorageBufferDescriptorWrite( randomStorage, compptcl::RandomBufferBinding ) );
+			writes.push_back( makeStorageBufferDescriptorWrite( *m_particlesStorages[inIndex], compptcl::InParticlesBufferBinding ) );
+			writes.push_back( makeStorageBufferDescriptorWrite( *m_particlesStorages[outIndex], compptcl::OutParticlesBufferBinding ) );
+			m_ubo.addDescriptorWriteT( writes, compptcl::ParticleSystemBufferBinding );
+			descriptorSet.setBindings( c3d::move( writes ) );
 			descriptorSet.update();
 		};
 

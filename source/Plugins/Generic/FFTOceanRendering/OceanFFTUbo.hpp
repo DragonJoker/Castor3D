@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "OceanFFTRenderingPrerequisites.hpp"
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
@@ -68,66 +68,21 @@ namespace ocean_fft
 	};
 
 	class OceanUbo
+		: public c3d::UboT< OceanUboConfiguration >
 	{
 	private:
 		using Configuration = OceanUboConfiguration;
-		OceanUbo( OceanUbo const & ) = delete;
-		OceanUbo & operator=( OceanUbo const & ) = delete;
-		OceanUbo( OceanUbo && )noexcept = delete;
-		OceanUbo & operator=( OceanUbo && )noexcept = delete;
 
 	public:
 		explicit OceanUbo( c3d::RenderDevice const & device );
-		~OceanUbo();
 
 		void cpuUpdate( Configuration const & config
 			, OceanFFTConfig const & fftConfig
 			, c3d::Point3f const & cameraPosition );
 
-		template< typename EnumT >
-		void createPassBinding( crg::FramePass & pass
-			, EnumT binding )const
-		{
-			m_ubo.createPassBinding( pass, uint32_t( binding ) );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		void addDescriptorWrite( ashes::WriteDescriptorSetArray & bindings
-			, uint32_t & dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			bindings.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
-			++dstBinding;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
-
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

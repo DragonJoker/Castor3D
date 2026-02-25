@@ -110,21 +110,11 @@ namespace c3d
 		linesBuffer.allocated = 0u;
 	}
 
-	void OverlayTextBuffer::fillDescriptorSet( ashes::DescriptorSetLayout const & descriptorLayout
-		, ashes::DescriptorSet & descriptorSet )const
+	void OverlayTextBuffer::fillDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites )const
 	{
-		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eChars ) )
-			, *charsBuffer.buffer->buffer
-			, 0u
-			, uint32_t( charsBuffer.buffer->getSize() ) );
-		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eWords ) )
-			, *wordsBuffer.buffer->buffer
-			, 0u
-			, uint32_t( wordsBuffer.buffer->getSize() ) );
-		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eLines ) )
-			, *linesBuffer.buffer->buffer
-			, 0u
-			, uint32_t( linesBuffer.buffer->getSize() ) );
+		descriptorWrites.push_back( makeStorageBufferDescriptorWrite( *charsBuffer.buffer, TextOverlay::ComputeBindingIdx::eChars ) );
+		descriptorWrites.push_back( makeStorageBufferDescriptorWrite( *wordsBuffer.buffer, TextOverlay::ComputeBindingIdx::eWords ) );
+		descriptorWrites.push_back( makeStorageBufferDescriptorWrite( *linesBuffer.buffer, TextOverlay::ComputeBindingIdx::eLines ) );
 	}
 
 	//*************************************************************************
@@ -138,23 +128,18 @@ namespace c3d
 	{
 	}
 
-	void OverlayTextBufferPool::fillDescriptorSet( FontTexture const * fontTexture
-		, ashes::DescriptorSetLayout const & descriptorLayout
-		, ashes::DescriptorSet & descriptorSet )
+	void OverlayTextBufferPool::fillDescriptorWrites( FontTexture const * fontTexture
+		, ashes::WriteDescriptorSetArray & descriptorWrites )
 	{
 		auto it = m_buffers.emplace( fontTexture, nullptr ).first;
-
 		if ( !it->second )
-		{
 			it->second = makeRawUnique< OverlayTextBuffer >( m_engine
 				, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} )
 				, m_device );
-		}
 
-		it->second->fillDescriptorSet( descriptorLayout, descriptorSet );
+		it->second->fillDescriptorWrites( descriptorWrites );
 		if ( fontTexture )
-			fontTexture->getFontUbo().createSizedBinding( descriptorSet
-				, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont ) ) );
+			fontTexture->getFontUbo().addDescriptorWriteT( descriptorWrites, TextOverlay::ComputeBindingIdx::eFont );
 	}
 
 	OverlayTextBufferIndex OverlayTextBufferPool::fill( uint32_t overlayIndex
@@ -166,13 +151,10 @@ namespace c3d
 		try
 		{
 			auto it = m_buffers.emplace( fontTexture, nullptr ).first;
-
 			if ( !it->second )
-			{
 				it->second = makeRawUnique< OverlayTextBuffer >( m_engine
 					, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} )
 					, m_device );
-			}
 
 			result = it->second->fill( overlayIndex, overlay );
 		}
@@ -188,21 +170,16 @@ namespace c3d
 	void OverlayTextBufferPool::upload( UploadData & uploader )const
 	{
 		for ( auto const & [_, buffer] : m_buffers )
-		{
 			buffer->upload( uploader );
-		}
 	}
 
 	OverlayTextBuffer const * OverlayTextBufferPool::get( FontTexture const & fontTexture )
 	{
 		auto it = m_buffers.emplace( &fontTexture, nullptr ).first;
-
 		if ( !it->second )
-		{
 			it->second = makeRawUnique< OverlayTextBuffer >( m_engine
 				, m_name + cuT( "-" ) + fontTexture.getFontName()
 				, m_device );
-		}
 
 		return it->second.get();
 	}

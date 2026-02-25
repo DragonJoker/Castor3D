@@ -4,9 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_VoxelizerUbo_H___
 #define ___C3D_VoxelizerUbo_H___
 
-#include "UbosModule.hpp"
-
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
@@ -122,57 +120,17 @@ namespace c3d
 	};
 
 	class VoxelizerUbo
+		: public UboT< VoxelizerUboConfiguration >
 	{
 	public:
 		using Configuration = VoxelizerUboConfiguration;
 
 	public:
-		C3D_API VoxelizerUbo( VoxelizerUbo const & rhs ) = delete;
-		C3D_API VoxelizerUbo & operator=( VoxelizerUbo const & rhs ) = delete;
-		C3D_API VoxelizerUbo( VoxelizerUbo && rhs )noexcept = delete;
-		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && rhs )noexcept = delete;
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
-		C3D_API ~VoxelizerUbo()noexcept;
 
 		C3D_API void cpuUpdate( VctConfig const & voxelConfig
 			, float worldToGrid
 			, uint32_t voxelGridSize );
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		void addDescriptorWrite( ashes::WriteDescriptorSetArray & descriptorWrites
-			, uint32_t & dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			descriptorWrites.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
-			++dstBinding;
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo{};
 	};
 }
 

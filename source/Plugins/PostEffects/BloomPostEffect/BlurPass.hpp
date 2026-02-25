@@ -6,11 +6,11 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/Passes/GaussianBlur.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 namespace Bloom
 {
-	using UboOffset = c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration >;
-	using UboOffsetArray = c3d::Vector< UboOffset >;
+	using UboArray = c3d::Vector< c3d::UboT< c3d::GaussianBlur::Configuration > >;
 
 	class BlurPass
 	{
@@ -24,7 +24,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool isVertical
 			, bool const * enabled );
-		~BlurPass()noexcept;
+
 		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		void update( uint32_t kernelSize );
@@ -39,7 +39,7 @@ namespace Bloom
 
 	private:
 		c3d::RenderDevice const & m_device;
-		UboOffsetArray m_blurUbo;
+		UboArray m_blurUbos;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		c3d::Texture & m_result;

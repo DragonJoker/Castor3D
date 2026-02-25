@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneUbo_H___
 #define ___C3D_SceneUbo_H___
 
-#include "UbosModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
@@ -55,17 +54,13 @@ namespace c3d
 	}
 
 	class SceneUbo
+		: public UboT< SceneUboConfiguration >
 	{
-	private:
+	public:
 		using Configuration = SceneUboConfiguration;
 
 	public:
-		C3D_API SceneUbo( SceneUbo const & rhs ) = delete;
-		C3D_API SceneUbo & operator=( SceneUbo const & rhs ) = delete;
-		C3D_API SceneUbo( SceneUbo && rhs )noexcept = delete;
-		C3D_API SceneUbo & operator=( SceneUbo && rhs )noexcept = delete;
 		C3D_API explicit SceneUbo( RenderDevice const & device );
-		C3D_API ~SceneUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -84,35 +79,6 @@ namespace c3d
 		 *\param[in]	scene	La scène dessinée.
 		 */
 		C3D_API Configuration & cpuUpdate( Scene const & scene );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		template< typename BindingT >
-		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

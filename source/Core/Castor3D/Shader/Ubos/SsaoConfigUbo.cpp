@@ -1,6 +1,5 @@
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
@@ -31,14 +30,8 @@ namespace c3d
 	//*********************************************************************************************
 
 	SsaoConfigUbo::SsaoConfigUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-
-	SsaoConfigUbo::~SsaoConfigUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void SsaoConfigUbo::cpuUpdate( SsaoConfig const & config
@@ -62,7 +55,7 @@ namespace c3d
 		float const invRadius2 = 1.0f / radius2;
 		float const intersityDivR6 = config.intensity / std::pow( radius, 6.0f );
 
-		auto & configuration = m_ubo.getData();
+		SsaoUboConfiguration & configuration = getNCData();
 		float const projScale = camera.getProjectionScale( renderSize );
 		float const MIN_AO_SS_RADIUS = 1.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS

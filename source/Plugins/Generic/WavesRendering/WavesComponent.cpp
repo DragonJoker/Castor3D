@@ -260,17 +260,14 @@ namespace waves
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		c3d::addDescriptorSetLayoutBinding( bindings, index
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_ALL_GRAPHICS );
+		m_ubo->addLayoutBinding( bindings, index, VK_SHADER_STAGE_ALL_GRAPHICS );
 	}
 
 	void WavesRenderComponent::RenderData::fillDescriptor( c3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		descriptorWrites.push_back( m_ubo->getDescriptorWrite( index ) );
-		++index;
+		m_ubo->addDescriptorWrite( descriptorWrites, index );
 	}
 
 	//*********************************************************************************************

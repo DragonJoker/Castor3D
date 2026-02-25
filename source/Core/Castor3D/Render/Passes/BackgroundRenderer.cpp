@@ -30,18 +30,13 @@ namespace c3d
 		: m_device{ device }
 		, m_colour{ colour }
 		, m_cameraUbo{ m_device }
-		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( MemoryPropertyFlags::eDeviceLocal ) }
+		, m_modelUbo{ m_device, MemoryPropertyFlags::eDeviceLocal }
 	{
 		doCreatePass( graph, background
 			, renderUbo, sceneUbo, m_colour
 			, clearColour, clearDepth, forceVisible
 			, depth, depthObj
 			, progress );
-	}
-
-	BackgroundRenderer::~BackgroundRenderer()noexcept
-	{
-		m_device.uboPool->putBuffer( m_modelUbo );
 	}
 
 	void BackgroundRenderer::update( CpuUpdater & updater )
@@ -56,9 +51,10 @@ namespace c3d
 		m_cameraUbo.cpuUpdate( *updater.camera
 			, updater.bgMtxView
 			, updater.bgMtxProj );
-		auto & configuration = m_modelUbo.getData();
+		auto configuration = m_modelUbo.getData();
 		configuration.prvModel = configuration.curModel;
 		configuration.curModel = updater.bgMtxModl;
+		m_modelUbo.setData( c3d::move( configuration ) );
 	}
 
 	void BackgroundRenderer::update( GpuUpdater & updater )
@@ -90,7 +86,7 @@ namespace c3d
 			, colour
 			, depth
 			, depthObj
-			, m_modelUbo
+			, m_modelUbo.getUbo()
 			, m_cameraUbo
 			, renderUbo
 			, sceneUbo

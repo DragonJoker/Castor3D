@@ -1,8 +1,6 @@
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/Frustum.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -172,14 +170,8 @@ namespace c3d
 	//*********************************************************************************************
 
 	CameraUbo::CameraUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal ) }
+		: UboT{ device, MemoryPropertyFlags::eDeviceLocal }
 	{
-	}
-
-	CameraUbo::~CameraUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
@@ -238,8 +230,7 @@ namespace c3d
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Matrix4x4f const & projection
 		, Point2f const & jitter )
 	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 		configuration.projection = projection;
 		configuration.invProjection = projection.getInverse();
 		if ( jitter != Point2f{} )

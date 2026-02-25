@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <Castor3D/Castor3DModule.hpp>
 #include <Castor3D/Render/RenderModule.hpp>
 
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <ShaderWriter/BaseTypes/Int.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
@@ -59,61 +59,26 @@ namespace atmosphere_scattering
 	};
 
 	class CameraUbo
+		:public c3d::UboT< CameraConfig >
 	{
 	private:
 		using Configuration = CameraConfig;
-		CameraUbo( CameraUbo const & ) = delete;
-		CameraUbo & operator=( CameraUbo const & ) = delete;
-		CameraUbo( CameraUbo && )noexcept = delete;
-		CameraUbo & operator=( CameraUbo && )noexcept = delete;
 
 	public:
 		explicit CameraUbo( c3d::RenderDevice const & device
 			, bool & dirty );
-		~CameraUbo();
+
 		void cpuUpdate( c3d::Size const & renderSize
 			, c3d::Camera const & camera
 			, bool isSafeBanded
 			, c3d::Point3f const & sunDirection
 			, c3d::Vector3f const & planetPosition );
 
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		template< typename BindingT >
-		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
-
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
 
 	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 		c3d::GroupChangeTracked< c3d::Point3f > m_position;
 		c3d::GroupChangeTracked< c3d::Quaternion > m_orientation;
 	};

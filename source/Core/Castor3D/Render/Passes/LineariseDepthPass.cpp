@@ -135,7 +135,7 @@ namespace c3d
 		, m_prefix{ makeString( graph.getName() ) + prefix }
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
-		, m_clipInfo{ m_device.uboPool->getBuffer< Point3f >( MemoryPropertyFlags::eNone ) }
+		, m_clipInfo{ m_device }
 		, m_extractShader{ m_prefix + cuT( "ExtractDepth" ), passlindpth::getLineariseProgram( c3d::getEngine( device ) ) }
 		, m_extractStages{ makeProgramStates( m_device, m_extractShader ) }
 		, m_minifyShader{ m_prefix + cuT( "MinifyDepth" ), passlindpth::getMinifyProgram( c3d::getEngine( device ) ) }
@@ -148,16 +148,6 @@ namespace c3d
 
 	LineariseDepthPass::~LineariseDepthPass()noexcept
 	{
-		for ( auto & level : m_previousLevel )
-		{
-			m_device.uboPool->putBuffer( level );
-		}
-
-		if ( m_clipInfo )
-		{
-			m_device.uboPool->putBuffer( m_clipInfo );
-		}
-
 		m_result.destroy();
 	}
 
@@ -176,7 +166,7 @@ namespace c3d
 
 		if ( m_clipInfoValue.isDirty() )
 		{
-			m_clipInfo.getData() = m_clipInfoValue;
+			m_clipInfo.setData( m_clipInfoValue );
 			m_clipInfoValue.reset();
 		}
 	}
@@ -231,10 +221,8 @@ namespace c3d
 		for ( auto index = 0u; index < MaxLinearizedDepthMipLevel; ++index )
 		{
 			stepProgressBarLocal( progress, cuT( "Creating depth minify pass " ) + string::toString( index ) );
-			m_previousLevel.push_back( m_device.uboPool->getBuffer< Point2i >( MemoryPropertyFlags::eNone ) );
-			auto & previousLevel = m_previousLevel.back();
-			auto & data = previousLevel.getData();
-			data = Point2i{ size.width, size.height };
+			auto & previousLevel = m_previousLevel.emplace_back( m_device );
+			previousLevel.setData( Point2i{ size.width, size.height } );
 			size.width >>= 1;
 			size.height >>= 1;
 			auto & pass = m_graph.createPass( "MinimiseDepth" + string::toMbString( index )

@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
@@ -32,23 +30,16 @@ namespace c3d
 	//*********************************************************************************************
 
 	LpvLightConfigUbo::LpvLightConfigUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-	
-	LpvLightConfigUbo::~LpvLightConfigUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void LpvLightConfigUbo::cpuUpdate( LightInstance const & light
 		, float lpvCellSize
 		, uint32_t faceIndex )
 	{
-		CU_Require( m_ubo );
 		auto & lpvConfig = light.getCategory().getLpvConfig();
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 
 		configuration.lightOffset = float( light.getBufferOffset() );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
@@ -97,7 +88,7 @@ namespace c3d
 		, float lpvCellSize )
 	{
 		auto & lpvConfig = light.getCategory().getLpvConfig();
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 
 		configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 			, light.getViewMatrix( cascadeIndex ) );

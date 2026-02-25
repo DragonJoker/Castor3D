@@ -162,11 +162,6 @@ namespace c3d
 	MbString const GaussianBlur::CoefficientsCount = "c3d_coefficientsCount";
 	MbString const GaussianBlur::TextureSize = "c3d_textureSize";
 
-	GaussianBlur::~GaussianBlur()noexcept
-	{
-		m_device.uboPool->putBuffer( m_blurUbo );
-	}
-
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, String const & prefix
@@ -181,7 +176,7 @@ namespace c3d
 		, m_size{ makeExtent2D( getExtent( m_source.view() ) ) }
 		, m_format{ getFormat( m_source.view() ) }
 		, m_intermediateView{ intermediateView }
-		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		, m_blurUbo{ m_device }
 		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
 		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( c3d::getEngine( device ), isDepthFormat( m_format ), false ) }
 		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( c3d::getEngine( device ), isDepthFormat( m_format ), true ) }
@@ -189,7 +184,7 @@ namespace c3d
 		, m_stagesY{ makeProgramStates( device, m_shaderY ) }
 	{
 		CU_Require( kernelSize < MaxCoefficients );
-		auto & data = m_blurUbo.getData();
+		Configuration data{};
 		data.blurCoeffsCount = uint32_t( m_kernel.size() );
 		data.dump = 0u;
 		std::memcpy( data.blurCoeffs.data()->ptr()
@@ -197,6 +192,7 @@ namespace c3d
 			, sizeof( float ) * std::min( size_t( MaxCoefficients ), m_kernel.size() ) );
 		data.textureSize[0] = float( m_size.width );
 		data.textureSize[1] = float( m_size.height );
+		m_blurUbo.setData( c3d::move( data ) );
 		{
 			auto name = m_source.view( 0 ).data->name + "BlurX";
 			auto & passX = graph.createPass( name

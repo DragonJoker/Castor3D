@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfigUbo_H___
 #define ___C3D_SsaoConfigUbo_H___
 
-#include "UbosModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -103,83 +102,78 @@ namespace c3d
 		};
 	}
 
-	class SsaoConfigUbo
+	struct SsaoUboConfiguration
 	{
-	private:
-		struct Configuration
-		{
-			//   vec4(-2.0f / (width*P[0][0]),
-			//		  -2.0f / (height*P[1][1]),
-			//		  ( 1.0f - P[0][2]) / P[0][0],
-			//		  ( 1.0f + P[1][2]) / P[1][1])
-			//
-			//	where P is the projection matrix that maps camera space points
-			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
-			Point4f projInfo;
-			// Integer number of samples to take at each pixel.
-			int32_t numSamples;
-			// This is the number of turns around the circle that the spiral pattern makes.
-			// This should be prime to prevent taps from lining up.
-			int32_t numSpiralTurns;
-			// The height in pixels of a 1m object if viewed from 1m away.
-			// You can compute it from your projection matrix.  The actual value is just
-			// a scale factor on radius; you can simply hardcode this to a constant (~500)
-			// and make your radius value unitless (...but resolution dependent.)
-			float projScale;
-			// World-space AO radius in scene units (r).  e.g., 1.0m.
-			float radius;
-			// 1 / radius.
-			float invRadius;
-			// Squared radius.
-			float radius2;
-			// 1 / (squared radius).
-			float invRadius2;
-			// Bias to avoid AO in smooth corners, e.g., 0.01m.
-			float bias;
-			// intensity.
-			float intensity;
-			// intensity / radius ^ 6.
-			float intensityDivR6;
-			// Used for preventing AO computation on the sky (at infinite depth) and defining the CS Z to bilateral depth key scaling.
-			// This need not match the real far plane.
-			float farPlaneZ;
-			// Increase to make depth edges crisper. Decrease to reduce flicker.
-			float edgeSharpness;
-			// Step in 2-pixel intervals since we already blurred against neighbors in the
-			// first AO pass.  This constant can be increased while R decreases to improve
-			// performance at the expense of some dithering artifacts.
-			// 
-			// Morgan found that a scale of 3 left a 1-pixel checkerboard grid that was
-			// unobjectionable after shading was applied but eliminated most temporal incoherence
-			// from using small numbers of sample taps.
-			uint32_t blurStepSize;
-			// Filter radius in pixels. This will be multiplied by blurStepSize.
-			uint32_t blurRadius;
-			int32_t highQuality;
-			int32_t blurHighQuality;
-			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
-			// miplevel to maintain reasonable spatial locality in the cache
-			// If this number is too small (< 3), too many taps will land in the same pixel, and we'll get bad variance that manifests as flashing.
-			// If it is too high (> 5), we'll get bad performance because we're not using the MIP levels effectively
-			int32_t logMaxOffset;
-			// This must be less than or equal to MaxLinearizedDepthMipLevel.
-			int32_t maxMipLevel;
-			// pixels
-			float minRadius;
-			int32_t variation;
-			// The bending normals ray steps count.
-			uint32_t bendStepCount;
-			// The bending normals ray step size.
-			float bendStepSize;
-		};
+		//   vec4(-2.0f / (width*P[0][0]),
+		//		  -2.0f / (height*P[1][1]),
+		//		  ( 1.0f - P[0][2]) / P[0][0],
+		//		  ( 1.0f + P[1][2]) / P[1][1])
+		//
+		//	where P is the projection matrix that maps camera space points
+		//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
+		Point4f projInfo;
+		// Integer number of samples to take at each pixel.
+		int32_t numSamples;
+		// This is the number of turns around the circle that the spiral pattern makes.
+		// This should be prime to prevent taps from lining up.
+		int32_t numSpiralTurns;
+		// The height in pixels of a 1m object if viewed from 1m away.
+		// You can compute it from your projection matrix.  The actual value is just
+		// a scale factor on radius; you can simply hardcode this to a constant (~500)
+		// and make your radius value unitless (...but resolution dependent.)
+		float projScale;
+		// World-space AO radius in scene units (r).  e.g., 1.0m.
+		float radius;
+		// 1 / radius.
+		float invRadius;
+		// Squared radius.
+		float radius2;
+		// 1 / (squared radius).
+		float invRadius2;
+		// Bias to avoid AO in smooth corners, e.g., 0.01m.
+		float bias;
+		// intensity.
+		float intensity;
+		// intensity / radius ^ 6.
+		float intensityDivR6;
+		// Used for preventing AO computation on the sky (at infinite depth) and defining the CS Z to bilateral depth key scaling.
+		// This need not match the real far plane.
+		float farPlaneZ;
+		// Increase to make depth edges crisper. Decrease to reduce flicker.
+		float edgeSharpness;
+		// Step in 2-pixel intervals since we already blurred against neighbors in the
+		// first AO pass.  This constant can be increased while R decreases to improve
+		// performance at the expense of some dithering artifacts.
+		// 
+		// Morgan found that a scale of 3 left a 1-pixel checkerboard grid that was
+		// unobjectionable after shading was applied but eliminated most temporal incoherence
+		// from using small numbers of sample taps.
+		uint32_t blurStepSize;
+		// Filter radius in pixels. This will be multiplied by blurStepSize.
+		uint32_t blurRadius;
+		int32_t highQuality;
+		int32_t blurHighQuality;
+		// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
+		// miplevel to maintain reasonable spatial locality in the cache
+		// If this number is too small (< 3), too many taps will land in the same pixel, and we'll get bad variance that manifests as flashing.
+		// If it is too high (> 5), we'll get bad performance because we're not using the MIP levels effectively
+		int32_t logMaxOffset;
+		// This must be less than or equal to MaxLinearizedDepthMipLevel.
+		int32_t maxMipLevel;
+		// pixels
+		float minRadius;
+		int32_t variation;
+		// The bending normals ray steps count.
+		uint32_t bendStepCount;
+		// The bending normals ray step size.
+		float bendStepSize;
+	};
 
+	class SsaoConfigUbo
+		: public UboT< SsaoUboConfiguration >
+	{
 	public:
-		C3D_API SsaoConfigUbo( SsaoConfigUbo const & rhs ) = delete;
-		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo const & rhs ) = delete;
-		C3D_API SsaoConfigUbo( SsaoConfigUbo && rhs )noexcept = delete;
-		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit SsaoConfigUbo( RenderDevice const & device );
-		C3D_API ~SsaoConfigUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO content.
@@ -193,28 +187,6 @@ namespace c3d
 		C3D_API void cpuUpdate( SsaoConfig const & config
 			, Camera const & camera
 			, Size const & renderSize );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

@@ -907,12 +907,9 @@ namespace atmosphere_scattering
 
 		if ( it != m_cameraPasses.end() )
 		{
-			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index ) );
-			++index;
-			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index ) );
-			++index;
-			descriptorWrites.push_back( m_cloudsUbo->getDescriptorWrite( index ) );
-			++index;
+			it->second->cameraUbo.addDescriptorWrite( descriptorWrites, index );
+			m_atmosphereUbo->addDescriptorWrite( descriptorWrites, index );
+			m_cloudsUbo->addDescriptorWrite( descriptorWrites, index );
 			c3d::bindTexture( m_transmittance.getSampledView()
 				, *m_transmittance.sampler
 				, descriptorWrites

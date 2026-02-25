@@ -169,7 +169,9 @@ namespace Uncharted2
 		, m_pool{ c3d::makeRawUnique< ashes::DescriptorSetPool >( *device, *m_layout, 1u, true ) }
 		, m_set{ m_pool->createDescriptorSet() }
 	{
-		m_ubo.createSizedBinding( *m_set, m_layout->getBinding( 0u ) );
+		ashes::WriteDescriptorSetArray writes;
+		m_ubo.addDescriptorWriteT( writes, 0u );
+		m_set->setBindings( c3d::move( writes ) );
 		m_set->update();
 
 		parameters.get( "shoulderStrength", m_configuration.shoulderStrength );

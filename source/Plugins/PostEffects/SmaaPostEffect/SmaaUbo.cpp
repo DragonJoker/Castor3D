@@ -1,11 +1,5 @@
 #include "SmaaPostEffect/SmaaUbo.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
-#include <Castor3D/Render/RenderDevice.hpp>
-
-#include <ShaderWriter/Writer.hpp>
-
 namespace smaa
 {
 	//*********************************************************************************************
@@ -45,20 +39,14 @@ namespace smaa
 	c3d::MbString const SmaaUbo::Data = "c3d_smaaData";
 
 	SmaaUbo::SmaaUbo( c3d::RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< SmaaUboConfiguration >( c3d::MemoryPropertyFlags::eDeviceLocal ) }
+		: UboT{ device, c3d::MemoryPropertyFlags::eDeviceLocal }
 	{
-	}
-
-	SmaaUbo::~SmaaUbo()
-	{
-		m_device.uboPool->putBuffer< SmaaUboConfiguration >( m_ubo );
 	}
 
 	void SmaaUbo::cpuUpdate( c3d::Size const & renderSize
 		, SmaaConfig const & config )
 	{
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data.rtMetrics = { 1.0f / float( renderSize.getWidth() )
 			, 1.0f / float( renderSize.getHeight() )
 			, float( renderSize.getWidth() )

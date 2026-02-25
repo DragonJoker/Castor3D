@@ -360,8 +360,8 @@ namespace c3d
 			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(),cuT( "SSSBlur1" ) )
 			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSBlur2" ) ) }
 		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSResult" ) ) }
-		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( MemoryPropertyFlags::eNone ) }
-		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( MemoryPropertyFlags::eNone ) }
+		, m_blurCfgUbo{ m_device, MemoryPropertyFlags::eNone }
+		, m_blurWgtUbo{ m_device, MemoryPropertyFlags::eNone }
 		, m_blurHorizProgram{ cuT( "SSSBlurX" ), sssss::getBlurProgram( c3d::getEngine( device ), false ) }
 		, m_blurXShader{ makeProgramStates( m_device, m_blurHorizProgram ) }
 		, m_blurVerticProgram{ cuT( "SSSBlurY" ), sssss::getBlurProgram( c3d::getEngine( device ), true ) }
@@ -369,16 +369,14 @@ namespace c3d
 		, m_combineProgram{ cuT( "SSSCombine" ), sssss::getCombineProgram( c3d::getEngine( device ) ) }
 		, m_combineShader{ makeProgramStates( m_device, m_combineProgram ) }
 	{
-		auto & configuration = m_blurCfgUbo.getData();
-		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = Point2f{ 1.0f / float( m_size.getWidth() ), 1.0f / float( m_size.getHeight() ) };
+		m_blurCfgUbo.setData( { .blurPixelSize = Point2f{ 1.0f / float( m_size.getWidth() ), 1.0f / float( m_size.getHeight() ) }
+			, .blurCorrection = 1.0f } );
+		m_blurWgtUbo.setData( { .originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f }
+			, .blurWeights = { Point4f{ 0.1158, 0.3661, 0.3439, 0.25 }
+				, Point4f{ 0.1836, 0.1864, 0.0, 0.25 }
+				, Point4f{ 0.46, 0.0, 0.0402, 0.25 } }
+			, .blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 } } );
 
-		auto & weights = m_blurWgtUbo.getData();
-		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
-		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
-		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
-		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
-		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_diffuse;
 		stepProgressBarLocal( progress, cuT( "Creating SSSSS Blur passes" ) );
 		auto & modelBuffer = scene.getModelBuffer();
@@ -485,8 +483,6 @@ namespace c3d
 
 		m_intermediate.destroy();
 		m_result.destroy();
-		m_device.uboPool->putBuffer( m_blurCfgUbo );
-		m_device.uboPool->putBuffer( m_blurWgtUbo );
 	}
 
 	void SubsurfaceScatteringPass::update( CpuUpdater const & )

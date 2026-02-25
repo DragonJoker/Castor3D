@@ -38,16 +38,10 @@ namespace atmosphere_scattering
 
 	CameraUbo::CameraUbo( c3d::RenderDevice const & device
 		, bool & dirty )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 		, m_position{ dirty }
 		, m_orientation{ dirty }
 	{
-	}
-
-	CameraUbo::~CameraUbo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void CameraUbo::cpuUpdate( c3d::Size const & renderSize
@@ -75,7 +69,7 @@ namespace atmosphere_scattering
 
 		auto proj = camera.getRescaledProjection( renderSize, length.kilometres(), isSafeBanded );
 
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data.position = m_position;
 
 		position += planetPosition;

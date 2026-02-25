@@ -5,7 +5,8 @@ See LICENSE file in root folder
 #define ___C3DW_WavesUbo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
@@ -111,50 +112,15 @@ namespace waves
 	};
 
 	class WavesUbo
+		: public c3d::UboT< WavesConfiguration >
 	{
 	private:
 		using Configuration = WavesConfiguration;
-		WavesUbo( WavesUbo const & ) = delete;
-		WavesUbo & operator=( WavesUbo const & ) = delete;
-		WavesUbo( WavesUbo && )noexcept = delete;
-		WavesUbo & operator=( WavesUbo && )noexcept = delete;
 
 	public:
 		explicit WavesUbo( c3d::RenderDevice const & device );
-		~WavesUbo();
+
 		void cpuUpdate( WavesConfiguration const & config );
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

@@ -105,16 +105,11 @@ namespace motion_blur
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_ubo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		, m_ubo{ renderSystem.getRenderDevice() }
 		, m_shader{ cuT( "LinearMotionBlur" ), postfx::getProgram( renderSystem.getRenderDevice() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		setParameters( parameters );
-	}
-
-	PostEffect::~PostEffect()
-	{
-		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_ubo );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -180,12 +175,13 @@ namespace motion_blur
 			auto current = Clock::now();
 			auto duration = std::chrono::duration_cast< std::chrono::milliseconds >( current - m_saved );
 			auto fps = 1000.0f / float( duration.count() );
-			auto & configuration = m_ubo.getData();
+			auto configuration = m_ubo.getData();
 			configuration.samplesCount = m_configuration.samplesCount;
 			configuration.vectorDivider = m_configuration.vectorDivider;
 			configuration.blurScale = ( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() != c3d::RenderLoop::UnlimitedFPS )
 				? fps / float( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() )
 				: 1.0f;
+			m_ubo.setData( c3d::move( configuration ) );
 			m_saved = current;
 		}
 	}

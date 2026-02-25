@@ -15,22 +15,16 @@ namespace atmosphere_scattering
 
 	CloudsUbo::CloudsUbo( c3d::RenderDevice const & device
 		, bool & dirty )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 		, m_config{ dirty }
 	{
-	}
-
-	CloudsUbo::~CloudsUbo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void CloudsUbo::cpuUpdate( Configuration const & config
 		, float totalTime )
 	{
 		m_config = config;
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data = config;
 		data.crispiness *= 10.0f;
 		data.time = totalTime;

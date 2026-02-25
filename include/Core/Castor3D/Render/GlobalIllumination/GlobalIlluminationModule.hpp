@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_GlobalIlluminationModule_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace c3d
 {
@@ -47,33 +48,6 @@ namespace c3d
 	*	Buffers résultant d'une passe de light propagation volumes.
 	*/
 	class LightVolumePassResult;
-	/**
-	*\~english
-	*\brief
-	*	Light propagation UBO.
-	*\~french
-	*\brief
-	*	UBO de light propagation.
-	*/
-	class LpvGridConfigUbo;
-	/**
-	*\~english
-	*\brief
-	*	Light propagation UBO.
-	*\~french
-	*\brief
-	*	UBO de light propagation.
-	*/
-	class LayeredLpvGridConfigUbo;
-	/**
-	*\~english
-	*\brief
-	*	Voxelizer configuration data UBO.
-	*\~french
-	*\brief
-	*	UBO des données de configuration du voxelizer.
-	*/
-	class VoxelizerUbo;
 
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( c3d, LightVolumePassResult, C3D_API );

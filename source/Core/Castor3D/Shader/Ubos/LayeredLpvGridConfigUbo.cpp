@@ -1,31 +1,18 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 
-#include "Castor3D/Limits.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
-
 CU_ImplementSmartPtr( c3d, LayeredLpvGridConfigUbo )
 
 namespace c3d
 {
-	//*********************************************************************************************
-
 	LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-
-	LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void LayeredLpvGridConfigUbo::cpuUpdate( Array< Grid const *, LpvMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
-		CU_Require( m_ubo );
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 
 		for ( auto i = 0u; i < grids.size(); ++i )
 		{

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "WeatherConfig.hpp"
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -47,57 +47,22 @@ namespace atmosphere_scattering
 	Writer_Parameter( WeatherData );
 
 	class WeatherUbo
+		: public c3d::UboT< WeatherConfig >
 	{
 	private:
 		using Configuration = WeatherConfig;
-		WeatherUbo( WeatherUbo const & ) = delete;
-		WeatherUbo & operator=( WeatherUbo const & ) = delete;
-		WeatherUbo( WeatherUbo && )noexcept = delete;
-		WeatherUbo & operator=( WeatherUbo && )noexcept = delete;
 
 	public:
 		WeatherUbo( c3d::RenderDevice const & device
 			, bool & dirty );
-		~WeatherUbo();
+
 		void cpuUpdate( Configuration const & config );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		template< typename BindingT >
-		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
 
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
 
 	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 		CheckedWeatherConfig m_config;
 	};
 }

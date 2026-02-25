@@ -6,9 +6,8 @@ See LICENSE file in root folder
 
 #include "SsaoModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
@@ -153,7 +152,7 @@ namespace c3d
 		Extent2D m_size;
 		Texture m_result;
 		Texture m_bentResult;
-		UniformBufferOffsetT< Configuration > m_configurationUbo;
+		UboT< Configuration > m_configurationUbo;
 		Array< Program, 2u > m_programs;
 
 	};

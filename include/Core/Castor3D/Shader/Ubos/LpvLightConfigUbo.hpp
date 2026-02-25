@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_LpvLightConfigUbo_H___
 #define ___C3D_LpvLightConfigUbo_H___
 
-#include "UbosModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 
@@ -45,17 +44,13 @@ namespace c3d
 	}
 
 	class LpvLightConfigUbo
+		: public UboT< LpvLightConfigUboConfiguration >
 	{
 	public:
 		using Configuration = LpvLightConfigUboConfiguration;
 
 	public:
-		C3D_API LpvLightConfigUbo( LpvLightConfigUbo const & rhs ) = delete;
-		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo const & rhs ) = delete;
-		C3D_API LpvLightConfigUbo( LpvLightConfigUbo && rhs )noexcept = default;
-		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit LpvLightConfigUbo( RenderDevice const & device );
-		C3D_API ~LpvLightConfigUbo()noexcept;
 
 		C3D_API void cpuUpdate( LightInstance const & light
 			, float lpvCellSize
@@ -63,32 +58,6 @@ namespace c3d
 		C3D_API void cpuUpdate( DirectionalLightInstance const & light
 			, uint32_t cascadeIndex
 			, float lpvCellSize );
-
-		UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

@@ -11,9 +11,6 @@ See LICENSE file in root folder
 
 namespace light_streaks
 {
-	using UboOffset = c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration >;
-	using UboOffsetArray = c3d::Vector< UboOffset >;
-
 	class KawasePass
 	{
 	public:

@@ -452,13 +452,11 @@ namespace c3d
 				, RenderPipeline::eBuffers );
 			auto & descriptorSet = *descriptors.set;
 			ashes::WriteDescriptorSetArray descriptorWrites;
-			descriptorWrites.push_back( m_cameraUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eCamera ) ) );
-			descriptorWrites.push_back( m_renderUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eRender ) ) );
 
+			m_cameraUbo.addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eCamera );
+			m_renderUbo.addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eRender );
 			if ( m_sceneUbo )
-			{
-				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
-			}
+				m_sceneUbo->addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eScene );
 
 			auto const & nodesIds = getRenderQueue().getRenderNodes().getNodesIds();
 			auto & nodesIdsWrite = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eObjectsNodeID )

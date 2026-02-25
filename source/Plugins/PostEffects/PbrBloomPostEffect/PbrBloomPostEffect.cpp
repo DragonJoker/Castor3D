@@ -28,6 +28,7 @@ namespace PbrBloom
 			, renderTarget
 			, renderSystem
 			, params }
+		, m_ubo{ renderSystem.getRenderDevice() }
 	{
 		PostEffect::setParameters( params );
 	}
@@ -110,11 +111,9 @@ namespace PbrBloom
 		, c3d::Texture const & source
 		, c3d::Texture & target )
 	{
-		m_ubo = device.uboPool->getBuffer< c3d::Point2f >( c3d::MemoryPropertyFlags::eNone );
-		auto & data = m_ubo.getData();
 		m_extent = target.getExtent();
-		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
-		data->y = m_bloomStrength;
+		m_ubo.setData( { float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) )
+			, m_bloomStrength } );
 		auto extent = ashes::getSubresourceDimensions( convert( m_extent ), 1u );
 		auto mipCount = ashes::getMaxMipCount( extent );
 		m_duPassesCount = std::min( m_duPassesCount, mipCount );
@@ -170,7 +169,7 @@ namespace PbrBloom
 			, device
 			, m_downSampled.back()
 			, m_upSampled
-			, m_ubo
+			, m_ubo.getUbo()
 			, m_duPassesCount
 			, &isEnabled() );
 		m_combinePass = c3d::makeRawUnique< CombinePass >( m_graph
@@ -179,7 +178,7 @@ namespace PbrBloom
 			, source
 			, target
 			, c3d::makeExtent2D( m_extent )
-			, m_ubo
+			, m_ubo.getUbo()
 			, &isEnabled()
 			, &m_passIndex );
 
@@ -191,14 +190,12 @@ namespace PbrBloom
 		m_combinePass.reset();
 		m_upsamplePass.reset();
 		m_downsamplePass.reset();
-		device.uboPool->putBuffer( m_ubo );
 	}
 
 	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
-		auto & data = m_ubo.getData();
-		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
-		data->y = m_bloomStrength;
+		m_ubo.setData( { float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) )
+			, m_bloomStrength } );
 	}
 
 	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )

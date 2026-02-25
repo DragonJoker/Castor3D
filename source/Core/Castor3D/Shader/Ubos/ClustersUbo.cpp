@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -245,14 +243,8 @@ namespace c3d
 	//*********************************************************************************************
 
 	ClustersUbo::ClustersUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal ) }
+		: UboT{ device, MemoryPropertyFlags::eDeviceLocal }
 	{
-	}
-
-	ClustersUbo::~ClustersUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void ClustersUbo::cpuUpdate( Point3ui gridDim
@@ -265,8 +257,7 @@ namespace c3d
 		, float minDistance
 		, bool enableWaveIntrinsics )
 	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 		configuration.gridDim = gridDim;
 		configuration.clusterSize = clusterSize;
 		configuration.viewNearFar = { viewNear, viewFar };

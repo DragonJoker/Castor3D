@@ -28,8 +28,7 @@ namespace c3d
 
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
 			, TextOverlay const & overlay )noexcept;
-		C3D_API void fillDescriptorSet( ashes::DescriptorSetLayout const & descriptorLayout
-			, ashes::DescriptorSet & descriptorSet )const;
+		C3D_API void fillDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites )const;
 		C3D_API void upload( UploadData & uploader );
 
 		Engine & engine;
@@ -60,9 +59,8 @@ namespace c3d
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
 			, FontTexture const * fontTexture
 			, TextOverlay const & overlay )noexcept;
-		C3D_API void fillDescriptorSet( FontTexture const * fontTexture
-			, ashes::DescriptorSetLayout const & descriptorLayout
-			, ashes::DescriptorSet & descriptorSet );
+		C3D_API void fillDescriptorWrites( FontTexture const * fontTexture
+			, ashes::WriteDescriptorSetArray & descriptorWrites );
 		C3D_API void upload( UploadData & uploader )const;
 		C3D_API OverlayTextBuffer const * get( FontTexture const & fontTexture );
 

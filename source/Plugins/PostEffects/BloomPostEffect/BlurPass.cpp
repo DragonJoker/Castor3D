@@ -3,7 +3,6 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
@@ -113,20 +112,20 @@ namespace Bloom
 			return result;
 		}
 
-		static UboOffsetArray doCreateUbo( c3d::RenderDevice const & device
+		static UboArray doCreateUbos( c3d::RenderDevice const & device
 			, c3d::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical )
 		{
-			UboOffsetArray result;
+			UboArray result;
 			auto coefficientsCount = blurKernelSize;
 			auto kernel = doCreateKernel( coefficientsCount );
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				auto ubo = device.uboPool->getBuffer< c3d::GaussianBlur::Configuration >( c3d::MemoryPropertyFlags::eNone );
-				auto & data = ubo.getData();
+				auto & ubo = result.emplace_back( device );
+				c3d::GaussianBlur::Configuration data{};
 				data.textureSize = c3d::Point2f
 				{
 					isVertical ? 0.0f : 1.0f / float( dimensions.width >> ( i + 1 ) ),
@@ -134,7 +133,7 @@ namespace Bloom
 				};
 				data.blurCoeffsCount = coefficientsCount;
 				data.blurCoeffs = kernel;
-				result.emplace_back( c3d::move( ubo ) );
+				ubo.setData( c3d::move( data ) );
 			}
 
 			return result;
@@ -153,7 +152,7 @@ namespace Bloom
 		, bool isVertical
 		, bool const * enabled )
 		: m_device{ device }
-		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, blurPassesCount, isVertical ) }
+		, m_blurUbos{ blur::doCreateUbos( m_device, dimensions, blurKernelSize, blurPassesCount, isVertical ) }
 		, m_shader{ cuT( "BloomBlurPass" ), blur::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ dstImage }
@@ -180,7 +179,7 @@ namespace Bloom
 							, result->getTimer() );
 						return result;
 				} );
-			m_blurUbo[index].createPassBinding( pass, blur::Bindings::GaussCfgUboIdx );
+			m_blurUbos[index].createPassBinding( pass, blur::Bindings::GaussCfgUboIdx );
 			pass.addInputSampledT( *srcImage.getSampledLastAttach( 0u, index ), blur::Bindings::DifImgIdx
 				, crg::SamplerDesc{ c3d::FilterMode::eNearest, c3d::FilterMode::eNearest, c3d::MipmapMode::eNearest
 					, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge
@@ -191,23 +190,16 @@ namespace Bloom
 		m_result.setLastAttach( graph.mergeAttachments( attachs ) );
 	}
 
-	BlurPass::~BlurPass()noexcept
-	{
-		for ( auto & ubo : m_blurUbo )
-		{
-			m_device.uboPool->putBuffer( ubo );
-		}
-	}
-
 	void BlurPass::update( uint32_t kernelSize )
 	{
 		auto kernel = blur::doCreateKernel( kernelSize );
 
-		for ( auto & ubo : m_blurUbo )
+		for ( auto & ubo : m_blurUbos )
 		{
-			auto & data = ubo.getData();
+			auto data = ubo.getData();
 			data.blurCoeffsCount = kernelSize;
 			data.blurCoeffs = kernel;
+			ubo.setData( c3d::move( data ) );
 		}
 	}
 

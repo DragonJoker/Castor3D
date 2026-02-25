@@ -1,6 +1,5 @@
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -33,21 +32,15 @@ namespace c3d
 	//*********************************************************************************************
 
 	RenderUbo::RenderUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal ) }
+		: UboT{ device, MemoryPropertyFlags::eDeviceLocal }
 	{
-	}
-
-	RenderUbo::~RenderUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void RenderUbo::cpuUpdate( RenderUbo const & parent
 		, Size const & renderSize )
 	{
-		auto & parentData = parent.m_ubo.getData();
-		auto & data = m_ubo.getData();
+		auto & parentData = parent.getData();
+		auto & data = getNCData();
 		data.renderSize->x = renderSize.getWidth();
 		data.renderSize->y = renderSize.getHeight();
 		data.invRenderSize->x = 1.0f / float( renderSize.getWidth() );
@@ -61,9 +54,8 @@ namespace c3d
 		, Size const & renderSize, bool safeBanded
 		, uint32_t debugIndex )
 	{
-		CU_Require( m_ubo );
 		auto size = ( safeBanded ? getSafeBandedSize( renderSize ) : renderSize );
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data.renderSize->x = size.getWidth();
 		data.renderSize->y = size.getHeight();
 		data.invRenderSize->x = 1.0f / float( size.getWidth() );

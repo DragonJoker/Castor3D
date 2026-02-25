@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3DDOF_DepthOfFieldUbo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
@@ -79,39 +79,19 @@ namespace dof
 	};
 
 	class DepthOfFieldUbo
+		: public c3d::UboT< DepthOfFieldUboConfiguration >
 	{
 	private:
 		using Configuration = DepthOfFieldUboConfiguration;
 
 	public:
 		explicit DepthOfFieldUbo( c3d::RenderDevice const & device );
-		~DepthOfFieldUbo();
+
 		void cpuUpdate( DepthOfFieldConfig const & data );
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
 
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 
