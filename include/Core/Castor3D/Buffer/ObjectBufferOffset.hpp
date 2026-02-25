@@ -65,14 +65,26 @@ namespace c3d
 				chunk = {};
 			}
 
-			ashes::WriteDescriptorSet getStorageBinding( uint32_t binding )const
+			template< typename BindingT >
+			ashes::WriteDescriptorSet getDescriptorWrite( BindingT binding )const
 			{
-				auto result = ashes::WriteDescriptorSet{ binding
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				result.bufferInfo.push_back( VkDescriptorBufferInfo{ *getBuffer().buffer, getOffset(), getAskedSize() } );
-				return result;
+				return ashes::WriteDescriptorSet{ uint32_t( binding )
+					, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, { VkDescriptorBufferInfo{ *getBuffer().buffer, getOffset(), getAskedSize() } } };
+			}
+
+			template< typename BindingT >
+			void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+				, BindingT dstBinding )const
+			{
+				writes.emplace_back( getDescriptorWrite( dstBinding ) );
+			}
+
+			void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+				, uint32_t & dstBinding )const
+			{
+				writes.emplace_back( getDescriptorWrite( dstBinding ) );
+				++dstBinding;
 			}
 		};
 
@@ -165,10 +177,27 @@ namespace c3d
 			buffers[uint32_t( data )].chunk.size = size;
 		}
 
-		ashes::WriteDescriptorSet getStorageBinding( SubmeshData data
-			, uint32_t binding )const
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( SubmeshData data
+			, BindingT binding )const
 		{
-			return getBufferChunk( data ).getStorageBinding( binding );
+			return getBufferChunk( data ).getDescriptorWrite( binding );
+		}
+
+		template< typename BindingT >
+		void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, SubmeshData data
+			, BindingT dstBinding )const
+		{
+			writes.emplace_back( getDescriptorWrite( data, dstBinding ) );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, SubmeshData data
+			, uint32_t & dstBinding )const
+		{
+			writes.emplace_back( getDescriptorWrite( data, dstBinding ) );
+			++dstBinding;
 		}
 	};
 }

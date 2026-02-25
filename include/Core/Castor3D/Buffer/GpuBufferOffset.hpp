@@ -129,31 +129,54 @@ namespace c3d
 				, dstPipelineFlags );
 		}
 
-		VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding getLayoutBinding( BindingT index
 			, VkShaderStageFlags stages )const
 		{
-			return makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stages );
+			return { uint32_t( index ), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, 1u, stages, nullptr };
 		}
 
-		ashes::WriteDescriptorSet getStorageBinding( uint32_t binding )const
+		template< typename BindingT >
+		void addLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
 		{
-			auto result = ashes::WriteDescriptorSet{ binding
-				, 0u
-				, 1u
+			bindings.push_back( getLayoutBinding( index, stages ) );
+		}
+
+		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+			++index;
+		}
+
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT binding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			auto result = ashes::WriteDescriptorSet{ uint32_t( binding ), dstArrayElement, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
 			result.bufferInfo.push_back( { *getBuffer().buffer, getOffset(), getSize() } );
 			return result;
 		}
 
-		void createBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & binding )const
+		template< typename BindingT >
+		void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT dstBinding
+			, uint32_t dstArrayElement = 0u )const
 		{
-			descriptorSet.createBinding( binding
-				, *getBuffer().buffer
-				, uint32_t( getOffset() )
-				, uint32_t( getSize() ) );
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
 		}
 	};
 }
