@@ -293,10 +293,10 @@ namespace c3d
 		{
 			auto & randomStorage = device.renderSystem.getRandomStorage();
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( makeStorageBufferDescriptorWrite( *m_generatedCountBuffer, compptcl::IndexBufferBinding ) );
-			writes.push_back( makeStorageBufferDescriptorWrite( randomStorage, compptcl::RandomBufferBinding ) );
-			writes.push_back( makeStorageBufferDescriptorWrite( *m_particlesStorages[inIndex], compptcl::InParticlesBufferBinding ) );
-			writes.push_back( makeStorageBufferDescriptorWrite( *m_particlesStorages[outIndex], compptcl::OutParticlesBufferBinding ) );
+			m_generatedCountBuffer->addDescriptorWriteT( writes, compptcl::IndexBufferBinding );
+			randomStorage.addDescriptorWriteT( writes, compptcl::RandomBufferBinding );
+			m_particlesStorages[inIndex]->addDescriptorWriteT( writes, compptcl::InParticlesBufferBinding );
+			m_particlesStorages[outIndex]->addDescriptorWriteT( writes, compptcl::OutParticlesBufferBinding );
 			m_ubo.addDescriptorWriteT( writes, compptcl::ParticleSystemBufferBinding );
 			descriptorSet.setBindings( c3d::move( writes ) );
 			descriptorSet.update();

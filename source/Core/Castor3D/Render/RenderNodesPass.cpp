@@ -458,23 +458,8 @@ namespace c3d
 			m_renderUbo.addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eRender );
 			if ( m_sceneUbo )
 				m_sceneUbo->addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eScene );
-
-			auto const & nodesIds = getRenderQueue().getRenderNodes().getNodesIds();
-			auto & nodesIdsWrite = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eObjectsNodeID )
-				, 0u
-				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER );
-			nodesIdsWrite.bufferInfo.emplace_back() = { *nodesIds.buffer
-				, 0u
-				, nodesIds.getSize() };
-
-			auto & modelBuffer = scene.getModelBuffer();
-			auto & modelDataWrite = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eModelsData )
-				, 0u
-				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER );
-			modelDataWrite.bufferInfo.emplace_back() = { *modelBuffer.buffer
-				, 0u, modelBuffer.getSize() };
+			getRenderQueue().getRenderNodes().getNodesIds().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eObjectsNodeID );
+			scene.getModelBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eModelsData );
 
 			auto const & matCache = getOwner()->getMaterialCache();
 			matCache.getPassBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eMaterials );
@@ -485,24 +470,14 @@ namespace c3d
 			matCache.getTexConfigBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eTexConfigs );
 			matCache.getTexAnimBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eTexAnims );
 			if ( pipeline.getFlags().isBillboard() )
-			{
-				auto & billboardDatas = scene.getBillboardsBuffer();
-				auto & write = descriptorWrites.emplace_back( uint32_t( GlobalBuffersIdx::eBillboardsData )
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER );
-				write.bufferInfo.emplace_back() = { *billboardDatas.buffer
-					, 0u, billboardDatas.getSize() };
-			}
+				scene.getBillboardsBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eBillboardsData );
 
 			//
 			auto index = uint32_t( GlobalBuffersIdx::eCount );
 
 			// Submesh bindings
 			if ( auto submeshData = pipeline.getFlags().submeshData )
-			{
 				submeshData->fillDescriptor( pipeline.getFlags(), descriptorWrites, index );
-			}
 
 			// Specific bindings
 			doFillAdditionalDescriptor( pipeline.getFlags(), descriptorWrites, shadowMaps, shadowBuffer );

@@ -36,10 +36,7 @@ namespace c3d
 			ashes::WriteDescriptorSetArray writes;
 			auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 			CU_Require( morphTargets || skinTransforms );
-			writes.push_back( ashes::WriteDescriptorSet{ VertexTransformPass::eModelsData
-				, 0u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, { VkDescriptorBufferInfo{ modelsBuffer.getBuffer(), 0u, ashes::WholeSize } } } );
+			modelsBuffer.addDescriptorWriteT( writes, VertexTransformPass::eModelsData );
 
 			if ( morphTargets )
 			{

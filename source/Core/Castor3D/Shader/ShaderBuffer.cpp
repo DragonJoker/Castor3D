@@ -79,14 +79,7 @@ namespace c3d
 	ashes::WriteDescriptorSet ShaderBuffer::doGetDescriptorWrite( uint32_t dstBinding
 		, uint32_t dstArrayElement )const
 	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, 0u
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.emplace_back() = { *m_buffer->buffer
-			, 0u
-			, m_size };
-		return result;
+		return m_buffer->getDescriptorWrite( dstBinding, dstArrayElement );
 	}
 
 	ashes::WriteDescriptorSet ShaderBuffer::doGetSingleDescriptorWrite( uint32_t dstBinding
@@ -106,7 +99,6 @@ namespace c3d
 	VkDescriptorSetLayoutBinding ShaderBuffer::doGetLayoutBinding( uint32_t index
 		, VkShaderStageFlags stages )const
 	{
-		return VkDescriptorSetLayoutBinding{ index
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, stages, nullptr };
+		return m_buffer->getLayoutBinding( index, stages );
 	}
 }

@@ -339,9 +339,7 @@ namespace c3d
 		}
 
 		shadowBuffer.addDescriptorWrite( descriptorWrites, index );
-		bindBuffer( renderSystem.getRandomStorage().getBuffer()
-			, descriptorWrites
-			, index );
+		renderSystem.getRandomStorage().addDescriptorWrite( descriptorWrites, index );
 #endif
 	}
 
@@ -386,9 +384,7 @@ namespace c3d
 		if ( hasShadows )
 		{
 			shadowBuffer.addDescriptorWrite( descriptorWrites, index );
-			bindBuffer( renderSystem.getRandomStorage().getBuffer()
-				, descriptorWrites
-				, index );
+			renderSystem.getRandomStorage().addDescriptorWrite( descriptorWrites, index );
 		}
 #endif
 	}
@@ -515,11 +511,11 @@ namespace c3d
 		, uint32_t & index )
 	{
 		frustumClusters.getClustersUbo().addDescriptorWrite( descriptorWrites, index );
-		bindBuffer( *frustumClusters.getReducedLightsAABBBuffer().buffer, descriptorWrites, index );
-		bindBuffer( *frustumClusters.getPointLightClusterIndexBuffer().buffer, descriptorWrites, index );
-		bindBuffer( *frustumClusters.getPointLightClusterGridBuffer().buffer, descriptorWrites, index );
-		bindBuffer( *frustumClusters.getSpotLightClusterIndexBuffer().buffer, descriptorWrites, index );
-		bindBuffer( *frustumClusters.getSpotLightClusterGridBuffer().buffer, descriptorWrites, index );
+		frustumClusters.getReducedLightsAABBBuffer().addDescriptorWrite( descriptorWrites, index );
+		frustumClusters.getPointLightClusterIndexBuffer().addDescriptorWrite( descriptorWrites, index );
+		frustumClusters.getPointLightClusterGridBuffer().addDescriptorWrite( descriptorWrites, index );
+		frustumClusters.getSpotLightClusterIndexBuffer().addDescriptorWrite( descriptorWrites, index );
+		frustumClusters.getSpotLightClusterGridBuffer().addDescriptorWrite( descriptorWrites, index );
 	}
 
 	bool NodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const noexcept

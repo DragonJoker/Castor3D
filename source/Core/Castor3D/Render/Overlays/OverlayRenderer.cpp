@@ -402,8 +402,8 @@ namespace c3d
 		result.descriptorSet = result.descriptorPool->createDescriptorSet( "PanelOverlayCompute" );
 		ashes::WriteDescriptorSetArray setBindings;
 		cameraUbo.addDescriptorWriteT( setBindings, PanelOverlay::ComputeBindingIdx::eCamera );
-		setBindings.push_back( makeStorageBufferDescriptorWrite( *vertexBuffer.overlaysData, PanelOverlay::ComputeBindingIdx::eOverlays ) );
-		setBindings.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.vertexBuffer.getBuffer(), PanelOverlay::ComputeBindingIdx::eVertex ) );
+		vertexBuffer.overlaysData->addDescriptorWriteT( setBindings, PanelOverlay::ComputeBindingIdx::eOverlays );
+		vertexBuffer.vertexBuffer.addDescriptorWriteT( setBindings, PanelOverlay::ComputeBindingIdx::eVertex );
 		result.descriptorSet->setBindings( c3d::move( setBindings ) );
 		result.descriptorSet->update();
 
@@ -442,8 +442,8 @@ namespace c3d
 		result.descriptorSet = result.descriptorPool->createDescriptorSet( name );
 		ashes::WriteDescriptorSetArray setBindings;
 		cameraUbo.addDescriptorWriteT( setBindings, BorderPanelOverlay::ComputeBindingIdx::eCamera );
-		setBindings.push_back( makeStorageBufferDescriptorWrite( *vertexBuffer.overlaysData, BorderPanelOverlay::ComputeBindingIdx::eOverlays ) );
-		setBindings.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.vertexBuffer.getBuffer(), BorderPanelOverlay::ComputeBindingIdx::eVertex ) );
+		vertexBuffer.overlaysData->addDescriptorWriteT( setBindings, BorderPanelOverlay::ComputeBindingIdx::eOverlays );
+		vertexBuffer.vertexBuffer.addDescriptorWriteT( setBindings, BorderPanelOverlay::ComputeBindingIdx::eVertex );
 		result.descriptorSet->setBindings( c3d::move( setBindings ) );
 		result.descriptorSet->update();
 
@@ -501,9 +501,9 @@ namespace c3d
 		ashes::WriteDescriptorSetArray setBindings;
 		m_commonData.cameraUbo.addDescriptorWriteT( setBindings, TextOverlay::ComputeBindingIdx::eCamera );
 		m_commonData.textVertexBuffer->renderUbo.addDescriptorWriteT( setBindings, TextOverlay::ComputeBindingIdx::eRender );
-		setBindings.push_back( makeStorageBufferDescriptorWrite( *m_commonData.textVertexBuffer->overlaysData, TextOverlay::ComputeBindingIdx::eOverlays ) );
+		m_commonData.textVertexBuffer->overlaysData->addDescriptorWriteT( setBindings, TextOverlay::ComputeBindingIdx::eOverlays );
 		m_commonData.textVertexBuffer->fillComputeDescriptorWrites( &fontTexture, setBindings );
-		setBindings.push_back( makeStorageBufferDescriptorWrite( m_commonData.textVertexBuffer->vertexBuffer.getBuffer(), TextOverlay::ComputeBindingIdx::eVertex ) );
+		m_commonData.textVertexBuffer->vertexBuffer.addDescriptorWriteT( setBindings, TextOverlay::ComputeBindingIdx::eVertex );
 
 		MbString name = "TextOverlayCompute-" + toUtf8( fontTexture.getFontName() );
 		auto result = textPipeline.descriptorPool->createDescriptorSet( name );

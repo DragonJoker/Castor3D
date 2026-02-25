@@ -166,5 +166,17 @@ namespace c3d
 		return m_buffer->getSubView( offset, size );
 	}
 
+	ashes::WriteDescriptorSet GpuBufferBase::doGetDescriptorWrite( uint32_t dstBinding
+		, uint32_t dstArrayElement )const
+	{
+		return m_buffer->getDescriptorWrite( dstBinding, dstArrayElement );
+	}
+
+	VkDescriptorSetLayoutBinding GpuBufferBase::doGetLayoutBinding( uint32_t index
+		, VkShaderStageFlags stages )const
+	{
+		return m_buffer->getLayoutBinding( index, stages );
+	}
+
 	//*********************************************************************************************
 }

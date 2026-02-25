@@ -1633,10 +1633,8 @@ namespace c3d
 
 			renderUbo.addDescriptorWriteT( writes, InOutBindings::eRender );
 			sceneUbo.addDescriptorWriteT( writes, InOutBindings::eScene );
-			writes.push_back( makeStorageBufferDescriptorWrite( scene.getModelBuffer()
-				, InOutBindings::eModels ) );
-			writes.push_back( makeStorageBufferDescriptorWrite( scene.getBillboardsBuffer()
-				, InOutBindings::eBillboards ) );
+			scene.getModelBuffer().addDescriptorWriteT( writes, InOutBindings::eModels );
+			scene.getBillboardsBuffer().addDescriptorWriteT( writes, InOutBindings::eBillboards );
 			matCache.getPassBuffer().addDescriptorWriteT( writes, InOutBindings::eMaterials );
 			matCache.getSssProfileBuffer().addDescriptorWriteT( writes, InOutBindings::eSssProfiles );
 			writes.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
@@ -1661,12 +1659,9 @@ namespace c3d
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
-				writes.push_back( makeStorageBufferDescriptorWrite( technique.getMaterialsCounts()
-					, InOutBindings::eMaterialsCounts ) );
-				writes.push_back( makeStorageBufferDescriptorWrite( technique.getMaterialsStarts()
-					, InOutBindings::eMaterialsStarts ) );
-				writes.push_back( makeStorageBufferDescriptorWrite( technique.getPixelXY()
-					, InOutBindings::ePixelsXY ) );
+				technique.getMaterialsCounts().addDescriptorWriteT( writes, InOutBindings::eMaterialsCounts );
+				technique.getMaterialsStarts().addDescriptorWriteT( writes, InOutBindings::eMaterialsStarts );
+				technique.getPixelXY().addDescriptorWriteT( writes, InOutBindings::ePixelsXY );
 				writes.push_back( makeStorageImageDescriptorWrite( graph.createImageView( targetImage.getSampledViewId() )
 					, InOutBindings::eOutResult ) );
 				writes.push_back( makeStorageImageDescriptorWrite( technique.getScattering().getTargetView()
@@ -1837,82 +1832,36 @@ namespace c3d
 			ashes::WriteDescriptorSetArray writes;
 
 			if ( isMeshShading )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
-			}
+				modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInMeshlets );
 
 			if ( flags.enableIndices() )
 			{
 				CU_Require( indexBuffer );
-				writes.emplace_back( makeStorageBufferDescriptorWrite( indexBuffer->getBuffer(), VtxBindings::eInIndices, 0u, indexBuffer->getSize() ) );
+				indexBuffer->addDescriptorWriteT( writes, VtxBindings::eInIndices );
 			}
 
 			if ( flags.enablePosition() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPosition, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInPosition );
 			if ( flags.enableNormal() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInNormal, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInNormal );
 			if ( flags.enableTangentSpace() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTangent, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInTangent );
 			if ( flags.enableBitangent() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInBitangent );
 			if ( flags.enableTexcoord0() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInTexcoord0 );
 			if ( flags.enableTexcoord1() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInTexcoord1 );
 			if ( flags.enableTexcoord2() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInTexcoord2 );
 			if ( flags.enableTexcoord3() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInTexcoord3 );
 			if ( flags.enableColours() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInColour, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInColour );
 			if ( flags.enablePassMasks() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
-			}
-
+				modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInPassMasks );
 			if ( flags.enableVelocity() )
-			{
-				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer();
-				writes.emplace_back( makeStorageBufferDescriptorWrite( buffer.getBuffer(), VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
-			}
+				modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInVelocity );
 
 			auto result = pool.createDescriptorSet( toUtf8( name ) + "Vtx"
 				, uint32_t( Sets::eVtx ) );

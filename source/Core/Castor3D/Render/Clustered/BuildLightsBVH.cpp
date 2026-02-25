@@ -629,12 +629,11 @@ namespace c3d
 
 		mainCameraUbo.addLayoutBindingT( bindings, dspbvh::Bindings::eMainCamera, VK_SHADER_STAGE_VERTEX_BIT );
 		clustersCameraUbo.addLayoutBindingT( bindings, dspbvh::Bindings::eClustersCamera, VK_SHADER_STAGE_VERTEX_BIT );
-		c3d::addDescriptorSetLayoutBindingT( bindings, dspbvh::Bindings::eLightBVH, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+		pointLightBVH.addLayoutBindingT( bindings, dspbvh::Bindings::eLightBVH, VK_SHADER_STAGE_VERTEX_BIT );
 
 		mainCameraUbo.addDescriptorWriteT( writes, dspbvh::Bindings::eMainCamera );
 		clustersCameraUbo.addDescriptorWriteT( writes, dspbvh::Bindings::eClustersCamera );
-		writes.emplace_back( uint32_t( dspbvh::Bindings::eLightBVH ), 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ pointLightBVH.getBuffer(), 0u, pointLightBVH.getSize() } } );
+		pointLightBVH.addDescriptorWriteT( writes, dspbvh::Bindings::eLightBVH );
 	}
 
 	void createDisplaySpotLightsBVHProgram( RenderDevice const & device
@@ -650,12 +649,11 @@ namespace c3d
 
 		mainCameraUbo.addLayoutBindingT( bindings, dspbvh::Bindings::eMainCamera, VK_SHADER_STAGE_VERTEX_BIT );
 		clustersCameraUbo.addLayoutBindingT( bindings, dspbvh::Bindings::eClustersCamera, VK_SHADER_STAGE_VERTEX_BIT );
-		c3d::addDescriptorSetLayoutBindingT( bindings, dspbvh::Bindings::eLightBVH, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+		spotLightBVH.addLayoutBindingT( bindings, dspbvh::Bindings::eLightBVH, VK_SHADER_STAGE_VERTEX_BIT );
 
 		mainCameraUbo.addDescriptorWriteT( writes, dspbvh::Bindings::eMainCamera );
 		clustersCameraUbo.addDescriptorWriteT( writes, dspbvh::Bindings::eClustersCamera );
-		writes.emplace_back( uint32_t( dspbvh::Bindings::eLightBVH ), 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ spotLightBVH.getBuffer(), 0u, spotLightBVH.getSize() } } );
+		spotLightBVH.addDescriptorWriteT( writes, dspbvh::Bindings::eLightBVH );
 	}
 
 	//*********************************************************************************************

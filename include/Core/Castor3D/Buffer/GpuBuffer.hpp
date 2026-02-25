@@ -226,8 +226,60 @@ namespace c3d
 			return m_data;
 		}
 
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			return doGetDescriptorWrite( uint32_t( dstBinding ), dstArrayElement );
+		}
+
+		template< typename BindingT >
+		void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
+		}
+
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding getLayoutBinding( BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			return doGetLayoutBinding( uint32_t( index ), stages );
+		}
+
+		template< typename BindingT >
+		void addLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+		}
+
+		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+			++index;
+		}
+
 	protected:
 		C3D_API crg::BufferViewId getSubView( DeviceSize offset, DeviceSize size )const;
+
+	private:
+		C3D_API ashes::WriteDescriptorSet doGetDescriptorWrite( uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u )const;
+		C3D_API VkDescriptorSetLayoutBinding doGetLayoutBinding( uint32_t index
+			, VkShaderStageFlags stages )const;
 
 	private:
 		RenderSystem const & m_renderSystem;
