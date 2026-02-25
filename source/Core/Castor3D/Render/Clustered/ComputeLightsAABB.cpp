@@ -340,14 +340,12 @@ namespace c3d
 		ProgramModule programModule{ "LightsAABB", dsplgtb::createDebugDisplayShader( device ) };
 		program = makeProgramStates( device, programModule );
 
-		c3d::addDescriptorSetLayoutBindingT( bindings, dsplgtb::Bindings::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
-		c3d::addDescriptorSetLayoutBindingT( bindings, dsplgtb::Bindings::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+		mainCameraUbo.addLayoutBindingT( bindings, dsplgtb::Bindings::eMainCamera, VK_SHADER_STAGE_VERTEX_BIT );
+		clustersCameraUbo.addLayoutBindingT( bindings, dsplgtb::Bindings::eClustersCamera, VK_SHADER_STAGE_VERTEX_BIT );
 		c3d::addDescriptorSetLayoutBindingT( bindings, dsplgtb::Bindings::eLightsAABB, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
 
-		writes.emplace_back( uint32_t( dsplgtb::Bindings::eMainCamera ), 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
-		writes.emplace_back( uint32_t( dsplgtb::Bindings::eClustersCamera ), 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
+		mainCameraUbo.addDescriptorWriteT( writes, dsplgtb::Bindings::eMainCamera );
+		clustersCameraUbo.addDescriptorWriteT( writes, dsplgtb::Bindings::eMainCamera );
 		writes.emplace_back( uint32_t( dsplgtb::Bindings::eLightsAABB ), 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ allLightsAABBB.getBuffer(), 0u, allLightsAABBB.getSize() } } );
 	}

@@ -4,9 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayUbo_H___
 #define ___C3D_OverlayUbo_H___
 
-#include "UbosModule.hpp"
-
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>

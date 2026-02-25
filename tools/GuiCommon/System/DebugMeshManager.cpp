@@ -174,11 +174,10 @@ namespace GuiCommon
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, ashes::WriteDescriptorSetArray & writes )
 		{
-			c3d::addDescriptorSetLayoutBindingT( bindings, BindingPoints::eCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+			cameraUbo.addLayoutBindingT( bindings, BindingPoints::eCamera, VK_SHADER_STAGE_VERTEX_BIT );
 			c3d::addDescriptorSetLayoutBindingT( bindings, BindingPoints::eMeshConfig, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
 
-			writes.emplace_back( uint32_t( BindingPoints::eCamera ), 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ cameraUbo.getUbo().getBuffer().getBuffer(), cameraUbo.getUbo().getByteOffset(), cameraUbo.getUbo().getByteRange() } } );
+			cameraUbo.addDescriptorWriteT( writes, BindingPoints::eCamera );
 			writes.emplace_back( uint32_t( BindingPoints::eMeshConfig ), 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ cubeBoxUbo.getBuffer().getBuffer(), cubeBoxUbo.getOffset(), cubeBoxUbo.getSize() } } );
 		}

@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_LpvGridConfigUbo_H___
 #define ___C3D_LpvGridConfigUbo_H___
 
-#include "UbosModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 #include <CastorUtils/Graphics/Grid.hpp>
@@ -82,17 +81,13 @@ namespace c3d
 	}
 
 	class LpvGridConfigUbo
+		: public UboT< LpvGridConfigUboConfiguration >
 	{
 	public:
 		using Configuration = LpvGridConfigUboConfiguration;
 
 	public:
-		C3D_API LpvGridConfigUbo( LpvGridConfigUbo const & rhs ) = delete;
-		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo const & rhs ) = delete;
-		C3D_API LpvGridConfigUbo( LpvGridConfigUbo && rhs )noexcept = default;
-		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
-		C3D_API ~LpvGridConfigUbo()noexcept;
 
 		C3D_API Grid const & cpuUpdate( BoundingBox const & aabb
 			, Point3f const & cameraPos
@@ -104,45 +99,7 @@ namespace c3d
 			, Point3f const & cameraDir
 			, float indirectAttenuation );
 
-		UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		void addDescriptorWrite( ashes::WriteDescriptorSetArray & descriptorWrites
-			, uint32_t & dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			descriptorWrites.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
-			++dstBinding;
-		}
-
 	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 		Grid m_grid;
 	};
 }

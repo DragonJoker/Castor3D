@@ -1,7 +1,5 @@
 #include "Uncharted2ToneMapping/Uncharted2Ubo.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 
@@ -56,21 +54,13 @@ namespace Uncharted2
 	const c3d::String Uncharted2Ubo::Data = cuT( "Uncharted2Data" );
 
 	Uncharted2Ubo::Uncharted2Ubo( c3d::RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-		auto & data = m_ubo.getData();
-		data = Configuration{};
-	}
-
-	Uncharted2Ubo::~Uncharted2Ubo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void Uncharted2Ubo::update( Configuration const & config )
 	{
-		m_ubo.getData() = config;
+		setData( config );
 	}
 
 	//************************************************************************************************

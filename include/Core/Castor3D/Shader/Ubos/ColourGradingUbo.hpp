@@ -4,11 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ColourGradingUbo_H___
 #define ___C3D_ColourGradingUbo_H___
 
-#include "UbosModule.hpp"
-
 #include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
-
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
@@ -108,17 +105,13 @@ namespace c3d
 	}
 
 	class ColourGradingUbo
+		: public UboT< ColourGradingConfig >
 	{
 	public:
 		using Configuration = ColourGradingConfig;
 
 	public:
-		C3D_API ColourGradingUbo( ColourGradingUbo const & rhs ) = delete;
-		C3D_API ColourGradingUbo & operator=( ColourGradingUbo const & rhs ) = delete;
-		C3D_API ColourGradingUbo( ColourGradingUbo && rhs )noexcept = delete;
-		C3D_API ColourGradingUbo & operator=( ColourGradingUbo && rhs )noexcept = delete;
 		C3D_API explicit ColourGradingUbo( RenderDevice const & device );
-		C3D_API ~ColourGradingUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -128,27 +121,6 @@ namespace c3d
 		 *\param[in]	config	La configuration HDR.
 		 */
 		C3D_API void cpuUpdate( Configuration const & config );
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

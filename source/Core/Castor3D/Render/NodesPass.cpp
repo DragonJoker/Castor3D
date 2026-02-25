@@ -338,8 +338,7 @@ namespace c3d
 			}
 		}
 
-		shadowBuffer.addBinding( descriptorWrites
-			, index );
+		shadowBuffer.addDescriptorWrite( descriptorWrites, index );
 		bindBuffer( renderSystem.getRandomStorage().getBuffer()
 			, descriptorWrites
 			, index );
@@ -386,8 +385,7 @@ namespace c3d
 
 		if ( hasShadows )
 		{
-			shadowBuffer.addBinding( descriptorWrites
-				, index );
+			shadowBuffer.addDescriptorWrite( descriptorWrites, index );
 			bindBuffer( renderSystem.getRandomStorage().getBuffer()
 				, descriptorWrites
 				, index );
@@ -417,8 +415,7 @@ namespace c3d
 			CU_Require( indirectLighting.vctConfigUbo );
 			CU_Require( indirectLighting.vctFirstBounce );
 			CU_Require( indirectLighting.vctSecondaryBounce );
-			indirectLighting.vctConfigUbo->addDescriptorWrite( descriptorWrites
-				, index );
+			indirectLighting.vctConfigUbo->addDescriptorWrite( descriptorWrites, index );
 			bindTexture( indirectLighting.vctFirstBounce->getSampledView()
 				, *indirectLighting.vctFirstBounce->sampler
 				, descriptorWrites

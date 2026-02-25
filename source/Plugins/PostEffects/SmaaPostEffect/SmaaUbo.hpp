@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "SmaaConfig.hpp"
 
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <CastorUtils/Math/Point.hpp>
 
@@ -107,46 +107,20 @@ namespace smaa
 	};
 
 	class SmaaUbo
+		: public c3d::UboT< SmaaUboConfiguration >
 	{
 	public:
 		using Configuration = SmaaUboConfiguration;
 
 	public:
-		SmaaUbo( SmaaUbo const & rhs ) = delete;
-		SmaaUbo & operator=( SmaaUbo const & rhs ) = delete;
-		SmaaUbo( SmaaUbo && rhs ) = default;
-		SmaaUbo & operator=( SmaaUbo && rhs ) = delete;
 		explicit SmaaUbo( c3d::RenderDevice const & device );
-		~SmaaUbo();
 
 		void cpuUpdate( c3d::Size const & renderSize
 			, SmaaConfig const & config );
 
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

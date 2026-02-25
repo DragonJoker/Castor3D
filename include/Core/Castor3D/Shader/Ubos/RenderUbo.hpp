@@ -4,11 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderUbo_H___
 #define ___C3D_RenderUbo_H___
 
-#include "UbosModule.hpp"
-
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
@@ -50,17 +48,13 @@ namespace c3d
 	}
 
 	class RenderUbo
+		: public UboT< RenderUboConfiguration >
 	{
 	public:
 		using Configuration = RenderUboConfiguration;
 
 	public:
-		C3D_API RenderUbo( RenderUbo const & rhs ) = delete;
-		C3D_API RenderUbo & operator=( RenderUbo const & rhs ) = delete;
-		C3D_API RenderUbo( RenderUbo && rhs )noexcept = delete;
-		C3D_API RenderUbo & operator=( RenderUbo && rhs )noexcept = delete;
 		C3D_API explicit RenderUbo( RenderDevice const & device );
-		C3D_API ~RenderUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -88,35 +82,6 @@ namespace c3d
 		C3D_API void cpuUpdate( HdrConfig const & hdrConfig
 			, Size const & renderSize, bool safeBanded
 			, uint32_t debugIndex );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		template< typename BindingT >
-		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

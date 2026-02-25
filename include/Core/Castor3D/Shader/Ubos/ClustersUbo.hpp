@@ -4,11 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ClustersUbo_H___
 #define ___C3D_ClustersUbo_H___
 
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
@@ -94,16 +93,13 @@ namespace c3d
 	}
 
 	class ClustersUbo
+		: public UboT< ClustersUboConfiguration >
 	{
 	public:
 		using Configuration = ClustersUboConfiguration;
-		C3D_API ClustersUbo( ClustersUbo const & rhs ) = delete;
-		C3D_API ClustersUbo & operator=( ClustersUbo const & rhs ) = delete;
-		C3D_API ClustersUbo( ClustersUbo && rhs )noexcept = delete;
-		C3D_API ClustersUbo & operator=( ClustersUbo && rhs )noexcept = delete;
 
+	public:
 		C3D_API explicit ClustersUbo( RenderDevice const & device );
-		C3D_API ~ClustersUbo()noexcept;
 
 		C3D_API void cpuUpdate( Point3ui gridDim
 			, Point2ui clusterSize
@@ -114,60 +110,6 @@ namespace c3d
 			, ClusterSplitScheme splitScheme
 			, float minDistance
 			, bool enableWaveIntrinsics );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index
-			, VkShaderStageFlags stages )const
-		{
-			return makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages );
-		}
-
-		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, uint32_t & index
-			, VkShaderStageFlags stages )const
-		{
-			c3d::addDescriptorSetLayoutBinding( bindings
-				, index
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		void addDescriptorWrite( ashes::WriteDescriptorSetArray & descriptorWrites
-			, uint32_t & dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			descriptorWrites.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
-			++dstBinding;
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

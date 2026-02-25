@@ -15,21 +15,14 @@ namespace atmosphere_scattering
 
 	WeatherUbo::WeatherUbo( c3d::RenderDevice const & device
 		, bool & dirty )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 		, m_config{ dirty }
 	{
-	}
-
-	WeatherUbo::~WeatherUbo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void WeatherUbo::cpuUpdate( Configuration const & config )
 	{
 		m_config = config;
-		auto & data = m_ubo.getData();
-		data = config;
+		setData( config );
 	}
 }

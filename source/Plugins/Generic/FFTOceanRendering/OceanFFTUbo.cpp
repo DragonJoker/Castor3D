@@ -15,14 +15,8 @@ namespace ocean_fft
 	c3d::MbString const OceanUbo::Data = "c3d_oceanData";
 
 	OceanUbo::OceanUbo( c3d::RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-
-	OceanUbo::~OceanUbo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void OceanUbo::cpuUpdate( OceanUboConfiguration const & config
@@ -37,7 +31,7 @@ namespace ocean_fft
 		blockOffset -= c3d::Point2i{ fftConfig.blocksCount->x >> 1, fftConfig.blocksCount->y >> 1 };
 		auto amplitude = float( fftConfig.amplitude * 0.3f / sqrt( fftConfig.heightMapSamples * fftConfig.heightMapSamples ) );
 
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data = config;
 		data.patchSize = fftConfig.patchSize;
 		data.heightMapSamples->x = fftConfig.heightMapSamples;

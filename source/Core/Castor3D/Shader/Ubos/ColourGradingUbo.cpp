@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -210,20 +208,13 @@ namespace c3d
 	//*********************************************************************************************
 
 	ColourGradingUbo::ColourGradingUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal ) }
+		: UboT{ device, MemoryPropertyFlags::eDeviceLocal }
 	{
-	}
-
-	ColourGradingUbo::~ColourGradingUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void ColourGradingUbo::cpuUpdate( Configuration const & config )
 	{
-		CU_Require( m_ubo );
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data.enabled = config.enabled;
 		data.enableSplitToning = config.enableSplitToning;
 		data.enableShadowMidToneHighlight = config.enableShadowMidToneHighlight;

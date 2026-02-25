@@ -1,45 +1,11 @@
 #include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-
 CU_ImplementSmartPtr( c3d, ShadowBuffer )
 
 namespace c3d
 {
 	ShadowBuffer::ShadowBuffer( RenderDevice const & device )
-		: m_device{ device }
-		, m_buffer{ m_device.uboPool->getBuffer< AllShadowData >( MemoryPropertyFlags::eHostVisible ) }
+		: UboT{ device, MemoryPropertyFlags::eHostVisible }
 	{
-	}
-
-	ShadowBuffer::~ShadowBuffer()noexcept
-	{
-		m_device.uboPool->putBuffer( m_buffer );
-	}
-
-	VkDescriptorSetLayoutBinding ShadowBuffer::createLayoutBinding( uint32_t binding
-		, VkShaderStageFlags stages )const
-	{
-		return makeDescriptorSetLayoutBinding( binding
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, stages );
-	}
-
-	ashes::WriteDescriptorSet ShadowBuffer::getBinding( uint32_t binding )const
-	{
-		return m_buffer.getDescriptorWrite( binding, 0u );
-	}
-
-	void ShadowBuffer::addBinding( ashes::WriteDescriptorSetArray & descriptorWrites
-		, uint32_t & binding )const
-	{
-		descriptorWrites.emplace_back( getBinding( binding ) );
-		++binding;
-	}
-
-	void ShadowBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, VkDescriptorSetLayoutBinding const & binding )const
-	{
-		m_buffer.createSizedBinding( descriptorSet, binding );
 	}
 }

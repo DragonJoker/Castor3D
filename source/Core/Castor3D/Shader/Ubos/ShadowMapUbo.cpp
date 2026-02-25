@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -48,30 +46,20 @@ namespace c3d
 	//*********************************************************************************************
 
 	ShadowMapUbo::ShadowMapUbo( RenderDevice const & device )
-		: m_device{ device }
+		: UboT{ device, MemoryPropertyFlags::eDeviceLocal }
 	{
-		m_ubo = m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eDeviceLocal );
-	}
-
-	ShadowMapUbo::~ShadowMapUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void ShadowMapUbo::update( LightInstance const & light
 		, uint32_t index )
 	{
-		CU_Require( m_ubo );
-		auto & data = m_ubo.getData();
+		auto & data = getNCData();
 		data.lightOffset = light.getBufferIndex();
 		auto position = light.getNode().getDerivedPosition();
-		data.lightPosFarPlane =
-		{
-			position[0],
-			position[1],
-			position[2],
-			light.getCategory().getFarPlane(),
-		};
+		data.lightPosFarPlane = { position[0]
+			, position[1]
+			, position[2]
+			, light.getCategory().getFarPlane() };
 
 		if ( light.getCategory().getLightType() == LightType::eDirectional )
 		{

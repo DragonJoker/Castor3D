@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "AtmosphereScatteringConfig.hpp"
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
@@ -136,6 +136,7 @@ namespace atmosphere_scattering
 	};
 
 	class AtmosphereScatteringUbo
+		: public c3d::UboT< AtmosphereScatteringConfig >
 	{
 	private:
 		using Configuration = AtmosphereScatteringConfig;
@@ -147,39 +148,10 @@ namespace atmosphere_scattering
 	public:
 		AtmosphereScatteringUbo( c3d::RenderDevice const & device
 			, bool & dirty );
-		~AtmosphereScatteringUbo();
+
 		c3d::Pair< c3d::Point3f, c3d::Vector3f > cpuUpdate( Configuration const & config
 			, c3d::SceneNode const & sunNode
 			, c3d::SceneNode const & planetNode );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
 
 		c3d::Point3f const & getSunDirection()const
 		{
@@ -196,8 +168,6 @@ namespace atmosphere_scattering
 		static const c3d::MbString Data;
 
 	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 		bool & m_dirty;
 		CheckedAtmosphereScatteringConfig m_config;
 		c3d::GroupChangeTracked< c3d::Point3f > m_sunDirection;

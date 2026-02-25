@@ -6,21 +6,13 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
-#include "Castor3D/Scene/Light/DirectionalLight.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
-#include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Shader/ShaderBuffer.hpp"
-
-#include <CastorUtils/Design/ArrayView.hpp>
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 namespace c3d
 {
 	class ShadowBuffer
+		: public UboT< AllShadowData >
 	{
-	public:
-		using ShadowsData = ArrayView< AllShadowData >;
-
 	public:
 		/**
 		 *\~english
@@ -31,67 +23,16 @@ namespace c3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API explicit ShadowBuffer( RenderDevice const & device );
-		C3D_API ~ShadowBuffer()noexcept;
 		/**
 		 *\~english
-		 *\brief		Creates the descriptor set layout binding.
+		 *\return		The buffer data.
 		 *\~french
-		 *\brief		Crée une attache de layout de set de descripteurs.
+		 *\brief		Lees données du buffer.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
-			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| VK_SHADER_STAGE_GEOMETRY_BIT
-				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				| VK_SHADER_STAGE_VERTEX_BIT ) )const;
-		/**
-		 *\~english
-		 *\brief		Creates a frame pass binding.
-		 *\~french
-		 *\brief		Crée une attache de frame pass.
-		 */
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_buffer.createPassBinding( pass, binding );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates the descriptor write for this buffer.
-		 *\~french
-		 *\brief		Crée le descriptor write pour ce tampon.
-		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
-		/**
-		 *\~english
-		 *\brief		Creates the descriptor write for this buffer.
-		 *\~french
-		 *\brief		Crée le descriptor write pour ce tampon.
-		 */
-		C3D_API void addBinding( ashes::WriteDescriptorSetArray & descriptorWrites
-			, uint32_t & binding )const;
-		/**
-		 *\~english
-		 *\brief		Creates the descriptor set binding at given point.
-		 *\param[in]	descriptorSet	The descriptor set that receives the binding.
-		 *\param[in]	binding			The descriptor set layout binding.
-		 *\~french
-		 *\brief		Crée une attache de set de descripteurs au point donné.
-		 *\param[in]	descriptorSet	Le set de descripteurs recevant l'attache.
-		 *\param[in]	binding			L'attache de layout de set de descripteurs.
-		 */
-		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & binding )const;
-
 		auto & getData()
 		{
-			return m_buffer.getData();
+			return UboT< AllShadowData >::getData();
 		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< AllShadowData > m_buffer;
 	};
 }
 

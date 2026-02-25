@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
@@ -33,22 +31,15 @@ namespace c3d
 	//*********************************************************************************************
 
 	VoxelizerUbo::VoxelizerUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-
-	VoxelizerUbo::~VoxelizerUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void VoxelizerUbo::cpuUpdate( VctConfig const & voxelConfig
 		, float worldToGrid
 		, uint32_t voxelGridSize )
 	{
-		CU_Require( m_ubo );
-		auto & voxelData = m_ubo.getData();
+		auto & voxelData = getNCData();
 		voxelData.worldToGrid = worldToGrid;
 		voxelData.gridToWorld = 1.0f / worldToGrid;
 		voxelData.clipToGrid = float( voxelGridSize );

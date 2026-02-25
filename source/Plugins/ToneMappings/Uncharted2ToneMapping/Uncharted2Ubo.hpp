@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Uncharted2_Uncharted2Ubo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/CompositeTypes/Function.hpp>
@@ -73,44 +73,19 @@ namespace Uncharted2
 	};
 
 	class Uncharted2Ubo
+		: public c3d::UboT< Uncharted2UboConfiguration >
 	{
 	private:
 		using Configuration = Uncharted2UboConfiguration;
 
 	public:
-		Uncharted2Ubo( Uncharted2Ubo const & rhs ) = delete;
-		Uncharted2Ubo & operator=( Uncharted2Ubo const & rhs ) = delete;
-		Uncharted2Ubo( Uncharted2Ubo && rhs ) = default;
-		Uncharted2Ubo & operator=( Uncharted2Ubo && rhs ) = delete;
 		explicit Uncharted2Ubo( c3d::RenderDevice const & device );
-		~Uncharted2Ubo();
 
 		void update( Configuration const & config );
-
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
 
 	public:
 		static const c3d::String Buffer;
 		static const c3d::String Data;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

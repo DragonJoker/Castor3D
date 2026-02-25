@@ -377,7 +377,7 @@ namespace c3d
 		, m_listener{ getEngine()->addNewFrameListener( getName() + string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
-		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		, m_configUbo{ m_device }
 	{
 		log::debug << "Created RenderWindow, size: " << size << std::endl;
 		if ( !m_surface )
@@ -418,7 +418,6 @@ namespace c3d
 		doDestroySwapchain();
 		doDestroyRenderPass();
 		doDestroyProgram();
-		m_device.uboPool->putBuffer( m_configUbo );
 
 		if ( m_reservedQueue )
 			m_queues->unreserveQueue( m_reservedQueue );
@@ -533,12 +532,13 @@ namespace c3d
 		{
 			m_loadingScreen->update( updater );
 			auto extent = m_loadingScreen->getResult().getExtent();
-			auto & config = m_configUbo.getData();
+			auto config = m_configUbo.getData();
 			config.multiply = Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
 			config.add = Point4f{};
 			config.uvMultiplyAdd = Point4f{ float( m_size->x ) / float( extent.width )
 				, float( m_size->y ) / float( extent.height )
 				, 0.0f, 0.0f };
+			m_configUbo.setData( config );
 		}
 		else if ( auto target = getRenderTarget() )
 		{
@@ -569,12 +569,13 @@ namespace c3d
 					if (m_texture3Dto2D )
 						m_texture3Dto2D->update( updater );
 
-					auto & config = m_configUbo.getData();
+					auto config = m_configUbo.getData();
 					config.multiply = Point4f{ intermediate.factors.multiply };
 					config.add = Point4f{ intermediate.factors.add };
 					config.data = Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
 						, 0.0f, 0.0f, 0.0f };
 					config.uvMultiplyAdd = Point4f{ 1.0f, 1.0f, 0.0f, 0.0f };
+					m_configUbo.setData( config );
 				}
 				else
 #endif
@@ -582,10 +583,11 @@ namespace c3d
 					updater.combineIndex = 0u;
 					updater.cellSize = 0.0f;
 					updater.gridCenter = {};
-					auto & config = m_configUbo.getData();
+					auto config = m_configUbo.getData();
 					config.multiply = Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
 					config.add = Point4f{};
 					config.uvMultiplyAdd = Point4f{ 1.0f, 1.0f, 0.0f, 0.0f };
+					m_configUbo.setData( config );
 				}
 			}
 		}
@@ -1192,7 +1194,7 @@ namespace c3d
 			{
 				auto const & intermediateView = intermediate.intermediateSampledView;
 				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediateView.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-						, makeUniformBufferDescriptorWrite( m_configUbo, 1u ) }
+						, m_configUbo.getDescriptorWrite( 1u ) }
 					, intermediateView.factors.invertY );
 			}
 
@@ -1328,7 +1330,7 @@ namespace c3d
 			for ( auto const & intermediate : makeArrayView( begin, m_intermediates.end() ) )
 			{
 				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediate.intermediateSampledView.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-						, makeUniformBufferDescriptorWrite( m_configUbo, 1u ) }
+						, m_configUbo.getDescriptorWrite( 1u ) }
 				, intermediate.intermediateSampledView.factors.invertY );
 			}
 

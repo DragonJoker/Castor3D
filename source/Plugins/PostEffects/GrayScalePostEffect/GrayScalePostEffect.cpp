@@ -1,7 +1,6 @@
 #include "GrayScalePostEffect/GrayScalePostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Model/Vertex.hpp>
@@ -86,15 +85,10 @@ namespace grayscale
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< c3d::Point3f >( c3d::MemoryPropertyFlags::eNone ) }
+		, m_configUbo{ renderSystem.getRenderDevice() }
 		, m_shader{ cuT( "GrayScale" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
-	}
-
-	PostEffect::~PostEffect()
-	{
-		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_configUbo );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -156,7 +150,7 @@ namespace grayscale
 	{
 		if ( m_factors.isDirty() )
 		{
-			m_configUbo.getData() = m_factors.value();
+			m_configUbo.setData( m_factors.value() );
 			m_factors.reset();
 		}
 	}

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3DFXAA_FxaaUbo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
@@ -49,6 +49,7 @@ namespace fxaa
 	};
 
 	class FxaaUbo
+		: public c3d::UboT< FxaaUboConfiguration >
 	{
 	private:
 		using Configuration = FxaaUboConfiguration;
@@ -56,35 +57,14 @@ namespace fxaa
 	public:
 		explicit FxaaUbo( c3d::RenderDevice const & device
 			, c3d::Size const & size );
-		~FxaaUbo();
+
 		void cpuUpdate( float shift
 			, float span
 			, float reduce );
 
-		void createPassBinding( crg::FramePass & pass
-			, uint32_t binding )const
-		{
-			m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		c3d::RenderDevice const & m_device;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

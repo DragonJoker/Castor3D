@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderUbosModule_H___
 #define ___C3D_ShaderUbosModule_H___
 
-#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Limits.hpp"
 
+#include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace c3d
@@ -90,6 +90,29 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	Debug switchs.
+	*\~french
+	*\brief
+	*	Les switchs de debug.
+	*/
+	struct DebugConfig;
+	/**
+	*\~english
+	*\brief
+	*	Meshlet draw parameters.
+	*\~french
+	*\brief
+	*	Paramètres de dessin de meshlets.
+	*/
+	struct DrawParamsConfiguration
+	{
+		uint32_t nodeId{};
+		uint32_t instanceCount{};
+		uint32_t instanceOffset{};
+	};
+	/**
+	*\~english
+	*\brief
 	*	Fonts UBO.
 	*\~french
 	*\brief
@@ -113,26 +136,35 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
-	*	Debug switchs.
+	*	Light propagation UBO.
 	*\~french
 	*\brief
-	*	Les switchs de debug.
+	*	UBO de light propagation.
 	*/
-	struct DebugConfig;
+	class LayeredLpvGridConfigUbo;
 	/**
 	*\~english
 	*\brief
-	*	Meshlet draw parameters.
+	*	Light propagation data.
 	*\~french
 	*\brief
-	*	Paramètres de dessin de meshlets.
+	*	Données de light propagation.
 	*/
-	struct DrawParamsConfiguration
+	struct LayeredLpvGridConfigUboConfiguration
 	{
-		uint32_t nodeId{};
-		uint32_t instanceCount{};
-		uint32_t instanceOffset{};
+		Array< Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
+		Point4f allCellSizes{};
+		Point4f gridSizeAtt{};
 	};
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LpvGridConfigUbo;
 	/**
 	*\~english
 	*\brief
@@ -171,20 +203,6 @@ namespace c3d
 		float tanFovXHalf = 1.0f;
 		float tanFovYHalf = 1.0f;
 		float lightOffset = 0.0f;
-	};
-	/**
-	*\~english
-	*\brief
-	*	Light propagation data.
-	*\~french
-	*\brief
-	*	Données de light propagation.
-	*/
-	struct LayeredLpvGridConfigUboConfiguration
-	{
-		Array< Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
-		Point4f allCellSizes{};
-		Point4f gridSizeAtt{};
 	};
 	/**
 	*\~english
@@ -505,12 +523,31 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	Voxelizer configuration data UBO.
+	*\~french
+	*\brief
+	*	UBO des données de configuration du voxelizer.
+	*/
+	class VoxelizerUbo;
+	/**
+	*\~english
+	*\brief
 	*	Voxelizer configuration data.
 	*\~french
 	*\brief
 	*	Données de configuration du voxelizer.
 	*/
 	struct VoxelizerUboConfiguration;
+	/**
+	*\~english
+	*\brief
+	*	Base class for UBO.
+	*\~french
+	*\brief
+	*	Classe de base pour les UBO.
+	*/
+	template< typename DataT >
+	class UboT;
 
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( c3d, FontUbo, C3D_API );

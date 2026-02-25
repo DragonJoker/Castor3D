@@ -3,7 +3,6 @@
 #include "LightStreaksPostEffect/LightStreaksPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 

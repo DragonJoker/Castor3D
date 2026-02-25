@@ -125,16 +125,11 @@ namespace c3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	void OverlayVertexBufferPoolT< VertexT, CountT >::fillComputeDescriptorSet( FontTexture const * fontTexture
-		, ashes::DescriptorSetLayout const & descLayout
-		, ashes::DescriptorSet & descriptorSet )const
+	void OverlayVertexBufferPoolT< VertexT, CountT >::fillComputeDescriptorWrites( FontTexture const * fontTexture
+		, ashes::WriteDescriptorSetArray & descriptorWrites )const
 	{
 		if ( textBuffer && fontTexture )
-		{
-			textBuffer->fillDescriptorSet( fontTexture
-				, descLayout
-				, descriptorSet );
-		}
+			textBuffer->fillDescriptorWrites( fontTexture, descriptorWrites );
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -257,35 +252,21 @@ namespace c3d
 		}
 
 		auto result = descriptorPool->createDescriptorSet( toUtf8( debugName ) );
-		engine.getMaterialCache().getPassBuffer().createBinding( *result
-			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-		engine.getMaterialCache().getTexConfigBuffer().createBinding( *result
-			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
-		engine.getMaterialCache().getTexAnimBuffer().createBinding( *result
-			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
-		cameraUbo.createSizedBinding( *result
-			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eCamera ) ) );
-		renderUbo.createSizedBinding( *result
-			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eRender ) ) );
-		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces ) )
-			, vertexBuffer.getBuffer().getBuffer()
-			, 0u
-			, uint32_t( vertexBuffer.getBuffer().getBuffer().getSize() ) );
-		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlays ) )
-			, overlaysData->getBuffer()
-			, 0u
-			, uint32_t( overlaysData->getSize() ) );
-		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysIDs ) )
-			, idsBuffer
-			, 0u
-			, uint32_t( idsBuffer.getSize() ) );
+		ashes::WriteDescriptorSetArray writes;
+		writes.push_back( engine.getMaterialCache().getPassBuffer().getBinding( OverlayBindingId::eMaterials ) );
+		writes.push_back( engine.getMaterialCache().getTexConfigBuffer().getBinding( OverlayBindingId::eTexConfigs ) );
+		writes.push_back( engine.getMaterialCache().getTexAnimBuffer().getBinding( OverlayBindingId::eTexAnims ) );
+		cameraUbo.addDescriptorWriteT( writes, OverlayBindingId::eCamera );
+		renderUbo.addDescriptorWriteT( writes, OverlayBindingId::eRender );
+		writes.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.getBuffer(), OverlayBindingId::eOverlaysSurfaces ) );
+		writes.push_back( makeStorageBufferDescriptorWrite( *overlaysData, OverlayBindingId::eOverlays ) );
+		writes.push_back( makeStorageBufferDescriptorWrite( idsBuffer, OverlayBindingId::eOverlaysIDs
+			, 0u, uint32_t( idsBuffer.getSize() ) ) );
 
 		if ( fontTexture && textBuffer )
-		{
-			fontTexture->getFontUbo().createSizedBinding( *result
-				, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysFont ) ) );
-		}
+			fontTexture->getFontUbo().addDescriptorWriteT( writes, OverlayBindingId::eOverlaysFont );
 
+		result->setBindings( c3d::move( writes ) );
 		result->update();
 		return result;
 	}

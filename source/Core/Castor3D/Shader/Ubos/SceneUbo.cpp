@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -47,20 +45,13 @@ namespace c3d
 	//*********************************************************************************************
 
 	SceneUbo::SceneUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		: UboT{ device, MemoryPropertyFlags::eNone }
 	{
-	}
-
-	SceneUbo::~SceneUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	SceneUbo::Configuration & SceneUbo::cpuUpdate( Fog const & fog )
 	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 		configuration.fogType = uint32_t( fog.getType() );
 		configuration.fogDensity = fog.getDensity();
 		return configuration;

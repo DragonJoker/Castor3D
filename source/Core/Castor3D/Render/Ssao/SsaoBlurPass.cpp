@@ -436,13 +436,14 @@ namespace c3d
 		, m_size{ size }
 		, m_result{ ssaoblr::doCreateTexture( m_device, *input.resources, makeString( m_graph.getName() ) + cuT( "SsaoBlur" ) + prefix, input.getFormat(), m_size, axis->y != 0 ) }
 		, m_bentResult{ ssaoblr::doCreateTexture( m_device, *input.resources, makeString( m_graph.getName() ) + cuT( "SsaoBentNormals" ) + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
-		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		, m_configurationUbo{ m_device }
 		, m_programs{ Program{ device, false, makeString( m_graph.getName() ) }
 			, Program{ device, true, makeString( m_graph.getName() ) } }
 	{
 		stepProgressBarLocal( progress, cuT( "Creating " ) + makeString( m_graph.getName() ) + cuT( " SSAO " ) + prefix + cuT( " blur pass" ) );
-		auto & configuration = m_configurationUbo.getData();
+		auto configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
+		m_configurationUbo.setData( c3d::move( configuration ) );
 		auto & pass = m_graph.createPass( "Blur" + toUtf8( prefix )
 			, [this, &passIndex, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
@@ -483,14 +484,13 @@ namespace c3d
 	{
 		m_bentResult.destroy();
 		m_result.destroy();
-		m_device.uboPool->putBuffer( m_configurationUbo );
 	}
 
 	void SsaoBlurPass::update( CpuUpdater const & )
 	{
 		if ( m_config.blurRadius.isDirty() )
 		{
-			auto & configuration = m_configurationUbo.getData();
+			auto configuration = m_configurationUbo.getData();
 
 			switch ( m_config.blurRadius.value().value() )
 			{
@@ -534,6 +534,8 @@ namespace c3d
 				configuration.gaussian[1][2] = 0.036108f;
 				break;
 			}
+
+			m_configurationUbo.setData( c3d::move( configuration ) );
 		}
 	}
 

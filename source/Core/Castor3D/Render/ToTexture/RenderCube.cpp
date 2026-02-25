@@ -206,12 +206,11 @@ namespace c3d
 					renderPass,
 				} );
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + string::toMbString( face ) );
-			facePipeline.matrixUbo.createSizedBinding( *facePipeline.descriptorSet
-				, m_descriptorLayout->getBinding( 0u ) );
-			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-				, view
-				, m_sampler->getSampler() );
-			doFillDescriptorSet( *m_descriptorLayout, *facePipeline.descriptorSet, face );
+			ashes::WriteDescriptorSetArray writes;
+			facePipeline.matrixUbo.addDescriptorWriteT( writes, 0u );
+			writes.push_back( makeImageViewDescriptorWrite( view, m_sampler->getSampler(), 1u ) );
+			doFillDescriptorWrites( writes, face );
+			facePipeline.descriptorSet->setBindings( c3d::move( writes ) );
 			facePipeline.descriptorSet->update();
 			++face;
 		}
@@ -266,8 +265,7 @@ namespace c3d
 	{
 	}
 
-	void RenderCube::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet
+	void RenderCube::doFillDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t face )
 	{
 	}

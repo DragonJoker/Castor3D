@@ -1635,15 +1635,12 @@ namespace c3d
 			auto const & engine = *scene.getOwner();
 			auto const & matCache = engine.getMaterialCache();
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( mainCameraUbo.getDescriptorWrite( InOutBindings::eMainCamera ) );
-
+			mainCameraUbo.addDescriptorWriteT( writes, InOutBindings::eMainCamera );
 			if ( clustersCameraUbo )
-			{
-				writes.push_back( clustersCameraUbo->getDescriptorWrite( InOutBindings::eClustersCamera ) );
-			}
+				clustersCameraUbo->addDescriptorWriteT( writes, InOutBindings::eClustersCamera );
 
-			writes.push_back( renderUbo.getDescriptorWrite( InOutBindings::eRender ) );
-			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
+			renderUbo.addDescriptorWriteT( writes, InOutBindings::eRender );
+			sceneUbo.addDescriptorWriteT( writes, InOutBindings::eScene );
 			writes.push_back( makeStorageBufferDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels ) );
 			writes.push_back( makeStorageBufferDescriptorWrite( scene.getBillboardsBuffer()

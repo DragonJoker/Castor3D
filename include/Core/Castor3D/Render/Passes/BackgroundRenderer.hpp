@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_BackgroundPass_H___
 
 #include "BackgroundPassBase.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 namespace c3d
@@ -48,8 +49,6 @@ namespace c3d
 				, nullptr }
 		{
 		}
-
-		C3D_API ~BackgroundRenderer()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -86,7 +85,7 @@ namespace c3d
 		RenderDevice const & m_device;
 		Texture & m_colour;
 		CameraUbo m_cameraUbo;
-		UniformBufferOffsetT< ModelBufferConfiguration > m_modelUbo;
+		UboT< ModelBufferConfiguration > m_modelUbo;
 		BackgroundPassBase * m_backgroundPass{};
 	};
 }

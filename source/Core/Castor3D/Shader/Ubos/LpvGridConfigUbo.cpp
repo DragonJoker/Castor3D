@@ -1,8 +1,5 @@
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-
 #include <CastorUtils/Graphics/Grid.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -46,14 +43,8 @@ namespace c3d
 	//*********************************************************************************************
 
 	LpvGridConfigUbo::LpvGridConfigUbo( RenderDevice const & device )
-		: m_device{ device }
-		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 	{
-	}
-	
-	LpvGridConfigUbo::~LpvGridConfigUbo()noexcept
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	Grid const & LpvGridConfigUbo::cpuUpdate( BoundingBox const & aabb
@@ -61,8 +52,7 @@ namespace c3d
 		, uint32_t gridDim
 		, float indirectAttenuation )
 	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 		auto cellSize = std::max( std::max( aabb.getDimensions()->x
 			, aabb.getDimensions()->y )
 			, aabb.getDimensions()->z ) / float( gridDim );
@@ -85,7 +75,7 @@ namespace c3d
 		, Point3f const & cameraDir
 		, float indirectAttenuation )
 	{
-		auto & configuration = m_ubo.getData();
+		auto & configuration = getNCData();
 		m_grid = { grid, gridLevelScale };
 		m_grid.transform( cameraPos, cameraDir );
 

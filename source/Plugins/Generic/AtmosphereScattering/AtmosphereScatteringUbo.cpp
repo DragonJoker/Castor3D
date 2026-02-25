@@ -1,7 +1,6 @@
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
@@ -18,19 +17,13 @@ namespace atmosphere_scattering
 
 	AtmosphereScatteringUbo::AtmosphereScatteringUbo( c3d::RenderDevice const & device
 		, bool & dirty )
-		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		: UboT{ device }
 		, m_dirty{ dirty }
 		, m_config{ m_dirty }
 		, m_sunDirection{ m_dirty }
 		, m_planetPosition{ m_dirty }
 		, m_mieAbsorption{ m_dirty }
 	{
-	}
-
-	AtmosphereScatteringUbo::~AtmosphereScatteringUbo()
-	{
-		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	c3d::Pair< c3d::Point3f, c3d::Vector3f > AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
@@ -56,7 +49,7 @@ namespace atmosphere_scattering
 
 		if ( m_dirty )
 		{
-			auto & data = m_ubo.getData();
+			auto & data = getNCData();
 			data = config;
 			data.sunIlluminance *= data.sunIlluminanceScale;
 			data.sunDirection->x = ( *m_sunDirection )->x;

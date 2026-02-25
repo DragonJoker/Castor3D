@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_CameraUbo_H___
 #define ___C3D_CameraUbo_H___
 
-#include "UbosModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -129,15 +128,13 @@ namespace c3d
 	}
 
 	class CameraUbo
+		: public UboT< CameraUboConfiguration >
 	{
 	public:
 		using Configuration = CameraUboConfiguration;
-		C3D_API CameraUbo( CameraUbo const & rhs ) = delete;
-		C3D_API CameraUbo & operator=( CameraUbo const & rhs ) = delete;
-		C3D_API CameraUbo( CameraUbo && rhs )noexcept = delete;
-		C3D_API CameraUbo & operator=( CameraUbo && rhs )noexcept = delete;
+
+	public:
 		C3D_API explicit CameraUbo( RenderDevice const & device );
-		C3D_API ~CameraUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -200,35 +197,6 @@ namespace c3d
 		 */
 		C3D_API Configuration & cpuUpdate( Matrix4x4f const & projection
 			, Point2f const & jitter = Point2f{} );
-
-		template< typename BindingT >
-		void createPassBinding( crg::FramePass & pass
-			, BindingT binding )const
-		{
-			return m_ubo.createPassBinding( pass, binding );
-		}
-
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
-		}
-
-		template< typename BindingT >
-		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
-			, uint32_t dstArrayElement = 0u )const
-		{
-			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
-		}
-
-		UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_ubo;
-		}
-
-	private:
-		RenderDevice const & m_device;
-		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

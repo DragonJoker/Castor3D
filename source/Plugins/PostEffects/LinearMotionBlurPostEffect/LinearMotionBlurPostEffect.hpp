@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "LinearMotionBlurParsers.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -22,7 +22,7 @@ namespace motion_blur
 		PostEffect( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & parameters );
-		~PostEffect()override;
+
 		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
@@ -63,7 +63,7 @@ namespace motion_blur
 		using Clock = std::chrono::high_resolution_clock;
 		using TimePoint = Clock::time_point;
 		Configuration m_configuration;
-		c3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::UboT< Configuration > m_ubo;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		TimePoint m_saved;

@@ -8,7 +8,6 @@
 #include "NoiseLayer6.xpm"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
@@ -155,7 +154,7 @@ namespace film_grain
 			, params }
 		, m_shader{ cuT( "FilmGrain" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
+		, m_configUbo{ renderSystem.getRenderDevice() }
 		, m_noiseImages{ postfx::loadImages( *renderTarget.getEngine() ) }
 	{
 		m_config.pixelSize = c3d::Point2f{ m_renderTarget.getDisplaySize().getWidth()
@@ -182,13 +181,7 @@ namespace film_grain
 			}
 		}
 
-		auto & data = m_configUbo.getData();
-		data = m_config;
-	}
-
-	PostEffect::~PostEffect()
-	{
-		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_configUbo );
+		m_configUbo.setData( m_config );
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -316,7 +309,7 @@ namespace film_grain
 			m_firstUpdate = false;
 		}
 
-		auto & data = m_configUbo.getData();
+		auto data = m_configUbo.getData();
 		data.exposure = m_config.exposure;
 		data.noiseIntensity = m_config.noiseIntensity;
 		time = updater.tslf > 0_ms
@@ -340,6 +333,8 @@ namespace film_grain
 
 			data.time = float( m_timeIndex ) / float( NoiseMapCount );
 		}
+
+		m_configUbo.setData( c3d::move( data ) );
 	}
 
 	bool PostEffect::doWriteInto( c3d::StringStream & file

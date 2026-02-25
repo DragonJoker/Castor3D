@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"

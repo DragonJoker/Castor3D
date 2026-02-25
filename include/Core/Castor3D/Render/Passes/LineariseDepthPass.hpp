@@ -6,11 +6,11 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Shader/Ubos/Ubo.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
@@ -105,7 +105,7 @@ namespace c3d
 		String m_prefix;
 		Extent2D m_size;
 		Texture m_result;
-		UniformBufferOffsetT< Point3f > m_clipInfo;
+		UboT< Point3f > m_clipInfo;
 		ChangeTracked< Point3f > m_clipInfoValue;
 		/**
 		*name
@@ -120,7 +120,7 @@ namespace c3d
 		*	Minification.
 		*/
 		/**@{*/
-		Vector< UniformBufferOffsetT< Point2i > > m_previousLevel;
+		Vector< UboT< Point2i > > m_previousLevel;
 		ProgramModule m_minifyShader;
 		ashes::PipelineShaderStageCreateInfoArray m_minifyStages;
 		/**@}*/

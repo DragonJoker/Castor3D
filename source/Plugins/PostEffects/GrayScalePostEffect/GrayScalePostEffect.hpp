@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Shader/Ubos/Ubo.hpp>
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
@@ -21,7 +22,7 @@ namespace grayscale
 		PostEffect( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
-		~PostEffect()override;
+
 		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
 			, c3d::RenderSystem & renderSystem
 			, c3d::Parameters const & params );
@@ -59,7 +60,7 @@ namespace grayscale
 		static c3d::MbString Name;
 
 	private:
-		c3d::UniformBufferOffsetT< c3d::Point3f > m_configUbo;
+		c3d::UboT< c3d::Point3f > m_configUbo;
 		c3d::ChangeTracked< c3d::Point3f > m_factors{ c3d::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

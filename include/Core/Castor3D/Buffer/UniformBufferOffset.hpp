@@ -131,31 +131,58 @@ namespace c3d
 			pass.addInputUniformT( *attach, binding );
 		}
 
-		void createSizedBinding( ashes::DescriptorSet & descriptorSet
-			, VkDescriptorSetLayoutBinding const & layoutBinding )const
-		{
-			auto const & uniformBuffer = buffer->getBuffer();
-			auto size = buffer->getAlignedSize();
-			descriptorSet.createBinding( layoutBinding
-				, *uniformBuffer.buffer
-				, uint32_t( offset * size )
-				, uint32_t( range * size ) );
-		}
-
 		template< typename BindingT >
 		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const
 		{
 			auto const & uniformBuffer = buffer->getBuffer();
 			auto size = buffer->getAlignedSize();
-			auto result = ashes::WriteDescriptorSet{ uint32_t( dstBinding )
-				, dstArrayElement
+			return ashes::WriteDescriptorSet{ uint32_t( dstBinding )
+				, dstArrayElement, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, { VkDescriptorBufferInfo{ *uniformBuffer.buffer, size * offset, size * range } } };
+		}
+
+		template< typename BindingT >
+		void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
+		}
+
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding getLayoutBinding( BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			return VkDescriptorSetLayoutBinding{ uint32_t( index )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, 1u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-			result.bufferInfo.push_back( VkDescriptorBufferInfo{ *uniformBuffer.buffer
-				, size * offset
-				, size * range } );
-			return result;
+				, stages
+				, nullptr };
+		}
+
+		template< typename BindingT >
+		void addLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+		}
+
+		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+			++index;
 		}
 	};
 	/**
