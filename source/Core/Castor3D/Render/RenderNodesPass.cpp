@@ -464,9 +464,7 @@ namespace c3d
 			auto const & matCache = getOwner()->getMaterialCache();
 			matCache.getPassBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eMaterials );
 			matCache.getSssProfileBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eSssProfiles );
-			descriptorWrites.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
-				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
-				, uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles ) ) );
+			matCache.getSssProfileBuffer().getDiffusionProfilesImage().addTextureDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eSssDiffusionProfiles );
 			matCache.getTexConfigBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eTexConfigs );
 			matCache.getTexAnimBuffer().addDescriptorWriteT( descriptorWrites, GlobalBuffersIdx::eTexAnims );
 			if ( pipeline.getFlags().isBillboard() )
@@ -734,52 +732,30 @@ namespace c3d
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
+		auto const & scene = getCuller().getScene();
 		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
 		if ( flags.usesMesh() )
-		{
-			stageFlags |= VK_SHADER_STAGE_MESH_BIT_NV
-				| VK_SHADER_STAGE_TASK_BIT_NV;
-		}
+			stageFlags |= VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV;
 		else
-		{
 			stageFlags |= VK_SHADER_STAGE_ALL_GRAPHICS;
-		}
 
 		// Common bindings
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eCamera )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eRender )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, stageFlags ) );
-
+		m_cameraUbo.addLayoutBindingT( addBindings, GlobalBuffersIdx::eCamera, stageFlags );
+		m_renderUbo.addLayoutBindingT( addBindings, GlobalBuffersIdx::eRender, stageFlags );
 		if ( m_sceneUbo )
-		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eScene )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stageFlags ) );
-		}
+			m_sceneUbo->addLayoutBindingT( addBindings, GlobalBuffersIdx::eScene, stageFlags );
+		getRenderQueue().getRenderNodes().getNodesIds().addLayoutBindingT( addBindings, GlobalBuffersIdx::eObjectsNodeID, stageFlags );
+		scene.getModelBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eModelsData, stageFlags );
 
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eObjectsNodeID )
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eModelsData )
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, stageFlags ) );
 		auto const & matCache = getOwner()->getMaterialCache();
 		matCache.getPassBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eMaterials, stageFlags );
 		matCache.getSssProfileBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eSssProfiles, stageFlags );
-		addDescriptorSetLayoutBindingT( addBindings, GlobalBuffersIdx::eSssDiffusionProfiles, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, stageFlags );
+		matCache.getSssProfileBuffer().getDiffusionProfilesImage().addTextureLayoutBindingT( addBindings, GlobalBuffersIdx::eSssDiffusionProfiles, stageFlags );
 		matCache.getTexConfigBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eTexConfigs, stageFlags );
 		matCache.getTexAnimBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eTexAnims, stageFlags );
 		if ( flags.isBillboard() )
-		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eBillboardsData )
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
-		}
+			scene.getBillboardsBuffer().addLayoutBindingT( addBindings, GlobalBuffersIdx::eBillboardsData, stageFlags );
 
 		//
 		auto index = uint32_t( GlobalBuffersIdx::eCount );

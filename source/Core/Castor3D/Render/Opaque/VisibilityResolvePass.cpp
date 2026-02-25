@@ -1510,58 +1510,58 @@ namespace c3d
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMainCamera
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMainCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eClustersCamera
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eClustersCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eRender
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eRender
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eScene
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eScene
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eModels
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eModels
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eBillboards
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eBillboards
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stages ) );
+				, stages );
 			matCache.getPassBuffer().addLayoutBindingT( bindings, InOutBindings::eMaterials, stages );
 			matCache.getSssProfileBuffer().addLayoutBindingT( bindings, InOutBindings::eSssProfiles, stages );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eSssDiffusionProfiles
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eSssDiffusionProfiles
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, stages ) );
+				, stages );
 			matCache.getTexConfigBuffer().addLayoutBindingT( bindings, InOutBindings::eTexConfigs, stages );
 			matCache.getTexAnimBuffer().addLayoutBindingT( bindings, InOutBindings::eTexAnims, stages );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eInData
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eInData
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eInOutDiffuse
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eInOutDiffuse
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMapBrdf
+				, stages );
+			addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMapBrdf
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, stages ) );
+				, stages );
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
-				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMaterialsCounts
+				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMaterialsCounts
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eMaterialsStarts
+					, stages );
+				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMaterialsStarts
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::ePixelsXY
+					, stages );
+				addDescriptorSetLayoutBindingT( bindings, InOutBindings::ePixelsXY
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eOutResult
+					, stages );
+				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eOutResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBindingT( InOutBindings::eOutScattering
+					, stages );
+				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eOutScattering
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
+					, stages );
 			}
 
 			auto const & engine = c3d::getEngine( device );
@@ -1570,22 +1570,18 @@ namespace c3d
 			scene.getLightCache().addLayoutBinding( bindings, index, stages );
 
 			if ( ssao )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, stages ) ); // c3d_mapOcclusion
-				++index;
-			}
+					, stages ); // c3d_mapOcclusion
 
 			if ( technique.hasShadowBuffer() )
 				RenderNodesPass::addShadowLayoutBindings( bindings
 					, stages
 					, index );
 
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index // c3d_mapEnvironment
+			addDescriptorSetLayoutBinding( bindings, index // c3d_mapEnvironment
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, stages ) );
-			++index;
+				, stages );
 
 			if ( auto background = scene.getBackground() )
 				RenderNodesPass::addBackgroundLayoutBindings( *background
@@ -1637,9 +1633,7 @@ namespace c3d
 			scene.getBillboardsBuffer().addDescriptorWriteT( writes, InOutBindings::eBillboards );
 			matCache.getPassBuffer().addDescriptorWriteT( writes, InOutBindings::eMaterials );
 			matCache.getSssProfileBuffer().addDescriptorWriteT( writes, InOutBindings::eSssProfiles );
-			writes.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
-				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
-				, InOutBindings::eSssDiffusionProfiles ) );
+			matCache.getSssProfileBuffer().getDiffusionProfilesImage().addTextureDescriptorWriteT( writes, InOutBindings::eSssDiffusionProfiles );
 			matCache.getTexConfigBuffer().addDescriptorWriteT( writes, InOutBindings::eTexConfigs );
 			matCache.getTexAnimBuffer().addDescriptorWriteT( writes, InOutBindings::eTexAnims );
 			auto & visibilityPassResult = technique.getVisibilityResult();

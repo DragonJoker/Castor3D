@@ -218,94 +218,61 @@ namespace c3d
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eCullData )
+		addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eCullData
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_TASK_BIT_NV ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eMeshlets )
+			, VK_SHADER_STAGE_TASK_BIT_NV );
+		addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eMeshlets
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_MESH_BIT_NV ) );
+			, VK_SHADER_STAGE_MESH_BIT_NV );
 		auto combine = m_submesh.getComponentCombine();
 
 		if ( combine.hasPositionFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePosition )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::ePosition
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasNormalFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eNormal )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eNormal
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasTangentFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTangent )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eTangent
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasBitangentFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eBitangent )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eBitangent
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasTexcoord0Flag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord0 )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eTexcoord0
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasTexcoord1Flag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord1 )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eTexcoord1
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasTexcoord2Flag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord2 )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eTexcoord2
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasTexcoord3Flag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord3 )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eTexcoord3
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasColourFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eColour )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eColour
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasPassMaskFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePassMasks )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::ePassMasks
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
+				, VK_SHADER_STAGE_MESH_BIT_NV );
 		if ( combine.hasVelocityFlag )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eVelocity )
+			addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eVelocity
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		}
-
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eInstances )
+				, VK_SHADER_STAGE_MESH_BIT_NV );
+		addDescriptorSetLayoutBindingT( bindings, MeshBuffersIdx::eInstances
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV ) );
+			, VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV );
 
 		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( m_submesh )
 			, c3d::move( bindings ) );
