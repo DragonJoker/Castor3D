@@ -258,8 +258,8 @@ namespace c3d
 		engine.getMaterialCache().getTexAnimBuffer().addDescriptorWriteT( writes, OverlayBindingId::eTexAnims );
 		cameraUbo.addDescriptorWriteT( writes, OverlayBindingId::eCamera );
 		renderUbo.addDescriptorWriteT( writes, OverlayBindingId::eRender );
-		writes.push_back( makeStorageBufferDescriptorWrite( vertexBuffer.getBuffer(), OverlayBindingId::eOverlaysSurfaces ) );
-		writes.push_back( makeStorageBufferDescriptorWrite( *overlaysData, OverlayBindingId::eOverlays ) );
+		vertexBuffer.addDescriptorWriteT( writes, OverlayBindingId::eOverlaysSurfaces );
+		overlaysData->addDescriptorWriteT( writes, OverlayBindingId::eOverlays );
 		writes.push_back( makeStorageBufferDescriptorWrite( idsBuffer, OverlayBindingId::eOverlaysIDs
 			, 0u, uint32_t( idsBuffer.getSize() ) ) );
 

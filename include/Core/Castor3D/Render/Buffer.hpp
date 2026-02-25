@@ -68,6 +68,62 @@ namespace c3d
 			return bufferId.data->name;
 		}
 
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			return ashes::WriteDescriptorSet{ uint32_t( dstBinding ), dstArrayElement
+				, ( checkFlag( bufferId.data->info.usage, BufferUsageFlags::eUniformBuffer )
+					? VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					: VK_DESCRIPTOR_TYPE_STORAGE_BUFFER )
+				, { VkDescriptorBufferInfo{ *buffer, 0u, getSize() } } };
+		}
+
+		template< typename BindingT >
+		void addDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
+		}
+
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding getLayoutBinding( BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			return VkDescriptorSetLayoutBinding{ uint32_t( index )
+				, ( checkFlag( bufferId.data->info.usage, BufferUsageFlags::eUniformBuffer )
+					? VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					: VK_DESCRIPTOR_TYPE_STORAGE_BUFFER )
+				, 1u
+				, stages
+				, nullptr };
+		}
+
+		template< typename BindingT >
+		void addLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+		}
+
+		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getLayoutBinding( index, stages ) );
+			++index;
+		}
+
 		crg::ResourcesCache * resources{};
 		RenderDevice const * device{};
 		crg::BufferId bufferId{};

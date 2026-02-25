@@ -112,9 +112,9 @@ namespace c3d
 
 	void OverlayTextBuffer::fillDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites )const
 	{
-		descriptorWrites.push_back( makeStorageBufferDescriptorWrite( *charsBuffer.buffer, TextOverlay::ComputeBindingIdx::eChars ) );
-		descriptorWrites.push_back( makeStorageBufferDescriptorWrite( *wordsBuffer.buffer, TextOverlay::ComputeBindingIdx::eWords ) );
-		descriptorWrites.push_back( makeStorageBufferDescriptorWrite( *linesBuffer.buffer, TextOverlay::ComputeBindingIdx::eLines ) );
+		charsBuffer.buffer->addDescriptorWriteT( descriptorWrites, TextOverlay::ComputeBindingIdx::eChars );
+		wordsBuffer.buffer->addDescriptorWriteT( descriptorWrites, TextOverlay::ComputeBindingIdx::eWords );
+		linesBuffer.buffer->addDescriptorWriteT( descriptorWrites, TextOverlay::ComputeBindingIdx::eLines );
 	}
 
 	//*************************************************************************

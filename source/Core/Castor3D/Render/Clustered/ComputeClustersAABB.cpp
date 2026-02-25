@@ -283,13 +283,12 @@ namespace c3d
 		mainCameraUbo.addLayoutBindingT( bindings, dspclsb::Bindings::eMainCamera, VK_SHADER_STAGE_VERTEX_BIT );
 		clustersCameraUbo.addLayoutBindingT( bindings, dspclsb::Bindings::eClustersCamera, VK_SHADER_STAGE_VERTEX_BIT );
 		clusters.getClustersUbo().addLayoutBindingT( bindings, dspclsb::Bindings::eClusters, VK_SHADER_STAGE_VERTEX_BIT );
-		c3d::addDescriptorSetLayoutBindingT( bindings, dspclsb::Bindings::eClustersAABB, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
+		clustersAABB.addLayoutBindingT( bindings, dspclsb::Bindings::eClustersAABB, VK_SHADER_STAGE_VERTEX_BIT );
 
 		mainCameraUbo.addDescriptorWriteT( writes, dspclsb::Bindings::eMainCamera );
 		clustersCameraUbo.addDescriptorWriteT( writes, dspclsb::Bindings::eMainCamera );
 		clusters.getClustersUbo().addDescriptorWriteT( writes, dspclsb::Bindings::eClusters );
-		writes.emplace_back( uint32_t( dspclsb::Bindings::eClustersAABB ), 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersAABB.getBuffer(), 0u, clustersAABB.getSize() } } );
+		clustersAABB.addDescriptorWriteT( writes, dspclsb::Bindings::eClustersAABB );
 	}
 
 	//*********************************************************************************************
