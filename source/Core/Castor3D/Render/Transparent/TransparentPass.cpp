@@ -121,8 +121,8 @@ namespace c3d
 		doAddPassSpecificsLayoutBindings( bindings, index );
 		m_scene.getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 		if ( hasSsao() )
-			addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapOcclusion
-		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapBrdf
+			m_ssao->addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
+		getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 
 		doAddShadowLayoutBindings( m_scene, bindings, index );
 		doAddEnvLayoutBindings( bindings, index );
@@ -130,9 +130,9 @@ namespace c3d
 		doAddGILayoutBindings( bindings, index );
 		doAddClusteredLightingLayoutBindings( m_parent->getRenderTarget(), bindings, index );
 
-		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapScene
-		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapDepthObj
-		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapNormals
+		m_sceneImage.addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
+		m_depthObjImage.addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
+		m_normalsImage.addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 	}
 
 	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
@@ -144,17 +144,8 @@ namespace c3d
 		doAddPassSpecificsDescriptorWrites( descriptorWrites, index );
 		m_scene.getLightCache().addDescriptorWrite( descriptorWrites, index );
 		if ( hasSsao() )
-		{
-			bindTexture( m_ssao->getSampledView()
-				, *m_ssao->sampler
-				, descriptorWrites
-				, index );
-		}
-
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
-			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
-			, descriptorWrites
-			, index );
+			m_ssao->addTextureDescriptorWrite( descriptorWrites, index );
+		getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().addTextureDescriptorWrite( descriptorWrites, index );
 
 		doAddShadowDescriptorWrites( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptorWrites( descriptorWrites, index );
@@ -162,18 +153,9 @@ namespace c3d
 		doAddGIDescriptorWrites( descriptorWrites, index );
 		doAddClusteredLightingDescriptorWrites( m_parent->getRenderTarget(), descriptorWrites, index );
 
-		bindTexture( m_sceneImage.getSampledView()
-			, *m_sceneImage.sampler
-			, descriptorWrites
-			, index );
-		bindTexture( m_depthObjImage.getSampledView()
-			, *m_depthObjImage.sampler
-			, descriptorWrites
-			, index );
-		bindTexture( m_normalsImage.getSampledView()
-			, *m_normalsImage.sampler
-			, descriptorWrites
-			, index );
+		m_sceneImage.addTextureDescriptorWrite( descriptorWrites, index );
+		m_depthObjImage.addTextureDescriptorWrite( descriptorWrites, index );
+		m_normalsImage.addTextureDescriptorWrite( descriptorWrites, index );
 	}
 
 	void TransparentPass::doGetPixelShaderSource( PipelineFlags const & flags

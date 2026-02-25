@@ -116,12 +116,6 @@ namespace c3d
 		{
 			return m_result;
 		}
-
-		ashes::Sampler const & getSampler()const noexcept
-		{
-			CU_Require( m_sampler != nullptr );
-			return m_sampler->getSampler();
-		}
 		/**@}*/
 
 	private:
@@ -131,7 +125,6 @@ namespace c3d
 		ashes::Image * m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;
-		SamplerObs m_sampler{};
 		ashes::RenderPassPtr m_renderPass;
 		Vector< RawUniquePtr< MipRenderCube > > m_renderPasses;
 	};

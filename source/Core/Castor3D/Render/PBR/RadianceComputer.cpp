@@ -34,7 +34,12 @@ namespace c3d
 					, { size[0], size[1], 1u }, 6u, 1u
 					, PixelFormat::eR32G32B32A32_SFLOAT
 					, ImageUsageFlags::eColorAttachment | ImageUsageFlags::eSampled }
-				, {} };
+				, { BorderColour::eFloatTransparentBlack
+					, ComparisonFunc::eNever
+					, WrapMode::eClampToEdge
+					, FilterMode::eLinear
+					, FilterMode::eLinear
+					, MipmapMode::eNearest } };
 			result.create();
 			return result;
 		}
@@ -319,11 +324,6 @@ namespace c3d
 	{
 		return { 1u, { m_commands.submit( queue, signalsToWait )
 			, PipelineStageFlags::eColorAttachmentOutput } };
-	}
-
-	ashes::Sampler const & RadianceComputer::getSampler()const noexcept
-	{
-		return m_sampler->getSampler();
 	}
 
 	//*********************************************************************************************

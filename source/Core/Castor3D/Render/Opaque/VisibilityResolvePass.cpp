@@ -1643,39 +1643,29 @@ namespace c3d
 			matCache.getTexConfigBuffer().addDescriptorWriteT( writes, InOutBindings::eTexConfigs );
 			matCache.getTexAnimBuffer().addDescriptorWriteT( writes, InOutBindings::eTexAnims );
 			auto & visibilityPassResult = technique.getVisibilityResult();
-			writes.push_back( makeStorageImageDescriptorWrite( visibilityPassResult.getTargetView()
-				, InOutBindings::eInData ) );
+			visibilityPassResult.addImageDescriptorWriteT( writes, InOutBindings::eInData );
 
 			if ( deferredLighting == DeferredLightingFilter::eDeferredOnly )
-				writes.push_back( makeStorageImageDescriptorWrite( technique.getSssDiffuse().getTargetView()
-					, InOutBindings::eInOutDiffuse ) );
+				technique.getSssDiffuse().addImageDescriptorWriteT( writes, InOutBindings::eInOutDiffuse );
 			else
-				writes.push_back( makeStorageImageDescriptorWrite( technique.getDiffuse().getTargetView()
-					, InOutBindings::eInOutDiffuse ) );
+				technique.getDiffuse().addImageDescriptorWriteT( writes, InOutBindings::eInOutDiffuse );
 
-			writes.push_back( makeImageViewDescriptorWrite( engine.getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
-				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
-				, InOutBindings::eMapBrdf ) );
+			engine.getRenderSystem()->getPrefilteredBrdfTexture().addTextureDescriptorWriteT( writes, InOutBindings::eMapBrdf );
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
 				technique.getMaterialsCounts().addDescriptorWriteT( writes, InOutBindings::eMaterialsCounts );
 				technique.getMaterialsStarts().addDescriptorWriteT( writes, InOutBindings::eMaterialsStarts );
 				technique.getPixelXY().addDescriptorWriteT( writes, InOutBindings::ePixelsXY );
-				writes.push_back( makeStorageImageDescriptorWrite( graph.createImageView( targetImage.getSampledViewId() )
-					, InOutBindings::eOutResult ) );
-				writes.push_back( makeStorageImageDescriptorWrite( technique.getScattering().getTargetView()
-					, InOutBindings::eOutScattering ) );
+				targetImage.addImageDescriptorWriteT( writes, InOutBindings::eOutResult );
+				technique.getScattering().addImageDescriptorWriteT( writes, InOutBindings::eOutScattering );
 			}
 
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersDescriptorWrites( writes, index );
 			scene.getLightCache().addDescriptorWrite( writes, index );
 			if ( ssao )
-				bindTexture( ssao->getSampledView()
-					, *ssao->sampler
-					, writes
-					, index );
+				ssao->addTextureDescriptorWrite( writes, index );
 
 			if ( technique.hasShadowBuffer() )
 				RenderNodesPass::addShadowDescriptorWrites( *engine.getRenderSystem()
@@ -1685,10 +1675,7 @@ namespace c3d
 					, technique.getShadowBuffer()
 					, index );
 
-			bindTexture( scene.getEnvironmentMap().getColourId().getSampledView()
-				, *scene.getEnvironmentMap().getColourId().sampler
-				, writes
-				, index );
+			scene.getEnvironmentMap().getColourId().addTextureDescriptorWrite( writes, index );
 
 			if ( auto background = scene.getBackground() )
 				RenderNodesPass::addBackgroundDescriptorWrites( *background

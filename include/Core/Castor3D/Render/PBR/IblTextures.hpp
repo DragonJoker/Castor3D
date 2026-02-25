@@ -91,21 +91,6 @@ namespace c3d
 			return m_brdf;
 		}
 
-		ashes::Sampler const & getIrradianceSampler()const noexcept
-		{
-			return m_radianceComputer.getSampler();
-		}
-
-		ashes::Sampler const & getPrefilteredEnvironmentSampler()const noexcept
-		{
-			return m_environmentPrefilter.getSampler();
-		}
-
-		ashes::Sampler const & getPrefilteredEnvironmentSheenSampler()const noexcept
-		{
-			return m_environmentSheenPrefilter.getSampler();
-		}
-
 		ashes::Sampler const & getPrefilteredBrdfSampler()const noexcept
 		{
 			CU_Require( m_sampler != nullptr );

@@ -135,17 +135,9 @@ namespace c3d
 		m_scene.getLightCache().addDescriptorWrite( descriptorWrites, index );
 
 		if ( hasSsao() )
-		{
-			bindTexture( m_ssao->getSampledView()
-				, *m_ssao->sampler
-				, descriptorWrites
-				, index );
-		}
+			m_ssao->addTextureDescriptorWrite( descriptorWrites, index );
 
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
-			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
-			, descriptorWrites
-			, index );
+		getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().addTextureDescriptorWrite( descriptorWrites, index );
 		doAddShadowDescriptorWrites( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptorWrites( descriptorWrites, index );
 		doAddBackgroundDescriptorWrites( m_scene, descriptorWrites, m_targetImage, index );
@@ -155,21 +147,11 @@ namespace c3d
 			doAddClusteredLightingDescriptorWrites( m_parent->getRenderTarget(), descriptorWrites, index );
 
 		if ( m_mippedColour )
-		{
-			bindTexture( m_mippedColour->getSampledView()
-				, *m_mippedColour->sampler
-				, descriptorWrites
-				, index );
-		}
+			m_mippedColour->addTextureDescriptorWrite( descriptorWrites, index );
 
-		if ( m_parent
-			&& flags.pass.hasDeferredDiffuseLightingFlag
+		if ( m_parent && flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
-		{
-			bindImage( m_parent->getSssDiffuse().getSampledView()
-				, descriptorWrites
-				, index );
-		}
+			m_parent->getSssDiffuse().addTextureDescriptorWrite( descriptorWrites, index );
 	}
 
 	void ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags

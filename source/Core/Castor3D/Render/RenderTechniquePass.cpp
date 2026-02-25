@@ -297,8 +297,8 @@ namespace c3d
 		doAddPassSpecificsLayoutBindings( bindings, index );
 		m_scene.getLightCache().addLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT );
 		if ( hasSsao() )
-			addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapOcclusion
-		addDescriptorSetLayoutBinding( bindings, index, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapBrdf
+			m_ssao->addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapOcclusion
+		getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapBrdf
 
 		doAddShadowLayoutBindings( m_scene, bindings, index );
 		doAddEnvLayoutBindings( bindings, index );
@@ -318,17 +318,9 @@ namespace c3d
 		doAddPassSpecificsDescriptorWrites( descriptorWrites, index );
 		m_scene.getLightCache().addDescriptorWrite( descriptorWrites, index );
 		if ( hasSsao() )
-		{
-			bindTexture( m_ssao->getSampledView()
-				, *m_ssao->sampler
-				, descriptorWrites
-				, index );
-		}
+			m_ssao->addTextureDescriptorWrite( descriptorWrites, index );
+		getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().addTextureDescriptorWrite( descriptorWrites, index );
 
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
-			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
-			, descriptorWrites
-			, index );
 		doAddShadowDescriptorWrites( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptorWrites( descriptorWrites, index );
 		doAddBackgroundDescriptorWrites( m_scene, descriptorWrites, m_targetImage, index );

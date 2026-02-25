@@ -63,16 +63,6 @@ namespace c3d
 		 */
 		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray const & signalsToWait
 			, ashes::Queue const & queue )const;
-		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		*/
-		/**@{*/
-		C3D_API ashes::Sampler const & getSampler()const noexcept;
 
 		Texture const & getResult()const noexcept
 		{

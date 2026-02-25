@@ -687,9 +687,11 @@ namespace c3d
 		if ( res || !descriptorConnection.descriptorSet )
 		{
 			auto result = textDescriptorPool->createDescriptorSet( "TextOverlays_" + string::toMbString( intptr_t( &fontTexture ) ) );
-			result->createBinding( textDescriptorLayout->getBinding( 0u )
-				, fontTexture.getTexture()->getDefaultSampledView()
-				, fontTexture.getSampler()->getSampler() );
+			ashes::WriteDescriptorSetArray writes;
+			writes.push_back( makeImageViewDescriptorWrite( fontTexture.getTexture()->getDefaultSampledView()
+				, fontTexture.getSampler()->getSampler()
+				, 0u ) );
+			result->setBindings( c3d::move( writes ) );
 			result->update();
 			descriptorConnection.descriptorSet = c3d::move( result );
 			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection, &fontTexture]( DoubleBufferedTextureLayout const & )

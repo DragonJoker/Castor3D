@@ -158,9 +158,7 @@ namespace c3d
 	{
 		pass.addInputSampledImage( m_textureId.getWholeViewId()
 			, index
-			, crg::SamplerDesc{ FilterMode::eLinear
-				, FilterMode::eLinear
-				, MipmapMode::eLinear } );
+			, crg::SamplerDesc{ FilterMode::eLinear, FilterMode::eLinear, MipmapMode::eLinear } );
 		++index;
 	}
 
@@ -168,20 +166,14 @@ namespace c3d
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, shaderStages ) );	// c3d_mapBackground
-		++index;
+		m_textureId.addTextureLayoutBinding( bindings, index, shaderStages );
 	}
 
 	void ColourBackground::doAddDescriptorWrites( ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		bindTexture( m_textureId.getSampledView()
-			, *m_textureId.sampler
-			, descriptorWrites
-			, index );
+		m_textureId.addTextureDescriptorWrite( descriptorWrites, index );
 	}
 
 	//************************************************************************************************

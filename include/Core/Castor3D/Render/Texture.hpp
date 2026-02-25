@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Image/Sampler.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/ImageData.hpp>
@@ -282,6 +283,135 @@ namespace c3d
 		{
 			m_attach = attach;
 			return m_attach;
+		}
+
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getTextureDescriptorWrite( VkSampler psampler
+			, BindingT index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			CU_Require( psampler != VkSampler{} );
+			return { uint32_t( index )
+				, dstArrayElement
+				, VkDescriptorType{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER }
+				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ psampler
+					, getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
+		}
+
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getTextureDescriptorWrite( BindingT index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			return getTextureDescriptorWrite( *sampler, index, dstArrayElement );
+		}
+
+		template< typename BindingT >
+		void addTextureDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, VkSampler psampler
+			, BindingT index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.push_back( getTextureDescriptorWrite( psampler, index, dstArrayElement ) );
+		}
+
+		void addTextureDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, VkSampler psampler
+			, uint32_t & index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.push_back( getTextureDescriptorWrite( psampler, index, dstArrayElement ) );
+			++index;
+		}
+
+		template< typename BindingT >
+		void addTextureDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.push_back( getTextureDescriptorWrite( *sampler, index, dstArrayElement ) );
+		}
+
+		void addTextureDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.push_back( getTextureDescriptorWrite( *sampler, index, dstArrayElement ) );
+			++index;
+		}
+
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding getTextureLayoutBinding( BindingT index
+			, VkShaderStageFlags stageFlags )const
+		{
+			return { uint32_t( index ), VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1u, stageFlags, nullptr };
+		}
+
+		template< typename BindingT >
+		void addTextureLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getTextureLayoutBinding( index, stages ) );
+		}
+
+		void addTextureLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getTextureLayoutBinding( index, stages ) );
+			++index;
+		}
+
+		template< typename BindingT >
+		ashes::WriteDescriptorSet getImageDescriptorWrite( BindingT index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			return { uint32_t( index )
+				, dstArrayElement
+				, VkDescriptorType{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE }
+				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ nullptr
+					, getTargetView()
+					, VK_IMAGE_LAYOUT_GENERAL } } };
+		}
+
+		template< typename BindingT >
+		void addImageDescriptorWriteT( ashes::WriteDescriptorSetArray & writes
+			, BindingT index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.push_back( getImageDescriptorWrite( index, dstArrayElement ) );
+		}
+
+		void addImageDescriptorWrite( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & index
+			, uint32_t dstArrayElement = 0u )const
+		{
+			writes.push_back( getImageDescriptorWrite( index, dstArrayElement ) );
+			++index;
+		}
+
+		template< typename BindingT >
+		VkDescriptorSetLayoutBinding getImageLayoutBinding( BindingT index
+			, VkShaderStageFlags stageFlags )const
+		{
+			return { uint32_t( index ), VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1u, stageFlags, nullptr };
+		}
+
+		template< typename BindingT >
+		void addImageLayoutBindingT( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, BindingT index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getImageLayoutBinding( index, stages ) );
+		}
+
+		void addImageLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			bindings.push_back( getImageLayoutBinding( index, stages ) );
+			++index;
 		}
 
 		crg::ResourcesCache * resources{};
