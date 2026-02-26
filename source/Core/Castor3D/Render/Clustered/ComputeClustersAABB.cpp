@@ -8,6 +8,7 @@
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
@@ -38,6 +39,7 @@ namespace c3d
 		static ShaderPtr createShader( RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
+			shader::Utils utils{ writer };
 
 			// Inputs
 			C3D_Camera( writer
@@ -56,87 +58,18 @@ namespace c3d
 				, Bindings::eClustersAABB
 				, 0u );
 
-			auto screenToView = writer.implementFunction< sdw::Vec4 >( "screenToView"
-				, [&writer, &c3d_renderData, &c3d_cameraData]( sdw::Vec4 const & screen )
-				{
-					// Convert to normalized texture coordinates in the range [0 .. 1].
-					auto texCoord = writer.declLocale( "texCoord"
-						, screen.xy() * c3d_renderData.invRenderSize() );
-
-					// Convert to clip space
-					auto clip = writer.declLocale( "clip"
-						, sdw::vec4( sdw::fma( texCoord.xy(), vec2( 2.0_f ), vec2( -1.0_f ) )
-							, screen.zw() ) );
-
-					auto view = writer.declLocale( "view"
-						, c3d_cameraData.projToView( clip ) );
-					view /= view.w();
-					writer.returnStmt( view );
-				}
-				, sdw::InVec4{ writer, "screen" } );
-
-			auto intersectLinePlane = writer.implementFunction< sdw::Vec3 >( "c3d_intersectLinePlane"
-				, [&writer]( sdw::Vec3 const & a
-					, sdw::Vec3 const & b
-					, sdw::Float const & d )
-				{
-					auto ab = b - a;
-					auto normal = vec3( 0.0_f, 0.0_f, 1.0_f );
-					auto t = writer.declLocale( "t"
-						, ( d - dot( normal, a ) ) / dot( normal, ab ) );
-					writer.returnStmt( a + ab * t );
-				}
-				, sdw::InVec3{ writer, "a" }
-				, sdw::InVec3{ writer, "b" }
-				, sdw::InFloat{ writer, "d" } );
-
 			writer.implementMainT< sdw::VoidT >( 1u, 1u, 1u
-				, [&writer, &c3d_clustersData, &c3d_clustersLightsData, &c3d_lightsAABBRange, &c3D_clustersAABB
-					, screenToView, &intersectLinePlane]( sdw::ComputeIn const & in )
+				, [&writer, &c3d_cameraData, &c3d_renderData, &c3d_clustersData, &c3d_clustersLightsData, &c3d_lightsAABBRange, &c3D_clustersAABB
+					, &utils]( sdw::ComputeIn const & in )
 				{
 					auto const & clusterIndex3D = in.globalInvocationID;
+					auto tileNearFar = writer.declLocale( "tileNearFar"
+						, c3d_clustersData.getClusterDepthBounds( clusterIndex3D, c3d_clustersLightsData, c3d_lightsAABBRange ) );
+
 					auto clusterIndex1D = writer.declLocale( "clusterIndex1D"
 						, c3d_clustersData.computeClusterIndex1D( clusterIndex3D ) );
-
-					// Compute the near and far planes for cluster K.
-					auto tileNearFar = writer.declLocale( "tileNearFar"
-						, c3d_clustersData.getClusterDepthBounds( clusterIndex3D
-							, c3d_clustersLightsData
-							, c3d_lightsAABBRange ) );
-
-					// Reversed depth implies maxZ is 0.0f instead of 1.0f.
-					float constexpr maxZ = 0.0f;
-					// The top-left point of cluster K in screen space.
-					auto pMin = writer.declLocale( "pMin"
-						, sdw::vec4( vec2( clusterIndex3D.xy() ) * c3d_clustersData.clusterSize(), maxZ, 1.0f ) );
-					// The bottom-right point of cluster K in screen space.
-					auto pMax = writer.declLocale( "pMax"
-						, sdw::vec4( vec2( ( clusterIndex3D.xy() + u32vec2( 1_u ) )  )* c3d_clustersData.clusterSize(), maxZ, 1.0f ) );
-
-					// Transform the screen space points to view space.
-					pMin = screenToView( pMin );
-					pMax = screenToView( pMax );
-
-					// Find the min and max points on the near and far planes.
-					// Origin (camera eye position)
-					auto eye = writer.declLocale< sdw::Vec3 >( "eye"
-						, vec3( 0.0_f ) );
-					auto nearMin = writer.declLocale( "nearMin"
-						, intersectLinePlane( eye, pMin.xyz(), tileNearFar.x() ) );
-					auto nearMax = writer.declLocale( "nearMax"
-						, intersectLinePlane( eye, pMax.xyz(), tileNearFar.x() ) );
-					auto farMin = writer.declLocale( "farMin"
-						, intersectLinePlane( eye, pMin.xyz(), tileNearFar.y() ) );
-					auto farMax = writer.declLocale( "farMax"
-						, intersectLinePlane( eye, pMax.xyz(), tileNearFar.y() ) );
-
-					auto aabbMin = writer.declLocale( "aabbMin"
-						, min( nearMin, min( nearMax, min( farMin, farMax ) ) ) );
-					auto aabbMax = writer.declLocale( "aabbMax"
-						, max( nearMin, max( nearMax, max( farMin, farMax ) ) ) );
-
-					c3D_clustersAABB[clusterIndex1D] = shader::AABB{ vec4( aabbMin, 1.0f )
-						, vec4( aabbMax, 1.0f ) };
+					c3D_clustersAABB[clusterIndex1D] = utils.computeAABB( clusterIndex3D, c3d_clustersData.clusterSize(), tileNearFar
+						, c3d_cameraData.getInvProjMtx(), c3d_renderData.invRenderSize() );
 
 				} );
 			return writer.getBuilder().releaseShader();

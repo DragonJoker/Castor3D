@@ -167,6 +167,18 @@ namespace c3d::shader
 		C3D_API sdw::RetFloat directionalAlbedoSheen( sdw::Float const & cosTheta
 			, sdw::Float const & roughness );
 
+		C3D_API sdw::RetVec4 screenToView( sdw::Vec4 const & ssPosition
+			, sdw::Mat4x4 const & invProjection
+			, sdw::Vec2 const & invRenderSize );
+		C3D_API sdw::RetVec3 intersectLinePlane( sdw::Vec3 const & a
+			, sdw::Vec3 const & b
+			, sdw::Float const & d );
+		C3D_API RetAABB computeAABB( sdw::U32Vec3 const & cellIndex3D
+			, sdw::Vec2 const & cellSize
+			, sdw::Vec2 const & tileNearFarZ
+			, sdw::Mat4x4 const & invProjection
+			, sdw::Vec2 const & invRenderSize );
+
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
@@ -183,59 +195,36 @@ namespace c3d::shader
 	private:
 		sdw::ShaderWriter & m_writer;
 		sdw::Function< sdw::Void
-			, sdw::InOutFloat
-			, sdw::InOutFloat > m_swap1F;
+			, sdw::InOutFloat, sdw::InOutFloat > m_swap1F;
 		sdw::Function< sdw::Float
-			, sdw::InVec2
-			, sdw::InVec2 > m_distanceSquared2F;
+			, sdw::InVec2, sdw::InVec2 > m_distanceSquared2F;
 		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3 > m_distanceSquared3F;
+			, sdw::InVec3, sdw::InVec3 > m_distanceSquared3F;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec2
-			, sdw::InFloat
-			, sdw::InMat4 > m_calcVSPosition;
+			, sdw::InVec2, sdw::InFloat, sdw::InMat4 > m_calcVSPosition;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec2
-			, sdw::InFloat
-			, sdw::InMat4 > m_calcWSPosition;
+			, sdw::InVec2, sdw::InFloat, sdw::InMat4 > m_calcWSPosition;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InVec3 > m_getMapNormal;
+			, sdw::InVec2, sdw::InVec3, sdw::InVec3 > m_getMapNormal;
 		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat > m_rescaleDepth;
+			, sdw::InFloat, sdw::InFloat, sdw::InFloat > m_rescaleDepth;
 		sdw::Function< sdw::Vec4
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InUInt > m_computeAccumulation;
+			, sdw::InFloat, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InUInt > m_computeAccumulation;
 		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat > m_conductorFresnel1;
+			, sdw::InFloat, sdw::InFloat, sdw::InFloat > m_conductorFresnel1;
 		sdw::Function< sdw::Vec3
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InVec3 > m_conductorFresnel3;
+			, sdw::InFloat, sdw::InVec3, sdw::InVec3 > m_conductorFresnel3;
 		sdw::Function< DerivVec3
 			, InDerivFloat
-			, sdw::InVec3
-			, sdw::InVec3 > m_conductorFresnelDeriv3;
+			, sdw::InVec3, sdw::InVec3 > m_conductorFresnelDeriv3;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InFloat > m_fresnelToF0;
+			, sdw::InVec3, sdw::InFloat > m_fresnelToF0;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3 > m_invertNormal;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3 > m_isSaturated3D;
 		sdw::Function< sdw::Boolean
-			, sdw::InIVec3
-			, sdw::InInt > m_isSaturated3DImg;
+			, sdw::InIVec3, sdw::InInt > m_isSaturated3DImg;
 		sdw::Function< sdw::UInt
 			, sdw::InVec4 > m_encodeColor;
 		sdw::Function< sdw::UInt
@@ -247,46 +236,37 @@ namespace c3d::shader
 		sdw::Function< sdw::Vec4
 			, sdw::InFloat > m_encodeFloatRGBA;
 		sdw::Function< sdw::UInt
-			, sdw::InUVec3
-			, sdw::InUVec3 > m_flatten3D;
+			, sdw::InUVec3, sdw::InUVec3 > m_flatten3D;
 		sdw::Function< sdw::UVec3
-			, sdw::InUInt
-			, sdw::InUVec3 > m_unflatten3D;
+			, sdw::InUInt, sdw::InUVec3 > m_unflatten3D;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec4 > m_clipToScreen;
 		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InVec3 > m_reconstructCSZ;
+			, sdw::InFloat, sdw::InVec3 > m_reconstructCSZ;
 		sdw::Function< sdw::Vec2
-			, InTextureConfigData
-			, InTextureTransformData
-			, sdw::InVec2 > m_transformUV;
+			, InTextureConfigData, InTextureTransformData, sdw::InVec2 > m_transformUV;
 		sdw::Function< sdw::Vec3
-			, InTextureConfigData
-			, InTextureTransformData
-			, sdw::InVec3 > m_transformUVW;
+			, InTextureConfigData, InTextureTransformData, sdw::InVec3 > m_transformUVW;
 		sdw::Function< sdw::Vec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InVec3 > m_evalIridescence;
+			, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InVec3 > m_evalIridescence;
 		sdw::Function< sdw::Vec3
-			, sdw::InFloat
-			, sdw::InVec3 > m_evalSensitivity;
+			, sdw::InFloat, sdw::InVec3 > m_evalSensitivity;
 		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_ior1ToFresnel0;
+			, sdw::InFloat, sdw::InFloat > m_ior1ToFresnel0;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InFloat > m_ior3ToFresnel0;
+			, sdw::InVec3, sdw::InFloat > m_ior3ToFresnel0;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3 > m_fresnel0ToIor;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec2 > m_reconstructNormal;
 		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_directionalAlbedoSheen;
+			, sdw::InFloat, sdw::InFloat > m_directionalAlbedoSheen;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3, sdw::InVec3, sdw::InFloat > m_intersectLinePlane;
+		sdw::Function< sdw::Vec4
+			, sdw::InVec4, sdw::InMat4, sdw::InVec2 > m_screenToView;
+		sdw::Function< AABB
+			, sdw::InU32Vec3, sdw::InVec2, sdw::InVec2, sdw::InMat4, sdw::InVec2 > m_computeAABB;
 	};
 }
 

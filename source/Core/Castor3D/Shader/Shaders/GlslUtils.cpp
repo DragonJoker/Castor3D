@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -1180,6 +1181,122 @@ namespace c3d::shader
 		}
 
 		return m_directionalAlbedoSheen( pcosTheta, proughness );
+	}
+
+	sdw::RetVec4 Utils::screenToView( sdw::Vec4 const & pssPosition
+		, sdw::Mat4x4 const & pinvProjection
+		, sdw::Vec2 const & pinvRenderSize )
+	{
+		if ( !m_screenToView )
+		{
+			m_screenToView = m_writer.implementFunction< sdw::Vec4 >( "c3d_screenToView"
+				, [this]( sdw::Vec4 const & ssPosition
+					, sdw::Mat4x4 const & invProjection
+					, sdw::Vec2 const & invRenderSize )
+				{
+					// Convert to normalized texture coordinates in the range [0 .. 1].
+					auto ndcPosition = m_writer.declLocale( "ndcPosition"
+						, ssPosition.xy() * invRenderSize );
+
+					// Convert to clip space
+					auto csPosition = m_writer.declLocale( "clip"
+						, sdw::vec4( sdw::fma( ndcPosition.xy(), vec2( 2.0_f ), vec2( -1.0_f ) )
+							, ssPosition.zw() ) );
+
+					// Then to view space
+					auto vsPosition = m_writer.declLocale( "view"
+						, invProjection * csPosition );
+					vsPosition /= vsPosition.w();
+
+					m_writer.returnStmt( vsPosition );
+				}
+				, sdw::InVec4{ m_writer, "screen" }
+				, sdw::InMat4{ m_writer, "invProjection" }
+				, sdw::InVec2{ m_writer, "invRenderSize" } );
+		}
+		return m_screenToView( pssPosition, pinvProjection, pinvRenderSize );
+	}
+	
+	sdw::RetVec3 Utils::intersectLinePlane( sdw::Vec3 const & pa
+		, sdw::Vec3 const & pb
+		, sdw::Float const & pd )
+	{
+		if ( !m_intersectLinePlane )
+		{
+			m_intersectLinePlane = m_writer.implementFunction< sdw::Vec3 >( "c3d_intersectLinePlane"
+				, [this]( sdw::Vec3 const & a
+					, sdw::Vec3 const & b
+					, sdw::Float const & d )
+				{
+					auto ab = b - a;
+					auto normal = vec3( 0.0_f, 0.0_f, 1.0_f );
+					auto t = m_writer.declLocale( "t"
+						, ( d - dot( normal, a ) ) / dot( normal, ab ) );
+					m_writer.returnStmt( a + ab * t );
+				}
+				, sdw::InVec3{ m_writer, "a" }
+				, sdw::InVec3{ m_writer, "b" }
+				, sdw::InFloat{ m_writer, "d" } );
+		}
+		return m_intersectLinePlane( pa, pb, pd );
+	}
+
+	RetAABB Utils::computeAABB( sdw::U32Vec3 const & pcellIndex3D
+		, sdw::Vec2 const & pcellSize
+		, sdw::Vec2 const & ptileNearFarZ
+		, sdw::Mat4x4 const & pinvProjection
+		, sdw::Vec2 const & pinvRenderSize )
+	{
+		if ( !m_computeAABB )
+		{
+			m_computeAABB = m_writer.implementFunction< AABB >( "c3d_computeAABB"
+				, [this]( sdw::U32Vec3 const & cellIndex3D
+					, sdw::Vec2 const & cellSize
+					, sdw::Vec2 const & tileNearFarZ
+					, sdw::Mat4x4 const & invProjection
+					, sdw::Vec2 const & invRenderSize )
+				{
+					// Reversed depth implies maxZ is 0.0f instead of 1.0f.
+					float constexpr maxZ = 0.0f;
+					// The top-left point of cluster K in screen space.
+					auto pMin = m_writer.declLocale( "pMin"
+						, sdw::vec4( vec2( cellIndex3D.xy() ) * cellSize, maxZ, 1.0f ) );
+					// The bottom-right point of cluster K in screen space.
+					auto pMax = m_writer.declLocale( "pMax"
+						, sdw::vec4( vec2( cellIndex3D.xy() + u32vec2( 1_u ) ) * cellSize, maxZ, 1.0f ) );
+
+					// Transform the screen space points to view space.
+					pMin = screenToView( pMin, invProjection, invRenderSize );
+					pMax = screenToView( pMax, invProjection, invRenderSize );
+
+					// Find the min and max points on the near and far planes.
+					// Origin (camera eye position)
+					auto eye = m_writer.declLocale< sdw::Vec3 >( "eye"
+						, vec3( 0.0_f ) );
+					auto nearMin = m_writer.declLocale( "nearMin"
+						, intersectLinePlane( eye, pMin.xyz(), tileNearFarZ.x() ) );
+					auto nearMax = m_writer.declLocale( "nearMax"
+						, intersectLinePlane( eye, pMax.xyz(), tileNearFarZ.x() ) );
+					auto farMin = m_writer.declLocale( "farMin"
+						, intersectLinePlane( eye, pMin.xyz(), tileNearFarZ.y() ) );
+					auto farMax = m_writer.declLocale( "farMax"
+						, intersectLinePlane( eye, pMax.xyz(), tileNearFarZ.y() ) );
+
+					auto aabbMin = m_writer.declLocale( "aabbMin"
+						, min( nearMin, min( nearMax, min( farMin, farMax ) ) ) );
+					auto aabbMax = m_writer.declLocale( "aabbMax"
+						, max( nearMin, max( nearMax, max( farMin, farMax ) ) ) );
+
+					m_writer.returnStmt( shader::AABB{ vec4( aabbMin, 1.0f )
+						, vec4( aabbMax, 1.0f ) } );
+				}
+				, sdw::InU32Vec3{ m_writer, "cellIndex3D" }
+				, sdw::InVec2{ m_writer, "cellSize" }
+				, sdw::InVec2{ m_writer, "tileNearFarZ" }
+				, sdw::InMat4{ m_writer, "invProjection" }
+				, sdw::InVec2{ m_writer, "invRenderSize" } );
+		}
+		return m_computeAABB( pcellIndex3D, pcellSize, ptileNearFarZ, pinvProjection, pinvRenderSize );
 	}
 
 	sdw::Vec3 Utils::reconstructNormal( sdw::Vec2 const & normal )
