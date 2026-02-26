@@ -108,10 +108,10 @@ namespace c3d
 					float constexpr maxZ = 0.0f;
 					// The top-left point of cluster K in screen space.
 					auto pMin = writer.declLocale( "pMin"
-						, sdw::vec4( vec2( clusterIndex3D.xy() * c3d_clustersData.clusterSize() ), maxZ, 1.0f ) );
+						, sdw::vec4( vec2( clusterIndex3D.xy() ) * c3d_clustersData.clusterSize(), maxZ, 1.0f ) );
 					// The bottom-right point of cluster K in screen space.
 					auto pMax = writer.declLocale( "pMax"
-						, sdw::vec4( vec2( ( clusterIndex3D.xy() + u32vec2( 1_u ) ) * c3d_clustersData.clusterSize() ), maxZ, 1.0f ) );
+						, sdw::vec4( vec2( ( clusterIndex3D.xy() + u32vec2( 1_u ) )  )* c3d_clustersData.clusterSize(), maxZ, 1.0f ) );
 
 					// Transform the screen space points to view space.
 					pMin = screenToView( pMin );
@@ -253,9 +253,9 @@ namespace c3d
 					, runGraph
 					, device
 					, crg::cp::Config{}
-						.groupCountX( clusters.getDimensions()->x )
-						.groupCountY( clusters.getDimensions()->y )
-						.groupCountZ( clusters.getDimensions()->z )
+						.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
+						.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
+						.getGroupCountZ( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->z; } ) )
 						.enabled( &clusters.needsClustersUpdate() ) );
 				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );

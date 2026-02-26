@@ -561,9 +561,9 @@ namespace c3d
 					, device
 					, clusters
 					, crg::cp::Config{}
-						.groupCountX( clusters.getDimensions()->x )
-						.groupCountY( clusters.getDimensions()->y )
-						.groupCountZ( clusters.getDimensions()->z ) );
+						.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
+						.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
+						.getGroupCountZ( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->z; } ) ) );
 				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

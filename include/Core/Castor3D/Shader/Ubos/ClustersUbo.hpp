@@ -22,7 +22,7 @@ namespace c3d
 				, sdw::type::MemoryLayout::eStd140
 				, sdw::U32Vec3Field< "dimensions" >
 				, sdw::UIntField< "splitScheme" >
-				, sdw::U32Vec2Field< "clusterSize" >
+				, sdw::Vec2Field< "clusterSize" >
 				, sdw::Vec2Field< "viewNearFar" >
 				, sdw::UIntField< "pointLightLevels" >
 				, sdw::UIntField< "spotLightLevels" >
@@ -102,7 +102,7 @@ namespace c3d
 		C3D_API explicit ClustersUbo( RenderDevice const & device );
 
 		C3D_API void cpuUpdate( Point3ui gridDim
-			, Point2ui clusterSize
+			, Point2f clusterSize
 			, float viewNear
 			, float viewFar
 			, uint32_t pointLightsCount
