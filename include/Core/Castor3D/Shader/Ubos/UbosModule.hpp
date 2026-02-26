@@ -281,6 +281,49 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	Froxels data UBO.
+	*\~french
+	*\brief
+	*	UBO des données des froxels.
+	*/
+	class FroxelsUbo;
+	/**
+	*\~english
+	*\brief
+	*	Froxels data.
+	*\~french
+	*\brief
+	*	Données des froxels.
+	*/
+	struct FroxelsUboConfiguration
+	{
+		// The depth segments, if the split scheme needs them.
+		Array< f32, MaxFroxelGridDepth + ( ( ( MaxFroxelGridDepth % 4u ) == 0u ) ? 4u : 0u ) > depthSegments{};
+		// The Gaussian blur kernel weights.
+		Array< f32, 64u > kernelWeights{};
+		// The froxels projection matrix (accounting for blur).
+		Matrix4x4f projection;
+		// The froxels inverse projection matrix (accounting for blur).
+		Matrix4x4f projectionInverse;
+		// The froxels sample count.
+		Point4ui sampleCount{};
+		// The 3D dimensions of the froxel grid.
+		Point3ui gridDim{};
+		// The size of the blur kernel.
+		u32 blurFilterSize{};
+		// The size of a froxel in screen space (pixels).
+		Point2f froxelSize{};
+		// The distance to the near and far clipping plane. (Used for computing the index in the froxel grid)
+		Point2f viewNearFar{};
+		// The froxels render size (accounting for blur).
+		Point2f renderSize{};
+		Point2f invRenderSize{};
+		//
+		Point2f pad{};
+	};
+	/**
+	*\~english
+	*\brief
 	*	Meshlet draw informations.
 	*\~french
 	*\brief

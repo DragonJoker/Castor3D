@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Clustered/AssignLightsToClusters.hpp"
 #include "Castor3D/Render/Clustered/BuildLightsBVH.hpp"
 #include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
@@ -14,6 +15,7 @@
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/SortAssignedLights.hpp"
 #include "Castor3D/Render/Debug/DebugModule.hpp"
+#include "Castor3D/Render/Volumetric/FrustumFroxels.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
@@ -212,8 +214,17 @@ namespace c3d
 		auto const & lightCache = scene->getLightCache();
 		m_clustersDirty = scene->hasClusteredLights()
 			&& ( m_first > 0 || m_config.dirty );
-		auto renderSize = getSafeBandedSize( updater.renderSize );
-		doUpdate( updater.renderSize, Point2f{ renderSize->x, renderSize->y }, nullptr );
+
+		if ( auto froxels = updater.target ? updater.target->getFrustumFroxels() : nullptr )
+		{
+			doUpdate( updater.renderSize, froxels->getRenderSize(), &froxels->getViewport() );
+		}
+		else
+		{
+			auto renderSize = getSafeBandedSize( updater.renderSize );
+			doUpdate( updater.renderSize, Point2f{ renderSize->x, renderSize->y }, nullptr );
+		}
+
 		m_clustersUbo.cpuUpdate( m_dimensions
 			, m_clusterSize.value()
 			, m_camera.getNear()

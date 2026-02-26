@@ -55,6 +55,7 @@ namespace c3d::shader
 	struct DirectionalLight;
 	struct DirectionalShadowData;
 	struct DirectLighting;
+	struct Frustum;
 	struct IndirectLighting;
 	struct Intersection;
 	struct Light;
@@ -262,6 +263,7 @@ namespace c3d::shader
 	Writer_Parameter( DerivFragmentSurface );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( DirectionalShadowData );
+	Writer_Parameter( Frustum );
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );

@@ -209,6 +209,9 @@ namespace c3d
 	*/
 	//@{
 	static uint32_t constexpr MaxLightsPerCluster = 1'024u;
+	static uint32_t constexpr MaxLightsPerFroxel = 512u;
+	static uint32_t constexpr MaxFroxelGridDepth = 128u;
+	static uint32_t constexpr MaxFroxelImageSize = 128u;
 	//@}
 }
 

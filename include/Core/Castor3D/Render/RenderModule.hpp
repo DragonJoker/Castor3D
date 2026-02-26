@@ -936,6 +936,7 @@ namespace c3d
 		CpuUpdater() = default;
 
 		RenderQueueArray * queues{ nullptr };
+		RenderTarget * target{ nullptr };
 		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
 		SceneNode const * node{ nullptr };

@@ -24,6 +24,7 @@
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Volumetric/FrustumFroxels.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -404,7 +405,10 @@ namespace c3d
 			, progress
 			, visbuffer );
 		if ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled )
+		{
 			m_renderTarget.getFrustumClusters()->createFramePasses( m_graph, getRenderUbo() );
+			m_renderTarget.getFrustumFroxels()->createFramePasses( m_graph );
+		}
 		m_background = doCreateBackgroundPass( progress );
 		createComputeDiffusionProfilesPass( m_graph
 			, m_device
@@ -419,7 +423,11 @@ namespace c3d
 			, m_device
 			, progress
 			, weightedBlended );
-		m_renderTarget.getFrustumClusters()->createDebugDisplayPrograms( getCameraUbo() );
+		if ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled )
+		{
+			m_renderTarget.getFrustumClusters()->createDebugDisplayPrograms( getCameraUbo() );
+			m_renderTarget.getFrustumFroxels()->createDebugDisplayPrograms( getCameraUbo(), getRenderUbo() );
+		}
 
 		if ( m_clearLpvRunnable )
 		{

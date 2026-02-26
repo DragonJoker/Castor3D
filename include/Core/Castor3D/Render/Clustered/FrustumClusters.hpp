@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
+#include "Castor3D/Shader/Ubos/FroxelsUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
@@ -146,6 +147,31 @@ namespace c3d
 		BufferBase const & getReducedLightsAABBBuffer()const noexcept
 		{
 			return m_reducedLightsAABBBuffer;
+		}
+
+		BufferBase const & getAllLightsAABBBuffer()const noexcept
+		{
+			return m_allLightsAABBBuffer;
+		}
+
+		BufferBase const & getPointLightBVHBuffer()const noexcept
+		{
+			return m_pointBuffers.bvh;
+		}
+
+		BufferBase const & getSpotLightBVHBuffer()const noexcept
+		{
+			return m_spotBuffers.bvh;
+		}
+
+		crg::Attachment const & getPointLightIndicesBuffer()const noexcept
+		{
+			return *m_sortAttachs[MortonIndicesOutput].pointLightIndices;
+		}
+
+		crg::Attachment const & getSpotLightIndicesBuffer()const noexcept
+		{
+			return *m_sortAttachs[MortonIndicesOutput].spotLightIndices;
 		}
 
 		auto & getCamera()const noexcept
