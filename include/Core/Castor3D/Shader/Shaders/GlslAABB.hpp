@@ -91,8 +91,22 @@ namespace c3d::shader
 			, sdw::Float const & range
 			, bool enabled = true );
 
+		C3D_API void set(sdw::Vec4 const & min
+			, sdw::Vec4 const & max );
+		C3D_API void set( sdw::Vec3 const & position
+			, sdw::Float const & range );
+		C3D_API sdw::RetBoolean intersectAABB( AABB const & rhs )const;
+		C3D_API sdw::RetBoolean intersectAABBCoarse( AABB const & rhs )const;
+		C3D_API sdw::RetBoolean intersectSphere( sdw::Vec4 const & rhs )const;
+		C3D_API sdw::RetBoolean intersectCone( Cone const & rhs )const;
+
 		auto min()const { return getMember< "bmin" >(); }
 		auto max()const { return getMember< "bmax" >(); }
+
+	private:
+		mutable sdw::Function< sdw::Boolean, InAABB, InAABB > m_intersectAABBCoarse;
+		mutable sdw::Function< sdw::Boolean, InAABB, sdw::InVec4 > m_intersectSphere;
+		mutable sdw::Function< sdw::Boolean, InAABB, InCone > m_intersectCone;
 	};
 }
 

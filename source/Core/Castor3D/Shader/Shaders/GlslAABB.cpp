@@ -56,5 +56,125 @@ namespace c3d::shader
 	{
 	}
 
+	void AABB::set( sdw::Vec4 const & pmin
+		, sdw::Vec4 const & pmax )
+	{
+		min() = pmin;
+		max() = pmax;
+	}
+
+	void AABB::set( sdw::Vec3 const & position
+		, sdw::Float const & range )
+	{
+		min() = vec4( position - vec3( range ), range );
+		max() = vec4( position + vec3( range ), range );
+	}
+
+	sdw::RetBoolean AABB::intersectAABB( AABB const & rhs )const
+	{
+		return intersectAABBCoarse( rhs );
+	}
+
+	sdw::RetBoolean AABB::intersectAABBCoarse( AABB const & rhs )const
+	{
+		if ( !m_intersectAABBCoarse )
+		{
+			// Check to see if on AABB intersects another AABB.
+			// Source: Real-time collision detection, Christer Ericson (2005)
+			auto & writer = sdw::findWriterMandat( *this );
+			m_intersectAABBCoarse = writer.implementFunction< sdw::Boolean >( "c3d_aabbIntersectAABB"
+				, [&writer]( shader::AABB const & a
+					, shader::AABB const & b )
+				{
+					auto result = writer.declLocale( "result"
+						, 1_b );
+
+					for ( int i = 0; i < 3; ++i )
+					{
+						result = result
+							&& ( a.max()[i] >= b.min()[i]
+								&& a.min()[i] <= b.max()[i] );
+					}
+
+					writer.returnStmt( result );
+				}
+				, shader::InAABB{ writer, "a" }
+				, shader::InAABB{ writer, "b" } );
+		}
+		return m_intersectAABBCoarse( *this, rhs );
+	}
+
+	sdw::RetBoolean AABB::intersectSphere( sdw::Vec4 const & rhs )const
+	{
+		if ( !m_intersectSphere )
+		{
+			auto & writer = sdw::findWriterMandat( *this );
+			m_intersectSphere = writer.implementFunction< sdw::Boolean >( "c3d_aabbIntersectSphere"
+				, [&writer]( shader::AABB const & aabb
+					, sdw::Vec4 const & sphere )
+				{
+					auto sqDistance = writer.declLocale( "sqDistance"
+						, 0.0_f );
+					auto v = writer.declLocale( "v"
+						, 0.0_f );
+
+					for ( int i = 0; i < 3; ++i )
+					{
+						v = sphere[i];
+
+						sdwIF( writer, v < aabb.min()[i] )
+						{
+							sqDistance += pow( aabb.min()[i] - v, 2.0_f );
+						}
+						sdwFI
+						sdwIF( writer, v > aabb.max()[i] )
+						{
+							sqDistance += pow( v - aabb.max()[i], 2.0_f );
+						}
+						sdwFI
+					}
+
+					writer.returnStmt( sqDistance <= sphere.w() * sphere.w() );
+				}
+				, shader::InAABB{ writer, "aabb" }
+				, sdw::InVec4{ writer, "sphere" } );
+		}
+		return m_intersectSphere( *this, rhs );
+	}
+
+	sdw::RetBoolean AABB::intersectCone( Cone const & rhs )const
+	{
+		if ( !m_intersectCone )
+		{
+			auto & writer = sdw::findWriterMandat( *this );
+			m_intersectCone = writer.implementFunction< sdw::Boolean >( "c3d_aabbIntersectCone"
+				, [&writer]( shader::AABB const & aabb
+					, shader::Cone const & cone )
+				{
+					auto aabbCenter = writer.declLocale( "aabbCenter"
+						, aabb.min().xyz() + ( aabb.max().xyz() - aabb.min().xyz() ) / 2.0_f );
+					auto sphere = writer.declLocale( "sphere"
+						, vec4( aabbCenter, distance( aabb.max().xyz(), aabbCenter ) ) );
+					auto V = writer.declLocale( "V"
+						, sphere.xyz() - cone.apex() );
+					auto lenSqV = writer.declLocale( "lenSqV"
+						, dot( V, V ) );
+					auto lenV1 = writer.declLocale( "lenV1"
+						, dot( V, cone.direction() ) );
+					auto distanceClosestPoint = writer.declLocale( "distanceClosestPoint"
+						, cone.apertureCos() * sqrt( lenSqV - lenV1 * lenV1 ) - lenV1 * cone.apertureSin() );
+
+					auto angleCull = distanceClosestPoint > sphere.w();
+					auto frontCull = lenV1 > sphere.w() + cone.range();
+					auto backCull = lenV1 < -sphere.w();
+
+					writer.returnStmt( !( angleCull || frontCull || backCull ) );
+				}
+				, shader::InAABB{ writer, "aabb" }
+				, shader::InCone{ writer, "cone" } );
+		}
+		return m_intersectCone( *this, rhs );
+	}
+
 	//*********************************************************************************************
 }
