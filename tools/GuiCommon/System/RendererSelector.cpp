@@ -63,15 +63,15 @@ namespace GuiCommon
 
 		auto buttonSizer = new wxBoxSizer( wxHORIZONTAL );
 		auto ok = new GradientButton( this, wxID_OK, _( "OK" ) );
-		buttonSizer->Add( ok, wxSizerFlags( 0 ).Border( wxLEFT, 5 ) );
+		buttonSizer->Add( ok, wxSizerFlags( 0 ).Border( wxLEFT | wxBOTTOM, 5 ) );
 		buttonSizer->Add( 200, 0, 1 );
 		auto cancel = new GradientButton( this, wxID_CANCEL, _( "Cancel" ) );
-		buttonSizer->Add( cancel, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
+		buttonSizer->Add( cancel, wxSizerFlags( 0 ).Border( wxRIGHT | wxBOTTOM, 5 ) );
 
-		sizer->Add( 0, 60, 0 );
+		sizer->Add( 0, 30, 0 );
 		sizer->Add( m_renderersList, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand().FixedMinSize().ReserveSpaceEvenIfHidden() );
 		sizer->Add( m_devicesList, wxSizerFlags( 0 ).Border( wxALL, 10 ).Expand().FixedMinSize().ReserveSpaceEvenIfHidden() );
-		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxLEFT | wxRIGHT | wxBOTTOM, 5 ).Expand() );
 		SetSizer( sizer );
 		sizer->SetSizeHints( this );
 
