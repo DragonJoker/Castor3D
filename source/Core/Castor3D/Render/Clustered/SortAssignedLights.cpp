@@ -120,9 +120,9 @@ namespace c3d
 						, runGraph
 						, device
 						, crg::cp::Config{}
-							.groupCountX( clusters.getDimensions()->x )
-							.groupCountY( clusters.getDimensions()->y )
-							.groupCountZ( clusters.getDimensions()->z )
+							.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
+							.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
+							.getGroupCountZ( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->z; } ) )
 							.isEnabled( crg::RunnablePass::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::ePoint ); } ) )
 						, clusters
 						, LightType::ePoint );
@@ -146,9 +146,9 @@ namespace c3d
 						, runGraph
 						, device
 						, crg::cp::Config{}
-							.groupCountX( clusters.getDimensions()->x )
-							.groupCountY( clusters.getDimensions()->y )
-							.groupCountZ( clusters.getDimensions()->z )
+							.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
+							.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
+							.getGroupCountZ( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->z; } ) )
 							.isEnabled( crg::RunnablePass::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::eSpot ); } ) )
 						, clusters
 						, LightType::eSpot );

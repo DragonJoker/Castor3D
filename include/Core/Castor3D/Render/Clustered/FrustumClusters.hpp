@@ -196,7 +196,7 @@ namespace c3d
 		};
 
 	private:
-		void doUpdate( Size const & renderSize );
+		void doUpdate( Size const & rawRenderSize, Point2f finalRenderSize, Viewport const * viewport );
 
 	private:
 		RenderDevice const & m_device;
@@ -205,8 +205,11 @@ namespace c3d
 		bool m_clustersDirty{ true };
 		bool m_lightsDirty{ true };
 		int32_t m_first{ 5 };
+		Size m_rawRenderSize;
+		Point2f m_finalRenderSize;
 		Point3ui m_dimensions{ 32u, 16u, 64u };
-		GroupChangeTracked< Point2ui > m_clusterSize;
+		u32 m_clusterCount{ 32u * 16u * 64u };
+		GroupChangeTracked< Point2f > m_clusterSize;
 		GroupChangeTracked< Matrix4x4f > m_cameraProjection;
 		GroupChangeTracked< Matrix4x4f > m_cameraView;
 		ClustersUbo m_clustersUbo;
@@ -226,7 +229,6 @@ namespace c3d
 		BufferT< AABB > m_aabbBuffer;
 		Buffer m_clusterFlagsBuffer;
 		Buffer m_uniqueClusters;
-		Vector< ashes::BufferBasePtr > m_toDelete;
 
 		ashes::PipelineShaderStageCreateInfoArray m_displayClustersAABBProgram;
 		ashes::VkDescriptorSetLayoutBindingArray m_displayClustersAABBBindings;

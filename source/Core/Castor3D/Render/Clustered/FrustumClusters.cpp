@@ -29,10 +29,9 @@ namespace c3d
 
 	namespace frscls
 	{
-		static uint32_t constexpr MaxClusterGridWidth = 32u;
-		static uint32_t constexpr MaxClusterGridHeight = 32u;
+		static uint32_t constexpr MaxClusterGridWidthHeight = 32u;
 		static uint32_t constexpr MaxClusterGridDepth = 64u;
-		static uint32_t constexpr MaxClusterCount = MaxClusterGridWidth * MaxClusterGridHeight * MaxClusterGridDepth;
+		static uint32_t constexpr MaxClusterCount = MaxClusterGridWidthHeight * MaxClusterGridWidthHeight * MaxClusterGridDepth;
 
 		inline const Array< uint32_t, 6u > NumLevelNodes
 		{
@@ -157,7 +156,7 @@ namespace c3d
 		: m_device{ device }
 		, m_camera{ camera }
 		, m_config{ config }
-		, m_clusterSize{ m_clustersDirty, Point2ui{} }
+		, m_clusterSize{ m_clustersDirty, Point2f{} }
 		, m_cameraProjection{ m_clustersDirty, Matrix4x4f{} }
 		, m_cameraView{ m_clustersDirty, Matrix4x4f{} }
 		, m_clustersUbo{ m_device }
@@ -195,7 +194,7 @@ namespace c3d
 		m_allLightsAABBBuffer.create();
 		m_reducedLightsAABBBuffer.create();
 		m_aabbBuffer.create();
-		doUpdate( {} );
+		doUpdate( {}, {}, nullptr );
 	}
 
 	FrustumClusters::~FrustumClusters()noexcept
@@ -213,7 +212,8 @@ namespace c3d
 		auto const & lightCache = scene->getLightCache();
 		m_clustersDirty = scene->hasClusteredLights()
 			&& ( m_first > 0 || m_config.dirty );
-		doUpdate( updater.renderSize );
+		auto renderSize = getSafeBandedSize( updater.renderSize );
+		doUpdate( updater.renderSize, Point2f{ renderSize->x, renderSize->y }, nullptr );
 		m_clustersUbo.cpuUpdate( m_dimensions
 			, m_clusterSize.value()
 			, m_camera.getNear()
@@ -399,16 +399,39 @@ namespace c3d
 		return shader::RadixSortT< 4u >::bucketSize;
 	}
 
-	void FrustumClusters::doUpdate( Size const & renderSize )
+	void FrustumClusters::doUpdate( Size const & rawRenderSize
+		, Point2f finalRenderSize
+		, Viewport const * viewport )
 	{
-		m_toDelete.clear();
+		m_rawRenderSize = rawRenderSize;
+		m_finalRenderSize = finalRenderSize;
 
-		auto safeBandedSize = getSafeBandedSize( renderSize );
-		auto const & dimensions = m_dimensions;
-		m_clusterSize = { divRoundUp( safeBandedSize->x, dimensions->x )
-			, divRoundUp( safeBandedSize->y, dimensions->y ) };
-		m_cameraProjection = m_camera.getProjection( renderSize, true );
+		f32 fAspectRatio = f32( m_rawRenderSize->x ) / f32( std::max( 1u, m_rawRenderSize->y ) );
+		if ( m_rawRenderSize->x > m_rawRenderSize->y )
+		{
+			m_dimensions->x = frscls::MaxClusterGridWidthHeight;
+			m_dimensions->y = u32( frscls::MaxClusterGridWidthHeight / fAspectRatio );
+		}
+		else if ( m_rawRenderSize->x < m_rawRenderSize->y )
+		{
+			m_dimensions->x = u32( frscls::MaxClusterGridWidthHeight * fAspectRatio );
+			m_dimensions->y = frscls::MaxClusterGridWidthHeight;
+		}
+		else
+		{
+			m_dimensions->x = frscls::MaxClusterGridWidthHeight;
+			m_dimensions->y = frscls::MaxClusterGridWidthHeight;
+		}
+
+		m_clusterCount = m_dimensions->x * m_dimensions->y * m_dimensions->z;
+		m_clusterSize = { m_finalRenderSize->x / f32( m_dimensions->x )
+			, m_finalRenderSize->y / f32( m_dimensions->y ) };
+
 		m_cameraView = m_camera.getView();
+		if ( viewport )
+			m_cameraProjection = viewport->getProjection();
+		else
+			m_cameraProjection = m_camera.getProjection( rawRenderSize, true );
 	}
 
 	//*********************************************************************************************

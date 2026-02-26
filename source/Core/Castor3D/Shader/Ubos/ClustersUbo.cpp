@@ -51,9 +51,9 @@ namespace c3d
 						auto farZ = clustersLightsData.y();
 
 						auto i = writer.declLocale( "i"
-							, screenPos.x() / writer.cast< sdw::Float >( clusterSize().x() ) );
+							, screenPos.x() / clusterSize().x() );
 						auto j = writer.declLocale( "j"
-							, screenPos.y() / writer.cast< sdw::Float >( clusterSize().y() ) );
+							, screenPos.y() / clusterSize().y() );
 
 						sdw::UInt const Exponential = 0_u;
 						sdw::UInt const Linear = 1_u;
@@ -248,7 +248,7 @@ namespace c3d
 	}
 
 	void ClustersUbo::cpuUpdate( Point3ui gridDim
-		, Point2ui clusterSize
+		, Point2f clusterSize
 		, float viewNear
 		, float viewFar
 		, uint32_t pointLightsCount

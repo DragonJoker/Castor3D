@@ -260,7 +260,7 @@ namespace c3d
 		// The clusters Z split scheme.
 		uint32_t splitScheme{};
 		// The size of a cluster in screen space (pixels).
-		Point2ui clusterSize{};
+		Point2f clusterSize{};
 		// The distance to the near and far clipping plane. (Used for computing the index in the cluster grid)
 		Point2f viewNearFar{};
 		// The number of BVH levels for point lights.
