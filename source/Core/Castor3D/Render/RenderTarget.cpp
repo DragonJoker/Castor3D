@@ -23,6 +23,7 @@
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 #include "Castor3D/Render/Upscale/UpscalePass.hpp"
 #include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
+#include "Castor3D/Render/Volumetric/FrustumFroxels.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
@@ -886,14 +887,13 @@ namespace c3d
 		m_culler.reset();
 		m_colourGradingUbo.reset();
 		m_frustumClusters.reset();
+		m_frustumFroxels.reset();
 	}
 
 	void RenderTarget::update( CpuUpdater & updater )
 	{
 		if ( !m_initialised )
-		{
 			return;
-		}
 
 #if C3D_DebugTimers
 		auto block( m_cpuUpdateTimer->start() );
@@ -903,6 +903,7 @@ namespace c3d
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
+		updater.target = this;
 		updater.renderSize = m_renderSize;
 		updater.jitter = m_jitter / c3d::Point2f{ m_renderSize->x, m_renderSize->y };
 		updater.scene = &scene;
@@ -912,11 +913,8 @@ namespace c3d
 		auto & cache = scene.getMeshCache();
 		{
 			auto lock( makeUniqueLock( cache ) );
-
 			for ( auto const & [_, mesh] : cache )
-			{
 				mesh->update( updater );
-			}
 		}
 
 		CU_Require( m_culler );
@@ -932,14 +930,20 @@ namespace c3d
 
 		m_overlayPass->update( updater );
 
+		if ( m_frustumFroxels )
+		{
+			m_frustumFroxels->update( updater );
+
+			if ( m_debugDrawer )
+				m_frustumFroxels->updateDebug( *m_debugDrawer );
+		}
+
 		if ( m_frustumClusters )
 		{
 			m_frustumClusters->update( updater );
 
 			if ( m_debugDrawer )
-			{
 				m_frustumClusters->updateDebug( *m_debugDrawer );
-			}
 		}
 
 		m_colourGradingUbo->cpuUpdate( getColourGradingConfig() );
@@ -949,18 +953,17 @@ namespace c3d
 			, { &m_hdrObjects.front(), &m_hdrObjects.back() } );
 
 		if ( m_toneMapping )
-		{
 			m_toneMapping->update( updater, *lastTarget );
-		}
 		else
-		{
 			m_hdrCopyPassIndex = ( lastTarget == m_hdrCopyPassSource ) ? 1u : 0u;
-		}
 
 		lastTarget = &doUpdatePostEffects( updater
 			, m_srgbPostEffects
 			, { &m_srgbObjects.front(), &m_srgbObjects.back() } );
 		m_combinePassIndex = ( lastTarget == m_combinePassSource ) ? 1u : 0u;
+
+		updater.target = nullptr;
+		updater.viewport = nullptr;
 	}
 
 	void RenderTarget::update( GpuUpdater & updater )
@@ -1240,6 +1243,7 @@ namespace c3d
 		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
 		{
 			m_frustumClusters = makeUnique< FrustumClusters >( device, getScene()->getResources(), *getCamera(), m_clustersConfig );
+			m_frustumFroxels = makeUnique< FrustumFroxels >( device, getScene()->getResources(), *m_frustumClusters, m_froxelsConfig );
 		}
 
 		doInitCombineProgram();

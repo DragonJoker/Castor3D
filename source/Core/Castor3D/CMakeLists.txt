@@ -1672,7 +1672,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Upscale/UpscaleWrapper.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Upscale/UpscalePass.cpp
 )
-
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Upscale/UpscaleBlit.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Upscale/UpscaleDLSS.hpp
@@ -1690,6 +1689,33 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Render\\Upscale" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Render\\Upscale" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Volumetric/AssignLightsToFroxels.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Volumetric/FinaliseFroxelsLighting.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Volumetric/FroxelsConfig.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Volumetric/FrustumFroxels.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Volumetric/IntegrateFroxels.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Volumetric/VolumetricModule.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Volumetric/AssignLightsToFroxels.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Volumetric/FinaliseFroxelsLighting.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Volumetric/FroxelsConfig.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Volumetric/FrustumFroxels.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Volumetric/IntegrateFroxels.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Volumetric/VolumetricModule.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Render\\Volumetric" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Render\\Volumetric" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/BillboardList.cpp
@@ -2041,6 +2067,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslDerivativeValue.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslDiffuseBRDF.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslFog.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslFrustum.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslGlobalIllumination.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslLambertianBRDF.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslLight.cpp
@@ -2086,6 +2113,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslDerivativeValue.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslDiffuseBRDF.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslFog.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslFrustum.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslGlobalIllumination.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslLambertianBRDF.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslLight.hpp
@@ -2142,6 +2170,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ColourGradingUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ClustersUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/FontUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/FroxelsUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LayeredLpvGridConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LpvGridConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LpvLightConfigUbo.cpp
@@ -2163,6 +2192,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ColourGradingUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ClustersUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/FontUbo.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/FroxelsUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LayeredLpvGridConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LpvGridConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LpvLightConfigUbo.hpp

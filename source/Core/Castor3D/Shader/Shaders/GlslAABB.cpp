@@ -16,6 +16,22 @@ namespace c3d::shader
 	{
 	}
 
+	void Plane::set( sdw::Vec3 const & p1
+			, sdw::Vec3 const & p2
+			, sdw::Vec3 const & p3 )
+	{
+		auto & writer = sdw::findWriterMandat( *this );
+		auto u = writer.declLocale( "u", p2 - p1 );
+		auto v = writer.declLocale( "v", p3 - p1 );
+		normal() = normalize( cross( v, u ) );
+		distance() = -dot( p3, normal() );
+	}
+
+	sdw::RetFloat Plane::distance( sdw::Vec3 const & p )
+	{
+		return dot( normal(), p ) + distance();
+	}
+
 	//*********************************************************************************************
 
 	Cone::Cone( sdw::Vec3 const & apex
@@ -174,6 +190,39 @@ namespace c3d::shader
 				, shader::InCone{ writer, "cone" } );
 		}
 		return m_intersectCone( *this, rhs );
+	}
+
+	sdw::RetVec3 AABB::getPositiveVertex( sdw::Vec3 const & normal )const
+	{
+		if ( !m_getPositiveVertex )
+		{
+			auto & writer = sdw::findWriterMandat( *this );
+			m_getPositiveVertex = writer.implementFunction< sdw::Vec3 >( "c3d_getPositiveVertex"
+				, [&writer]( shader::AABB const & aabb
+					, sdw::Vec3 const & normal )
+				{
+					auto result = writer.declLocale( "", aabb.min().xyz() );
+					sdwIF( writer, normal.x() >= 0.0f )
+					{
+						result.x() = aabb.max().x();
+					}
+					sdwFI
+					sdwIF( writer, normal.y() >= 0.0f )
+					{
+						result.y() = aabb.max().y();
+					}
+					sdwFI
+					sdwIF( writer, normal.z() >= 0.0f )
+					{
+						result.z() = aabb.max().z();
+					}
+					sdwFI
+					writer.returnStmt( result );
+				}
+				, shader::InAABB{ writer, "aabb" }
+				, sdw::InVec3{ writer, "normal" } );
+		}
+		return m_getPositiveVertex( *this, normal );
 	}
 
 	//*********************************************************************************************

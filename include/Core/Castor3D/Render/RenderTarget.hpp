@@ -21,6 +21,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
+#include "Castor3D/Render/Volumetric/FroxelsConfig.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 #include "Castor3D/Shader/Ubos/RenderUbo.hpp"
@@ -413,6 +414,11 @@ namespace c3d
 			return m_frustumClusters.get();
 		}
 
+		FrustumFroxels * getFrustumFroxels()const noexcept
+		{
+			return m_frustumFroxels.get();
+		}
+
 		DebugDrawer & getDebugDrawer()const noexcept
 		{
 			return *m_debugDrawer;
@@ -462,6 +468,11 @@ namespace c3d
 			return m_clustersConfig;
 		}
 
+		FroxelsConfig & getFroxelsConfig()noexcept
+		{
+			return m_froxelsConfig;
+		}
+
 		void enableFullLoading( bool value )noexcept
 		{
 			m_enableFullLoading = value;
@@ -470,6 +481,11 @@ namespace c3d
 		void setClustersConfig( ClustersConfig config )noexcept
 		{
 			m_clustersConfig = c3d::move( config );
+		}
+
+		void setFroxelsConfig( FroxelsConfig config )noexcept
+		{
+			m_froxelsConfig = c3d::move( config );
 		}
 
 		void setToneMappingParameters( Parameters params )noexcept
@@ -563,7 +579,9 @@ namespace c3d
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
 		ClustersConfig m_clustersConfig;
+		FroxelsConfig m_froxelsConfig;
 		FrustumClustersUPtr m_frustumClusters;
+		FrustumFroxelsUPtr m_frustumFroxels;
 		bool m_enableFullLoading{ false };
 		DebugDrawerUPtr m_debugDrawer{};
 		crg::AttachmentPtr m_hdrSource;
