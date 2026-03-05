@@ -24,7 +24,7 @@
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Transparent/TransparentPass.hpp"
-#include "Castor3D/Render/Volumetric/FrustumFroxels.hpp"
+#include "Castor3D/Render/Volumetric/VolumetricRendering.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -405,10 +405,11 @@ namespace c3d
 			, progress
 			, visbuffer );
 		if ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled )
-		{
 			m_renderTarget.getFrustumClusters()->createFramePasses( m_graph, getRenderUbo() );
-			m_renderTarget.getFrustumFroxels()->createFramePasses( m_graph );
-		}
+		m_volumetric = makeRawUnique< VolumetricRendering >( *this
+			, m_device
+			, colour
+			, progress );
 		m_background = doCreateBackgroundPass( progress );
 		createComputeDiffusionProfilesPass( m_graph
 			, m_device
@@ -424,21 +425,14 @@ namespace c3d
 			, progress
 			, weightedBlended );
 		if ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled )
-		{
 			m_renderTarget.getFrustumClusters()->createDebugDisplayPrograms( getCameraUbo() );
-			m_renderTarget.getFrustumFroxels()->createDebugDisplayPrograms( getCameraUbo(), getRenderUbo() );
-		}
 
 		if ( m_clearLpvRunnable )
-		{
 			getEngine()->registerTimer( makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
-		}
 
 		if ( m_voxelizer )
-		{
 			m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
-		}
 
 		doCreateRenderPasses( TechniquePassEvent::eBeforePostEffects );
 
@@ -459,19 +453,11 @@ namespace c3d
 
 #if !C3D_DebugDisableShadowMaps
 		if ( m_directionalShadowMap )
-		{
 			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( c3d::ref( *m_directionalShadowMap ), UInt32Array{} );
-		}
-
 		if ( m_spotShadowMap )
-		{
 			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( c3d::ref( *m_spotShadowMap ), UInt32Array{} );
-		}
-
 		if ( m_pointShadowMap )
-		{
 			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( c3d::ref( *m_pointShadowMap ), UInt32Array{} );
-		}
 
 		doInitialiseRsm();
 		doInitialiseLpv();
@@ -481,13 +467,12 @@ namespace c3d
 	RenderTechnique::~RenderTechnique()noexcept
 	{
 		if ( m_clearLpvRunnable )
-		{
 			getEngine()->unregisterTimer( makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
-		}
 
 		m_transparent.reset();
 		m_opaque.reset();
+		m_volumetric.reset();
 		m_prepass.reset();
 
 		m_llpvResult.clear();
@@ -546,9 +531,7 @@ namespace c3d
 		doUpdateLpv( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
-		{
 			scene.getEnvironmentMap().update( updater );
-		}
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
 			, [&updater]( RenderTechniquePass & renderPass )
@@ -556,6 +539,7 @@ namespace c3d
 				renderPass.update( updater );
 			} );
 		m_prepass->update( updater );
+		m_volumetric->update( updater );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&updater]( RenderTechniquePass & renderPass )
@@ -563,11 +547,8 @@ namespace c3d
 				renderPass.update( updater );
 			} );
 		m_background->update( updater );
-
 		if ( updater.voxelConeTracing && m_voxelizer )
-		{
 			m_voxelizer->update( updater );
-		}
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
 			, [&updater]( RenderTechniquePass & renderPass )
@@ -612,6 +593,7 @@ namespace c3d
 		}
 
 		m_prepass->update( updater );
+		m_volumetric->update( updater );
 		m_opaque->update( updater );
 		m_transparent->update( updater );
 	}
@@ -645,17 +627,16 @@ namespace c3d
 				renderPass.accept( visitor );
 			} );
 		m_prepass->accept( visitor );
-
-		if ( m_voxelizer )
-		{
-			m_voxelizer->accept( visitor );
-		}
+		m_volumetric->accept( visitor );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
 			} );
+		if ( m_voxelizer )
+			m_voxelizer->accept( visitor );
+
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
@@ -677,57 +658,39 @@ namespace c3d
 			} );
 
 		if ( m_reflectiveShadowMaps )
-		{
 			m_reflectiveShadowMaps->accept( visitor );
-		}
 
 #if !C3D_DebugDisableShadowMaps
 		if ( m_directionalShadowMap )
-		{
 			m_directionalShadowMap->accept( visitor );
-		}
-
 		if ( m_spotShadowMap )
-		{
 			m_spotShadowMap->accept( visitor );
-		}
-
 		if ( m_pointShadowMap )
-		{
 			m_pointShadowMap->accept( visitor );
-		}
 #endif
 
 		for ( auto const & lpv : m_lightPropagationVolumes )
 		{
 			if ( lpv )
-			{
 				lpv->accept( visitor );
-			}
 		}
 
 		for ( auto const & lpv : m_lightPropagationVolumesG )
 		{
 			if ( lpv )
-			{
 				lpv->accept( visitor );
-			}
 		}
 
 		for ( auto const & lpv : m_layeredLightPropagationVolumes )
 		{
 			if ( lpv )
-			{
 				lpv->accept( visitor );
-			}
 		}
 
 		for ( auto const & lpv : m_layeredLightPropagationVolumesG )
 		{
 			if ( lpv )
-			{
 				lpv->accept( visitor );
-			}
 		}
 	}
 
@@ -781,9 +744,7 @@ namespace c3d
 		for ( auto & passes : m_renderPasses )
 		{
 			for ( auto pass : passes )
-			{
 				result.push_back( pass );
-			}
 		}
 
 		return result;
@@ -822,6 +783,23 @@ namespace c3d
 	SceneUbo const & RenderTechnique::getSceneUbo()const noexcept
 	{
 		return m_renderTarget.getSceneUbo();
+	}
+
+	FrustumClusters const * RenderTechnique::getFrustumClusters()const noexcept
+	{
+		return m_renderTarget.getFrustumClusters();
+	}
+
+	FroxelsConfig const & RenderTechnique::getFroxelsConfig()const noexcept
+	{
+		return m_renderTarget.getFroxelsConfig();
+	}
+
+	FrustumFroxels const * RenderTechnique::getFrustumFroxels()const noexcept
+	{
+		return ( m_volumetric
+			? &m_volumetric->getFrustumFroxels()
+			: nullptr );
 	}
 
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( TechniquePassEvent event )

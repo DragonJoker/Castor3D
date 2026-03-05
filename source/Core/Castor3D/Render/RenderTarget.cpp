@@ -887,7 +887,6 @@ namespace c3d
 		m_culler.reset();
 		m_colourGradingUbo.reset();
 		m_frustumClusters.reset();
-		m_frustumFroxels.reset();
 	}
 
 	void RenderTarget::update( CpuUpdater & updater )
@@ -903,11 +902,13 @@ namespace c3d
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
-		updater.target = this;
 		updater.renderSize = m_renderSize;
 		updater.jitter = m_jitter / c3d::Point2f{ m_renderSize->x, m_renderSize->y };
 		updater.scene = &scene;
 		updater.camera = &camera;
+		updater.debugDrawer = m_debugDrawer.get();
+		auto safeBandedSize = getSafeBandedSize( m_renderSize );
+		updater.finalRenderSize = { safeBandedSize->x, safeBandedSize->y };
 		camera.update();
 
 		auto & cache = scene.getMeshCache();
@@ -929,14 +930,6 @@ namespace c3d
 			, updater.jitter );
 
 		m_overlayPass->update( updater );
-
-		if ( m_frustumFroxels )
-		{
-			m_frustumFroxels->update( updater );
-
-			if ( m_debugDrawer )
-				m_frustumFroxels->updateDebug( *m_debugDrawer );
-		}
 
 		if ( m_frustumClusters )
 		{
@@ -962,8 +955,8 @@ namespace c3d
 			, { &m_srgbObjects.front(), &m_srgbObjects.back() } );
 		m_combinePassIndex = ( lastTarget == m_combinePassSource ) ? 1u : 0u;
 
-		updater.target = nullptr;
 		updater.viewport = nullptr;
+		updater.debugDrawer = nullptr;
 	}
 
 	void RenderTarget::update( GpuUpdater & updater )
@@ -1205,6 +1198,13 @@ namespace c3d
 		return m_scene->getUbo();
 	}
 
+	FrustumFroxels const * RenderTarget::getFrustumFroxels()const noexcept
+	{
+		return ( m_renderTechnique
+			? m_renderTechnique->getFrustumFroxels()
+			: nullptr );
+	}
+
 	void RenderTarget::resetSemaphore()
 	{
 		m_signalFinished.clear();
@@ -1241,10 +1241,7 @@ namespace c3d
 		m_culler = makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 
 		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
-		{
 			m_frustumClusters = makeUnique< FrustumClusters >( device, getScene()->getResources(), *getCamera(), m_clustersConfig );
-			m_frustumFroxels = makeUnique< FrustumFroxels >( device, getScene()->getResources(), *m_frustumClusters, m_froxelsConfig );
-		}
 
 		doInitCombineProgram();
 

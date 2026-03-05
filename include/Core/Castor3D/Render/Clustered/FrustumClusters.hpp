@@ -222,7 +222,9 @@ namespace c3d
 		};
 
 	private:
-		void doUpdate( Size const & rawRenderSize, Point2f finalRenderSize, Viewport const * viewport );
+		void doUpdate( Size const & rawRenderSize
+			, Point2f const & finalRenderSize
+			, Viewport const * viewport );
 
 	private:
 		RenderDevice const & m_device;
