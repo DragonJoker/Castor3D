@@ -682,7 +682,7 @@ namespace atmosphere_scattering
 					auto c = writer.declLocale( "c", dot( L, L ) - ( radius * radius ) );
 					auto delta = writer.declLocale( "delta", b * b - 4.0_f * a * c );
 					auto t = writer.declLocale( "t", max( 0.0_f, ( -b + sqrt( delta ) ) / 2.0_f ) );
-					writer.returnStmt( Intersection{ writer, rd * t, 1_b, t } );
+					writer.returnStmt( Intersection{ rd * t, 1_b, t } );
 				}
 				, sdw::InVec3{ writer, "rd" }
 				, sdw::InFloat{ writer, "radius" } );
