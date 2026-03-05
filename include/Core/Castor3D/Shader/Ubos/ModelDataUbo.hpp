@@ -28,7 +28,7 @@ namespace c3d::shader
 			, sdw::UIntField< "indexCount" >
 			, sdw::UIntField< "vertexCount" > >
 	{
-		SDW_DeclStructInstance( C3D_API, ModelData );
+		SDW_DeclStructInstance( C3D_INL_API, ModelData );
 
 		ModelData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

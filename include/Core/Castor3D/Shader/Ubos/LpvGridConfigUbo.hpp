@@ -28,7 +28,7 @@ namespace c3d
 			, sdw::Vec3Field< "cameraPosition" >
 			, sdw::FloatField< "pad0" > >
 		{
-			SDW_DeclStructInstance( C3D_API, LpvGridData );
+			SDW_DeclStructInstance( C3D_INL_API, LpvGridData );
 
 			LpvGridData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

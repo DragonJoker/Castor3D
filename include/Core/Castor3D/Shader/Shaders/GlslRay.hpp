@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslRay_H___
 #define ___C3D_GlslRay_H___
 
-#include "SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
@@ -18,7 +18,7 @@ namespace c3d::shader
 		, sdw::BooleanField< "valid" >
 		, sdw::FloatField< "t" > >
 	{
-		SDW_DeclStructInstance( C3D_API, Intersection );
+		SDW_DeclStructInstance( C3D_INL_API, Intersection );
 
 		C3D_API Intersection( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -28,13 +28,10 @@ namespace c3d::shader
 		}
 
 		C3D_API explicit Intersection( sdw::ShaderWriter & writer );
-		C3D_API Intersection( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & p );
-		C3D_API Intersection( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & p
+		C3D_API Intersection( sdw::Vec3 const & p );
+		C3D_API Intersection( sdw::Vec3 const & p
 			, sdw::Boolean const & v );
-		C3D_API Intersection( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & p
+		C3D_API Intersection( sdw::Vec3 const & p
 			, sdw::Boolean const & v
 			, sdw::Float const & t );
 
@@ -54,15 +51,13 @@ namespace c3d::shader
 		}
 	};
 
-	Writer_Parameter( Intersection );
-
 	struct Ray
 		: public sdw::StructInstanceHelperT < "Ray"
 		, sdw::type::MemoryLayout::eC
 		, sdw::Vec3Field< "origin" >
 		, sdw::Vec3Field< "direction" > >
 	{
-		SDW_DeclStructInstance( C3D_API, Ray );
+		SDW_DeclStructInstance( C3D_INL_API, Ray );
 
 		C3D_API Ray( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -74,10 +69,8 @@ namespace c3d::shader
 		}
 
 		C3D_API explicit Ray( sdw::ShaderWriter & writer );
-		C3D_API Ray( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & o );
-		C3D_API Ray( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & o
+		C3D_API Ray( sdw::Vec3 const & o );
+		C3D_API Ray( sdw::Vec3 const & o
 			, sdw::Vec3 const & d );
 
 		C3D_API sdw::Vec3 step( sdw::Float const & t )const;
@@ -85,8 +78,6 @@ namespace c3d::shader
 		sdw::Vec3 origin;
 		sdw::Vec3 direction;
 	};
-
-	Writer_Parameter( Ray );
 }
 
 #endif

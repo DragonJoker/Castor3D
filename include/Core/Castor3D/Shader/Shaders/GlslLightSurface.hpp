@@ -16,7 +16,7 @@ namespace c3d::shader
 	struct LightSurface
 		: public sdw::StructInstance
 	{
-		SDW_DeclStructInstance( C3D_API, LightSurface );
+		SDW_DeclStructInstance( C3D_INL_API, LightSurface );
 
 		C3D_API LightSurface( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr

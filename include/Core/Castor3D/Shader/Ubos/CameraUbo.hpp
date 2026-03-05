@@ -40,7 +40,7 @@ namespace c3d
 		{
 			friend struct BillboardData;
 
-			SDW_DeclStructInstance( C3D_API, CameraData );
+			SDW_DeclStructInstance( C3D_INL_API, CameraData );
 
 			CameraData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

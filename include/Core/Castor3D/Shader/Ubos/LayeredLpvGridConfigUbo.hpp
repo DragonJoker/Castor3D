@@ -25,7 +25,7 @@ namespace c3d
 				, sdw::Vec3Field< "gridSizes" >
 				, sdw::FloatField< "indirectAttenuation" > >
 		{
-			SDW_DeclStructInstance( C3D_API, LayeredLpvGridData );
+			SDW_DeclStructInstance( C3D_INL_API, LayeredLpvGridData );
 
 			LayeredLpvGridData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

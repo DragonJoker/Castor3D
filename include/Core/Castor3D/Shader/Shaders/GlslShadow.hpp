@@ -32,7 +32,7 @@ namespace c3d::shader
 		friend struct PointShadowData;
 		friend struct SpotShadowData;
 
-		SDW_DeclStructInstance( C3D_API, ShadowData );
+		SDW_DeclStructInstance( C3D_INL_API, ShadowData );
 
 		ShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -65,7 +65,7 @@ namespace c3d::shader
 		, sdw::Vec4ArrayField< "splitScales", ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) / 4u >
 		, sdw::Mat4ArrayField< "transforms", MaxDirectionalCascadesCount > >
 	{
-		SDW_DeclStructInstance( C3D_API, DirectionalShadowData );
+		SDW_DeclStructInstance( C3D_INL_API, DirectionalShadowData );
 
 		DirectionalShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -87,7 +87,7 @@ namespace c3d::shader
 		, sdw::StructFieldT< ShadowData, "base" >
 		, sdw::Vec4Field< "position" > >
 	{
-		SDW_DeclStructInstance( C3D_API, PointShadowData );
+		SDW_DeclStructInstance( C3D_INL_API, PointShadowData );
 
 		PointShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -106,7 +106,7 @@ namespace c3d::shader
 		, sdw::StructFieldT< ShadowData, "base" >
 		, sdw::Mat4Field< "transform" > >
 	{
-		SDW_DeclStructInstance( C3D_API, SpotShadowData );
+		SDW_DeclStructInstance( C3D_INL_API, SpotShadowData );
 
 		SpotShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -126,7 +126,7 @@ namespace c3d::shader
 		, sdw::StructFieldArrayT< PointShadowData, "point", MaxPointShadowMapCount >
 		, sdw::StructFieldArrayT< SpotShadowData, "spot", MaxSpotShadowMapCount > >
 	{
-		SDW_DeclStructInstance( C3D_API, AllShadowData );
+		SDW_DeclStructInstance( C3D_INL_API, AllShadowData );
 
 		AllShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

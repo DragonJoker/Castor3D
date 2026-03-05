@@ -33,7 +33,7 @@ namespace c3d::shader
 		friend struct PointLight;
 		friend struct SpotLight;
 
-		SDW_DeclStructInstance( C3D_API, Light );
+		SDW_DeclStructInstance( C3D_INL_API, Light );
 
 		Light( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -59,7 +59,7 @@ namespace c3d::shader
 			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" > >
 	{
-		SDW_DeclStructInstance( C3D_API, DirectionalLight );
+		SDW_DeclStructInstance( C3D_INL_API, DirectionalLight );
 
 		DirectionalLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -87,7 +87,7 @@ namespace c3d::shader
 			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" > >
 	{
-		SDW_DeclStructInstance( C3D_API, PointLight );
+		SDW_DeclStructInstance( C3D_INL_API, PointLight );
 
 		PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -124,7 +124,7 @@ namespace c3d::shader
 			, sdw::FloatField< "innerCutOffCos" >
 			, sdw::FloatField< "outerCutOffTan" > >
 	{
-		SDW_DeclStructInstance( C3D_API, SpotLight );
+		SDW_DeclStructInstance( C3D_INL_API, SpotLight );
 
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

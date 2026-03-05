@@ -20,7 +20,7 @@ namespace c3d::shader
 			, sdw::FloatField< "rotateV" >
 			, sdw::Vec4Field< "tileSet" > >
 	{
-		SDW_DeclStructInstance( C3D_API, TextureTransformData );
+		SDW_DeclStructInstance( C3D_INL_API, TextureTransformData );
 
 		TextureTransformData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

@@ -20,7 +20,7 @@ namespace c3d
 				, sdw::UIntField< "sdfFont" >
 				, sdw::FloatField< "pixelRange" > >
 		{
-			SDW_DeclStructInstance( C3D_API, FontData );
+			SDW_DeclStructInstance( C3D_INL_API, FontData );
 
 			FontData( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr

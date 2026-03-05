@@ -21,7 +21,7 @@ namespace c3d::shader
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::U32Vec4ArrayField< "data", uint32_t( MaxNodesPerPipeline / 4u ) > >
 	{
-		SDW_DeclStructInstance( C3D_API, ObjectsIds );
+		SDW_DeclStructInstance( C3D_INL_API, ObjectsIds );
 
 		ObjectsIds( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

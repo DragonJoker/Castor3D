@@ -17,7 +17,7 @@ namespace c3d::shader
 			, sdw::Vec4Field< "sphere" >
 			, sdw::Vec4Field< "cone" > >
 	{
-		SDW_DeclStructInstance( C3D_API, CullData );
+		SDW_DeclStructInstance( C3D_INL_API, CullData );
 
 		CullData( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr

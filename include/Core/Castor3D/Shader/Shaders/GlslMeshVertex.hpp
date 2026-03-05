@@ -17,7 +17,7 @@ namespace c3d::shader
 	struct MeshVertexBase
 		: public sdw::StructInstance
 	{
-		SDW_DeclStructInstance( C3D_API, MeshVertexBase );
+		SDW_DeclStructInstance( C3D_INL_API, MeshVertexBase );
 
 		C3D_API MeshVertexBase( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -67,7 +67,7 @@ namespace c3d::shader
 	struct MeshPosition
 		: public sdw::StructInstance
 	{
-		SDW_DeclStructInstance( , MeshPosition );
+		SDW_DeclStructInstance( C3D_INL_API, MeshPosition );
 
 		MeshPosition( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr

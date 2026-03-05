@@ -17,7 +17,8 @@ namespace c3d::shader
 		: public sdw::StructInstance
 	{
 		friend class Materials;
-		SDW_DeclStructInstance( C3D_API, Material );
+
+		SDW_DeclStructInstance( C3D_INL_API, Material );
 
 		C3D_API Material( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

@@ -2,7 +2,6 @@
 
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>

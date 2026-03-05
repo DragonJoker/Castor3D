@@ -33,7 +33,7 @@ namespace c3d
 				, sdw::Vec2Field< "renderSize" >
 				, sdw::Vec2Field< "invRenderSize" > >
 		{
-			SDW_DeclStructInstance( C3D_API, FroxelsData );
+			SDW_DeclStructInstance( C3D_INL_API, FroxelsData );
 
 			FroxelsData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

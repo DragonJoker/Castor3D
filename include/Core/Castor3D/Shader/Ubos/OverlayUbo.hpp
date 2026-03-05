@@ -32,7 +32,7 @@ namespace c3d::shader
 			, sdw::FloatField< "textTopOffset" >
 			, sdw::UIntField< "pad1" > >
 	{
-		SDW_DeclStructInstance( C3D_API, OverlayData );
+		SDW_DeclStructInstance( C3D_INL_API, OverlayData );
 
 		OverlayData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -217,7 +217,7 @@ namespace c3d::shader
 		, sdw::type::MemoryLayout::eStd430
 		, sdw::U32Vec4ArrayField< "v", MaxWordsPerBuffer / 4U > >
 	{
-		SDW_DeclStructInstance( C3D_API, OverlaysIDs );
+		SDW_DeclStructInstance( C3D_INL_API, OverlaysIDs );
 
 		OverlaysIDs( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

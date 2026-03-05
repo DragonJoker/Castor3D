@@ -22,7 +22,7 @@ namespace c3d
 				, sdw::UIntField< "sampleCount" >
 				, sdw::IntField< "index" > >
 		{
-			SDW_DeclStructInstance( C3D_API, RsmConfigData );
+			SDW_DeclStructInstance( C3D_INL_API, RsmConfigData );
 
 			RsmConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

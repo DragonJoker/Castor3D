@@ -26,7 +26,7 @@ namespace c3d
 				, sdw::FloatField< "tanFovYHalf" >
 				, sdw::IntField< "lightOffset" > >
 		{
-			SDW_DeclStructInstance( C3D_API, LpvLightData );
+			SDW_DeclStructInstance( C3D_INL_API, LpvLightData );
 
 			C3D_API LpvLightData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
