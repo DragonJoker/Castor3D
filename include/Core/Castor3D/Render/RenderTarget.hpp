@@ -234,6 +234,7 @@ namespace c3d
 		C3D_API bool hasSss()const noexcept;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
 		C3D_API SceneUbo const & getSceneUbo()const noexcept;
+		C3D_API FrustumFroxels const * getFrustumFroxels()const noexcept;
 
 		CameraUbo const & getCameraUbo()const noexcept
 		{
@@ -414,11 +415,6 @@ namespace c3d
 			return m_frustumClusters.get();
 		}
 
-		FrustumFroxels * getFrustumFroxels()const noexcept
-		{
-			return m_frustumFroxels.get();
-		}
-
 		DebugDrawer & getDebugDrawer()const noexcept
 		{
 			return *m_debugDrawer;
@@ -581,7 +577,6 @@ namespace c3d
 		ClustersConfig m_clustersConfig;
 		FroxelsConfig m_froxelsConfig;
 		FrustumClustersUPtr m_frustumClusters;
-		FrustumFroxelsUPtr m_frustumFroxels;
 		bool m_enableFullLoading{ false };
 		DebugDrawerUPtr m_debugDrawer{};
 		crg::AttachmentPtr m_hdrSource;

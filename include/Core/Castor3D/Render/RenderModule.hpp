@@ -29,6 +29,7 @@ See LICENSE file in root folder
 namespace c3d
 {
 	class CameraUbo;
+	class DebugDrawer;
 
 	/**@name Render */
 	//@{
@@ -933,34 +934,6 @@ namespace c3d
 
 	struct CpuUpdater
 	{
-		CpuUpdater() = default;
-
-		RenderQueueArray * queues{ nullptr };
-		RenderTarget * target{ nullptr };
-		Scene * scene{ nullptr };
-		Camera * camera{ nullptr };
-		SceneNode const * node{ nullptr };
-		LightInstance * light{ nullptr };
-		Viewport * viewport{ nullptr };
-		uint32_t index{ 0u };
-		uint32_t combineIndex{ 0u };
-		uint32_t debugIndex{ 0u };
-		Point2f jitter;
-		bool voxelConeTracing{ false };
-		Point3f gridCenter{};
-		float cellSize{ 0.0f };
-		Milliseconds tslf{};
-		Milliseconds time{};
-		Milliseconds total{};
-		Vector< TechniqueQueues > techniquesQueues{};
-		Point2f bandRatio{};
-		Matrix4x4f bgMtxModl{};
-		Matrix4x4f bgMtxView{};
-		Matrix4x4f bgMtxProj{};
-		bool isSafeBanded{ true };
-		Texture * targetImage{};
-		Size renderSize{};
-
 		struct DirtyObjects
 		{
 			DirtyObjects() = default;
@@ -980,7 +953,36 @@ namespace c3d
 			Vector< LightInstance * > dirtyLights{};
 			Vector< Camera * > dirtyCameras{};
 		};
+
+		CpuUpdater() = default;
+
 		Map< Scene const *, DirtyObjects > dirtyScenes;
+		Vector< TechniqueQueues > techniquesQueues{};
+		RenderQueueArray * queues{};
+		Scene * scene{};
+		Camera * camera{};
+		SceneNode const * node{};
+		LightInstance * light{};
+		Viewport * viewport{};
+		DebugDrawer * debugDrawer{};
+		Texture * targetImage{};
+		Point3f gridCenter{};
+		Point2f jitter;
+		Point2f bandRatio{};
+		Point2f finalRenderSize{};
+		uint32_t index{};
+		uint32_t combineIndex{};
+		uint32_t debugIndex{};
+		float cellSize{};
+		Milliseconds tslf{};
+		Milliseconds time{};
+		Milliseconds total{};
+		Matrix4x4f bgMtxModl{};
+		Matrix4x4f bgMtxView{};
+		Matrix4x4f bgMtxProj{};
+		Size renderSize{};
+		bool voxelConeTracing{};
+		bool isSafeBanded{ true };
 	};
 
 	struct GpuUpdater

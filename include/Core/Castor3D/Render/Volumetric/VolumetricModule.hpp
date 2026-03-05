@@ -31,6 +31,15 @@ namespace c3d
 	*	Le buffer contenant les clusters.
 	*/
 	class FrustumFroxels;
+	/**
+	*\~english
+	*\brief
+	*	Class in charge of rendering all volumetrics.
+	*\~french
+	*\brief
+	*	Classe en charge du rendu des volumes.
+	*/
+	class VolumetricRendering;
 
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( c3d, FrustumFroxels, C3D_API );

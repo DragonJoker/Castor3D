@@ -17,6 +17,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Transparent/TransparentModule.hpp"
+#include "Castor3D/Render/Volumetric/VolumetricModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
 #include "Castor3D/Render/Texture.hpp"
@@ -154,6 +155,9 @@ namespace c3d
 		C3D_API CameraUbo const & getCameraUbo()const noexcept;
 		C3D_API RenderUbo const & getRenderUbo()const noexcept;
 		C3D_API SceneUbo const & getSceneUbo()const noexcept;
+		C3D_API FrustumClusters const * getFrustumClusters()const noexcept;
+		C3D_API FroxelsConfig const & getFroxelsConfig()const noexcept;
+		C3D_API FrustumFroxels const * getFrustumFroxels()const noexcept;
 
 		Size const & getSize()const noexcept
 		{
@@ -376,6 +380,7 @@ namespace c3d
 		TechniquePasses m_renderPasses;
 		RawUniquePtr< PrepassRendering > m_prepass;
 		BackgroundRendererUPtr m_background{};
+		RawUniquePtr< VolumetricRendering > m_volumetric;
 		RawUniquePtr< OpaqueRendering > m_opaque;
 		RawUniquePtr< TransparentRendering > m_transparent;
 		crg::FrameGraph m_clearLpvGraph;

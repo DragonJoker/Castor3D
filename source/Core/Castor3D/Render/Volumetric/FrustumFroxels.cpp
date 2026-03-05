@@ -229,6 +229,8 @@ namespace c3d
 		m_froxelsDirty = lightCache.hasClusteredLights()
 			&& m_first > 0;
 		doUpdate( updater.renderSize );
+		updater.viewport = &m_viewport;
+		updater.finalRenderSize = m_finalRenderSize;
 		doUpdateBlurKernel();
 		m_froxelsUbo.cpuUpdate( m_finalDimensions
 			, m_froxelSize.value()
@@ -272,10 +274,8 @@ namespace c3d
 		, RenderUbo const & renderUbo )
 	{
 		if ( m_displayFroxelsAABBProgram.empty() )
-		{
 			createDisplayFroxelsAABBProgram( m_device, *this, cameraUbo, m_clusters.getCameraUbo(), renderUbo
 				, m_displayFroxelsAABBProgram, m_displayFroxelsAABBBindings, m_displayFroxelsAABBWrites );
-		}
 	}
 
 	Scene const & FrustumFroxels::getScene()const noexcept
