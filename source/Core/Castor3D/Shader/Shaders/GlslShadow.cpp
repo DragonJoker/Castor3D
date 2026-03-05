@@ -791,8 +791,7 @@ namespace c3d::shader
 		auto ditherValue = m_writer.declLocale( "ditherValue"
 			, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
 		auto ray = m_writer.declLocale( "ray"
-			, Ray{ m_writer
-				, sdw::fma( rayDirection, vec3( stepLength * ditherValue ), lightSurface.eyePosition() )
+			, Ray{ sdw::fma( rayDirection, vec3( stepLength * ditherValue ), lightSurface.eyePosition() )
 				, rayDirection } );
 
 		// Compute scattering value
@@ -839,8 +838,7 @@ namespace c3d::shader
 		auto ditherValue = m_writer.declLocale( "ditherValue"
 			, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
 		auto ray = m_writer.declLocale( "ray"
-			, Ray{ m_writer
-				, sdw::fma( rayDirection, vec3( stepLength * ditherValue ), lightSurface.eyePosition() )
+			, Ray{ sdw::fma( rayDirection, vec3( stepLength * ditherValue ), lightSurface.eyePosition() )
 				, rayDirection } );
 
 		return computeVolumetric( shadows
