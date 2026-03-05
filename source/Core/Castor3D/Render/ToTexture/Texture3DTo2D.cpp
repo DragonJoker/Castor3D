@@ -528,7 +528,7 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	ast::type::ImageFormat getImageFormat( PixelFormat format )
+	sdw::type::ImageFormat getImageFormat( PixelFormat format )
 	{
 		switch ( format )
 		{

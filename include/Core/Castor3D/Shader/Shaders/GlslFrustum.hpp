@@ -22,7 +22,7 @@ namespace c3d::shader
 			, sdw::StructFieldArrayT< Plane, "planes", 6u >
 			, sdw::StructFieldT< AABB, "aabb" > >
 	{
-		SDW_DeclStructInstance( C3D_API, Frustum );
+		SDW_DeclStructInstance( C3D_INL_API, Frustum );
 
 		Frustum( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr

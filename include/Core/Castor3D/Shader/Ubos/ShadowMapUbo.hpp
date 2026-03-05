@@ -24,7 +24,7 @@ namespace c3d
 				, sdw::Vec4Field< "lightPosFarPlane" >
 				, sdw::UIntField< "lightOffset" > >
 		{
-			SDW_DeclStructInstance( C3D_API, ShadowMapData );
+			SDW_DeclStructInstance( C3D_INL_API, ShadowMapData );
 
 			C3D_API ShadowMapData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

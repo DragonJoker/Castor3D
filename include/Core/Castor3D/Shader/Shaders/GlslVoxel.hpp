@@ -17,7 +17,7 @@ namespace c3d::shader
 			, sdw::UIntField< "colorMask" >
 			, sdw::UIntField< "normalMask" > >
 	{
-		SDW_DeclStructInstance( C3D_API, Voxel );
+		SDW_DeclStructInstance( C3D_INL_API, Voxel );
 
 		Voxel( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

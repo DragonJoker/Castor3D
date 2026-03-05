@@ -33,7 +33,7 @@ namespace c3d
 				, sdw::FloatField< "pad1" >
 				, sdw::FloatField< "pad2" > >
 		{
-			SDW_DeclStructInstance( C3D_API, ClustersData );
+			SDW_DeclStructInstance( C3D_INL_API, ClustersData );
 
 			ClustersData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

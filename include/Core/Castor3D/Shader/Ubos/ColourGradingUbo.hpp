@@ -47,7 +47,7 @@ namespace c3d
 				, sdw::UIntField< "enableContrast" >
 				, sdw::UIntField< "pad0" > >
 		{
-			SDW_DeclStructInstance( C3D_API, ColourGradingData );
+			SDW_DeclStructInstance( C3D_INL_API, ColourGradingData );
 
 			C3D_API ColourGradingData( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr

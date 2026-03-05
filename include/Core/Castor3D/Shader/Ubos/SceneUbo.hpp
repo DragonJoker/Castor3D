@@ -27,7 +27,7 @@ namespace c3d
 			friend class Fog;
 			friend class CommonFog;
 
-			SDW_DeclStructInstance( C3D_API, SceneData );
+			SDW_DeclStructInstance( C3D_INL_API, SceneData );
 
 			SceneData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

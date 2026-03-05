@@ -20,7 +20,7 @@ namespace c3d::shader
 		, sdw::UIntField< "skinningId" >
 		, sdw::UIntField< "pad" > >
 	{
-		SDW_DeclStructInstance( C3D_API, ObjectIds );
+		SDW_DeclStructInstance( C3D_INL_API, ObjectIds );
 
 		ObjectIds( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

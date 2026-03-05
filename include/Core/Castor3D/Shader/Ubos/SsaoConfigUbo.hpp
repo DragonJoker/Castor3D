@@ -44,7 +44,7 @@ namespace c3d
 				, sdw::UIntField< "bendStepCount" >
 				, sdw::FloatField< "bendStepSize" > >
 		{
-			SDW_DeclStructInstance( C3D_API, SsaoConfigData );
+			SDW_DeclStructInstance( C3D_INL_API, SsaoConfigData );
 
 			SsaoConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

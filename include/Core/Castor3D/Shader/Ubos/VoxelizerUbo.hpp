@@ -32,7 +32,7 @@ namespace c3d
 				, sdw::UInt32Field< "enableOcclusion" >
 				, sdw::UInt32Field< "enableSecondaryBounce" > >
 		{
-			SDW_DeclStructInstance( C3D_API, VoxelData );
+			SDW_DeclStructInstance( C3D_INL_API, VoxelData );
 
 			VoxelData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

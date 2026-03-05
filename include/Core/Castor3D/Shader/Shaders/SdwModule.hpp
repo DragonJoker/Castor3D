@@ -263,11 +263,11 @@ namespace c3d::shader
 	Writer_Parameter( DerivFragmentSurface );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( DirectionalShadowData );
+	Writer_Parameter( DirectLighting );
 	Writer_Parameter( Frustum );
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );
-	Writer_Parameter( DirectLighting );
 	Writer_Parameter( LightSurface );
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
@@ -344,7 +344,7 @@ namespace c3d::shader
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::Vec4Field< "data" > >
 	{
-		SDW_DeclStructInstance( C3D_API, BufferData );
+		SDW_DeclStructInstance( C3D_INL_API, BufferData );
 
 		BufferData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

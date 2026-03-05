@@ -18,7 +18,7 @@ namespace c3d::shader
 			, sdw::UIntField< "isSpherical" >
 			, sdw::UIntField< "isFixedSize" > >
 	{
-		SDW_DeclStructInstance( C3D_API, BillboardData );
+		SDW_DeclStructInstance( C3D_INL_API, BillboardData );
 
 		BillboardData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

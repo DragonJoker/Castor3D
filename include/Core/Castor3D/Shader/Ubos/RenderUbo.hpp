@@ -25,7 +25,7 @@ namespace c3d
 			, sdw::UInt32Field< "debugIndex" >
 			, sdw::FloatField< "pad" > >
 		{
-			SDW_DeclStructInstance( C3D_API, RenderData );
+			SDW_DeclStructInstance( C3D_INL_API, RenderData );
 
 			RenderData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr

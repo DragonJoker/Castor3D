@@ -47,6 +47,18 @@ namespace c3d
 	CU_DeclareSmartPtr( c3d, Texture3DTo2D, C3D_API );
 	/** @endcond */
 
+	/**
+	*\~english
+	*\param[in]
+	*	The PixelFormat.
+	*\return
+	*	The ImageFormat compatible with the given PixelFormat.
+	*\~french
+	*\param[in]
+	*	Le PixelFormat.
+	*\return
+	*	L'ImageFormat compatible avec le PixelFormat donné.
+	*/
 	ast::type::ImageFormat getImageFormat( PixelFormat format );
 
 	//@}

@@ -18,7 +18,7 @@ namespace c3d::shader
 		: public sdw::StructInstance
 	{
 	public:
-		SDW_DeclStructInstance( C3D_API, MorphTargetData );
+		SDW_DeclStructInstance( C3D_INL_API, MorphTargetData );
 
 		C3D_API MorphTargetData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -78,7 +78,7 @@ namespace c3d::shader
 		: public sdw::StructInstance
 	{
 	public:
-		SDW_DeclStructInstance( C3D_API, MorphTargetsData );
+		SDW_DeclStructInstance( C3D_INL_API, MorphTargetsData );
 
 		C3D_API MorphTargetsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -104,7 +104,7 @@ namespace c3d::shader
 			, sdw::Vec4ArrayField< "weights", MaxMorphTargets > >
 	{
 	public:
-		SDW_DeclStructInstance( C3D_API, MorphingWeightsData );
+		SDW_DeclStructInstance( C3D_INL_API, MorphingWeightsData );
 
 		C3D_API MorphingWeightsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

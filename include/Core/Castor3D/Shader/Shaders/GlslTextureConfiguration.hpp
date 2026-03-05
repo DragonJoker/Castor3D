@@ -59,11 +59,11 @@ namespace c3d::shader
 		friend class TextureConfigurations;
 
 	public:
+		SDW_DeclStructInstance( C3D_INL_API, TextureConfigData );
+
 		C3D_API TextureConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
-
-		SDW_DeclStructInstance( C3D_API, TextureConfigData );
 
 		C3D_API void transformUV( Utils & utils
 			, TextureTransformData const & anim
