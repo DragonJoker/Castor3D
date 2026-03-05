@@ -15,6 +15,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 
+#include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Boolean.hpp>
 #include <ShaderWriter/BaseTypes/Double.hpp>
@@ -25,6 +26,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace c3d::shader
 {
@@ -374,38 +376,240 @@ namespace c3d::shader
 		return result;
 	}
 
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec3 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec3 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Double const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec2 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec3 const in );
-	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::DVec4 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Int const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec2 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec3 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec4 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UInt const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec2 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec3 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec4 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Float const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec2 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec3 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec4 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Double const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec2 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec3 const in );
-	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::DVec4 const in );
+	template< typename OutComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::Int const & in )
+	{
+		return writer.template cast< OutComponentT >( in );
+	}
+
+	template< typename OutComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::UInt const & in )
+	{
+		return writer.template cast< OutComponentT >( in );
+	}
+
+	template< typename OutComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::Float const & in )
+	{
+		return writer.template cast< OutComponentT >( in );
+	}
+
+	template< typename OutComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::Double const & in )
+	{
+		return writer.template cast< OutComponentT >( in );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::Vec2T< InComponentT > const & in )
+	{
+		return writer.template cast< OutComponentT >( in.x() );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::Vec3T< InComponentT > const & in )
+	{
+		return writer.template cast< OutComponentT >( in.x() );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	OutComponentT makeVec1T( sdw::ShaderWriter & writer, sdw::Vec4T< InComponentT > const & in )
+	{
+		return writer.template cast< OutComponentT >( in.x() );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::Int const & in )
+	{
+		return sdw::vec2T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::UInt const & in )
+	{
+		return sdw::vec2T( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::Float const & in )
+	{
+		return sdw::vec2T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::Double const & in )
+	{
+		return sdw::vec2T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::Vec2T< InComponentT > const & in )
+	{
+		return sdw::vec2T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::Vec3T< InComponentT > const & in )
+	{
+		return sdw::vec2T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec2T< OutComponentT > makeVec2T( sdw::ShaderWriter & writer, sdw::Vec4T< InComponentT > const & in )
+	{
+		return sdw::vec2T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::Int const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::UInt const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::Float const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::Double const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::Vec2T< InComponentT > const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() )
+			, writer.template cast< OutComponentT >( 0 ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::Vec3T< InComponentT > const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() )
+			, writer.template cast< OutComponentT >( in.z() ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec3T< OutComponentT > makeVec3T( sdw::ShaderWriter & writer, sdw::Vec4T< InComponentT > const & in )
+	{
+		return sdw::vec3T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() )
+			, writer.template cast< OutComponentT >( in.z() ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::Int const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::UInt const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::Float const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::Double const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::Vec2T< InComponentT > const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() )
+			, writer.template cast< OutComponentT >( 0 )
+			, writer.template cast< OutComponentT >( 1 ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::Vec3T< InComponentT > const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() )
+			, writer.template cast< OutComponentT >( in.z() )
+			, writer.template cast< OutComponentT >( 1 ) );
+	}
+
+	template< typename OutComponentT, typename InComponentT >
+	sdw::Vec4T< OutComponentT > makeVec4T( sdw::ShaderWriter & writer, sdw::Vec4T< InComponentT > const & in )
+	{
+		return sdw::vec4T< OutComponentT >( writer.template cast< OutComponentT >( in.x() )
+			, writer.template cast< OutComponentT >( in.y() )
+			, writer.template cast< OutComponentT >( in.z() )
+			, writer.template cast< OutComponentT >( in.w() ) );
+	}
+
+	template< sdw::type::ImageFormat FormatT, typename InputT >
+	sdw::ImageFetchT< FormatT > makeFetchT( sdw::ShaderWriter & writer, InputT const & in )
+	{
+		using TypeT = sdw::ImageFetchT< FormatT >;
+		using ComponentT = sdw::TypeTraits< TypeT >::ComponentType;
+		if constexpr ( sdw::TypeTraits< TypeT >::ComponentCount == 1u )
+			return makeVec1T< ComponentT >( writer, in );
+		else if constexpr ( sdw::TypeTraits< TypeT >::ComponentCount == 2u )
+			return makeVec2T< ComponentT >( writer, in );
+		else if constexpr ( sdw::TypeTraits< TypeT >::ComponentCount == 3u )
+			return makeVec3T< ComponentT >( writer, in );
+		else
+			return makeVec4T< ComponentT >( writer, in );
+	}
+
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::IVec2 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::IVec3 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::IVec4 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UVec2 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UVec3 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UVec4 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Float const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Vec2 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Vec3 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Vec4 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Double const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::DVec2 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::DVec3 const & in );
+	C3D_API sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::DVec4 const & in );
+
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Int const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec2 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec3 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec4 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UInt const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec2 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec3 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec4 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Float const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec2 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec3 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec4 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Double const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::DVec2 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::DVec3 const & in );
+	C3D_API sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::DVec4 const & in );
 
 	//@}
 }
