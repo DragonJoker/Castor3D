@@ -49,7 +49,7 @@ namespace atmosphere_scattering
 					if ( isVisible )
 					{
 						auto targetSize = writer.declLocale( "targetSize"
-							, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
+							, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
 						out.colour() = cloudsMap.sample( in.fragCoord.xy() / targetSize );
 					}
 					else

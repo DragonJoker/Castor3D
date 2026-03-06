@@ -283,6 +283,7 @@ namespace c3d
 
 			PointLightInstance const & pointLight = static_cast< PointLightInstance & >( *updater.light );
 			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
+				, pointLight.getNode().getDerivedPosition()
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
 		}

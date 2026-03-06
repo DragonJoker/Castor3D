@@ -165,6 +165,7 @@ namespace atmosphere_scattering
 		, c3d::Texture const * depthObj
 		, c3d::RenderUbo const & renderUbo
 		, c3d::SceneUbo const & sceneUbo
+		, c3d::CameraUbo const & mainCameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
 		, c3d::Extent2D const & size
@@ -189,27 +190,18 @@ namespace atmosphere_scattering
 				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
 				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled }
 			, { { .mipFilter = c3d::MipmapMode::eNearest } } }
-		, skyColour{ device
+		, scatteringColour{ device
 			, background.getScene().getResources()
-			, cuT( "SkyColour" ) + c3d::string::toString( index )
+			, cuT( "ScatteringColour" ) + c3d::string::toString( index )
 			, { c3d::ImageCreateFlags::eNone
 				, { size.width, size.height, 1u }, 1u, 1u
 				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
 				, c3d::ImageUsageFlags::eStorage | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eColorAttachment }
 			, { { .addressMode = c3d::WrapMode::eRepeat
 				, .mipFilter = c3d::MipmapMode::eNearest } } }
-		, sunColour{ device
+		, transmittanceColour{ device
 			, background.getScene().getResources()
-			, cuT( "SunColour" ) + c3d::string::toString( index )
-			, { c3d::ImageCreateFlags::eNone
-				, { size.width, size.height, 1u }, 1u, 1u
-				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
-				, c3d::ImageUsageFlags::eStorage | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eColorAttachment }
-			, { { .addressMode = c3d::WrapMode::eRepeat
-				, .mipFilter = c3d::MipmapMode::eNearest } } }
-		, cloudsColour{ device
-			, background.getScene().getResources()
-			, cuT( "CloudsColour" ) + c3d::string::toString( index )
+			, cuT( "TransmittanceColour" ) + c3d::string::toString( index )
 			, { c3d::ImageCreateFlags::eNone
 				, { size.width, size.height, 1u }, 1u, 1u
 				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
@@ -245,6 +237,7 @@ namespace atmosphere_scattering
 		, volumetricCloudsPass{ c3d::makeRawUnique< CloudsVolumePass >( graph
 			, device
 			, atmosphereUbo
+			, mainCameraUbo
 			, cameraUbo
 			, cloudsUbo
 			, transmittance
@@ -256,26 +249,28 @@ namespace atmosphere_scattering
 			, curl
 			, weather
 			, depthObj
-			, skyColour
-			, sunColour
-			, cloudsColour
+			, scatteringColour
+			, transmittanceColour
 			, index ) }
 		, cloudsResolvePass{ c3d::makeRawUnique< CloudsResolvePass >( graph
 			, device
 			, cameraUbo
 			, atmosphereUbo
 			, cloudsUbo
-			, skyColour
-			, sunColour
-			, cloudsColour
+			, transmittance
+			, multiscatter
+			, skyView
+			, volume
+			, scatteringColour
+			, transmittanceColour
+			, depthObj
 			, cloudsResult
 			, index ) }
 	{
 		skyView.create();
 		volume.create();
-		skyColour.create();
-		sunColour.create();
-		cloudsColour.create();
+		scatteringColour.create();
+		transmittanceColour.create();
 		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
 			, [&background, &backgroundPass, &device, size, forceVisible]( crg::FramePass const & framePass
@@ -294,11 +289,10 @@ namespace atmosphere_scattering
 					, res->getTimer() );
 				return res;
 			} );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
 		renderUbo.createPassBinding( pass, AtmosphereBackgroundBindings::eRenderConfig );
 		sceneUbo.createPassBinding( pass, AtmosphereBackgroundBindings::eScene );
 		pass.addInputSampledT( *cloudsResult.getSampledLastAttach(), AtmosphereBackgroundBindings::eClouds
-			, linearSampler );
+			, crg::SamplerDesc{ c3d::FilterMode::eNearest, c3d::FilterMode::eNearest } );
 		lastPass = &pass;
 	}
 
@@ -306,9 +300,8 @@ namespace atmosphere_scattering
 	{
 		skyView.destroy();
 		volume.destroy();
-		cloudsColour.destroy();
-		sunColour.destroy();
-		skyColour.destroy();
+		transmittanceColour.destroy();
+		scatteringColour.destroy();
 		cloudsResult.destroy();
 	}
 
@@ -318,16 +311,12 @@ namespace atmosphere_scattering
 			, skyView.getSampledViewId()
 			, c3d::ImageLayout::eShaderReadOnly
 			, c3d::TextureFactors{}.invert( true ) );
-		visitor.visit( cuT( "Sky Colour" )
-			, skyColour
+		visitor.visit( cuT( "Scattering Colour" )
+			, scatteringColour
 			, c3d::ImageLayout::eShaderReadOnly
 			, c3d::TextureFactors{}.invert( true ) );
-		visitor.visit( cuT( "Sun Colour" )
-			, sunColour
-			, c3d::ImageLayout::eShaderReadOnly
-			, c3d::TextureFactors{}.invert( true ) );
-		visitor.visit( cuT( "Clouds Colour" )
-			, cloudsColour
+		visitor.visit( cuT( "Transmittance Colour" )
+			, transmittanceColour
 			, c3d::ImageLayout::eShaderReadOnly
 			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Clouds Result" )
@@ -601,6 +590,7 @@ namespace atmosphere_scattering
 					, depthObj
 					, renderUbo
 					, sceneUbo
+					, cameraUbo
 					, *m_atmosphereUbo
 					, *m_cloudsUbo
 					, size
@@ -830,6 +820,30 @@ namespace atmosphere_scattering
 				it->second->update( updater, sunDirection, planetPosition );
 			}
 		}
+
+		auto lengthUnit = node->getScene()->getEngine()->getLengthUnit();
+		auto length = c3d::Length::fromUnit( 1.0f, lengthUnit );
+
+		auto rawPosition = node->getDerivedPosition();
+		if ( auto planetNode = getPlanetNode() )
+			rawPosition -= planetNode->getDerivedPosition();
+		auto position = c3d::Vector3f::fromUnit( rawPosition, lengthUnit );
+		auto orientation = node->getDerivedOrientation();
+		auto right{ c3d::Vector3f::fromKilometres( c3d::Point3f{ 1.0, 0.0, 0.0 } ) };
+		auto up{ c3d::Vector3f::fromKilometres( c3d::Point3f{ 0.0, 1.0, 0.0 } ) };
+		orientation.transform( right, right );
+		orientation.transform( up, up );
+		auto front{ c3d::point::cross( right, up ) };
+		up = c3d::point::cross( front, right );
+
+		updater.bgPosition = position.kilometres();
+		c3d::matrix::lookAt( updater.bgMtxView
+			, position.kilometres()
+			, ( position + front ).kilometres()
+			, up.kilometres() );
+		updater.bgMtxProj = camera.getRescaledProjection( updater.renderSize
+			, length.kilometres()
+			, updater.isSafeBanded );
 	}
 
 	void AtmosphereBackground::doGpuUpdate( c3d::GpuUpdater & updater )const

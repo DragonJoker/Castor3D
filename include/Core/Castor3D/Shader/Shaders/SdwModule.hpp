@@ -32,6 +32,7 @@ namespace c3d::shader
 {
 	/**@name Shader */
 	//@{
+	static uint32_t constexpr MaxVolumeCount = 32u;
 
 	struct ShadowOptions
 	{
@@ -81,6 +82,8 @@ namespace c3d::shader
 	struct SssProfile;
 	struct TextureTransformData;
 	struct TextureConfigData;
+	struct Volume;
+	struct VolumesTraversalResult;
 	struct VoxelData;
 
 	struct BlendComponents;
@@ -192,6 +195,8 @@ namespace c3d::shader
 	class TextureAnimations;
 	class TextureConfigurations;
 	class Utils;
+	class Volumes;
+	class VolumeShaders;
 
 	class PhongLightingModel;
 	class PhongReflectionModel;
@@ -287,9 +292,27 @@ namespace c3d::shader
 	Writer_Parameter( TextureTransformData );
 	Writer_Parameter( TextureConfigData );
 	Writer_Parameter( MeshVertex );
+	Writer_Parameter( Volume );
+	Writer_Parameter( VolumesTraversalResult );
 	Writer_Parameter( VoxelData );
 	Writer_Parameter( VoxelSurface );
 	/** @endcond */
+
+	using VolumeTraversalFunc = sdw::Function< sdw::Void
+		, InVolume
+		, InRay
+		, sdw::InFloat // sample
+		, sdw::InFloat // t
+		, sdw::InFloat // dt
+		, sdw::InVec3 // pos
+		, InOutVolumesTraversalResult >;
+	using VolumeStepFunc = sdw::Function< sdw::Void
+		, InVolume
+		, InOutRay
+		, sdw::InFloat // sample
+		, sdw::InOutFloat // t
+		, sdw::InOutFloat // dt
+		, InOutVolumesTraversalResult >;
 
 	struct LightingModelSpec
 	{

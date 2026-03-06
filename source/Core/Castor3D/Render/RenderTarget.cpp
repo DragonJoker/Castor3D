@@ -925,6 +925,7 @@ namespace c3d
 			, m_renderSize, true
 			, updater.debugIndex );
 		m_cameraUbo.cpuUpdate( camera
+			, camera.getParent()->getDerivedPosition()
 			, camera.getView()
 			, camera.getProjection( m_renderSize, true )
 			, updater.jitter );

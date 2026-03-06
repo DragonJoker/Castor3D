@@ -117,6 +117,7 @@ namespace c3d
 			, 0.1f
 			, 2.0f );
 		viewport.update();
+		updater.bgPosition = node->getDerivedPosition();
 		updater.bgMtxView = updater.camera->getView();
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection( updater.renderSize )

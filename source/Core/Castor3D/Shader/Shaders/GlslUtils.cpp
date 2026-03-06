@@ -21,16 +21,6 @@ namespace c3d::shader
 		: m_writer{ writer }
 	{
 	}
-
-	sdw::Float Utils::saturate( sdw::Float const & v )const
-	{
-		return clamp( v, 0.0_f, 1.0_f );
-	}
-
-	sdw::Vec3 Utils::saturate( sdw::Vec3 const & v )const
-	{
-		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
-	}
 	
 	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & v )const
 	{
@@ -1333,6 +1323,48 @@ namespace c3d::shader
 		, sdw::Vec3 const & alpha )
 	{
 		return ( 1.0_f - max3( alpha ) ) * base + alpha * layer;
+	}
+
+	//*********************************************************************************************
+
+	sdw::RetFloat saturate( sdw::Float const & v )
+	{
+		return clamp( v, 0.0_f, 1.0_f );
+	}
+
+	sdw::RetVec2 saturate( sdw::Vec2 const & v )
+	{
+		return clamp( v, vec2( 0.0_f ), vec2( 1.0_f ) );
+	}
+
+	sdw::RetVec3 saturate( sdw::Vec3 const & v )
+	{
+		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
+	}
+
+	sdw::RetVec4 saturate( sdw::Vec4 const & v )
+	{
+		return clamp( v, vec4( 0.0_f ), vec4( 1.0_f ) );
+	}
+
+	sdw::RetDouble saturate( sdw::Double const & v )
+	{
+		return clamp( v, 0.0_d, 1.0_d );
+	}
+
+	sdw::RetDVec2 saturate( sdw::DVec2 const & v )
+	{
+		return clamp( v, dvec2( 0.0_d ), dvec2( 1.0_d ) );
+	}
+
+	sdw::RetDVec3 saturate( sdw::DVec3 const & v )
+	{
+		return clamp( v, dvec3( 0.0_d ), dvec3( 1.0_d ) );
+	}
+
+	sdw::RetDVec4 saturate( sdw::DVec4 const & v )
+	{
+		return clamp( v, dvec4( 0.0_d ), dvec4( 1.0_d ) );
 	}
 
 	//*********************************************************************************************

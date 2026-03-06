@@ -17,8 +17,6 @@ namespace c3d::shader
 	public:
 		C3D_API explicit Utils( sdw::ShaderWriter & writer );
 
-		C3D_API sdw::Float saturate( sdw::Float const & v )const;
-		C3D_API sdw::Vec3 saturate( sdw::Vec3 const & v )const;
 		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
 		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
 		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
@@ -268,6 +266,14 @@ namespace c3d::shader
 		sdw::Function< AABB
 			, sdw::InU32Vec3, sdw::InVec2, sdw::InVec2, sdw::InMat4, sdw::InVec2 > m_computeAABB;
 	};
+	C3D_API sdw::RetFloat saturate( sdw::Float const & v );
+	C3D_API sdw::RetVec2 saturate( sdw::Vec2 const & v );
+	C3D_API sdw::RetVec3 saturate( sdw::Vec3 const & v );
+	C3D_API sdw::RetVec4 saturate( sdw::Vec4 const & v );
+	C3D_API sdw::RetDouble saturate( sdw::Double const & v );
+	C3D_API sdw::RetDVec2 saturate( sdw::DVec2 const & v );
+	C3D_API sdw::RetDVec3 saturate( sdw::DVec3 const & v );
+	C3D_API sdw::RetDVec4 saturate( sdw::DVec4 const & v );
 }
 
 #endif

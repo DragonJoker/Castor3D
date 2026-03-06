@@ -43,13 +43,14 @@ namespace atmosphere_scattering
 		auto & writer = sdw::findWriterMandat( lightSurface, output );
 		auto targetSize = vec2( sdw::Float{ float( atmosphereBackground->getTargetSize().width ) }
 			, float( atmosphereBackground->getTargetSize().height ) );
-		auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
-		auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
-		atmosphereBackground->getPixelTransLum( lightSurface.clipPosition().xy()
-			, targetSize
-			, lightSurface.clipPosition().z()
-			, transmittance
-			, luminance );
+		auto luminance = writer.declLocale< sdw::Vec4 >( "luminance", sdw::vec4( 0.0_f ) );
+		auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance", sdw::vec4( 0.0_f ) );
+		auto ray = writer.declLocale( "ray"
+			, atmosphereBackground->getPixelTransLum( lightSurface.clipPosition().xy()
+				, targetSize
+				, lightSurface.clipPosition().z()
+				, transmittance
+				, luminance ) );
 		output = luminance.xyz() / luminance.a();
 		lighting.applyVolumetric( shadows
 			, shadowMapIndex

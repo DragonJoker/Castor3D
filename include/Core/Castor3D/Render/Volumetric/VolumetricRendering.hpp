@@ -103,7 +103,7 @@ namespace c3d
 		Texture const & m_colour;
 		FrustumFroxels m_frustumFroxels;
 		TextureUPtr m_transmittance;
-		TextureUPtr m_inscatter;
+		TextureUPtr m_scattering;
 	};
 }
 

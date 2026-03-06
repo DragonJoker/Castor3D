@@ -34,16 +34,42 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	Class in charge of registering volume component plugins.
+	*\~french
+	*\brief
+	*	Classe en charge de l'enregistrement des plugins de composants de vo:lumes.
+	*/
+	class VolumeComponentRegister;
+	/**
+	*\~english
+	*\brief
 	*	Class in charge of rendering all volumetrics.
 	*\~french
 	*\brief
 	*	Classe en charge du rendu des volumes.
 	*/
 	class VolumetricRendering;
+	/**
+	\~english
+	\brief		Plugin for a volume component.
+	\~french
+	\brief		Plugin pour un composant de volume.
+	*/
+	class VolumeComponentPlugin;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( c3d, FrustumFroxels, C3D_API );
+	CU_DeclareSmartPtr( c3d, VolumeComponentPlugin, C3D_API );
+	CU_DeclareSmartPtr( c3d, VolumeComponentRegister, C3D_API );
 	/** @endcond */
+
+	using CreateVolumeComponentPlugin = Function< VolumeComponentPluginUPtr( VolumeComponentRegister const & ) >;
+
+	namespace shader
+	{
+		class VolumeComponentShader;
+
+		using VolumeComponentShaderPtr = RawUniquePtr< VolumeComponentShader >;
+	};
 
 	//@}
 	//@}

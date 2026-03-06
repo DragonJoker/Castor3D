@@ -4,15 +4,19 @@
 #include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 #include "AtmosphereScattering/CloudsModel.hpp"
+#include "AtmosphereScattering/CloudsVolumePlugin.hpp"
 #include "AtmosphereScattering/ScatteringModel.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
+#include <Castor3D/Render/Volumetric/VolumeComponentRegister.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Shader/Shaders/GlslVolumeShaders.hpp>
+#include <Castor3D/Shader/Ubos/CameraUbo.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
@@ -31,9 +35,13 @@ namespace atmosphere_scattering
 	{
 		enum class Bindings : uint32_t
 		{
+			eOutScattering,
+			eOutTransmittance,
+			eMainCamera,
+			eDepthMap,
 			eAtmosphere,
 			eClouds,
-			eCamera,
+			eKmCamera,
 			eTransmittance,
 			eMultiScatter,
 			eSkyView,
@@ -42,10 +50,6 @@ namespace atmosphere_scattering
 			eWorley,
 			eCurl,
 			eWeatherMap,
-			eDepthMap,
-			eOutSky,
-			eOutSun,
-			eOutClouds,
 			eCount,
 		};
 
@@ -68,26 +72,22 @@ namespace atmosphere_scattering
 						out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 					} );
 
-				auto outSky = writer.declOutput< sdw::Vec4 >( "outSky", sdw::EntryPoint::eFragment, 0u );
-				auto outSun = writer.declOutput< sdw::Vec4 >( "outSun", sdw::EntryPoint::eFragment, 1u );
-				auto outClouds = writer.declOutput< sdw::Vec4 >( "outClouds", sdw::EntryPoint::eFragment, 2u );
+				auto outScattering = writer.declOutput< sdw::Vec4 >( "outScattering", sdw::EntryPoint::eFragment, 0u );
+				auto outTransmittance = writer.declOutput< sdw::Vec4 >( "outTransmittance", sdw::EntryPoint::eFragment, 1u );
 
-				writer.implementEntryPoint( [&writer, &func, &outSky, &outSun, &outClouds]( sdw::FragmentIn const & in
+				writer.implementEntryPoint( [&writer, &func, &outScattering, &outTransmittance]( sdw::FragmentIn const & in
 					, sdw::FragmentOut const & )
 					{
-						auto fragCoord = writer.declLocale( "fragCoord"
-							, vec2( in.fragCoord.xy() ) );
-						auto sky = writer.declLocale( "sky"
+						auto pixelCoord = writer.declLocale( "pixelCoord"
+							, in.fragCoord.xy() );
+						auto scattering = writer.declLocale( "scattering"
 							, vec4( 0.0_f ) );
-						auto sun = writer.declLocale( "sun"
+						auto transmittance = writer.declLocale( "transmittance"
 							, vec4( 0.0_f ) );
-						auto clouds = writer.declLocale( "clouds"
-							, vec4( 0.0_f ) );
-						func( fragCoord, sky, sun, clouds );
+						func( pixelCoord, scattering, transmittance );
 
-						outSky = sky;
-						outSun = sun;
-						outClouds = clouds;
+						outScattering = scattering;
+						outTransmittance = transmittance;
 					} );
 			}
 		};
@@ -100,31 +100,27 @@ namespace atmosphere_scattering
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
 			{
-				auto outSky = writer.declStorageImg< sdw::WImage2DRgba32 >( "outSky"
-					, uint32_t( Bindings::eOutSky )
+				auto outScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "outScattering"
+					, uint32_t( Bindings::eOutScattering )
 					, 0u );
-				auto outSun = writer.declStorageImg< sdw::WImage2DRgba32 >( "outSun"
-					, uint32_t( Bindings::eOutSun )
-					, 0u );
-				auto outClouds = writer.declStorageImg< sdw::WImage2DRgba32 >( "outClouds"
-					, uint32_t( Bindings::eOutClouds )
+				auto outTransmittance = writer.declStorageImg< sdw::WImage2DRgba32 >( "outTransmittance"
+					, uint32_t( Bindings::eOutTransmittance )
 					, 0u );
 
-				writer.implementMain( [&writer, &func, &outSky, &outSun, &outClouds]( sdw::ComputeIn const & in )
+				writer.implementMain( [&writer, &func, &outScattering, &outTransmittance]( sdw::ComputeIn const & in )
 					{
-						auto fragCoord = writer.declLocale( "fragCoord"
+						auto pixelCoord = writer.declLocale( "pixelCoord"
 							, vec2( in.globalInvocationID.xy() ) );
-						auto sky = writer.declLocale( "sky"
+						auto scattering = writer.declLocale( "scattering"
 							, vec4( 0.0_f ) );
-						auto sun = writer.declLocale( "sun"
+						auto transmittance = writer.declLocale( "transmittance"
 							, vec4( 0.0_f ) );
-						auto clouds = writer.declLocale( "clouds"
-							, vec4( 0.0_f ) );
-						auto ifragCoord = func( fragCoord, sky, sun, clouds );
+						func( pixelCoord, scattering, transmittance );
 
-						outSky.store( ifragCoord, sky );
-						outSun.store( ifragCoord, sun );
-						outClouds.store( ifragCoord, clouds );
+						auto ifragCoord = writer.declLocale( "fragCoord"
+							, ivec2( in.globalInvocationID.xy() ) );
+						outScattering.store( ifragCoord, scattering );
+						outTransmittance.store( ifragCoord, transmittance );
 					} );
 			}
 		};
@@ -136,102 +132,151 @@ namespace atmosphere_scattering
 		{
 			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
-			C3D_AtmosphereScattering( writer
-				, Bindings::eAtmosphere
-				, 0u );
-			C3D_Clouds( writer
-				, Bindings::eClouds
-				, 0u );
-			ATM_Camera( writer
-				, Bindings::eCamera
-				, 0u );
-
 			auto targetSize = writer.declConstant( "targetSize"
 				, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
+			C3D_Camera( writer
+				, Bindings::eMainCamera
+				, 0u );
 
-			auto depthBufferValue = 0.0_f;
+			if constexpr ( useUnified )
+			{
+				auto binding = uint32_t( Bindings::eDepthMap );
+				c3ds::VolumeShaders volumeShaders{ writer
+					, engine.getVolumeComponentsRegister(), { renderSize.width, renderSize.height }, hasDepth
+					, ( 0x00000001u << engine.getVolumeComponentsRegister().getNameId( CloudsVolumePlugin::TypeName ) )
+					, binding };
 
-			c3d::shader::Utils utils{ writer };
-			AtmosphereModel atmosphere{ writer
-				, c3d_atmosphereData
-				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+				ShaderWriter< useCompute >::implementMain( writer
+					, [&writer, &volumeShaders, &targetSize, &c3d_cameraData]( sdw::Vec2 const & fragCoord
+						, sdw::Vec4 & outScattering
+						, sdw::Vec4 & outTransmittance )
+					{
+						c3ds::Volumes volumes{ writer, volumeShaders };
+						volumeShaders.registerVolumeTypes( volumes );
+
+						auto traversalResult = writer.declLocale( "traversalResult"
+							, c3ds::VolumesTraversalResult{ writer, volumeShaders, targetSize } );
+
+						auto ray = writer.declLocale( "ray"
+							, c3d_cameraData.castRay( fragCoord, targetSize ) );
+						volumeShaders.initialise( fragCoord, ray, volumes, traversalResult );
+
+						auto i = writer.declLocale( "i", 0_u );
+						auto dt = writer.declLocale( "dt", 0.0_f );
+						sdwWHILE( writer, i < volumes.size() && traversalResult.transmittanceAboveThreshold )
+						{
+							auto volume = writer.declLocale( "volume", volumes[i] );
+							auto t = writer.declLocale( "t", volume.begin );
+
+							sdwFOR( writer, sdw::Float, sample, 0.0_f, sample < volume.sampleCount && traversalResult.transmittanceAboveThreshold, sample += 1.0_f )
+							{
+								volumes.step( volume, ray, sample, t, dt, traversalResult );
+								volumes.traverse( volume, ray, sample, t, dt, traversalResult );
+							}
+							sdwROF
+
+							++i;
+						}
+						sdwELIHW
+
+						volumeShaders.finalise( ray, traversalResult );
+
+						outScattering = vec4( traversalResult.inscatter, 1.0_f );
+						outTransmittance = vec4( traversalResult.transmittance, 1.0_f );
+					} );
+			}
+			else
+			{
+				auto transmittanceThreshold = writer.declConstant( "transmittanceThreshold"
+					, 0.01_f );
+				auto depthMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "depthMap"
+					, Bindings::eDepthMap
+					, 0u
+					, hasDepth ) };
+				C3D_AtmosphereScattering( writer
+					, Bindings::eAtmosphere
+					, 0u );
+				C3D_Clouds( writer
+					, Bindings::eClouds
+					, 0u );
+				ATM_Camera( writer
+					, Bindings::eKmCamera
+					, 0u );
+
+				c3d::shader::Utils utils{ writer };
+				AtmosphereModel atmosphere{ writer, c3d_atmosphereData
+					, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &atm_cameraData )
 					.setVariableSampleCount( true )
 					.setMieRayPhase( true )
 					.setMultiScatApprox( true )
-				, { transmittanceExtent.width, transmittanceExtent.height } };
-			auto binding = uint32_t( Bindings::eTransmittance );
-			ScatteringModel scattering{ writer
-				, atmosphere
-				, ScatteringModel::Settings{}
+					, { transmittanceExtent.width, transmittanceExtent.height } };
+				auto binding = uint32_t( Bindings::eTransmittance );
+				ScatteringModel scattering{ writer
+					, atmosphere
+					, ScatteringModel::Settings{}
 					.setNeedsMultiscatter( true )
 					.setBloomSunDisk( true )
-				, binding
-				, 0u };
-			binding = uint32_t( Bindings::ePerlinWorley );
-			CloudsModel clouds{ writer
-				, utils
-				, atmosphere
-				, scattering
-				, c3d_cloudsData
-				, binding
-				, 0u };
-			auto depthMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "depthMap"
-				, Bindings::eDepthMap
-				, 0u
-				, hasDepth ) };
+					, binding
+					, 0u };
+				binding = uint32_t( Bindings::ePerlinWorley );
+				CloudsModel clouds{ writer
+					, utils
+					, atmosphere
+					, scattering
+					, c3d_cloudsData
+					, binding
+					, 0u };
 
-			ShaderWriter< useCompute >::implementMain( writer
-				, [&writer, &scattering, &targetSize, &depthBufferValue, &c3d_cloudsData, &depthMap, &atmosphere, &clouds
-					, &hasDepth]( sdw::Vec2 const & fragCoord
-					, sdw::Vec4 & skyColor
-					, sdw::Vec4 & sunColor
-					, sdw::Vec4 & cloudsColor )
-				{
-					auto ifragCoord = writer.declLocale( "ifragCoord"
-						, ivec2( fragCoord ) );
-					auto transmittance = writer.declLocale( "transmittance"
-						, vec4( 0.0_f ) );
-					auto ray = writer.declLocale( "ray"
-						, scattering.getPixelTransLum( fragCoord
-							, targetSize
-							, depthBufferValue
-							, transmittance
-							, skyColor ) );
+				auto depthBufferValue = 0.0_f;
 
-					auto skyLuminance = writer.declLocale( "skyLuminance"
-						, scattering.rescaleLuminance( skyColor ).rgb() );
-					auto sunLuminance = writer.declLocale( "sunLuminance"
-						, scattering.getSunLuminance( ray ) );
-					auto skyBlendFactor = writer.declLocale( "skyBlendFactor"
-						, 0.0_f );
-
-					sdwIF( writer, c3d_cloudsData.coverage() > 0.0_f )
+				// For reference
+				ShaderWriter< useCompute >::implementMain( writer
+					, [&writer, &scattering, &targetSize, &depthBufferValue, &c3d_cloudsData, &depthMap, &atmosphere, &clouds
+						, &hasDepth]( sdw::Vec2 const & fragCoord
+							, sdw::Vec4 & outScattering
+							, sdw::Vec4 & outTransmittance )
 					{
-						auto sceneUv = writer.declLocale( "sceneUv"
-							, fragCoord / targetSize );
-						auto depthObj = writer.declLocale( "depthObj"
-							, hasDepth ? depthMap.lod( vec2( sceneUv.x(), 1.0_f - sceneUv.y() ), 0.0_f ) : vec4( -1.0_f, -1.0_f, 0.0_f, 0.0_f ) );
+						auto ifragCoord = writer.declLocale( "ifragCoord"
+							, ivec2( fragCoord ) );
+						auto transmittance = writer.declLocale( "transmittance"
+							, vec4( 0.0_f ) );
+						auto ray = writer.declLocale( "ray"
+							, scattering.getPixelTransLum( fragCoord
+								, targetSize
+								, depthBufferValue
+								, transmittance
+								, outScattering ) );
 
-						if ( hasDepth )
+						auto skyLuminance = writer.declLocale( "skyLuminance"
+							, scattering.rescaleLuminance( outScattering ).rgb() );
+						auto sunLuminance = writer.declLocale( "sunLuminance"
+							, scattering.getSunLuminance( ray ) );
+						auto skyBlendFactor = writer.declLocale( "skyBlendFactor"
+							, 0.0_f );
+
+						sdwIF( writer, c3d_cloudsData.coverage() > 0.0_f )
 						{
-							depthObj.g() *= atmosphere.settings.length.kilometres();
+							auto sceneUv = writer.declLocale( "sceneUv"
+								, fragCoord / targetSize );
+							auto depthObj = writer.declLocale( "depthObj"
+								, hasDepth ? depthMap.lod( vec2( sceneUv.x(), 1.0_f - sceneUv.y() ), 0.0_f ) : vec4( -1.0_f, -1.0_f, 0.0_f, 0.0_f ) );
+							if ( hasDepth )
+								depthObj.g() *= atmosphere.settings.length.kilometres();
+							outTransmittance = clouds.applyClouds( ray
+								, depthObj.b()
+								, depthObj.g()
+								, ifragCoord
+								, sunLuminance
+								, skyLuminance
+								, skyBlendFactor );
 						}
+						sdwFI
 
-						cloudsColor = clouds.applyClouds( ray
-							, depthObj.b()
-							, depthObj.g()
-							, ifragCoord
-							, sunLuminance
-							, skyLuminance
-							, skyBlendFactor );
-					}
-					sdwFI
-
-					skyColor = vec4( skyLuminance, skyBlendFactor );
-					sunColor = vec4( sunLuminance, 1.0_f );
-					return ifragCoord;
-				} );
+						outScattering = vec4( skyLuminance, skyBlendFactor );
+						return ifragCoord;
+					} );
+			}
 
 			return writer.getBuilder().releaseShader();
 		}
@@ -242,7 +287,8 @@ namespace atmosphere_scattering
 	CloudsVolumePass::CloudsVolumePass( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
-		, CameraUbo const & cameraUbo
+		, c3d::CameraUbo const & mainCameraUbo
+		, CameraUbo const & kmCameraUbo
 		, CloudsUbo const & cloudsUbo
 		, c3d::Texture const & transmittance
 		, c3d::Texture const & multiscatter
@@ -253,15 +299,14 @@ namespace atmosphere_scattering
 		, c3d::Texture const & curl
 		, c3d::Texture const & weather
 		, c3d::Texture const * depthObj
-		, c3d::Texture & skyResult
-		, c3d::Texture & sunResult
-		, c3d::Texture & cloudsResult
+		, c3d::Texture & scatteringResult
+		, c3d::Texture & transmittanceResult
 		, uint32_t index )
 		: c3d::Named{ cuT( "Clouds/VolumePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), volclouds::getProgram( c3d::getEngine( device ), skyResult.getExtent(), transmittance.getExtent(), depthObj != nullptr ) }
+		, m_shader{ getName(), volclouds::getProgram( c3d::getEngine( device ), scatteringResult.getExtent(), transmittance.getExtent(), depthObj != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto renderSize = skyResult.getExtent();
+		auto renderSize = scatteringResult.getExtent();
 		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -294,7 +339,8 @@ namespace atmosphere_scattering
 			} );
 		atmosphereUbo.createPassBinding( pass, volclouds::Bindings::eAtmosphere );
 		cloudsUbo.createPassBinding( pass, volclouds::Bindings::eClouds );
-		cameraUbo.createPassBinding( pass, volclouds::Bindings::eCamera );
+		mainCameraUbo.createPassBinding( pass, volclouds::Bindings::eMainCamera );
+		kmCameraUbo.createPassBinding( pass, volclouds::Bindings::eKmCamera );
 		crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
 		crg::SamplerDesc linearRepeatSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest
 			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
@@ -314,15 +360,13 @@ namespace atmosphere_scattering
 
 		if constexpr ( volclouds::useCompute )
 		{
-			skyResult.setLastAttach( pass.addOutputStorageImageT( skyResult.getTargetViewId(), volclouds::Bindings::eOutSky ) );
-			sunResult.setLastAttach( pass.addOutputStorageImageT( sunResult.getTargetViewId(), volclouds::Bindings::eOutSun ) );
-			cloudsResult.setLastAttach( pass.addOutputStorageImageT( cloudsResult.getTargetViewId(), volclouds::Bindings::eOutClouds ) );
+			scatteringResult.setLastAttach( pass.addOutputStorageImageT( scatteringResult.getTargetViewId(), volclouds::Bindings::eOutScattering ) );
+			transmittanceResult.setLastAttach( pass.addOutputStorageImageT( transmittanceResult.getTargetViewId(), volclouds::Bindings::eOutTransmittance ) );
 		}
 		else
 		{
-			skyResult.setLastAttach( pass.addOutputColourTarget( skyResult.getTargetViewId() ) );
-			sunResult.setLastAttach( pass.addOutputColourTarget( sunResult.getTargetViewId() ) );
-			cloudsResult.setLastAttach( pass.addOutputColourTarget( cloudsResult.getTargetViewId() ) );
+			scatteringResult.setLastAttach( pass.addOutputColourTarget( scatteringResult.getTargetViewId() ) );
+			transmittanceResult.setLastAttach( pass.addOutputColourTarget( transmittanceResult.getTargetViewId() ) );
 		}
 	}
 

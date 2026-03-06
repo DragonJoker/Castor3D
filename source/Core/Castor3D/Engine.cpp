@@ -27,6 +27,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
+#include "Castor3D/Render/Volumetric/VolumeComponentRegister.hpp"
 #include "Castor3D/Scene/CscnImporterFile.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -512,6 +513,7 @@ namespace c3d
 		m_passFactory = makeUnique< PassFactory >( *this );
 		m_passComponents = makeUnique< PassComponentRegister >( *this );
 		m_submeshComponents = makeUnique< SubmeshComponentRegister >( *this );
+		m_volumeComponents = makeUnique< VolumeComponentRegister >( *this );
 
 		auto listenerClean = []( auto & element )
 		{
@@ -697,6 +699,7 @@ namespace c3d
 		DataImageLoader::unregisterLoader( m_imageLoader );
 		cleanupGlslang();
 
+		m_volumeComponents.reset();
 		m_submeshComponents.reset();
 		m_passComponents.reset();
 		m_passFactory.reset();
@@ -1319,6 +1322,18 @@ namespace c3d
 	void Engine::unregisterSubmeshComponent( String const & type )const
 	{
 		m_submeshComponents->unregisterComponent( type );
+	}
+
+	void Engine::registerVolumeComponent( String const & type
+		, VolumeComponentPluginUPtr componentPlugin )const
+	{
+		m_volumeComponents->registerComponent( type
+			, c3d::move( componentPlugin ) );
+	}
+
+	void Engine::unregisterVolumeComponent( String const & type )const
+	{
+		m_volumeComponents->unregisterComponent( type );
 	}
 
 	void Engine::registerRenderPassType( String const & renderPassType

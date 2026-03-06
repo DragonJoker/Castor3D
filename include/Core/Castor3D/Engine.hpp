@@ -29,6 +29,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Render/Upscale/UpscaleModule.hpp"
+#include "Castor3D/Render/Volumetric/VolumetricModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
@@ -693,16 +694,37 @@ namespace c3d
 		C3D_API void unregisterPassComponent( String const & type )const;
 		/**
 		 *\~english
-		 *\brief		Registers a pass component.
+		 *\brief		Registers a submesh component.
 		 *\param[in]	type			The component type name.
 		 *\param[in]	componentPlugin	The component's specific functions.
 		 *\~french
-		 *\brief		Enregistre un composant de passe.
+		 *\brief		Enregistre un composant de submesh.
 		 *\param[in]	type			Le nom du type de composant.
 		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
 		 */
 		C3D_API SubmeshComponentID registerSubmeshComponent( String const & type
 			, SubmeshComponentPluginUPtr componentPlugin )const;
+		/**
+		 *\~english
+		 *\brief		Unregisters a submesh component.
+		 *\param[in]	type	The component type name.
+		 *\~french
+		 *\brief		Désenregistre un composant de submesh.
+		 *\param[in]	type	Le nom du type de composant.
+		 */
+		C3D_API void unregisterSubmeshComponent( String const & type )const;
+		/**
+		 *\~english
+		 *\brief		Registers a volume component.
+		 *\param[in]	type			The component type name.
+		 *\param[in]	componentPlugin	The component's specific functions.
+		 *\~french
+		 *\brief		Enregistre un composant de volume.
+		 *\param[in]	type			Le nom du type de composant.
+		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
+		 */
+		C3D_API void registerVolumeComponent( String const & type
+			, VolumeComponentPluginUPtr componentPlugin )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a pass component.
@@ -711,7 +733,7 @@ namespace c3d
 		 *\brief		Désenregistre un composant de passe.
 		 *\param[in]	type	Le nom du type de composant.
 		 */
-		C3D_API void unregisterSubmeshComponent( String const & type )const;
+		C3D_API void unregisterVolumeComponent( String const & type )const;
 		/**
 		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
@@ -971,6 +993,11 @@ namespace c3d
 			return *m_submeshComponents;
 		}
 
+		VolumeComponentRegister & getVolumeComponentsRegister()const noexcept
+		{
+			return *m_volumeComponents;
+		}
+
 		ImporterFileFactory & getImporterFileFactory()const noexcept
 		{
 			return *m_importerFileFactory;
@@ -1140,6 +1167,13 @@ namespace c3d
 		{
 			return registerSubmeshComponent( ComponentT::TypeName
 				, createPlugin( *m_submeshComponents ) );
+		}
+
+		template< typename ComponentT >
+		void registerVolumeComponent( CreateVolumeComponentPlugin const & createPlugin = &ComponentT::createPlugin )const
+		{
+			registerVolumeComponent( ComponentT::TypeName
+				, createPlugin( *m_volumeComponents ) );
 		}
 
 		void setLengthUnit( LengthUnit value )noexcept
@@ -1333,6 +1367,7 @@ namespace c3d
 		PassFactoryUPtr m_passFactory;
 		PassComponentRegisterUPtr m_passComponents;
 		SubmeshComponentRegisterUPtr m_submeshComponents;
+		VolumeComponentRegisterUPtr m_volumeComponents;
 		CpuInformations m_cpuInformations;
 		UpscaleConfig m_upscalingConfig;
 		LightingModelID m_lightingModelId{};

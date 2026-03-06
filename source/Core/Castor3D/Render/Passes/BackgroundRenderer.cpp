@@ -49,6 +49,7 @@ namespace c3d
 		}
 
 		m_cameraUbo.cpuUpdate( *updater.camera
+			, updater.bgPosition
 			, updater.bgMtxView
 			, updater.bgMtxProj );
 		auto configuration = m_modelUbo.getData();

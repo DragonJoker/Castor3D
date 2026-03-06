@@ -83,10 +83,6 @@ namespace atmosphere_scattering
 
 		viewProj = camera.getProjection( renderSize, isSafeBanded ) * camera.getView();
 		data.objInvViewProj = viewProj.getInverse();
-
-		data.lightDotCameraFront = c3d::point::dot( sunDirection
-			, c3d::point::getNormalised( front.kilometres() ) );
-		data.isLightInFront = data.lightDotCameraFront > 0.2f ? 1 : 0;
 	}
 
 	//************************************************************************************************

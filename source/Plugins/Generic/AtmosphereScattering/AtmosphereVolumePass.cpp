@@ -104,8 +104,7 @@ namespace atmosphere_scattering
 			auto apSliceCount = writer.declConstant( "apSliceCount"
 				, 32.0_f );
 
-			AtmosphereModel atmosphere{ writer
-				, c3d_atmosphereData
+			AtmosphereModel atmosphere{ writer, c3d_atmosphereData
 				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &atm_cameraData )
 					.setMieRayPhase( true )
@@ -202,8 +201,8 @@ namespace atmosphere_scattering
 							, tMaxMax ) );
 
 					auto transmittance = writer.declLocale( "transmittance"
-						, dot( ss.transmittance(), vec3( 1.0_f / 3.0_f ) ) );
-					writer.returnStmt( vec4( ss.luminance(), 1.0_f - transmittance ) );
+						, dot( ss.transmittance, vec3( 1.0_f / 3.0_f ) ) );
+					writer.returnStmt( vec4( ss.luminance, 1.0_f - transmittance ) );
 				}
 				, sdw::InVec2{ writer, "pixPos" }
 				, sdw::InInt{ writer, "sliceId" } );

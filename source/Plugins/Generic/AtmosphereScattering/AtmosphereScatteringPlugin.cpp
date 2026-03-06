@@ -1,17 +1,12 @@
 #include "AtmosphereScattering/AtmosphereScatteringPrerequisites.hpp"
 
-#include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereLightingModel.hpp"
 #include "AtmosphereScattering/AtmosphereScattering_Parsers.hpp"
+#include "AtmosphereScattering/CloudsVolumePlugin.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Material/Pass/PbrPass.hpp>
-#include <Castor3D/Material/Pass/PhongPass.hpp>
-#include <Castor3D/Model/Mesh/MeshFactory.hpp>
-
-#include <CastorUtils/FileParser/FileParser.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_AtmosphereScattering_API
@@ -62,10 +57,12 @@ extern "C"
 			, atmosphere_scattering::createParsers()
 			, atmosphere_scattering::createSections()
 			, nullptr );
+		engine->registerVolumeComponent< atmosphere_scattering::CloudsVolumePlugin >();
 	}
 
 	C3D_AtmosphereScattering_API void onUnload( c3d::Engine * engine )
 	{
+		engine->unregisterVolumeComponent( atmosphere_scattering::CloudsVolumePlugin::TypeName );
 		engine->unregisterParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType );
 		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterScatteringModel( c3d::String{ atmosphere_scattering::AtmosphereScatteringModel::Name } );

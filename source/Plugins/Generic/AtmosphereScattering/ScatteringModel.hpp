@@ -62,6 +62,8 @@ namespace atmosphere_scattering
 			, uint32_t & binding
 			, uint32_t set );
 		sdw::RetVec3 getSunLuminance( Ray const & ray );
+		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & position
+			, sdw::Vec3 const & sunDir );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir );
 		sdw::Vec4 gradSkyView( sdw::Vec2 const & coord
 			, sdw::Vec2 const & dPdx
@@ -77,6 +79,10 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & V
 			, sdw::Vec2 const & fragSize );
 		sdw::Vec4 rescaleLuminance( sdw::Vec4 const & luminance );
+
+		void dispatchOutput( sdw::Vec3 const & ssInscatter
+			, sdw::Vec3 const & ssTransmittance
+			, sdw::Vec4 & luminance )const;
 
 	private:
 		void doRenderSky( sdw::Vec2 const & fragSize
@@ -95,7 +101,12 @@ namespace atmosphere_scattering
 		void doRegisterOutputs( SingleScatteringResult const & ss
 			, sdw::Vec3 & L
 			, sdw::Vec4 & luminance
-			, sdw::Vec4 & transmittance );
+			, sdw::Vec4 & transmittance )const;
+		void doRegisterOutputs( sdw::Vec3 const & ssLuminance
+			, sdw::Vec3 const & ssTransmittance
+			, sdw::Vec3 & L
+			, sdw::Vec4 & luminance
+			, sdw::Vec4 & transmittance )const;
 		sdw::Float doGetSunAngle( sdw::Vec3 const & sunDir
 			, sdw::Float const & minAngle
 			, sdw::Float const & maxAngle )const;

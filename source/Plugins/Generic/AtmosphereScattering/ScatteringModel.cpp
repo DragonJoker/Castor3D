@@ -1,9 +1,7 @@
 #include "AtmosphereScattering/ScatteringModel.hpp"
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
-#include <Castor3D/Shader/Shaders/GlslLight.hpp>
-
-#include <ShaderWriter/Source.hpp>
+#include <Castor3D/Shader/Shaders/GlslVolumeShaders.hpp>
 
 namespace atmosphere_scattering
 {
@@ -91,7 +89,13 @@ namespace atmosphere_scattering
 								, vec3( 0.0_f )
 								, m_atmosphere.getPlanetRadius() ).valid() )
 							{
-								sunLuminance = 2.0_f * getSunRadiance( ray.direction );
+								auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
+									, c3d::PiMult2< float > *( 1.0_f - cos( sunAngularDiameter * 0.5_f ) ) );
+								auto zenithSunLuminance = m_writer.declLocale( "zenithSunLuminance"
+									, m_atmosphere.getSunIlluminance() / sunSolidAngle );
+								auto outerspaceLuminance = m_writer.declLocale( "outerspaceLuminance"
+									, zenithSunLuminance / getSunRadiance( vec3( 0.0_f, 1.0_f, 0.0_f ) ) );
+								sunLuminance = outerspaceLuminance / 10000.0f;
 
 								auto u = vec3( 1.0_f, 1.0_f, 1.0_f );
 								auto a = vec3( 0.397_f, 0.503_f, 0.652_f );
@@ -158,6 +162,12 @@ namespace atmosphere_scattering
 		}
 
 		return m_getSunLuminance( pray );
+	}
+
+	sdw::RetVec3 ScatteringModel::getSunRadiance( sdw::Vec3 const & position
+		, sdw::Vec3 const & sunDir )
+	{
+		return m_atmosphere.getSunRadiance( position, sunDir, transmittanceMap );
 	}
 
 	sdw::RetVec3 ScatteringModel::getSunRadiance( sdw::Vec3 const & sunDir )
@@ -270,7 +280,7 @@ namespace atmosphere_scattering
 					auto psPosition = m_writer.declLocale( "psPosition"
 						, wsPosition - m_atmosphere.getPlanetPosition() );
 					auto ray = m_writer.declLocale( "ray"
-						, c3d::shader::Ray{ m_writer, psPosition, reflect( -V, wsNormal ) } );
+						, c3d::shader::Ray{ psPosition, reflect( -V, wsNormal ) } );
 					auto viewHeight = m_writer.declLocale( "viewHeight"
 						, length( ray.origin ) );
 					auto upVector = m_writer.declLocale( "upVector"
@@ -321,6 +331,16 @@ namespace atmosphere_scattering
 		auto exposure = 10.0_f;
 		hdr = vec3( 1.0_f ) - exp( -hdr / whitePoint * exposure );
 		return vec4( m_writer.ternary( luminance.a() == 0.0_f, luminance.xyz(), hdr * luminance.a() ), 1.0_f );
+	}
+
+	void ScatteringModel::dispatchOutput( sdw::Vec3 const & ssInscatter
+		, sdw::Vec3 const & ssTransmittance
+		, sdw::Vec4 & luminance )const
+	{
+		auto transmittance = m_writer.declLocale( "transmittance", vec4( 0.0_f ) );
+		auto L = m_writer.declLocale( "L", vec3( 0.0_f ) );
+		doRegisterOutputs( ssInscatter, ssTransmittance, L
+			, luminance, transmittance );
 	}
 
 	void ScatteringModel::doRenderSky( sdw::Vec2 const & fragSize
@@ -442,22 +462,28 @@ namespace atmosphere_scattering
 	void ScatteringModel::doRegisterOutputs( SingleScatteringResult const & ss
 		, sdw::Vec3 & L
 		, sdw::Vec4 & luminance
-		, sdw::Vec4 & transmittance )
+		, sdw::Vec4 & transmittance )const
 	{
-		L += ss.luminance();
-		auto throughput = m_writer.declLocale( "throughput"
-			, ss.transmittance() );
+		doRegisterOutputs( ss.luminance, ss.transmittance, L
+			, luminance, transmittance );
+	}
+
+	void ScatteringModel::doRegisterOutputs( sdw::Vec3 const & ssLuminance
+		, sdw::Vec3 const & ssTransmittance
+		, sdw::Vec3 & L
+		, sdw::Vec4 & luminance
+		, sdw::Vec4 & transmittance )const
+	{
+		L += ssLuminance;
 
 		if ( m_settings.colorTransmittance )
 		{
 			luminance = vec4( L, 1.0_f );
-			transmittance = vec4( throughput, 1.0_f );
+			transmittance = vec4( ssTransmittance, 1.0_f );
 		}
 		else
 		{
-			auto trs = m_writer.declLocale( "trs"
-				, dot( throughput, sdw::vec3( 1.0 / 3.0 ) ) );
-			luminance = vec4( L, 1.0_f - trs );
+			luminance = vec4( L, 1.0_f - dot( ssTransmittance, sdw::vec3( 1.0 / 3.0 ) ) );
 		}
 	}
 

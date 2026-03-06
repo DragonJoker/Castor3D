@@ -37,6 +37,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsResolvePass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsUbo.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsVolumePass.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsVolumePlugin.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsWeatherPass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsWorleyPass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ScatteringModel.hpp
@@ -63,6 +64,7 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsResolvePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsVolumePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsVolumePlugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsWeatherPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CloudsWorleyPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ScatteringModel.cpp

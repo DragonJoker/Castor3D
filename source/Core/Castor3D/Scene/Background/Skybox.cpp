@@ -420,6 +420,7 @@ namespace c3d
 			, camera.getNear()
 			, camera.getFar() );
 		viewport.update();
+		updater.bgPosition = node->getDerivedPosition();
 		updater.bgMtxView = camera.getView();
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection( updater.renderSize )
