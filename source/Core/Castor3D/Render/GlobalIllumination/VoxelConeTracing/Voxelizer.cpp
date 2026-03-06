@@ -201,6 +201,7 @@ namespace c3d
 				, updater.renderSize, true
 				, updater.debugIndex );
 			m_cameraUbo.cpuUpdate( camera
+				, camera.getParent()->getDerivedPosition()
 				, identity
 				, ortho
 				, updater.jitter );

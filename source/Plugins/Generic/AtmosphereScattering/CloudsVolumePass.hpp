@@ -21,7 +21,8 @@ namespace atmosphere_scattering
 		CloudsVolumePass( crg::FramePassGroup & graph
 			, c3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo
-			, CameraUbo const & cameraUbo
+			, c3d::CameraUbo const & mainCameraUbo
+			, CameraUbo const & kmCameraUbo
 			, CloudsUbo const & weatherUbo
 			, c3d::Texture const & transmittance
 			, c3d::Texture const & multiscatter
@@ -32,9 +33,8 @@ namespace atmosphere_scattering
 			, c3d::Texture const & curl
 			, c3d::Texture const & weather
 			, c3d::Texture const * depthObj
-			, c3d::Texture & skyResult
-			, c3d::Texture & sunResult
-			, c3d::Texture & cloudsResult
+			, c3d::Texture & scatteringResult
+			, c3d::Texture & transmittanceResult
 			, uint32_t index );
 		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 

@@ -216,17 +216,19 @@ namespace c3d
 		if ( node )
 		{
 			m_viewport.update();
-			auto position = node->getDerivedPosition();
-			auto const & orientation = node->getDerivedOrientation();
-			Point3f right{ 1.0, 0.0, 0.0 };
-			Point3f up{ 0.0, 1.0, 0.0 };
+			Point3d position = Point3d{ node->getDerivedPosition() };
+			QuaternionT< double > orientation{ node->getDerivedOrientation().constPtr() };
+			Point3d right{ 1.0, 0.0, 0.0 };
+			Point3d up{ 0.0, 1.0, 0.0 };
 			orientation.transform( right, right );
 			orientation.transform( up, up );
-			Point3f front{ point::cross( right, up ) };
+			Point3d front{ point::cross( right, up ) };
 			up = point::cross( front, right );
 
 			// Update view matrix
-			matrix::lookAt( m_view, position, position + front, up );
+			Matrix4x4d mtx;
+			matrix::lookAt( mtx, position, position + front, up );
+			m_view = mtx;
 			updateFrustum();
 			onGpuChanged( *this );
 		}

@@ -31,15 +31,15 @@ namespace c3d
 			, cuT( "Transmittance" )
 			, TextureCreateInfo{ ImageCreateFlags::eNone
 				, colour.getExtent(), 1u, 1u
-				, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( volrnd::transmittanceUsageFlags ) )
+				, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::transmittanceUsageFlags ) )
 				, volrnd::transmittanceUsageFlags }
 			, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } ) }
-		, m_inscatter{ c3d::makeUnique< Texture >( m_device
+		, m_scattering{ c3d::makeUnique< Texture >( m_device
 			, parent.getResources()
-			, cuT( "Transmittance" )
+			, cuT( "Scattering" )
 			, TextureCreateInfo{ ImageCreateFlags::eNone
 				, colour.getExtent(), 1u, 1u
-				, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( volrnd::inscatterUsageFlags ) )
+				, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::inscatterUsageFlags ) )
 				, volrnd::inscatterUsageFlags }
 			, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } ) }
 	{

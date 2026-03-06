@@ -92,6 +92,8 @@ namespace c3d
 			C3D_API sdw::Vec3 readNormal( sdw::Vec3 const & input )const;
 			C3D_API sdw::Vec3 writeNormal( sdw::Vec3 const & input )const;
 
+			C3D_API RetRay castRay( sdw::Vec2 const & ssPosition, sdw::Vec2 const & screenSize );
+
 			auto nearPlane()const { return getMember< "nearPlane" >(); }
 			auto farPlane()const { return getMember< "farPlane" >(); }
 			auto position()const { return getMember< "position" >(); }
@@ -124,6 +126,10 @@ namespace c3d
 			{
 				return frustumPlanes()[index];
 			}
+
+		private:
+			sdw::Function< Ray
+				, sdw::InVec2 > m_castRay;
 		};
 	}
 
@@ -151,17 +157,20 @@ namespace c3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	camera		The camera holding the data.
+		 *\param[in]	position	The new position.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera		La caméra contenant les données.
+		 *\param[in]	position	La nouvelle position.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
+			, Point3f const & position
 			, Matrix4x4f const & view
 			, Matrix4x4f const & projection
 			, Point2f const & jitter = Point2f{} );

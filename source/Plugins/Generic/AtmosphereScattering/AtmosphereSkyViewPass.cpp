@@ -59,8 +59,7 @@ namespace atmosphere_scattering
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			AtmosphereModel atmosphere{ writer
-				, c3d_atmosphereData
+			AtmosphereModel atmosphere{ writer, c3d_atmosphereData
 				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &atm_cameraData )
 					.setVariableSampleCount( true )
@@ -123,7 +122,7 @@ namespace atmosphere_scattering
 							, sunDir
 							, sampleCountIni
 							, depthBufferValue ) );
-						out.colour() = vec4( ss.luminance(), 1.0_f );
+						out.colour() = vec4( ss.luminance, 1.0_f );
 					}
 					sdwFI
 				} );

@@ -136,7 +136,7 @@ namespace water
 		auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 			, fma( ( components.getRawNormal().xz() + components.getRawNormal().xy() ) * 0.5_f
 				, vec2( ( ( components.hasMember( "mdlPosition" ) && components.hasMember( "waterDensity" ) )
-					? refractionDistortionFactor * utils.saturate( length( scenePosition - lightSurface.worldPosition().value().xyz() ) * 0.5_f )
+					? refractionDistortionFactor * c3ds::saturate( length( scenePosition - lightSurface.worldPosition().value().xyz() ) * 0.5_f )
 					: refractionDistortionFactor ) )
 				, hdrCoords ) );
 		auto distortedDepth = writer.declLocale( "distortedDepth"
@@ -158,7 +158,7 @@ namespace water
 			auto mdlPosition = components.getMember< sdw::Vec3 >( "mdlPosition" );
 			auto waterDensity = components.getMember< sdw::Float >( "waterDensity" );
 			auto lightAbsorbtion = writer.declLocale( "lightAbsorbtion"
-				, specularTransmission * ( 1.0_f - utils.saturate( sdw::log( mdlPosition.y() - distortedPosition.y() ) * waterDensity ) ) );
+				, specularTransmission * ( 1.0_f - c3ds::saturate( sdw::log( mdlPosition.y() - distortedPosition.y() ) * waterDensity ) ) );
 			debugOutputBlock.registerOutput( cuT( "Light Absorbtion" ), lightAbsorbtion );
 			waterTransmission *= lightAbsorbtion;
 			debugOutputBlock.registerOutput( cuT( "Absorbed Transmission" ), waterTransmission );
@@ -185,7 +185,7 @@ namespace water
 		debugOutputBlock.registerOutput( cuT( "Height Mixed Refraction" ), specularTransmission );
 		specularTransmission = mix( specularTransmission
 			, waterTransmission
-			, utils.saturate( vec3( utils.saturate( length( lightSurface.viewPosition().value() ) / distanceFactor ) ) ) );
+			, c3ds::saturate( vec3( c3ds::saturate( length( lightSurface.viewPosition().value() ) / distanceFactor ) ) ) );
 		debugOutputBlock.registerOutput( cuT( "Distance Mixed Refraction" ), specularTransmission );
 
 		if ( components.hasMember( "waterNoise" ) )
@@ -219,14 +219,14 @@ namespace water
 			debugOutputBlock.registerOutput( cuT( "Foam Noise" ), waterFoamNoise );
 			debugOutputBlock.registerOutput( cuT( "Foam Colour" ), waterFoam );
 			auto foamAmount = writer.declLocale( "foamAmount"
-				, utils.saturate( ( lightSurface.worldPosition().value().w() - foamHeightStart ) / foamFadeDistance ) * pow( utils.saturate( dot( components.getRawNormal(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), foamAngleExponent ) * waterFoamNoise );
+				, c3ds::saturate( ( lightSurface.worldPosition().value().w() - foamHeightStart ) / foamFadeDistance ) * pow( c3ds::saturate( dot( components.getRawNormal(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), foamAngleExponent ) * waterFoamNoise );
 			debugOutputBlock.registerOutput( cuT( "Raw Foam Amount" ), foamAmount );
 			foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 			debugOutputBlock.registerOutput( cuT( "Depth Softened Foam Amount" ), foamAmount );
 			auto foamResult = writer.declLocale( "foamResult"
 				, lighting.diffuse * mix( vec3( 0.0_f )
 					, waterFoam * foamBrightness
-					, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
+					, vec3( c3ds::saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 			debugOutputBlock.registerOutput( cuT( "Foam Result" ), foamResult );
 			specularTransmission += foamResult;
 			specularReflection += foamResult;

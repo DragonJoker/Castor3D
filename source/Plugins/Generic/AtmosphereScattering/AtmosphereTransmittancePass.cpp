@@ -39,8 +39,7 @@ namespace atmosphere_scattering
 			C3D_AtmosphereScattering( writer
 				, Bindings::eAtmosphere
 				, 0u );
-			AtmosphereModel atmosphere{ writer
-				, c3d_atmosphereData
+			AtmosphereModel atmosphere{ writer, c3d_atmosphereData
 				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) } };
 
 			auto sampleCountIni = writer.declConstant( "sampleCountIni"
@@ -81,7 +80,7 @@ namespace atmosphere_scattering
 							, ray
 							, c3d_atmosphereData.sunDirection()
 							, sampleCountIni
-							, depthBufferValue ).opticalDepth() ) );
+							, depthBufferValue ).opticalDepth ) );
 
 					// Optical depth to transmittance
 					out.colour() = vec4( transmittance, 1.0f );

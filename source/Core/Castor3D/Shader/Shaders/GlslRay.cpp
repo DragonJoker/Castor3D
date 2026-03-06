@@ -1,5 +1,4 @@
 #include "Castor3D/Shader/Shaders/GlslRay.hpp"
-#include "Castor3D/Shader/Shaders/GlslVolumeShaders.hpp"
 
 #include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>

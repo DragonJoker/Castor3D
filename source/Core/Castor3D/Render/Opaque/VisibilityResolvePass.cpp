@@ -1453,20 +1453,16 @@ namespace c3d
 
 							auto linearDepth = writer.declLocale( "linearDepth"
 								, utils.lineariseDepth( depth, c3d_cameraDataMain.nearPlane(), c3d_cameraDataMain.farPlane() ) );
+							auto volumeResult = writer.declLocale( "volumeResult"
+								, vec4( vec3( 0.0_f ), 1.0_f ) );
 							backgroundModel->applyVolume( vec2( ipixel )
 								, linearDepth
 								, vec2( c3d_renderData.renderSize() )
 								, c3d_cameraDataMain.depthPlanes()
-								, outResult );
-
+								, volumeResult );
+							outResult += volumeResult;
 							if ( outputScattering )
-							{
-								backgroundModel->applyVolume( vec2( ipixel )
-									, linearDepth
-									, vec2( c3d_renderData.renderSize() )
-									, c3d_cameraDataMain.depthPlanes()
-									, outScattering );
-							}
+								outScattering += volumeResult;
 						}
 
 						outResult.a() = 1.0_f;

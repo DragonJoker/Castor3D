@@ -3,6 +3,7 @@
 #include "Castor3D/Render/Frustum.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
+#include "Castor3D/Shader/Shaders/GlslRay.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -165,6 +166,31 @@ namespace c3d
 		{
 			return ( transpose( invCurView() ) * vec4( -input, 1.0_f ) ).xyz();
 		}
+
+		RetRay CameraData::castRay( sdw::Vec2 const & ssPosition, sdw::Vec2 const & screenSize )
+		{
+			if ( !m_castRay )
+			{
+				auto & writer = sdw::findWriterMandat( ssPosition, screenSize );
+				m_castRay = writer.implementFunction< Ray >( "c3d_castRay"
+					, [this, &writer]( sdw::Vec2 const & uv )
+					{
+						auto clipSpace = writer.declLocale( "clipSpace"
+							, vec3( sdw::fma( uv, vec2( 2.0_f, -2.0_f ), vec2( -1.0_f, 1.0_f ) ), 0.0_f ) );
+						auto wsPosition = writer.declLocale( "wsPosition"
+							, curProjToWorld( vec4( clipSpace, 1.0_f ) ) );
+
+						auto result = writer.declLocale< Ray >( "result" );
+						result.origin = position();
+						result.direction = normalize( wsPosition.xyz() / wsPosition.w() - position() );
+
+						writer.returnStmt( result );
+					}
+					, sdw::InVec2{ writer, "uv" } );
+			}
+
+			return m_castRay( ssPosition / screenSize );
+		}
 	}
 
 	//*********************************************************************************************
@@ -178,12 +204,14 @@ namespace c3d
 		, Point2f const & jitter )
 	{
 		return cpuUpdate( camera
+			, camera.getParent()->getDerivedPosition()
 			, camera.getView()
 			, camera.getRawProjection()
 			, jitter );
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+		, Point3f const & position
 		, Matrix4x4f const & view
 		, Matrix4x4f const & projection
 		, Point2f const & jitter )
@@ -192,7 +220,7 @@ namespace c3d
 			, projection
 			, camera.getFrustum()
 			, jitter );
-		configuration.position = camera.getParent()->getDerivedPosition();
+		configuration.position = position;
 		configuration.nearPlane = camera.getNear();
 		configuration.farPlane = camera.getFar();
 

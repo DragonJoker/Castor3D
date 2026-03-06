@@ -64,8 +64,7 @@ namespace atmosphere_scattering
 			auto isotropicPhase = writer.declConstant( "isotropicPhase"
 				, 1.0_f / sphereSolidAngle );
 
-			AtmosphereModel atmosphere{ writer
-				, c3d_atmosphereData
+			AtmosphereModel atmosphere{ writer, c3d_atmosphereData
 				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setUseGround( true )
 					.setIlluminanceIsOne( true )
@@ -142,8 +141,8 @@ namespace atmosphere_scattering
 								, sampleCountIni
 								, depthBufferValue ) );
 
-						multiScatAs1SharedMem[in.globalInvocationID.z()] = result.multiScatAs1() * sphereSolidAngle / ( sqrtSample * sqrtSample );
-						lSharedMem[in.globalInvocationID.z()] = result.luminance() * sphereSolidAngle / ( sqrtSample * sqrtSample );
+						multiScatAs1SharedMem[in.globalInvocationID.z()] = result.multiScatAs1 * sphereSolidAngle / ( sqrtSample * sqrtSample );
+						lSharedMem[in.globalInvocationID.z()] = result.luminance * sphereSolidAngle / ( sqrtSample * sqrtSample );
 					}
 
 					sdw::barrier( writer );

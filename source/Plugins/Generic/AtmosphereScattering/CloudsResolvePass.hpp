@@ -23,9 +23,13 @@ namespace atmosphere_scattering
 			, CameraUbo const & cameraUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, CloudsUbo const & cloudsUbo
-			, c3d::Texture const & sky
-			, c3d::Texture const & sun
-			, c3d::Texture const & clouds
+			, c3d::Texture const & transmittance
+			, c3d::Texture const & multiscatter
+			, c3d::Texture const & skyview
+			, c3d::Texture const & volume
+			, c3d::Texture const & inscatterResult
+			, c3d::Texture const & transmittanceResult
+			, c3d::Texture const * depthObj
 			, c3d::Texture & result
 			, uint32_t index );
 		void accept( c3d::ConfigurationVisitorBase & visitor )const;

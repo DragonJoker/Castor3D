@@ -35,6 +35,8 @@ CU_ImplementSmartPtr( waves, WavesRenderComponent )
 
 namespace waves
 {
+	namespace c3ds = c3d::shader;
+
 	using namespace c3d;
 
 	//*********************************************************************************************
@@ -618,8 +620,8 @@ namespace waves
 					, listIn[0].nodeId );
 
 				auto dampening = writer.declLocale( "dampening"
-					, 1.0_f - pow( utils.saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_wavesData.dampeningFactor() ) );
-				dampening *= 1.0_f - pow( utils.saturate( abs( texcoord.y() - 0.5_f ) / 0.5_f ), c3d_wavesData.dampeningFactor() );
+					, 1.0_f - pow( c3ds::saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_wavesData.dampeningFactor() ) );
+				dampening *= 1.0_f - pow( c3ds::saturate( abs( texcoord.y() - 0.5_f ) / 0.5_f ), c3d_wavesData.dampeningFactor() );
 
 				auto finalWaveResult = writer.declLocale< shd::WaveResult >( "finalWaveResult" );
 				finalWaveResult.position = vec3( 0.0_f );

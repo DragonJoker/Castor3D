@@ -198,6 +198,7 @@ namespace c3d
 			, node->getDerivedPosition()
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
+		updater.bgPosition = node->getDerivedPosition();
 		updater.bgMtxView = view;
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection( updater.renderSize )

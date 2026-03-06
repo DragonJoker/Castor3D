@@ -13,6 +13,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Shader/Shaders/GlslVolumeShaders.hpp>
 
 #include <ShaderWriter/CompositeTypes/UniformBuffer.hpp>
 

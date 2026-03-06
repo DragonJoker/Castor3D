@@ -25,9 +25,7 @@ namespace atmosphere_scattering
 		c3d::Matrix4x4f camInvViewProj;
 		c3d::Matrix4x4f objInvViewProj;
 		c3d::Point3f position;
-		float lightDotCameraFront;
-		int32_t isLightInFront;
-		c3d::Point3i pad;
+		float pad;
 	};
 
 	struct CameraData
@@ -36,11 +34,7 @@ namespace atmosphere_scattering
 			, sdw::Mat4Field< "camInvViewProj" >
 			, sdw::Mat4Field< "objInvViewProj" >
 			, sdw::Vec3Field< "position" >
-			, sdw::FloatField< "lightDotCameraFront" >
-			, sdw::IntField< "isLightInFront" >
-			, sdw::IntField< "pad0" >
-			, sdw::IntField< "pad1" >
-			, sdw::IntField< "pad2" > >
+			, sdw::FloatField< "pad0" > >
 	{
 		SDW_DeclStructInstance( , CameraData );
 
@@ -52,8 +46,6 @@ namespace atmosphere_scattering
 		sdw::Vec4 objProjToWorld( sdw::Vec4 const & pos )const;
 
 		auto position()const { return getMember< "position" >(); }
-		auto isLightInFront()const { return getMember< "isLightInFront" >(); }
-		auto lightDotCameraFront()const { return getMember< "lightDotCameraFront" >(); }
 		auto camInvViewProj()const { return getMember< "camInvViewProj" >(); }
 		auto objInvViewProj()const { return getMember< "objInvViewProj" >(); }
 	};

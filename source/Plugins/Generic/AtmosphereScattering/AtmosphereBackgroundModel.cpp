@@ -1,8 +1,8 @@
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
+#include "AtmosphereScattering/AtmosphereModel.hpp"
+
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Shader/Shaders/GlslBlendComponents.hpp>
-#include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 
 #include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>

@@ -248,6 +248,7 @@ namespace atmosphere_scattering
 				, c3d::Texture const * depthObj
 				, c3d::RenderUbo const & renderUbo
 				, c3d::SceneUbo const & sceneUbo
+				, c3d::CameraUbo const & mainCameraUbo
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo
 				, c3d::Extent2D const & size
@@ -271,9 +272,8 @@ namespace atmosphere_scattering
 
 			c3d::Texture skyView;
 			c3d::Texture volume;
-			c3d::Texture skyColour;
-			c3d::Texture sunColour;
-			c3d::Texture cloudsColour;
+			c3d::Texture scatteringColour;
+			c3d::Texture transmittanceColour;
 			c3d::Texture cloudsResult;
 			mutable bool camAtmoChanged{ true };
 			mutable CameraUbo cameraUbo;

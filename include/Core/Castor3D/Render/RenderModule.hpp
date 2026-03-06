@@ -977,6 +977,7 @@ namespace c3d
 		Milliseconds tslf{};
 		Milliseconds time{};
 		Milliseconds total{};
+		Point3f bgPosition{};
 		Matrix4x4f bgMtxModl{};
 		Matrix4x4f bgMtxView{};
 		Matrix4x4f bgMtxProj{};
