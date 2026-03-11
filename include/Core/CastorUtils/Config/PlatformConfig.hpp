@@ -43,8 +43,18 @@ See LICENSE file in root folder
 #if defined( CU_PlatformWindows )
 #	if defined( CastorUtils_EXPORTS )
 #		define CU_API __declspec(dllexport)
+#		if defined( __MINGW32__ )
+#			define CU_INL_API
+#		else
+#			define CU_INL_API __declspec(dllexport)
+#		endif
 #	else
 #		define CU_API __declspec(dllimport)
+#		if defined( __MINGW32__ )
+#			define CU_INL_API
+#		else
+#			define CU_INL_API __declspec(dllimport)
+#		endif
 #	endif
 #	define CU_SharedLibExt cuT( "dll" )
 #	define CU_SharedLibPrefix cuT( "")
@@ -58,12 +68,14 @@ See LICENSE file in root folder
 #	define CU_SharedLibPrefix cuT( "lib")
 #   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
+#	define CU_INL_API
 #	define CU_stdcall
 #else
 #	define CU_SharedLibExt cuT( "so" )
 #	define CU_SharedLibPrefix cuT( "lib")
 #   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
+#	define CU_INL_API
 #	define CU_stdcall
 #endif
 

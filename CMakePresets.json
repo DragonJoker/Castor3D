@@ -171,12 +171,49 @@
 			}
 		},
 		{
+			"name": "dev-mingw-base",
+			"hidden": true,
+			"generator": "Ninja",
+			"installDir": "${sourceDir}/package/Castor3D",
+			"cacheVariables": {
+				"CASTOR_BUILD_PLUGINS": true,
+				"CASTOR_BUILDGRP_DEMO": true,
+				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_TEST": false,
+				"CASTOR_BUILDGRP_TOOL": true,
+				"CASTOR_FORCE_VCPKG_SUBMODULES": false,
+				"CASTOR_GUICOMMON_NEEDS_HLSL": true,
+				"CASTOR_USE_GLSLANG": true,
+				"CASTOR_USE_MESH_SHADERS": false,
+				"CASTOR_USE_TASK_SHADERS": false,
+				"PROJECTS_UNITY_BUILD": false,
+				"PROJECTS_USE_PRECOMPILED_HEADERS": true
+			}
+		},
+		{
+			"name": "dev-mingw-debug",
+			"displayName": "Castor3D Developer MinGW Config, Debug",
+			"description": "Build configuration using Ninja, for Castor3D developers on MinGW, Debug",
+			"inherits": "dev-mingw-base",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "dev-mingw-release",
+			"displayName": "Castor3D Developer MinGW Config, Release",
+			"description": "Build configuration using Ninja, for Castor3D developers on MinGW, Release",
+			"inherits": "dev-mingw-base",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
 			"name": "dev-osx-base",
 			"hidden": true,
 			"generator": "Ninja",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;tools;vkfft",
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": true,
 				"CASTOR_BUILDGRP_INTEROP": true,
@@ -215,7 +252,8 @@
 			"hidden": true,
 			"cacheVariables": {
 				"PROJECTS_UNITY_BUILD": false,
-				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
+				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;tools;vkfft"
 			}
 		},
 		{

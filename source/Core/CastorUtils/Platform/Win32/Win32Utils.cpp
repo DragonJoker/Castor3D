@@ -32,7 +32,7 @@ namespace c3d
 			};
 			using ScreenDataPtr = ScreenData *;
 
-			BOOL CALLBACK MonitorEnum( CU_UnusedParam( HMONITOR, hMonitor )
+			static BOOL CALLBACK MonitorEnum( CU_UnusedParam( HMONITOR, hMonitor )
 				, CU_UnusedParam( HDC, hdcMonitor )
 				, LPCRECT lprcMonitor
 				, LPARAM dwData )
@@ -128,7 +128,7 @@ namespace c3d
 		static BYTE constexpr LoWin32WinNTWin11 = getLoByte( Win32WinNTWin11 );
 		static BYTE constexpr HiWin32WinNTWin11 = getHiByte( Win32WinNTWin11 );
 
-		BOOL IsWindows11OrGreater()
+		static BOOL IsWindows11OrGreater()
 		{
 			return IsWindowsVersionOrGreater( HiWin32WinNTWin11, LoWin32WinNTWin11, 0 );
 		}

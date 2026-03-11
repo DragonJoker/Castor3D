@@ -2281,9 +2281,6 @@ else ()
 	endif ()
 endif ()
 
-set( mikktspace_DIR ${VCPKG_SHARE_DIR}/mikktspace )
-find_package( mikktspace CONFIG REQUIRED )
-
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils
@@ -2292,9 +2289,29 @@ target_link_libraries( ${PROJECT_NAME}
 	PRIVATE
 		sdw::CompilerSpirV
 		${glslang_LIBRARIES}
-		meshoptimizer::meshoptimizer
-		mikktspace::mikktspace
 )
+if ( VCPKG_TOOLCHAIN )
+	set( mikktspace_DIR ${VCPKG_SHARE_DIR}/mikktspace )
+	find_package( mikktspace CONFIG REQUIRED )
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			meshoptimizer::meshoptimizer
+			mikktspace::mikktspace
+	)
+else ()
+	set( mikktspace_patch git apply ${EXTERNAL_DIR}/patches/mikktspace.patch )
+	FetchContent_Declare( mikktspace
+		GIT_REPOSITORY https://github.com/naetherm/mikktspace
+		GIT_TAG 31921594f12c75b5503cf85b556a055b59d2610e
+		PATCH_COMMAND ${mikktspace_patch}
+		UPDATE_DISCONNECTED 1 )
+	FetchContent_MakeAvailable( mikktspace )
+	FetchContent_Declare( meshoptimizer
+		GIT_REPOSITORY https://github.com/zeux/meshoptimizer
+		GIT_TAG 1c4ed42b3c83994db3a4b079d3f6042885e47692 )
+	FetchContent_MakeAvailable( meshoptimizer )
+endif ()
+
 if ( CASTOR_C3D_NEEDS_GLSL )
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC

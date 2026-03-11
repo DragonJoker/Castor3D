@@ -28,9 +28,11 @@ namespace c3d
 	public:
 		class WriterBlock
 		{
+		private:
+			WriterBlock( WriterBlock const & rhs ) = delete;
+			WriterBlock & operator=( WriterBlock const & rhs ) = delete;
+
 		public:
-			CU_API WriterBlock( WriterBlock const & rhs ) = delete;
-			CU_API WriterBlock & operator=( WriterBlock const & rhs ) = delete;
 			CU_API WriterBlock( WriterBlock && rhs )noexcept;
 			CU_API WriterBlock & operator=( WriterBlock && rhs )noexcept;
 
@@ -57,12 +59,14 @@ namespace c3d
 
 		friend class WriterBlock;
 
+	private:
+		TextWriterBase( TextWriterBase const & rhs ) = delete;
+		TextWriterBase & operator=( TextWriterBase const & rhs ) = delete;
+
 	public:
-		CU_API TextWriterBase( TextWriterBase const & rhs ) = delete;
-		CU_API TextWriterBase & operator=( TextWriterBase const & rhs ) = delete;
 		CU_API TextWriterBase( TextWriterBase && rhs )noexcept;
 		CU_API TextWriterBase & operator=( TextWriterBase && rhs )noexcept;
-		CU_API virtual ~TextWriterBase()noexcept = default;
+		CU_INL_API virtual ~TextWriterBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

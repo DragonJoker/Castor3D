@@ -7,7 +7,7 @@
 
 namespace c3d
 {
-	void printCDBConsole( MbString const & toLog, bool newLine )
+	static void printCDBConsole( MbString const & toLog, bool newLine )
 	{
 		if ( ::IsDebuggerPresent() )
 		{

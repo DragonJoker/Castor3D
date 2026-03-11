@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f5abfa7..5db5d59 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,13 +5,13 @@ project(mikktspace)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
+ add_library(
+-    ${CMAKE_PROJECT_NAME} STATIC
++    mikktspace STATIC
+     mikktspace.h
+     mikktspace.cpp
+ )
+ 
+ set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
+-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES PUBLIC_HEADER mikktspace.h)
++set_target_properties(mikktspace PROPERTIES PUBLIC_HEADER mikktspace.h)
+ 
+ 
+ install(TARGETS mikktspace
+
+warning: in the working copy of 'CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it

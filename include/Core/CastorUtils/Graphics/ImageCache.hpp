@@ -132,7 +132,7 @@ namespace c3d
 	public:
 		CU_API explicit ResourceCacheT( LoggerInstance & logger
 			, ImageLoader const & loader );
-		CU_API ~ResourceCacheT()noexcept override = default;
+		CU_INL_API ~ResourceCacheT()noexcept override = default;
 
 		ImageLoader const & getLoader()const noexcept
 		{

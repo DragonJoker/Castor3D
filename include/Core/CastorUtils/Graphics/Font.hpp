@@ -37,7 +37,7 @@ namespace c3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API BinaryLoader() = default;
+			CU_INL_API BinaryLoader() = default;
 			/**
 			 *\~english
 			 *\brief			Loads a non SDF font
@@ -187,7 +187,7 @@ namespace c3d
 		 *\brief		Destructeur.
 		 *\remarks		Virtual pour permettre l'utilisation en tant que ResourceT.
 		 */
-		CU_API virtual ~Font()noexcept = default;
+		CU_INL_API virtual ~Font()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Loads wanted glyph.

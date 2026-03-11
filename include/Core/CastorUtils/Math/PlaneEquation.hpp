@@ -18,7 +18,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API PlaneEquation() = default;
+		CU_INL_API PlaneEquation() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.

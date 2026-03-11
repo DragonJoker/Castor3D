@@ -2,13 +2,6 @@
 
 namespace c3d
 {
-	namespace platform
-	{
-		uint32_t getCoreCount();
-		String getCPUModel();
-		String getCPUVendor();
-	}
-
 	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
 	{
 		m_coreCount = platform::getCoreCount();

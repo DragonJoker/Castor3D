@@ -24,8 +24,8 @@ namespace c3d
 		CU_API static const xchar GenericSeparator;
 
 	public:
-		CU_API Path() = default;
-		CU_API ~Path() = default;
+		CU_INL_API Path() = default;
+		CU_INL_API ~Path() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from a char array
@@ -216,49 +216,49 @@ namespace c3d
 		void doNormalise();
 		void doUpdateInternal();
 
-		CU_API friend Path operator/( Path const & lhs, Path const & rhs )
+		CU_INL_API friend Path operator/( Path const & lhs, Path const & rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;
 			return path;
 		}
 
-		CU_API friend Path operator/( Path const & lhs, String const & rhs )
+		CU_INL_API friend Path operator/( Path const & lhs, String const & rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;
 			return path;
 		}
 
-		CU_API friend Path operator/( Path const & lhs, char const * rhs )
+		CU_INL_API friend Path operator/( Path const & lhs, char const * rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;
 			return path;
 		}
 
-		CU_API friend Path operator/( Path const & lhs, wchar_t const * rhs )
+		CU_INL_API friend Path operator/( Path const & lhs, wchar_t const * rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;
 			return path;
 		}
 
-		CU_API friend Path operator/( String const & lhs, Path const & rhs )
+		CU_INL_API friend Path operator/( String const & lhs, Path const & rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;
 			return path;
 		}
 
-		CU_API friend Path operator/( char const * lhs, Path const & rhs )
+		CU_INL_API friend Path operator/( char const * lhs, Path const & rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;
 			return path;
 		}
 
-		CU_API friend Path operator/( wchar_t const * lhs, Path const & rhs )
+		CU_INL_API friend Path operator/( wchar_t const * lhs, Path const & rhs )
 		{
 			Path path{ lhs };
 			path /= rhs;

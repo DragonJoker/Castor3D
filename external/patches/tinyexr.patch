@@ -1,0 +1,179 @@
+diff --git a/Config.cmake.in b/Config.cmake.in
+new file mode 100644
+index 0000000..577a3a6
+--- /dev/null
++++ b/Config.cmake.in
+@@ -0,0 +1,6 @@
++@PACKAGE_INIT@
++
++include(CMakeFindDependencyMacro)
++find_dependency(miniz CONFIG REQUIRED)
++
++include("${CMAKE_CURRENT_LIST_DIR}/@BUILD_TARGET@Targets.cmake")
+diff --git a/miniz.patch b/miniz.patch
+new file mode 100644
+index 0000000..3b7f0e2
+--- /dev/null
++++ b/miniz.patch
+@@ -0,0 +1,65 @@
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 00fbd36..ca70f94 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -6,6 +6,11 @@ if(DEFINED PROJECT_NAME)
++   set(MINIZ_STANDALONE_PROJECT OFF)
++ endif()
++ 
+++set(INSTALL_BIN_DIR      "bin"                      CACHE PATH "Path where exe and dll will be installed")
+++set(INSTALL_LIB_DIR      "lib"                      CACHE PATH "Path where lib will be installed")
+++set(INSTALL_INCLUDE_DIR  "include"                  CACHE PATH "Path where headers will be installed")
+++set(INSTALL_CMAKE_DIR    "share/miniz"              CACHE PATH "Path where cmake configs will be installed")
+++
++ 
++ if(CMAKE_VERSION VERSION_LESS "3.12")
++   project(miniz C)
++@@ -45,7 +50,7 @@ option(BUILD_HEADER_ONLY "Build a header-only version" OFF)
++ option(BUILD_SHARED_LIBS "Build shared library instead of static" OFF)
++ option(BUILD_NO_STDIO" Build a without stdio version" OFF)
++ option(BUILD_TESTS "Build tests" ${MINIZ_STANDALONE_PROJECT})
++-option(INSTALL_PROJECT "Install project" ${MINIZ_STANDALONE_PROJECT})
+++# option(INSTALL_PROJECT "Install project" ${MINIZ_STANDALONE_PROJECT})
++ 
++ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
++ 
++@@ -192,11 +197,11 @@ set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY
++ 
++ if(INSTALL_PROJECT)
++   install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
++-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
++-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
++-    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+++    RUNTIME  DESTINATION ${INSTALL_BINDIR}
+++    ARCHIVE  DESTINATION ${INSTALL_LIBDIR}
+++    LIBRARY  DESTINATION ${INSTALL_LIBDIR}
++     # users can use <miniz.h> or <miniz/miniz.h>
++-    INCLUDES DESTINATION include ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+++    INCLUDES DESTINATION include ${INSTALL_INCLUDE_DIR}/${PROJECT_NAME}
++   )
++ 
++   include(CMakePackageConfigHelpers)
++@@ -215,21 +220,20 @@ if(INSTALL_PROJECT)
++     @ONLY
++   )
++ 
++-  set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
++   install(EXPORT ${PROJECT_NAME}Targets
++     FILE
++       ${PROJECT_NAME}Targets.cmake
++     NAMESPACE
++       ${PROJECT_NAME}::
++     DESTINATION
++-      ${ConfigPackageLocation}
+++      ${INSTALL_CMAKE_DIR}
++   )
++   install(
++     FILES
++       "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake"
++       "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}ConfigVersion.cmake"
++     DESTINATION
++-      ${ConfigPackageLocation}
+++      ${INSTALL_CMAKE_DIR}
++     COMPONENT
++       Devel
++   )
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7f97b0..e7de698 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,8 +7,22 @@ set(SAMPLE_TARGET "test_tinyexr")
+ 
+ project(${BUILD_TARGET} CXX)
+ 
++set(INSTALL_BIN_DIR      "bin"                      CACHE PATH "Path where exe and dll will be installed")
++set(INSTALL_LIB_DIR      "lib"                      CACHE PATH "Path where lib will be installed")
++set(INSTALL_INCLUDE_DIR  "include"                  CACHE PATH "Path where headers will be installed")
++set(INSTALL_CMAKE_DIR    "share/tinyexr"            CACHE PATH "Path where cmake configs will be installed")
++
++# Make relative paths absolute (needed later on)
++set(RELATIVE_INSTALL_INCLUDE_DIR ${INSTALL_INCLUDE_DIR})
++foreach(p LIB BIN INCLUDE CMAKE)
++  set(var INSTALL_${p}_DIR)
++  if(NOT IS_ABSOLUTE "${${var}}")
++    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
++  endif()
++endforeach()
++
+ # options
+-option(TINYEXR_BUILD_SAMPLE "Build a sample" ON)
++# option(TINYEXR_BUILD_SAMPLE "Build a sample" ON)
+ option(TINYEXR_USE_MINIZ "Use miniz" ON)
+ 
+ # cmake modules
+@@ -28,11 +42,18 @@ set(TINYEXR_SOURCES
+     )
+ 
+ if(TINYEXR_USE_MINIZ)
+-  enable_language(C)
+-  add_library(miniz STATIC deps/miniz/miniz.c)
+-  target_include_directories(miniz PUBLIC deps/miniz)
+-  set_target_properties(miniz PROPERTIES FOLDER "deps")
+-  list(APPEND TINYEXR_EXT_LIBRARIES miniz)
++  set( miniz_patch git apply ${PROJECT_SOURCE_DIR}/miniz.patch )
++  FetchContent_Declare( miniz
++    GIT_REPOSITORY https://github.com/richgel999/miniz
++    GIT_TAG c883286f1a6443720e7705450f59e579a4bbb8e2
++    PATCH_COMMAND ${miniz_patch}
++    UPDATE_DISCONNECTED 1 )
++  set( BUILD_EXAMPLES OFF )
++  set( BUILD_FUZZERS OFF )
++  set( BUILD_TESTS OFF )
++  set( INSTALL_PROJECT ON )
++  FetchContent_MakeAvailable( miniz )
++  list(APPEND TINYEXR_EXT_LIBRARIES miniz)
+ endif()
+ 
+ add_library(${BUILD_TARGET} ${TINYEXR_SOURCES} ${TINYEXR_DEP_SOURCES})
+@@ -43,7 +64,7 @@ target_link_libraries(${BUILD_TARGET} ${TINYEXR_EXT_LIBRARIES} ${CMAKE_DL_LIBS})
+ 
+ # Increase warning level for clang.
+ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT MSVC)
+-  set(CLANG_COMPILE_FLAGS "-Weverything -Werror -Wno-padded -Wno-c++98-compat-pedantic -Wno-documentation -Wno-unused-member-function")
++  set(CLANG_COMPILE_FLAGS "-Weverything -Wno-padded -Wno-c++98-compat-pedantic -Wno-documentation -Wno-unused-member-function")
+   if (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 16)
+     set(CLANG_COMPILE_FLAGS "${CLANG_COMPILE_FLAGS} -Wno-unsafe-buffer-usage")
+   endif()
+@@ -76,3 +97,32 @@ if (TINYEXR_BUILD_SAMPLE)
+   endif(WIN32)
+ 
+ endif (TINYEXR_BUILD_SAMPLE)
++
++target_include_directories(${BUILD_TARGET} PUBLIC $<INSTALL_INTERFACE:${RELATIVE_INSTALL_INCLUDE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
++set_target_properties(${BUILD_TARGET} PROPERTIES PUBLIC_HEADER "${PROJECT_SOURCE_DIR}/tinyexr.h")
++
++install(TARGETS ${BUILD_TARGET} EXPORT ${BUILD_TARGET}Targets
++  RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
++  LIBRARY DESTINATION "${INSTALL_LIB_DIR}"
++  ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
++  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
++  COMPONENT dev
++)
++
++install(EXPORT ${BUILD_TARGET}Targets
++  FILE ${BUILD_TARGET}Targets.cmake
++  NAMESPACE ${BUILD_TARGET}::
++  DESTINATION "${INSTALL_CMAKE_DIR}"
++)
++
++include(CMakePackageConfigHelpers)
++configure_package_config_file(
++  ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
++  ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}Config.cmake
++  INSTALL_DESTINATION "${INSTALL_CMAKE_DIR}"
++)
++
++install(
++  FILES ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}Config.cmake
++  DESTINATION "${INSTALL_CMAKE_DIR}"
++)
+
+warning: in the working copy of 'CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it

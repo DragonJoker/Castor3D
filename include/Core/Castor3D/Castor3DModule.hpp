@@ -28,14 +28,25 @@ See LICENSE file in root folder
 
 #if !defined( CU_PlatformWindows )
 #	define C3D_API
+#	define C3D_INL_API
 #else
 #	ifdef MemoryBarrier
 #		undef MemoryBarrier
 #	endif
 #	if defined( Castor3D_EXPORTS )
 #		define C3D_API __declspec( dllexport )
+#		if defined( __MINGW32__ )
+#			define C3D_INL_API
+#		else
+#			define C3D_INL_API __declspec( dllexport )
+#		endif
 #	else
 #		define C3D_API __declspec( dllimport )
+#		if defined( __MINGW32__ )
+#			define C3D_INL_API
+#		else
+#			define C3D_INL_API __declspec( dllimport )
+#		endif
 #	endif
 #endif
 

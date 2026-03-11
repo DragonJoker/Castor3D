@@ -14,13 +14,6 @@ namespace c3d
 	class Grid
 	{
 	public:
-		CU_API Grid() = default;
-		CU_API Grid( Grid const & ) = default;
-		CU_API Grid( Grid && )noexcept = default;
-		CU_API Grid & operator=( Grid const & ) = default;
-		CU_API Grid & operator=( Grid && )noexcept = default;
-		CU_API ~Grid()noexcept = default;
-
 		CU_API Grid( uint32_t gridSize
 			, float cellSize
 			, Point3f max

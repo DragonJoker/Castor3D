@@ -16,9 +16,9 @@ namespace c3d
 		Glyph & operator=( Glyph const & ) = delete;
 
 	public:
-		CU_API Glyph( Glyph && )noexcept = default;
-		CU_API Glyph & operator=( Glyph && )noexcept = default;
-		CU_API ~Glyph()noexcept = default;
+		CU_INL_API Glyph( Glyph && )noexcept = default;
+		CU_INL_API Glyph & operator=( Glyph && )noexcept = default;
+		CU_INL_API ~Glyph()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

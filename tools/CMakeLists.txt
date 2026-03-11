@@ -69,18 +69,20 @@ function( ToolsBuild )
 
 			if( wxWidgets_FOUND AND GTK_FOUND )
 				if ( WIN32 )
-					get_property( LibPathRel TARGET wx::base PROPERTY IMPORTED_LOCATION_RELEASE )
-					set( ADDITIONAL_DEPS_REL
-						${ADDITIONAL_DEPS_REL}
-						${LibPathRel}
-						PARENT_SCOPE
-					)
-					get_property( LibPathDbg TARGET wx::base PROPERTY IMPORTED_LOCATION_DEBUG )
-					set( ADDITIONAL_DEPS_DBG
-						${ADDITIONAL_DEPS_DBG}
-						${LibPathDbg}
-						PARENT_SCOPE
-					)
+					if ( TARGET wx::base )
+						get_property( LibPathRel TARGET wx::base PROPERTY IMPORTED_LOCATION_RELEASE )
+						set( ADDITIONAL_DEPS_REL
+							${ADDITIONAL_DEPS_REL}
+							${LibPathRel}
+							PARENT_SCOPE
+						)
+						get_property( LibPathDbg TARGET wx::base PROPERTY IMPORTED_LOCATION_DEBUG )
+						set( ADDITIONAL_DEPS_DBG
+							${ADDITIONAL_DEPS_DBG}
+							${LibPathDbg}
+							PARENT_SCOPE
+						)
+					endif ()
 				endif ()
 				set( SystemIncludeDirs
 					${SystemIncludeDirs}

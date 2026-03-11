@@ -18,7 +18,7 @@ namespace c3d
 {
 	struct ContextDeleter
 	{
-		CU_API virtual ~ContextDeleter()noexcept = default;
+		CU_INL_API virtual ~ContextDeleter()noexcept = default;
 		CU_API virtual void destroy( void * data )noexcept = 0;
 	};
 
@@ -44,10 +44,13 @@ namespace c3d
 
 	struct BlockContext
 	{
-		CU_API BlockContext( BlockContext const & rhs ) = delete;
-		CU_API BlockContext & operator=( BlockContext const & rhs ) = delete;
-		CU_API BlockContext( BlockContext && rhs )noexcept = default;
-		CU_API BlockContext & operator=( BlockContext && rhs )noexcept = default;
+	private:
+		BlockContext( BlockContext const & rhs ) = delete;
+		BlockContext & operator=( BlockContext const & rhs ) = delete;
+
+	public:
+		CU_INL_API BlockContext( BlockContext && rhs )noexcept = default;
+		CU_INL_API BlockContext & operator=( BlockContext && rhs )noexcept = default;
 
 		BlockContext( void * pcontext
 			, ContextDeleterPtr pdtor )
@@ -90,7 +93,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API virtual ~FileParserContext()noexcept = default;
+		CU_INL_API virtual ~FileParserContext()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Registers a user context.

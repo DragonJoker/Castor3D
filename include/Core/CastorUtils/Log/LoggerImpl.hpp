@@ -24,7 +24,7 @@ namespace c3d
 		LoggerImpl & operator=( LoggerImpl const & ) = delete;
 		CU_API LoggerImpl( LoggerImpl && rhs )noexcept;
 		CU_API LoggerImpl & operator=( LoggerImpl && rhs )noexcept;
-		~LoggerImpl()noexcept = default;
+		CU_INL_API ~LoggerImpl()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

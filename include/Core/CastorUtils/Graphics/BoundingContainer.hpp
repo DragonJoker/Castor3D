@@ -15,12 +15,12 @@ namespace c3d
 	{
 	public:
 		using MyPoint = Point< float, Dimension >;
-		CU_API BoundingContainer() = default;
-		CU_API BoundingContainer( BoundingContainer const & ) = default;
-		CU_API BoundingContainer( BoundingContainer && )noexcept = default;
-		CU_API BoundingContainer & operator=( BoundingContainer const & ) = default;
-		CU_API BoundingContainer & operator=( BoundingContainer && )noexcept = default;
-		CU_API virtual ~BoundingContainer()noexcept = default;
+		CU_INL_API BoundingContainer() = default;
+		CU_INL_API BoundingContainer( BoundingContainer const & ) = default;
+		CU_INL_API BoundingContainer( BoundingContainer && )noexcept = default;
+		CU_INL_API BoundingContainer & operator=( BoundingContainer const & ) = default;
+		CU_INL_API BoundingContainer & operator=( BoundingContainer && )noexcept = default;
+		CU_INL_API virtual ~BoundingContainer()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from center.

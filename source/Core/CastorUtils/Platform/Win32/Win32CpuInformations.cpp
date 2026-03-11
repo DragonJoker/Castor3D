@@ -2,6 +2,7 @@
 
 #if defined( CU_PlatformWindows )
 
+#include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <Windows.h>
@@ -14,7 +15,7 @@ namespace c3d::platform
 {
 	uint32_t getCoreCount()
 	{
-		SYSTEM_INFO sysinfo = { 0 };
+		SYSTEM_INFO sysinfo{};
 		::GetSystemInfo( &sysinfo );
 		return uint32_t( sysinfo.dwNumberOfProcessors );
 	}
@@ -68,10 +69,10 @@ namespace c3d::platform
 
 		static void callCpuid( uint32_t func, Array< int32_t, 4 > & data )
 		{
-			uint32_t a;
-			uint32_t b;
-			uint32_t c;
-			uint32_t d;
+			uint32_t a{};
+			uint32_t b{};
+			uint32_t c{};
+			uint32_t d{};
 			__get_cpuid( func, &a, &b, &c, &d );
 			data[0] = int32_t( a );
 			data[1] = int32_t( b );
