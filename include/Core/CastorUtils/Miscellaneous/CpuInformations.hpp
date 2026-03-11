@@ -10,6 +10,12 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	namespace platform
+	{
+		uint32_t getCoreCount();
+		String getCPUModel();
+		String getCPUVendor();
+	}
 	/**
 	\~english
 	\brief		Retrieves the basic CPU informations.

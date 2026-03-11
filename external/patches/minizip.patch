@@ -1,0 +1,43 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3fe7b05..d2065ed 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,8 +10,6 @@ set(CMAKE_DEBUG_POSTFIX "d")
+ 
+ set(PROJECT_NAME minizip)
+ 
+-INCLUDE(FindZLIB)
+-
+ IF(NOT ZLIB_FOUND)
+ 	message(FATAL_ERROR "zlib library is required for libminizip!")
+ ENDIF(NOT ZLIB_FOUND)
+@@ -21,7 +19,28 @@ link_directories(${ZLIB_LIBRARIES})
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+ 
+-add_library(${PROJECT_NAME} ioapi.c unzip.c zip.c)
++set(SRC ioapi.c unzip.c zip.c mztools.c)
++set(HEADERS crypt.h ioapi.h unzip.h zip.h mztools.h)
++if(WIN32)
++	list(APPEND SRC iowin32.c)
++	list(APPEND HEADERS iowin32.h)
++endif()
++
++add_library(${PROJECT_NAME} ${SRC})
+ 
+ target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES})
+ 
++install(
++	TARGETS minizip
++	EXPORT minizipTargets
++	RUNTIME DESTINATION bin
++	LIBRARY DESTINATION lib
++	ARCHIVE DESTINATION lib
++)
++install(FILES ${HEADERS} DESTINATION include/minizip)
++
++install( EXPORT minizipTargets
++	FILE minizipConfig.cmake
++	NAMESPACE minizip::
++	DESTINATION share/minizip
++)

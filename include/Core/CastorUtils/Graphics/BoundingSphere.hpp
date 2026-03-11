@@ -12,7 +12,7 @@ namespace c3d
 		: public BoundingContainer3D
 	{
 	public:
-		CU_API BoundingSphere() = default;
+		CU_INL_API BoundingSphere() = default;
 		/**
 		 *\~english
 		 *\brief		Specified constructor.

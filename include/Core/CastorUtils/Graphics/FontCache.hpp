@@ -43,7 +43,7 @@ namespace c3d
 
 	public:
 		CU_API explicit ResourceCacheT( LoggerInstance & logger );
-		CU_API ~ResourceCacheT()noexcept override = default;
+		CU_INL_API ~ResourceCacheT()noexcept override = default;
 
 		CU_API Path getRealPath( Path path )const;
 		/**

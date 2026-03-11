@@ -45,12 +45,14 @@ namespace c3d
 			bool implicit{};
 		};
 
+	private:
+		PreprocessedFile( PreprocessedFile const & rhs ) = delete;
+		PreprocessedFile & operator=( PreprocessedFile const & rhs ) = delete;
+
 	public:
-		CU_API PreprocessedFile( PreprocessedFile const & rhs ) = delete;
-		CU_API PreprocessedFile & operator=( PreprocessedFile const & rhs ) = delete;
 		CU_API PreprocessedFile( PreprocessedFile && rhs )noexcept;
 		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs )noexcept;
-		CU_API virtual ~PreprocessedFile()noexcept = default;
+		CU_INL_API virtual ~PreprocessedFile()noexcept = default;
 
 		CU_API explicit PreprocessedFile( FileParser & parser );
 		CU_API PreprocessedFile( FileParser & parser
@@ -147,7 +149,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API virtual ~FileParser()noexcept = default;
+		CU_INL_API virtual ~FileParser()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers.

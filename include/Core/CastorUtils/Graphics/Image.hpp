@@ -93,7 +93,7 @@ namespace c3d
 		}
 
 		// Virtual dtor to enable use as ResourceT
-		CU_API virtual ~Image()noexcept = default;
+		CU_INL_API virtual ~Image()noexcept = default;
 		//@}
 		/**
 		 *\name		Copy/Move.
@@ -133,7 +133,7 @@ namespace c3d
 		 *\param[in]	size	La nouvelle résolution
 		 *\return		La référence de l'image
 		 */
-		CU_API Image getResampled( Size const & size )const
+		Image getResampled( Size const & size )const
 		{
 			auto result = *this;
 			result.resample( size );

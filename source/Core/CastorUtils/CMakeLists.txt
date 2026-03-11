@@ -1,30 +1,30 @@
 project( CastorUtils )
 
-set( unofficial-convectionkernels_DIR ${VCPKG_SHARE_DIR}/unofficial-convectionkernels )
-set( unofficial-skia_DIR ${VCPKG_SHARE_DIR}/unofficial-skia )
-set( gli_DIR ${VCPKG_SHARE_DIR}/gli )
-set( tinyxml2_DIR ${VCPKG_SHARE_DIR}/tinyxml2 )
-set( msdfgen_DIR ${VCPKG_SHARE_DIR}/msdfgen )
-set( PNG_DIR ${VCPKG_SHARE_DIR}/libpng )
-set( WebP_DIR ${VCPKG_SHARE_DIR}/WebP )
-set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
-set( tinyexr_DIR ${VCPKG_SHARE_DIR}/tinyexr )
-set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
-list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/bcdec )
-list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/stb )
-find_package( bcdec REQUIRED )
-find_package( unofficial-convectionkernels CONFIG REQUIRED )
-find_package( unofficial-skia CONFIG REQUIRED )
-find_package( gli CONFIG REQUIRED )
-find_package( tinyxml2 CONFIG REQUIRED )
-find_package( msdfgen CONFIG REQUIRED )
-find_package( PNG REQUIRED )
-find_package( Stb REQUIRED )
-find_package( tinyexr CONFIG REQUIRED )
-find_package( WebP CONFIG REQUIRED )
-find_package( Ktx CONFIG REQUIRED )
-
 if ( VCPKG_TOOLCHAIN )
+	set( unofficial-convectionkernels_DIR ${VCPKG_SHARE_DIR}/unofficial-convectionkernels )
+	set( unofficial-skia_DIR ${VCPKG_SHARE_DIR}/unofficial-skia )
+	set( gli_DIR ${VCPKG_SHARE_DIR}/gli )
+	set( tinyxml2_DIR ${VCPKG_SHARE_DIR}/tinyxml2 )
+	set( msdfgen_DIR ${VCPKG_SHARE_DIR}/msdfgen )
+	set( PNG_DIR ${VCPKG_SHARE_DIR}/libpng )
+	set( WebP_DIR ${VCPKG_SHARE_DIR}/WebP )
+	set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
+	set( tinyexr_DIR ${VCPKG_SHARE_DIR}/tinyexr )
+	set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
+	list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/bcdec )
+	list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/stb )
+	find_package( bcdec REQUIRED )
+	find_package( unofficial-convectionkernels CONFIG REQUIRED )
+	find_package( unofficial-skia CONFIG REQUIRED )
+	find_package( gli CONFIG REQUIRED )
+	find_package( tinyxml2 CONFIG REQUIRED )
+	find_package( msdfgen CONFIG REQUIRED )
+	find_package( PNG REQUIRED )
+	find_package( Stb REQUIRED )
+	find_package( tinyexr CONFIG REQUIRED )
+	find_package( WebP CONFIG REQUIRED )
+	find_package( Ktx CONFIG REQUIRED )
+
 	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
 	find_package( unofficial-minizip CONFIG REQUIRED )
 	set( minizip_LIB unofficial::minizip::minizip )
@@ -32,8 +32,116 @@ if ( VCPKG_TOOLCHAIN )
 	find_package( unofficial-brotli CONFIG REQUIRED )
 	set( brotlidec_LIB unofficial::brotli::brotlidec )
 else ()
-	find_package( minizip CONFIG REQUIRED )
-	set( minizip_LIB minizip::minizip )
+	find_package( PNG REQUIRED )
+	include( FetchContent )
+
+	set( convectionkernels_patch git apply ${EXTERNAL_DIR}/patches/convectionkernels.patch )
+	FetchContent_Declare( convectionkernels
+		GIT_REPOSITORY https://github.com/elasota/ConvectionKernels
+		GIT_TAG 350416daa4e98f1c17ffc273b134d0120a2ef230
+		SYSTEM
+		PATCH_COMMAND ${convectionkernels_patch}
+		UPDATE_DISCONNECTED 1 )
+	FetchContent_MakeAvailable( convectionkernels )
+
+	FetchContent_Declare( stb
+		GIT_REPOSITORY https://github.com/nothings/stb
+		GIT_TAG 2fb8c5a3deb2110c89669f8d6f36e5833b556b44
+		SYSTEM )
+	FetchContent_MakeAvailable( stb )
+
+	set( minizip_patch git apply ${EXTERNAL_DIR}/patches/minizip.patch )
+	FetchContent_Declare( minizip
+		GIT_REPOSITORY https://github.com/domoticz/minizip
+		GIT_TAG aee7fbddf118d9363575af96310c29fa747d70c0
+		PATCH_COMMAND ${minizip_patch}
+		UPDATE_DISCONNECTED 1
+		SYSTEM )
+	FetchContent_MakeAvailable( minizip )
+	set( minizip_LIB minizip )
+	
+	set( brotli_patch git apply ${EXTERNAL_DIR}/patches/brotli.patch )
+	FetchContent_Declare( brotli
+		GIT_REPOSITORY https://github.com/google/brotli
+		GIT_TAG 028fb5a23661f123017c060daa546b55cf4bde29
+		PATCH_COMMAND ${brotli_patch}
+		UPDATE_DISCONNECTED 1
+		SYSTEM )
+	set( BROTLI_BUNDLED_MODE OFF )
+	set( BROTLI_BUILD_TOOLS OFF )
+	set( BROTLI_DISABLE_TESTS ON )
+	FetchContent_MakeAvailable( brotli )
+	set( brotlidec_LIB brotlidec )
+
+	FetchContent_Declare( bcdec
+		GIT_REPOSITORY https://github.com/iOrange/bcdec
+		GIT_TAG 93628fe5627102fe5187b7eeb99122dec6612c36
+		SYSTEM )
+	FetchContent_MakeAvailable( bcdec )
+
+	FetchContent_Declare( gli
+		GIT_REPOSITORY https://github.com/g-truc/gli
+		GIT_TAG 7efdcf87dd51cfe828b0da1068f2072542b5631a
+		SYSTEM )
+	FetchContent_MakeAvailable( gli )
+
+	FetchContent_Declare( tinyxml2
+		GIT_REPOSITORY https://github.com/leethomason/tinyxml2
+		GIT_TAG 9148bdf719e997d1f474be6bcc7943881046dba1
+		SYSTEM )
+	set( tinyxml2_BUILD_TESTING OFF )
+	FetchContent_MakeAvailable( tinyxml2 )
+
+	set( tinyexr_patch git apply ${EXTERNAL_DIR}/patches/tinyexr.patch )
+	FetchContent_Declare( tinyexr
+		GIT_REPOSITORY https://github.com/syoyo/tinyexr
+		GIT_TAG 735ff73ce5959cf005eb99ce517c9bcecab89dfb
+		PATCH_COMMAND ${tinyexr_patch}
+		UPDATE_DISCONNECTED 1
+		SYSTEM )
+	set( TINYEXR_BUILD_SAMPLE OFF )
+	set( TINYEXR_USE_MINIZ ON )
+	FetchContent_MakeAvailable( tinyexr )
+
+	FetchContent_Declare( libwebp
+		GIT_REPOSITORY https://github.com/webmproject/libwebp
+		GIT_TAG f342dfc1756785df8803d25478bf664c0de629de
+		SYSTEM )
+	set( WEBP_BUILD_ANIM_UTILS OFF )
+	set( WEBP_BUILD_CWEBP OFF )
+	set( WEBP_BUILD_DWEBP OFF )
+	set( WEBP_BUILD_EXTRAS OFF )
+	set( WEBP_BUILD_GIF2WEBP OFF )
+	set( WEBP_BUILD_IMG2WEBP OFF )
+	set( WEBP_BUILD_VWEBP OFF )
+	set( WEBP_BUILD_WEBPINFO OFF )
+	set( WEBP_BUILD_WEBPMUX OFF )
+	FetchContent_MakeAvailable( libwebp )
+
+	FetchContent_Declare( ktx
+		GIT_REPOSITORY https://github.com/KhronosGroup/KTX-Software
+		GIT_TAG 4d6fc70eaf62ad0558e63e8d97eb9766118327a6
+		SYSTEM )
+	set( KTX_FEATURE_TESTS OFF )
+	set( KTX_FEATURE_LOADTEST_APPS OFF )
+	FetchContent_MakeAvailable( ktx )
+	
+	set( msdfgen_patch git apply ${EXTERNAL_DIR}/patches/msdfgen.patch )
+	FetchContent_Declare( msdfgen
+		GIT_REPOSITORY https://github.com/Chlumsky/msdfgen
+		GIT_TAG 1874bcf7d9624ccc85b4bc9a85d78116f690f35b
+		PATCH_COMMAND ${msdfgen_patch}
+		UPDATE_DISCONNECTED 1
+		SYSTEM )
+	set( MSDFGEN_BUILD_STANDALONE OFF )
+	set( MSDFGEN_DYNAMIC_RUNTIME ON )
+	set( MSDFGEN_USE_VCPKG OFF )
+	set( MSDFGEN_USE_SKIA OFF )
+	set( MSDFGEN_DISABLE_SVG ON )
+	set( MSDFGEN_DISABLE_PNG ON )
+	set( MSDFGEN_INSTALL ON )
+	set( BUILD_SHARED_LIBS OFF )
+	FetchContent_MakeAvailable( msdfgen )
 endif ()
 
 include( Doxygen )
@@ -702,8 +810,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
-			${bcdec_INCLUDE_DIR}
-			${Stb_INCLUDE_DIR}
 	)
 	if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 		target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
@@ -718,20 +824,49 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}
-			${minizip_LIB}
-			${brotlidec_LIB}
-			unofficial::convectionkernels::convectionkernels
-			gli
-			msdfgen::msdfgen
-			msdfgen::msdfgen-ext
-			msdfgen::msdfgen-core
-			msdfgen::msdfgen-full
-			WebP::webp
-			WebP::webpdecoder
-			WebP::webpdemux
-			KTX::ktx
-			unofficial::tinyexr::tinyexr
 	)
+	if ( VCPKG_TOOLCHAIN )
+		target_include_directories( ${PROJECT_NAME}
+			PRIVATE
+				${bcdec_INCLUDE_DIR}
+				${Stb_INCLUDE_DIR}
+		)
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				${minizip_LIB}
+				${brotlidec_LIB}
+				unofficial::convectionkernels::convectionkernels
+				gli
+				msdfgen::msdfgen
+				msdfgen::msdfgen-ext
+				msdfgen::msdfgen-core
+				msdfgen::msdfgen-full
+				WebP::webp
+				WebP::webpdecoder
+				WebP::webpdemux
+				KTX::ktx
+				unofficial::tinyexr::tinyexr
+		)
+	else ()
+		target_include_directories( ${PROJECT_NAME}
+			PRIVATE
+				${bcdec_SOURCE_DIR}
+				${stb_SOURCE_DIR}
+		)
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				${minizip_LIB}
+				${brotlidec_LIB}
+				convectionkernels
+				gli
+				msdfgen::msdfgen
+				webp
+				webpdecoder
+				webpdemux
+				ktx
+				tinyexr
+		)
+	endif ()
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC

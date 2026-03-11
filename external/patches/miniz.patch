@@ -1,0 +1,65 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 00fbd36..ca70f94 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,6 +6,11 @@ if(DEFINED PROJECT_NAME)
+   set(MINIZ_STANDALONE_PROJECT OFF)
+ endif()
+ 
++set(INSTALL_BIN_DIR      "bin"                      CACHE PATH "Path where exe and dll will be installed")
++set(INSTALL_LIB_DIR      "lib"                      CACHE PATH "Path where lib will be installed")
++set(INSTALL_INCLUDE_DIR  "include"                  CACHE PATH "Path where headers will be installed")
++set(INSTALL_CMAKE_DIR    "share/miniz"              CACHE PATH "Path where cmake configs will be installed")
++
+ 
+ if(CMAKE_VERSION VERSION_LESS "3.12")
+   project(miniz C)
+@@ -45,7 +50,7 @@ option(BUILD_HEADER_ONLY "Build a header-only version" OFF)
+ option(BUILD_SHARED_LIBS "Build shared library instead of static" OFF)
+ option(BUILD_NO_STDIO" Build a without stdio version" OFF)
+ option(BUILD_TESTS "Build tests" ${MINIZ_STANDALONE_PROJECT})
+-option(INSTALL_PROJECT "Install project" ${MINIZ_STANDALONE_PROJECT})
++# option(INSTALL_PROJECT "Install project" ${MINIZ_STANDALONE_PROJECT})
+ 
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+ 
+@@ -192,11 +197,11 @@ set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY
+ 
+ if(INSTALL_PROJECT)
+   install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
+-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
+-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    RUNTIME  DESTINATION ${INSTALL_BINDIR}
++    ARCHIVE  DESTINATION ${INSTALL_LIBDIR}
++    LIBRARY  DESTINATION ${INSTALL_LIBDIR}
+     # users can use <miniz.h> or <miniz/miniz.h>
+-    INCLUDES DESTINATION include ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
++    INCLUDES DESTINATION include ${INSTALL_INCLUDE_DIR}/${PROJECT_NAME}
+   )
+ 
+   include(CMakePackageConfigHelpers)
+@@ -215,21 +220,20 @@ if(INSTALL_PROJECT)
+     @ONLY
+   )
+ 
+-  set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+   install(EXPORT ${PROJECT_NAME}Targets
+     FILE
+       ${PROJECT_NAME}Targets.cmake
+     NAMESPACE
+       ${PROJECT_NAME}::
+     DESTINATION
+-      ${ConfigPackageLocation}
++      ${INSTALL_CMAKE_DIR}
+   )
+   install(
+     FILES
+       "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake"
+       "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}ConfigVersion.cmake"
+     DESTINATION
+-      ${ConfigPackageLocation}
++      ${INSTALL_CMAKE_DIR}
+     COMPONENT
+       Devel
+   )

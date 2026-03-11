@@ -70,7 +70,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Position()noexcept = default;
+		CU_INL_API ~Position()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator

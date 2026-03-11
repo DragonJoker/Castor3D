@@ -130,7 +130,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~PxBufferBase()noexcept = default;
+		CU_INL_API ~PxBufferBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator

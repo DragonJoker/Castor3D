@@ -1,0 +1,45 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 22b21d2..876f9a3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -186,18 +186,22 @@ endif()
+ if (NOT BROTLI_BUNDLED_MODE)
+   if (BROTLI_BUILD_TOOLS)
+     install(
+-      TARGETS brotli
++      TARGETS brotli ${BROTLI_SHARED_LIBRARIES} ${BROTLI_STATIC_LIBRARIES}
++      EXPORT brotliTargets
++      ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++      LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++      RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
++    )
++  else()
++    install(
++      TARGETS ${BROTLI_SHARED_LIBRARIES} ${BROTLI_STATIC_LIBRARIES}
++      EXPORT brotliTargets
++      ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++      LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+       RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+     )
+   endif()
+ 
+-  install(
+-    TARGETS ${BROTLI_SHARED_LIBRARIES} ${BROTLI_STATIC_LIBRARIES}
+-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-  )
+-
+   install(
+     DIRECTORY ${BROTLI_INCLUDE_DIRS}/brotli
+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+@@ -393,3 +397,9 @@ install(FILES docs/constants.h.3 docs/decode.h.3 docs/encode.h.3 docs/types.h.3
+ if (ENABLE_COVERAGE STREQUAL "yes")
+   setup_target_for_coverage(coverage test coverage)
+ endif()
++
++install( EXPORT brotliTargets
++	FILE brotliConfig.cmake
++	NAMESPACE brotli::
++	DESTINATION share/brotli
++)

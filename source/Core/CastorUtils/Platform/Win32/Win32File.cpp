@@ -122,7 +122,7 @@ namespace c3d
 		, std::filesystem::path const & path
 		, char const * mode )
 	{
-		file = fopen( path, mode );
+		file = fopen( path.string().c_str(), mode);
 		return file != nullptr;
 	}
 
@@ -130,7 +130,7 @@ namespace c3d
 		, std::filesystem::path const & path
 		, char const * mode )
 	{
-		file = fopen( path, mode );
+		file = fopen( path.string().c_str(), mode );
 		return file != nullptr;
 	}
 
@@ -138,12 +138,12 @@ namespace c3d
 		, int64_t offset
 		, int iOrigin )
 	{
-		return fseek( file, offset, iOrigin ) == 0;
+		return fseeko64( file, offset, iOrigin ) == 0;
 	}
 
 	int64_t fileTell( FILE * file )
 	{
-		return ftell( file );
+		return ftello64( file );
 	}
 
 #endif
@@ -179,7 +179,7 @@ namespace c3d
 
 	bool File::directoryExists( Path const & path )
 	{
-		struct _stat status = { 0 };
+		struct _stat status{};
 		_stat( toUtf8( path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}

@@ -18,12 +18,13 @@ namespace c3d
 {
 	class LoggerInstance
 	{
-	public:
+	private:
 		LoggerInstance( LoggerInstance const & ) = delete;
 		LoggerInstance & operator=( LoggerInstance const & ) = delete;
+
+	public:
 		CU_API LoggerInstance( LoggerInstance && rhs )noexcept;
 		CU_API LoggerInstance & operator=( LoggerInstance && rhs )noexcept;
-
 		CU_API ~LoggerInstance()noexcept;
 		/**
 		 *\~english

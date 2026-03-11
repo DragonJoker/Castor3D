@@ -1,0 +1,46 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..a32281c
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,40 @@
++cmake_minimum_required(VERSION 3.5.0)
++
++project( convectionkernels )
++
++file(GLOB HEADER_FILES *.h)
++file(MAKE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/include/convectionkernels")
++file(COPY ${HEADER_FILES} DESTINATION "${CMAKE_CURRENT_LIST_DIR}/include/convectionkernels")
++file(REMOVE ${HEADER_FILES})
++
++file(GLOB SRC_FILES *.cpp)
++file(GLOB HDR_FILES include/convectionkernels/*.h)
++
++add_library( ${PROJECT_NAME}
++    STATIC
++    ${HDR_FILES}
++    ${SRC_FILES}
++)
++set_property( TARGET ${PROJECT_NAME}
++    PROPERTY PUBLIC_HEADER ${HDR_FILES}
++)
++target_include_directories( ${PROJECT_NAME}
++    PRIVATE
++        ${CMAKE_CURRENT_LIST_DIR}
++        ${CMAKE_CURRENT_LIST_DIR}/include/convectionkernels
++    PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
++        $<INSTALL_INTERFACE:include>
++)
++install( TARGETS ${PROJECT_NAME}
++    EXPORT convectionkernels-config
++    RUNTIME DESTINATION bin
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++    PUBLIC_HEADER DESTINATION include/convectionkernels
++)
++install( EXPORT convectionkernels-config
++    FILE convectionkernels-config.cmake
++    NAMESPACE convectionkernels::
++    DESTINATION share/convectionkernels
++)

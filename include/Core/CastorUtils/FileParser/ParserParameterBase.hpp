@@ -22,12 +22,12 @@ namespace c3d
 		 *\~french
 		 *\brief		Constructor.
 		 */
-		CU_API ParserParameterBase() = default;
-		CU_API ParserParameterBase( ParserParameterBase const & ) = default;
-		CU_API ParserParameterBase( ParserParameterBase && )noexcept = default;
-		CU_API ParserParameterBase & operator=( ParserParameterBase const & ) = default;
-		CU_API ParserParameterBase & operator=( ParserParameterBase && )noexcept = default;
-		CU_API virtual ~ParserParameterBase()noexcept = default;
+		CU_INL_API ParserParameterBase() = default;
+		CU_INL_API ParserParameterBase( ParserParameterBase const & ) = default;
+		CU_INL_API ParserParameterBase( ParserParameterBase && )noexcept = default;
+		CU_INL_API ParserParameterBase & operator=( ParserParameterBase const & ) = default;
+		CU_INL_API ParserParameterBase & operator=( ParserParameterBase && )noexcept = default;
+		CU_INL_API virtual ~ParserParameterBase()noexcept = default;
 		/**
 		 *\~english
 		 *\return		The parameter type.
@@ -41,7 +41,7 @@ namespace c3d
 		 *\~french
 		 *\return		Le type de base du paramètre (comme ParameterType::eText pour ParameterType::eName).
 		 */
-		CU_API virtual ParameterType getBaseType()const
+		CU_INL_API virtual ParameterType getBaseType()const
 		{
 			return getType();
 		}

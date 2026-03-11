@@ -1,7 +1,7 @@
 #include "CastorUtils/Graphics/Font.hpp"
 
-#include <msdfgen/msdfgen.h>
-#include <msdfgen/msdfgen-ext.h>
+#include <msdfgen.h>
+#include <msdfgen-ext.h>
 #include <ft2build.h>
 
 FT_BEGIN_HEADER
