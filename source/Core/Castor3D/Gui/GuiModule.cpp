@@ -59,6 +59,7 @@ namespace c3d
 			result = engine.addNewMaterial( name
 				, engine
 				, engine.getDefaultLightingModel() );
+			result->setSerialisable( false );
 			result->createPass();
 		}
 
