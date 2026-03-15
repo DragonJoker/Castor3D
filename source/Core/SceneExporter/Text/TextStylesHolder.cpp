@@ -23,11 +23,10 @@ namespace c3d
 		static bool filter( ControlStyle const & style
 			, Scene const * scene )
 		{
+			if ( !style.isSerialisable() )
+				return false;
 			if ( !style.hasScene() && !scene )
-			{
 				return true;
-			}
-
 			return style.hasScene()
 				&& scene == &style.getScene();
 		}

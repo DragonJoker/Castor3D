@@ -66,6 +66,16 @@ namespace c3d
 			m_foregroundInvisible = value;
 		}
 
+		void setSerialisable( bool value )noexcept
+		{
+			m_serialisable = value;
+		}
+
+		bool isSerialisable()const noexcept
+		{
+			return m_serialisable;
+		}
+
 		bool isBackgroundInvisible()const noexcept
 		{
 			return m_backgroundInvisible;
@@ -163,6 +173,7 @@ namespace c3d
 		MaterialObs m_foregroundMaterial{};
 		bool m_backgroundInvisible{};
 		bool m_foregroundInvisible{};
+		bool m_serialisable{ true };
 	};
 }
 

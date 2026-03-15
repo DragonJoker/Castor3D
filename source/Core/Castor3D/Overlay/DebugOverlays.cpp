@@ -348,6 +348,7 @@ namespace c3d
 		auto counterStyle = panelStyle->getStyle< StaticStyle >( cuT( "Counter" ) );
 
 		panelStyle = &static_cast< PanelStyle & >( *panelStyle->clone( cuT( "Debug/RenderPasses/" ) + name ) );
+		panelStyle->setSerialisable( false );
 		panelStyle->setBackgroundMaterial( createMaterial( engine, name, colour ) );
 
 		auto maxWidth = CategoryLineWidth - leftOffset;
