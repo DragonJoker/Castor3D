@@ -20,6 +20,8 @@ namespace c3d
 	{
 		bool sortAroundCenter{};
 		parameters.get( cuT( "sort_around_center" ), sortAroundCenter );
+		bool tileUV0{};
+		parameters.get( cuT( "tile_uv0" ), tileUV0 );
 		bool tileUV{};
 		parameters.get( cuT( "tile_uv" ), tileUV );
 		bool flipYZ{};
@@ -54,12 +56,12 @@ namespace c3d
 		++subDivisionsD;
 		uint32_t nbVertexW = subDivisionsW + 1;
 		uint32_t nbVertexH = subDivisionsD + 1;
-		float offsetW = ( sortAroundCenter 
-			? 0.0f
-			: -width / 2 );
-		float offsetH = ( sortAroundCenter 
-			? 0.0f
-			: -depth / 2 );
+		float offsetW = ( sortAroundCenter ? 0.0f : -width / 2 );
+		float offsetH = ( sortAroundCenter ? 0.0f : -depth / 2 );
+		float uvOffW = ( tileUV0 ? -width / 2 : 0.0f );
+		float uvOffH = ( tileUV0 ? -depth / 2 : 0.0f );
+		float uvW = ( tileUV0 ? width : 1.0f );
+		float uvH = ( tileUV0 ? depth : 1.0f );
 		float gapW = width / float( subDivisionsW );
 		float gapH = depth / float( subDivisionsD );
 		auto submesh = mesh.createDefaultSubmesh();
@@ -75,7 +77,7 @@ namespace c3d
 					points.emplace_back()
 						.position( Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
 						.normal( Point3f{ 0.0, 1.0, 0.0 } )
-						.texcoord( Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
+						.texcoord( Point3f{ uvOffW + float( i ) * uvW * gapW / width, uvOffH + float( j ) * uvH * gapH / depth, 0.0f } );
 				}
 			}
 
@@ -100,7 +102,7 @@ namespace c3d
 					points.emplace_back()
 						.position( Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
 						.normal( Point3f{ 0.0, 0.0, 1.0 } )
-						.texcoord( Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
+						.texcoord( Point3f{ uvOffW + float( i ) * uvW * gapW / width, uvOffH + float( j ) * uvH * gapH / depth, 0.0f } );
 				}
 			}
 
