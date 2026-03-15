@@ -14,6 +14,7 @@
     "pugixml",
     "rapidjson",
     "stb",
+    "tinyusdz",
     "utfcpp",
     {
       "name": "vcpkg-cmake",
@@ -24,5 +25,10 @@
       "host": true
     },
     "zlib"
-  ]
+  ],
+  "vcpkg-configuration": {
+    "overlay-ports": [
+      "./tinyusdz"
+    ]
+  }
 }

@@ -1,0 +1,197 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 032d736..4b7bf38 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -366,6 +366,75 @@ if(TINYUSDZ_WITH_PYTHON)
+   add_subdirectory(${PROJECT_SOURCE_DIR}/src/external/pybind11)
+ endif()
+ 
++set(TINYUSDZ_HEADERS
++    ${PROJECT_SOURCE_DIR}/src/ascii-parser.hh
++    ${PROJECT_SOURCE_DIR}/src/asset-resolution.hh
++    ${PROJECT_SOURCE_DIR}/src/audio-loader.hh
++    ${PROJECT_SOURCE_DIR}/src/base122.hh
++    ${PROJECT_SOURCE_DIR}/src/composition.hh
++    ${PROJECT_SOURCE_DIR}/src/crate-format.hh
++    ${PROJECT_SOURCE_DIR}/src/crate-pprint.hh
++    ${PROJECT_SOURCE_DIR}/src/crate-reader.hh
++    ${PROJECT_SOURCE_DIR}/src/crate-writer.hh
++    ${PROJECT_SOURCE_DIR}/src/handle-allocator.hh
++    ${PROJECT_SOURCE_DIR}/src/image-loader.hh
++    ${PROJECT_SOURCE_DIR}/src/image-types.hh
++    ${PROJECT_SOURCE_DIR}/src/image-util.hh
++    ${PROJECT_SOURCE_DIR}/src/image-writer.hh
++    ${PROJECT_SOURCE_DIR}/src/io-util.hh
++    ${PROJECT_SOURCE_DIR}/src/json-to-usd.hh
++    ${PROJECT_SOURCE_DIR}/src/json-writer.hh
++    ${PROJECT_SOURCE_DIR}/src/linear-algebra.hh
++    ${PROJECT_SOURCE_DIR}/src/lz4-compression.hh
++    ${PROJECT_SOURCE_DIR}/src/path-util.hh
++    ${PROJECT_SOURCE_DIR}/src/performance.hh
++    ${PROJECT_SOURCE_DIR}/src/pprinter.hh
++    ${PROJECT_SOURCE_DIR}/src/prim-pprint.hh
++    ${PROJECT_SOURCE_DIR}/src/prim-reconstruct.hh
++    ${PROJECT_SOURCE_DIR}/src/prim-types.hh
++    ${PROJECT_SOURCE_DIR}/src/primvar.hh
++    ${PROJECT_SOURCE_DIR}/src/pxr-compat.hh
++    ${PROJECT_SOURCE_DIR}/src/stage.hh
++    ${PROJECT_SOURCE_DIR}/src/stream-reader.hh
++    ${PROJECT_SOURCE_DIR}/src/stream-writer.hh
++    ${PROJECT_SOURCE_DIR}/src/str-util.hh
++    ${PROJECT_SOURCE_DIR}/src/subdiv.hh
++    ${PROJECT_SOURCE_DIR}/src/texture-types.hh
++    ${PROJECT_SOURCE_DIR}/src/tiny-format.hh
++    ${PROJECT_SOURCE_DIR}/src/tinyusdz.hh
++    ${PROJECT_SOURCE_DIR}/src/tiny-variant.hh
++    ${PROJECT_SOURCE_DIR}/src/token-type.hh
++    ${PROJECT_SOURCE_DIR}/src/unicode-xid.hh
++    ${PROJECT_SOURCE_DIR}/src/usda-reader.hh
++    ${PROJECT_SOURCE_DIR}/src/usda-writer.hh
++    ${PROJECT_SOURCE_DIR}/src/usdc-reader.hh
++    ${PROJECT_SOURCE_DIR}/src/usdc-writer.hh
++    ${PROJECT_SOURCE_DIR}/src/usdFbx.hh
++    ${PROJECT_SOURCE_DIR}/src/usdGeom.hh
++    ${PROJECT_SOURCE_DIR}/src/usdLux.hh
++    ${PROJECT_SOURCE_DIR}/src/usdMtlx.hh
++    ${PROJECT_SOURCE_DIR}/src/usdObj.hh
++    ${PROJECT_SOURCE_DIR}/src/usdShade.hh
++    ${PROJECT_SOURCE_DIR}/src/usdSkel.hh
++    ${PROJECT_SOURCE_DIR}/src/usd-to-json.hh
++    ${PROJECT_SOURCE_DIR}/src/usdVox.hh
++    ${PROJECT_SOURCE_DIR}/src/value-eval-util.hh
++    ${PROJECT_SOURCE_DIR}/src/value-pprint.hh
++    ${PROJECT_SOURCE_DIR}/src/value-types.hh
++    ${PROJECT_SOURCE_DIR}/src/xform.hh
++    ${PROJECT_SOURCE_DIR}/src/integerCoding.h
++    ${PROJECT_SOURCE_DIR}/src/common-macros.inc
++    ${PROJECT_SOURCE_DIR}/src/define-type-trait.inc
++    ${PROJECT_SOURCE_DIR}/src/math-util.inc
++    ${PROJECT_SOURCE_DIR}/src/prim-type-macros.inc
++    ${PROJECT_SOURCE_DIR}/src/tiny-any.inc
++    ${PROJECT_SOURCE_DIR}/src/unicode-xid-table.inc
++    ${PROJECT_SOURCE_DIR}/src/value-type-macros.inc
++)
++set(TINYUSDZ_NONSTD_HEADERS
++    ${PROJECT_SOURCE_DIR}/src/nonstd/expected.hpp
++    ${PROJECT_SOURCE_DIR}/src/nonstd/optional.hpp
++)
+ set(TINYUSDZ_SOURCES
+     ${PROJECT_SOURCE_DIR}/src/asset-resolution.cc
+     ${PROJECT_SOURCE_DIR}/src/tinyusdz.cc
+@@ -414,14 +483,24 @@ set(TINYUSDZ_SOURCES
+     )
+ 
+ if (TINYUSDZ_WITH_TYDRA)
++    set(TINYUSDZ_TYDRA_HEADERS
++        ${PROJECT_SOURCE_DIR}/src/tydra/attribute-eval.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/facial.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/json-export.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/nurbs-tess.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/obj-export.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/prim-apply.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/render-data.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/scene-access.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/shader-network.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/texture-loader.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/texture-util.hh
++        ${PROJECT_SOURCE_DIR}/src/tydra/usd-export.hh
++        )
+     list(APPEND TINYUSDZ_SOURCES
+         ${PROJECT_SOURCE_DIR}/src/tydra/facial.cc
+-        ${PROJECT_SOURCE_DIR}/src/tydra/facial.hh
+         ${PROJECT_SOURCE_DIR}/src/tydra/prim-apply.cc
+-        ${PROJECT_SOURCE_DIR}/src/tydra/prim-apply.hh
+         ${PROJECT_SOURCE_DIR}/src/tydra/scene-access.cc
+-        ${PROJECT_SOURCE_DIR}/src/tydra/scene-access.hh
+-        ${PROJECT_SOURCE_DIR}/src/tydra/attribute-eval.hh
+         ${PROJECT_SOURCE_DIR}/src/tydra/attribute-eval.cc
+         ${PROJECT_SOURCE_DIR}/src/tydra/attribute-eval-typed.cc
+         ${PROJECT_SOURCE_DIR}/src/tydra/attribute-eval-typed-animatable.cc
+@@ -430,11 +509,8 @@ if (TINYUSDZ_WITH_TYDRA)
+         ${PROJECT_SOURCE_DIR}/src/tydra/obj-export.cc
+         ${PROJECT_SOURCE_DIR}/src/tydra/usd-export.cc
+         ${PROJECT_SOURCE_DIR}/src/tydra/shader-network.cc
+-        ${PROJECT_SOURCE_DIR}/src/tydra/shader-network.hh
+         ${PROJECT_SOURCE_DIR}/src/tydra/render-data.cc
+-        ${PROJECT_SOURCE_DIR}/src/tydra/render-data.hh
+         ${PROJECT_SOURCE_DIR}/src/tydra/texture-util.cc
+-        ${PROJECT_SOURCE_DIR}/src/tydra/texture-util.hh
+         )
+ endif (TINYUSDZ_WITH_TYDRA)
+ 
+@@ -442,6 +518,7 @@ if(TINYUSDZ_WITH_PXR_COMPAT_API)
+   list(APPEND TINYUSDZ_SOURCES ${PROJECT_SOURCE_DIR}/src/pxr-compat.cc)
+ endif()
+ 
++set(TINYUSDZ_C_API_HEADERS ${PROJECT_SOURCE_DIR}/c-tinyusd.h)
+ set(TINYUSDZ_C_API_SOURCES ${PROJECT_SOURCE_DIR}/src/c-tinyusd.cc)
+ 
+ set(TINYUSDZ_DEP_SOURCES
+@@ -922,10 +999,15 @@ endif()
+ #add_library(${TINYUSDZ_TARGET_STATIC} STATIC $<TARGET_OBJECTS:tinyusdz_object>)
+ #add_sanitizers(${TINYUSDZ_TARGET_STATIC})
+ 
+-add_library(${TINYUSDZ_TARGET_STATIC} STATIC ${TINYUSDZ_SOURCES} ${TINYUSDZ_DEP_SOURCES} ${TINYUSDZ_EXT_SOURCES})
++add_library(${TINYUSDZ_TARGET_STATIC} STATIC ${TINYUSDZ_HEADERS} ${TINYUSDZ_NONSTD_HEADERS} ${TINYUSDZ_TYDRA_HEADERS} ${TINYUSDZ_SOURCES} ${TINYUSDZ_DEP_SOURCES} ${TINYUSDZ_EXT_SOURCES})
+ set_target_properties(${TINYUSDZ_TARGET_STATIC} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+ add_sanitizers(${TINYUSDZ_TARGET_STATIC})
+ #set_target_properties(tinyusdz_object PROPERTIES FOLDER "tinyusdz")
++install(TARGETS ${TINYUSDZ_TARGET_STATIC} EXPORT tinyusdz RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
++install(FILES ${TINYUSDZ_HEADERS} DESTINATION include/tinyusdz CONFIGURATIONS Release)
++install(FILES ${TINYUSDZ_NONSTD_HEADERS} DESTINATION include/tinyusdz/nonstd CONFIGURATIONS Release)
++install(FILES ${TINYUSDZ_TYDRA_HEADERS} DESTINATION include/tinyusdz/tydra CONFIGURATIONS Release)
++target_include_directories(${TINYUSDZ_TARGET_STATIC} PUBLIC $<INSTALL_INTERFACE:include/tinyusdz>)
+ 
+ # Target with namespace
+ add_library(${TINYUSDZ_TARGET_STATIC_NS} ALIAS ${TINYUSDZ_TARGET_STATIC})
+@@ -937,6 +1019,7 @@ if(TINYUSDZ_BUILD_SHARED_LIBS)
+   add_library(
+     ${TINYUSDZ_TARGET} SHARED ${TINYUSDZ_SOURCES} ${TINYUSDZ_DEP_SOURCES} ${TINYUSDZ_EXT_SOURCES})
+   add_sanitizers(${TINYUSDZ_TARGET})
++  install(TARGETS ${TINYUSDZ_TARGET} EXPORT tinyusdz RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+ 
+   # for dllexport
+   target_compile_definitions(${TINYUSDZ_TARGET} PRIVATE "TINYUSDZ_COMPILE_LIBRARY")
+@@ -1118,7 +1201,7 @@ endforeach()
+ 
+ if(TINYUSDZ_WITH_C_API)
+   if(TINYUSDZ_BUILD_SHARED_LIBS)
+-    add_library(${BUILD_TARGET_C} SHARED ${TINYUSDZ_C_API_SOURCES})
++    add_library(${BUILD_TARGET_C} SHARED ${TINYUSDZ_C_API_HEADERS} ${TINYUSDZ_C_API_SOURCES})
+     # Link with static(object) version of libtinyusdz to make dll monolitic
+     # TODO: Build TINYUSDZ_TARGET_STATIC as Object?
+     target_link_libraries(${BUILD_TARGET_C} PRIVATE ${TINYUSDZ_TARGET_STATIC})
+@@ -1126,12 +1209,15 @@ if(TINYUSDZ_WITH_C_API)
+     target_compile_definitions(${BUILD_TARGET_C} PRIVATE "TINYUSDZ_SHARED_LIBRARY")
+     target_include_directories(
+       ${BUILD_TARGET_C} PRIVATE ${PROJECT_SOURCE_DIR}/src)
++    install(TARGETS ${BUILD_TARGET_C} EXPORT tinyusdz RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+   endif() 
+ 
+-  add_library(${BUILD_TARGET_C}_static STATIC ${TINYUSDZ_C_API_SOURCES})
++  add_library(${BUILD_TARGET_C}_static STATIC ${TINYUSDZ_C_API_HEADERS} ${TINYUSDZ_C_API_SOURCES})
+   target_link_libraries(${BUILD_TARGET_C}_static PRIVATE ${TINYUSDZ_TARGET_STATIC})
+   target_include_directories(
+     ${BUILD_TARGET_C}_static PRIVATE ${PROJECT_SOURCE_DIR}/src)
++  install(TARGETS ${BUILD_TARGET_C}_static EXPORT tinyusdz RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
++  install(FILES ${TINYUSDZ_C_API_HEADERS} DESTINATION include/tinyusdz CONFIGURATIONS Release)
+ endif()
+ 
+ if(TINYUSDZ_WITH_PYTHON)
+@@ -1368,3 +1454,13 @@ if(WIN32)
+                                            "${CMAKE_CURRENT_SOURCE_DIR}")
+   endif()
+ endif()
++
++install( EXPORT tinyusdz
++  FILE tinyusdzConfig.cmake
++  COMPONENT tinyusdz
++  NAMESPACE tinyusdz::
++  DESTINATION lib/cmake/tinyusdz)
++include( CMakePackageConfigHelpers )
++write_basic_package_version_file( tinyusdzConfigVersion.cmake
++  VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}
++  COMPATIBILITY AnyNewerVersion)
+\ No newline at end of file
+
+warning: in the working copy of 'CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
