@@ -1,11 +1,12 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO assimp/assimp
-    REF fb375dd8c0a032106a2122815fb18dffe0283721
-    SHA512 bfeb877208b26b9f5712b4eedc61bac695d12a8e4df9f0ffc8fc1cefc12aa4483ab779f6aa2f3eb9fc2c3d26067728ace98bd94df07e37bc4c70e9ee4f65d885
+    REF "v${VERSION}"
+    SHA512 dc9637b183a1ab4c87d3548b1cacf4278fc5d30ffa4ca35436f94723c20b916932791e8e2c2f0d2a63786078457e61a42fb7aac8462551172f7f5bd2582ad9a9
     HEAD_REF master
     PATCHES
         build_fixes.patch
+        tinyusdz.patch
 )
 
 file(REMOVE "${SOURCE_PATH}/cmake-modules/FindZLIB.cmake")
@@ -33,6 +34,7 @@ vcpkg_cmake_configure(
         -DASSIMP_BUILD_ZLIB=OFF
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
         -DASSIMP_BUILD_VRML_IMPORTER=OFF # requires meshlab
+        -DASSIMP_BUILD_USD_IMPORTER=ON
         -DASSIMP_BUILD_TESTS=OFF
         -DASSIMP_WARNINGS_AS_ERRORS=OFF
         -DASSIMP_IGNORE_GIT_HASH=ON
