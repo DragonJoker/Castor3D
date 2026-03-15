@@ -858,7 +858,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 				${zlibLibPathDbg}
 				${freetypeLibPathDbg}
 			)
-		elseif ()
+		else ()
 			if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
 				get_filename_component( ZLibLibPath ${ZLIB_LIBRARY} PATH )
 				set( ZLibLibPath ${ZLibLibPath}/zlib1.dll )

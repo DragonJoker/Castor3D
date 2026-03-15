@@ -207,12 +207,12 @@ namespace c3d
 			sectionContext.addPopParser( cuT( "}" ), parserEnd< DataT, ComponentT > );
 		}
 
-		template< typename ComponentT, ParameterType ValueT >
+		template< typename ComponentT, BaseDataSection SectionIdT, ParameterType ValueT >
 		static void writeValueParser( AttributeParsers & result
 			, String const & parserName )
 		{
-			BlockParserContextT< SubmeshContext > submeshContext{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
-			submeshContext.addParser( parserName, parserSubmeshComponentValue< ComponentT >, { makeParameter< ValueT >() } );
+			BlockParserContextT< SubmeshContext > componentContext{ result, SectionIdT, CSCNSection::eSubmesh };
+			componentContext.addParser( parserName, parserSubmeshComponentValue< ComponentT >, { makeParameter< ValueT >() } );
 		}
 
 		static void writeUVParser( AttributeParsers & result
@@ -416,42 +416,42 @@ namespace c3d
 		{
 		case SubmeshData::ePositions:
 			smshbase::writeParser< PositionsComponent, smshbase::BaseDataSection::ePositions, ParameterType::ePoint3F >( result, "positions" );
-			smshbase::writeValueParser< PositionsComponent, ParameterType::ePoint3F >( result, "position" );
-			smshbase::writeValueParser< PositionsComponent, ParameterType::ePoint3F >( result, "vertex" );
+			smshbase::writeValueParser< PositionsComponent, smshbase::BaseDataSection::ePositions, ParameterType::ePoint3F >( result, "position" );
+			smshbase::writeValueParser< PositionsComponent, smshbase::BaseDataSection::ePositions, ParameterType::ePoint3F >( result, "vertex" );
 			break;
 		case SubmeshData::eNormals:
 			smshbase::writeParser< NormalsComponent, smshbase::BaseDataSection::eNormals, ParameterType::ePoint3F >( result, "normals" );
-			smshbase::writeValueParser< NormalsComponent, ParameterType::ePoint3F >( result, "normal" );
+			smshbase::writeValueParser< NormalsComponent, smshbase::BaseDataSection::eNormals, ParameterType::ePoint3F >( result, "normal" );
 			break;
 		case SubmeshData::eTangents:
 			smshbase::writeParser< TangentsComponent, smshbase::BaseDataSection::eTangents, ParameterType::ePoint4F >( result, "tangents" );
-			smshbase::writeValueParser< TangentsComponent, ParameterType::ePoint4F >( result, "tangent" );
+			smshbase::writeValueParser< TangentsComponent, smshbase::BaseDataSection::eTangents, ParameterType::ePoint4F >( result, "tangent" );
 			break;
 		case SubmeshData::eBitangents:
 			smshbase::writeParser< BitangentsComponent, smshbase::BaseDataSection::eBitangents, ParameterType::ePoint3F >( result, "bitangents" );
-			smshbase::writeValueParser< BitangentsComponent, ParameterType::ePoint3F >( result, "bitangent" );
+			smshbase::writeValueParser< BitangentsComponent, smshbase::BaseDataSection::eBitangents, ParameterType::ePoint3F >( result, "bitangent" );
 			break;
 		case SubmeshData::eTexcoords0:
 			smshbase::writeParser< Texcoords0Component, smshbase::BaseDataSection::eTexcoords0, ParameterType::ePoint3F >( result, "texcoords0" );
 			smshbase::writeUVParser( result, "uv" );
-			smshbase::writeValueParser< Texcoords0Component, ParameterType::ePoint3F >( result, "uvw" );
-			smshbase::writeValueParser< Texcoords0Component, ParameterType::ePoint3F >( result, "texcoord0" );
+			smshbase::writeValueParser< Texcoords0Component, smshbase::BaseDataSection::eTexcoords0, ParameterType::ePoint3F >( result, "uvw" );
+			smshbase::writeValueParser< Texcoords0Component, smshbase::BaseDataSection::eTexcoords0, ParameterType::ePoint3F >( result, "texcoord0" );
 			break;
 		case SubmeshData::eTexcoords1:
 			smshbase::writeParser< Texcoords1Component, smshbase::BaseDataSection::eTexcoords1, ParameterType::ePoint3F >( result, "texcoords1" );
-			smshbase::writeValueParser< Texcoords1Component, ParameterType::ePoint3F >( result, "texcoord1" );
+			smshbase::writeValueParser< Texcoords1Component, smshbase::BaseDataSection::eTexcoords1, ParameterType::ePoint3F >( result, "texcoord1" );
 			break;
 		case SubmeshData::eTexcoords2:
 			smshbase::writeParser< Texcoords2Component, smshbase::BaseDataSection::eTexcoords2, ParameterType::ePoint3F >( result, "texcoords2" );
-			smshbase::writeValueParser< Texcoords2Component, ParameterType::ePoint3F >( result, "texcoord2" );
+			smshbase::writeValueParser< Texcoords2Component, smshbase::BaseDataSection::eTexcoords2, ParameterType::ePoint3F >( result, "texcoord2" );
 			break;
 		case SubmeshData::eTexcoords3:
 			smshbase::writeParser< Texcoords3Component, smshbase::BaseDataSection::eTexcoords3, ParameterType::ePoint3F >( result, "texcoords3" );
-			smshbase::writeValueParser< Texcoords3Component, ParameterType::ePoint3F >( result, "texcoord3" );
+			smshbase::writeValueParser< Texcoords3Component, smshbase::BaseDataSection::eTexcoords3, ParameterType::ePoint3F >( result, "texcoord3" );
 			break;
 		case SubmeshData::eColours:
 			smshbase::writeParser< ColoursComponent, smshbase::BaseDataSection::eColours, ParameterType::ePoint3F >( result, "colours" );
-			smshbase::writeValueParser< ColoursComponent, ParameterType::ePoint3F >( result, "colour" );
+			smshbase::writeValueParser< ColoursComponent, smshbase::BaseDataSection::eColours, ParameterType::ePoint3F >( result, "colour" );
 			break;
 		default:
 			break;
