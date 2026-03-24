@@ -290,7 +290,7 @@ namespace c3d
 			{
 			}
 
-			CRG_API void resetPipeline( uint32_t index )
+			void resetPipeline( uint32_t index )
 			{
 				resetCommandBuffer( index );
 				m_bottom.pipeline.resetPipeline( m_bottom.pipeline.getProgram( index ), index );

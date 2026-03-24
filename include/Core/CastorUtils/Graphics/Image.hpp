@@ -60,7 +60,7 @@ namespace c3d
 			CU_CheckInvariants();
 		}
 
-		CU_API Image( String const & name
+		Image( String const & name
 			, Size const & size
 			, PixelFormat format
 			, uint8_t const * buffer
@@ -69,7 +69,7 @@ namespace c3d
 		{
 		}
 
-		CU_API Image( String const & name
+		Image( String const & name
 			, Size const & size
 			, PixelFormat format
 			, ByteArray const & buffer
@@ -78,7 +78,7 @@ namespace c3d
 		{
 		}
 
-		CU_API Image( String const & name
+		Image( String const & name
 			, ImageMemoryLayout layout
 			, PxBufferBaseUPtr buffer
 			, PxBufferBaseUPtr alphaChannel = nullptr )
@@ -86,7 +86,7 @@ namespace c3d
 		{
 		}
 
-		CU_API Image( String const & name
+		Image( String const & name
 			, PxBufferBase const & buffer )
 			: Image{ name, {}, buffer }
 		{

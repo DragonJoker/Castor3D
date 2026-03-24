@@ -5,6 +5,13 @@ CU_ImplementSmartPtr( c3d, BoundingSphere )
 
 namespace c3d
 {
+	BoundingSphere::BoundingSphere()noexcept = default;
+	BoundingSphere::BoundingSphere( BoundingSphere const & ) = default;
+	BoundingSphere::BoundingSphere( BoundingSphere && )noexcept = default;
+	BoundingSphere & BoundingSphere::operator=( BoundingSphere const & ) = default;
+	BoundingSphere & BoundingSphere::operator=( BoundingSphere && )noexcept = default;
+	BoundingSphere::~BoundingSphere()noexcept = default;
+
 	BoundingSphere::BoundingSphere( Point3f const & center, float radius )
 		: BoundingContainer3D{ center }
 		, m_radius( radius )

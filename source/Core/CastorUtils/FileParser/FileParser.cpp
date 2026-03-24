@@ -270,6 +270,8 @@ namespace c3d
 
 	//*********************************************************************************************
 
+	PreprocessedFile::~PreprocessedFile()noexcept = default;
+
 	PreprocessedFile::PreprocessedFile( FileParser & parser )
 		: m_parser{ parser }
 	{
@@ -517,6 +519,8 @@ namespace c3d
 	}
 
 	//*********************************************************************************************
+
+	FileParser::~FileParser()noexcept = default;
 
 	FileParser::FileParser( SectionId rootSectionId
 		, void * rootBlockContext )

@@ -13,14 +13,16 @@ namespace c3d
 	template< uint8_t Dimension >
 	class BoundingContainer
 	{
+	protected:
+		BoundingContainer() = default;
+		BoundingContainer( BoundingContainer const & ) = default;
+		BoundingContainer( BoundingContainer && )noexcept = default;
+		BoundingContainer & operator=( BoundingContainer const & ) = default;
+		BoundingContainer & operator=( BoundingContainer && )noexcept = default;
+		virtual ~BoundingContainer()noexcept = default;
+
 	public:
 		using MyPoint = Point< float, Dimension >;
-		CU_INL_API BoundingContainer() = default;
-		CU_INL_API BoundingContainer( BoundingContainer const & ) = default;
-		CU_INL_API BoundingContainer( BoundingContainer && )noexcept = default;
-		CU_INL_API BoundingContainer & operator=( BoundingContainer const & ) = default;
-		CU_INL_API BoundingContainer & operator=( BoundingContainer && )noexcept = default;
-		CU_INL_API virtual ~BoundingContainer()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from center.
@@ -43,7 +45,7 @@ namespace c3d
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est dans le conteneur.
 		 */
-		CU_API virtual bool isWithin( MyPoint const & point )const = 0;
+		virtual bool isWithin( MyPoint const & point )const = 0;
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within.
@@ -54,7 +56,7 @@ namespace c3d
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est sur la limite.
 		 */
-		CU_API virtual bool isOnLimits( MyPoint const & point )const = 0;
+		virtual bool isOnLimits( MyPoint const & point )const = 0;
 		/**
 		 *\~english
 		 *\return		This container's center.

@@ -52,7 +52,7 @@ namespace c3d
 	public:
 		CU_API PreprocessedFile( PreprocessedFile && rhs )noexcept;
 		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs )noexcept;
-		CU_INL_API virtual ~PreprocessedFile()noexcept = default;
+		CU_API virtual ~PreprocessedFile()noexcept;
 
 		CU_API explicit PreprocessedFile( FileParser & parser );
 		CU_API PreprocessedFile( FileParser & parser
@@ -149,7 +149,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_INL_API virtual ~FileParser()noexcept = default;
+		CU_API virtual ~FileParser()noexcept;
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers.

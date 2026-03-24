@@ -6,7 +6,9 @@
 
 #define BCDEC_IMPLEMENTATION
 #define BCDEC_BC4BC5_PRECISE
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <bcdec.h>
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 #pragma GCC diagnostic ignored "-Wrestrict"
 

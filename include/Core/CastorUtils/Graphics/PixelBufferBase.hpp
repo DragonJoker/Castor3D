@@ -482,7 +482,7 @@ namespace c3d
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
+		static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
 			, Size const & size
 			, uint32_t layers
 			, uint32_t levels
@@ -523,7 +523,7 @@ namespace c3d
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseUPtr create( Size const & size
+		static PxBufferBaseUPtr create( Size const & size
 			, uint32_t layers
 			, uint32_t levels
 			, PixelFormat wantedFormat
@@ -562,7 +562,7 @@ namespace c3d
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
+		static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
 			, std::atomic_bool const * interrupt
 			, Size const & size
 			, PixelFormat wantedFormat
@@ -600,7 +600,7 @@ namespace c3d
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
+		static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
 			, Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
@@ -634,7 +634,7 @@ namespace c3d
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseUPtr create( Size const & size
+		static PxBufferBaseUPtr create( Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM

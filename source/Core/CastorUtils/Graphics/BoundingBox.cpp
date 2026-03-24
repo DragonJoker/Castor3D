@@ -6,6 +6,13 @@ CU_ImplementSmartPtr( c3d, BoundingBox )
 
 namespace c3d
 {
+	BoundingBox::BoundingBox()noexcept = default;
+	BoundingBox::BoundingBox( BoundingBox const & ) = default;
+	BoundingBox::BoundingBox( BoundingBox && )noexcept = default;
+	BoundingBox & BoundingBox::operator=( BoundingBox const & ) = default;
+	BoundingBox & BoundingBox::operator=( BoundingBox && )noexcept = default;
+	BoundingBox::~BoundingBox()noexcept = default;
+
 	BoundingBox::BoundingBox( Point3f const & min, Point3f const & max )
 		: BoundingContainer3D{ min + ( max - min ) / 2.0f }
 		, m_dimensions{ max - min }

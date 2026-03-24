@@ -12,7 +12,12 @@ namespace c3d
 		: public BoundingContainer3D
 	{
 	public:
-		CU_INL_API BoundingSphere() = default;
+		CU_API BoundingSphere()noexcept;
+		CU_API BoundingSphere( BoundingSphere const & );
+		CU_API BoundingSphere( BoundingSphere && )noexcept;
+		CU_API BoundingSphere & operator=( BoundingSphere const & );
+		CU_API BoundingSphere & operator=( BoundingSphere && )noexcept;
+		CU_API ~BoundingSphere()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Specified constructor.

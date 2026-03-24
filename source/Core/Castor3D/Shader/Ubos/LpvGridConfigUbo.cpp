@@ -44,6 +44,7 @@ namespace c3d
 
 	LpvGridConfigUbo::LpvGridConfigUbo( RenderDevice const & device )
 		: UboT{ device }
+		, m_grid{ 1u, 1.0f, { 1.0f, 1.0f, 1.0f }, { -1.0f, -1.0f, -1.0f }, 1.0f }
 	{
 	}
 

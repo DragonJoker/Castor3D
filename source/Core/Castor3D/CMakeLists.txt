@@ -2357,6 +2357,11 @@ else ()
 		GIT_REPOSITORY https://github.com/zeux/meshoptimizer
 		GIT_TAG 1c4ed42b3c83994db3a4b079d3f6042885e47692 )
 	FetchContent_MakeAvailable( meshoptimizer )
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			meshoptimizer::meshoptimizer
+			mikktspace
+	)
 endif ()
 
 if ( CASTOR_C3D_NEEDS_GLSL )

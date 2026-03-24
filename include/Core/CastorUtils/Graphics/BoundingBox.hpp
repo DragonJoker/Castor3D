@@ -12,7 +12,12 @@ namespace c3d
 		: public BoundingContainer3D
 	{
 	public:
-		CU_INL_API BoundingBox() = default;
+		CU_API BoundingBox()noexcept;
+		CU_API BoundingBox( BoundingBox const & );
+		CU_API BoundingBox( BoundingBox && )noexcept;
+		CU_API BoundingBox & operator=( BoundingBox const & );
+		CU_API BoundingBox & operator=( BoundingBox && )noexcept;
+		CU_API ~BoundingBox()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Constructor from min and max extents.

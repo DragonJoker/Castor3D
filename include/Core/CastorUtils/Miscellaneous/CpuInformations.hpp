@@ -43,7 +43,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API CpuInformations() = default;
+		CU_INL_API CpuInformations() = default;
 		/**
 		 *\~english
 		 *\return		The number of cores (Physical + Virtual).
