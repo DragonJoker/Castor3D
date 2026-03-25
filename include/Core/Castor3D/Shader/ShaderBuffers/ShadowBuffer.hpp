@@ -29,9 +29,9 @@ namespace c3d
 		 *\~french
 		 *\brief		Lees données du buffer.
 		 */
-		auto & getData()
+		AllShadowData & getData()noexcept
 		{
-			return UboT< AllShadowData >::getData();
+			return UboT< AllShadowData >::getNCData();
 		}
 	};
 }
