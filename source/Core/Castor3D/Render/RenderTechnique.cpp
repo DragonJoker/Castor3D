@@ -119,9 +119,8 @@ namespace c3d
 					updater.index = uint32_t( index );
 					shadowMap.update( updater );
 
-					AllShadowData shadowData{};
+					AllShadowData & shadowData = shadowBuffer.getData();
 					light.fillShadowBuffer( shadowData );
-					shadowBuffer.setData( c3d::move( shadowData ) );
 
 					switch ( updater.light->getGlobalIlluminationType() )
 					{
