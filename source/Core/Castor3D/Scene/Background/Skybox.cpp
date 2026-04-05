@@ -405,7 +405,7 @@ namespace c3d
 	{
 	}
 
-	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )const
+	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		static Point3f const Scale{ 1, -1, 1 };
 

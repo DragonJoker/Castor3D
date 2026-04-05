@@ -372,7 +372,7 @@ namespace c3d
 		m_ibl.reset();
 	}
 
-	void SceneBackground::update( CpuUpdater & updater )const
+	void SceneBackground::update( CpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{

@@ -175,7 +175,7 @@ namespace c3d
 	{
 	}
 
-	void ImageBackground::doCpuUpdate( CpuUpdater & updater )const
+	void ImageBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		static c3d::Point3f const Scale{ 1, -1, 1 };
 		static c3d::Quaternion const Orientation{ c3d::Quaternion::identity() };

@@ -779,7 +779,7 @@ namespace atmosphere_scattering
 	{
 	}
 
-	void AtmosphereBackground::doCpuUpdate( c3d::CpuUpdater & updater )const
+	void AtmosphereBackground::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		static c3d::Point3f const Scale{ 1, -1, 1 };
 		static c3d::Quaternion const Orientation{ c3d::Quaternion::identity() };

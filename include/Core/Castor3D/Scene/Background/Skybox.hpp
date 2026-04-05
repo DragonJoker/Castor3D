@@ -296,7 +296,7 @@ namespace c3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doCpuUpdate( CpuUpdater & updater )const override;
+		void doCpuUpdate( CpuUpdater & updater )override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
 		void doUpload( UploadData & uploader )override;
 		void doAddPassBindings( crg::FramePass & pass
