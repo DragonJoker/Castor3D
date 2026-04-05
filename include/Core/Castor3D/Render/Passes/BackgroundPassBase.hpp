@@ -65,7 +65,7 @@ namespace c3d
 
 	protected:
 		RenderDevice const & m_device;
-		SceneBackground const * m_background;
+		SceneBackground * m_background;
 		Viewport m_viewport;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
 	};

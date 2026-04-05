@@ -105,7 +105,7 @@ namespace c3d
 		*\param[in] updater
 		*	Les données d'update.
 		*/
-		C3D_API void update( CpuUpdater & updater )const;
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		*\~english
 		*\brief
@@ -503,7 +503,7 @@ namespace c3d
 	private:
 		virtual bool doInitialise( RenderDevice const & device ) = 0;
 		virtual void doCleanup() = 0;
-		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
+		virtual void doCpuUpdate( CpuUpdater & updater ) = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
 		virtual void doUpload( UploadData & uploader ) = 0;
 		virtual void doAddPassBindings( crg::FramePass & pass

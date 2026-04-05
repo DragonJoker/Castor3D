@@ -200,7 +200,7 @@ namespace atmosphere_scattering
 	private:
 		bool doInitialise( c3d::RenderDevice const & device )override;
 		void doCleanup()override;
-		void doCpuUpdate( c3d::CpuUpdater & updater )const override;
+		void doCpuUpdate( c3d::CpuUpdater & updater )override;
 		void doGpuUpdate( c3d::GpuUpdater & updater )const override;
 		void doUpload( c3d::UploadData & uploader )override;
 		/**

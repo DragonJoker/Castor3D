@@ -99,7 +99,7 @@ namespace c3d
 		m_textureId.destroy();
 	}
 
-	void ColourBackground::doCpuUpdate( CpuUpdater & updater )const
+	void ColourBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		static c3d::Point3f const Scale{ 1, -1, 1 };
 		static c3d::Quaternion const Orientation{ c3d::Quaternion::identity() };
