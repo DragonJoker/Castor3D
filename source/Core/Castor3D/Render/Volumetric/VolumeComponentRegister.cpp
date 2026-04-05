@@ -77,7 +77,12 @@ namespace c3d
 			: it->id;
 	}
 
-	VolumeComponentPlugin const & VolumeComponentRegister::getPlugin( uint32_t componentId )const
+	VolumeComponentPlugin & VolumeComponentRegister::getPlugin( String const & componentType )const
+	{
+		return getPlugin( getNameId( componentType ) );
+	}
+
+	VolumeComponentPlugin & VolumeComponentRegister::getPlugin( uint32_t componentId )const
 	{
 		if ( componentId > m_registered.size()
 			|| componentId == 0u
@@ -133,6 +138,13 @@ namespace c3d
 		}
 	}
 
+	void VolumeComponentRegister::registerCamera( Camera const & camera
+		, c3d::Texture const * depthObj )const
+	{
+		for ( auto & component : m_registered )
+			component.plugin->registerCamera( camera, depthObj );
+	}
+
 	Vector< shader::VolumeComponentShaderPtr > VolumeComponentRegister::createShaders( sdw::ShaderWriter & writer
 		, shader::VolumeShaders const & volumeShaders
 		, c3d::Extent2D const & targetExtent
@@ -145,5 +157,31 @@ namespace c3d
 			if ( checkFlag( enabledPlugins, 0x00000001u << component.plugin->getId() ) )
 				result.emplace_back( component.plugin->createComponentsShader( writer, volumeShaders, targetExtent, hasDepth, bindingId ) );
 		return result;
+	}
+
+	void VolumeComponentRegister::registerScenePasses( crg::ResourcesCache & resources
+		, crg::FramePassGroup & graph
+		, c3d::Scene const & scene )const
+	{
+		for ( auto & component : m_registered )
+			component.plugin->registerScenePasses( resources, graph, scene );
+	}
+
+	void VolumeComponentRegister::registerCameraPasses( crg::ResourcesCache & resources
+		, crg::FramePassGroup & graph
+		, c3d::Camera const & camera )const
+	{
+		for ( auto & component : m_registered )
+			component.plugin->registerCameraPasses( resources, graph, camera );
+	}
+
+	void VolumeComponentRegister::registerBindings( crg::FramePass & pass
+		, uint32_t enabledPlugins
+		, Camera const & camera
+		, uint32_t & bindingId )const
+	{
+		for ( auto & component : m_registered )
+			if ( checkFlag( enabledPlugins, 0x00000001u << component.plugin->getId() ) )
+				component.plugin->registerBindings( pass, camera, bindingId );
 	}
 }

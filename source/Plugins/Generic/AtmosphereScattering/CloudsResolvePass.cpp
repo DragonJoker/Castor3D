@@ -96,10 +96,39 @@ namespace atmosphere_scattering
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
+			auto offsetX = writer.declConstant( "offsetX"
+				, 1.0_f / targetSize.x() );
+			auto offsetY = writer.declConstant( "offsetY"
+				, 1.0_f / targetSize.y() );
+			auto kernel = c3d::Vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
+					, 2.0_f / 16.0_f, 4.0_f / 16.0_f, 2.0_f / 16.0_f
+					, 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f };
+			auto offsets = c3d::Vector< sdw::Vec2 >{ vec2( -offsetX, offsetY ) // top-left
+					, vec2( 0.0_f, offsetY ) // top-center
+					, vec2( offsetX, offsetY ) // top-right
+					, vec2( -offsetX, 0.0_f )   // center-left
+					, vec2( 0.0_f, 0.0_f )   // center-center
+					, vec2( offsetX, 0.0_f )   // center-right
+					, vec2( -offsetX, -offsetY ) // bottom-left
+					, vec2( 0.0_f, -offsetY ) // bottom-center
+					, vec2( offsetX, -offsetY ) };  // bottom-right
+
+			auto gaussianBlur = writer.implementFunction< sdw::Vec4 >( "gaussianBlur"
+				, [&writer, &kernel, &offsets]( sdw::CombinedImage2DRgba32 const & tex
+					, sdw::Vec2 const & uv )
+				{
+					auto col = writer.declLocale( "col", vec4( 0.0_f ) );
+					for ( uint32_t i = 0u; i < 9u; ++i )
+						col += kernel[i] * tex.sample( uv + offsets[i] );
+					writer.returnStmt( col );
+				}
+				, sdw::InCombinedImage2DRgba32{ writer, "tex" }
+				, sdw::InVec2{ writer, "uv" } );
+
 			if constexpr ( useUnified )
 			{
 				writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &atmosphere, &scattering, hasDepth, &depthMap
-						, &scatteringMap, &transmittanceMap, &targetSize]( sdw::FragmentIn const & in
+						, &gaussianBlur, &scatteringMap, &transmittanceMap, &targetSize]( sdw::FragmentIn const & in
 					, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 					{
 						auto texCoords = writer.declLocale( "texCoords"
@@ -111,7 +140,7 @@ namespace atmosphere_scattering
 						auto inscatter = writer.declLocale( "inscatter"
 							, scatteringMap.sample( texCoords ) );
 						auto transmittance = writer.declLocale( "transmittance"
-							, transmittanceMap.sample( texCoords ) );
+							, gaussianBlur( transmittanceMap, texCoords ) );
 						auto ray = writer.declLocale( "ray"
 							, atmosphere.castRay( texCoords ) );
 						auto sun = writer.declLocale( "sun"
@@ -128,40 +157,6 @@ namespace atmosphere_scattering
 			}
 			else
 			{
-				auto offsetX = writer.declConstant( "offsetX"
-					, 1.0_f / targetSize.x() );
-				auto offsetY = writer.declConstant( "offsetY"
-					, 1.0_f / targetSize.y() );
-				auto kernel = c3d::Vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
-						, 2.0_f / 16.0_f, 4.0_f / 16.0_f, 2.0_f / 16.0_f
-						, 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f };
-				auto offsets = c3d::Vector< sdw::Vec2 >{ vec2( -offsetX, offsetY ) // top-left
-						, vec2( 0.0_f, offsetY ) // top-center
-						, vec2( offsetX, offsetY ) // top-right
-						, vec2( -offsetX, 0.0_f )   // center-left
-						, vec2( 0.0_f, 0.0_f )   // center-center
-						, vec2( offsetX, 0.0_f )   // center-right
-						, vec2( -offsetX, -offsetY ) // bottom-left
-						, vec2( 0.0_f, -offsetY ) // bottom-center
-						, vec2( offsetX, -offsetY ) };  // bottom-right
-
-				auto gaussianBlur = writer.implementFunction< sdw::Vec4 >( "gaussianBlur"
-					, [&writer, &kernel, &offsets]( sdw::CombinedImage2DRgba32 const & tex
-						, sdw::Vec2 const & uv )
-					{
-						auto col = writer.declLocale( "col"
-							, vec4( 0.0_f ) );
-
-						for ( uint32_t i = 0u; i < 9u; ++i )
-						{
-							col += kernel[i] * tex.sample( uv + offsets[i] );
-						}
-
-						writer.returnStmt( col );
-					}
-					, sdw::InCombinedImage2DRgba32{ writer, "tex" }
-					, sdw::InVec2{ writer, "uv" } );
-
 				auto computeLighting = writer.implementFunction< sdw::Vec3 >( "computeLighting"
 					, [&writer, &c3d_cloudsData]( sdw::Vec3 const & skyColor
 						, sdw::Vec3 const & cloudsColor
@@ -265,8 +260,8 @@ namespace atmosphere_scattering
 		pass.addInputSampledT( *multiscatter.getSampledLastAttach(), cloudsres::Bindings::eMultiScatter, linearClampSampler );
 		pass.addInputSampledT( *skyview.getSampledLastAttach(), cloudsres::Bindings::eSkyView, linearClampSampler );
 		pass.addInputSampledT( *volume.getSampledLastAttach(), cloudsres::Bindings::eVolume, linearClampSampler );
-		pass.addInputSampledT( *inscatterResult.getSampledLastAttach(), cloudsres::Bindings::eMapScattering );
-		pass.addInputSampledT( *transmittanceResult.getSampledLastAttach(), cloudsres::Bindings::eMapTransmittance );
+		pass.addInputSampledT( *inscatterResult.getSampledLastAttach(), cloudsres::Bindings::eMapScattering, linearClampSampler );
+		pass.addInputSampledT( *transmittanceResult.getSampledLastAttach(), cloudsres::Bindings::eMapTransmittance, linearClampSampler );
 		if ( depthObj )
 			pass.addInputSampledT( *depthObj->getSampledLastAttach(), cloudsres::Bindings::eMapDepth );
 		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );

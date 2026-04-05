@@ -3,6 +3,7 @@
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
+#include "AtmosphereScattering/CloudsVolumePlugin.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
@@ -11,6 +12,7 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/Volumetric/VolumeComponentRegister.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
@@ -37,6 +39,7 @@ namespace atmosphere_scattering
 			CloudsConfig clouds{};
 			DensityProfileLayer * densityLayer{};
 			AtmosphereBackgroundUPtr background{};
+			CloudsVolumePlugin * plugin{};
 		};
 
 		static c3d::String getPrefix( AtmosphereContext const & context )
@@ -57,8 +60,10 @@ namespace atmosphere_scattering
 		{
 			newBlockContext->sceneContext = blockContext;
 			newBlockContext->scene = blockContext->scene;
+			newBlockContext->plugin = &static_cast< CloudsVolumePlugin & >( blockContext->scene->getEngine()->getVolumeComponentsRegister().getPlugin( CloudsVolumePlugin::TypeName ) );
 			newBlockContext->background = c3d::makeUnique< AtmosphereBackground >( *blockContext->scene->getEngine()
-				, *blockContext->scene );
+				, *blockContext->scene
+				, *newBlockContext->plugin );
 		}
 		CU_EndAttributePushNewBlock( AtmosphereSection::eRoot )
 
@@ -74,14 +79,14 @@ namespace atmosphere_scattering
 				blockContext->background->setAtmosphereCfg( c3d::move( blockContext->atmosphere ) );
 				blockContext->background->setCloudsCfg( c3d::move( blockContext->clouds ) );
 				blockContext->background->setWeatherCfg( c3d::move( blockContext->weather ) );
-				blockContext->background->loadTransmittance( blockContext->transmittanceDim );
-				blockContext->background->loadMultiScatter( blockContext->multiScatterDim );
-				blockContext->background->loadAtmosphereVolume( blockContext->atmosphereVolumeDim );
-				blockContext->background->loadSkyView( blockContext->skyViewDim );
-				blockContext->background->loadWorley( blockContext->worleyDim );
-				blockContext->background->loadPerlinWorley( blockContext->perlinWorleyDim );
-				blockContext->background->loadCurl( blockContext->curlDim );
-				blockContext->background->loadWeather( blockContext->weatherDim );
+				blockContext->background->getVolumeData().loadTransmittance( blockContext->transmittanceDim );
+				blockContext->background->getVolumeData().loadMultiScatter( blockContext->multiScatterDim );
+				blockContext->background->getVolumeData().loadAtmosphereVolume( blockContext->atmosphereVolumeDim );
+				blockContext->background->getVolumeData().loadSkyView( blockContext->skyViewDim );
+				blockContext->background->getVolumeData().loadWorley( blockContext->worleyDim );
+				blockContext->background->getVolumeData().loadPerlinWorley( blockContext->perlinWorleyDim );
+				blockContext->background->getVolumeData().loadCurl( blockContext->curlDim );
+				blockContext->background->getVolumeData().loadWeather( blockContext->weatherDim );
 				blockContext->scene->setBackground( c3d::ptrRefCast< c3d::SceneBackground >( blockContext->background ) );
 			}
 		}

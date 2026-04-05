@@ -20,18 +20,9 @@ namespace atmosphere_scattering
 	public:
 		CloudsVolumePass( crg::FramePassGroup & graph
 			, c3d::RenderDevice const & device
-			, AtmosphereScatteringUbo const & atmosphereUbo
 			, c3d::CameraUbo const & mainCameraUbo
-			, CameraUbo const & kmCameraUbo
-			, CloudsUbo const & weatherUbo
 			, c3d::Texture const & transmittance
-			, c3d::Texture const & multiscatter
-			, c3d::Texture const & skyview
-			, c3d::Texture const & volume
-			, c3d::Texture const & perlinWorley
-			, c3d::Texture const & worley
-			, c3d::Texture const & curl
-			, c3d::Texture const & weather
+			, c3d::Camera const & camera
 			, c3d::Texture const * depthObj
 			, c3d::Texture & scatteringResult
 			, c3d::Texture & transmittanceResult

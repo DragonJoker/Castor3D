@@ -265,8 +265,8 @@ namespace c3d
 
 		if ( it->baseId > MaxPassCombines )
 		{
-			CU_Failure( "Overflown pass combines count." );
-			CU_Exception( "Overflown pass combines count." );
+			CU_Failure( "Overflown material combines count." );
+			CU_Exception( "Overflown material combines count." );
 		}
 
 		fillPassComponentCombine( combine );
@@ -284,8 +284,8 @@ namespace c3d
 
 			if ( it == m_componentCombines.end() )
 			{
-				CU_Failure( "Pass components combination was not registered." );
-				CU_Exception( "Pass components combination was not registered." );
+				CU_Failure( "Material components combination was not registered." );
+				CU_Exception( "Material components combination was not registered." );
 			}
 
 			return PassComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
@@ -421,8 +421,8 @@ namespace c3d
 
 		if ( it == m_registered.end() )
 		{
-			CU_Failure( "Pass components combination doesn't contain any reflection/refraction component" );
-			CU_Exception( "Pass components combination doesn't contain any reflection/refraction component" );
+			CU_Failure( "Material components combination doesn't contain any reflection/refraction component" );
+			CU_Exception( "Material components combination doesn't contain any reflection/refraction component" );
 		}
 
 		return it->plugin->createReflRefrShader();
@@ -690,8 +690,8 @@ namespace c3d
 		if ( auto id = getNameId( componentType );
 			id != passcompreg::InvalidId )
 		{
-			log::error << "Pass component type [" << componentType << "] is already registered." << std::endl;
-			CU_Failure( "Pass component type is already registered" );
+			log::error << "Material component type [" << componentType << "] is already registered." << std::endl;
+			CU_Failure( "Material component type is already registered" );
 			return id;
 		}
 
@@ -708,8 +708,8 @@ namespace c3d
 
 		if ( id == passcompreg::InvalidId )
 		{
-			log::error << "Component type [" << componentType << "] was not found." << std::endl;
-			CU_Failure( "Component type was not found." );
+			log::error << "Material component type [" << componentType << "] was not found." << std::endl;
+			CU_Failure( "Material component type was not found." );
 			return;
 		}
 
@@ -735,8 +735,8 @@ namespace c3d
 			|| componentId == 0u
 			|| !m_registered[componentId - 1ULL].plugin )
 		{
-			CU_Failure( "Component ID was not found." );
-			CU_Exception( "Component ID was not found." );
+			CU_Failure( "Material component ID was not found." );
+			CU_Exception( "Material component ID was not found." );
 		}
 
 		return *m_registered[componentId - 1ULL].plugin;
@@ -827,7 +827,7 @@ namespace c3d
 			, parsers
 			, sections
 			, nullptr );
-		log::debug << "Registered component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
+		log::debug << "Registered material component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
 	}
 
 	void PassComponentRegister::unregisterComponent( PassComponentID id )noexcept
@@ -868,7 +868,7 @@ namespace c3d
 				}
 			}
 
-			log::debug << "Unregistered component " << id << " (" << componentDesc.name << ")" << std::endl;
+			log::debug << "Unregistered material component " << id << " (" << componentDesc.name << ")" << std::endl;
 			componentDesc.name.clear();
 			componentDesc.plugin.reset();
 		}

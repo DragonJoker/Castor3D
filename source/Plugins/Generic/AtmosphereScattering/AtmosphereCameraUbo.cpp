@@ -36,29 +36,22 @@ namespace atmosphere_scattering
 	c3d::MbString const CameraUbo::Buffer = "C3D_ATM_Camera";
 	c3d::MbString const CameraUbo::Data = "d";
 
-	CameraUbo::CameraUbo( c3d::RenderDevice const & device
-		, bool & dirty )
+	CameraUbo::CameraUbo( c3d::RenderDevice const & device )
 		: UboT{ device }
-		, m_position{ dirty }
-		, m_orientation{ dirty }
 	{
 	}
 
 	void CameraUbo::cpuUpdate( c3d::Size const & renderSize
 		, c3d::Camera const & camera
 		, bool isSafeBanded
-		, c3d::Point3f const & sunDirection
+		, c3d::Quaternion const & orientation
+		, c3d::Point3f const & kmPosition
 		, c3d::Vector3f const & planetPosition )
 	{
 		auto node = camera.getParent();
 		auto const & engine = *node->getScene()->getEngine();
 		auto position = c3d::Vector3f::fromUnit( node->getDerivedPosition(), engine.getLengthUnit() ) - planetPosition;
-		auto orientation = node->getDerivedOrientation();
 		auto length = c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() );
-
-		auto kmPosition = position.kilometres();
-		m_position = kmPosition;
-		m_orientation = orientation;
 
 		auto right{ c3d::Vector3f::fromKilometres( c3d::Point3f{ 1.0, 0.0, 0.0 } ) };
 		auto up{ c3d::Vector3f::fromKilometres( c3d::Point3f{ 0.0, 1.0, 0.0 } ) };
@@ -70,7 +63,7 @@ namespace atmosphere_scattering
 		auto proj = camera.getRescaledProjection( renderSize, length.kilometres(), isSafeBanded );
 
 		auto & data = getNCData();
-		data.position = m_position;
+		data.position = kmPosition;
 
 		position += planetPosition;
 		c3d::Matrix4x4f view;

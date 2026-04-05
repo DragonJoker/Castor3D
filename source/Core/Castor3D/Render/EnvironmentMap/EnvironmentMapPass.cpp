@@ -76,9 +76,12 @@ namespace c3d
 			, m_device
 			, nullptr
 			, m_background
+			, *m_camera
 			, m_renderUbo
 			, *m_sceneUbo
 			, m_colourRender
+			, nullptr
+			, nullptr
 			, true /*clearColour*/
 			, true /*clearDepth*/
 			, true /*forceVisible*/

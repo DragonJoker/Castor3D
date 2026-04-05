@@ -1,6 +1,7 @@
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
 #include "AtmosphereScattering/AtmosphereModel.hpp"
+#include "AtmosphereScattering/CloudsModel.hpp"
 
 #include <Castor3D/Engine.hpp>
 
@@ -159,7 +160,7 @@ namespace atmosphere_scattering
 					auto wasHittingGround = m_writer.declLocale( "wasHittingGround"
 						, interGround.valid() );
 
-					sdwIF( m_writer, ( ( !interGround.valid() ) || linearDepth < interGround.t() ) )
+					sdwIF( m_writer, linearDepth > 0.0_f )
 					{
 						interGround.t() = linearDepth;
 						interGround.point() = ray.step( linearDepth );
@@ -195,7 +196,7 @@ namespace atmosphere_scattering
 					{
 						auto clouds = m_writer.declLocale( "clouds"
 							, cloudsResult.lod( uv, 0.0_f ) );
-						output = mix( output, clouds, vec4( clouds.a() ) );
+						output.rgb() += clouds.rgb();
 					}
 					sdwFI
 				}

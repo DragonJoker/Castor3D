@@ -410,7 +410,10 @@ namespace c3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Extent2D const & size
+		, Camera const & camera
 		, Texture & colour
+		, Texture const * /*scattering*/
+		, Texture const * /*transmittance*/
 		, Texture * depth
 		, Texture const * depthObj
 		, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo

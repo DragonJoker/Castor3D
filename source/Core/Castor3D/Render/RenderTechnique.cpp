@@ -408,6 +408,7 @@ namespace c3d
 		m_volumetric = makeRawUnique< VolumetricRendering >( *this
 			, m_device
 			, colour
+			, m_prepass->getDepthObj()
 			, progress );
 		m_background = doCreateBackgroundPass( progress );
 		createComputeDiffusionProfilesPass( m_graph
@@ -769,6 +770,16 @@ namespace c3d
 		return m_renderTarget.areDebugTargetsEnabled();
 	}
 
+	Scene const & RenderTechnique::getScene()const noexcept
+	{
+		return *m_renderTarget.getScene();
+	}
+
+	Camera const & RenderTechnique::getCamera()const noexcept
+	{
+		return *m_renderTarget.getCamera();
+	}
+
 	CameraUbo const & RenderTechnique::getCameraUbo()const noexcept
 	{
 		return m_renderTarget.getCameraUbo();
@@ -822,9 +833,12 @@ namespace c3d
 			, m_device
 			, progress
 			, *m_renderTarget.getScene()->getBackground()
+			, *m_renderTarget.getCamera()
 			, m_renderTarget.getRenderUbo()
 			, getSceneUbo()
 			, getTargetResult()
+			, &m_volumetric->getScattering()
+			, &m_volumetric->getTransmittance()
 			, true /*clearColour*/
 			, false /*clearDepth*/
 			, false /*forceVisible*/

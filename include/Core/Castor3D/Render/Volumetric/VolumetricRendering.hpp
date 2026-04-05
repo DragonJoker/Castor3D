@@ -29,6 +29,7 @@ namespace c3d
 		C3D_API VolumetricRendering( RenderTechnique & parent
 			, RenderDevice const & device
 			, Texture const & colour
+			, Texture const & depthObj
 			, ProgressBar * progress );
 		/**
 		 *\~english
@@ -95,6 +96,16 @@ namespace c3d
 		{
 			return m_colour;
 		}
+
+		Texture const & getTransmittance()const noexcept
+		{
+			return *m_transmittance;
+		}
+
+		Texture const & getScattering()const noexcept
+		{
+			return *m_scattering;
+		}
 		/**@}*/
 
 	private:
@@ -102,6 +113,7 @@ namespace c3d
 		crg::FramePassGroup & m_graph;
 		Texture const & m_colour;
 		FrustumFroxels m_frustumFroxels;
+		TextureUPtr m_downscaledDepth;
 		TextureUPtr m_transmittance;
 		TextureUPtr m_scattering;
 	};

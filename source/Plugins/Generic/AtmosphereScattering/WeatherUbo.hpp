@@ -53,17 +53,13 @@ namespace atmosphere_scattering
 		using Configuration = WeatherConfig;
 
 	public:
-		WeatherUbo( c3d::RenderDevice const & device
-			, bool & dirty );
+		WeatherUbo( c3d::RenderDevice const & device );
 
 		void cpuUpdate( Configuration const & config );
 
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		CheckedWeatherConfig m_config;
 	};
 }
 

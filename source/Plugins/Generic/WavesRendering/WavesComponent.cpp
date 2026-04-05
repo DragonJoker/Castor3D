@@ -602,7 +602,7 @@ namespace waves
 				, submeshShaders
 				, passShaders
 				, flags }
-			, [&writer, &utils, &c3d_wavesData, &c3d_modelsData, &c3d_cameraData
+			, [&writer, &c3d_wavesData, &c3d_modelsData, &c3d_cameraData
 				, &calculateWave, &flags]( sdw::TessEvalMainIn const &
 					, sdw::TessEvalListInT< shader::FragmentSurfaceT, shd::OutputVertices > const & listIn
 					, sdw::TrianglesTessPatchInT< sdw::VoidT > const & patchIn

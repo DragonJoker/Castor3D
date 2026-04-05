@@ -149,6 +149,7 @@ namespace c3d
 			, m_device
 			, nullptr
 			, *m_scene->getBackground()
+			, *m_camera
 			, m_renderUbo
 			, *m_sceneUbo
 			, m_colour
@@ -273,6 +274,7 @@ namespace c3d
 				, m_device
 				, nullptr
 				, *m_scene->getBackground()
+				, *m_camera
 				, m_renderUbo
 				, *m_sceneUbo
 				, m_colour
