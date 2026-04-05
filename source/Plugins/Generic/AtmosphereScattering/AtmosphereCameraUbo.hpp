@@ -57,22 +57,18 @@ namespace atmosphere_scattering
 		using Configuration = CameraConfig;
 
 	public:
-		explicit CameraUbo( c3d::RenderDevice const & device
-			, bool & dirty );
+		explicit CameraUbo( c3d::RenderDevice const & device );
 
 		void cpuUpdate( c3d::Size const & renderSize
 			, c3d::Camera const & camera
 			, bool isSafeBanded
-			, c3d::Point3f const & sunDirection
+			, c3d::Quaternion const & orientation
+			, c3d::Point3f const & kmPosition
 			, c3d::Vector3f const & planetPosition );
 
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		c3d::GroupChangeTracked< c3d::Point3f > m_position;
-		c3d::GroupChangeTracked< c3d::Quaternion > m_orientation;
 	};
 }
 

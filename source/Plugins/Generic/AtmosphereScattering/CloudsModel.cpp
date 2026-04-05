@@ -2,13 +2,11 @@
 
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereModel.hpp"
-#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 #include "AtmosphereScattering/CloudsUbo.hpp"
 #include "AtmosphereScattering/ScatteringModel.hpp"
 
+#include <Castor3D/Shader/Shaders/GlslVolumeShaders.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 namespace atmosphere_scattering
 {
@@ -24,8 +22,40 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
+	CloudsTraverseData::CloudsTraverseData( sdw::ShaderWriter & writer )
+		: CloudsTraverseData{ writer
+		, sdw::makeAggrInit( makeType( writer.getTypesCache() ), getZeroInit() )
+		, true }
+	{
+	}
+
+	void CloudsTraverseData::initialise( AtmosphereModel const & atmosphere, ScatteringModel & scattering
+		, sdw::I32Vec2 const & pixCoord, c3ds::Ray const & ray )
+	{
+		planetShadow = 0.0_f;
+		sunLuminance = scattering.getSunLuminance( ray );
+		volumesTransmittance = 1.0_f;
+		pixelCoord = pixCoord;
+	}
+
+	sdw::expr::ExprList CloudsTraverseData::getZeroInit()
+	{
+		sdw::expr::ExprList result;
+		result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+		result.emplace_back( makeExpr( 0.0_f ) );
+		result.emplace_back( makeExpr( i32vec2( 0_i ) ) );
+		result.emplace_back( makeExpr( 0.0_f ) );
+		result.emplace_back( makeExpr( 0.0_f ) );
+		result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+		result.emplace_back( makeExpr( 0.0_f ) );
+		result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+		return result;
+	}
+
+	//************************************************************************************************
+
 	CloudsModel::CloudsModel( sdw::ShaderWriter & pwriter
-		, c3d::shader::Utils & putils
+		, c3ds::Utils & putils
 		, AtmosphereModel & patmosphere
 		, ScatteringModel & pscattering
 		, CloudsData const & pclouds
@@ -54,7 +84,34 @@ namespace atmosphere_scattering
 	{
 	}
 
-	sdw::RetVec4 CloudsModel::applyClouds( c3d::shader::Ray const & pray
+	sdw::RetVec3 CloudsModel::integrateInscatter( sdw::Vec3 const & pluminance
+		, sdw::Float const & ptransmittance
+		, sdw::Float const & pstepTransmittance
+		, sdw::Float const & psigmaS )
+	{
+		if ( !m_integrateInscatter )
+		{
+			m_integrateInscatter = writer.implementFunction< sdw::Vec3 >( "clouds_integrateInscatter"
+				, [this]( sdw::Vec3 const & luminance
+					, sdw::Float const & transmittance
+					, sdw::Float const & stepTransmittance
+					, sdw::Float const & sigmaS )
+				{
+					auto S = writer.declLocale( "S", luminance );
+					auto sigmaE = writer.declLocale( "sigmaE", sdw::max( 0.000000001_f, sigmaS ) );
+					auto Sint = writer.declLocale( "Sint", ( S - S * stepTransmittance ) / sigmaE ); // integrate along the current step segment
+					writer.returnStmt( transmittance * Sint ); // accumulate and also take into account the transmittance from previous steps
+				}
+				, sdw::InVec3{ writer, "luminance" }
+				, sdw::InFloat{ writer, "transmittance" }
+				, sdw::InFloat{ writer, "stepTransmittance" }
+				, sdw::InFloat{ writer, "sigmaS" } );
+		}
+
+		return m_integrateInscatter( pluminance, ptransmittance, pstepTransmittance, psigmaS );
+	}
+
+	sdw::RetVec4 CloudsModel::applyClouds( c3ds::Ray const & pray
 		, sdw::Float const & pobjectId
 		, sdw::Float const & plinearDepth
 		, sdw::IVec2 const & pfragCoord
@@ -65,7 +122,7 @@ namespace atmosphere_scattering
 		if ( !m_applyClouds )
 		{
 			m_applyClouds = writer.implementFunction< sdw::Vec4 >( "clouds_apply"
-				, [this]( c3d::shader::Ray const & ray
+				, [this]( c3ds::Ray const & ray
 					, sdw::Float const & objectId
 					, sdw::Float const & linearDepth
 					, sdw::IVec2 const & fragCoord
@@ -292,7 +349,7 @@ namespace atmosphere_scattering
 					skyBlendFactor = planetShadow0 * fogAmount0;
 					writer.returnStmt( result );
 				}
-				, c3d::shader::InRay{ writer, "ray" }
+				, c3ds::InRay{ writer, "ray" }
 				, sdw::InFloat{ writer, "objectId" }
 				, sdw::InFloat{ writer, "linearDepth" }
 				, sdw::InIVec2{ writer, "fragCoord" }
@@ -606,11 +663,11 @@ namespace atmosphere_scattering
 					auto coneStep = 1.0_f / 6.0_f;
 					auto noiseKernel = writer.declConstantArray( "noiseKernel"
 						, c3d::Vector< sdw::Vec3 >{ vec3( 0.38051305_f, 0.92453449_f, -0.02111345_f )
-						, vec3( -0.50625799_f, -0.03590792_f, -0.86163418_f )
-						, vec3( -0.32509218_f, -0.94557439_f, 0.01428793_f )
-						, vec3( 0.09026238_f, -0.27376545_f, 0.95755165_f )
-						, vec3( 0.28128598_f, 0.42443639_f, -0.86065785_f )
-						, vec3( -0.16852403_f, 0.14748697_f, 0.97460106_f ) } );
+							, vec3( -0.50625799_f, -0.03590792_f, -0.86163418_f )
+							, vec3( -0.32509218_f, -0.94557439_f, 0.01428793_f )
+							, vec3( 0.09026238_f, -0.27376545_f, 0.95755165_f )
+							, vec3( 0.28128598_f, 0.42443639_f, -0.86065785_f )
+							, vec3( -0.16852403_f, 0.14748697_f, 0.97460106_f ) } );
 
 					auto startPos = writer.declLocale( "startPos"
 						, pos );
@@ -763,7 +820,7 @@ namespace atmosphere_scattering
 								, sampleCloudDensity( pos
 									, 1_b
 									, relativeHeight
-									, writer.cast< sdw::Float >( i ) / 16.0_f ) );
+									, 0.0_f ) );
 							cloudDensity *= clouds.density();
 
 							sdwIF( writer, cloudDensity > 0.0_f )

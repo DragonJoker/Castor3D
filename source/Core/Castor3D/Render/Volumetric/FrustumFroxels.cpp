@@ -259,8 +259,8 @@ namespace c3d
 	void FrustumFroxels::createFramePasses( crg::FramePassGroup & parentGraph )
 	{
 		auto & graph = parentGraph.createPassGroup( "Volumetric" );
-		createAssignLightsToFroxelsPass( graph, m_device, *this
-			, m_clusters, m_froxelsPointLightsBuffer, m_froxelsSpotLightsBuffer, m_counterBuffer, m_froxelsIndirectBuffer );
+		createAssignLightsToFroxelsPass( graph, m_device, *this, m_clusters
+			, m_froxelsPointLightsBuffer, m_froxelsSpotLightsBuffer, m_counterBuffer, m_froxelsIndirectBuffer );
 		createIntegrateFroxelsPass( graph, m_device, *this
 			, m_rawFroxelsLightingU32R, m_rawFroxelsLightingU32G, m_rawFroxelsLightingU32B );
 		createFinaliseFroxelsLightingPass( graph, m_device, *this

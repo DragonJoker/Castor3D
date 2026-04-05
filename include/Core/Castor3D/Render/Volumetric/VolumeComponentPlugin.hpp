@@ -6,9 +6,12 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Volumetric/VolumetricModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace c3d
 {
+	class Camera;
+
 	namespace shader
 	{
 		class VolumeComponentShader
@@ -78,9 +81,40 @@ namespace c3d
 		*/
 		C3D_API virtual shader::VolumeComponentShaderPtr createComponentsShader( sdw::ShaderWriter & writer
 			, shader::VolumeShaders const & volumeShaders
-			, c3d::Extent2D const & targetExtent
+			, Extent2D const & targetExtent
 			, bool hasDepth
 			, uint32_t & bindingId )const = 0;
+		/**
+		 *\~english
+		 *\name
+		 *	Pass bindings.
+		 *\~french
+		 *\name
+		 *	Attaches de passe.
+		 */
+		/**@{*/
+		C3D_API virtual void registerScenePasses( crg::ResourcesCache & resources
+			, crg::FramePassGroup & graph
+			, c3d::Scene const & scene )const = 0;
+		C3D_API virtual void registerCameraPasses( crg::ResourcesCache & resources
+			, crg::FramePassGroup & graph
+			, c3d::Camera const & camera )const = 0;
+		C3D_API virtual void registerBindings( crg::FramePass & pass
+			, Camera const & camera
+			, uint32_t & bindingId )const = 0;
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	Plugin specific data.
+		 *\~french
+		 *\name
+		 *	Données spécifiques de plugin.
+		 */
+		/**@{*/
+		C3D_API virtual void registerCamera( Camera const & camera
+			, c3d::Texture const * depthObj ) = 0;
+		/**@}*/
 		/**
 		*\name
 		*	Getters.

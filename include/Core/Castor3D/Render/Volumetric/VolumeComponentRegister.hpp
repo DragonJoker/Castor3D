@@ -15,6 +15,10 @@ namespace c3d
 		class VolumeShaders;
 	}
 
+	class Camera;
+	class Scene;
+	struct Texture;
+
 	class VolumeComponentRegister
 		: public OwnedBy< Engine >
 	{
@@ -44,7 +48,10 @@ namespace c3d
 			, VolumeComponentPluginUPtr componentPlugin );
 		C3D_API void unregisterComponent( String const & componentType );
 		C3D_API uint32_t getNameId( String const & componentType )const;
-		C3D_API VolumeComponentPlugin const & getPlugin( uint32_t componentId )const;
+		C3D_API VolumeComponentPlugin & getPlugin( String const & componentType )const;
+		C3D_API VolumeComponentPlugin & getPlugin( uint32_t componentId )const;
+		C3D_API void registerCamera( Camera const & camera
+			, Texture const * depthObj )const;
 		/**@}*/
 		/**
 		 *\~english
@@ -57,11 +64,38 @@ namespace c3d
 		/**@{*/
 		C3D_API Vector< shader::VolumeComponentShaderPtr > createShaders( sdw::ShaderWriter & writer
 			, shader::VolumeShaders const & volumeShaders
-			, c3d::Extent2D const & targetExtent
+			, Extent2D const & targetExtent
 			, bool hasDepth
 			, uint32_t enabledPlugins
 			, uint32_t & bindingId )const;
 		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	Pass bindings.
+		 *\~french
+		 *\name
+		 *	Attaches de passe.
+		 */
+		/**@{*/
+		C3D_API void registerScenePasses( crg::ResourcesCache & resources
+			, crg::FramePassGroup & graph
+			, c3d::Scene const & scene )const;
+		C3D_API void registerCameraPasses( crg::ResourcesCache & resources
+			, crg::FramePassGroup & graph
+			, c3d::Camera const & camera )const;
+		C3D_API void registerBindings( crg::FramePass & pass
+			, uint32_t enabledPlugins
+			, Camera const & camera
+			, uint32_t & bindingId )const;
+		/**@}*/
+
+		VolumeComponentPlugin * operator[]( uint32_t pluginId )
+		{
+			if ( pluginId > 0 && pluginId <= m_registered.size() )
+				return m_registered[pluginId - 1u].plugin.get();
+			return nullptr;
+		}
 
 		auto begin()const noexcept
 		{
@@ -72,7 +106,6 @@ namespace c3d
 		{
 			return m_registered.end();
 		}
-		/**@}*/
 
 	private:
 		struct Component

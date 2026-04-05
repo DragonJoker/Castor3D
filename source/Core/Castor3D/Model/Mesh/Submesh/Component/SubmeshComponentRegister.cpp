@@ -361,8 +361,8 @@ namespace c3d
 
 		if ( id == smshcompreg::InvalidId )
 		{
-			log::error << "Component type [" << componentType << "] was not found." << std::endl;
-			CU_Failure( "Component type was not found." );
+			log::error << "Submesh component type [" << componentType << "] was not found." << std::endl;
+			CU_Failure( "Submesh component type was not found." );
 			return;
 		}
 
@@ -388,8 +388,8 @@ namespace c3d
 			|| componentId == 0u
 			|| !m_registered[componentId - 1u].plugin )
 		{
-			CU_Failure( "Component ID was not found." );
-			CU_Exception( "Component ID was not found." );
+			CU_Failure( "Submesh component ID was not found." );
+			CU_Exception( "Submesh component ID was not found." );
 		}
 
 		return *m_registered[componentId - 1u].plugin;
@@ -535,7 +535,7 @@ namespace c3d
 			, sections
 			, componentDesc.plugin->createParserContext );
 
-		log::debug << "Registered component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
+		log::debug << "Registered submesh component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
 	}
 
 	void SubmeshComponentRegister::unregisterComponent( SubmeshComponentID id )
@@ -573,7 +573,7 @@ namespace c3d
 				m_renderShaderFlags.erase( fit );
 			}
 
-			log::debug << "Unregistered component " << id << " (" << componentDesc.name << ")" << std::endl;
+			log::debug << "Unregistered submesh component " << id << " (" << componentDesc.name << ")" << std::endl;
 			componentDesc.name.clear();
 			componentDesc.plugin.reset();
 			componentDesc.id = smshcompreg::InvalidId;

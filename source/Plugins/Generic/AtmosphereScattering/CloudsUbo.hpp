@@ -77,8 +77,7 @@ namespace atmosphere_scattering
 		using Configuration = CloudsConfig;
 
 	public:
-		CloudsUbo( c3d::RenderDevice const & device
-			, bool & dirty );
+		CloudsUbo( c3d::RenderDevice const & device );
 
 		void cpuUpdate( Configuration const & config
 			, float totalTime );
@@ -86,9 +85,6 @@ namespace atmosphere_scattering
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		CheckedCloudsConfig m_config;
 	};
 }
 

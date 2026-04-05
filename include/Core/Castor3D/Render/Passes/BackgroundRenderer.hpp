@@ -17,9 +17,12 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
+			, Camera const & camera
 			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, Texture & colour
+			, Texture const * scattering
+			, Texture const * transmittance
 			, bool clearColour
 			, bool clearDepth
 			, bool forceVisible
@@ -30,6 +33,7 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
+			, Camera const & camera
 			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, Texture & colour
@@ -39,9 +43,12 @@ namespace c3d
 				, device
 				, progress
 				, background
+				, camera
 				, renderUbo
 				, sceneUbo
 				, colour
+				, nullptr
+				, nullptr
 				, clearColour
 				, false
 				, forceVisible
@@ -71,9 +78,9 @@ namespace c3d
 	private:
 		void doCreatePass( crg::FramePassGroup & graph
 			, SceneBackground & background
+			, Camera const & camera
 			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
-			, Texture & colour
 			, bool clearColour
 			, bool clearDepth
 			, bool forceVisible
@@ -84,6 +91,8 @@ namespace c3d
 	private:
 		RenderDevice const & m_device;
 		Texture & m_colour;
+		Texture const * m_scattering;
+		Texture const * m_transmittance;
 		CameraUbo m_cameraUbo;
 		UboT< ModelBufferConfiguration > m_modelUbo;
 		BackgroundPassBase * m_backgroundPass{};

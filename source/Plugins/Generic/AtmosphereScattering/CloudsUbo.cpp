@@ -13,17 +13,14 @@ namespace atmosphere_scattering
 	c3d::MbString const CloudsUbo::Buffer = "C3D_ATM_Clouds";
 	c3d::MbString const CloudsUbo::Data = "d";
 
-	CloudsUbo::CloudsUbo( c3d::RenderDevice const & device
-		, bool & dirty )
+	CloudsUbo::CloudsUbo( c3d::RenderDevice const & device )
 		: UboT{ device }
-		, m_config{ dirty }
 	{
 	}
 
 	void CloudsUbo::cpuUpdate( Configuration const & config
 		, float totalTime )
 	{
-		m_config = config;
 		auto & data = getNCData();
 		data = config;
 		data.crispiness *= 10.0f;

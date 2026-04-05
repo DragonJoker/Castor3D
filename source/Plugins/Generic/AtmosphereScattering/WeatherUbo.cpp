@@ -13,16 +13,13 @@ namespace atmosphere_scattering
 	c3d::MbString const WeatherUbo::Buffer = "Weather";
 	c3d::MbString const WeatherUbo::Data = "c3d_weatherData";
 
-	WeatherUbo::WeatherUbo( c3d::RenderDevice const & device
-		, bool & dirty )
+	WeatherUbo::WeatherUbo( c3d::RenderDevice const & device )
 		: UboT{ device }
-		, m_config{ dirty }
 	{
 	}
 
 	void WeatherUbo::cpuUpdate( Configuration const & config )
 	{
-		m_config = config;
 		setData( config );
 	}
 }

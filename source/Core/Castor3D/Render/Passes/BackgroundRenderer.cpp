@@ -19,9 +19,12 @@ namespace c3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, SceneBackground & background
+		, Camera const & camera
 		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, Texture & colour
+		, Texture const * scattering
+		, Texture const * transmittance
 		, bool clearColour
 		, bool clearDepth
 		, bool forceVisible
@@ -29,11 +32,13 @@ namespace c3d
 		, Texture const * depthObj )
 		: m_device{ device }
 		, m_colour{ colour }
+		, m_scattering{ scattering }
+		, m_transmittance{ transmittance }
 		, m_cameraUbo{ m_device }
 		, m_modelUbo{ m_device, MemoryPropertyFlags::eDeviceLocal }
 	{
-		doCreatePass( graph, background
-			, renderUbo, sceneUbo, m_colour
+		doCreatePass( graph, background, camera
+			, renderUbo, sceneUbo
 			, clearColour, clearDepth, forceVisible
 			, depth, depthObj
 			, progress );
@@ -68,9 +73,9 @@ namespace c3d
 
 	void BackgroundRenderer::doCreatePass( crg::FramePassGroup & graph
 		, SceneBackground & background
+		, Camera const & camera
 		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
-		, Texture & colour
 		, bool clearColour
 		, bool clearDepth
 		, bool forceVisible
@@ -79,12 +84,15 @@ namespace c3d
 		, ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating background pass" ) );
-		auto size = makeExtent2D( colour.getExtent() );
+		auto size = makeExtent2D( m_colour.getExtent() );
 		background.createBackgroundPass( graph
 			, m_device
 			, progress
 			, size
-			, colour
+			, camera
+			, m_colour
+			, m_scattering
+			, m_transmittance
 			, depth
 			, depthObj
 			, m_modelUbo.getUbo()

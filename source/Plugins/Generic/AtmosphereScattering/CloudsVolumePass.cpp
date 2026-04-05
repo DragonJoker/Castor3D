@@ -134,9 +134,7 @@ namespace atmosphere_scattering
 
 			auto targetSize = writer.declConstant( "targetSize"
 				, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
-			C3D_Camera( writer
-				, Bindings::eMainCamera
-				, 0u );
+			C3D_Camera( writer, Bindings::eMainCamera, 0u );
 
 			if constexpr ( useUnified )
 			{
@@ -286,18 +284,9 @@ namespace atmosphere_scattering
 
 	CloudsVolumePass::CloudsVolumePass( crg::FramePassGroup & graph
 		, c3d::RenderDevice const & device
-		, AtmosphereScatteringUbo const & atmosphereUbo
 		, c3d::CameraUbo const & mainCameraUbo
-		, CameraUbo const & kmCameraUbo
-		, CloudsUbo const & cloudsUbo
 		, c3d::Texture const & transmittance
-		, c3d::Texture const & multiscatter
-		, c3d::Texture const & skyview
-		, c3d::Texture const & volume
-		, c3d::Texture const & perlinWorley
-		, c3d::Texture const & worley
-		, c3d::Texture const & curl
-		, c3d::Texture const & weather
+		, c3d::Camera const & camera
 		, c3d::Texture const * depthObj
 		, c3d::Texture & scatteringResult
 		, c3d::Texture & transmittanceResult
@@ -306,9 +295,10 @@ namespace atmosphere_scattering
 		, m_shader{ getName(), volclouds::getProgram( c3d::getEngine( device ), scatteringResult.getExtent(), transmittance.getExtent(), depthObj != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
+		auto & engine = c3d::getEngine( device );
 		auto renderSize = scatteringResult.getExtent();
 		auto & pass = graph.createPass( c3d::toUtf8( getName() )
-			, [this, &device, renderSize]( crg::FramePass const & framePass
+			, [this, &engine, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -333,30 +323,15 @@ namespace atmosphere_scattering
 						.build( framePass, context, graph );
 				}
 
-				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
+				engine.registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		atmosphereUbo.createPassBinding( pass, volclouds::Bindings::eAtmosphere );
-		cloudsUbo.createPassBinding( pass, volclouds::Bindings::eClouds );
-		mainCameraUbo.createPassBinding( pass, volclouds::Bindings::eMainCamera );
-		kmCameraUbo.createPassBinding( pass, volclouds::Bindings::eKmCamera );
 		crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear };
 		crg::SamplerDesc linearRepeatSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest
 			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
 		crg::SamplerDesc mipLinearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eLinear
 			, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat, c3d::WrapMode::eRepeat };
-		pass.addInputSampledT( *transmittance.getSampledLastAttach(), volclouds::Bindings::eTransmittance, linearClampSampler );
-		pass.addInputSampledT( *multiscatter.getSampledLastAttach(), volclouds::Bindings::eMultiScatter, linearClampSampler );
-		pass.addInputSampledT( *skyview.getSampledLastAttach(), volclouds::Bindings::eSkyView, linearClampSampler );
-		pass.addInputSampledT( *volume.getSampledLastAttach(), volclouds::Bindings::eVolume, linearClampSampler );
-		pass.addInputSampledT( *perlinWorley.getSampledLastAttach(), volclouds::Bindings::ePerlinWorley, mipLinearSampler );
-		pass.addInputSampledT( *worley.getSampledLastAttach(), volclouds::Bindings::eWorley, mipLinearSampler );
-		pass.addInputSampledT( *curl.getSampledLastAttach(), volclouds::Bindings::eCurl, linearRepeatSampler );
-		pass.addInputSampledT( *weather.getSampledLastAttach(), volclouds::Bindings::eWeatherMap, linearRepeatSampler );
-
-		if ( depthObj )
-			pass.addInputSampledT( *depthObj->getSampledLastAttach(), volclouds::Bindings::eDepthMap, linearClampSampler );
 
 		if constexpr ( volclouds::useCompute )
 		{
@@ -368,6 +343,13 @@ namespace atmosphere_scattering
 			scatteringResult.setLastAttach( pass.addOutputColourTarget( scatteringResult.getTargetViewId() ) );
 			transmittanceResult.setLastAttach( pass.addOutputColourTarget( transmittanceResult.getTargetViewId() ) );
 		}
+
+		mainCameraUbo.createPassBinding( pass, volclouds::Bindings::eMainCamera );
+		if ( depthObj )
+			pass.addInputSampledT( *depthObj->getSampledLastAttach(), volclouds::Bindings::eDepthMap, linearClampSampler );
+
+		auto binding = uint32_t( volclouds::Bindings::eDepthMap );
+		engine.getVolumeComponentsRegister().registerBindings( pass, 0xFFFFFFFFu, camera, binding );
 	}
 
 	void CloudsVolumePass::accept( c3d::ConfigurationVisitorBase & visitor )const

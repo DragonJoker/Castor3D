@@ -146,33 +146,15 @@ namespace atmosphere_scattering
 		AtmosphereScatteringUbo & operator=( AtmosphereScatteringUbo && )noexcept = delete;
 
 	public:
-		AtmosphereScatteringUbo( c3d::RenderDevice const & device
-			, bool & dirty );
+		AtmosphereScatteringUbo( c3d::RenderDevice const & device );
 
-		c3d::Pair< c3d::Point3f, c3d::Vector3f > cpuUpdate( Configuration const & config
+		std::tuple< c3d::Point3f, c3d::Vector3f, c3d::Point3f > cpuUpdate( Configuration const & config
 			, c3d::SceneNode const & sunNode
 			, c3d::SceneNode const & planetNode );
-
-		c3d::Point3f const & getSunDirection()const
-		{
-			return m_sunDirection;
-		}
-
-		c3d::Point3f const & getPlanetPosition()const
-		{
-			return m_planetPosition;
-		}
 
 	public:
 		static const c3d::MbString Buffer;
 		static const c3d::MbString Data;
-
-	private:
-		bool & m_dirty;
-		CheckedAtmosphereScatteringConfig m_config;
-		c3d::GroupChangeTracked< c3d::Point3f > m_sunDirection;
-		c3d::GroupChangeTracked< c3d::Point3f > m_planetPosition;
-		c3d::GroupChangeTracked< c3d::Point3f > m_mieAbsorption;
 	};
 }
 

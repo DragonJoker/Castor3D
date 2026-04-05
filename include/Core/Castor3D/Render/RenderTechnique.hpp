@@ -152,6 +152,8 @@ namespace c3d
 		C3D_API bool isOpaqueEnabled()const;
 		C3D_API DebugConfig & getDebugConfig()const;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
+		C3D_API Scene const & getScene()const noexcept;
+		C3D_API Camera const & getCamera()const noexcept;
 		C3D_API CameraUbo const & getCameraUbo()const noexcept;
 		C3D_API RenderUbo const & getRenderUbo()const noexcept;
 		C3D_API SceneUbo const & getSceneUbo()const noexcept;
