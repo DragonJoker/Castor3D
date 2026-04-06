@@ -58,6 +58,7 @@ namespace c3d
 	class VolumeComponentPlugin;
 
 	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( c3d, FrustumFroxels, C3D_API );
 	CU_DeclareSmartPtr( c3d, VolumeComponentPlugin, C3D_API );
 	CU_DeclareSmartPtr( c3d, VolumeComponentRegister, C3D_API );
 	/** @endcond */

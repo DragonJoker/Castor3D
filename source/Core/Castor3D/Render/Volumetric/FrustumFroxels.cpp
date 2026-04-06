@@ -15,6 +15,8 @@
 
 #include <RenderGraph/FramePassGroup.hpp>
 
+CU_ImplementSmartPtr( c3d, FrustumFroxels )
+
 namespace c3d
 {
 	//*********************************************************************************************

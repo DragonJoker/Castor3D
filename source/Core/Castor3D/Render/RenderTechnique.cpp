@@ -808,7 +808,7 @@ namespace c3d
 	FrustumFroxels const * RenderTechnique::getFrustumFroxels()const noexcept
 	{
 		return ( m_volumetric
-			? &m_volumetric->getFrustumFroxels()
+			? m_volumetric->getFrustumFroxels()
 			: nullptr );
 	}
 
