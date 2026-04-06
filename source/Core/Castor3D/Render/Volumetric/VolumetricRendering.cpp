@@ -32,58 +32,68 @@ namespace c3d
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Volumetric" ) }
 		, m_colour{ colour }
-		, m_frustumFroxels{ device, parent.getResources(), *parent.getFrustumClusters(), parent.getFroxelsConfig() }
-		, m_downscaledDepth{ c3d::makeUnique< Texture >( m_device
-			, parent.getResources()
-			, cuT( "DownscaledDepthMinMax" )
-			, TextureCreateInfo{ ImageCreateFlags::eNone
-				, Extent3D{ colour.getExtent().width >> 1u, colour.getExtent().height >> 1u, 1u }, 1u, 1u
-				, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::transmittanceUsageFlags ) )
-				, volrnd::transmittanceUsageFlags }
-			, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } ) }
-		, m_transmittance{ c3d::makeUnique< Texture >( m_device
-			, parent.getResources()
-			, cuT( "Transmittance" )
-			, TextureCreateInfo{ ImageCreateFlags::eNone
-				, colour.getExtent(), 1u, 1u
-				, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::transmittanceUsageFlags ) )
-				, volrnd::transmittanceUsageFlags }
-			, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } ) }
-		, m_scattering{ c3d::makeUnique< Texture >( m_device
-			, parent.getResources()
-			, cuT( "Scattering" )
-			, TextureCreateInfo{ ImageCreateFlags::eNone
-				, colour.getExtent(), 1u, 1u
-				, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::inscatterUsageFlags ) )
-				, volrnd::inscatterUsageFlags }
-			, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } ) }
+		, m_components{ getEngine( m_device ).getVolumeComponentsRegister() }
+		, m_frustumFroxels{ m_components.hasAnyEnabled()
+			? c3d::makeUnique< FrustumFroxels >( device, parent.getResources(), *parent.getFrustumClusters(), parent.getFroxelsConfig() )
+			: nullptr }
+		, m_transmittance{ m_components.hasAnyEnabled()
+			? c3d::makeUnique< Texture >( m_device
+				, parent.getResources()
+				, cuT( "Transmittance" )
+				, TextureCreateInfo{ ImageCreateFlags::eNone
+					, colour.getExtent(), 1u, 1u
+					, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::transmittanceUsageFlags ) )
+					, volrnd::transmittanceUsageFlags }
+				, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } )
+			: nullptr }
+		, m_scattering{ m_components.hasAnyEnabled()
+			? c3d::makeUnique< Texture >( m_device
+				, parent.getResources()
+				, cuT( "Scattering" )
+				, TextureCreateInfo{ ImageCreateFlags::eNone
+					, colour.getExtent(), 1u, 1u
+					, m_device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( volrnd::inscatterUsageFlags ) )
+					, volrnd::inscatterUsageFlags }
+				, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } )
+			: nullptr }
 	{
-		getEngine( m_device ).getVolumeComponentsRegister().registerCamera( parent.getCamera(), &depthObj );
-		getEngine( m_device ).getVolumeComponentsRegister().registerScenePasses( parent.getResources(), m_graph, parent.getScene() );
-		getEngine( m_device ).getVolumeComponentsRegister().registerCameraPasses( parent.getResources(), m_graph, parent.getCamera() );
-		//createDownscaleDepthPass( m_graph, m_device, parent.getScene(), depthObj, *m_downscaledDepth );
-		m_frustumFroxels.createFramePasses( m_graph );
-		m_frustumFroxels.createDebugDisplayPrograms( parent.getCameraUbo(), parent.getRenderUbo() );
-		createVolumesTraversalPass( m_graph, m_device, parent.getCamera(), *this, parent.getCameraUbo(), *m_transmittance, *m_scattering );
+		if ( m_components.hasAnyEnabled() )
+		{
+			m_components.registerCamera( parent.getCamera(), &depthObj );
+			m_components.registerScenePasses( parent.getResources(), m_graph, parent.getScene() );
+			m_components.registerCameraPasses( parent.getResources(), m_graph, parent.getCamera() );
+			m_frustumFroxels->createFramePasses( m_graph );
+			m_frustumFroxels->createDebugDisplayPrograms( parent.getCameraUbo(), parent.getRenderUbo() );
+			createVolumesTraversalPass( m_graph, m_device, parent.getCamera(), *this, parent.getCameraUbo(), *m_transmittance, *m_scattering );
+		}
 	}
 
 	void VolumetricRendering::update( CpuUpdater & updater )
 	{
-		m_frustumFroxels.update( updater );
+		if ( !m_components.hasAnyEnabled() )
+			return;
+
+		m_frustumFroxels->update( updater );
 
 		if ( updater.debugDrawer )
-			m_frustumFroxels.updateDebug( *updater.debugDrawer );
+			m_frustumFroxels->updateDebug( *updater.debugDrawer );
 	}
 
 	void VolumetricRendering::update( GpuUpdater & updater )
 	{
+		if ( !m_components.hasAnyEnabled() )
+			return;
 	}
 
 	void VolumetricRendering::upload( UploadData & uploader )
 	{
+		if ( !m_components.hasAnyEnabled() )
+			return;
 	}
 
 	void VolumetricRendering::accept( RenderTechniqueVisitor & visitor )
 	{
+		if ( !m_components.hasAnyEnabled() )
+			return;
 	}
 }

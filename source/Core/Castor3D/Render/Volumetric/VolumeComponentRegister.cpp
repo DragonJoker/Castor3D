@@ -142,7 +142,18 @@ namespace c3d
 		, c3d::Texture const * depthObj )const
 	{
 		for ( auto & component : m_registered )
-			component.plugin->registerCamera( camera, depthObj );
+			if ( component.plugin->isEnabled() )
+				component.plugin->registerCamera( camera, depthObj );
+	}
+
+	bool VolumeComponentRegister::hasAnyEnabled()const noexcept
+	{
+		return std::any_of( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin && lookup.plugin->isEnabled();
+			} );
 	}
 
 	Vector< shader::VolumeComponentShaderPtr > VolumeComponentRegister::createShaders( sdw::ShaderWriter & writer
@@ -154,7 +165,7 @@ namespace c3d
 	{
 		Vector< shader::VolumeComponentShaderPtr > result;
 		for ( auto & component : m_registered )
-			if ( checkFlag( enabledPlugins, 0x00000001u << component.plugin->getId() ) )
+			if ( component.plugin->isEnabled() && checkFlag( enabledPlugins, 0x00000001u << component.plugin->getId() ) )
 				result.emplace_back( component.plugin->createComponentsShader( writer, volumeShaders, targetExtent, hasDepth, bindingId ) );
 		return result;
 	}
@@ -164,7 +175,8 @@ namespace c3d
 		, c3d::Scene const & scene )const
 	{
 		for ( auto & component : m_registered )
-			component.plugin->registerScenePasses( resources, graph, scene );
+			if ( component.plugin->isEnabled() )
+				component.plugin->registerScenePasses( resources, graph, scene );
 	}
 
 	void VolumeComponentRegister::registerCameraPasses( crg::ResourcesCache & resources
@@ -172,7 +184,8 @@ namespace c3d
 		, c3d::Camera const & camera )const
 	{
 		for ( auto & component : m_registered )
-			component.plugin->registerCameraPasses( resources, graph, camera );
+			if ( component.plugin->isEnabled() )
+				component.plugin->registerCameraPasses( resources, graph, camera );
 	}
 
 	void VolumeComponentRegister::registerBindings( crg::FramePass & pass
@@ -181,7 +194,7 @@ namespace c3d
 		, uint32_t & bindingId )const
 	{
 		for ( auto & component : m_registered )
-			if ( checkFlag( enabledPlugins, 0x00000001u << component.plugin->getId() ) )
+			if ( component.plugin->isEnabled() && checkFlag( enabledPlugins, 0x00000001u << component.plugin->getId() ) )
 				component.plugin->registerBindings( pass, camera, bindingId );
 	}
 }

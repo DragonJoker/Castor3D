@@ -87,9 +87,9 @@ namespace c3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		FrustumFroxels const & getFrustumFroxels()const noexcept
+		FrustumFroxels const * getFrustumFroxels()const noexcept
 		{
-			return m_frustumFroxels;
+			return m_frustumFroxels.get();
 		}
 
 		Texture const & getColour()const noexcept
@@ -112,7 +112,8 @@ namespace c3d
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		Texture const & m_colour;
-		FrustumFroxels m_frustumFroxels;
+		VolumeComponentRegister const & m_components;
+		FrustumFroxelsUPtr m_frustumFroxels;
 		TextureUPtr m_downscaledDepth;
 		TextureUPtr m_transmittance;
 		TextureUPtr m_scattering;

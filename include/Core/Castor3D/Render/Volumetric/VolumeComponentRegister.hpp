@@ -52,6 +52,7 @@ namespace c3d
 		C3D_API VolumeComponentPlugin & getPlugin( uint32_t componentId )const;
 		C3D_API void registerCamera( Camera const & camera
 			, Texture const * depthObj )const;
+		C3D_API bool hasAnyEnabled()const noexcept;
 		/**@}*/
 		/**
 		 *\~english

@@ -125,11 +125,22 @@ namespace c3d
 			return m_id;
 		}
 
+		bool isEnabled()const noexcept
+		{
+			return m_enabled;
+		}
+
 		VolumeComponentRegister const & getRegister()const noexcept
 		{
 			return m_volumeComponents;
 		}
 		/**@}*/
+
+	protected:
+		void setEnabled( bool v )
+		{
+			m_enabled = v;
+		}
 
 	private:
 		friend class VolumeComponentRegister;
@@ -139,7 +150,9 @@ namespace c3d
 			m_id = id;
 		}
 
+	private:
 		uint32_t m_id{};
+		bool m_enabled{};
 		VolumeComponentRegister const & m_volumeComponents;
 	};
 }

@@ -345,6 +345,10 @@ namespace atmosphere_scattering
 			return c3d::makeUniqueDerived< c3d::VolumeComponentPlugin, CloudsVolumePlugin >( volumeComponents );
 		}
 
+		void enable()
+		{
+			setEnabled( true );
+		}
 
 	public:
 		static c3d::String const TypeName;

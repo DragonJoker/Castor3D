@@ -61,6 +61,7 @@ namespace atmosphere_scattering
 			newBlockContext->sceneContext = blockContext;
 			newBlockContext->scene = blockContext->scene;
 			newBlockContext->plugin = &static_cast< CloudsVolumePlugin & >( blockContext->scene->getEngine()->getVolumeComponentsRegister().getPlugin( CloudsVolumePlugin::TypeName ) );
+			newBlockContext->plugin->enable();
 			newBlockContext->background = c3d::makeUnique< AtmosphereBackground >( *blockContext->scene->getEngine()
 				, *blockContext->scene
 				, *newBlockContext->plugin );
