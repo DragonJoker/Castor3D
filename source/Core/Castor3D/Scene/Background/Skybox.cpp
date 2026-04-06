@@ -179,7 +179,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserCross, SkyboxContext )
 		{
-			if ( params.size() < 1 )
+			if ( params.empty() )
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			else if ( !blockContext->skybox )
 				CU_ParsingError( cuT( "No skybox initialised." ) );
@@ -204,7 +204,7 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserOrientation, SkyboxContext )
 		{
-			if ( params.size() < 1 )
+			if ( params.empty() )
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			else if ( !blockContext->skybox )
 				CU_ParsingError( cuT( "No skybox initialised." ) );
@@ -217,7 +217,7 @@ namespace c3d
 		template< SkyboxFace FaceT >
 		static CU_ImplementAttributeParserBlock( parserFaceImage, SkyboxContext )
 		{
-			if ( params.size() <= 1 )
+			if ( params.empty() )
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			else if ( !blockContext->skybox )
 				CU_ParsingError( cuT( "No skybox initialised." ) );
