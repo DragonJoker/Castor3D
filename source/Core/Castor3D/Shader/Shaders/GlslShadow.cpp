@@ -975,7 +975,7 @@ namespace c3d::shader
 						, clamp( dot( normal, lightDirection ), 0.0_f, 1.0_f ) );
 					auto slope = m_writer.declLocale( "slope"
 						, sqrt( 1.0_f - cosAlpha ) );
-					m_writer.returnStmt( minOffset + maxSlopeOffset * slope );
+					m_writer.returnStmt( sdw::fma( slope, maxSlopeOffset, minOffset ) );
 				}
 				, sdw::InVec3( m_writer, "normal" )
 				, sdw::InVec3( m_writer, "lightDirection" )
