@@ -847,7 +847,7 @@ namespace c3d::shader
 	{
 		auto getSplitDepth = [&splitDepths]( sdw::UInt const & index )
 			{
-				return splitDepths[index / 4u][index % 4u];
+				return splitDepths[index >> 2u][index & 0x03u];
 			};
 
 		auto maxCount = writer.declLocale( "maxCount"

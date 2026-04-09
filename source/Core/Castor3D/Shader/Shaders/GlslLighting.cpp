@@ -927,7 +927,7 @@ namespace c3d::shader
 				auto firstScale = m_writer.declLocale( "firstScale"
 					, shadows.splitScales()[0][0] );
 				auto filterScale = m_writer.declLocale( "filterScale"
-					, abs( firstScale / shadows.splitScales()[*m_directionalCascadeIndex / 4u][*m_directionalCascadeIndex % 4u] ) );
+					, abs( firstScale / shadows.splitScales()[*m_directionalCascadeIndex >> 2u][*m_directionalCascadeIndex & 0x03u] ) );
 				auto filterSize = m_writer.declLocale( "filterSize"
 					, baseShadows.pcfFilterSize() );
 				baseShadows.pcfFilterSize() = clamp( filterSize * filterScale
@@ -945,7 +945,7 @@ namespace c3d::shader
 				{
 					auto filterIndex = m_writer.declLocale( "filterIndex"
 						, *m_directionalCascadeIndex + 1u );
-					filterScale = abs( firstScale / shadows.splitScales()[filterIndex / 4u][filterIndex % 4u] );
+					filterScale = abs( firstScale / shadows.splitScales()[filterIndex >> 2u][filterIndex & 0x03u] );
 					baseShadows.pcfFilterSize() = clamp( filterSize * filterScale
 						, 1.0_f
 						, sdw::Float{ float( MaxPcfFilterSize ) } );

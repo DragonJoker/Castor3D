@@ -73,7 +73,7 @@ namespace c3d
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, m_writer.cast< sdw::UInt >( cascadeFactors.x() ) );
 					auto rMax = m_writer.declLocale( "rMax"
-						, vec2( rsmData.maxRadius / shadowData.splitScales()[cascadeIndex / 4u][cascadeIndex % 4u] ) / vec2( c3d_rsmFluxMap.getSize( 0_i ).xy() ) );
+						, vec2( rsmData.maxRadius / shadowData.splitScales()[cascadeIndex >> 2u][cascadeIndex & 0x03u] ) / vec2( c3d_rsmFluxMap.getSize( 0_i ).xy() ) );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, shadowData.transforms()[cascadeIndex] * vec4( worldPosition, 1.0_f ) );
 					lightSpacePosition.xyz() /= lightSpacePosition.w();

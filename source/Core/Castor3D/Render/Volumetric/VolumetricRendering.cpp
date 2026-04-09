@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Texture.hpp"
-#include "Castor3D/Render/Volumetric/DownscaleDepthPass.hpp"
 #include "Castor3D/Render/Volumetric/VolumeComponentRegister.hpp"
 #include "Castor3D/Render/Volumetric/VolumesTraversal.hpp"
 

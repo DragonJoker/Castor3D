@@ -42,8 +42,8 @@ namespace c3d
 			{
 			}
 
-			auto depthSegment( sdw::UInt const & slice )const { return getMember< "depthSegments" >()[slice / 4u][slice % 4u]; }
-			auto blurKernelWeight( sdw::UInt const & index )const { return getMember< "blurKernelWeights" >()[index / 4u][index % 4u]; }
+			auto depthSegment( sdw::UInt const & slice )const { return getMember< "depthSegments" >()[slice >> 2u][slice & 0x03u]; }
+			auto blurKernelWeight( sdw::UInt const & index )const { return getMember< "blurKernelWeights" >()[index >> 2u][index & 0x03u]; }
 			auto projection()const { return getMember< "projection" >(); }
 			auto projectionInverse()const { return getMember< "projectionInverse" >(); }
 			auto sampleCount()const { return getMember< "sampleCount" >(); }

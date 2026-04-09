@@ -41,7 +41,7 @@ namespace c3d::shader
 			scattering *= attenuation;
 		}
 
-		specular *= specular;
+		specular *= attenuation;
 		dielectric *= attenuation;
 		metal *= attenuation;
 		coating *= attenuation;
