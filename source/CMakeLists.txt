@@ -91,7 +91,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		if ( NOT CASTOR_FORCE_GLSLANG_SUBMODULE )
 			if ( VCPKG_TOOLCHAIN )
 				set( glslang_DIR ${VCPKG_SHARE_DIR}/glslang )
-				find_package( glslang CONFIG REQUIRED glslang GenericCodeGen OSDependent SPIRV SPVRemapper )
+				find_package( glslang CONFIG REQUIRED glslang GenericCodeGen OSDependent SPIRV )
 				if ( TARGET glslang::SPIRV )
 					get_target_property( glslang_INCLUDE_DIR glslang::SPIRV INTERFACE_INCLUDE_DIRECTORIES )
 					find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
@@ -100,7 +100,6 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 						glslang::glslang
 						glslang::GenericCodeGen
 						glslang::SPIRV
-						glslang::SPVRemapper
 					)
 				else ()
 					get_target_property( glslang_INCLUDE_DIR SPIRV INTERFACE_INCLUDE_DIRECTORIES )
@@ -110,7 +109,6 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 						glslang
 						GenericCodeGen
 						SPIRV
-						SPVRemapper
 					)
 				endif ()
 			else ()
@@ -141,14 +139,12 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 				set_property( TARGET GenericCodeGen PROPERTY FOLDER "External/glslang" )
 				set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
 				set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
-				set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
 			endif ()
 			set( glslang_LIBRARIES
 				OSDependent
 				glslang
 				GenericCodeGen
 				SPIRV
-				SPVRemapper
 			)
 		endif ()
 	endif ()

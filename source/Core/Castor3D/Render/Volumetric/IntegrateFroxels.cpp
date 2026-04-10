@@ -18,6 +18,7 @@
 
 #include <CastorUtils/Design/DataHolder.hpp>
 
+#include <ShaderWriter/ComputeWriter.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
@@ -92,7 +93,7 @@ namespace c3d
 			auto c3d_froxelsLightingB = writer.declStorageImg< RWUImg3DR32 >( "c3d_froxelsLightingB", Bindings::eFroxelsLightingB, 0u );
 
 			auto processFroxelLight = [&c3d_froxelsData, &c3d_cameraData, &c3d_froxelsLightingR, &c3d_froxelsLightingG, &c3d_froxelsLightingB
-					, &writer, &utils]( shader::PointLight const & light, sdw::U32Vec3 const & froxelIndex3D )
+					, &writer, &utils]( auto const & light, sdw::U32Vec3 const & froxelIndex3D )
 				{
 					auto depthBounds = writer.declLocale( "depthBounds", c3d_froxelsData.getDepthBounds( froxelIndex3D.z() ) );
 					auto minScreenPosition = writer.declLocale( "minScreenPosition"
