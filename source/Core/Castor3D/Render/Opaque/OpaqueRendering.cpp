@@ -28,28 +28,28 @@ namespace c3d
 		: OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
-		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
+		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() && VisibilityResolvePass::sortPixels() )
 			? makeBufferBase( m_device, parent.getResources()
 				, getEngine()->getMaxPassTypeCount() * sizeof( uint32_t )
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eIndirectBuffer
 				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/MaterialsCounts1" ) )
 			: nullptr ) }
-		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
+		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() && VisibilityResolvePass::sortPixels() )
 			? makeBufferBase( m_device, parent.getResources()
 				, getEngine()->getMaxPassTypeCount() * sizeof( Point3ui )
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eIndirectBuffer
 				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/MaterialsCounts2" ) )
 			: nullptr ) }
-		, m_materialsStarts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
+		, m_materialsStarts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() && VisibilityResolvePass::sortPixels() )
 			? makeBufferBase( m_device, parent.getResources()
 				, getEngine()->getMaxPassTypeCount() * sizeof( uint32_t )
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
 				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/MaterialsStarts" ) )
 			: nullptr ) }
-		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
+		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() && VisibilityResolvePass::sortPixels() )
 			? makeBufferBase( m_device, parent.getResources()
 				, getOwner()->getTargetExtent().width * getOwner()->getTargetExtent().height * sizeof( Point2ui )
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
@@ -64,7 +64,7 @@ namespace c3d
 
 		if ( previous.hasVisibility() )
 		{
-			if ( VisibilityResolvePass::useCompute() )
+			if ( VisibilityResolvePass::useCompute() && VisibilityResolvePass::sortPixels() )
 			{
 				m_visibilityReorder = makeUnique< VisibilityReorderPass >( m_graph
 					, m_device
@@ -331,17 +331,20 @@ namespace c3d
 		auto & targetScattering = getOwner()->getScattering();
 		if ( VisibilityResolvePass::useCompute() )
 		{
-			pass.addInputStorage( *m_materialsCounts->getLastAttach(), index );
-			++index;
-			pass.addInputStorage( *m_materialsStarts->getLastAttach(), index );
-			++index;
-			pass.addInputStorage( *m_pixelsXY->getLastAttach(), index );
-			++index;
 			targetResult.setLastAttach( pass.addInOutStorage( *targetResult.getLastAttach(), index ) );
 			++index;
 			targetScattering.setLastAttach( isDeferredLighting
 				? pass.addInOutStorage( *targetScattering.getLastAttach(), index )
 				: pass.addClearableOutputStorageImage( targetScattering.getTargetViewId(), index ) );
+			++index;
+			if ( VisibilityResolvePass::sortPixels() )
+			{
+				pass.addInputStorage( *m_materialsCounts->getLastAttach(), index );
+				++index;
+				pass.addInputStorage( *m_materialsStarts->getLastAttach(), index );
+				++index;
+				pass.addInputStorage( *m_pixelsXY->getLastAttach(), index );
+			}
 		}
 		else
 		{
