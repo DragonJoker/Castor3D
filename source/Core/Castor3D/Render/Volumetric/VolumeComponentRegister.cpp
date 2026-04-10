@@ -4,6 +4,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 
 CU_ImplementSmartPtr( c3d, VolumeComponentRegister )
 
@@ -170,22 +171,18 @@ namespace c3d
 		return result;
 	}
 
-	void VolumeComponentRegister::registerScenePasses( crg::ResourcesCache & resources
-		, crg::FramePassGroup & graph
-		, c3d::Scene const & scene )const
-	{
-		for ( auto & component : m_registered )
-			if ( component.plugin->isEnabled() )
-				component.plugin->registerScenePasses( resources, graph, scene );
-	}
-
-	void VolumeComponentRegister::registerCameraPasses( crg::ResourcesCache & resources
+	void VolumeComponentRegister::registerPasses( crg::ResourcesCache & resources
 		, crg::FramePassGroup & graph
 		, c3d::Camera const & camera )const
 	{
 		for ( auto & component : m_registered )
+		{
 			if ( component.plugin->isEnabled() )
+			{
+				component.plugin->registerScenePasses( resources, graph, *camera.getScene() );
 				component.plugin->registerCameraPasses( resources, graph, camera );
+			}
+		}
 	}
 
 	void VolumeComponentRegister::registerBindings( crg::FramePass & pass

@@ -79,10 +79,7 @@ namespace c3d
 		 *	Attaches de passe.
 		 */
 		/**@{*/
-		C3D_API void registerScenePasses( crg::ResourcesCache & resources
-			, crg::FramePassGroup & graph
-			, c3d::Scene const & scene )const;
-		C3D_API void registerCameraPasses( crg::ResourcesCache & resources
+		C3D_API void registerPasses( crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
 			, c3d::Camera const & camera )const;
 		C3D_API void registerBindings( crg::FramePass & pass

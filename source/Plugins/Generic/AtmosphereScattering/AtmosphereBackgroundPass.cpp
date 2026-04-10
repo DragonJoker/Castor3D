@@ -34,7 +34,7 @@ namespace atmosphere_scattering
 
 			C3D_Scene( writer, AtmosphereBackgroundBindings::eScene, 0u );
 			C3D_Render( writer, AtmosphereBackgroundBindings::eRenderConfig, 0u );
-			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap", AtmosphereBackgroundBindings::eClouds, 0u );
+			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "cloudsMap", AtmosphereBackgroundBindings::eClouds, 0u );
 
 			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
 				, sdw::VertexOut out )

@@ -26,7 +26,7 @@ namespace atmosphere_scattering
 		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
 			, sctmdl::getNextBinding( binding )
 			, set ) }
-		, multiScatterMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
+		, multiScatterMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "multiScatterMap"
 			, ( settings.needsMultiscatter ? sctmdl::getNextBinding( binding ) : 0u )
 			, set
 			, settings.needsMultiscatter ) }
