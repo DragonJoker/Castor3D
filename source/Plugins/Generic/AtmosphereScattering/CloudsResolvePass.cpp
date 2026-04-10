@@ -64,10 +64,10 @@ namespace atmosphere_scattering
 			C3D_Clouds( writer
 				, Bindings::eClouds
 				, 0u );
-			auto scatteringMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "atm_scatteringMap"
+			auto scatteringMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "atm_scatteringMap"
 				, Bindings::eMapScattering
 				, 0u );
-			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("atm_transmittanceMap"
+			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >("atm_transmittanceMap"
 				, Bindings::eMapTransmittance
 				, 0u );
 			auto depthMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "depthMap"
@@ -114,7 +114,7 @@ namespace atmosphere_scattering
 					, vec2( offsetX, -offsetY ) };  // bottom-right
 
 			auto gaussianBlur = writer.implementFunction< sdw::Vec4 >( "gaussianBlur"
-				, [&writer, &kernel, &offsets]( sdw::CombinedImage2DRgba32 const & tex
+				, [&writer, &kernel, &offsets]( sdw::CombinedImage2DRgba16 const & tex
 					, sdw::Vec2 const & uv )
 				{
 					auto col = writer.declLocale( "col", vec4( 0.0_f ) );
@@ -122,7 +122,7 @@ namespace atmosphere_scattering
 						col += kernel[i] * tex.sample( uv + offsets[i] );
 					writer.returnStmt( col );
 				}
-				, sdw::InCombinedImage2DRgba32{ writer, "tex" }
+				, sdw::InCombinedImage2DRgba16{ writer, "tex" }
 				, sdw::InVec2{ writer, "uv" } );
 
 			if constexpr ( useUnified )

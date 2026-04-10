@@ -337,7 +337,7 @@ namespace atmosphere_scattering
 			transmittanceTexture = &value;
 		}
 
-		void setMultiscatterMap( sdw::CombinedImage2DRgba32 const & value )
+		void setMultiscatterMap( sdw::CombinedImage2DRgba16 const & value )
 		{
 			multiScatTexture = &value;
 		}
@@ -442,7 +442,7 @@ namespace atmosphere_scattering
 		c3d::Extent2D transmittanceExtent{};
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba16 const * transmittanceTexture{};
-		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
+		sdw::CombinedImage2DRgba16 const * multiScatTexture{};
 		c3d::shader::Shadow * shadows{};
 
 	private:

@@ -59,8 +59,7 @@ namespace c3d
 		if ( m_components.hasAnyEnabled() )
 		{
 			m_components.registerCamera( parent.getCamera(), &depthObj );
-			m_components.registerScenePasses( parent.getResources(), m_graph, parent.getScene() );
-			m_components.registerCameraPasses( parent.getResources(), m_graph, parent.getCamera() );
+			m_components.registerPasses( parent.getResources(), m_graph, parent.getCamera() );
 			m_frustumFroxels->createFramePasses( m_graph );
 			m_frustumFroxels->createDebugDisplayPrograms( parent.getCameraUbo(), parent.getRenderUbo() );
 			createVolumesTraversalPass( m_graph, m_device, parent.getCamera(), *this, parent.getCameraUbo(), *m_transmittance, *m_scattering );

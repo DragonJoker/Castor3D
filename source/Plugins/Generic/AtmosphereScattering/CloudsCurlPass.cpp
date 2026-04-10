@@ -31,7 +31,7 @@ namespace atmosphere_scattering
 		{
 			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
-			auto outputTexture = writer.declStorageImg< sdw::WImage2DRg32 >( "outputTexture"
+			auto outputTexture = writer.declStorageImg< sdw::WImage2DRg8Unorm >( "outputTexture"
 				, Bindings::eOutput
 				, 0u );
 

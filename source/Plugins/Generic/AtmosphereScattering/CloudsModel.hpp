@@ -178,9 +178,9 @@ namespace atmosphere_scattering
 		AtmosphereModel & atmosphere;
 		ScatteringModel & scattering;
 		CloudsData const & clouds;
-		sdw::CombinedImage3DRgba32 perlinWorleyNoiseMap;
-		sdw::CombinedImage3DRgba32 worleyNoiseMap;
-		sdw::CombinedImage2DRg32 curlNoiseMap;
+		sdw::CombinedImage3DRgba8Unorm perlinWorleyNoiseMap;
+		sdw::CombinedImage3DRgba8Unorm worleyNoiseMap;
+		sdw::CombinedImage2DRg8Unorm curlNoiseMap;
 		sdw::CombinedImage2DRg32 weatherMap;
 
 	public:

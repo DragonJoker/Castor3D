@@ -116,7 +116,7 @@ namespace atmosphere_scattering
 		AtmosphereModel & m_atmosphere;
 		Settings m_settings;
 		sdw::CombinedImage2DRgba16 transmittanceMap;
-		sdw::CombinedImage2DRgba32 multiScatterMap;
+		sdw::CombinedImage2DRgba16 multiScatterMap;
 		sdw::CombinedImage2DRgba32 skyViewMap;
 		sdw::CombinedImage3DRgba32 volumeMap;
 

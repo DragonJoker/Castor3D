@@ -66,13 +66,13 @@ namespace atmosphere_scattering
 		, atmosphere{ patmosphere }
 		, scattering{ pscattering }
 		, clouds{ pclouds }
-		, perlinWorleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "perlinWorleyNoiseMap"
+		, perlinWorleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba8Unorm >( "perlinWorleyNoiseMap"
 			, details::getNextBinding( binding )
 			, set ) }
-		, worleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "worleyNoiseMap"
+		, worleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba8Unorm >( "worleyNoiseMap"
 			, details::getNextBinding( binding )
 			, set ) }
-		, curlNoiseMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "curlNoiseMap"
+		, curlNoiseMap{ writer.declCombinedImg< sdw::CombinedImage2DRg8Unorm >( "curlNoiseMap"
 			, details::getNextBinding( binding )
 			, set ) }
 		, weatherMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "weatherMap"
