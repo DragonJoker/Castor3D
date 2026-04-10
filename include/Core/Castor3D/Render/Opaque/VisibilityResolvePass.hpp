@@ -129,6 +129,7 @@ namespace c3d
 		C3D_API static ComponentModeFlags getComponentsMask()noexcept;
 
 		C3D_API static bool useCompute()noexcept;
+		C3D_API static bool sortPixels()noexcept;
 
 		bool hasSsao()const noexcept override
 		{

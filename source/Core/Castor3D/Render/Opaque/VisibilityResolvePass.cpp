@@ -65,6 +65,7 @@ namespace c3d
 	namespace visres
 	{
 		static constexpr bool useCompute{ true };
+		static constexpr bool sortPixels{ true };
 
 		enum class Sets : uint32_t
 		{
@@ -89,11 +90,11 @@ namespace c3d
 			eInData,
 			eInOutDiffuse,
 			eMapBrdf,
+			eOutResult,
+			eOutScattering,
 			eMaterialsCounts,
 			eMaterialsStarts,
 			ePixelsXY,
-			eOutResult,
-			eOutScattering,
 			eCount,
 		};
 
@@ -119,7 +120,7 @@ namespace c3d
 			eTextures,
 		};
 
-		template< bool ComputeT >
+		template< bool ComputeT, bool SortPixelsT = sortPixels >
 		struct ShaderWriter;
 
 		static uint32_t constexpr maxPipelinesSize = uint32_t( getBitSize( MaxPipelines ) );
@@ -209,7 +210,7 @@ namespace c3d
 		};
 
 		template<>
-		struct ShaderWriter< true >
+		struct ShaderWriter< true, true >
 		{
 			using Type = sdw::ComputeWriter;
 
@@ -288,6 +289,72 @@ namespace c3d
 								}
 							}
 							sdwFI
+						}
+						sdwFI
+					} );
+			}
+		};
+
+		template<>
+		struct ShaderWriter< true, false >
+		{
+			using Type = sdw::ComputeWriter;
+
+			static void implementMain( Type & writer
+				, PipelineFlags const & flags
+				, bool isMeshShading
+				, bool isDeferredLighting
+				, bool outputScattering
+				, uint32_t stride
+				, sdw::RUImage2DRg32 const & c3d_imgData
+				, sdw::RWImage2DRgba32 const & c3d_imgDiffuse
+				, sdw::UInt const &
+				, sdw::UInt const & billboardNodeId
+				, ShadeFunc const & shade )
+			{
+				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba16 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
+				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DR11fG11fB10f >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
+
+				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
+					, [&c3d_imgData, &c3d_imgDiffuse, &billboardNodeId, &shade
+						, &c3d_imgOutResult, &c3d_imgOutScattering
+						, &writer, &flags, stride, isMeshShading, isDeferredLighting]( sdw::ComputeIn const & in )
+					{
+						auto pos = in.globalInvocationID.xy();
+						auto index = pos.y() * ( in.numWorkGroups.x() * in.workGroupSize.x() ) + pos.x();
+
+						auto ipixel = writer.declLocale( "ipixel"
+							, ivec2( in.globalInvocationID.xy() ) );
+						auto indata = writer.declLocale( "indata"
+							, c3d_imgData.load( ipixel ) );
+						auto nodePipelineId = writer.declLocale( "nodePipelineId"
+							, indata.x() );
+						auto curNodeId = writer.declLocale( "curNodeId"
+							, nodePipelineId >> maxPipelinesSize );
+						auto curPipelineId = writer.declLocale( "curPipelineId"
+							, nodePipelineId & maxPipelinesMask );
+						auto meshletId = writer.declLocale( "meshletId"
+							, isMeshShading ? indata.y() >> maxPrimitiveIDSize : 0_u );
+						auto primitiveId = writer.declLocale( "primitiveId"
+							, isMeshShading ? indata.y() & maxPrimitiveIDMask : indata.y() );
+						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
+						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
+						auto diffuse = writer.declLocale( "diffuse"
+							, ( ( isDeferredLighting && flags.pass.hasDeferredDiffuseLightingFlag )
+								? c3d_imgDiffuse.load( ipixel )
+								: vec4( 0.0_f ) ) );
+
+						sdwIF( writer, ( stride != 0u ? ( curNodeId == billboardNodeId ) : curNodeId != 0_u )
+							&& shade( ipixel, curNodeId, curPipelineId, primitiveId, meshletId, result, diffuse, scattering ) )
+						{
+							c3d_imgOutResult.store( ipixel, result );
+							c3d_imgOutScattering.store( ipixel, scattering.xyz() );
+
+							if ( flags.pass.hasDeferredDiffuseLightingFlag
+								&& !isDeferredLighting )
+							{
+								c3d_imgDiffuse.store( ipixel, diffuse );
+							}
 						}
 						sdwFI
 					} );
@@ -1073,7 +1140,7 @@ namespace c3d
 		{
 			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
 			auto & engine = c3d::getEngine( device );
-			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
+			ShaderWriter< useCompute, sortPixels >::Type writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 			shader::BRDFHelpers brdfHelpers{ writer };
@@ -1214,7 +1281,8 @@ namespace c3d
 							, outResult
 							, areDebugTargetsEnabled };
 
-						if ( !VisibilityResolvePass::useCompute() )
+						if ( !VisibilityResolvePass::useCompute()
+							|| !VisibilityResolvePass::sortPixels() )
 						{
 							sdwIF( writer, pipelineId != curPipelineId )
 							{
@@ -1543,21 +1611,25 @@ namespace c3d
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
-				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMaterialsCounts
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, stages );
-				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMaterialsStarts
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, stages );
-				addDescriptorSetLayoutBindingT( bindings, InOutBindings::ePixelsXY
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, stages );
 				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eOutResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages );
 				addDescriptorSetLayoutBindingT( bindings, InOutBindings::eOutScattering
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages );
+
+				if ( VisibilityResolvePass::sortPixels() )
+				{
+					addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMaterialsCounts
+						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+						, stages );
+					addDescriptorSetLayoutBindingT( bindings, InOutBindings::eMaterialsStarts
+						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+						, stages );
+					addDescriptorSetLayoutBindingT( bindings, InOutBindings::ePixelsXY
+						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+						, stages );
+				}
 			}
 
 			auto const & engine = c3d::getEngine( device );
@@ -1644,11 +1716,15 @@ namespace c3d
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
-				technique.getMaterialsCounts().addDescriptorWriteT( writes, InOutBindings::eMaterialsCounts );
-				technique.getMaterialsStarts().addDescriptorWriteT( writes, InOutBindings::eMaterialsStarts );
-				technique.getPixelXY().addDescriptorWriteT( writes, InOutBindings::ePixelsXY );
 				targetImage.addImageDescriptorWriteT( writes, InOutBindings::eOutResult );
 				technique.getScattering().addImageDescriptorWriteT( writes, InOutBindings::eOutScattering );
+
+				if ( VisibilityResolvePass::sortPixels() )
+				{
+					technique.getMaterialsCounts().addDescriptorWriteT( writes, InOutBindings::eMaterialsCounts );
+					technique.getMaterialsStarts().addDescriptorWriteT( writes, InOutBindings::eMaterialsStarts );
+					technique.getPixelXY().addDescriptorWriteT( writes, InOutBindings::ePixelsXY );
+				}
 			}
 
 			auto index = uint32_t( InOutBindings::eCount );
@@ -2245,6 +2321,11 @@ namespace c3d
 		return visres::useCompute;
 	}
 
+	bool VisibilityResolvePass::sortPixels()noexcept
+	{
+		return visres::sortPixels;
+	}
+
 	void VisibilityResolvePass::doAccept( RenderTechniqueVisitor & visitor )
 	{
 		if ( visitor.getFlags().renderPassType == m_nodesPass.getTypeID()
@@ -2312,6 +2393,7 @@ namespace c3d
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
+		auto & extent = m_parent->getNormal().getExtent();
 
 		for ( auto const & [pipeline, descriptors] : m_activePipelines )
 		{
@@ -2341,7 +2423,10 @@ namespace c3d
 						, 0u
 						, sizeof( visres::PushData )
 						, &pushData );
-					context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
+					if ( sortPixels() )
+						context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
+					else
+						context.getContext().vkCmdDispatch( commandBuffer, extent.width >> 2u, extent.height >> 2u, 1u );
 					++m_drawCalls;
 				}
 			}
@@ -2373,7 +2458,10 @@ namespace c3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
+				if ( sortPixels() )
+					context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
+				else
+					context.getContext().vkCmdDispatch( commandBuffer, extent.width >> 2u, extent.height >> 2u, 1u );
 				++m_drawCalls;
 			}
 		}
