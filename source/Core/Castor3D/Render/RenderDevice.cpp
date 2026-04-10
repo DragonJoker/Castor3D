@@ -510,6 +510,7 @@ namespace c3d
 			doTryAddExtension( VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME, nullptr, &m_pushDescriptorProperties );
 #	endif
 #endif
+
 			// use the features2 chain to append extensions
 			auto currentFeat = reinterpret_cast< VkStructure * >( &m_features2 );
 
@@ -529,10 +530,17 @@ namespace c3d
 				currentProp = currentProp->pNext;
 			}
 
+			if ( hasVulkan1_1 )
+			{
+				currentProp->pNext = reinterpret_cast< VkStructure * >( &m_subgroupProperties );
+				currentProp = currentProp->pNext;
+			}
+
 			gpu.getFeatures( m_features2 );
 			gpu.getProperties( m_properties2 );
 			features = m_features2.features;
 		}
+
 #if VK_KHR_deferred_host_operations
 		doTryAddExtension( VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME );
 #endif

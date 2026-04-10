@@ -186,6 +186,7 @@ namespace c3d
 		Texture m_rawFroxelsLightingU32B;
 		Texture m_rawFroxelsLighting;
 		Texture m_finalFroxelsLighting;
+		BufferT< u32 > m_lightsSliceBounds;
 
 		ashes::PipelineShaderStageCreateInfoArray m_displayFroxelsAABBProgram;
 		ashes::VkDescriptorSetLayoutBindingArray m_displayFroxelsAABBBindings;
