@@ -391,6 +391,15 @@ namespace c3d
 			return m_preferredTransferQueue->familyIndex;
 		}
 
+		uint32_t getSubgroupSize()const noexcept
+		{
+#if VK_VERSION_1_1
+			return m_subgroupProperties.subgroupSize;
+#else
+			return 32u;
+#endif
+		}
+
 		RenderSystem & renderSystem;
 		ashes::PhysicalDevice const & gpu;
 		AshPluginDescription const & desc;
@@ -449,6 +458,9 @@ namespace c3d
 			, nullptr
 			, {} };
 		VkPhysicalDeviceProperties2 m_properties2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2
+			, nullptr
+			, {} };
+		VkPhysicalDeviceSubgroupProperties m_subgroupProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES
 			, nullptr
 			, {} };
 #endif

@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Volumetric/AssignLightsToFroxels.hpp"
+#include "Castor3D/Render/Volumetric/ComputeLightsSliceBounds.hpp"
 #include "Castor3D/Render/Volumetric/FinaliseFroxelsLighting.hpp"
 #include "Castor3D/Render/Volumetric/FroxelsConfig.hpp"
 #include "Castor3D/Render/Volumetric/IntegrateFroxels.hpp"
@@ -203,6 +204,11 @@ namespace c3d
 				, PixelFormat::eB10G11R11_UFLOAT
 				, ImageUsageFlags::eStorage }
 			, { BorderColour::eFloatOpaqueBlack } }
+		, m_lightsSliceBounds{ m_device, resources
+			, cuT( "C3D_FroxelsLightsSliceDepthBounds" )
+			, BufferCreateFlags::eNone
+			, frsfxl::MaxFroxelExtent.width * frsfxl::MaxFroxelExtent.height
+			, BufferUsageFlags::eStorageBuffer }
 	{
 		m_depthSegments.resize( MaxFroxelGridDepth + ( ( ( MaxFroxelGridDepth % 4u ) == 0u ) ? 4u : 0u ) );
 		m_kernelWeights.resize( 64u );
@@ -268,6 +274,8 @@ namespace c3d
 		createFinaliseFroxelsLightingPass( graph, m_device, *this
 			, m_rawFroxelsLightingU32R, m_rawFroxelsLightingU32G, m_rawFroxelsLightingU32B
 			, m_rawFroxelsLighting, m_finalFroxelsLighting );
+		createComputeLightsSliceBoundsPass( graph, m_device, *this
+			, m_finalFroxelsLighting, m_lightsSliceBounds );
 	}
 
 	void FrustumFroxels::createDebugDisplayPrograms( CameraUbo const & cameraUbo
