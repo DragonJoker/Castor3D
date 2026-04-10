@@ -11,6 +11,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( c3d, ImageBackground )
 

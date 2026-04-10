@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "castor3d",
-  "version": "0.16.0",
-  "builtin-baseline": "74e6536215718009aae747d86d84b78376bf9e09",
+  "version": "0.17.0",
+  "builtin-baseline": "c3867e714dd3a51c272826eea77267876517ed99",
   "dependencies": [
     "bcdec",
     "convectionkernels",

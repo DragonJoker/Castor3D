@@ -9,6 +9,8 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include <CastorUtils/FileParser/FileParser.hpp>
+
 CU_ImplementSmartPtr( c3d, ColourBackground )
 
 namespace c3d

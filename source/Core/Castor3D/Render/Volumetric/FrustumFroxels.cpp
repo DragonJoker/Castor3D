@@ -53,7 +53,7 @@ namespace c3d
 			CU_Require( delta >= 0.0f );
 			if ( delta >= 0.0f )
 			{
-				f32 x1 = ( -b + sqrt( delta ) ) / ( 2.0f * a );
+				f32 x1 = f32( ( -b + sqrt( delta ) ) / ( 2.0 * a ) );
 
 				dimensionsWithoutMargin->x = ( u32 )std::ceil( x1 );
 				dimensionsWithoutMargin->y = ( u32 )std::ceil( x1 / aspectRatio );

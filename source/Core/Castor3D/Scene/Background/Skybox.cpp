@@ -392,6 +392,7 @@ namespace c3d
 		skyboxCtx.addParser( cuT( "bottom" ), skybox::parserFaceImage< SkyboxFace::eBottom >, { makeParameter< ParameterType::ePath >() } );
 		skyboxCtx.addParser( cuT( "front" ), skybox::parserFaceImage< SkyboxFace::eFront >, { makeParameter< ParameterType::ePath >() } );
 		skyboxCtx.addParser( cuT( "back" ), skybox::parserFaceImage< SkyboxFace::eBack >, { makeParameter< ParameterType::ePath >() } );
+		skyboxCtx.addParser( cuT( "orientation" ), skybox::parserOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
 		skyboxCtx.addPopParser( cuT( "}" ), skybox::parserEnd );
 	}
 

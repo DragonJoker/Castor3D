@@ -192,7 +192,7 @@ namespace c3d::shader
 		return m_intersectCone( *this, rhs );
 	}
 
-	sdw::RetVec3 AABB::getPositiveVertex( sdw::Vec3 const & normal )const
+	sdw::RetVec3 AABB::getPositiveVertex( sdw::Vec3 const & pnormal )const
 	{
 		if ( !m_getPositiveVertex )
 		{
@@ -222,7 +222,7 @@ namespace c3d::shader
 				, shader::InAABB{ writer, "aabb" }
 				, sdw::InVec3{ writer, "normal" } );
 		}
-		return m_getPositiveVertex( *this, normal );
+		return m_getPositiveVertex( *this, pnormal );
 	}
 
 	//*********************************************************************************************

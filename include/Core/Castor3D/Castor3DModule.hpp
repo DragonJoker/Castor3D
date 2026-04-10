@@ -28,6 +28,7 @@ See LICENSE file in root folder
 
 #if !defined( CU_PlatformWindows )
 #	define C3D_API
+#	define C3D_INL_API
 #else
 #	ifdef MemoryBarrier
 #		undef MemoryBarrier
