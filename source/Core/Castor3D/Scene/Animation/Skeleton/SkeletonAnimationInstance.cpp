@@ -61,6 +61,13 @@ namespace c3d
 			}
 		}
 
+		// Build object lookup cache for O(1) access
+		for ( auto const & obj : m_toMove )
+		{
+			auto fullName = sklanminst::getObjectTypeName( obj->getObject().getType() ) + obj->getObject().getName();
+			m_objectCache.try_emplace( fullName, obj.get() );
+		}
+
 		for ( auto const & keyFrame : animation )
 		{
 			m_keyFrames.emplace_back( *this
@@ -89,15 +96,10 @@ namespace c3d
 		SkeletonAnimationInstanceObjectRPtr result{};
 		auto fullName = sklanminst::getObjectTypeName( type ) + name;
 
-		if ( auto it = std::find_if( m_toMove.begin()
-			, m_toMove.end()
-			, [&fullName]( SkeletonAnimationInstanceObjectUPtr const & lookup )
-			{
-				return sklanminst::getObjectTypeName( lookup->getObject().getType() ) + lookup->getObject().getName() == fullName;
-			} );
-			it != m_toMove.end() )
+		if ( auto it = m_objectCache.find( fullName );
+			it != m_objectCache.end() )
 		{
-			result = it->get();
+			result = it->second;
 		}
 		else
 		{

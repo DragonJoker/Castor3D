@@ -119,6 +119,9 @@ namespace c3d
 		//!\~english	The moving objects.
 		//!\~french		Les objets mouvants.
 		SkeletonAnimationInstanceObjectPtrArray m_toMove;
+		//!\~english	Object lookup cache for O(1) access by full name (type prefix + name).
+		//!\~french		Cache de recherche d'objets pour un accès O(1) par nom complet (préfixe de type + nom).
+		StringMap< SkeletonAnimationInstanceObjectRPtr > m_objectCache;
 		//!\~english	The instance keyframes.
 		//!\~french		Les instances des keyframes.
 		SkeletonAnimationInstanceKeyFrameArray m_keyFrames;
