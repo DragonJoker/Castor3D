@@ -64,7 +64,7 @@ namespace c3d
 
 	namespace visres
 	{
-		static constexpr bool useCompute{ true };
+		static constexpr bool useCompute{ false };
 		static constexpr bool sortPixels{ true };
 
 		enum class Sets : uint32_t

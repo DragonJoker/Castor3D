@@ -119,7 +119,7 @@ namespace GuiCommon
 			{
 				const wxString Help{ wxT( "help" ) };
 				const wxString Config{ wxT( "config" ) };
-				const wxString LogLevel{ wxT( "log" ) };
+				const wxString LogLevel{ wxT( "log_level" ) };
 				const wxString Validate{ wxT( "validate" ) };
 				const wxString ShaderDebugLevel{ wxT( "shader_debug_level" ) };
 				const wxString SyncRender{ wxT( "sync" ) };
