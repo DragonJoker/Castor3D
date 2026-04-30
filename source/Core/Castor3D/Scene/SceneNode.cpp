@@ -55,6 +55,19 @@ namespace c3d
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eNode )
 
+		static CU_ImplementAttributeParserNewBlock( parserObjectNodeGroup, SceneContext, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+			{
+				newBlockContext->scene = blockContext;
+				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
+				newBlockContext->groupName = getPrefixedName( params[0]->get< String >(), *blockContext );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNodeGroup )
+
 		static CU_ImplementAttributeParserBlock( parserStatic, NodeContext )
 		{
 			if ( !blockContext->currentNode )
@@ -190,6 +203,127 @@ namespace c3d
 			}
 		}
 		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupPositions, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eNodeGroupPositions, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupScales, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eNodeGroupScales, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupOrientations, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eNodeGroupOrientations, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserGroupParent, NodeGroupContext )
+		{
+			auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+			SceneNodeRPtr parent{};
+
+			if ( name == Scene::ObjectRootNode )
+				parent = blockContext->scene->scene->getObjectRootNode();
+			else if ( name == Scene::CameraRootNode )
+				parent = blockContext->scene->scene->getCameraRootNode();
+			else if ( name == Scene::RootNode )
+				parent = blockContext->scene->scene->getRootNode();
+			else
+				parent = blockContext->scene->scene->findSceneNode( name );
+
+			if ( parent )
+				blockContext->parentNode = parent;
+			else
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupPosition, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+				blockContext->positions.push_back( params[0]->get< Point3f >() );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupScale, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+				blockContext->scales.push_back( params[0]->get< Point3f >() );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupOrientation, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+			{
+				blockContext->orientations.push_back( Quaternion::fromAxisAngle( params[0]->get< Point3f >()
+					, Angle::fromDegrees( params[1]->get< float >() ) ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupPositionsEnd, NodeGroupContext )
+		{
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupScalesEnd, NodeGroupContext )
+		{
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupOrientationsEnd, NodeGroupContext )
+		{
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserObjectNodeGroupEnd, NodeGroupContext )
+		{
+			if ( !blockContext->scene )
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			else
+			{
+				auto maxCount = std::max( { blockContext->positions.size(), blockContext->scales.size(), blockContext->orientations.size() } );
+				blockContext->positions.resize( maxCount, Point3f{ 0.0f, 0.0f, 0.0f } );
+				blockContext->orientations.resize( maxCount, Quaternion::identity() );
+				blockContext->scales.resize( maxCount, Point3f{ 1.0f, 1.0f, 1.0f } );
+
+				for ( u32 i = 0u; i < maxCount; ++i )
+				{
+					auto name = blockContext->groupName + string::toString( i );
+					SceneNodeUPtr ownedNode;
+					auto currentNode = blockContext->scene->scene->tryFindSceneNode( name );
+					if ( !currentNode )
+					{
+						ownedNode = makeUnique< SceneNode >( name, *blockContext->scene->scene );
+						currentNode = ownedNode.get();
+					}
+
+					currentNode->setPosition( blockContext->positions[i] );
+					currentNode->setOrientation( blockContext->orientations[i] );
+					currentNode->setScale( blockContext->scales[i] );
+					if ( ownedNode )
+						blockContext->scene->scene->addSceneNode( name, ownedNode );
+					currentNode->attachTo( *blockContext->parentNode );
+					log::info << "Loaded scene node [" << name << "]" << std::endl;
+				}
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	//*********************************************************************************************
@@ -308,9 +442,14 @@ namespace c3d
 	{
 		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene };
 		BlockParserContextT< NodeContext > nodeContext{ result, CSCNSection::eNode, CSCNSection::eScene };
+		BlockParserContextT< NodeContext > nodeGroupContext{ result, CSCNSection::eNodeGroup, CSCNSection::eScene };
+		BlockParserContextT< NodeContext > nodeGroupPositionsContext{ result, CSCNSection::eNodeGroupPositions, CSCNSection::eNodeGroup };
+		BlockParserContextT< NodeContext > nodeGroupOrientationsContext{ result, CSCNSection::eNodeGroupOrientations, CSCNSection::eNodeGroup };
+		BlockParserContextT< NodeContext > nodeGroupScalesContext{ result, CSCNSection::eNodeGroupScales, CSCNSection::eNodeGroup };
 
 		sceneContext.addPushParser( cuT( "camera_node" ), CSCNSection::eNode, node::parserCameraNode, { makeParameter< ParameterType::eName >() } );
 		sceneContext.addPushParser( cuT( "scene_node" ), CSCNSection::eNode, node::parserObjectNode, { makeParameter< ParameterType::eName >() } );
+		sceneContext.addPushParser( cuT( "scene_node_group" ), CSCNSection::eNodeGroup, node::parserObjectNodeGroup, { makeParameter< ParameterType::eName >() } );
 
 		nodeContext.addParser( cuT( "static" ), node::parserStatic, { makeParameter< ParameterType::eBool >() } );
 		nodeContext.addParser( cuT( "visible" ), node::parserVisible, { makeParameter< ParameterType::eBool >() } );
@@ -321,6 +460,21 @@ namespace c3d
 		nodeContext.addParser( cuT( "direction" ), node::parserDirection, { makeParameter< ParameterType::ePoint3F >() } );
 		nodeContext.addParser( cuT( "scale" ), node::parserScale, { makeParameter< ParameterType::ePoint3F >() } );
 		nodeContext.addPopParser( cuT( "}" ), node::parserEnd );
+
+		nodeGroupContext.addParser( cuT( "parent" ), node::parserGroupParent, { makeParameter< ParameterType::eName >() } );
+		nodeGroupContext.addPushParser( cuT( "positions" ), CSCNSection::eNodeGroupPositions, node::parserObjectNodeGroupPositions );
+		nodeGroupContext.addPushParser( cuT( "orientations" ), CSCNSection::eNodeGroupOrientations, node::parserObjectNodeGroupOrientations );
+		nodeGroupContext.addPushParser( cuT( "scales" ), CSCNSection::eNodeGroupScales, node::parserObjectNodeGroupScales );
+		nodeGroupContext.addPopParser( cuT( "}" ), node::parserObjectNodeGroupEnd );
+
+		nodeGroupPositionsContext.addParser( cuT( "position" ), node::parserObjectNodeGroupPosition, { makeParameter< ParameterType::ePoint3F >() } );
+		nodeGroupPositionsContext.addPopParser( cuT( "}" ), node::parserObjectNodeGroupPositionsEnd );
+
+		nodeGroupOrientationsContext.addParser( cuT( "orientation" ), node::parserObjectNodeGroupOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+		nodeGroupOrientationsContext.addPopParser( cuT( "}" ), node::parserObjectNodeGroupOrientationsEnd );
+
+		nodeGroupScalesContext.addParser( cuT( "scale" ), node::parserObjectNodeGroupScale, { makeParameter< ParameterType::ePoint3F >() } );
+		nodeGroupScalesContext.addPopParser( cuT( "}" ), node::parserObjectNodeGroupScalesEnd );
 
 		SceneNodeAnimation::addParsers( result );
 	}
@@ -753,6 +907,18 @@ namespace c3d
 	}
 
 	Engine * getEngine( NodeContext const & context )
+	{
+		return getEngine( *context.scene );
+	}
+
+	//*********************************************************************************************
+
+	String getPrefix( NodeGroupContext const & context )
+	{
+		return getPrefix( *context.scene );
+	}
+
+	Engine * getEngine( NodeGroupContext const & context )
 	{
 		return getEngine( *context.scene );
 	}

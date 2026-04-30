@@ -100,6 +100,10 @@ namespace c3d
 		eNodeAnimationKeyframe = c3d::makeSectionName( 'N', 'O', 'D', 'A', 'N', 'K', 'F', 'M' ),
 		eToneMapping = c3d::makeSectionName( 'T', 'O', 'N', 'E', 'M', 'A', 'P', 'G' ),
 		eFroxels = c3d::makeSectionName( 'V', 'O', 'L', 'F', 'R', 'O', 'X', 'L' ),
+		eNodeGroup = c3d::makeSectionName( 'N', 'O', 'D', 'E', 'G', 'R', 'U', 'P' ),
+		eNodeGroupPositions = c3d::makeSectionName( 'N', 'D', 'G', 'P', 'P', 'O', 'S', 'S' ),
+		eNodeGroupScales = c3d::makeSectionName( 'N', 'D', 'G', 'P', 'S', 'C', 'L', 'S' ),
+		eNodeGroupOrientations = c3d::makeSectionName( 'N', 'D', 'G', 'P', 'R', 'O', 'T', 'S' ),
 	};
 
 	struct SceneContext;

@@ -384,6 +384,10 @@ namespace c3d
 			, { SectionId( CSCNSection::eMeshAnimationKeyframeWeights ), cuT( "mesh_animation_keyframe_weights" ) }
 			, { SectionId( CSCNSection::eToneMapping ), cuT( "tone_mapping" ) }
 			, { SectionId( CSCNSection::eFroxels ), cuT( "froxels" ) }
+			, { SectionId( CSCNSection::eNodeGroup ), cuT( "scene_node_group" ) }
+			, { SectionId( CSCNSection::eNodeGroupPositions ), cuT( "positions" ) }
+			, { SectionId( CSCNSection::eNodeGroupScales ), cuT( "scales" ) }
+			, { SectionId( CSCNSection::eNodeGroupOrientations ), cuT( "orientations" ) }
 		};
 	}
 

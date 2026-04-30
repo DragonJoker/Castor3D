@@ -510,6 +510,19 @@ namespace c3d
 
 	C3D_API String getPrefix( NodeContext const & context );
 	C3D_API Engine * getEngine( NodeContext const & context );
+
+	struct NodeGroupContext
+	{
+		SceneContext * scene{};
+		SceneNodeRPtr parentNode{};
+		String groupName;
+		Vector< Point3f > positions;
+		Vector< Point3f > scales;
+		Vector< Quaternion > orientations;
+	};
+
+	C3D_API String getPrefix( NodeGroupContext const & context );
+	C3D_API Engine * getEngine( NodeGroupContext const & context );
 }
 
 #endif
