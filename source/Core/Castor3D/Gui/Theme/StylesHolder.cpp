@@ -89,115 +89,137 @@ namespace c3d
 		return createControlStyle( c3d::move( name ), scene, m_staticStyles );
 	}
 
-	ButtonStyleRPtr StylesHolder::getButtonStyle( String const & name )const
+	ButtonStyleRPtr StylesHolder::getButtonStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_buttonStyles );
+		return getControlStyle( name, m_buttonStyles, throwOnFail );
 	}
 
-	ComboBoxStyleRPtr StylesHolder::getComboBoxStyle( String const & name )const
+	ComboBoxStyleRPtr StylesHolder::getComboBoxStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_comboBoxStyles );
+		return getControlStyle( name, m_comboBoxStyles, throwOnFail );
 	}
 
-	EditStyleRPtr StylesHolder::getEditStyle( String const & name )const
+	EditStyleRPtr StylesHolder::getEditStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_editStyles );
+		return getControlStyle( name, m_editStyles, throwOnFail );
 	}
 
-	ExpandablePanelStyleRPtr StylesHolder::getExpandablePanelStyle( String const & name )const
+	ExpandablePanelStyleRPtr StylesHolder::getExpandablePanelStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_expandablePanelStyles );
+		return getControlStyle( name, m_expandablePanelStyles, throwOnFail );
 	}
 
-	FrameStyleRPtr StylesHolder::getFrameStyle( String const & name )const
+	FrameStyleRPtr StylesHolder::getFrameStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_frameStyles );
+		return getControlStyle( name, m_frameStyles, throwOnFail );
 	}
 
-	ListBoxStyleRPtr StylesHolder::getListBoxStyle( String const & name )const
+	ListBoxStyleRPtr StylesHolder::getListBoxStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_listBoxStyles );
+		return getControlStyle( name, m_listBoxStyles, throwOnFail );
 	}
 
-	PanelStyleRPtr StylesHolder::getPanelStyle( String const & name )const
+	PanelStyleRPtr StylesHolder::getPanelStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_panelStyles );
+		return getControlStyle( name, m_panelStyles, throwOnFail );
 	}
 
-	ProgressStyleRPtr StylesHolder::getProgressStyle( String const & name )const
+	ProgressStyleRPtr StylesHolder::getProgressStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_progressStyles );
+		return getControlStyle( name, m_progressStyles, throwOnFail );
 	}
 
-	ScrollBarStyleRPtr StylesHolder::getScrollBarStyle( String const & name )const
+	ScrollBarStyleRPtr StylesHolder::getScrollBarStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_scrollBarStyles );
+		return getControlStyle( name, m_scrollBarStyles, throwOnFail );
 	}
 
-	SliderStyleRPtr StylesHolder::getSliderStyle( String const & name )const
+	SliderStyleRPtr StylesHolder::getSliderStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_sliderStyles );
+		return getControlStyle( name, m_sliderStyles, throwOnFail );
 	}
 
-	StaticStyleRPtr StylesHolder::getStaticStyle( String const & name )const
+	StaticStyleRPtr StylesHolder::getStaticStyle( String const & name, bool throwOnFail )const
 	{
-		return getControlStyle( name, m_staticStyles );
+		return getControlStyle( name, m_staticStyles, throwOnFail );
 	}
 
 	//************************************************************************************************
 
 	ControlStyleRPtr ButtonStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getButtonStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createButtonStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr ComboBoxStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getComboBoxStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createComboBoxStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr EditStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getEditStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createEditStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr ExpandablePanelStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getExpandablePanelStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createExpandablePanelStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr FrameStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getFrameStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createFrameStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr ListBoxStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getListBoxStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createListBoxStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr PanelStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getPanelStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createPanelStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr ProgressStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getProgressStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createProgressStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr ScrollBarStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getScrollBarStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createScrollBarStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr SliderStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getSliderStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createSliderStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 
 	ControlStyleRPtr StaticStyle::doCreate( String const & cloneName )const
 	{
+		if ( auto style = getEngine().getControlsManager()->getStaticStyle( cloneName, false ) )
+			return style;
 		return getEngine().getControlsManager()->createStaticStyle( cloneName, hasScene() ? &getScene() : nullptr );
 	}
 

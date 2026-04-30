@@ -45,7 +45,8 @@ namespace c3d
 
 	template< typename StyleT >
 	StyleT * StylesHolder::getControlStyle( String name
-		, StringMap< UniquePtr< StyleT > > const & controls )const
+		, StringMap< UniquePtr< StyleT > > const & controls
+		, bool throwOnFail )const
 	{
 		auto it = controls.find( name );
 
@@ -57,11 +58,11 @@ namespace c3d
 		StyleT * style{};
 		auto panelIt = std::find_if( m_panelStyles.begin()
 			, m_panelStyles.end()
-			, [&name, &style]( auto const & lookup )
+			, [throwOnFail, &name, &style]( auto const & lookup )
 			{
 				if ( name.find( lookup.first + cuT( "/" ) ) == 0u )
 				{
-					style = lookup.second->template getStyle< StyleT >( name.substr( lookup.first.size() + 1u ) );
+					style = lookup.second->template getStyle< StyleT >( name.substr( lookup.first.size() + 1u ), throwOnFail );
 				}
 
 				return style != nullptr;
@@ -76,18 +77,18 @@ namespace c3d
 		{
 			auto expandPanelIt = std::find_if( m_expandablePanelStyles.begin()
 				, m_expandablePanelStyles.end()
-				, [&name, &style]( auto const & lookup )
+				, [throwOnFail, &name, &style]( auto const & lookup )
 				{
 					auto header = lookup.first + cuT( "/Header/" );
 					auto panel = lookup.first + cuT( "/Content/" );
 
 					if ( name.find( header ) == 0u )
 					{
-						style = lookup.second->getHeaderStyle().template getStyle< StyleT >( name.substr( header.size() ) );
+						style = lookup.second->getHeaderStyle().template getStyle< StyleT >( name.substr( header.size() ), throwOnFail );
 					}
 					else if ( name.find( panel ) == 0u )
 					{
-						style = lookup.second->getContentStyle().template getStyle< StyleT >( name.substr( panel.size() ) );
+						style = lookup.second->getContentStyle().template getStyle< StyleT >( name.substr( panel.size() ), throwOnFail );
 					}
 
 					return style != nullptr;
@@ -99,7 +100,7 @@ namespace c3d
 			}
 		}
 
-		if ( style == nullptr )
+		if ( style == nullptr && throwOnFail )
 		{
 			CU_SrcException( "StylesHolder", "Couldn't find style" );
 		}

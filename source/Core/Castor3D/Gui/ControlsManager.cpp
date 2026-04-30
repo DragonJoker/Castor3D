@@ -34,16 +34,17 @@ namespace c3d
 
 		template< typename StyleT >
 		StyleT * getThemeStyle( String const & name
-			, StringMap< ThemeUPtr > const & themes )
+			, StringMap< ThemeUPtr > const & themes
+			, bool throwOnFail )
 		{
 			StyleT * style{};
 			auto themeIt = std::find_if( themes.begin()
 				, themes.end()
-				, [&name, &style]( auto const & lookup )
+				, [throwOnFail, &name, &style]( auto const & lookup )
 				{
 					if ( name.find( lookup.first + cuT( "/" ) ) == 0u )
 					{
-						style = lookup.second->template getStyle< StyleT >( name.substr( lookup.first.size() + 1u ) );
+						style = lookup.second->template getStyle< StyleT >( name.substr( lookup.first.size() + 1u ), throwOnFail );
 					}
 
 					return style != nullptr;
@@ -112,114 +113,114 @@ namespace c3d
 		return nullptr;
 	}
 
-	ButtonStyleRPtr ControlsManager::getButtonStyle( String const & name )const
+	ButtonStyleRPtr ControlsManager::getButtonStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< ButtonStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< ButtonStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getButtonStyle( name );
+		return StylesHolder::getButtonStyle( name, throwOnFail );
 	}
 
-	ComboBoxStyleRPtr ControlsManager::getComboBoxStyle( String const & name )const
+	ComboBoxStyleRPtr ControlsManager::getComboBoxStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< ComboBoxStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< ComboBoxStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getComboBoxStyle( name );
+		return StylesHolder::getComboBoxStyle( name, throwOnFail );
 	}
 
-	EditStyleRPtr ControlsManager::getEditStyle( String const & name )const
+	EditStyleRPtr ControlsManager::getEditStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< EditStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< EditStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getEditStyle( name );
+		return StylesHolder::getEditStyle( name, throwOnFail );
 	}
 
-	ExpandablePanelStyleRPtr ControlsManager::getExpandablePanelStyle( String const & name )const
+	ExpandablePanelStyleRPtr ControlsManager::getExpandablePanelStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< ExpandablePanelStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< ExpandablePanelStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getExpandablePanelStyle( name );
+		return StylesHolder::getExpandablePanelStyle( name, throwOnFail );
 	}
 
-	FrameStyleRPtr ControlsManager::getFrameStyle( String const & name )const
+	FrameStyleRPtr ControlsManager::getFrameStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< FrameStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< FrameStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getFrameStyle( name );
+		return StylesHolder::getFrameStyle( name, throwOnFail );
 	}
 
-	ListBoxStyleRPtr ControlsManager::getListBoxStyle( String const & name )const
+	ListBoxStyleRPtr ControlsManager::getListBoxStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< ListBoxStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< ListBoxStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getListBoxStyle( name );
+		return StylesHolder::getListBoxStyle( name, throwOnFail );
 	}
 
-	PanelStyleRPtr ControlsManager::getPanelStyle( String const & name )const
+	PanelStyleRPtr ControlsManager::getPanelStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< PanelStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< PanelStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getPanelStyle( name );
+		return StylesHolder::getPanelStyle( name, throwOnFail );
 	}
 
-	ProgressStyleRPtr ControlsManager::getProgressStyle( String const & name )const
+	ProgressStyleRPtr ControlsManager::getProgressStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< ProgressStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< ProgressStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getProgressStyle( name );
+		return StylesHolder::getProgressStyle( name, throwOnFail );
 	}
 
-	ScrollBarStyleRPtr ControlsManager::getScrollBarStyle( String const & name )const
+	ScrollBarStyleRPtr ControlsManager::getScrollBarStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< ScrollBarStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< ScrollBarStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getScrollBarStyle( name );
+		return StylesHolder::getScrollBarStyle( name, throwOnFail );
 	}
 
-	SliderStyleRPtr ControlsManager::getSliderStyle( String const & name )const
+	SliderStyleRPtr ControlsManager::getSliderStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< SliderStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< SliderStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getSliderStyle( name );
+		return StylesHolder::getSliderStyle( name, throwOnFail );
 	}
 
-	StaticStyleRPtr ControlsManager::getStaticStyle( String const & name )const
+	StaticStyleRPtr ControlsManager::getStaticStyle( String const & name, bool throwOnFail )const
 	{
-		if ( auto style = ctrlmgr::getThemeStyle< StaticStyle >( name, m_themes ) )
+		if ( auto style = ctrlmgr::getThemeStyle< StaticStyle >( name, m_themes, throwOnFail ) )
 		{
 			return style;
 		}
 
-		return StylesHolder::getStaticStyle( name );
+		return StylesHolder::getStaticStyle( name, throwOnFail );
 	}
 
 	void ControlsManager::create( ControlRPtr control )

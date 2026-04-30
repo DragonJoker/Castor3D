@@ -90,77 +90,77 @@ namespace c3d
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ButtonStyleRPtr getButtonStyle( String const & name )const override;
+		C3D_API ButtonStyleRPtr getButtonStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The combo box style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ComboBoxStyleRPtr getComboBoxStyle( String const & name )const override;
+		C3D_API ComboBoxStyleRPtr getComboBoxStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The edit style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API EditStyleRPtr getEditStyle( String const & name )const override;
+		C3D_API EditStyleRPtr getEditStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The expandable panel style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ExpandablePanelStyleRPtr getExpandablePanelStyle( String const & name )const override;
+		C3D_API ExpandablePanelStyleRPtr getExpandablePanelStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The frame style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API FrameStyleRPtr getFrameStyle( String const & name )const override;
+		C3D_API FrameStyleRPtr getFrameStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The list box style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ListBoxStyleRPtr getListBoxStyle( String const & name )const override;
+		C3D_API ListBoxStyleRPtr getListBoxStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The panel style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API PanelStyleRPtr getPanelStyle( String const & name )const override;
+		C3D_API PanelStyleRPtr getPanelStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The progress style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ProgressStyleRPtr getProgressStyle( String const & name )const override;
+		C3D_API ProgressStyleRPtr getProgressStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The scrollbar style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ScrollBarStyleRPtr getScrollBarStyle( String const & name )const override;
+		C3D_API ScrollBarStyleRPtr getScrollBarStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The slider style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API SliderStyleRPtr getSliderStyle( String const & name )const override;
+		C3D_API SliderStyleRPtr getSliderStyle( String const & name, bool throwOnFail = true )const override;
 
 		/** \return
 		*	The static style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API StaticStyleRPtr getStaticStyle( String const & name )const override;
+		C3D_API StaticStyleRPtr getStaticStyle( String const & name, bool throwOnFail = true )const override;
 
 		//@}
 		/**@name Controls management */

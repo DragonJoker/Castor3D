@@ -68,64 +68,64 @@ namespace c3d
 		C3D_API StaticStyleRPtr createStaticStyle( String name
 			, Scene * scene );
 
-		C3D_API virtual ButtonStyleRPtr getButtonStyle( String const & name )const;
-		C3D_API virtual ComboBoxStyleRPtr getComboBoxStyle( String const & name )const;
-		C3D_API virtual EditStyleRPtr getEditStyle( String const & name )const;
-		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( String const & name )const;
-		C3D_API virtual FrameStyleRPtr getFrameStyle( String const & name )const;
-		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( String const & name )const;
-		C3D_API virtual PanelStyleRPtr getPanelStyle( String const & name )const;
-		C3D_API virtual ProgressStyleRPtr getProgressStyle( String const & name )const;
-		C3D_API virtual ScrollBarStyleRPtr getScrollBarStyle( String const & name )const;
-		C3D_API virtual SliderStyleRPtr getSliderStyle( String const & name )const;
-		C3D_API virtual StaticStyleRPtr getStaticStyle( String const & name )const;
+		C3D_API virtual ButtonStyleRPtr getButtonStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual ComboBoxStyleRPtr getComboBoxStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual EditStyleRPtr getEditStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual FrameStyleRPtr getFrameStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual PanelStyleRPtr getPanelStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual ProgressStyleRPtr getProgressStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual ScrollBarStyleRPtr getScrollBarStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual SliderStyleRPtr getSliderStyle( String const & name, bool throwOnFail = true )const;
+		C3D_API virtual StaticStyleRPtr getStaticStyle( String const & name, bool throwOnFail = true )const;
 
 		template< typename StyleT >
-		StyleT * getStyle( String const & name )const
+		StyleT * getStyle( String const & name, bool throwOnFail = true )const
 		{
 			if constexpr ( std::is_same_v< StyleT, ButtonStyle > )
 			{
-				return getButtonStyle( name );
+				return getButtonStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, ComboBoxStyle > )
 			{
-				return getComboBoxStyle( name );
+				return getComboBoxStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, EditStyle > )
 			{
-				return getEditStyle( name );
+				return getEditStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, ExpandablePanelStyle > )
 			{
-				return getExpandablePanelStyle( name );
+				return getExpandablePanelStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, FrameStyle > )
 			{
-				return getFrameStyle( name );
+				return getFrameStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, ListBoxStyle > )
 			{
-				return getListBoxStyle( name );
+				return getListBoxStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, PanelStyle > )
 			{
-				return getPanelStyle( name );
+				return getPanelStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, ProgressStyle > )
 			{
-				return getProgressStyle( name );
+				return getProgressStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, ScrollBarStyle > )
 			{
-				return getScrollBarStyle( name );
+				return getScrollBarStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, SliderStyle > )
 			{
-				return getSliderStyle( name );
+				return getSliderStyle( name, throwOnFail );
 			}
 			else if constexpr ( std::is_same_v< StyleT, StaticStyle > )
 			{
-				return getStaticStyle( name );
+				return getStaticStyle( name, throwOnFail );
 			}
 			else
 			{
@@ -233,7 +233,8 @@ namespace c3d
 
 		template< typename StyleT >
 		StyleT * getControlStyle( String name
-			, StringMap< UniquePtr< StyleT > > const & controls )const;
+			, StringMap< UniquePtr< StyleT > > const & controls
+			, bool throwOnFail )const;
 
 	private:
 		Engine & m_engine;
