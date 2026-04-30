@@ -52,7 +52,7 @@ namespace c3d
 	{
 		uploader.pushUpload( m_rawData
 			, m_size
-			, *m_buffer->buffer
+			, m_buffer->getBuffer()
 			, 0u
 			, m_wantedState.access
 			, m_wantedState.pipelineStage );
@@ -64,7 +64,7 @@ namespace c3d
 	{
 		uploader.pushUpload( m_rawData
 			, size
-			, *m_buffer->buffer
+			, m_buffer->getBuffer()
 			, offset
 			, m_wantedState.access
 			, m_wantedState.pipelineStage );
@@ -90,7 +90,7 @@ namespace c3d
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.emplace_back() = { *m_buffer->buffer
+		result.bufferInfo.emplace_back() = { m_buffer->getBuffer()
 			, offset + sizeof( uint32_t ) * 4u
 			, size };
 		return result;

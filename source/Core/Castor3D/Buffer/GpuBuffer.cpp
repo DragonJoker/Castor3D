@@ -137,7 +137,7 @@ namespace c3d
 			, size
 			, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
 		staging.pushUpload( m_ownData.data() + o, s
-			, *getBuffer().buffer, o
+			, getBuffer().getBuffer(), o
 			, dstAccessState );
 	}
 

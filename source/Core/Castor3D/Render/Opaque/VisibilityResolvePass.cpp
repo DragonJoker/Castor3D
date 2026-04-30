@@ -2424,7 +2424,7 @@ namespace c3d
 						, sizeof( visres::PushData )
 						, &pushData );
 					if ( sortPixels() )
-						context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
+						context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts().getBuffer(), pushData.pipelineId * sizeof( Point3ui ) );
 					else
 						context.getContext().vkCmdDispatch( commandBuffer, extent.width >> 2u, extent.height >> 2u, 1u );
 					++m_drawCalls;
@@ -2459,7 +2459,7 @@ namespace c3d
 					, 0u
 					, nullptr );
 				if ( sortPixels() )
-					context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
+					context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts().getBuffer(), pushData.pipelineId * sizeof( Point3ui ) );
 				else
 					context.getContext().vkCmdDispatch( commandBuffer, extent.width >> 2u, extent.height >> 2u, 1u );
 				++m_drawCalls;

@@ -269,16 +269,16 @@ namespace c3d
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock( { "PickingPass Copy"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		auto pipelineStageFlags = m_pickBuffer->buffer->getCompatibleStageFlags();
+		auto pipelineStageFlags = m_pickBuffer->getBuffer().getCompatibleStageFlags();
 		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_pickBuffer->buffer->makeTransferDestination() );
+			, m_pickBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_colourView.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
-			, *m_pickBuffer->buffer );
+			, m_pickBuffer->getBuffer() );
 
 #	if C3D_DebugPickingTransfer
 
@@ -311,7 +311,7 @@ namespace c3d
 
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_pickBuffer->buffer->makeHostRead() );
+			, m_pickBuffer->getBuffer().makeHostRead() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, m_colourView.makeColourAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );

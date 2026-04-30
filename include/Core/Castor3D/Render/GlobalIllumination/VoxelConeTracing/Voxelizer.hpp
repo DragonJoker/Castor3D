@@ -115,7 +115,6 @@ namespace c3d
 		/**@}*/
 
 	private:
-		void doCreateClearStaticsPass( ProgressBar * progress );
 		void doCreateVoxelizePass( ProgressBar * progress
 			, BufferT< Voxel > & outVoxels
 			, SceneCuller & culler

@@ -384,6 +384,11 @@ namespace c3d
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
 		C3D_API ShadowBuffer * getShadowBuffer()const;
 
+		crg::ResourcesCache & getResources()noexcept
+		{
+			return m_resources;
+		}
+
 		uint32_t getIndex()const noexcept
 		{
 			return m_index;

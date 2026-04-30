@@ -74,19 +74,19 @@ namespace ocean_fft
 			, c3d::BufferT< cfloat > const & distribution )
 			: fftConfig{ pfftConfig }
 			, frequency{ c3d::makeBuffer< cfloat >( fftConfig.device
-					, c3d::getEngine( fftConfig.device ).getGraphResourceCache()
+					, c3d::getEngine( fftConfig.device ).getResources()
 					, dimensions.width * dimensions.height
 					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
 					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Frequency" ) ) }
 			, result{ c3d::makeBufferBase( pfftConfig.device
-					, c3d::getEngine( fftConfig.device ).getGraphResourceCache()
+					, c3d::getEngine( fftConfig.device ).getResources()
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
 					, c3d::MemoryPropertyFlags::eDeviceLocal
 					, prefix + name + cuT( "Result0" ) )
 				, c3d::makeBufferBase( pfftConfig.device
-					, c3d::getEngine( fftConfig.device ).getGraphResourceCache()
+					, c3d::getEngine( fftConfig.device ).getResources()
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, c3d::BufferUsageFlags::eStorageBuffer | c3d::BufferUsageFlags::eTransferSrc | c3d::BufferUsageFlags::eTransferDst
 					, c3d::MemoryPropertyFlags::eDeviceLocal

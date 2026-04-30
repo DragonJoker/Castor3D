@@ -68,7 +68,7 @@ namespace Bloom
 		, m_shader{ cuT( "BloomHiPass" ), hi::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ device
-			, c3d::getEngine( device ).getGraphResourceCache()
+			, c3d::getEngine( device ).getResources()
 			, "BLHi"
 			, { c3d::ImageCreateFlags::eNone
 				, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }, 1u, DebugHiPass ? 1u : blurPassesCount

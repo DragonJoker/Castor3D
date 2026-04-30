@@ -159,7 +159,7 @@ namespace c3d
 		{
 			auto result = ashes::WriteDescriptorSet{ uint32_t( binding ), dstArrayElement, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			result.bufferInfo.push_back( { *getBuffer().buffer, getOffset(), getSize() } );
+			result.bufferInfo.push_back( { getBuffer().getBuffer(), getOffset(), getSize() } );
 			return result;
 		}
 

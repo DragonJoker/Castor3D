@@ -313,7 +313,7 @@ namespace ocean_fft
 				, m_device, cuT( "OceanFFTDistributionSeedsUpload" ), *queueData->commandPool};
 			uploader->pushUpload( distribution.data()
 				, distribution.size() * sizeof( cfloat )
-				, *distribBuffer.buffer
+				, distribBuffer.getBuffer()
 				, 0u
 				, c3d::ComputeShaderReadState );
 		}

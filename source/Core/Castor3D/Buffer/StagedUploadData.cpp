@@ -370,7 +370,7 @@ namespace c3d
 			}
 
 			StagingBuffer buffer{ makeUnique< GpuPackedBaseBuffer >( getDevice()
-				, getEngine( getDevice() ).getGraphResourceCache()
+				, getEngine( getDevice() ).getResources()
 				, BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
 				, MemoryPropertyFlags::eHostVisible | MemoryPropertyFlags::eHostCoherent
 				, getName() + cuT( "Staging" ) + string::toString( pool.size() )

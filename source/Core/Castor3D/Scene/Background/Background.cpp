@@ -156,7 +156,7 @@ namespace c3d
 							, device, cuT( "BackgroundIBUpload" ), *data->commandPool };
 						uploader->pushUpload( indexData.data()
 							, VkDeviceSize( sizeof( uint16_t ) * indexData.size() )
-							, *indexBuffer.buffer, 0u
+							, indexBuffer.getBuffer(), 0u
 							, VertexIndexInputState );
 					}
 				}
@@ -198,7 +198,7 @@ namespace c3d
 							, device, cuT( "BackgroundVBUpload" ), *data->commandPool };
 						uploader->pushUpload( vertexData.data()
 							, vertexData.size() * sizeof( Point3f )
-							, *vertexBuffer.buffer, 0u
+							, vertexBuffer.getBuffer(), 0u
 							, VertexAttributeInputState );
 					}
 				}

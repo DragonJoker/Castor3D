@@ -1063,7 +1063,7 @@ namespace c3d
 			return m_resourceHandler;
 		}
 
-		crg::ResourcesCache & getGraphResourceCache()noexcept
+		crg::ResourcesCache & getResources()noexcept
 		{
 			return m_resources;
 		}

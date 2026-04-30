@@ -35,7 +35,7 @@ namespace c3d
 		, descriptorLayout{ descriptorLayout }
 		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, MaxOverlayPipelines
 			, BufferUsageFlags::eStorageBuffer
 			, MemoryPropertyFlags::eHostVisible
@@ -43,7 +43,7 @@ namespace c3d
 		, overlaysBuffer{ makeArrayView( overlaysData->lock()
 			, overlaysData->getCount() ) }
 		, vertexBuffer{ device.renderSystem
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eStorageBuffer
 			, MemoryPropertyFlags::eDeviceLocal
 			, name + cuT( "Vertex" )
@@ -91,7 +91,7 @@ namespace c3d
 			debugName += cuT( "-" ) + makeString( pipeline.pipeline->getName() );
 			auto & pipelineData = it->second;
 			pipelineData.overlaysIDsBuffer = makeBuffer< uint32_t >( device
-				, engine.getGraphResourceCache()
+				, engine.getResources()
 				, MaxOverlayPipelines
 				, BufferUsageFlags::eStorageBuffer
 				, MemoryPropertyFlags::eHostVisible
@@ -99,7 +99,7 @@ namespace c3d
 			pipelineData.overlaysIDs = makeArrayView( pipelineData.overlaysIDsBuffer->lock()
 				, pipelineData.overlaysIDsBuffer->getCount() );
 			pipelineData.indirectCommandsBuffer = makeBuffer< VkDrawIndirectCommand >( device
-				, engine.getGraphResourceCache()
+				, engine.getResources()
 				, MaxOverlayPipelines
 				, BufferUsageFlags::eIndirectBuffer
 				, MemoryPropertyFlags::eHostVisible
@@ -111,7 +111,7 @@ namespace c3d
 			auto & descs = *pipelineData.descriptorSets;
 			descs.draw = doCreateDescriptorSet( debugName
 				, fontTexture
-				, *pipelineData.overlaysIDsBuffer->buffer );
+				, pipelineData.overlaysIDsBuffer->getBuffer() );
 			descs.all.push_back( *descs.draw );
 			descs.all.push_back( *c3d::getEngine( device ).getTextureUnitCache().getDescriptorSet() );
 

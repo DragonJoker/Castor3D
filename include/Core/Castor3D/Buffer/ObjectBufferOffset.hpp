@@ -70,7 +70,7 @@ namespace c3d
 			{
 				return ashes::WriteDescriptorSet{ uint32_t( binding )
 					, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, { VkDescriptorBufferInfo{ *getBuffer().buffer, getOffset(), getAskedSize() } } };
+					, { VkDescriptorBufferInfo{ getBuffer().getBuffer(), getOffset(), getAskedSize() } } };
 			}
 
 			template< typename BindingT >

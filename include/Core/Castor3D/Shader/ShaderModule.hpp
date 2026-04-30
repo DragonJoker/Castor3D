@@ -151,42 +151,14 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
-	*	Helper class for SSBO with a counter heading its data, to be coupled with shader::AppendBufferT.
-	*\remarks
-	*	This buffer is meant to be filled by the GPU.
-	*\~french
-	*\brief
-	*	Classe d'aide pour un SSBO avec un compteur au début de ses données, à utiliser avec shader::AppendBufferT.
-	*\remarks
-	*	Ce buffer est fait pour être rempli au niveau GPU.
-	*/
-	class ShaderAppendBuffer;
-	/**
-	*\~english
-	*\brief
 	*	Factory for shader::LightingModel.
 	*\~french
 	*\brief
 	*	Fabrique de shader::LightingModel.
 	*/
 	class LightingModelFactory;
-	/**
-	*\~english
-	*\brief
-	*	Wrapper class to select between SSBO or TBO.
-	*\remarks
-	*	Allows to user either one or the other in the same way.
-	*\~french
-	*\brief
-	*	Classe permettant de choisir entre SSBO et TBO.
-	*\remarks
-	*	Permet d'utiliser l'un comme l'autre de la même manière.
-	*/
-	template< typename ElementTypeTraits >
-	class StructuredShaderBuffer;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( c3d, ShaderAppendBuffer, C3D_API );
 	CU_DeclareSmartPtr( c3d, ShaderBuffer, C3D_API );
 	CU_DeclareSmartPtr( c3d, ShaderProgram, C3D_API );
 	CU_DeclareSmartPtr( c3d, LightingModelFactory, C3D_API );

@@ -20,8 +20,6 @@ namespace c3d
 			| ImageUsageFlags::eColorAttachment );
 	}
 
-	VolumetricRendering::~VolumetricRendering()noexcept = default;
-
 	VolumetricRendering::VolumetricRendering( RenderTechnique & parent
 		, RenderDevice const & device
 		, Texture const & colour
@@ -58,12 +56,22 @@ namespace c3d
 	{
 		if ( m_components.hasAnyEnabled() )
 		{
+			m_transmittance->create();
+			m_scattering->create();
 			m_components.registerCamera( parent.getCamera(), &depthObj );
 			m_components.registerPasses( parent.getResources(), m_graph, parent.getCamera() );
 			m_frustumFroxels->createFramePasses( m_graph );
 			m_frustumFroxels->createDebugDisplayPrograms( parent.getCameraUbo(), parent.getRenderUbo() );
 			createVolumesTraversalPass( m_graph, m_device, parent.getCamera(), *this, parent.getCameraUbo(), *m_transmittance, *m_scattering );
 		}
+	}
+
+	VolumetricRendering::~VolumetricRendering()noexcept
+	{
+		if ( m_scattering )
+			m_scattering->destroy();
+		if ( m_transmittance )
+			m_transmittance->destroy();
 	}
 
 	void VolumetricRendering::update( CpuUpdater & updater )

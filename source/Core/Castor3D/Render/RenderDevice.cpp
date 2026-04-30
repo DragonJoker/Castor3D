@@ -591,11 +591,11 @@ namespace c3d
 			}
 		}
 
-		bufferPool = makeUnique< GpuBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "GlobalBufferPool" ) );
-		geometryPools = makeUnique< ObjectBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "ModelBuffersPool" ) );
-		vertexPools = makeUnique< VertexBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "VertexBuffersPool" ) );
-		indexPools = makeUnique< IndexBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "IndexBuffersPool" ) );
-		uboPool = makeUnique< UniformBufferPool >( *this, renderSystem.getEngine()->getGraphResourceCache(), cuT( "UniformBufferPool" ) );
+		bufferPool = makeUnique< GpuBufferPool >( *this, renderSystem.getEngine()->getResources(), cuT( "GlobalBufferPool" ) );
+		geometryPools = makeUnique< ObjectBufferPool >( *this, renderSystem.getEngine()->getResources(), cuT( "ModelBuffersPool" ) );
+		vertexPools = makeUnique< VertexBufferPool >( *this, renderSystem.getEngine()->getResources(), cuT( "VertexBuffersPool" ) );
+		indexPools = makeUnique< IndexBufferPool >( *this, renderSystem.getEngine()->getResources(), cuT( "IndexBuffersPool" ) );
+		uboPool = makeUnique< UniformBufferPool >( *this, renderSystem.getEngine()->getResources(), cuT( "UniformBufferPool" ) );
 
 		if ( renderSystem.getEngine()->getUpscalingConfig().enabled )
 			upscaling = makeUnique< UpscalingWrapper >( *this );

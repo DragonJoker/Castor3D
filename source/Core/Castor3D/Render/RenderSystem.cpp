@@ -1040,7 +1040,7 @@ namespace c3d
 	bool RenderSystem::doCreateRandomStorage( RenderDevice const & device )
 	{
 		m_randomStorage = makeBuffer< Point4f >( device
-			, getEngine()->getGraphResourceCache()
+			, getEngine()->getResources()
 			, RandomDataCount
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
 			, MemoryPropertyFlags::eHostVisible

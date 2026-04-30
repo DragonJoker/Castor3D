@@ -44,15 +44,15 @@ namespace c3d
 		, device{ device }
 		, name{ debugName }
 		, charsBuffer{ txtbufpool::makeDataBuffer< TextChar >( device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, MaxCharsPerBuffer
 			, name + cuT( "-CharsData" ) ) }
 		, wordsBuffer{ txtbufpool::makeDataBuffer< TextWord >( device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, MaxWordsPerBuffer
 			, name + cuT( "-WordsData" ) ) }
 		, linesBuffer{ txtbufpool::makeDataBuffer< TextLine >( device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, MaxLinesPerBuffer
 			, name + cuT( "-LinesData" ) ) }
 	{

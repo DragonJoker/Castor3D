@@ -108,7 +108,7 @@ namespace c3d
 			{
 				if ( buffer.buffer->hasAllocated() )
 				{
-					auto const & vkBuffer = *buffer.buffer->getBuffer().buffer;
+					auto const & vkBuffer = buffer.buffer->getBuffer().getBuffer();
 					auto curFlags = vkBuffer.getCompatibleStageFlags();
 					auto barrier = vkBuffer.makeHostWrite();
 

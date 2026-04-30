@@ -86,17 +86,17 @@ namespace c3d
 			, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 		if ( auto const & buffer = *m_buffers.emplace_back( makeBufferBase( getDevice()
-				, getEngine( getDevice() ).getGraphResourceCache()
+				, getEngine( getDevice() ).getResources()
 				, mappedSize
 				, BufferUsageFlags::eTransferSrc
 				, MemoryPropertyFlags::eHostVisible
 				, getName() + cuT( "/StagingBuffer" ) ) );
-			doCopyData( data.srcData, data.srcSize, *buffer.buffer, 0u ) )
+			doCopyData( data.srcData, data.srcSize, buffer.getBuffer(), 0u ) )
 		{
 			doMemoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, buffer.buffer->makeTransferSource() );
-			doUploadImage( data, *buffer.buffer, 0u );
+				, buffer.getBuffer().makeTransferSource() );
+			doUploadImage( data, buffer.getBuffer(), 0u );
 		}
 
 		return data.srcSize;

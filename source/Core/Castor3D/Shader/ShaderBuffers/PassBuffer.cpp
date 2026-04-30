@@ -88,7 +88,7 @@ namespace c3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: ShaderBufferHolder{ device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, count * engine.getPassComponentsRegister().getPassBufferStride()
 			, cuT( "PassBuffer" ) }
 		, m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }

@@ -130,7 +130,7 @@ namespace PbrBloom
 					| c3d::ImageUsageFlags::eSampled
 					| c3d::ImageUsageFlags::eTransferSrc
 					| c3d::ImageUsageFlags::eTransferDst ) }
-				, c3d::TextureSamplerInfo{} );
+				, c3d::TextureSamplerInfo{} ).create();
 			m_upSampled.emplace_back( device.renderSystem.getRenderDevice()
 				, m_renderTarget.getResources()
 				, "PBRBloomUpsample" + c3d::string::toString( i )
@@ -141,7 +141,7 @@ namespace PbrBloom
 					| c3d::ImageUsageFlags::eSampled
 					| c3d::ImageUsageFlags::eTransferSrc
 					| c3d::ImageUsageFlags::eTransferDst ) }
-				, c3d::TextureSamplerInfo{} );
+				, c3d::TextureSamplerInfo{} ).create();
 			extent.width >>= 1u;
 			extent.height >>= 1u;
 		}
@@ -156,7 +156,7 @@ namespace PbrBloom
 				| c3d::ImageUsageFlags::eSampled
 				| c3d::ImageUsageFlags::eTransferSrc
 				| c3d::ImageUsageFlags::eTransferDst ) }
-			, c3d::TextureSamplerInfo{} );
+			, c3d::TextureSamplerInfo{} ).create();
 
 		m_downsamplePass = c3d::makeRawUnique< DownsamplePass >( m_graph
 			, device
@@ -190,6 +190,10 @@ namespace PbrBloom
 		m_combinePass.reset();
 		m_upsamplePass.reset();
 		m_downsamplePass.reset();
+		for ( auto & texture : m_downSampled )
+			texture.destroy();
+		for ( auto & texture : m_upSampled )
+			texture.destroy();
 	}
 
 	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )

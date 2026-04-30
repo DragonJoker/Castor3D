@@ -135,8 +135,8 @@ namespace c3d
 		getOwner()->getEngine()->unregisterTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
 		m_timerRenderNodes.reset();
 #endif
-		m_billboardsData->buffer->unlock();
-		m_modelsData->buffer->unlock();
+		m_billboardsData->getBuffer().unlock();
+		m_modelsData->getBuffer().unlock();
 		m_modelsData->destroy();
 		m_billboardsData->destroy();
 	}
@@ -580,13 +580,13 @@ namespace c3d
 			return;
 		}
 
-		m_modelsData->buffer->flush( 0u
+		m_modelsData->getBuffer().flush( 0u
 			, ashes::getAlignedSize( m_nodesData.size() * sizeof( ModelBufferConfiguration )
 				, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) );
 
 		if ( !m_billboardNodes.empty() )
 		{
-			m_billboardsData->buffer->flush( 0u
+			m_billboardsData->getBuffer().flush( 0u
 				, ashes::getAlignedSize( m_nodesData.size() * sizeof( BillboardUboConfiguration )
 					, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) );
 		}

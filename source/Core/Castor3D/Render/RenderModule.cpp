@@ -411,7 +411,7 @@ namespace c3d
 
 	VkBuffer getBuffer( BufferBase const & buffer )noexcept
 	{
-		return getBuffer( *buffer.buffer );
+		return getBuffer( buffer.getBuffer() );
 	}
 
 	DeviceSize getOffset( ashes::BufferView const & view )noexcept

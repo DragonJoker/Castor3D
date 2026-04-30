@@ -139,7 +139,7 @@ namespace c3d
 			auto size = buffer->getAlignedSize();
 			return ashes::WriteDescriptorSet{ uint32_t( dstBinding )
 				, dstArrayElement, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, { VkDescriptorBufferInfo{ *uniformBuffer.buffer, size * offset, size * range } } };
+				, { VkDescriptorBufferInfo{ uniformBuffer.getBuffer(), size * offset, size * range } } };
 		}
 
 		template< typename BindingT >

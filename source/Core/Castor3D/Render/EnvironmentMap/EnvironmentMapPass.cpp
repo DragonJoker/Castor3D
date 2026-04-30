@@ -64,13 +64,13 @@ namespace c3d
 		, m_renderUbo{ m_device }
 		, m_sceneUbo{ &environmentMap.getScene().getUbo() }
 		, m_colourRender{ device
-			, c3d::getEngine( device ).getGraphResourceCache()
+			, c3d::getEngine( device ).getResources()
 			, environmentMap.getTmpImage( m_index, m_face ) }
 		, m_colourResult{ device
-			, c3d::getEngine( device ).getGraphResourceCache()
+			, c3d::getEngine( device ).getResources()
 			, environmentMap.getColourViewId( m_index, m_face ) }
 		, m_depth{ device
-			, c3d::getEngine( device ).getGraphResourceCache()
+			, c3d::getEngine( device ).getResources()
 			, getOwner()->getDepthViewId( m_index, m_face ) }
 		, m_backgroundRenderer{ makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
 			, m_device

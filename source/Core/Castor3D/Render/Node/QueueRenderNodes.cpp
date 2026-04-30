@@ -362,7 +362,7 @@ namespace c3d
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );
-			commandBuffer.drawMeshTasksIndirectNV( *indirectMeshCommands.buffer
+			commandBuffer.drawMeshTasksIndirectNV( indirectMeshCommands.getBuffer()
 				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandNV )
 				, drawCount
 				, sizeof( VkDrawMeshTasksIndirectCommandNV ) );
@@ -392,7 +392,7 @@ namespace c3d
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );
-			commandBuffer.drawMeshTasksIndirect( *indirectMeshCommands.buffer
+			commandBuffer.drawMeshTasksIndirect( indirectMeshCommands.getBuffer()
 				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandEXT )
 				, drawCount
 				, sizeof( VkDrawMeshTasksIndirectCommandEXT ) );

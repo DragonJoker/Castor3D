@@ -25,9 +25,9 @@ namespace c3d
 	SssProfileBuffer::SssProfileBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: ShaderBufferHolder{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "SssProfileBuffer" ) }
+		: ShaderBufferHolder{ device, engine.getResources(), count * DataSize, cuT( "SssProfileBuffer" ) }
 		, m_diffusionProfiles{ device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, cuT( "DiffusionProfiles" )
 			, { ImageCreateFlags::eNone
 				, { 512u, 1u, 1u }, uint32_t( ashes::getAlignedSize( count, 64u ) ), 1u

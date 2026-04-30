@@ -300,9 +300,9 @@ namespace ocean_fft
 				, m_device{ device }
 				, m_extent{ extent }
 				, m_inBufferSize{ input.getSize() }
-				, m_vkInput{ *input.buffer }
+				, m_vkInput{ input.getBuffer() }
 				, m_outBufferSize{ output[0]->getSize() }
-				, m_vkOutput{ *output[0]->buffer, *output[1]->buffer }
+				, m_vkOutput{ output[0]->getBuffer(), output[1]->getBuffer() }
 				, m_app{ procfft::createApp( config
 					, device
 					, m_extent

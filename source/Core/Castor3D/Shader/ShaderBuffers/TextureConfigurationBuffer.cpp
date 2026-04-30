@@ -30,7 +30,7 @@ namespace c3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: ShaderBufferHolder{ device
-			, engine.getGraphResourceCache()
+			, engine.getResources()
 			, count * VkDeviceSize( DataSize )
 			, cuT( "TextureConfigurationBuffer" ) }
 		, m_data{ texcfgbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
