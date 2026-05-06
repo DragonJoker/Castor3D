@@ -15,7 +15,7 @@ namespace dof
 		, DepthOfFieldUbo const & configurationUbo
 		, c3d::Texture const & firstBlurResult
 		, c3d::Texture & blurResult
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled
+		, crg::IsEnabledCallback const & isEnabled
 		, uint32_t const * passIndex );
 }
 

@@ -78,8 +78,8 @@ namespace c3d
 						: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } )
 					.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 					.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
-					.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-					.getPassIndex( GetPassIndexCallback( [this, forceVisible]() { return m_background->getPassIndex( forceVisible ); } ) )
+					.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+					.getPassIndex( crg::GetPassIndexCallback( [this, forceVisible]() { return m_background->getPassIndex( forceVisible ); } ) )
 					.renderSize( size )
 					.programCreator( { SceneBackground::PassCount
 						, [this, &device]( uint32_t programIndex )

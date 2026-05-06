@@ -42,9 +42,9 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 				: crg::RunnablePass{ pass, context, graph
-					, { crg::defaultV< InitialiseCallback >
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-						, RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } ) } }
+					, crg::RunnablePass::Callbacks{}
+						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
+						.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } ) }
 			{
 			}
 
@@ -57,7 +57,7 @@ namespace c3d
 				for ( auto & [binding, attach] : getPass().getOutputs() )
 				{
 					auto view = attach->view();
-					auto image = getGraph().createImage( view.data->image );
+					auto image = getGraph().createImage( view.data->image ).getImage();
 					auto subresourceRange = convert( view.data->info.subresourceRange );
 					subresourceRange.layerCount = view.data->image.data->info.arrayLayers;
 					assert( attach->isTransferOutputImageView() );
@@ -76,7 +76,7 @@ namespace c3d
 		{
 			auto data = *cubeArrayView.data;
 			data.info.viewType = ImageViewType::e2DArray;
-			return graph.createView( data );
+			return graph.createViewId( data );
 		}
 
 		static Vector< LpvLightConfigUbo > createUbos( RenderDevice const & device

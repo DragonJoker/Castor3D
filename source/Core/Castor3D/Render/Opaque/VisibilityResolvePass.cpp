@@ -2088,12 +2088,12 @@ namespace c3d
 		, crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute() ? PipelineStageFlags::eComputeShader : PipelineStageFlags::eColorAttachmentOutput ); } )
-				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-				, GetPassIndexCallback( [](){ return 0u; } )
-				, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-				, IsComputePassCallback( [](){ return useCompute(); } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onGetPipelineState( [](){ return crg::getPipelineState( useCompute() ? PipelineStageFlags::eComputeShader : PipelineStageFlags::eColorAttachmentOutput ); } )
+				.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
+				.onGetPassIndex( [](){ return 0u; } )
+				.onIsEnabled( [this](){ return doIsEnabled(); } )
+				.onIsComputePass( [](){ return useCompute(); } )
 			, renderPassDesc.m_ruConfig }
 		, m_device{ device }
 		, m_nodesPass{ nodesPass }

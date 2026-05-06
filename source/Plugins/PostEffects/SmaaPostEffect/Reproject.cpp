@@ -138,7 +138,7 @@ namespace smaa
 		for ( auto const & view : currentColourViews )
 		{
 			auto image = c3d::makeRawUnique< ashes::Image >( *device
-				, renderTarget.getResources().createImage( context, view.data->image )
+				, renderTarget.getResources().createImage( context, view.data->image ).getImage()
 				, ashes::ImageCreateInfo{ convert( view.data->image.data->info ) } );
 			auto createInfo = convert( view.data->info );
 			createInfo.image = *image;

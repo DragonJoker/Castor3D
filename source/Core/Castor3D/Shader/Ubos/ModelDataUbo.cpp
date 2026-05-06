@@ -82,7 +82,7 @@ namespace c3d::shader
 		, sdw::Vec4 const & boneWeights0
 		, sdw::Vec4 const & boneWeights1 )const
 	{
-		if ( skinning.transforms )
+		if ( skinning.transforms.isEnabled() )
 		{
 			return SkinningUbo::computeTransform( skinning
 				, getModelMtx()

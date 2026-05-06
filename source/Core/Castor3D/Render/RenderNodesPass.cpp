@@ -106,11 +106,12 @@ namespace c3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t ){ doSubInitialise(); }
-				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( ctx, cb ); }
-				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
-				, GetPassIndexCallback( [](){ return 0u; } )
-				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
+			, crg::RenderPass::Callbacks{}
+				.onInitialise( [this]( uint32_t ){ doSubInitialise(); } )
+				.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( ctx, cb ); } )
+				.onGetSubpassContents( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
+				.onGetPassIndex( [](){ return 0u; } )
+				.onIsEnabled( [this](){ return isPassEnabled(); } )
 			, makeExtent2D( desc.base().m_size )
 			, rendndpass::buildRuConfig( desc.m_ruConfig
 				, getRenderQueue() ) }

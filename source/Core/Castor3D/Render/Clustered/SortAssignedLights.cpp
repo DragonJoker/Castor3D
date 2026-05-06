@@ -123,7 +123,7 @@ namespace c3d
 							.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
 							.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
 							.getGroupCountZ( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->z; } ) )
-							.isEnabled( crg::RunnablePass::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::ePoint ); } ) )
+							.isEnabled( crg::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::ePoint ); } ) )
 						, clusters
 						, LightType::ePoint );
 					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
@@ -149,7 +149,7 @@ namespace c3d
 							.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
 							.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
 							.getGroupCountZ( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->z; } ) )
-							.isEnabled( crg::RunnablePass::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::eSpot ); } ) )
+							.isEnabled( crg::IsEnabledCallback( [scene](){ return !scene->hasClusteredLights( LightType::eSpot ); } ) )
 						, clusters
 						, LightType::eSpot );
 					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )

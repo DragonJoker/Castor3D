@@ -68,13 +68,7 @@ namespace c3d
 
 			// Shader inputs
 			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
-			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
-				, "c3d_rsmSamples"
-				, writer.getTypesCache().getVec4F()
-				, sdw::type::MemoryLayout::eStd430
-				, uint32_t( Idx::RsmSamplesIdx )
-				, 0u
-				, true };
+			auto c3d_rsmSamples = writer.declArrayStorageBuffer< sdw::Vec4 >( "c3d_rsmSamples", Idx::RsmSamplesIdx, 0u );
 			C3D_Camera( writer, Idx::CameraUboIdx, 0u );
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", Idx::DepthObjMapIdx, 0u );
 			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", Idx::NmlOccMapIdx, 0u );
@@ -142,13 +136,7 @@ namespace c3d
 
 			// Shader inputs
 			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
-			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
-				, "c3d_rsmSamples"
-				, writer.getTypesCache().getVec4F()
-				, sdw::type::MemoryLayout::eStd430
-				, uint32_t( Idx::RsmSamplesIdx )
-				, 0u
-				, true };
+			auto c3d_rsmSamples = writer.declArrayStorageBuffer< sdw::Vec4 >( "c3d_rsmSamples", Idx::RsmSamplesIdx, 0u );
 			C3D_Camera( writer, Idx::CameraUboIdx, 0u );
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", Idx::DepthObjMapIdx, 0u );
 			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", Idx::NmlOccMapIdx, 0u );
@@ -220,13 +208,7 @@ namespace c3d
 
 			// Shader inputs
 			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
-			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
-				, "c3d_rsmSamples"
-				, writer.getTypesCache().getVec4F()
-				, sdw::type::MemoryLayout::eStd430
-				, uint32_t( Idx::RsmSamplesIdx )
-				, 0u
-				, true };
+			auto c3d_rsmSamples = writer.declArrayStorageBuffer< sdw::Vec4 >( "c3d_rsmSamples", Idx::RsmSamplesIdx, 0u );
 			C3D_Camera( writer, Idx::CameraUboIdx, 0u );
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", Idx::DepthObjMapIdx, 0u );
 			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNmlOcc", Idx::NmlOccMapIdx, 0u );

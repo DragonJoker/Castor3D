@@ -319,13 +319,13 @@ namespace c3d
 		static crg::rq::Config createConfig( Size const & size
 			, ashes::PipelineShaderStageCreateInfoArray const & shaderStages
 			, bool const * enabled
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+			, crg::IsEnabledCallback const & isEnabled )
 		{
 			crg::rq::Config result;
 			result.texcoordConfig( crg::Texcoord{} );
 			result.renderSize( makeExtent2D( size ) );
 			result.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) );
-			result.isEnabled( crg::RunnablePass::IsEnabledCallback( [enabled, isEnabled](){ return *enabled && isEnabled(); } ) );
+			result.isEnabled( crg::IsEnabledCallback( [enabled, isEnabled](){ return *enabled && isEnabled(); } ) );
 			return result;
 		}
 	}
@@ -346,7 +346,7 @@ namespace c3d
 		, CameraUbo const & cameraUbo
 		, Texture const & depthObj
 		, Texture const & diffuse
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+		, crg::IsEnabledCallback const & isEnabled )
 		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, m_device{ device }
 		, m_cameraUbo{ cameraUbo }

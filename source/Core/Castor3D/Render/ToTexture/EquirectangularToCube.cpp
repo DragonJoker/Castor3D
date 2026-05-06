@@ -36,7 +36,7 @@ namespace c3d
 
 				shader::Utils utils{ writer };
 
-				auto matrixUbo = sdw::UniformBuffer{ writer, "Matrix", 0u, 0u };
+				auto matrixUbo = writer.declUniformBuffer( "Matrix", 0u, 0u );
 				auto mtxViewProjection = matrixUbo.declMember< sdw::Mat4 >( "mtxViewProjection" );
 				matrixUbo.end();
 				auto mapColour = writer.declCombinedImg< Img2DRgba >( "mapColour", 1u, 0u );

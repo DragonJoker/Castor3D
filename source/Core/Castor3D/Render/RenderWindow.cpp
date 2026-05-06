@@ -1235,7 +1235,7 @@ namespace c3d
 			if ( intermediate.layout != ImageLayout::eShaderReadOnly )
 				commandBuffer->memoryBarrier( ashes::getStageMask( convert( intermediateBarrierView.layout ) )
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
+					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image ).getImage()
 						, intermediateBarrierView.viewId.data->info.subresourceRange
 						, intermediateBarrierView.layout
 						, ImageLayout::eShaderReadOnly
@@ -1252,7 +1252,7 @@ namespace c3d
 			if ( intermediate.layout != ImageLayout::eShaderReadOnly && intermediate.layout != ImageLayout::eUndefined )
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, ashes::getStageMask( convert( intermediateBarrierView.layout ) )
-					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
+					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image ).getImage()
 						, intermediateBarrierView.viewId.data->info.subresourceRange
 						, ImageLayout::eShaderReadOnly
 						, intermediateBarrierView.layout
@@ -1505,7 +1505,7 @@ namespace c3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );
 #else
-		VkImage srcImage = m_resources.createImage( context, intermediateBarrierView.viewId.data->image );
+		VkImage srcImage = m_resources.createImage( context, intermediateBarrierView.viewId.data->image ).getImage();
 
 		if ( intermediate.layout != ImageLayout::eTransferSrc )
 		{

@@ -171,7 +171,7 @@ namespace c3d
 					, graph
 					, crg::ru::Config{ 1u }
 					, config
-						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 				, m_clusters{ clusters }
 			{

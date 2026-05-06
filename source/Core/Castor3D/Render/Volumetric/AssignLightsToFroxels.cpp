@@ -318,7 +318,7 @@ namespace c3d
 					, graph
 					, crg::ru::Config{ 2u }
 					, config
-						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
+						.getPassIndex( crg::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
 						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } ) }
 				, m_device{ device }
 			{
@@ -393,7 +393,7 @@ namespace c3d
 						.groupCountX( froxels.getDimensions()->x )
 						.groupCountY( froxels.getDimensions()->y )
 						.groupCountZ( froxels.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights(); } ) ) );
+						.isEnabled( crg::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights(); } ) ) );
 				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

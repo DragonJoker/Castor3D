@@ -111,8 +111,8 @@ namespace light_streaks
 					, graph
 					, c3d::Extent3D{ size.width, size.height, 1u }
 					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
+					, crg::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
 				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

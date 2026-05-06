@@ -125,13 +125,11 @@ namespace waves
 }
 
 #define C3D_Waves( writer, binding, set )\
-	sdw::UniformBuffer wavesBuffer{ writer\
-		, "C3D_Waves"\
-		, "c3d_wavesData"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_wavesData = wavesBuffer.declMember< waves::WavesData >( "o" );\
+	auto wavesBuffer = writer.declUniformBuffer( "c3d_wavesData" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 ); \
+	auto c3d_wavesData = wavesBuffer.declMember< waves::WavesData >( "o" ); \
 	wavesBuffer.end()
 
 #endif

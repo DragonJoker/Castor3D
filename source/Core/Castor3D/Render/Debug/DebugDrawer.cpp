@@ -212,11 +212,10 @@ namespace c3d
 		: crg::RenderPass{ framePass
 			, context
 			, graph
-			, { crg::defaultV< InitialiseCallback >
-				, [this]( crg::RecordContext const & recContext, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( recContext, cb ); }
-				, crg::defaultV< GetSubpassContentsCallback >
-				, GetPassIndexCallback( [passIndex](){ return *passIndex; } )
-				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
+			, crg::RenderPass::Callbacks{}
+				.onRecord( [this]( crg::RecordContext const & recContext, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( recContext, cb ); } )
+				.onGetPassIndex( [passIndex](){ return *passIndex; } )
+				.onIsEnabled( [this](){ return doIsEnabled(); } )
 			, c3d::move( dimensions )
 			, crg::ru::Config{ 2u } }
 		, m_device{ device }

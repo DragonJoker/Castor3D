@@ -28,7 +28,7 @@ namespace c3d
 			, Buffer & indirectCounts
 			, Buffer & materialsStarts
 			, Buffer & pixels
-			, crg::RunnablePass::IsEnabledCallback isEnabled );
+			, crg::IsEnabledCallback isEnabled );
 		void accept( ConfigurationVisitorBase & visitor )const;
 
 	private:

@@ -109,13 +109,11 @@ namespace c3d
 }
 
 #define C3D_FroxelsEx( writer, binding, set, enabled ) \
-	sdw::UniformBuffer froxels{ writer \
-		, "C3D_Froxels" \
-		, "c3d_froxels" \
+	auto froxels = writer.declUniformBuffer( "c3d_froxels" \
 		, ( enabled ? uint32_t( binding ) : 0u ) \
 		, uint32_t( set ) \
 		, ast::type::MemoryLayout::eStd140 \
-		, enabled }; \
+		, enabled ); \
 	auto c3d_froxelsData = froxels.declMember< c3d::shader::FroxelsData >( "c", enabled ); \
 	froxels.end()
 

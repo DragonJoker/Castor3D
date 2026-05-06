@@ -37,12 +37,11 @@ namespace c3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
-				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_transformPasses.empty(); } )
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+				.onRecord( [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } )
+				.onIsEnabled( [this](){ return !m_transformPasses.empty(); } )
+				.onIsComputePass( [this](){ return doIsComputePass(); } )
 			, crg::ru::Config{ 1u, true } }
 		, m_device{ device }
 		, m_modelsBuffer{ modelsBuffer }

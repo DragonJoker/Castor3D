@@ -66,7 +66,7 @@ namespace c3d
 		static void createPass( String const & name
 			, crg::FramePassGroup & graph
 			, RenderDevice const & device
-			, crg::RunnablePass::IsEnabledCallback isEnabled
+			, crg::IsEnabledCallback isEnabled
 			, Texture const & data
 			, Buffer & materialsCounts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
@@ -152,7 +152,7 @@ namespace c3d
 		static void createPass( String const & name
 			, crg::FramePassGroup & graph
 			, RenderDevice const & device
-			, crg::RunnablePass::IsEnabledCallback isEnabled
+			, crg::IsEnabledCallback isEnabled
 			, Buffer const & materialsCounts
 			, Buffer & indirectCounts
 			, Buffer & starts
@@ -242,7 +242,7 @@ namespace c3d
 		static void createPass( String const & name
 			, crg::FramePassGroup & graph
 			, RenderDevice const & device
-			, crg::RunnablePass::IsEnabledCallback isEnabled
+			, crg::IsEnabledCallback isEnabled
 			, Texture const & data
 			, Buffer & materialsCounts
 			, Buffer const & materialsStarts
@@ -284,7 +284,7 @@ namespace c3d
 		, Buffer & indirectCounts
 		, Buffer & materialsStarts
 		, Buffer & pixels
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::IsEnabledCallback isEnabled )
 		: Named{ cuT( "VisibilityReorder" ) }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()

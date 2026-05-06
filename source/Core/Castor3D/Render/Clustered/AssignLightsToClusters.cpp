@@ -220,9 +220,9 @@ namespace c3d
 					, graph
 					, crg::ru::Config{ 2u }
 					, config
-						.isEnabled( IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
-						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
-						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } ) }
+						.isEnabled( crg::IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
+						.getPassIndex( crg::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
+						.programCreator( { 3u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } ) }
 				, m_device{ device }
 				, m_config{ clusters.getConfig() }
 			{

@@ -183,16 +183,15 @@ namespace c3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, VctConfig const & vctConfig
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
-				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, c3d::move( isEnabled )
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+				.onRecord( [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } )
+				.onIsEnabled( c3d::move( isEnabled ) )
+				.onIsComputePass( [this](){ return doIsComputePass(); } )
 			, crg::ru::Config{ 1u, false }.implicitAction( pass.getOutputs().begin()->second->view()
 				, crg::RecordContext::clearAttachment( pass.getOutputs().begin()->second->view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
@@ -218,7 +217,7 @@ namespace c3d
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
 		auto view = getPass().getOutputs().begin()->second->view( index );
 		auto layoutState = getLayoutState( view );
-		auto image = getGraph().createImage( view.data->image );
+		auto image = getGraph().createImage( view.data->image ).getImage();
 		auto color = convert( transparentBlackClearColor );
 		auto subresourceRange = convert( view.data->info.subresourceRange );
 

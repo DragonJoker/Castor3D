@@ -349,7 +349,7 @@ namespace c3d
 					auto runPass = makeRawUnique< intfxl::FramePass >( framePass, context, runGraph, device
 						, crg::cp::Config{}
 							.indirectBuffer( crg::IndirectBuffer{ froxels.getPointIndirectBuffer(), u32( sizeof( VkDispatchIndirectCommand ) ) } )
-							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights( LightType::ePoint ); } ) )
+							.isEnabled( crg::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights( LightType::ePoint ); } ) )
 						, LightType::ePoint );
 					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );
@@ -376,7 +376,7 @@ namespace c3d
 					auto runPass = makeRawUnique< intfxl::FramePass >( framePass, context, runGraph, device
 						, crg::cp::Config{}
 							.indirectBuffer( crg::IndirectBuffer{ froxels.getSpotIndirectBuffer(), u32( sizeof( VkDispatchIndirectCommand ) ) } )
-							.isEnabled( crg::RunnablePass::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights( LightType::eSpot ); } ) )
+							.isEnabled( crg::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights( LightType::eSpot ); } ) )
 						, LightType::eSpot );
 					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 						, runPass->getTimer() );

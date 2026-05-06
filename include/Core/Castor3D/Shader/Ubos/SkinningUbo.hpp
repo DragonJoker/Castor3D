@@ -11,13 +11,15 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
+
 namespace c3d
 {
 	namespace shader
 	{
 		struct SkinningData
 		{
-			RawUniquePtr< sdw::ArrayStorageBufferT< sdw::Mat4 > > transforms;
+			sdw::ArrayStorageBufferT< sdw::Mat4 > transforms;
 		};
 	}
 

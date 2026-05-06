@@ -474,8 +474,9 @@ namespace c3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ){ doSubInitialise( index ); }
-				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); } }
+			, crg::RenderPass::Callbacks{}
+				.onInitialise( [this]( uint32_t index ){ doSubInitialise( index ); } )
+				.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); } )
 			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
 		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, m_gridSize ) }

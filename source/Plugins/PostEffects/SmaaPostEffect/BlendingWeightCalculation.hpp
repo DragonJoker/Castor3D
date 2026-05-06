@@ -37,8 +37,10 @@ namespace smaa
 		crg::FramePassGroup & m_graph;
 		crg::ResourcesCache & m_resources;
 		c3d::Extent3D m_extent;
-		crg::ImageViewId m_areaView;
-		crg::ImageViewId m_searchView;
+		crg::ImageViewId m_areaViewId;
+		crg::Image * m_areaImage{};
+		crg::ImageViewId m_searchViewId;
+		crg::Image * m_searchImage{};
 		c3d::Texture m_result;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

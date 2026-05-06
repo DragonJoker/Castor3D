@@ -119,8 +119,8 @@ namespace Bloom
 							, c3d::Rect3D{ {}, { extent.width >> 1u, extent.height >> 1u, 1u } }
 							, c3d::FilterMode::eLinear
 							, crg::ru::Config{}
-							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [enabled](){ return *enabled; } ) );
+							, crg::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::IsEnabledCallback( [enabled](){ return *enabled; } ) );
 						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;

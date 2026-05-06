@@ -125,13 +125,12 @@ namespace smaa
 }
 
 #define C3D_Smaa( writer, binding, set )\
-	sdw::UniformBuffer smaaBuffer{ writer\
-		, smaa::SmaaUbo::Buffer\
-		, uint32_t( binding )\
-		, set\
-		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_smaaData = smaaBuffer.declMember< smaa::SmaaData >( smaa::SmaaUbo::Data );\
+	auto smaaBuffer = writer.declUniformBuffer( smaa::SmaaUbo::Buffer \
+		, uint32_t( binding ) \
+		, set \
+		, ast::type::MemoryLayout::eStd140 \
+		, true ); \
+	auto c3d_smaaData = smaaBuffer.declMember< smaa::SmaaData >( smaa::SmaaUbo::Data ); \
 	smaaBuffer.end()
 
 #endif

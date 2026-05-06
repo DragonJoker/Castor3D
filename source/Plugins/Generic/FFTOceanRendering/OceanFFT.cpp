@@ -43,8 +43,8 @@ namespace ocean_fft
 							, graph
 							, c3d::ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
-							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+							, crg::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::IsEnabledCallback( [](){ return true; } ) );
 						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
@@ -62,7 +62,7 @@ namespace ocean_fft
 			auto data = *dstImageView.getTargetViewId().data;
 			data.name = data.image.data->name + "_L0";
 			data.info.subresourceRange.levelCount = 1u;
-			auto viewId = graph.createView( data );
+			auto viewId = graph.createViewId( data );
 			auto extent = getExtent( viewId );
 			auto & copy = graph.createPass( "CopyTo" + mbName
 				, [&device, extent]( crg::FramePass const & framePass
@@ -75,8 +75,8 @@ namespace ocean_fft
 						, c3d::Offset3D{}
 						, extent
 						, crg::ru::Config{}
-						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-						, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+						, crg::GetPassIndexCallback( [](){ return 0u; } )
+						, crg::IsEnabledCallback( [](){ return true; } ) );
 					c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
@@ -94,8 +94,8 @@ namespace ocean_fft
 							, graph
 							, c3d::ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
-							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+							, crg::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::IsEnabledCallback( [](){ return true; } ) );
 						c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;

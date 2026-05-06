@@ -67,13 +67,7 @@ namespace c3d
 
 			// Shader inputs
 			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
-			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
-				, "c3d_rsmSamples"
-				, writer.getTypesCache().getVec4F()
-				, sdw::type::MemoryLayout::eStd430
-				, uint32_t( Idx::RsmSamplesIdx )
-				, 0u
-				, true };
+			auto c3d_rsmSamples = writer.declArrayStorageBuffer< sdw::Vec4 >( "c3d_rsmSamples", Idx::RsmSamplesIdx, 0u );
 			C3D_Camera( writer, Idx::CameraIdx, 0u );
 			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", Idx::GiMapIdx, 0u );
 			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", Idx::NmlMapIdx, 0u );
@@ -159,13 +153,7 @@ namespace c3d
 
 			// Shader inputs
 			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
-			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
-				, "c3d_rsmSamples"
-				, writer.getTypesCache().getVec4F()
-				, sdw::type::MemoryLayout::eStd430
-				, uint32_t( Idx::RsmSamplesIdx )
-				, 0u
-				, true };
+			auto c3d_rsmSamples = writer.declArrayStorageBuffer< sdw::Vec4 >( "c3d_rsmSamples", Idx::RsmSamplesIdx, 0u );
 			C3D_Camera( writer, Idx::CameraIdx, 0u );
 			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", Idx::GiMapIdx, 0u );
 			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", Idx::NmlMapIdx, 0u );
@@ -253,13 +241,7 @@ namespace c3d
 
 			// Shader inputs
 			C3D_RsmConfig( writer, Idx::RsmCfgUboIdx, 0u );
-			sdw::ArrayStorageBufferT< sdw::Vec4 > c3d_rsmSamples{ writer
-				, "c3d_rsmSamples"
-				, writer.getTypesCache().getVec4F()
-				, sdw::type::MemoryLayout::eStd430
-				, uint32_t( Idx::RsmSamplesIdx )
-				, 0u
-				, true };
+			auto c3d_rsmSamples = writer.declArrayStorageBuffer< sdw::Vec4 >( "c3d_rsmSamples", Idx::RsmSamplesIdx, 0u );
 			C3D_Camera( writer, Idx::CameraIdx, 0u );
 			auto c3d_mapGi = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapGi", uint32_t( Idx::GiMapIdx ), 0u );
 			auto c3d_mapNml = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNml", uint32_t( Idx::NmlMapIdx ), 0u );

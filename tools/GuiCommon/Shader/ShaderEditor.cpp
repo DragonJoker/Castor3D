@@ -320,6 +320,7 @@ namespace GuiCommon
 #endif
 #if GC_HasHLSL
 			hlsl::HlslConfig hlslConfig{ hlsl::v6_6
+				, hlsl::t1_1
 				, stage
 				, false };
 			m_sources.try_emplace( ShaderLanguage::eHLSL

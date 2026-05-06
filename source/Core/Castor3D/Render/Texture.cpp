@@ -301,9 +301,10 @@ namespace c3d
 		, m_ownImage{ false }
 	{
 		auto & context = device->makeContext();
+		imagePages = &resources->createImage( context, imageId );
 		image = makeRawUnique< ashes::Image >( **device
 			, imageId.data->name
-			, resources->createImage( context, imageId )
+			, imagePages->getImage()
 			, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
 		m_wholeView = resources->createImageView( context, m_wholeViewId );
 
@@ -329,10 +330,11 @@ namespace c3d
 			return;
 
 		auto & context = device->makeContext();
-		
+
+		imagePages = &resources->createImage( context, imageId );
 		image = makeRawUnique< ashes::Image >( **device
 			, imageId.data->name
-			, resources->createImage( context, imageId )
+			, imagePages->getImage()
 			, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
 		m_wholeView = resources->createImageView( context, m_wholeViewId );
 

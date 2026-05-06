@@ -50,7 +50,7 @@ namespace c3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, VctConfig const & vctConfig
-			, crg::RunnablePass::IsEnabledCallback isEnabled );
+			, crg::IsEnabledCallback isEnabled );
 		/**
 		*\~english
 		*\brief

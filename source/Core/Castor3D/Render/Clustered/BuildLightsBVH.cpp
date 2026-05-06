@@ -275,13 +275,13 @@ namespace c3d
 				: crg::RunnablePass{ framePass
 					, context
 					, graph
-					, { [this]( uint32_t index ){ doInitialise( index ); }
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-						, IsComputePassCallback( [](){ return true; } ) }
-					, crg::ru::Config{ 2u, true /* resettable */ } }
+					, crg::RunnablePass::Callbacks{}
+						.onInitialise( [this]( uint32_t index ){ doInitialise( index ); } )
+						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+						.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
+						.onIsEnabled( [this](){ return doIsEnabled(); } )
+						.onIsComputePass( [](){ return true; } )
+					, crg::ru::Config{ 1u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getScene().getLightCache() }
 				, m_lightType{ lightType }
@@ -320,15 +320,12 @@ namespace c3d
 					, bool bottomLevel
 					, FramePass const * parent
 					, LightType lightType )
-					: cpConfig{ crg::getDefaultV< InitialiseCallback >()
+					: cpConfig{ crg::defaultV< crg::InitialiseCallback >
 						, nullptr
-						, IsEnabledCallback( [parent]() { return parent->m_clusters.needsLightsUpdate(); } )
-						, GetPassIndexCallback( [parent]() { return parent->doGetPassIndex(); } )
-						, crg::getDefaultV< RecordCallback >()
-						, crg::getDefaultV< RecordCallback >()
-						, 1u
-						, 1u
-						, 1u }
+						, crg::IsEnabledCallback( [parent]() { return parent->m_clusters.needsLightsUpdate(); } )
+						, crg::defaultV< crg::GetPassIndexCallback >
+						, crg::defaultV< crg::RecordCallback >
+						, crg::defaultV< crg::RecordCallback > }
 					, pipeline{ framePass
 						, context
 						, graph

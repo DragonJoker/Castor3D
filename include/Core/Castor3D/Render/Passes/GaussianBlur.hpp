@@ -53,7 +53,7 @@ namespace c3d
 			, crg::Attachment const & attach
 			, crg::ImageViewId const & intermediateView
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+			, crg::IsEnabledCallback const & isEnabled = crg::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -77,7 +77,7 @@ namespace c3d
 			, String const & prefix
 			, crg::Attachment const & attach
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
+			, crg::IsEnabledCallback const & isEnabled = crg::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -101,7 +101,7 @@ namespace c3d
 			, String const & prefix
 			, c3d::Texture & texture
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
+			, crg::IsEnabledCallback const & isEnabled = crg::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\copydoc		RenderTechniquePass::accept
 		 */

@@ -66,15 +66,14 @@ namespace c3d::shader
 #define DeclareSsbo( Name, Type, Enable, Stride )\
 	[&writer, &flags, &firstBinding, set, Stride]()\
 	{\
-		sdw::StorageBuffer Name##Buffer{ writer\
-			, #Name + MbString{ "Buffer" }\
-			, firstBinding++\
-			, set\
-			, ast::type::MemoryLayout::eStd430\
-			, ( Enable ) && Stride == 0u };\
-		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable && Stride == 0u );\
-		Name##Buffer.end();\
-		return result;\
+		auto Name##Buffer = writer.declStorageBuffer( #Name + MbString{ "Buffer" } \
+			, firstBinding++ \
+			, set \
+			, ast::type::MemoryLayout::eStd430 \
+			, ( Enable ) && Stride == 0u ); \
+		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable && Stride == 0u ); \
+		Name##Buffer.end(); \
+		return result; \
 	}()
 
 	MeshBuffersBase::MeshBuffersBase( sdw::ShaderWriter & writer
@@ -84,12 +83,11 @@ namespace c3d::shader
 		, uint32_t stride )
 		: positions{ [&writer, &flags, &firstBinding, set, stride]()
 			{
-				sdw::StorageBuffer c3d_inPositionBuffer{ writer
-					, MbString{ "c3d_inPositionsBuffer" }
+				auto c3d_inPositionBuffer = writer.declStorageBuffer( MbString{ "c3d_inPositionsBuffer" }
 					, firstBinding++
 					, set
 					, ast::type::MemoryLayout::eStd430
-					, flags.enablePosition() };
+					, flags.enablePosition() );
 				auto result = c3d_inPositionBuffer.declMemberArray< MeshPosition >( "c3d_inPositions"
 					, flags.enablePosition()
 					, stride );
@@ -155,12 +153,11 @@ namespace c3d::shader
 			, stride }
 		, meshlets{ [&writer, &firstBinding, set, stride, meshlets]()
 			{
-				sdw::StorageBuffer c3d_inMeshletsBuffer{ writer
-					, "c3d_inMeshletsBuffer"
+				auto c3d_inMeshletsBuffer = writer.declStorageBuffer( "c3d_inMeshletsBuffer"
 					, firstBinding++
 					, set
 					, ast::type::MemoryLayout::eStd430
-					, ( meshlets && stride == 0u ) };
+					, ( meshlets && stride == 0u ) );
 				auto result = c3d_inMeshletsBuffer.declMemberArray< Meshlet >( "c3d_inMeshletsBuffer"
 					, ( meshlets && stride == 0u ) );
 				c3d_inMeshletsBuffer.end();
@@ -223,12 +220,11 @@ namespace c3d::shader
 			, stride }
 		, meshlets{ [&writer, baseBinding, set, &flags]()
 			{
-				sdw::StorageBuffer c3d_inMeshletsBuffer{ writer
-					, "c3d_inMeshletsBuffer"
+				auto c3d_inMeshletsBuffer = writer.declStorageBuffer( "c3d_inMeshletsBuffer"
 					, baseBinding
 					, set
 					, ast::type::MemoryLayout::eStd430
-					, flags.enableMeshletID() };
+					, flags.enableMeshletID() );
 				auto result = c3d_inMeshletsBuffer.declMemberArray< Meshlet >( "c3d_inMeshletsBuffer"
 					, flags.enableMeshletID() );
 				c3d_inMeshletsBuffer.end();

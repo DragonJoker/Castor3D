@@ -234,25 +234,21 @@ namespace c3d::shader
 }
 
 #define C3D_Overlays( writer, binding, set )\
-	sdw::StorageBuffer c3d_overlaysDataBuffer{ writer\
-		, "C3D_OverlaysDataBuffer"\
-		, "c3d_overlaysDataBuffer"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< c3d::shader::OverlayData >( "d" );\
+	sdw::StorageBuffer c3d_overlaysDataBuffer = writer.declStorageBuffer( "c3d_overlaysDataBuffer" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd430 \
+		, true ); \
+	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< c3d::shader::OverlayData >( "d" ); \
 	c3d_overlaysDataBuffer.end()
 
 #define C3D_OverlaysIDs( writer, binding, set )\
-	sdw::StorageBuffer c3d_overlaysIDsBuffer{ writer\
-		, "C3D_OverlaysIDsBuffer"\
-		, "c3d_overlaysIDsBuffer"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< c3d::shader::OverlaysIDs >( "d" );\
+	auto c3d_overlaysIDsBuffer = writer.declStorageBuffer( "c3d_overlaysIDsBuffer" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd430 \
+		, true ); \
+	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< c3d::shader::OverlaysIDs >( "d" ); \
 	c3d_overlaysIDsBuffer.end()
 
 #endif

@@ -64,13 +64,12 @@ namespace c3d
 }
 
 #define C3D_LayeredLpvGridConfig( writer, binding, set, enabled )\
-	sdw::UniformBuffer layeredLpvConfig{ writer\
-		, "C3D_LayeredLpvConfig"\
-		, "c3d_layeredLpvConfig"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_llpvGridData = layeredLpvConfig.declMember< c3d::shader::LayeredLpvGridData >( "c3d_llpvGridData", enabled );\
+	auto layeredLpvConfig = writer.declUniformBuffer( "c3d_layeredLpvConfig" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, enabled ); \
+	auto c3d_llpvGridData = layeredLpvConfig.declMember< c3d::shader::LayeredLpvGridData >( "c3d_llpvGridData", enabled ); \
 	layeredLpvConfig.end()
 
 #endif

@@ -194,16 +194,16 @@ namespace ocean_fft
 		, crg::RunnableGraph & graph
 		, c3d::RenderDevice const & device
 		, c3d::Extent2D const & extent
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+		, crg::IsEnabledCallback const & isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( [[maybe_unused]] uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, isEnabled
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onGetPipelineState( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
+				.onRecord( [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } )
+				.onGetPassIndex( [this](){ return doGetPassIndex(); } )
+				.onIsEnabled( isEnabled )
+				.onIsComputePass( [this](){ return doIsComputePass(); } )
 			, { 1u } }
 		, m_device{ device }
 		, m_descriptorSetLayout{ gendspl::createDescriptorLayout( m_device ) }

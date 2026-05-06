@@ -191,14 +191,12 @@ namespace c3d
 }
 
 #define C3D_SsaoConfig( Writer, Binding, Set )\
-	sdw::UniformBuffer ssaoConfig{ Writer\
-		, "C3D_SsaoConfig"\
-		, "c3d_ssaoConfig"\
-		, uint32_t( Binding )\
-		, uint32_t( Set )\
-		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_ssaoConfigData = ssaoConfig.declMember< c3d::shader::SsaoConfigData >( "d" );\
+	auto ssaoConfig = ( Writer ).declUniformBuffer( "c3d_ssaoConfig" \
+		, uint32_t( Binding ) \
+		, uint32_t( Set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, true ); \
+	auto c3d_ssaoConfigData = ssaoConfig.declMember< c3d::shader::SsaoConfigData >( "d" ); \
 	ssaoConfig.end()
 
 #endif

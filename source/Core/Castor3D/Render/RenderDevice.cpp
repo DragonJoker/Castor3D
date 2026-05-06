@@ -5,9 +5,12 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>
 
@@ -611,6 +614,23 @@ namespace c3d
 		bufferPool.reset();
 		{
 			auto lock = makeUniqueLock( m_mutex );
+			auto & engine = getEngine( *this );
+			for ( auto & [_, context] : m_contexts )
+			{
+				engine.getResources().destroyContext( *context );
+				for ( auto & [_1, window] : engine.getRenderWindows() )
+				{
+					window->getResources().destroyContext( *context );
+				}
+				engine.getRenderTargetCache().forEach( [&context]( RenderTarget & target )
+					{
+						target.getResources().destroyContext( *context );
+					} );
+				engine.getSceneCache().forEach( [&context]( Scene & scene )
+					{
+						scene.getResources().destroyContext( *context );
+					} );
+			}
 			m_contexts.clear();
 		}
 		queueFamilies.clear();

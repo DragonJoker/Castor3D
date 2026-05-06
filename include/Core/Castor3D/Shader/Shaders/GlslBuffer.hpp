@@ -23,45 +23,31 @@ namespace c3d::shader
 			, uint32_t set
 			, bool enabled = true )
 			: m_writer{ writer }
-			, m_variableName{ variableName }
+			, m_ssbo{ m_writer.declStorageBuffer( variableName, binding, set, sdw::type::MemoryLayout::eStd430, enabled ) }
+			, m_counts{ ( m_ssbo.isEnabled()
+				? m_ssbo.declMember< sdw::UVec4 >( "counts" )
+				: m_writer.declGlobal< sdw::UVec4 >( "disabled_" + variableName + "_cnt", false ) ) }
 		{
-			if ( enabled )
-			{
-				m_ssbo = makeRawUnique< sdw::StorageBuffer >( m_writer
-					, c3d::move( blockName )
-					, c3d::move( variableName )
-					, binding
-					, set );
-				m_ssbo->declMember< sdw::UVec4 >( "counts" );
-			}
 		}
 
 		sdw::UInt getFirstCount()const
 		{
-			return ( m_ssbo
-				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).x()
-				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+			return m_counts.x();
 		}
 
 		sdw::UInt getSecondCount()const
 		{
-			return ( m_ssbo
-				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).y()
-				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+			return m_counts.y();
 		}
 
 		sdw::UInt getThirdCount()const
 		{
-			return ( m_ssbo
-				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).z()
-				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+			return m_counts.z();
 		}
 
 		sdw::UInt getFourthCount()const
 		{
-			return ( m_ssbo
-				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).w()
-				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+			return m_counts.w();
 		}
 
 		sdw::UInt getCount()const
@@ -71,7 +57,7 @@ namespace c3d::shader
 
 		bool isEnabled()const noexcept
 		{
-			return m_ssbo != nullptr;
+			return m_ssbo.isEnabled();
 		}
 
 		sdw::ShaderWriter * getWriter()const noexcept
@@ -81,8 +67,8 @@ namespace c3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-		RawUniquePtr< sdw::StorageBuffer > m_ssbo;
-		MbString m_variableName;
+		sdw::StorageBuffer m_ssbo;
+		sdw::UVec4 m_counts;
 	};
 
 	template< typename DataT >
@@ -100,15 +86,16 @@ namespace c3d::shader
 			, ParamsT && ... params )
 			: BufferBase{ writer
 				, c3d::move( blockName )
-				, c3d::move( variableName )
+				, variableName
 				, binding
 				, set
 				, enabled }
+			, m_variableName{ c3d::move( variableName ) }
 		{
 			if ( isEnabled() )
 			{
-				m_ssbo->declMemberArray< DataT >( "d", isEnabled(), c3d::forward< ParamsT >( params )... );
-				m_ssbo->end();
+				m_ssbo.declMemberArray< DataT >( "d", isEnabled(), c3d::forward< ParamsT >( params )... );
+				m_ssbo.end();
 			}
 		}
 
@@ -116,10 +103,13 @@ namespace c3d::shader
 		DataT getData( sdw::UInt const & index
 			, ParamsT && ... params )const
 		{
-			return ( m_ssbo
-				? DataT{ m_ssbo->getMemberArray< DataT >( "d", isEnabled() )[index] }
+			return ( isEnabled()
+				? DataT{ m_ssbo.getMemberArray< DataT >( "d", isEnabled() )[index] }
 				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, c3d::forward< ParamsT >( params )... ) );
 		}
+
+	private:
+		MbString m_variableName;
 	};
 }
 

@@ -62,41 +62,6 @@ namespace c3d
 				, MemoryPropertyFlags::eDeviceLocal
 				, name );
 		}
-
-		class VoxelsClear
-			: public crg::RunnablePass
-		{
-		public:
-			VoxelsClear( crg::FramePass const & pass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph
-				, IsEnabledCallback isEnabled )
-				: crg::RunnablePass{ pass
-				, context
-				, graph
-				, { crg::defaultV< InitialiseCallback >
-					, GetPipelineStateCallback( []() { return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-					, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ) { doRecordInto( ctx, cb, i ); }
-					, crg::defaultV< GetPassIndexCallback >
-					, c3d::move( isEnabled ) } }
-			{
-			}
-
-		protected:
-			void doRecordInto( crg::RecordContext const & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )const
-			{
-				for ( auto & [_, attach] : getPass().getOutputs() )
-				{
-					context->vkCmdFillBuffer( commandBuffer
-						, getGraph().createBuffer( attach->buffer( index ).data->buffer )
-						, attach->getBufferRange().offset
-						, attach->getBufferRange().size
-						, 0u );
-				}
-			}
-		};
 	}
 
 	//*********************************************************************************************
@@ -125,19 +90,18 @@ namespace c3d
 		, m_dynamicsVoxels{ vxlsr::createSsbo( device, resources, cuT( "VoxelizedSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 	{
-		doCreateClearStaticsPass( progress );
 		doCreateVoxelizePass( progress, *m_staticsVoxels, *m_staticsCuller, true );
 		doCreateMergeStaticsPass( progress );
 		doCreateVoxelizePass( progress, *m_dynamicsVoxels, *m_dynamicsCuller, false );
 		doCreateVoxelToTexture( progress );
 		doCreateVoxelMipGen( cuT( "FirstBounceMip" )
 			, m_firstBounce
-			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableFirstBounceMipGen(); } )
+			, crg::IsEnabledCallback( [this](){ return doEnableFirstBounceMipGen(); } )
 			, progress );
 		doCreateVoxelSecondaryBounce( progress );
 		doCreateVoxelMipGen( cuT( "SecondaryBounceMip" )
 			, m_secondaryBounce
-			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableSecondaryBounceMipGen(); } )
+			, crg::IsEnabledCallback( [this](){ return doEnableSecondaryBounceMipGen(); } )
 			, progress );
 		m_runnable = m_graph.compile( m_device.makeContext() );
 		m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() + "/Graph" )
@@ -277,7 +241,7 @@ namespace c3d
 		}
 
 		stepProgressBarLocal( progress, cuT( "Creating voxelize pass" ) );
-		auto & oass = m_graph.createPass( name
+		auto & pass = m_graph.createPass( name
 			, [this, progress, isStatic, &outVoxels, &culler]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -295,34 +259,10 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		MbString bufName = "Voxels";
-
-		if ( isStatic )
-		{
-			bufName = "Static" + bufName;
-		}
-
-		outVoxels.setLastAttach( oass.addInOutStorage( *outVoxels.getLastAttach(), 0u ) );
-	}
-
-	void Voxelizer::doCreateClearStaticsPass( ProgressBar * progress )
-	{
-		stepProgressBarLocal( progress, cuT( "Creating clear static pass" ) );
-		auto & result = m_graph.createPass( "StaticsClearPass"
-			, [this, progress]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				stepProgressBarLocal( progress, cuT( "Initialising clear static pass" ) );
-				auto res = makeRawUnique< vxlsr::VoxelsClear >( framePass
-					, context
-					, runnableGraph
-					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableClearStatic(); } ) );
-				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
-					, res->getTimer() );
-				return res;
-			} );
-		m_staticsVoxels->setLastAttach( result.addOutputStorageBuffer( m_staticsVoxels->bufferViewId, 0u ) );
+		if ( isStatic)
+			outVoxels.setLastAttach( pass.addClearableOutputStorageBuffer( outVoxels.bufferViewId, 0u ) );
+		else
+			outVoxels.setLastAttach( pass.addInOutStorage( *outVoxels.getLastAttach(), 0u ) );
 	}
 
 	void Voxelizer::doCreateMergeStaticsPass( ProgressBar * progress )
@@ -340,8 +280,8 @@ namespace c3d
 					, 0u
 					, m_staticsVoxels->getSize()
 					, crg::ru::Config{}
-					, crg::BufferCopy::GetPassIndexCallback( []() { return 0u; } )
-					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
+					, crg::GetPassIndexCallback( []() { return 0u; } )
+					, crg::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
 				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
@@ -365,7 +305,7 @@ namespace c3d
 					, runnableGraph
 					, m_device
 					, m_voxelConfig
-					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableVoxelToTexture(); } ) );
+					, crg::IsEnabledCallback( [this]() { return doEnableVoxelToTexture(); } ) );
 				m_voxelToTexture = res.get();
 				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
@@ -377,7 +317,7 @@ namespace c3d
 
 	void Voxelizer::doCreateVoxelMipGen( String const & name
 		, Texture & view
-		, crg::RunnablePass::IsEnabledCallback isEnabled
+		, crg::IsEnabledCallback isEnabled
 		, ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating voxel mipmap generation pass" ) );
@@ -392,7 +332,7 @@ namespace c3d
 					, runnableGraph
 					, ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
-					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
+					, crg::defaultV< crg::GetPassIndexCallback >
 					, enable );
 				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
@@ -416,7 +356,7 @@ namespace c3d
 					, runnableGraph
 					, m_device
 					, m_voxelConfig
-					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableSecondaryBounce(); } ) );
+					, crg::IsEnabledCallback( [this]() { return doEnableSecondaryBounce(); } ) );
 				m_voxelSecondaryBounce = res.get();
 				c3d::getEngine( m_device ).registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );

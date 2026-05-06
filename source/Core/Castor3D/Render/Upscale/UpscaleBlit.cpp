@@ -49,8 +49,8 @@ namespace c3d
 		recContext.memoryBarrier( commandBuffer, resolvedColor, makeLayoutState( ImageLayout::eTransferDst ) );
 		auto & resources = recContext.getResources();
 		resources->vkCmdBlitImage( commandBuffer
-			, resources.createImage( unresolvedColor.data->image ), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			, resources.createImage( resolvedColor.data->image ), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, resources.createImage( unresolvedColor.data->image ).getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			, resources.createImage( resolvedColor.data->image ).getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, 1u, &region, VK_FILTER_LINEAR );
 		recContext.memoryBarrier( commandBuffer, resolvedColor, dstState );
 		recContext.memoryBarrier( commandBuffer, unresolvedColor, srcState );

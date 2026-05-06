@@ -110,7 +110,7 @@ namespace c3d
 		, m_bandSize{ getSafeBandSize( size ) }
 		, m_realSize{ getSafeBandedSize( size ) }
 		, m_graph{ resources.getHandler(), "PickingGraph" }
-		, m_colourImage{ m_graph.createImage( crg::ImageData{ "PickingColour"
+		, m_colourImage{ m_graph.createImageId( crg::ImageData{ "PickingColour"
 			, ImageCreateFlags::eNone
 			, ImageType::e2D
 			, PixelFormat::eR32G32B32A32_UINT
@@ -119,20 +119,20 @@ namespace c3d
 				| ImageUsageFlags::eTransferSrc
 				| ImageUsageFlags::eTransferDst
 				| ImageUsageFlags::eSampled ) } ) }
-		, m_colourImageView{ m_graph.createView( crg::ImageViewData{ "PickingColour"
+		, m_colourImageView{ m_graph.createViewId( crg::ImageViewData{ "PickingColour"
 			, m_colourImage
 			, ImageViewCreateFlags::eNone
 			, ImageViewType::e2D
 			, getFormat( m_colourImage )
 			, { ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } ) }
-		, m_depthImage{ m_graph.createImage( crg::ImageData{ "PickingDepth"
+		, m_depthImage{ m_graph.createImageId( crg::ImageData{ "PickingDepth"
 			, ImageCreateFlags::eNone
 			, ImageType::e2D
 			, PixelFormat::eD32_SFLOAT
 			, makeExtent3D( m_realSize )
 			, ( ImageUsageFlags::eDepthStencilAttachment
 				| ImageUsageFlags::eSampled ) } ) }
-		, m_depthImageView{ m_graph.createView( crg::ImageViewData{ "PickingDepth"
+		, m_depthImageView{ m_graph.createViewId( crg::ImageViewData{ "PickingDepth"
 			, m_depthImage
 			, ImageViewCreateFlags::eNone
 			, ImageViewType::e2D
@@ -163,7 +163,7 @@ namespace c3d
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
 		m_colourTexture = makeRawUnique< ashes::Image >( *m_device
-			, m_runnable->createImage( m_colourImage )
+			, m_runnable->createImage( m_colourImage ).getImage()
 			, ashes::ImageCreateInfo{ convert( m_colourImage.data->info ) } );
 		m_colourView = ashes::ImageView{ convert( m_colourImageView.data->info )
 			, m_runnable->createImageView( m_colourImageView )

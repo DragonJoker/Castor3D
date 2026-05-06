@@ -43,7 +43,7 @@ namespace ocean_fft
 			, c3d::Extent2D const & extent
 			, c3d::Point2f const & heightMapSize
 			, uint32_t displacementDownsample
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::defaultV< crg::RunnablePass::IsEnabledCallback > );
+			, crg::IsEnabledCallback const & isEnabled = crg::defaultV< crg::IsEnabledCallback > );
 		/**
 		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */

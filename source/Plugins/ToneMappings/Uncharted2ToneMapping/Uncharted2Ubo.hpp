@@ -90,13 +90,12 @@ namespace Uncharted2
 }
 
 #define C3D_Uncharted2( writer, binding, set )\
-	sdw::UniformBuffer uncharted2{ writer\
-		, Uncharted2::Uncharted2Ubo::Buffer\
-		, binding\
-		, set\
-		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_uncharted2Data = uncharted2.declMember< Uncharted2::Uncharted2Data >( Uncharted2::Uncharted2Ubo::Data );\
+	auto uncharted2 = writer.declUniformBuffer( Uncharted2::Uncharted2Ubo::Buffer \
+		, binding \
+		, set \
+		, ast::type::MemoryLayout::eStd140 \
+		, true ); \
+	auto c3d_uncharted2Data = uncharted2.declMember< Uncharted2::Uncharted2Data >( Uncharted2::Uncharted2Ubo::Data ); \
 	uncharted2.end()
 
 #endif

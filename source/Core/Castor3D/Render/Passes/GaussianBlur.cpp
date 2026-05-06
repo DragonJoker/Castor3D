@@ -135,7 +135,7 @@ namespace c3d
 			, uint32_t mipLevels )
 		{
 			auto mbPrefix = toUtf8( prefix );
-			auto intermediate = graph.createImage( crg::ImageData{ mbPrefix + "GB"
+			auto intermediate = graph.createImageId( crg::ImageData{ mbPrefix + "GB"
 				, ImageCreateFlags::eNone
 				, ImageType::e2D
 				, format
@@ -146,7 +146,7 @@ namespace c3d
 						? ( ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc )
 						: ImageUsageFlags::eNone ) )
 				, mipLevels } );
-			return graph.createView( crg::ImageViewData{ mbPrefix + "GB"
+			return graph.createViewId( crg::ImageViewData{ mbPrefix + "GB"
 				, intermediate
 				, ImageViewCreateFlags::eNone
 				, ImageViewType::e2D
@@ -168,7 +168,7 @@ namespace c3d
 		, crg::Attachment const & attach
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+		, crg::IsEnabledCallback const & isEnabled )
 		: OwnedBy< Engine >{ c3d::getEngine( device ) }
 		, m_source{ attach }
 		, m_device{ device }
@@ -244,7 +244,7 @@ namespace c3d
 		, String const & prefix
 		, crg::Attachment const & attach
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+		, crg::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
 			, device
 			, prefix
@@ -260,7 +260,7 @@ namespace c3d
 		, String const & prefix
 		, c3d::Texture & texture
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+		, crg::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
 			, device
 			, prefix

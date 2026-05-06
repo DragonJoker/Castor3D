@@ -139,6 +139,7 @@ namespace c3d
 		crg::AttachmentPtr m_ownAttach;
 		crg::Attachment const * m_attach{};
 		bool m_ownBuffer{};
+		crg::Buffer * m_buffer{};
 	};
 
 	struct Buffer : BufferBase

@@ -72,14 +72,12 @@ namespace c3d
 }
 
 #define C3D_ShadowMap( writer, binding, set )\
-	sdw::UniformBuffer shadowMapCfg{ writer\
-		, "C3D_ShadowMapConfig"\
-		, "c3d_shadowMapConfig"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_shadowMapData = shadowMapCfg.declMember< c3d::shader::ShadowMapData >( "d" );\
+	auto shadowMapCfg = writer.declUniformBuffer( "c3d_shadowMapConfig" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, true ); \
+	auto c3d_shadowMapData = shadowMapCfg.declMember< c3d::shader::ShadowMapData >( "d" ); \
 	shadowMapCfg.end()
 
 #endif

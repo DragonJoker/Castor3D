@@ -282,10 +282,10 @@ namespace c3d
 					, graph
 					, crg::ru::Config{ 2u }
 					, config
-						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
+						.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getPassIndex( crg::GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
 						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd ); } ) )
+						.recordInto( crg::RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd ); } ) )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
 						.getGroupCountX( crg::cp::GetGroupCountCallback( [this]() { return doGetGroupsCountX(); } ) ) }
 				, m_device{ device }
@@ -373,10 +373,10 @@ namespace c3d
 					, graph
 					, crg::ru::Config{ 2u }
 					, config
-						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
+						.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getPassIndex( crg::GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
 						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd ); } ) )
+						.recordInto( crg::RecordCallback( [this]( crg::RecordContext const & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd ); } ) )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } ) }
 				, m_device{ device }
 				, m_clusters{ clusters }

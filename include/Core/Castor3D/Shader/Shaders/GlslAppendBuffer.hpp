@@ -141,7 +141,7 @@ namespace c3d::shader
 
 		bool isEnabled()const noexcept
 		{
-			return m_ssbo != nullptr;
+			return m_ssbo.isEnabled();
 		}
 
 		sdw::ShaderWriter * getWriter()const noexcept
@@ -151,7 +151,7 @@ namespace c3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-		RawUniquePtr< sdw::StorageBuffer > m_ssbo;
+		sdw::StorageBuffer m_ssbo;
 		RawUniquePtr< sdw::UInt32 > m_count;
 		MbString m_variableName;
 	};
@@ -178,10 +178,10 @@ namespace c3d::shader
 		{
 			if ( isEnabled() )
 			{
-				m_data = makeRawUnique< sdw::Array< DataT > >( m_ssbo->declMemberArray< DataT >( "d"
+				m_data = makeRawUnique< sdw::Array< DataT > >( m_ssbo.declMemberArray< DataT >( "d"
 					, true
 					, c3d::forward< ParamsT >( params )... ) );
-				m_ssbo->end();
+				m_ssbo.end();
 			}
 		}
 
@@ -189,14 +189,14 @@ namespace c3d::shader
 		DataT getData( sdw::UInt32 const & index
 			, ParamsT && ... params )const
 		{
-			return ( m_ssbo
+			return ( m_ssbo.isEnabled()
 				? ( *m_data )[index]
 				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, c3d::forward< ParamsT >( params )... ) );
 		}
 
 		void appendData( DataT const & data )
 		{
-			if ( m_ssbo )
+			if ( m_ssbo.isEnabled() )
 			{
 				auto idx = m_writer.declLocale( m_variableName + "_idx", this->incrementCount() );
 				( *m_data )[idx] = data;
@@ -206,7 +206,7 @@ namespace c3d::shader
 		void appendData( DataT const & data
 			, sdw::UInt32 const & maxCount )
 		{
-			if ( m_ssbo )
+			if ( m_ssbo.isEnabled() )
 			{
 				auto idx = m_writer.declLocale( m_variableName + "_idx", this->incrementCount() );
 
@@ -221,7 +221,7 @@ namespace c3d::shader
 		void appendData( DataT const & data
 			, uint32_t maxCount )
 		{
-			if ( m_ssbo )
+			if ( m_ssbo.isEnabled() )
 			{
 				auto idx = m_writer.declLocale( m_variableName + "_idx", this->incrementCount() );
 

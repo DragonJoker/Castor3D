@@ -75,10 +75,10 @@ namespace c3d
 					, graph
 					, crg::ru::Config{ 1u }
 					, config
-						.isEnabled( RunnablePass::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.programCreator( { 1u, [this]( uint32_t ){ return doCreateProgram(); } } )
 						.getGroupCountY( crg::cp::GetGroupCountCallback( [this]() { return doGetGroupCountY(); } ) )
-						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
+						.end( crg::RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
 				, m_buffer{ buffer }
 				, m_imageHeight{ imageHeight }

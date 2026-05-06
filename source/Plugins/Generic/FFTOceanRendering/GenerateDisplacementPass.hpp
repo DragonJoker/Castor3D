@@ -39,7 +39,7 @@ namespace ocean_fft
 			, crg::RunnableGraph & graph
 			, c3d::RenderDevice const & device
 			, c3d::Extent2D const & extent
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::defaultV< crg::RunnablePass::IsEnabledCallback > );
+			, crg::IsEnabledCallback const & isEnabled = crg::defaultV< crg::IsEnabledCallback > );
 		/**
 		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */

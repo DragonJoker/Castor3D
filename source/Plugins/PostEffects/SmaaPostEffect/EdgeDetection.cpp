@@ -54,7 +54,7 @@ namespace smaa
 				, ( c3d::ImageUsageFlags::eSampled
 					| c3d::ImageUsageFlags::eDepthStencilAttachment ) }
 			, {} }
-		, m_outStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
+		, m_outStencilView{ m_graph.createViewId( crg::ImageViewData{ "SMEDStRes"
 			, m_outDepth.imageId
 			, c3d::ImageViewCreateFlags::eNone
 			, c3d::ImageViewType::e2D

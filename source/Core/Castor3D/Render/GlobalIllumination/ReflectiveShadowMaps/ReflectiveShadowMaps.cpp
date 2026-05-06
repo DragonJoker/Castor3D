@@ -37,9 +37,9 @@ namespace c3d
 				: crg::RunnablePass{ pass
 					, context
 					, graph
-					, Callbacks{ []( uint32_t ){}
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-						, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
+					, crg::RunnablePass::Callbacks{}
+						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
+						.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } ) }
 			{
 			}
 
@@ -53,7 +53,7 @@ namespace c3d
 				for ( auto & [binding, attach] : getPass().getOutputs() )
 				{
 					auto view = attach->view();
-					auto image = getGraph().createImage( view.data->image );
+					auto image = getGraph().createImage( view.data->image ).getImage();
 					auto subresourceRange = convert( view.data->info.subresourceRange );
 					assert( attach->isTransferInputImageView() );
 					context->vkCmdClearColorImage( commandBuffer

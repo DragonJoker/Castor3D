@@ -135,14 +135,12 @@ namespace c3d
 }
 
 #define C3D_Voxelizer( writer, binding, set, enable )\
-	sdw::UniformBuffer voxelizer{ writer\
-		, "C3D_Voxelizer"\
-		, "c3d_voxelizer"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140\
-		, enable };\
-	auto c3d_voxelData = voxelizer.declMember< c3d::shader::VoxelData >( "c3d_voxelData" );\
+	auto voxelizer = writer.declUniformBuffer( "c3d_voxelizer" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, enable ); \
+	auto c3d_voxelData = voxelizer.declMember< c3d::shader::VoxelData >( "c3d_voxelData" ); \
 	voxelizer.end()
 
 #endif

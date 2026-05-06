@@ -130,17 +130,15 @@ namespace c3d::shader
 }
 
 #define C3D_OverlaysSurfaces( writer, binding, set, isText, hasTex )\
-	sdw::StorageBuffer c3d_overlaysSurfacesBuffer{ writer\
-		, "C3D_OverlaysSurfacesBuffer"\
-		, "c3d_overlaysSurfacesBuffer"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_overlaysSurfaces = c3d_overlaysSurfacesBuffer.declMemberArray< c3d::shader::OverlaySurface >( "d"\
-		, true\
-		, isText\
-		, hasTex );\
+	auto c3d_overlaysSurfacesBuffer = writer.declStorageBuffer( "c3d_overlaysSurfacesBuffer" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd430 \
+		, true ); \
+	auto c3d_overlaysSurfaces = c3d_overlaysSurfacesBuffer.declMemberArray< c3d::shader::OverlaySurface >( "d" \
+		, true \
+		, isText \
+		, hasTex ); \
 	c3d_overlaysSurfacesBuffer.end()
 
 #endif

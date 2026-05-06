@@ -49,7 +49,7 @@ namespace c3d
 			, CameraUbo const & cameraUbo
 			, Texture const & depthObj
 			, Texture const & diffuse
-			, crg::RunnablePass::IsEnabledCallback const & isEnabled );
+			, crg::IsEnabledCallback const & isEnabled );
 		C3D_API ~SubsurfaceScatteringPass()noexcept;
 		/**
 		 *\~english

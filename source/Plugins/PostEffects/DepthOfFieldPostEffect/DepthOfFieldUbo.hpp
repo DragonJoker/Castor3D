@@ -96,7 +96,7 @@ namespace dof
 }
 
 #define C3D_DepthOfField( writer, binding, set )\
-	sdw::UniformBuffer dofBuffer{ writer, DepthOfFieldUbo::Buffer, binding, set };\
+	auto dofBuffer = writer.declUniformBuffer( DepthOfFieldUbo::Buffer, binding, set );\
 	auto c3d_dofData = dofBuffer.declMember< DepthOfFieldData >( DepthOfFieldUbo::Data );\
 	dofBuffer.end()
 

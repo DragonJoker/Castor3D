@@ -223,14 +223,14 @@ namespace film_grain
 	{
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = m_noiseImages[0].getPixelFormat();
-		m_noiseImg = m_graph.createImage( crg::ImageData{ "FGNoise"
+		m_noiseImg = m_graph.createImageId( crg::ImageData{ "FGNoise"
 			, c3d::ImageCreateFlags::eNone
 			, c3d::ImageType::e3D
 			, format
 			, { dim.getWidth(), dim.getHeight(), NoiseMapCount }
 			, ( c3d::ImageUsageFlags::eSampled
 				| c3d::ImageUsageFlags::eTransferDst ) } );
-		m_noiseView = m_graph.createView( crg::ImageViewData{ "FGNoise"
+		m_noiseView = m_graph.createViewId( crg::ImageViewData{ "FGNoise"
 			, m_noiseImg
 			, c3d::ImageViewCreateFlags::eNone
 			, c3d::ImageViewType::e3D
@@ -248,7 +248,7 @@ namespace film_grain
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 				auto noiseImg = c3d::makeRawUnique< ashes::Image >( *device
-					, graph.createImage( m_noiseImg )
+					, graph.createImage( m_noiseImg ).getImage()
 					, ashes::ImageCreateInfo{ convert( m_noiseImg.data->info ) } );
 				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ convert( m_noiseView.data->info ) }
 					, graph.createImageView( m_noiseView )

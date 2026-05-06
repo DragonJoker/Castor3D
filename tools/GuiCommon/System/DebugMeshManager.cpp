@@ -87,12 +87,10 @@ namespace GuiCommon
 			C3D_Camera( writer
 				, BindingPoints::eCamera
 				, 0u );
-			sdw::StorageBuffer cubeBox{ writer
-				, "GC_DebugMesh"
-				, "gc_debugMesh"
+			auto cubeBox = writer.declStorageBuffer( "gc_debugMesh"
 				, uint32_t( BindingPoints::eMeshConfig )
 				, uint32_t( 0u )
-				, sdw::type::MemoryLayout::eStd430 };
+				, sdw::type::MemoryLayout::eStd430 );
 			auto gc_debugMeshData = cubeBox.declMemberArray< DebugMeshData >( "c" );
 			cubeBox.end();
 
@@ -141,12 +139,10 @@ namespace GuiCommon
 			C3D_Camera( writer
 				, BindingPoints::eCamera
 				, 0u );
-			sdw::StorageBuffer cubeBox{ writer
-				, "GC_DebugMesh"
-				, "gc_debugMesh"
+			auto cubeBox = writer.declStorageBuffer( "gc_debugMesh"
 				, uint32_t( BindingPoints::eMeshConfig )
 				, uint32_t( 0u )
-				, sdw::type::MemoryLayout::eStd430 };
+				, sdw::type::MemoryLayout::eStd430 );
 			auto gc_debugMeshData = cubeBox.declMemberArray< DebugMeshData >( "c" );
 			cubeBox.end();
 

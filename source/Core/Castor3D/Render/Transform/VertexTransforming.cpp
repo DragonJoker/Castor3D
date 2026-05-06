@@ -35,23 +35,21 @@ namespace c3d
 	//*********************************************************************************************
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
-	sdw::StorageBuffer Name##Buffer{ writer\
-		, #Name + MbString{ "Buffer" }\
-		, uint32_t( Binding )\
-		, 0u\
-		, ast::type::MemoryLayout::eStd430\
-		, Enable };\
-	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
+	auto Name##Buffer = writer.declStorageBuffer( #Name + MbString{ "Buffer" } \
+		, uint32_t( Binding ) \
+		, 0u \
+		, ast::type::MemoryLayout::eStd430 \
+		, Enable ); \
+	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable ); \
 	Name##Buffer.end()
 
 #define DeclareSsboEx( Name, Type, Binding, Enable, Flags )\
-	sdw::StorageBuffer Name##Buffer{ writer\
-		, #Name + MbString{ "Buffer" }\
-		, uint32_t( Binding )\
-		, 0u\
-		, ast::type::MemoryLayout::eStd430\
-		, Enable };\
-	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable, Flags );\
+	auto Name##Buffer = writer.declStorageBuffer( #Name + MbString{ "Buffer" } \
+		, uint32_t( Binding ) \
+		, 0u \
+		, ast::type::MemoryLayout::eStd430 \
+		, Enable ); \
+	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable, Flags ); \
 	Name##Buffer.end()
 
 	//*********************************************************************************************

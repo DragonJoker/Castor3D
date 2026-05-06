@@ -417,6 +417,7 @@ namespace c3d
 		crg::ResourcesCache * resources{};
 		RenderDevice const * device{};
 		crg::ImageId imageId{};
+		crg::Image * imagePages{};
 		ashes::ImagePtr image{};
 		ashes::Sampler const * sampler{};
 

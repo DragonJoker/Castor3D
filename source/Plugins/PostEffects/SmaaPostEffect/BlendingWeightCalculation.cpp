@@ -820,14 +820,14 @@ namespace smaa
 		{
 			auto & context = device.makeContext();
 			auto mbName = c3d::toUtf8( name );
-			auto imageId = graph.createImage( crg::ImageData{ mbName
+			auto imageId = graph.createImageId( crg::ImageData{ mbName
 				, c3d::ImageCreateFlags::eNone
 				, c3d::ImageType::e2D
 				, format
 				, dimensions
 				, ( c3d::ImageUsageFlags::eSampled
 					| c3d::ImageUsageFlags::eTransferDst ) } );
-			auto result = graph.createView( crg::ImageViewData{ mbName
+			auto result = graph.createViewId( crg::ImageViewData{ mbName
 				, imageId
 				, c3d::ImageViewCreateFlags::eNone
 				, c3d::ImageViewType::e2D
@@ -835,7 +835,7 @@ namespace smaa
 				, { c3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
 			auto staging = device->createStagingTexture( convert( format ), convert( dimensions ) );
 			auto image = c3d::makeRawUnique< ashes::Image >( *device
-				, resources.createImage( context, imageId )
+				, resources.createImage( context, imageId ).getImage()
 				, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
 			ashes::ImageView view{ ashes::ImageViewCreateInfo{ convert( result.data->info ) }
 				, resources.createImageView( context, result )
@@ -869,20 +869,22 @@ namespace smaa
 		, m_graph{ graph }
 		, m_resources{ renderTarget.getResources() }
 		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
-		, m_areaView{ bwcalc::createImage( m_graph
+		, m_areaViewId{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
 			, cuT( "SMBWArea" )
 			, c3d::PixelFormat::eR8G8_UNORM
 			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
 			, c3d::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
-		, m_searchView{ bwcalc::createImage( m_graph
+		, m_areaImage{ &m_resources.createImage( device.makeContext(), m_areaViewId.data->image ) }
+		, m_searchViewId{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
 			, cuT( "SMBWSearch" )
 			, c3d::PixelFormat::eR8_UNORM
 			, { SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 1u }
 			, c3d::makeArrayView( std::begin( searchTexBytes ), std::end( searchTexBytes ) ) ) }
+		, m_searchImage{ &m_resources.createImage( device.makeContext(), m_searchViewId.data->image ) }
 		, m_result{ m_device
 			, m_resources
 			, cuT( "SMBWRes" )
@@ -918,14 +920,14 @@ namespace smaa
 					, result->getTimer() );
 				return result;
 			} );
-		m_graph.addInput( m_areaView
+		m_graph.addInput( m_areaViewId
 			, makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
-		m_graph.addInput( m_searchView
+		m_graph.addInput( m_searchViewId
 			, makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
 		ubo.createPassBinding( pass, smaa::Bindings::SmaaUboIdx );
-		pass.addInputSampledImageT( m_areaView, bwcalc::Bindings::AreaTexIdx, linearSampler );
-		pass.addInputSampledImageT( m_searchView, bwcalc::Bindings::SearchTexIdx );
+		pass.addInputSampledImageT( m_areaViewId, bwcalc::Bindings::AreaTexIdx, linearSampler );
+		pass.addInputSampledImageT( m_searchViewId, bwcalc::Bindings::SearchTexIdx );
 		pass.addInputSampledT( *edgeDetectionView.getSampledLastAttach(), bwcalc::Bindings::EdgesTexIdx, linearSampler );
 		pass.addInputStencilTarget( *stencilView.getLastAttach() );
 		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId(), c3d::transparentBlackClearColor ) );
@@ -934,10 +936,10 @@ namespace smaa
 
 	BlendingWeightCalculation::~BlendingWeightCalculation()
 	{
-		m_resources.destroyImageView( m_areaView );
-		m_resources.destroyImage( m_areaView.data->image );
-		m_resources.destroyImageView( m_searchView );
-		m_resources.destroyImage( m_searchView.data->image );
+		m_resources.destroyImageView( m_areaViewId );
+		m_resources.destroyImage( m_areaViewId.data->image );
+		m_resources.destroyImageView( m_searchViewId );
+		m_resources.destroyImage( m_searchViewId.data->image );
 		m_result.destroy();
 	}
 

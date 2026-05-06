@@ -62,13 +62,11 @@ namespace c3d
 }
 
 #define C3D_FontEx( writer, binding, set, enable )\
-	sdw::UniformBuffer font{ writer\
-		, "C3D_Font"\
-		, "c3d_font"\
+	auto font = writer.declUniformBuffer( "c3d_font"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
-		, enable };\
+		, enable );\
 	auto c3d_fontData = font.declMember< c3d::shader::FontData >( "f", enable );\
 	font.end()
 

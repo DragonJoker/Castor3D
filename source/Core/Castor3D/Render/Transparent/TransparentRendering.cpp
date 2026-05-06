@@ -143,8 +143,8 @@ namespace c3d
 					, runnableGraph
 					, m_mippedColour.getExtent()
 					, crg::ru::Config{ 1u }
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
+					, crg::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::IsEnabledCallback( [this](){ return m_enabled; } ) );
 				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
@@ -164,8 +164,8 @@ namespace c3d
 					, runnableGraph
 					, ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
+					, crg::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::IsEnabledCallback( [this](){ return m_enabled; } ) );
 				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;

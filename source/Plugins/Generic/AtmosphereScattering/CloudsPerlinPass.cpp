@@ -460,8 +460,8 @@ namespace atmosphere_scattering
 					, graph
 					, c3d::ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [&enabled](){ return enabled; } ) );
+					, crg::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::IsEnabledCallback( [&enabled](){ return enabled; } ) );
 				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

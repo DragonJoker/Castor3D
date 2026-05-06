@@ -73,9 +73,8 @@ namespace c3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, crg::RunnablePass::Callbacks{ []( uint32_t ){}
-				, crg::defaultV< crg::RunnablePass::GetPipelineStateCallback >
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } }
+			, crg::RunnablePass::Callbacks{}
+				.onRecord( [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } )
 			, { 1u, true } }
 		, m_device{ device }
 		, m_scene{ scene }

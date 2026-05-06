@@ -121,25 +121,21 @@ namespace c3d::shader
 }
 
 #define C3D_ModelsData( writer, binding, set )\
-	sdw::StorageBuffer c3d_modelsDataBuffer{ writer\
-		, "C3D_ModelsDataBuffer"\
-		, "c3d_modelsDataBuffer"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< c3d::shader::ModelData >( "d" );\
+	auto c3d_modelsDataBuffer = writer.declStorageBuffer( "c3d_modelsDataBuffer" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd430 \
+		, true ); \
+	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< c3d::shader::ModelData >( "d" ); \
 	c3d_modelsDataBuffer.end()
 
 #define C3D_ModelData( writer, binding, set )\
-	sdw::UniformBuffer c3d_modelDataBuffer{ writer\
-		, "C3D_ModelDataBuffer"\
-		, "c3d_modelDataBuffer"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_modelData = c3d_modelDataBuffer.declMember< c3d::shader::ModelData >( "d" );\
+	auto c3d_modelDataBuffer = writer.declUniformBuffer( "c3d_modelDataBuffer" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, true ); \
+	auto c3d_modelData = c3d_modelDataBuffer.declMember< c3d::shader::ModelData >( "d" ); \
 	c3d_modelDataBuffer.end()
 
 #endif

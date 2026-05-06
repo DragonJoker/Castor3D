@@ -66,7 +66,7 @@ namespace draw_edges
 }
 
 #define C3D_DrawEdges( writer, binding, set )\
-	sdw::UniformBuffer drawEdges{ writer, draw_edges::DrawEdgesUbo::Buffer, uint32_t( binding ), uint32_t( set ) };\
+	auto drawEdges = writer.declUniformBuffer( draw_edges::DrawEdgesUbo::Buffer, uint32_t( binding ), uint32_t( set ) );\
 	auto c3d_drawEdgesData = drawEdges.declMember< draw_edges::DrawEdgesData >( draw_edges::DrawEdgesUbo::Data );\
 	drawEdges.end()
 

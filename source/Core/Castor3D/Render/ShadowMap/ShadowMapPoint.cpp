@@ -190,8 +190,8 @@ namespace c3d
 							, getShadowPassResult( isStatic ).getExtent()
 							, ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
-							, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::ImageCopy::IsEnabledCallback( [this, faceIndex](){ return doEnableCopyStatic( faceIndex ); } ) );
+							, crg::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::IsEnabledCallback( [this, faceIndex](){ return doEnableCopyStatic( faceIndex ); } ) );
 						getOwner()->registerTimer( makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
@@ -231,7 +231,7 @@ namespace c3d
 					, *smResult.getLastAttach( SmTexture::eVariance, faceIndex )
 					, m_blurIntermediateView
 					, 5u
-					, crg::ImageCopy::IsEnabledCallback( [this, faceIndex]() { return doEnableBlur( faceIndex ); } ) ) );
+					, crg::IsEnabledCallback( [this, faceIndex]() { return doEnableBlur( faceIndex ); } ) ) );
 				smResult.setLastAttach( SmTexture::eVariance, faceIndex, &passes.blurs.back()->getResultAttach() );
 			}
 		}

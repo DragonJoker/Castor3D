@@ -80,7 +80,7 @@ namespace atmosphere_scattering
 			, graph
 			, crg::ru::Config{ 2u, true }
 			, crg::rq::Config{}
-				.isEnabled( IsEnabledCallback( [this](){ return c3d::BackgroundPassBase::doIsEnabled(); } ) )
+				.isEnabled( crg::IsEnabledCallback( [this](){ return c3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
 				.depthStencilState( c3d::makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL ) )
 				.passIndex( &background.getPassIndex( forceVisible ) )

@@ -31,16 +31,18 @@ namespace c3d::shader
 		/**
 		 *\arg	ValueT		The value type.
 		 */
-		template< typename ValueT >
+		template< typename ValueT
+			, typename KeyBufferT
+			, typename ValueBufferT >
 		void sortT( sdw::ShaderWriter & writer
 			, sdw::UInt const & elementOffset
 			, sdw::UInt elementCount
 			, sdw::UInt const & groupIndex
 			, [[maybe_unused]] sdw::UInt const & threadIndex
-			, sdw::Array< sdw::UInt > const & inputKeys
-			, sdw::Array< sdw::UInt > const & outputKeys
-			, sdw::Array< ValueT > const & inputValues
-			, sdw::Array< ValueT > const & outputValues
+			, KeyBufferT const & inputKeys
+			, KeyBufferT const & outputKeys
+			, ValueBufferT const & inputValues
+			, ValueBufferT const & outputValues
 			, ValueT const & invalidValue )
 		{
 			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", bucketSize );
@@ -146,14 +148,15 @@ namespace c3d::shader
 		/**
 		 *\arg	ValueT		The value type.
 		 */
-		template< typename ValueT >
+		template< typename ValueT
+			, typename KeyBufferT >
 		void sortT( sdw::ComputeWriter & writer
 			, sdw::UInt const & elementOffset
 			, sdw::UInt elementCount
 			, sdw::UInt const & groupIndex
 			, sdw::UInt const & threadIndex
-			, sdw::Array< sdw::UInt > const & inputKeys
-			, sdw::Array< sdw::UInt > const & outputKeys
+			, KeyBufferT const & inputKeys
+			, KeyBufferT const & outputKeys
 			, ValueT const & invalidValue )
 		{
 			sdw::Array< ValueT > inputValues = writer.declGlobalArray< ValueT >( "c3d_dummyInValues", 1u, false );

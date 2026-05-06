@@ -195,7 +195,7 @@ namespace c3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, crg::cp::Config config )
-				: crg::ComputePass{framePass
+				: crg::ComputePass{ framePass
 					, context
 					, graph
 					, crg::ru::Config{ 1u }

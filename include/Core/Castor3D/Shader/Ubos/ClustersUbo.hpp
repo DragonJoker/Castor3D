@@ -114,13 +114,11 @@ namespace c3d
 }
 
 #define C3D_ClustersEx( writer, binding, set, enabled ) \
-	sdw::UniformBuffer clusters{ writer \
-		, "C3D_Clusters" \
-		, "c3d_clusters" \
+	auto clusters = writer.declUniformBuffer( "c3d_clusters" \
 		, ( enabled ? uint32_t( binding ) : 0u ) \
 		, uint32_t( set ) \
 		, ast::type::MemoryLayout::eStd140 \
-		, enabled }; \
+		, enabled ); \
 	auto c3d_clustersData = clusters.declMember< c3d::shader::ClustersData >( "c", enabled ); \
 	clusters.end()
 

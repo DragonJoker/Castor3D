@@ -87,12 +87,13 @@ namespace c3d
 				: crg::RunnablePass{ framePass
 					, context
 					, graph
-					, { [this]( uint32_t index ){ doInitialise( index ); }
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-						, [this]( crg::RecordContext const & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-						, GetPassIndexCallback( [](){ return 0u; } )
-						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-						, IsComputePassCallback( [](){ return true; } ) }
+					, crg::RunnablePass::Callbacks{}
+						.onInitialise( [this]( uint32_t passIndex ){ doInitialise( passIndex ); } )
+						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+						.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } )
+						.onGetPassIndex( [](){ return 0u; } )
+						.onIsEnabled( [this](){ return doIsEnabled(); } )
+						.onIsComputePass( [](){ return true; } )
 					, crg::ru::Config{ 1u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getScene().getLightCache() }
@@ -125,12 +126,12 @@ namespace c3d
 					, LightType lightType )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "BucketSort/" ) + getName( lightType ), createShader( device ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
-					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
+					, cpConfig{ crg::defaultV< crg::InitialiseCallback >
 						, nullptr
-						, IsEnabledCallback( [parent]() { return parent->doIsEnabled(); } )
-						, GetPassIndexCallback( []() { return 0u; } )
-						, crg::getDefaultV< RecordCallback >()
-						, crg::getDefaultV< RecordCallback >()
+						, crg::IsEnabledCallback( [parent]() { return parent->doIsEnabled(); } )
+						, crg::GetPassIndexCallback( []() { return 0u; } )
+						, crg::defaultV< crg::RecordCallback >
+						, crg::defaultV< crg::RecordCallback >
 						, 1u
 						, 1u
 						, 1u }

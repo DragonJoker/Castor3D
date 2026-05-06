@@ -57,14 +57,12 @@ namespace c3d
 }
 
 #define C3D_RsmConfigEx( writer, binding, set, enable )\
-	sdw::UniformBuffer rsmConfig{ writer\
-		, "C3D_RsmConfig"\
-		, "c3d_rsmConfig"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140\
-		, enable };\
-	auto c3d_rsmConfigData = rsmConfig.declMember< c3d::shader::RsmConfigData >( "c3d_rsmConfigData" );\
+	auto rsmConfig = writer.declUniformBuffer( "c3d_rsmConfig" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, enable ); \
+	auto c3d_rsmConfigData = rsmConfig.declMember< c3d::shader::RsmConfigData >( "c3d_rsmConfigData" ); \
 	rsmConfig.end()
 
 #define C3D_RsmConfig( writer, binding, set )\

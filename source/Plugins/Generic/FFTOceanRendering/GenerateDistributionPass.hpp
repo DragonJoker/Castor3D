@@ -40,7 +40,7 @@ namespace ocean_fft
 			, c3d::RenderDevice const & device
 			, c3d::Extent2D const & extent
 			, bool normals
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+			, crg::IsEnabledCallback isEnabled = crg::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */

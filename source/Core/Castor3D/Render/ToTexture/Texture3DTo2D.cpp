@@ -332,7 +332,7 @@ namespace c3d
 			{
 				cmd.memoryBarrier( ashes::getStageMask( convert( view.layout ) )
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
+					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image ).getImage()
 						, view.viewId.data->info.subresourceRange
 						, view.layout
 						, ImageLayout::eShaderReadOnly
@@ -343,7 +343,7 @@ namespace c3d
 			{
 				cmd.memoryBarrier( ashes::getStageMask( convert( view.layout ) )
 					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
+					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image ).getImage()
 						, view.viewId.data->info.subresourceRange
 						, view.layout
 						, ImageLayout::eGeneral
@@ -376,7 +376,7 @@ namespace c3d
 				{
 					cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, ashes::getStageMask( convert( view.layout ) )
-						, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
+						, makeLayoutTransition( resources.createImage( context, view.viewId.data->image ).getImage()
 							, view.viewId.data->info.subresourceRange
 							, ImageLayout::eShaderReadOnly
 							, view.layout
@@ -389,7 +389,7 @@ namespace c3d
 			{
 				cmd.memoryBarrier( VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
 					, ashes::getStageMask( convert( view.layout ) )
-					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
+					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image ).getImage()
 						, view.viewId.data->info.subresourceRange
 						, ImageLayout::eGeneral
 						, view.layout

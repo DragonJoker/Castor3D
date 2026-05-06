@@ -202,9 +202,9 @@ namespace c3d
 					: crg::RunnablePass{ pass
 						, context
 						, graph
-						, { crg::defaultV< InitialiseCallback >
-							, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-							, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
+						, crg::RunnablePass::Callbacks{}
+							.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
+							.onRecord( [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } ) }
 				{
 				}
 

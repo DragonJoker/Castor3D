@@ -98,15 +98,13 @@ namespace c3d::shader
 }
 
 #define C3D_ObjectIdsData( writer, flags, binding, set )\
-	sdw::StorageBuffer objectIdsDataBuffer{ writer\
-		, "C3D_ObjectsIds"\
-		, "c3d_objectsIds"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, !flags.enableInstantiation() };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< c3d::shader::ObjectsIds >( "d"\
-		, !flags.enableInstantiation() );\
+	auto objectIdsDataBuffer = writer.declStorageBuffer( "c3d_objectsIds" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd430 \
+		, !flags.enableInstantiation() ); \
+	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< c3d::shader::ObjectsIds >( "d" \
+		, !flags.enableInstantiation() ); \
 	objectIdsDataBuffer.end()
 
 #endif

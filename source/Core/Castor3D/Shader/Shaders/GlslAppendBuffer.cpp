@@ -11,19 +11,15 @@ namespace c3d::shader
 		, uint32_t set
 		, bool enabled )
 		: m_writer{ writer }
+		, m_ssbo{ m_writer.declStorageBuffer( c3d::move( variableName ), binding, set, sdw::type::MemoryLayout::eStd430, enabled ) }
 		, m_variableName{ variableName }
 	{
 		if ( enabled )
 		{
-			m_ssbo = makeRawUnique< sdw::StorageBuffer >( m_writer
-				, c3d::move( blockName )
-				, c3d::move( variableName )
-				, binding
-				, set );
-			m_count = makeRawUnique< sdw::UInt32 >( m_ssbo->declMember< sdw::UInt32 >( "count" ) );
-			m_ssbo->declMember< sdw::UInt32 >( "pad0" );
-			m_ssbo->declMember< sdw::UInt32 >( "pad1" );
-			m_ssbo->declMember< sdw::UInt32 >( "pad2" );
+			m_count = makeRawUnique< sdw::UInt32 >( m_ssbo.declMember< sdw::UInt32 >( "count" ) );
+			m_ssbo.declMember< sdw::UInt32 >( "pad0" );
+			m_ssbo.declMember< sdw::UInt32 >( "pad1" );
+			m_ssbo.declMember< sdw::UInt32 >( "pad2" );
 		}
 		else
 		{
@@ -33,7 +29,7 @@ namespace c3d::shader
 
 	sdw::UInt AppendBufferBase::incrementCount()const
 	{
-		return ( m_ssbo
+		return ( m_ssbo.isEnabled()
 			? sdw::atomicAdd( *m_count, 1_u32 )
 			: *m_count );
 	}

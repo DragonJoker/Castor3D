@@ -312,8 +312,8 @@ namespace c3d
 								, getShadowPassResult( isStatic ).getExtent()
 								, ImageLayout::eShaderReadOnly
 								, crg::ru::Config{}
-								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
-								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
+								, crg::GetPassIndexCallback( [](){ return 0u; } )
+								, crg::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
 							getOwner()->registerTimer( makeString( framePass.getFullName() )
 								, result->getTimer() );
 							return result;
@@ -418,8 +418,8 @@ namespace c3d
 								, getShadowPassResult( isStatic ).getExtent()
 								, ImageLayout::eShaderReadOnly
 								, crg::ru::Config{}
-								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
-								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
+								, crg::GetPassIndexCallback( [](){ return 0u; } )
+								, crg::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
 							getOwner()->registerTimer( makeString( framePass.getFullName() )
 								, result->getTimer() );
 							return result;
@@ -459,7 +459,7 @@ namespace c3d
 						, *smResult.getLastAttach( SmTexture::eVariance, cascade )
 						, m_blurIntermediateView
 						, 5u
-						, crg::ImageCopy::IsEnabledCallback( [this, cascade]() { return doEnableBlur( cascade ); } ) ) );
+						, crg::IsEnabledCallback( [this, cascade]() { return doEnableBlur( cascade ); } ) ) );
 					smResult.setLastAttach( SmTexture::eVariance, cascade, &passes.blurs.back()->getResultAttach() );
 				}
 			}

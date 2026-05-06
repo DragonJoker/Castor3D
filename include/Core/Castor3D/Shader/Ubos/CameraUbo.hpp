@@ -210,13 +210,11 @@ namespace c3d
 }
 
 #define C3D_CameraNamedEx( writer, suffix, binding, set, enabled )\
-	sdw::UniformBuffer camera##suffix{ writer\
-		, "C3D_Camera"#suffix\
-		, "c3d_camera"#suffix\
+	auto camera##suffix = writer.declUniformBuffer( "c3d_camera"#suffix\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, sdw::type::MemoryLayout::eStd140\
-		, enabled };\
+		, enabled );\
 	auto c3d_cameraData##suffix = camera##suffix.declMember< c3d::shader::CameraData >( "c", enabled );\
 	camera##suffix.end()
 

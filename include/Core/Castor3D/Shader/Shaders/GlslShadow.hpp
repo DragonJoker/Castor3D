@@ -149,13 +149,11 @@ namespace c3d::shader
 			, SetT set
 			, bool enable = true )
 		{
-			sdw::UniformBuffer buffer{ writer
-				, "C3D_ShadowsBuffer"
-				, "c3d_shadows"
+			sdw::UniformBuffer buffer = writer.declUniformBuffer( "c3d_shadows"
 				, uint32_t( binding )
 				, uint32_t( set )
 				, sdw::type::MemoryLayout::eStd140
-				, enable };
+				, enable );
 			m_data = makeRawUnique< AllShadowData >( buffer.declMember< AllShadowData >( "s", enable ) );
 			buffer.end();
 		}

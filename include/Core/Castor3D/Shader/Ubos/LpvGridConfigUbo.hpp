@@ -105,13 +105,12 @@ namespace c3d
 }
 
 #define C3D_LpvGridConfig( writer, binding, set, enabled )\
-	sdw::UniformBuffer lpvGridConfig{ writer\
-		, "C3D_LpvGridConfig"\
-		, "c3d_lpvGridConfig"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvGridData = lpvGridConfig.declMember< c3d::shader::LpvGridData >( "c3d_lpvGridData", enabled );\
+	auto lpvGridConfig = writer.declUniformBuffer( "c3d_lpvGridConfig" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, enabled ); \
+	auto c3d_lpvGridData = lpvGridConfig.declMember< c3d::shader::LpvGridData >( "c3d_lpvGridData", enabled ); \
 	lpvGridConfig.end()
 
 #endif

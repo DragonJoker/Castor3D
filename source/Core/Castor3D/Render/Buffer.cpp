@@ -79,11 +79,10 @@ namespace c3d
 		, m_ownBuffer{ false }
 	{
 		auto & context = device->makeContext();
-		VkDeviceMemory vkmemory{};
-		VkBuffer  vkBuffer = resources->createBuffer( context, bufferId, vkmemory );
+		m_buffer = &resources->createBuffer( context, bufferId );
 		buffer = makeRawUnique< ashes::BufferBase >( **device
 			, bufferId.data->name
-			, vkBuffer, vkmemory
+			, m_buffer->getPage().buffer, m_buffer->getPage().memory
 			, convert( bufferId.data->info ) );
 	}
 
@@ -98,11 +97,10 @@ namespace c3d
 			return;
 
 		auto & context = device->makeContext();
-		VkDeviceMemory vkmemory{};
-		VkBuffer vkBuffer = resources->createBuffer( context, bufferId, vkmemory );
+		m_buffer = &resources->createBuffer( context, bufferId );
 		buffer = makeRawUnique< ashes::BufferBase >( **device
 			, bufferId.data->name
-			, vkBuffer, vkmemory
+			, m_buffer->getPage().buffer, m_buffer->getPage().memory
 			, convert( bufferId.data->info ) );
 	}
 
@@ -113,6 +111,7 @@ namespace c3d
 
 		resources->destroyBuffer( bufferId );
 		buffer = nullptr;
+		m_buffer = nullptr;
 	}
 
 	crg::BufferViewId BufferBase::getSubView( DeviceSize offset, DeviceSize size )const

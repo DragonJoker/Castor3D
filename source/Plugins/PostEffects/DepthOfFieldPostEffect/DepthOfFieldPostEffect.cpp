@@ -131,21 +131,21 @@ namespace dof
 			, "Near"
 			, m_nearCoC
 			, 5u
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } ) );
+			, crg::IsEnabledCallback( [this]() { return isEnabled(); } ) );
 		createFirstBlurPass( device
 			, nearGroup
 			, m_ubo
 			, source
 			, m_nearCoC
 			, m_intermediate
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } )
+			, crg::IsEnabledCallback( [this]() { return isEnabled(); } )
 			, &m_passIndex );
 		createSecondBlurPass( device
 			, nearGroup
 			, m_ubo
 			, m_intermediate
 			, m_nearBlur
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } )
+			, crg::IsEnabledCallback( [this]() { return isEnabled(); } )
 			, &m_passIndex );
 
 		auto & farGroup = m_graph.createPassGroup( "Far" );
@@ -154,21 +154,21 @@ namespace dof
 			, "Far"
 			, m_farCoC
 			, 5u
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } ) );
+			, crg::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } ) );
 		createFirstBlurPass( device
 			, farGroup
 			, m_ubo
 			, source
 			, m_farCoC
 			, m_intermediate
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
+			, crg::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
 			, &m_passIndex );
 		createSecondBlurPass( device
 			, farGroup
 			, m_ubo
 			, m_intermediate
 			, m_farBlur
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
+			, crg::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
 			, &m_passIndex );
 		createCombinePass( device
 			, m_graph

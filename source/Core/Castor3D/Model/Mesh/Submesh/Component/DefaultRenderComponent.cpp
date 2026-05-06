@@ -484,7 +484,7 @@ namespace c3d
 				vtxOut[i].prvPosition = prvCSPosition.xyw();
 				vtxOut[i].worldPosition = curWorldPos;
 				vtxOut[i].viewPosition = curViewPosition;
-				vtxOut[i].position = curCSPosition;
+				vtxOut[i].vtx.position = curCSPosition;
 				vtxOut[i].vertexId = vertexIndex;
 			}
 			sdwROF
@@ -823,7 +823,7 @@ namespace c3d
 				vtxOut[i].prvPosition = prvCSPosition.xyw();
 				vtxOut[i].worldPosition = curWorldPos;
 				vtxOut[i].viewPosition = curViewPosition;
-				vtxOut[i].position = curCSPosition;
+				vtxOut[i].vtx.position = curCSPosition;
 				vtxOut[i].vertexId = vertexIndex;
 			}
 			sdwROF

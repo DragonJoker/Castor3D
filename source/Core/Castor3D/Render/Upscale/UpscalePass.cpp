@@ -16,12 +16,13 @@ namespace c3d
 		: RunnablePass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ){ doInitialise( index ); }
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-				, IsComputePassCallback( [](){ return true; } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onInitialise( [this]( uint32_t index ){ doInitialise( index ); } )
+				.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+				.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
+				.onGetPassIndex( [this](){ return doGetPassIndex(); } )
+				.onIsEnabled( [this](){ return doIsEnabled(); } )
+				.onIsComputePass( [](){ return true; } )
 			, ruConfig }
 		, m_device{ device }
 		, m_target{ target }

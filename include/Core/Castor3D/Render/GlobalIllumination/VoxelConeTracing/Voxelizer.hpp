@@ -123,7 +123,7 @@ namespace c3d
 		void doCreateVoxelToTexture( ProgressBar * progress );
 		void doCreateVoxelMipGen( String const & name
 			, Texture & view
-			, crg::RunnablePass::IsEnabledCallback isEnabled
+			, crg::IsEnabledCallback isEnabled
 			, ProgressBar * progress );
 		void doCreateVoxelSecondaryBounce( ProgressBar * progress );
 		bool doEnableClearStatic()const;

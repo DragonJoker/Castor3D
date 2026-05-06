@@ -15,20 +15,11 @@ namespace c3d
 		, uint32_t transformsSet
 		, bool hasSkin )
 	{
-		shader::SkinningData result;
-
-		if ( hasSkin )
-		{
-			result.transforms = makeRawUnique< sdw::ArrayStorageBufferT< sdw::Mat4 > >( writer
-				, SkinningUbo::BufferSkinning
-				, writer.getTypesCache().getMat4x4F()
-				, ast::type::MemoryLayout::eStd430
-				, transformsBinding
-				, transformsSet
-				, true );
-		}
-
-		return result;
+		return shader::SkinningData{ writer.declArrayStorageBuffer< sdw::Mat4x4 >( SkinningUbo::BufferSkinning
+			, transformsBinding
+			, transformsSet
+			, ast::type::MemoryLayout::eStd430
+			, hasSkin ) };
 	}
 
 	sdw::Mat4 SkinningUbo::computeTransform( shader::SkinningData const & data
@@ -43,7 +34,7 @@ namespace c3d
 		auto mtxBoneTransform = writer.declLocale< sdw::Mat4 >( "mtxBoneTransform" );
 		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * MaxBonesCount );
 
-		auto const & ssbo = *data.transforms;
+		auto const & ssbo = data.transforms;
 		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[0_i] )] * boneWeights0[0_i];
 		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[1_i] )] * boneWeights0[1_i];
 		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[2_i] )] * boneWeights0[2_i];

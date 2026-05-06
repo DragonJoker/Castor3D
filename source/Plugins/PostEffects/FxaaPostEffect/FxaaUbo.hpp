@@ -69,7 +69,7 @@ namespace fxaa
 }
 
 #define C3D_Fxaa( writer, binding, set )\
-	sdw::UniformBuffer fxaa{ writer, FxaaUbo::Buffer, binding, set };\
+	auto fxaa = writer.declUniformBuffer( FxaaUbo::Buffer, binding, set );\
 	auto c3d_fxaaData = fxaa.declMember< FxaaData >( FxaaUbo::Data );\
 	fxaa.end()
 

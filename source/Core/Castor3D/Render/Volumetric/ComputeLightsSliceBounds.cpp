@@ -174,7 +174,7 @@ namespace c3d
 					, crg::cp::Config{}
 						.groupCountX( froxels.getDimensions()->x )
 						.groupCountY( froxels.getDimensions()->y )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights(); } ) ) );
+						.isEnabled( crg::IsEnabledCallback( [&scene](){ return scene.hasClusteredLights(); } ) ) );
 				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

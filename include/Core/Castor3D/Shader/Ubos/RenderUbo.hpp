@@ -86,14 +86,12 @@ namespace c3d
 }
 
 #define C3D_Render( writer, binding, set )\
-	sdw::UniformBuffer renderConfig{ writer\
-		, "C3D_Render"\
-		, "c3d_renderConfig"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_renderData = renderConfig.declMember< c3d::shader::RenderData >( "d" );\
+	auto renderConfig = writer.declUniformBuffer( "c3d_renderConfig" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd140 \
+		, true ); \
+	auto c3d_renderData = renderConfig.declMember< c3d::shader::RenderData >( "d" ); \
 	renderConfig.end()
 
 #endif

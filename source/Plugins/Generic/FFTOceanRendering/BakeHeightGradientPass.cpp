@@ -235,16 +235,16 @@ namespace ocean_fft
 		, c3d::Extent2D const & extent
 		, c3d::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
-		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
+		, crg::IsEnabledCallback const & isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, isEnabled
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onGetPipelineState( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
+				.onRecord( [this]( crg::RecordContext const & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } )
+				.onGetPassIndex( [this](){ return doGetPassIndex(); } )
+				.onIsEnabled( isEnabled )
+				.onIsComputePass( [this](){ return doIsComputePass(); } )
 			, { 1u } }
 		, m_device{ device }
 		, m_descriptorSetLayout{ bakehg::createDescriptorLayout( m_device ) }
@@ -337,7 +337,7 @@ namespace ocean_fft
 					, extent
 					, heightMapSize
 					, displacementDownsample
-					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+					, crg::IsEnabledCallback( [](){ return true; } ) );
 				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;

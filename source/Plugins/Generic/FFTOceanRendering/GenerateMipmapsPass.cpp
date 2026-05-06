@@ -156,12 +156,10 @@ namespace ocean_fft
 				: crg::RunnablePass{ pass
 					, context
 					, graph
-					, { crg::defaultV< InitialiseCallback >
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-						, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-						, crg::defaultV< GetPassIndexCallback >
-						, crg::defaultV< IsEnabledCallback >
-						, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+					, crg::RunnablePass::Callbacks{}
+						.onGetPipelineState( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
+						.onRecord( [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } )
+						.onIsComputePass( [this](){ return doIsComputePass(); } )
 					, { 1u } }
 				, m_device{ device }
 				, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }

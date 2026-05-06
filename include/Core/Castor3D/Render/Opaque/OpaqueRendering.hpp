@@ -164,9 +164,9 @@ namespace c3d
 		BufferUPtr m_materialsIndirectCounts;
 		BufferUPtr m_materialsStarts;
 		BufferUPtr m_pixelsXY;
-		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
-		crg::RunnablePass::IsEnabledCallback m_deferredOpaquePassEnabled;
-		crg::RunnablePass::IsEnabledCallback m_visibilityOpaquePassEnabled;
+		crg::IsEnabledCallback m_opaquePassEnabled;
+		crg::IsEnabledCallback m_deferredOpaquePassEnabled;
+		crg::IsEnabledCallback m_visibilityOpaquePassEnabled;
 		VisibilityReorderPassUPtr m_visibilityReorder;
 		SsaoPassUPtr m_ssao;
 		RenderTechniquePass * m_opaquePass{};

@@ -52,7 +52,7 @@ namespace ocean_fft
 					, runnableGraph
 					, device
 					, extent
-					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+					, crg::IsEnabledCallback( [](){ return true; } ) );
 				c3d::getEngine( device ).registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;

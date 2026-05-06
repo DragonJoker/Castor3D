@@ -326,12 +326,12 @@ namespace c3d
 				: crg::RunnablePass{ framePass
 					, context
 					, graph
-					, { [this]( uint32_t index ){ doInitialise( index ); }
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-						, crg::getDefaultV< GetPassIndexCallback >()
-						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-						, IsComputePassCallback( [](){ return true; } ) }
+					, crg::RunnablePass::Callbacks{}
+						.onInitialise( [this]( uint32_t index ){ doInitialise( index ); } )
+						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+						.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
+						.onIsEnabled( [this](){ return doIsEnabled(); } )
+						.onIsComputePass( [](){ return true; } )
 					, crg::ru::Config{ 1u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getScene().getLightCache() }
@@ -370,12 +370,12 @@ namespace c3d
 						, ( mergePathPartitions ? String{ cuT( "MergePathPartitions/" ) } : String{ cuT( "MergeSort/" ) } ) + getName( lightType )
 						, createShader( device, mergePathPartitions ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
-					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
+					, cpConfig{ crg::defaultV< crg::InitialiseCallback >
 						, nullptr
-						, IsEnabledCallback( [parent](){ return parent->doIsEnabled();} )
-						, crg::getDefaultV< GetPassIndexCallback >()
-						, crg::getDefaultV< RecordCallback >()
-						, crg::getDefaultV< RecordCallback >()
+						, crg::IsEnabledCallback( [parent](){ return parent->doIsEnabled();} )
+						, crg::defaultV< crg::GetPassIndexCallback >
+						, crg::defaultV< crg::RecordCallback >
+						, crg::defaultV< crg::RecordCallback >
 						, 1u
 						, 1u
 						, 1u }

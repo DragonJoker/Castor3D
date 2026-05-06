@@ -39,14 +39,12 @@ namespace c3d::shader
 }
 
 #define C3D_BillboardOpt( writer, binding, set, enable )\
-	sdw::StorageBuffer billboard{ writer\
-		, "C3D_Billboard"\
-		, "c3d_billboard"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, enable };\
-	auto c3d_billboardData = billboard.declMemberArray< c3d::shader::BillboardData >( "d", enable );\
+	auto billboard = writer.declStorageBuffer( "c3d_billboard" \
+		, uint32_t( binding ) \
+		, uint32_t( set ) \
+		, ast::type::MemoryLayout::eStd430 \
+		, enable ); \
+	auto c3d_billboardData = billboard.declMemberArray< c3d::shader::BillboardData >( "d", enable ); \
 	billboard.end()
 
 #define C3D_Billboard( writer, binding, set )\

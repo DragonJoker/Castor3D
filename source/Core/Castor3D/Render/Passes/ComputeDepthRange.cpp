@@ -130,12 +130,11 @@ namespace c3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { crg::defaultV< InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
-				, crg::defaultV< GetPassIndexCallback >
-				, IsEnabledCallback( [&enabled](){ return enabled; } )
-				, IsComputePassCallback( [](){ return true; } ) }
+			, crg::RunnablePass::Callbacks{}
+				.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+				.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } )
+				.onIsEnabled( [&enabled](){ return enabled; } )
+				.onIsComputePass( [](){ return true; } )
 			, { 2u, false } }
 		, m_device{ device }
 		, m_descriptorSetLayout{ passcompdr::createDescriptorLayout( m_device ) }

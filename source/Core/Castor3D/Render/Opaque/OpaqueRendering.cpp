@@ -56,9 +56,9 @@ namespace c3d
 				, MemoryPropertyFlags::eDeviceLocal
 				, getOwner()->getName() + cuT( "/PixelsXY" ) )
 			: nullptr ) }
-		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
-		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
-		, m_visibilityOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
+		, m_opaquePassEnabled{ crg::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
+		, m_deferredOpaquePassEnabled{ crg::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
+		, m_visibilityOpaquePassEnabled{ crg::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
 	{
 		m_ssao = doCreateSsaoPass( progress );
 
@@ -73,7 +73,7 @@ namespace c3d
 					, *m_materialsIndirectCounts
 					, *m_materialsStarts
 					, *m_pixelsXY
-					, crg::RunnablePass::IsEnabledCallback{ [this](){ return doIsOpaquePassEnabled() || doIsVisibilityOpaquePassEnabled(); } } );
+					, crg::IsEnabledCallback{ [this](){ return doIsOpaquePassEnabled() || doIsVisibilityOpaquePassEnabled(); } } );
 			}
 			doCreateVisibilityResolve( progress, previous, false );
 		}
