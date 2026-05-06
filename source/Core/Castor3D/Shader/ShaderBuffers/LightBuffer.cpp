@@ -15,26 +15,29 @@ namespace c3d
 
 	namespace lgtbuf
 	{
-		static VkDeviceSize constexpr MaxLightComponentsCount = maxValueT< uint32_t
-			, DirectionalLightInstance::LightDataComponents
-			, PointLightInstance::LightDataComponents
-			, SpotLightInstance::LightDataComponents >;
+		VkDeviceSize getMaxLightComponentsCount( uint32_t pointCount, uint32_t spotCount )
+		{
+			return ( DirectionalLightInstance::LightDataComponents
+				+ VkDeviceSize( pointCount ) * PointLightInstance::LightDataComponents
+				+ VkDeviceSize( spotCount ) * SpotLightInstance::LightDataComponents );
+		}
 	}
 
 	//*********************************************************************************************
 
 	LightBuffer::LightBuffer( RenderDevice const & device
 		, crg::ResourcesCache & resources
-		, uint32_t count )
+		, uint32_t pointCount
+		, uint32_t spotCount )
 		: ShaderBufferHolder{ device
 			, resources
-			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( Point4f )
+			, sizeof( Point4f ) * lgtbuf::getMaxLightComponentsCount( pointCount, spotCount )
 			, cuT( "C3D_LightBuffer" ) }
 		, m_lightSizes{ DirectionalLightInstance::LightDataComponents
 			, PointLightInstance::LightDataComponents
 			, SpotLightInstance::LightDataComponents }
 		, m_data{ makeArrayView( reinterpret_cast< Point4f * >( getPtr() )
-			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount ) }
+			, lgtbuf::getMaxLightComponentsCount( pointCount, spotCount ) ) }
 	{
 	}
 
@@ -43,11 +46,10 @@ namespace c3d
 		auto lock( makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
 		auto & lights = m_typeSortedLights[index];
-		auto it = std::find( lights.begin()
-			, lights.end()
-			, &light );
+		auto it = std::find( lights.begin(), lights.end(), &light );
 
-		if ( it == lights.end() )
+		if ( it == lights.end()
+			&& lights.size() < MaxLightsCount )
 		{
 			lights.push_back( &light );
 			m_dirty.emplace_back( &light );
@@ -67,9 +69,7 @@ namespace c3d
 		auto lock( makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
 		auto & lights = m_typeSortedLights[index];
-		auto it = std::find( lights.begin()
-			, lights.end()
-			, &light );
+		auto it = std::find( lights.begin(), lights.end(), &light );
 
 		if ( it != lights.end() )
 		{
@@ -78,7 +78,7 @@ namespace c3d
 			m_connections.erase( &light );
 
 			// Mark next lights as dirty (due to sorted container)
-			doMarkNextDirty( LightType( index + 1u ), dist );
+			doMarkNextDirty( LightType( index ), dist );
 		}
 	}
 
@@ -94,11 +94,8 @@ namespace c3d
 			for ( auto light : makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
 			{
 				auto [index, offset] = doGetOffsetIndex( *light );
-
-				if ( index <= MaxLightsCount )
-				{
+				if ( index <= m_data.size() )
 					light->fillLightBuffer( index, offset, &m_data[offset] );
-				}
 			}
 
 			m_buffer.setFirstCount( std::min( uint32_t( m_data.size() ), doGetBufferEnd( LightType::eDirectional ) ) );
@@ -119,18 +116,7 @@ namespace c3d
 
 	uint32_t LightBuffer::getLightsBufferCount( LightType lightType )const noexcept
 	{
-		uint32_t result{};
-		auto type = uint32_t( lightType );
-
-		for ( uint32_t i = 0u; i < type; ++i )
-		{
-			result += getLightsBufferCount( LightType( i ) );
-		}
-
-		auto count = uint32_t( m_typeSortedLights[type].size() );
-		return ( ( result + count <= MaxLightsCount )
-			? count
-			: ( MaxLightsCount - result ) );
+		return uint32_t( m_typeSortedLights[uint32_t( lightType )].size() );
 	}
 
 	Pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( LightInstance const & light )const

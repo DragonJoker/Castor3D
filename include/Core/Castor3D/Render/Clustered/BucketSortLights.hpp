@@ -12,10 +12,10 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, ClustersLightSortAttachs const & sortAttachs
-		, crg::BufferViewIdArray const & inputPointLightMortonCodes
-		, crg::BufferViewIdArray const & inputSpotLightMortonCodes
-		, crg::BufferViewIdArray const & inputPointLightIndices
-		, crg::BufferViewIdArray const & inputSpotLightIndices );
+		, crg::BufferViewIdArray const & outPointLightMortonCodes
+		, crg::BufferViewIdArray const & outSpotLightMortonCodes
+		, crg::BufferViewIdArray const & outPointLightIndices
+		, crg::BufferViewIdArray const & outSpotLightIndices );
 }
 
 #endif

@@ -12,15 +12,17 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, CameraUbo const & clustersCameraUbo
-		, BufferBase const & allLightsAABB
+		, PagedBufferBase const & allLightsAABB
 		, BufferBase const & clustersAABB
 		, BufferBase const & pointLightBVH
 		, BufferBase const & spotLightBVH
 		, ClustersLightSortAttachs const & outputSortAttachs
-		, BufferBase & pointLightClusterIndex
-		, BufferBase & spotLightClusterIndex
+		, Array< BufferT< uint32_t >, 3u > const & counters
+		, PagedBufferBase & pointLightClusterIndex
+		, PagedBufferBase & spotLightClusterIndex
 		, BufferBase & pointLightClusterGrid
-		, BufferBase & spotLightClusterGrid );
+		, BufferBase & spotLightClusterGrid
+		, BufferBase & tmpCounters );
 }
 
 #endif

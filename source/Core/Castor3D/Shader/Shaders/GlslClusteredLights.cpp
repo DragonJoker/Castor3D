@@ -55,9 +55,9 @@ namespace c3d::shader
 			, ClustersData const & clusterData
 			, sdw::UInt32 const & clusterIndex1D
 			, sdw::U32Vec3 const & clusterIndex3D
-			, sdw::UInt32Array const & pointLightIndices
+			, ClusterLightsIndices const & pointLightIndices
 			, sdw::U32Vec2Array const & pointLightClusters
-			, sdw::UInt32Array const & spotLightIndices
+			, ClusterLightsIndices const & spotLightIndices
 			, sdw::U32Vec2Array const & spotLightClusters
 			, shader::Lights & lights
 			, LightingModel & lightingModel
@@ -106,9 +106,9 @@ namespace c3d::shader
 			, ClustersData const & clusterData
 			, sdw::UInt32 const & clusterIndex1D
 			, sdw::U32Vec3 const & clusterIndex3D
-			, sdw::UInt32Array const & pointLightIndices
+			, ClusterLightsIndices const & pointLightIndices
 			, sdw::U32Vec2Array const & pointLightClusters
-			, sdw::UInt32Array const & spotLightIndices
+			, ClusterLightsIndices const & spotLightIndices
 			, sdw::U32Vec2Array const & spotLightClusters
 			, shader::Lights & lights
 			, LightingModel & lightingModel
@@ -189,9 +189,9 @@ namespace c3d::shader
 			, ClustersData const & clusterData
 			, sdw::UInt32 const & clusterIndex1D
 			, sdw::U32Vec3 const & clusterIndex3D
-			, sdw::UInt32Array const & pointLightIndices
+			, ClusterLightsIndices const & pointLightIndices
 			, sdw::U32Vec2Array const & pointLightClusters
-			, sdw::UInt32Array const & spotLightIndices
+			, ClusterLightsIndices const & spotLightIndices
 			, sdw::U32Vec2Array const & spotLightClusters
 			, shader::Lights & lights
 			, LightingModel & lightingModel
@@ -307,35 +307,23 @@ namespace c3d::shader
 		, m_enabled{ enabled && config && config->enabled }
 	{
 		C3D_ClustersEx( writer
-			, binding++
-			, set
-			, m_enabled );
+			, binding++, set, m_enabled );
 		C3D_ReducedLightsAABBEx( writer
-			, binding++
-			, set
-			, m_enabled );
-		C3D_PointLightClusterIndexEx( writer
-			, binding++
-			, set
-			, m_enabled );
+			, binding++, set, m_enabled );
+		m_pointLightIndices = makeRawUnique< ClusterLightsIndices >( writer
+			, "c3d_pointLightClusterIndices", MaxClusterLightsIndicesPageCount
+			, binding, set, m_enabled );
 		C3D_PointLightClusterGridEx( writer
-			, binding++
-			, set
-			, m_enabled );
-		C3D_SpotLightClusterIndexEx( writer
-			, binding++
-			, set
-			, m_enabled );
+			, binding++, set, m_enabled );
+		m_spotLightIndices = makeRawUnique< ClusterLightsIndices >( writer
+			, "c3d_spotLightClusterIndices", MaxClusterLightsIndicesPageCount
+			, binding, set, m_enabled );
 		C3D_SpotLightClusterGridEx( writer
-			, binding++
-			, set
-			, m_enabled );
+			, binding++, set, m_enabled );
 
 		m_clusterData = makeUnique< shader::ClustersData >( c3d_clustersData );
 		m_clustersLightsData = makeRawUnique< sdw::Vec4 >( c3d_clustersLightsData );
-		m_pointLightIndices = makeRawUnique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
 		m_pointLightClusters = makeRawUnique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
-		m_spotLightIndices = makeRawUnique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
 		m_spotLightClusters = makeRawUnique< sdw::U32Vec2Array >( c3d_spotLightClusterGrid );
 	}
 
@@ -511,6 +499,87 @@ namespace c3d::shader
 			, debugOutput
 			, computePointLight
 			, computeSpotLight );
+	}
+
+	//*********************************************************************************************
+
+	AllLightsAABB::AllLightsAABB( sdw::ShaderWriter & writer, uint32_t binding, uint32_t set, bool enabled )
+		: m_writer{ writer }
+		, m_buffers{ writer.declArrayStorageBufferArray< c3d::shader::AABB >( "c3d_allLightsAABBBuffers"
+			, binding, set, MaxLightsAABBPageCount, sdw::type::MemoryLayout::eStd430, enabled ) }
+	{
+	}
+
+	sdw::ReturnWrapperT< AABB > AllLightsAABB::operator[]( sdw::UInt const & index )const
+	{
+		auto tmpIndex = m_writer.declLocale( "c3d_tmpIndex", index );
+		auto pageIndex = tmpIndex / LightsAABBPageSize;
+		auto localIndex = tmpIndex % LightsAABBPageSize;
+		return m_buffers[pageIndex][localIndex];
+	}
+
+	sdw::ReturnWrapperT< AABB > AllLightsAABB::operator[]( sdw::Int const & index )const
+	{
+		auto tmpIndex = m_writer.declLocale( "c3d_tmpIndex", m_writer.cast< sdw::UInt >( index ) );
+		auto pageIndex = tmpIndex / LightsAABBPageSize;
+		auto localIndex = tmpIndex % LightsAABBPageSize;
+		return m_buffers[pageIndex][localIndex];
+	}
+
+	sdw::ReturnWrapperT< AABB > AllLightsAABB::operator[]( uint32_t index )const
+	{
+		auto pageIndex = index / LightsAABBPageSize;
+		auto localIndex = index % LightsAABBPageSize;
+		return m_buffers[pageIndex][localIndex];
+	}
+
+	AABB AllLightsAABB::loadInPage( sdw::UInt const & page, sdw::UInt const & index )const
+	{
+		return m_buffers[page][index];
+	}
+
+	void AllLightsAABB::storeInPage( sdw::UInt const & page, sdw::UInt const & index, AABB const & aabb )const
+	{
+		m_buffers[page][index] = aabb;
+	}
+
+	//*********************************************************************************************
+
+	ClusterLightsIndices::ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, bool enabled, uint32_t pageSize, uint32_t binding, uint32_t set )
+		: m_writer{ writer }
+		, m_pageSize{ pageSize }
+		, m_buffers{ writer.declArrayStorageBufferArray< sdw::UInt >( name
+			, binding, set, MaxClusterLightsIndicesPageCount, sdw::type::MemoryLayout::eStd430, enabled ) }
+	{
+	}
+
+	ClusterLightsIndices::ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, uint32_t pageSize, uint32_t & binding, uint32_t set, bool enabled )
+		: ClusterLightsIndices{ writer, name, enabled, pageSize, binding, set }
+	{
+		binding += MaxClusterLightsIndicesPageCount;
+	}
+
+	sdw::ReturnWrapperT< sdw::UInt > ClusterLightsIndices::operator[]( sdw::UInt const & index )const
+	{
+		auto tmpIndex = m_writer.declLocale( "c3d_tmpIndex", index );
+		auto pageIndex = tmpIndex / m_pageSize;
+		auto localIndex = tmpIndex % m_pageSize;
+		return m_buffers[pageIndex][localIndex];
+	}
+
+	sdw::ReturnWrapperT< sdw::UInt > ClusterLightsIndices::operator[]( sdw::Int const & index )const
+	{
+		auto tmpIndex = m_writer.declLocale( "c3d_tmpIndex", m_writer.cast< sdw::UInt >( index ) );
+		auto pageIndex = tmpIndex / m_pageSize;
+		auto localIndex = tmpIndex % m_pageSize;
+		return m_buffers[pageIndex][localIndex];
+	}
+
+	sdw::ReturnWrapperT< sdw::UInt > ClusterLightsIndices::operator[]( uint32_t index )const
+	{
+		auto pageIndex = index / m_pageSize;
+		auto localIndex = index % m_pageSize;
+		return m_buffers[pageIndex][localIndex];
 	}
 
 	//*********************************************************************************************

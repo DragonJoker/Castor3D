@@ -285,6 +285,11 @@ namespace c3d
 			return m_attach;
 		}
 
+		void countDescriptors( uint32_t & dstBinding )const
+		{
+			++dstBinding;
+		}
+
 		template< typename BindingT >
 		ashes::WriteDescriptorSet getTextureDescriptorWrite( VkSampler psampler
 			, BindingT index

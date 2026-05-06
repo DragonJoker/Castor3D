@@ -30,11 +30,11 @@ namespace c3d
 	{
 		enum class Bindings
 		{
-			eCamera,
 			eLights,
+			eAllLightsAABB,
+			eCamera = eAllLightsAABB + MaxLightsAABBPageCount,
 			eClusters,
 			eFroxels,
-			eAllLightsAABB,
 			ePointLightBVH,
 			eSpotLightBVH,
 			ePointLightIndices,
@@ -53,20 +53,20 @@ namespace c3d
 			shader::Utils utils{ writer };
 
 			// Inputs
-			C3D_Camera( writer
-				, Bindings::eCamera
-				, 0u );
 			shader::LightsBuffer lights{ writer
 				, uint32_t( Bindings::eLights )
 				, 0u };
+			shader::AllLightsAABB allLightsAABB{ writer
+				, Bindings::eAllLightsAABB
+				, 0u };
+			C3D_Camera( writer
+				, Bindings::eCamera
+				, 0u );
 			C3D_Clusters( writer
 				, Bindings::eClusters
 				, 0u );
 			C3D_Froxels( writer
 				, Bindings::eFroxels
-				, 0u );
-			C3D_AllLightsAABB( writer
-				, Bindings::eAllLightsAABB
 				, 0u );
 			C3D_PointLightBVH( writer
 				, Bindings::ePointLightBVH
@@ -105,7 +105,7 @@ namespace c3d
 			auto gsFroxelGroupFrustum = writer.declSharedVariable< shader::Frustum >( "gsFroxelGroupFrustum" );
 
 			shader::BVHBaseT< shader::Frustum > bvh{ writer };
-			shader::LightsBVHT< shader::Frustum > lightsBvh{ writer, c3d_allLightsAABB, MaxLightsPerFroxel };
+			shader::LightsBVHT< shader::Frustum > lightsBvh{ writer, allLightsAABB, MaxLightsPerFroxel };
 
 			auto updateIndirectDispatchBuffer = writer.implementFunction< sdw::Void >( "c3d_updateIndirectDispatchBuffer"
 				, [&writer, &gsLightStartOffset, &gsProcessedLightsCount, &c3d_indirectDispatch]( sdw::UInt const & indirectDispatchOffset )

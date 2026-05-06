@@ -230,25 +230,33 @@ namespace c3d
 	PipelineAndID RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * vertexPullingLayouts
-		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		return doPreparePipeline( vertexLayouts
 			, vertexPullingLayouts
 			, meshletDescriptorLayout
 			, pipelineFlags
-			, VK_CULL_MODE_BACK_BIT );
+			, VK_CULL_MODE_BACK_BIT
+			, shadowMaps
+			, shadowBuffer );
 	}
 
 	PipelineAndID RenderNodesPass::prepareFrontPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * vertexPullingLayouts
-		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		return doPreparePipeline( vertexLayouts
 			, vertexPullingLayouts
 			, meshletDescriptorLayout
 			, pipelineFlags
-			, VK_CULL_MODE_FRONT_BIT );
+			, VK_CULL_MODE_FRONT_BIT
+			, shadowMaps
+			, shadowBuffer );
 	}
 
 	void RenderNodesPass::cleanupPipelines()const
@@ -515,12 +523,17 @@ namespace c3d
 
 	void RenderNodesPass::doAddShadowLayoutBindings( Scene const & scene
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, uint32_t & index )const
 	{
-		if ( scene.hasShadows() )
+		if ( scene.hasShadows() && shadowBuffer )
 		{
-			addShadowLayoutBindings( doAdjustSceneFlags( scene.getFlags() )
+			addShadowLayoutBindings( *getEngine()->getRenderSystem()
+				, doAdjustSceneFlags( scene.getFlags() )
 				, bindings
+				, shadowMaps
+				, *shadowBuffer
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, index );
 		}
@@ -731,7 +744,9 @@ namespace c3d
 		doAdjustFlags( flags );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )const
 	{
 		auto const & scene = getCuller().getScene();
 		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -766,7 +781,7 @@ namespace c3d
 			submeshData->fillBindings( flags, addBindings, index );
 
 		// Specific bindings
-		doFillAdditionalBindings( flags, addBindings );
+		doFillAdditionalBindings( flags, addBindings, shadowMaps, shadowBuffer );
 
 		return addBindings;
 	}
@@ -795,7 +810,9 @@ namespace c3d
 		, ashes::DescriptorSetLayout const * vertexPullingLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 		, PipelineFlags const & flags
-		, VkCullModeFlags cullMode )
+		, VkCullModeFlags cullMode
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
@@ -830,7 +847,7 @@ namespace c3d
 
 				if ( !addDescriptors.layout )
 				{
-					auto bindings = doCreateAdditionalBindings( flags );
+					auto bindings = doCreateAdditionalBindings( flags, shadowMaps, shadowBuffer );
 					addDescriptors.layout = device->createDescriptorSetLayout( toUtf8( getName() + rendndpass::Suffix )
 						, c3d::move( bindings ) );
 					addDescriptors.pool = addDescriptors.layout->createPool( 1u );

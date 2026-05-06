@@ -1486,15 +1486,16 @@ namespace c3d
 				? renderPass.prepareFrontPipeline( pipelineFlags
 					, node.getGeometryBuffers( pipelineFlags ).layouts
 					, node.getVertexPullingDescriptorLayout()
-					, node.getMeshletDescriptorLayout() )
+					, node.getMeshletDescriptorLayout()
+					, shadowMaps, shadowBuffer )
 				: renderPass.prepareBackPipeline( pipelineFlags
 					, node.getGeometryBuffers( pipelineFlags ).layouts
 					, node.getVertexPullingDescriptorLayout()
-					, node.getMeshletDescriptorLayout() );
+					, node.getMeshletDescriptorLayout()
+					, shadowMaps, shadowBuffer );
 			it = m_pipelines.try_emplace( hash, result ).first;
 			renderPass.initialiseAdditionalDescriptor( *result.pipeline
-				, shadowMaps
-				, shadowBuffer );
+				, shadowMaps, shadowBuffer );
 		}
 
 		return it->second;
@@ -1516,11 +1517,11 @@ namespace c3d
 			auto result = renderPass.prepareBackPipeline( pipelineFlags
 				, node.getGeometryBuffers( pipelineFlags ).layouts
 				, node.getVertexPullingDescriptorLayout()
-				, nullptr );
+				, nullptr
+				, shadowMaps, shadowBuffer );
 			it = m_pipelines.try_emplace( hash, result ).first;
 			renderPass.initialiseAdditionalDescriptor( *result.pipeline
-				, shadowMaps
-				, shadowBuffer );
+				, shadowMaps, shadowBuffer );
 		}
 
 		return it->second;

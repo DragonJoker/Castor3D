@@ -91,7 +91,6 @@ namespace c3d
 						.onInitialise( [this]( uint32_t passIndex ){ doInitialise( passIndex ); } )
 						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 						.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } )
-						.onGetPassIndex( [](){ return 0u; } )
 						.onIsEnabled( [this](){ return doIsEnabled(); } )
 						.onIsComputePass( [](){ return true; } )
 					, crg::ru::Config{ 1u, true /* resettable */ } }
@@ -206,10 +205,10 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, ClustersLightSortAttachs const & sortAttachs
-		, crg::BufferViewIdArray const & pointLightMortonCodes
-		, crg::BufferViewIdArray const & spotLightMortonCodes
-		, crg::BufferViewIdArray const & pointLightIndices
-		, crg::BufferViewIdArray const & spotLightIndices )
+		, crg::BufferViewIdArray const & outPointLightMortonCodes
+		, crg::BufferViewIdArray const & outSpotLightMortonCodes
+		, crg::BufferViewIdArray const & outPointLightIndices
+		, crg::BufferViewIdArray const & outSpotLightIndices )
 	{
 		ClustersLightSortAttachs result{};
 		{
@@ -231,8 +230,8 @@ namespace c3d
 				} );
 			point.addInputStorageT( *sortAttachs.pointLightMortonCodes, buksrt::Bindings::eInputKeys );
 			point.addInputStorageT( *sortAttachs.pointLightIndices, buksrt::Bindings::eInputValues );
-			result.pointLightMortonCodes = point.addClearableOutputStorageBufferT( pointLightMortonCodes, buksrt::Bindings::eOutputKeys );
-			result.pointLightIndices = point.addClearableOutputStorageBufferT( pointLightIndices, buksrt::Bindings::eOutputValues );
+			result.pointLightMortonCodes = point.addClearableOutputStorageBufferT( outPointLightMortonCodes, buksrt::Bindings::eOutputKeys );
+			result.pointLightIndices = point.addClearableOutputStorageBufferT( outPointLightIndices, buksrt::Bindings::eOutputValues );
 		}
 		{
 			// Spot lights
@@ -253,8 +252,8 @@ namespace c3d
 				} );
 			spot.addInputStorageT( *sortAttachs.spotLightMortonCodes, buksrt::Bindings::eInputKeys );
 			spot.addInputStorageT( *sortAttachs.spotLightIndices, buksrt::Bindings::eInputValues );
-			result.spotLightMortonCodes = spot.addClearableOutputStorageBufferT( spotLightMortonCodes, buksrt::Bindings::eOutputKeys );
-			result.spotLightIndices = spot.addClearableOutputStorageBufferT( spotLightIndices, buksrt::Bindings::eOutputValues );
+			result.spotLightMortonCodes = spot.addClearableOutputStorageBufferT( outSpotLightMortonCodes, buksrt::Bindings::eOutputKeys );
+			result.spotLightIndices = spot.addClearableOutputStorageBufferT( outSpotLightIndices, buksrt::Bindings::eOutputValues );
 		}
 		return result;
 	}

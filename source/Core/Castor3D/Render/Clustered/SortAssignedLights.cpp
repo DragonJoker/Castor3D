@@ -25,8 +25,8 @@ namespace c3d
 		enum class BindingPoints
 		{
 			eClusters,
-			eClusterIndex,
 			eClusterGrid,
+			eClusterIndex,
 		};
 
 		static ShaderPtr createShader( RenderDevice const & device
@@ -38,15 +38,16 @@ namespace c3d
 			C3D_Clusters( writer
 				, BindingPoints::eClusters
 				, 0u );
-			C3D_LightClusterIndex( writer
-				, BindingPoints::eClusterIndex
-				, 0u );
 			C3D_LightClusterGrid( writer
 				, BindingPoints::eClusterGrid
 				, 0u );
+			shader::ClusterLightsIndices lightClusterIndices{ writer
+				, "c3d_lightClusterIndices", ClusterLightsIndicesPageSize
+				, BindingPoints::eClusterIndex
+				, 0u };
 
 			writer.implementMainT< sdw::VoidT >( bitonic.threadsCount
-				, [&]( sdw::ComputeIn const & in )
+				, [&writer, &bitonic, &lightClusterIndices, &c3d_clustersData, &c3d_lightClusterGrid]( sdw::ComputeIn const & in )
 				{
 					auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
 						, in.workGroupID );
@@ -62,7 +63,7 @@ namespace c3d
 					bitonic.sortT( writer
 						, startOffset, lightCount
 						, in.localInvocationIndex, in.globalInvocationID.x()
-						, c3d_lightClusterIndex, c3d_lightClusterIndex
+						, lightClusterIndices, lightClusterIndices
 						, sdw::UInt{ 0xFFFFFFFFU } );
 				} );
 			return writer.getBuilder().releaseShader();
@@ -102,8 +103,8 @@ namespace c3d
 	void createSortAssignedLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, FrustumClusters const & clusters
-		, BufferBase & pointLightClusterIndex
-		, BufferBase & spotLightClusterIndex
+		, PagedBufferBase & pointLightClusterIndex
+		, PagedBufferBase & spotLightClusterIndex
 		, BufferBase & pointLightClusterGrid
 		, BufferBase & spotLightClusterGrid )
 	{
@@ -131,8 +132,8 @@ namespace c3d
 					return runPass;
 				} );
 			clusters.getClustersUbo().createPassBinding( point, uint32_t( sort::BindingPoints::eClusters ) );
-			pointLightClusterIndex.setLastAttach( point.addInOutStorage( *pointLightClusterIndex.getLastAttach(), uint32_t( sort::BindingPoints::eClusterIndex ) ) );
 			pointLightClusterGrid.setLastAttach( point.addInOutStorage( *pointLightClusterGrid.getLastAttach(), uint32_t( sort::BindingPoints::eClusterGrid ) ) );
+			pointLightClusterIndex.setLastAttach( point.addInOutStorage( *pointLightClusterIndex.getLastAttach(), uint32_t( sort::BindingPoints::eClusterIndex ) ) );
 		}
 		{
 			// Spot lights
@@ -157,8 +158,8 @@ namespace c3d
 					return runPass;
 				} );
 			clusters.getClustersUbo().createPassBinding( spot, uint32_t( sort::BindingPoints::eClusters ) );
-			spotLightClusterIndex.setLastAttach( spot.addInOutStorage( *spotLightClusterIndex.getLastAttach(), uint32_t( sort::BindingPoints::eClusterIndex ) ) );
 			spotLightClusterGrid.setLastAttach( spot.addInOutStorage( *spotLightClusterGrid.getLastAttach(), uint32_t( sort::BindingPoints::eClusterGrid ) ) );
+			spotLightClusterIndex.setLastAttach( spot.addInOutStorage( *spotLightClusterIndex.getLastAttach(), uint32_t( sort::BindingPoints::eClusterIndex ) ) );
 		}
 	}
 

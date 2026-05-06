@@ -233,7 +233,7 @@ namespace c3d
 			, stageFlags
 			, descriptorCount
 			, pImmutableSamplers ) );
-		++binding;
+		binding += descriptorCount;
 	}
 
 	template< typename EnumT >

@@ -17,7 +17,7 @@ namespace c3d::shader
 	struct LightsBVHT
 	{
 		LightsBVHT( sdw::ShaderWriter & writer
-			, sdw::Array< AABB > const & allLightsAABB
+			, AllLightsAABB const & allLightsAABB
 			, u32 maxLightsInList )
 			: m_writer{ writer }
 			, m_allLightsAABB{ allLightsAABB }
@@ -197,7 +197,7 @@ namespace c3d::shader
 
 	private:
 		sdw::ShaderWriter & m_writer;
-		sdw::Array< AABB > const & m_allLightsAABB;
+		AllLightsAABB const & m_allLightsAABB;
 		u32 m_maxLightsInList;
 
 		sdw::Int m_sharedLightStartOffset;

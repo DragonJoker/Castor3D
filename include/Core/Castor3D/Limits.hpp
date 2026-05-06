@@ -129,7 +129,7 @@ namespace c3d
 	*/
 	//@{
 	// Light Buffer.
-	static uint32_t constexpr MaxLightsCount = 32'768u;
+	static uint32_t constexpr MaxLightsCount = 512u * 512u;
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 32'768u;
 	// SSS Profile Buffer.
@@ -205,10 +205,25 @@ namespace c3d
 	//@}
 	/**
 	*\name
-	*	Clustered rendering.
+	*	Clustered lighting.
 	*/
 	//@{
+	static uint32_t constexpr MaxClusterGridWidthHeight = 32u;
+	static uint32_t constexpr MaxClusterGridDepth = 64u;
+	static uint32_t constexpr MaxClusterCount = MaxClusterGridWidthHeight * MaxClusterGridWidthHeight * MaxClusterGridDepth;
 	static uint32_t constexpr MaxLightsPerCluster = 1'024u;
+	// Cluster lights indices buffer.
+	static uint32_t constexpr MaxClusterLightsIndicesPageCount = 32u;
+	static uint32_t constexpr ClusterLightsIndicesPageSize = MaxClusterCount * MaxClusterLightsIndicesPageCount;
+	// Light AABB Buffer.
+	static uint32_t constexpr MaxLightsAABBPageCount = 10u;
+	static uint32_t constexpr LightsAABBPageSize = 32'768u;
+	//@}
+	/**
+	*\name
+	*	Volumetric lighting.
+	*/
+	//@{
 	static uint32_t constexpr MaxLightsPerFroxel = 512u;
 	static uint32_t constexpr MaxFroxelGridDepth = 128u;
 	static uint32_t constexpr MaxFroxelImageSize = 128u;

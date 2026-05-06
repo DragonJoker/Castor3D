@@ -58,7 +58,9 @@ namespace c3d
 	}
 
 	void VisibilityPass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )const
 	{
 	}
 

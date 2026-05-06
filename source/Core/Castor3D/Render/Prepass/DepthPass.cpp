@@ -83,7 +83,9 @@ namespace c3d
 	}
 
 	void DepthPass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )const
 	{
 	}
 

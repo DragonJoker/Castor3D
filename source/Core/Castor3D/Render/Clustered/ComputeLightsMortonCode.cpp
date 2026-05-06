@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
@@ -23,8 +24,8 @@ namespace c3d
 	{
 		enum class Bindings
 		{
-			eClusters,
 			eAllLightsAABB,
+			eClusters = eAllLightsAABB + MaxLightsAABBPageCount,
 			eReducedLightsAABB,
 			ePointLightMortonCodes,
 			eSpotLightMortonCodes,
@@ -48,11 +49,11 @@ namespace c3d
 			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
+			shader::AllLightsAABB allLightsAABB( writer
+				, Bindings::eAllLightsAABB
+				, 0u );
 			C3D_Clusters( writer
 				, Bindings::eClusters
-				, 0u );
-			C3D_AllLightsAABB( writer
-				, Bindings::eAllLightsAABB
 				, 0u );
 			C3D_ReducedLightsAABB( writer
 				, Bindings::eReducedLightsAABB
@@ -98,7 +99,7 @@ namespace c3d
 				, sdw::InUVec3{ writer, "quantizedCoord" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&writer, &c3d_allLightsAABB, &c3d_reducedLightsAABB, &c3d_lightsAABBRange, &c3d_clustersData
+				, [&writer, &allLightsAABB, &c3d_reducedLightsAABB, &c3d_lightsAABBRange, &c3d_clustersData
 					, c3d_pointLightMortonCodes, &c3d_pointLightIndices, &c3d_spotLightMortonCodes, &c3d_spotLightIndices
 					, &gsAABB, &gsAABBRange, &getMortonCode]( sdw::ComputeIn const & in )
 				{
@@ -119,7 +120,7 @@ namespace c3d
 					sdwIF( writer, threadIndex < c3d_clustersData.pointLightCount() )
 					{
 						auto aabb = writer.declLocale( "threadIndex"
-							, c3d_allLightsAABB[threadIndex] );
+							, allLightsAABB[threadIndex] );
 						auto vsPosition = writer.declLocale( "vsPosition"
 							, ( aabb.min() + ( aabb.max() - aabb.min() ) / 2.0_f ).xyz() );
 						// Normalize and scale the position of the light to produce the quantized coordinate.
@@ -134,7 +135,7 @@ namespace c3d
 					sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
 						auto aabb = writer.declLocale( "threadIndex"
-							, c3d_allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex] );
+							, allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex] );
 						auto vsPosition = writer.declLocale( "vsPosition"
 							, ( aabb.min() + ( aabb.max() - aabb.min() ) / 2.0_f ).xyz() );
 						// Normalize and scale the position of the light to produce the quantized coordinate.
@@ -172,6 +173,7 @@ namespace c3d
 					, crg::ru::Config{ 1u }
 					, config
 						.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getGroupCountX( crg::cp::GetGroupCountCallback( [this](){ return doGetGroupsCountX(); } ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 				, m_clusters{ clusters }
 			{
@@ -184,6 +186,15 @@ namespace c3d
 					&& m_clusters.needsClustersUpdate();
 			}
 
+			u32 doGetGroupsCountX()const
+			{
+				auto const & lightCache = m_clusters.getScene().getLightCache();
+				auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
+				auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
+				auto totalValues = std::max( pointLightsCount, spoLightsCount );
+				return divRoundUp( totalValues, NumThreads );
+			 }
+
 		private:
 			FrustumClusters & m_clusters;
 		};
@@ -194,7 +205,7 @@ namespace c3d
 	ClustersLightSortAttachs createComputeLightsMortonCodePass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, FrustumClusters & clusters
-		, BufferBase const & allLightsAABB
+		, PagedBufferBase const & allLightsAABB
 		, BufferBase const & reducedLightsAABB
 		, crg::BufferViewIdArray const & pointLightMortonCodes
 		, crg::BufferViewIdArray const & spotLightMortonCodes
@@ -206,14 +217,12 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runGraph )
 			{
-				constexpr uint32_t numThreadGroups = divRoundUp( MaxLightsCount, 1024u );
 				auto result = makeRawUnique< cmpmrt::FramePass >( framePass
 					, context
 					, runGraph
 					, device
 					, clusters
-					, crg::cp::Config{}
-						.groupCountX( numThreadGroups ) );
+					, crg::cp::Config{} );
 				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

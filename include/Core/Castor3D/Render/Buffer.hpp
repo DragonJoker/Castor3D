@@ -68,6 +68,11 @@ namespace c3d
 			return bufferId.data->name;
 		}
 
+		void countDescriptors( uint32_t & dstBinding )const
+		{
+			++dstBinding;
+		}
+
 		template< typename BindingT >
 		ashes::WriteDescriptorSet getDescriptorWrite( BindingT dstBinding
 			, uint32_t dstArrayElement = 0u )const

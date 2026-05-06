@@ -520,6 +520,34 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	RenderGraph's paged buffer view binding base class.
+	*\~french
+	*\brief
+	*	Classe de base d'un binding d'un paged buffer RenderGraph.
+	*/
+	struct PagedBufferBase;
+	/**
+	*\~english
+	*\brief
+	*	Child class of c3d::PagedBufferBase, for untyped paged buffers.
+	*\~french
+	*\brief
+	*	Classe fille de c3d::PagedBufferBase, pour les paged buffers non typés.
+	*/
+	struct PagedBuffer;
+	/**
+	*\~english
+	*\brief
+	*	Child class of c3d::PagedBufferBase, for typed paged buffers.
+	*\~french
+	*\brief
+	*	Classe fille de c3d::PagedBufferBase, pour les paged buffers typés.
+	*/
+	template< typename DataT >
+	struct PagedBufferT;
+	/**
+	*\~english
+	*\brief
 	*	RenderGraph's image view binding.
 	*\~french
 	*\brief
@@ -1061,6 +1089,7 @@ namespace c3d
 	CU_DeclareSmartPtr( c3d, Viewport, C3D_API );
 	CU_DeclareSmartPtr( c3d, Texture, C3D_API );
 	CU_DeclareSmartPtr( c3d, Buffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, PagedBuffer, C3D_API );
 
 	CU_DeclareVector( IntermediateView, IntermediateView );
 	/** @endcond */

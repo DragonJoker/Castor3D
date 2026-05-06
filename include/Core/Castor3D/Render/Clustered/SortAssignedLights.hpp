@@ -11,8 +11,8 @@ namespace c3d
 	C3D_API void createSortAssignedLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, FrustumClusters const & clusters
-		, BufferBase & pointLightClusterIndex
-		, BufferBase & spotLightClusterIndex
+		, PagedBufferBase & pointLightClusterIndex
+		, PagedBufferBase & spotLightClusterIndex
 		, BufferBase & pointLightClusterGrid
 		, BufferBase & spotLightClusterGrid );
 }

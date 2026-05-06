@@ -9,6 +9,7 @@
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -423,8 +424,10 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
-				auto & mortonAttach = *getPass().getInputs().find( 0 )->second;
-				auto & indicesAttach = *getPass().getInputs().find( 1 )->second;
+				auto & inMortonAttach = *getPass().getInputs().find( uint32_t( merge::Bindings::eInputKeys ) )->second;
+				auto & inIndicesAttach = *getPass().getInputs().find( uint32_t( merge::Bindings::eInputValues ) )->second;
+				auto & outMortonAttach = *getPass().getOutputs().find( uint32_t( merge::Bindings::eOutputKeys ) )->second;
+				auto & outIndicesAttach = *getPass().getOutputs().find( uint32_t( merge::Bindings::eOutputValues ) )->second;
 
 				// The number of threads per thread group.
 				constexpr u32 threadsPerThreadGroupCount = NumThreadsPerThreadGroup;
@@ -490,10 +493,10 @@ namespace c3d
 						// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
 						u32 lastChunkOffset = chunkSize * ( chunksCount - 1 ) * sizeof( u32 );
 						auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
-						auto srcMorton = mortonAttach.buffer( index );
-						auto srcIndices = indicesAttach.buffer( index );
-						auto dstMorton = mortonAttach.buffer( 1u - index );
-						auto dstIndices = indicesAttach.buffer( 1u - index );
+						auto srcMorton = inMortonAttach.buffer( index );
+						auto srcIndices = inIndicesAttach.buffer( index );
+						auto dstMorton = outMortonAttach.buffer( index );
+						auto dstIndices = outIndicesAttach.buffer( index );
 						context.copyBuffer( commandBuffer, index
 							, srcMorton, dstMorton
 							, lastChunkOffset, lastChunkOffset, lastChunkSize );
@@ -507,6 +510,25 @@ namespace c3d
 
 					chunkSize *= 2;
 					chunksCount = divRoundUp( totalValues, chunkSize );
+				}
+
+				auto finalIndices = outIndicesAttach.buffer( 0u );
+				auto currentIndices = outIndicesAttach.buffer( 1u - index );
+				if ( finalIndices != currentIndices )
+				{
+					// Copy temp indices buffer into final indices buffer, if needed.
+					auto srcCurrentState = context.getAccessState( currentIndices.data->buffer, inIndicesAttach.getBufferRange() );
+					context.memoryBarrier( commandBuffer, currentIndices.data->buffer, inIndicesAttach.getBufferRange(), srcCurrentState, TransferReadState, true );
+
+					auto dstCurrentState = context.getAccessState( finalIndices.data->buffer, outIndicesAttach.getBufferRange() );
+					context.memoryBarrier( commandBuffer, finalIndices.data->buffer, outIndicesAttach.getBufferRange(), dstCurrentState, TransferWriteState, true );
+
+					auto srcBuffer = &getGraph().createBuffer( currentIndices.data->buffer );
+					auto dstBuffer = &getGraph().createBuffer( finalIndices.data->buffer );
+					VkBufferCopy copyRegion{ 0u, 0u, totalValues * sizeof( u32 ) };
+					context->vkCmdCopyBuffer( commandBuffer, srcBuffer->getBuffer(), dstBuffer->getBuffer(), 1u, &copyRegion );
+
+					context.memoryBarrier( commandBuffer, finalIndices.data->buffer, outIndicesAttach.getBufferRange(), dstCurrentState, ComputeShaderReadWriteState, true );
 				}
 			}
 

@@ -26,16 +26,19 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	count	The max passes count.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	pointCount	The max point lights count.
+		 *\param[in]	spotCount	The max spot lights count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	count	Le nombre maximal de passes.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	pointCount	Le nombre maximal de point lights.
+		 *\param[in]	spotCount	Le nombre maximal de spot lights.
 		 */
 		C3D_API LightBuffer( RenderDevice const & device
 		, crg::ResourcesCache & resources
-			, uint32_t count );
+			, uint32_t pointCount
+			, uint32_t spotCount );
 		/**
 		 *\~english
 		 *\brief		Adds a light source to the buffer.

@@ -28,8 +28,8 @@ namespace c3d
 	{
 		enum class Bindings
 		{
-			eClusters,
 			eAllLightsAABB,
+			eClusters = eAllLightsAABB + MaxLightsAABBPageCount,
 			eLightIndices,
 			eLightBVH,
 		};
@@ -61,10 +61,10 @@ namespace c3d
 				, 34636833_u	/* Level 6 */ } );
 
 			// Inputs
-			C3D_AllLightsAABBEx( writer
+			shader::AllLightsAABB allLightsAABB{ writer
 				, Bindings::eAllLightsAABB
 				, 0u
-				, bottomLevel );
+				, bottomLevel };
 			C3D_Clusters( writer
 				, Bindings::eClusters
 				, 0u );
@@ -127,7 +127,7 @@ namespace c3d
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
 				, [&c3d_clustersData, &c3d_numLevelNodes, &c3d_firstNodeIndex, &c3d_lightBVH, &c3d_lightIndices
-					, &c3d_childLevel, &c3d_allLightsAABB
+					, &c3d_childLevel, &allLightsAABB
 					, &writer, &logStepReduction, &gsAABBMin, &gsAABBMax
 					, &lightType, &bottomLevel]( sdw::ComputeIn const & in )
 				{
@@ -196,7 +196,7 @@ namespace c3d
 										? c3d_lightIndices[leafIndex]
 										: c3d_clustersData.pointLightCount() + c3d_lightIndices[leafIndex] ) );
 								auto aabb = writer.declLocale( "aabb"
-									, c3d_allLightsAABB[lightIndex] );
+									, allLightsAABB[lightIndex] );
 
 								aabbMin = aabb.min();
 								aabbMax = aabb.max();
@@ -330,10 +330,10 @@ namespace c3d
 						, context
 						, graph
 						, crg::pp::Config{}
-							.programCreator( { 2u, [this, &device, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, passIndex, bottomLevel, lightType ); } } )
+							.programCreator( { 1u, [this, &device, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, passIndex, bottomLevel, lightType ); } } )
 							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
-						, 6u }
+						, 1u }
 				{
 				}
 
@@ -372,18 +372,6 @@ namespace c3d
 				m_top.pipeline.initialise();
 				doCreatePipeline( index, m_bottom );
 				doCreatePipeline( index, m_top );
-			}
-
-			uint32_t doGetPassIndex()const
-			{
-				u32 result = {};
-
-				auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
-				if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
-					numChunks > 1u )
-					result += ( ( numChunks - 1u ) % 2u );
-
-				return result;
 			}
 
 			bool doIsEnabled()const
@@ -556,7 +544,7 @@ namespace c3d
 	void createBuildLightsBVHPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, FrustumClusters & clusters
-		, BufferBase const & allLightsAABB
+		, PagedBufferBase const & allLightsAABB
 		, ClustersLightSortAttachs const & outputSortAttachs
 		, BufferBase const & mergePathPartitions
 		, BufferBase & pointLightBVH

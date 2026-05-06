@@ -291,7 +291,9 @@ namespace c3d
 	}
 
 	void RenderTechniqueNodesPass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsLayoutBindings( bindings, index );
@@ -300,7 +302,7 @@ namespace c3d
 			m_ssao->addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapOcclusion
 		getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().addTextureLayoutBinding( bindings, index, VK_SHADER_STAGE_FRAGMENT_BIT ); // c3d_mapBrdf
 
-		doAddShadowLayoutBindings( m_scene, bindings, index );
+		doAddShadowLayoutBindings( m_scene, bindings, shadowMaps, shadowBuffer, index );
 		doAddEnvLayoutBindings( bindings, index );
 		doAddBackgroundLayoutBindings( m_scene, bindings, index );
 		doAddGILayoutBindings( bindings, index );

@@ -167,34 +167,48 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief			Adds shadow maps descriptor layout bindings to given list.
+		 *\param[in,out]	bindings		Receives the bindings.
+		 *\param[in]		shaderStages	The impacted shader stages.
+		 *\param[in,out]	index			The current binding index.
+		 *\param[in]		shadowMaps		The shadow maps.
+		 *\param[in]		shadowBuffer	The buffer holding the shadow configuration data.
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
+		 *\param[in,out]	bindings		Reçoit les bindings.
+		 *\param[in]		shaderStages	Les shader stages impactés.
+		 *\param[in,out]	index			L'index de binding actuel.
+		 *\param[in]		shadowMaps		Les shadow maps.
+		 *\param[in]		shadowBuffer	Le buffer contenant les données de configuration des ombres.
+		 */
+		C3D_API static void addShadowLayoutBindings( RenderSystem const & renderSystem
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const & shadowBuffer
+			, VkShaderStageFlags shaderStages
+			, uint32_t & index );
+		/**
+		 *\~english
+		 *\brief			Adds shadow maps descriptor layout bindings to given list.
 		 *\param[in]		sceneFlags		Used to define what shadow maps need to be bound.
 		 *\param[in,out]	bindings		Receives the bindings.
 		 *\param[in]		shaderStages	The impacted shader stages.
 		 *\param[in,out]	index			The current binding index.
+		 *\param[in]		shadowMaps		The shadow maps.
+		 *\param[in]		shadowBuffer	The buffer holding the shadow configuration data.
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
 		 *\param[in]		sceneFlags		Le mode de mélange couleurs.
 		 *\param[in,out]	bindings		Reçoit les bindings.
 		 *\param[in]		shaderStages	Les shader stages impactés.
 		 *\param[in,out]	index			L'index de binding actuel.
+		 *\param[in]		shadowMaps		Les shadow maps.
+		 *\param[in]		shadowBuffer	Le buffer contenant les données de configuration des ombres.
 		 */
-		C3D_API static void addShadowLayoutBindings( SceneFlags const & sceneFlags
+		C3D_API static void addShadowLayoutBindings( RenderSystem const & renderSystem
+			, SceneFlags const & sceneFlags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index );
-		/**
-		 *\~english
-		 *\brief			Adds shadow maps descriptor layout bindings to given list.
-		 *\param[in,out]	bindings		Receives the bindings.
-		 *\param[in]		shaderStages	The impacted shader stages.
-		 *\param[in,out]	index			The current binding index.
-		 *\~french
-		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
-		 *\param[in,out]	bindings		Reçoit les bindings.
-		 *\param[in]		shaderStages	Les shader stages impactés.
-		 *\param[in,out]	index			L'index de binding actuel.
-		 */
-		C3D_API static void addShadowLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const & shadowBuffer
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**

@@ -12,14 +12,14 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters const & clusters
 		, CameraUbo const & clustersCameraUbo
-		, BufferBase & allLightsAABBB );
+		, PagedBufferBase & allLightsAABBB );
 	C3D_API void createDisplayLightsAABBProgram( RenderDevice const & device
 		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, ashes::WriteDescriptorSetArray & writes
-		, BufferBase const & allLightsAABBB );
+		, PagedBufferBase const & allLightsAABBB );
 }
 
 #endif

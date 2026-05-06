@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
+#include "Castor3D/Render/PagedBuffer.hpp"
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 #include "Castor3D/Shader/Ubos/FroxelsUbo.hpp"
@@ -134,12 +135,12 @@ namespace c3d
 			return m_spotBuffers.clusterGrid;
 		}
 
-		BufferBase const & getPointLightClusterIndexBuffer()const noexcept
+		PagedBufferBase const & getPointLightClusterIndexBuffer()const noexcept
 		{
 			return m_pointBuffers.clusterIndex;
 		}
 
-		BufferBase const & getSpotLightClusterIndexBuffer()const noexcept
+		PagedBufferBase const & getSpotLightClusterIndexBuffer()const noexcept
 		{
 			return m_spotBuffers.clusterIndex;
 		}
@@ -149,7 +150,7 @@ namespace c3d
 			return m_reducedLightsAABBBuffer;
 		}
 
-		BufferBase const & getAllLightsAABBBuffer()const noexcept
+		PagedBufferBase const & getAllLightsAABBBuffer()const noexcept
 		{
 			return m_allLightsAABBBuffer;
 		}
@@ -166,12 +167,12 @@ namespace c3d
 
 		crg::Attachment const & getPointLightIndicesBuffer()const noexcept
 		{
-			return *m_sortAttachs[MortonIndicesOutput].pointLightIndices;
+			return *m_sortAttachsToTmp.pointLightIndices;
 		}
 
 		crg::Attachment const & getSpotLightIndicesBuffer()const noexcept
 		{
-			return *m_sortAttachs[MortonIndicesOutput].spotLightIndices;
+			return *m_sortAttachsToTmp.spotLightIndices;
 		}
 
 		auto & getCamera()const noexcept
@@ -190,8 +191,6 @@ namespace c3d
 		}
 
 		OnClustersBuffersChanged onClusterBuffersChanged;
-		static constexpr uint32_t MortonIndicesInput{ 1u };
-		static constexpr uint32_t MortonIndicesOutput{ 0u };
 
 	private:
 		struct AABB
@@ -208,17 +207,19 @@ namespace c3d
 			~Buffers()noexcept;
 
 			// Fixed size buffers, related to lights
-			Array< BufferT< u32 >, 2u > mortonCodes;
-			Array< BufferT< u32 >, 2u > indices;
+			BufferT< u32 > mortonCodes;
+			BufferT< u32 > tmpMortonCodes;
+			BufferT< u32 > indices;
+			BufferT< u32 > tmpIndices;
 			BufferT< AABB > bvh;
 			// Variable size buffers, related to frustum dimensions
 			BufferT< Point2ui > clusterGrid;
-			BufferT< u32 > clusterIndex;
+			PagedBufferT< u32 > clusterIndex;
 			//
-			crg::BufferViewIdArray inputIndices;
-			crg::BufferViewIdArray outputIndices;
-			crg::BufferViewIdArray inputMortonCodes;
-			crg::BufferViewIdArray outputMortonCodes;
+			crg::BufferViewIdArray toTmpIndices;
+			crg::BufferViewIdArray fromTmpIndices;
+			crg::BufferViewIdArray toTmpMortonCodes;
+			crg::BufferViewIdArray fromTmpMortonCodes;
 		};
 
 	private:
@@ -246,12 +247,15 @@ namespace c3d
 		BufferT< s32 > m_mergePathPartitions;
 
 		// Fixed size buffers, related to lights
-		BufferT< AABB > m_allLightsAABBBuffer;
+		PagedBufferT< AABB > m_allLightsAABBBuffer;
 		BufferT< AABB > m_reducedLightsAABBBuffer;
 		// Light type specific buffers
 		Buffers m_pointBuffers;
 		Buffers m_spotBuffers;
-		Array< ClustersLightSortAttachs, 2u > m_sortAttachs;
+		ClustersLightSortAttachs m_sortAttachsToTmp;
+		ClustersLightSortAttachs m_sortAttachsfromTmp;
+		BufferT< uint32_t > m_tmpCounters;
+		Array< BufferT< uint32_t >, 3u > m_counters;
 
 		// Variable size buffers, related to frustum dimensions
 		BufferT< AABB > m_aabbBuffer;

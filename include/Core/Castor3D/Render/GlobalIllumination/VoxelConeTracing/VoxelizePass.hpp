@@ -93,7 +93,9 @@ namespace c3d
 		void doUpdate( CpuUpdater & updater )override;
 
 		void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags

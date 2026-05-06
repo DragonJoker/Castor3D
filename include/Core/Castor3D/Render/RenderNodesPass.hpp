@@ -492,17 +492,23 @@ namespace c3d
 		 *\param[in]		vertexLayouts			The vertex buffers layouts.
 		 *\param[in]		vertexPullingLayouts	The vertex buffers descriptor layouts.
 		 *\param[in]		meshletDescriptorLayout	The optional meshlets descriptor layout.
+		 *\param[in]		shadowMaps				The shadow maps.
+		 *\param[in]		shadowBuffer			The buffer holding the shadow configuration data.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
 		 *\param[in]		pipelineFlags			Les indicateurs de pipeline.
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
 		 *\param[in]		vertexPullingLayouts	Les layouts de descripteurs des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
+		 *\param[in]		shadowMaps				Les shadow maps.
+		 *\param[in]		shadowBuffer			Le buffer contenant les données de configuration des ombres.
 		 */
 		C3D_API PipelineAndID prepareBackPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * vertexPullingLayouts
-			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
@@ -510,17 +516,23 @@ namespace c3d
 		 *\param[in]		vertexLayouts			The vertex buffers layouts.
 		 *\param[in]		vertexPullingLayouts	The vertex buffers descriptor layouts.
 		 *\param[in]		meshletDescriptorLayout	The optional meshlets descriptor layout.
+		 *\param[in]		shadowMaps				The shadow maps.
+		 *\param[in]		shadowBuffer			The buffer holding the shadow configuration data.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
 		 *\param[in]		pipelineFlags			Les indicateurs de pipeline.
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
 		 *\param[in]		vertexPullingLayouts	Les layouts de descripteurs des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
+		 *\param[in]		shadowMaps				Les shadow maps.
+		 *\param[in]		shadowBuffer			Le buffer contenant les données de configuration des ombres.
 		 */
 		C3D_API PipelineAndID prepareFrontPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * vertexPullingLayouts
-			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
 		 *\brief		Cleans up all pipelines from the lists.
@@ -678,7 +690,9 @@ namespace c3d
 		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
 		 */
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer )const = 0;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags );
 		/**
@@ -710,6 +724,8 @@ namespace c3d
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 		C3D_API void doAddShadowLayoutBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundLayoutBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -736,7 +752,9 @@ namespace c3d
 		}
 
 	private:
-		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer )const;
 		Vector< RenderPipelineUPtr > & doGetFrontPipelines();
 		Vector< RenderPipelineUPtr > & doGetBackPipelines();
 		Vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
@@ -745,7 +763,9 @@ namespace c3d
 			, ashes::DescriptorSetLayout const * vertexPullingLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags const & flags
-			, VkCullModeFlags cullMode );
+			, VkCullModeFlags cullMode
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
 		 *\brief		Creates the rasterization state.

@@ -11,7 +11,7 @@ namespace c3d
 	C3D_API void createBuildLightsBVHPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, FrustumClusters & clusters
-		, BufferBase const & allLightsAABB
+		, PagedBufferBase const & allLightsAABB
 		, ClustersLightSortAttachs const & outputSortAttachs
 		, BufferBase const & mergePathPartitions
 		, BufferBase & pointLightBVH

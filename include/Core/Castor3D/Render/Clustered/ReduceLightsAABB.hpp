@@ -12,7 +12,7 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, CameraUbo const & clustersCameraUbo
-		, BufferBase const & allLightsAABB
+		, PagedBufferBase const & allLightsAABB
 		, BufferBase & reducedLightsAABB );
 }
 

@@ -57,7 +57,7 @@ namespace c3d
 		 *\param[in]	dstBinding		The binding point index.
 		 *\param[in]	dstArrayElement	The starting element in that array.
 		 *\~french
-		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 *\brief		Crée le descriptor write de cet UBO.
 		 *\param[in]	dstBinding		Le point d'attache.
 		 *\param[in]	dstArrayElement	L'index de départ dans l'éventuel tableau.
 		 */
@@ -74,7 +74,7 @@ namespace c3d
 		 *\param[in]		dstBinding		The binding point index.
 		 *\param[in]		dstArrayElement	The starting element in that array.
 		 *\~french
-		 *\brief			Crée le descriptor write pour le buffer de sources lumineuses.
+		 *\brief			Crée le descriptor write de cet UBO.
 		 *\param[in,out]	writes			Reçoit le descriptor write.
 		 *\param[in]		dstBinding		Le point d'attache.
 		 *\param[in]		dstArrayElement	L'index de départ dans l'éventuel tableau.
@@ -93,7 +93,7 @@ namespace c3d
 		 *\param[in,out]	dstBinding		The binding point index, is incremented.
 		 *\param[in]		dstArrayElement	The starting element in that array.
 		 *\~french
-		 *\brief			Ajoute à la liste donnée le descriptor write pour le buffer de sources lumineuses.
+		 *\brief			Ajoute à la liste donnée le descriptor write de cet UBO.
 		 *\param[in,out]	writes			Reçoit le descriptor write.
 		 *\param[in,out]	dstBinding		Le point d'attache, est incrémenté.
 		 *\param[in]		dstArrayElement	L'index de départ dans l'éventuel tableau.
@@ -103,6 +103,18 @@ namespace c3d
 			, uint32_t dstArrayElement = 0u )const
 		{
 			writes.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
+		}
+		/**
+		 *\~english
+		 *\brief			Increments the given binding index by the descriptors count for this UBO.
+		 *\param[in,out]	dstBinding	The binding point index, is incremented.
+		 *\~french
+		 *\brief			Incrémente l'index d'attache donnée par le nombre de descripteurs pour cet UBO.
+		 *\param[in,out]	dstBinding	Le point d'attache, est incrémenté.
+		 */
+		void countDescriptors( uint32_t & dstBinding )const
+		{
 			++dstBinding;
 		}
 		/**

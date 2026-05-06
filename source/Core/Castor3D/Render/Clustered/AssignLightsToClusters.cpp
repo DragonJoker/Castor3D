@@ -20,6 +20,7 @@
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -32,19 +33,20 @@ namespace c3d
 	{
 		enum class Bindings
 		{
-			eCamera,
 			eLights,
-			eClusters,
 			eAllLightsAABB,
+			eCamera = eAllLightsAABB + MaxLightsAABBPageCount,
+			eClusters,
 			eClustersAABB,
 			ePointLightBVH,
 			eSpotLightBVH,
 			ePointLightIndices,
 			eSpotLightIndices,
-			ePointLightIndex,
-			ePointLightCluster,
-			eSpotLightIndex,
-			eSpotLightCluster,
+			eCounters,
+			ePointLightClusterGrid,
+			eSpotLightClusterGrid,
+			ePointLightClusterIndex,
+			eSpotLightClusterIndex = ePointLightClusterIndex + MaxClusterLightsIndicesPageCount,
 		};
 
 		static ShaderPtr createShader( RenderDevice const & device )
@@ -54,17 +56,17 @@ namespace c3d
 			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			// Inputs
-			C3D_Camera( writer
-				, Bindings::eCamera
-				, 0u );
 			shader::LightsBuffer lights{ writer
 				, uint32_t( Bindings::eLights )
 				, 0u };
+			shader::AllLightsAABB allLightsAABB{ writer
+				, Bindings::eAllLightsAABB
+				, 0u };
+			C3D_Camera( writer
+				, Bindings::eCamera
+				, 0u );
 			C3D_Clusters( writer
 				, Bindings::eClusters
-				, 0u );
-			C3D_AllLightsAABB( writer
-				, Bindings::eAllLightsAABB
 				, 0u );
 			C3D_ClustersAABB( writer
 				, Bindings::eClustersAABB
@@ -81,18 +83,24 @@ namespace c3d
 			C3D_SpotLightIndices( writer
 				, Bindings::eSpotLightIndices
 				, 0u );
-			C3D_PointLightClusterIndex( writer
-				, Bindings::ePointLightIndex
-				, 0u );
 			C3D_PointLightClusterGrid( writer
-				, Bindings::ePointLightCluster
-				, 0u );
-			C3D_SpotLightClusterIndex( writer
-				, Bindings::eSpotLightIndex
+				, Bindings::ePointLightClusterGrid
 				, 0u );
 			C3D_SpotLightClusterGrid( writer
-				, Bindings::eSpotLightCluster
+				, Bindings::eSpotLightClusterGrid
 				, 0u );
+			auto countersBuffer = writer.declStorageBuffer( "c3d_counters", uint32_t( Bindings::eCounters ), 0u );
+			auto c3d_pointLightClusterListCount = countersBuffer.declMember< sdw::UInt >( "c3d_pointLightClusterListCount" );
+			auto c3d_spotLightClusterListCount = countersBuffer.declMember< sdw::UInt >( "c3d_spotLightClusterListCount" );
+			countersBuffer.end();
+			shader::ClusterLightsIndices pointLightClusterIndices{ writer
+				, "c3d_pointLightClusterIndices", ClusterLightsIndicesPageSize
+				, Bindings::ePointLightClusterIndex
+				, 0u };
+			shader::ClusterLightsIndices spotLightClusterIndices{ writer
+				, "c3d_spotLightClusterIndices", ClusterLightsIndicesPageSize
+				, Bindings::eSpotLightClusterIndex
+				, 0u };
 
 			auto gsProcessedLightsCount = writer.declSharedVariable< sdw::UInt >( "gsProcessedLightsCount" );
 			auto gsLightStartOffset = writer.declSharedVariable< sdw::UInt >( "gsLightStartOffset" );
@@ -100,11 +108,11 @@ namespace c3d
 			auto gsClusterAABB = writer.declSharedVariable< shader::AABB >( "gsClusterAABB" );
 
 			shader::BVHBaseT< shader::AABB > bvh{ writer };
-			shader::LightsBVHT< shader::AABB > lightsBvh{ writer, c3d_allLightsAABB, MaxLightsPerCluster };
+			shader::LightsBVHT< shader::AABB > lightsBvh{ writer, allLightsAABB, MaxLightsPerCluster };
 
 			auto processPointLights = writer.implementFunction< sdw::Void >( "c3d_processPointLights"
 				, [&gsProcessedLightsCount, &gsLightStartOffset, gsClusterIndex1D
-					, c3d_pointLightClusterGrid, &c3d_pointLightClusterIndex, &c3d_pointLightClusterListCount
+					, c3d_pointLightClusterGrid, &pointLightClusterIndices, &c3d_pointLightClusterListCount
 					, &writer, &lightsBvh, NumThreads]( sdw::UInt const & groupIndex )
 				{
 					sdwIF( writer, groupIndex == 0u )
@@ -125,7 +133,7 @@ namespace c3d
 					// Now update the global light index lists with the group shared light lists.
 					sdwFOR( writer, sdw::UInt, i, groupIndex, i < gsProcessedLightsCount, i += NumThreads )
 					{
-						c3d_pointLightClusterIndex[gsLightStartOffset + i] = lightsBvh.getTraversedLightID( i );
+						pointLightClusterIndices[gsLightStartOffset + i] = lightsBvh.getTraversedLightID( i );
 					}
 					sdwROF
 				}
@@ -133,7 +141,7 @@ namespace c3d
 
 			auto processSpotLights = writer.implementFunction< sdw::Void >( "c3d_processSpotLights"
 				, [&gsProcessedLightsCount, &gsLightStartOffset, gsClusterIndex1D
-					, c3d_spotLightClusterGrid, &c3d_spotLightClusterIndex, &c3d_spotLightClusterListCount
+					, c3d_spotLightClusterGrid, &spotLightClusterIndices, &c3d_spotLightClusterListCount
 					, &writer, &lightsBvh, NumThreads]( sdw::UInt const & groupIndex )
 				{
 					sdwIF( writer, groupIndex == 0u )
@@ -154,7 +162,7 @@ namespace c3d
 					// Now update the global light index lists with the group shared light lists.
 					sdwFOR( writer, sdw::UInt, i, groupIndex, i < gsProcessedLightsCount, i += NumThreads )
 					{
-						c3d_spotLightClusterIndex[gsLightStartOffset + i] = lightsBvh.getTraversedLightID( i );
+						spotLightClusterIndices[gsLightStartOffset + i] = lightsBvh.getTraversedLightID( i );
 					}
 					sdwROF
 				}
@@ -214,17 +222,23 @@ namespace c3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, FrustumClusters const & clusters
+				, crg::Buffer & pointLightClusterIndices
+				, crg::Buffer & spotLightClusterIndices
+				, Array< BufferT< uint32_t >, 3u > const & counters
 				, crg::cp::Config config )
-				: crg::ComputePass{framePass
+				: crg::ComputePass{ framePass
 					, context
 					, graph
-					, crg::ru::Config{ 2u }
+					, crg::ru::Config{ 1u }
 					, config
 						.isEnabled( crg::IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
-						.getPassIndex( crg::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
-						.programCreator( { 3u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } ) }
+						.programCreator( { 1u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.end( crg::RecordCallback( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( recContext, cb, i ); } ) ) }
 				, m_device{ device }
 				, m_config{ clusters.getConfig() }
+				, m_pointLightClusterIndices{ pointLightClusterIndices }
+				, m_spotLightClusterIndices{ spotLightClusterIndices }
+				, m_counters{ counters }
 			{
 			}
 
@@ -237,19 +251,9 @@ namespace c3d
 			};
 
 		private:
-			uint32_t doGetPassIndex( FrustumClusters const & clusters )const
+			bool doIsEnabled( FrustumClusters const & clusters )const
 			{
-				u32 result = {};
-
-				auto const & lightCache = clusters.getScene().getLightCache();
-				auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
-				auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
-				auto totalValues = std::max( pointLightsCount, spoLightsCount );
-				if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
-					numChunks > 1u )
-					result += ( ( numChunks - 1u ) % 2u );
-
-				return result;
+				return clusters.getScene().hasClusteredLights();
 			}
 
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
@@ -266,15 +270,69 @@ namespace c3d
 				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 			}
 
-			bool doIsEnabled( FrustumClusters const & clusters )const
+			void doSubRecordInto( crg::RecordContext & recordContext
+				, VkCommandBuffer commandBuffer
+				, uint32_t passIndex )
 			{
-				return clusters.getScene().hasClusteredLights();
+				auto tmpCounters = getPass().getOutputs().find( uint32_t( dspclst::Bindings::eCounters ) )->second;
+
+				auto wasBatching = recordContext.isBatching();
+				if ( wasBatching )
+				{
+					recordContext.flushBatchBarriers( commandBuffer );
+				}
+
+				// Copy temp counters to mappable counter buffer
+				crg::BufferViewId tmpCountersId = tmpCounters->buffer( passIndex );
+				crg::BufferViewId countersId = m_counters[m_prevBufferIndex].bufferViewId;
+				AccessState currentState = recordContext.getAccessState( tmpCountersId );
+				AccessState wantedState{ AccessFlags::eTransferRead, PipelineStageFlags::eTransfer };
+				recordContext.memoryBarrier( commandBuffer
+					, tmpCountersId, currentState
+					, wantedState );
+				recordContext.memoryBarrier( commandBuffer
+					, countersId
+					, AccessState{ AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer } );
+				recordContext.copyBuffer( commandBuffer, passIndex, tmpCountersId, countersId, 0u, 0u, sizeof( u32 ) * 2u );
+				recordContext.memoryBarrier( commandBuffer
+					, tmpCountersId, wantedState, currentState );
+
+				if ( wasBatching )
+				{
+					recordContext.beginBatchBarriers();
+				}
+
+				// Copy mappable counter buffer to RAM
+				auto & vkBuffer = m_counters[m_prevBufferIndex].getBuffer();
+				uint32_t * ptr{};
+				recordContext->vkMapMemory( recordContext->device, vkBuffer.getStorage(), 0, VK_WHOLE_SIZE, 0, reinterpret_cast< void ** >( &ptr ) );
+				if ( ptr )
+				{
+					auto neededPoint = ptr[0] * sizeof( u32 );
+					if ( neededPoint > m_pointLightClusterIndices.getAllocatedSize() )
+						m_pointLightClusterIndices.resize( neededPoint );
+
+					auto neededSpot = ptr[0] * sizeof( u32 );
+					if ( neededSpot > m_spotLightClusterIndices.getAllocatedSize() )
+						m_spotLightClusterIndices.resize( neededSpot );
+
+					recordContext->vkUnmapMemory( recordContext->device, vkBuffer.getStorage() );
+				}
+
+				// Cycle buffers, to prevent stalling GPU on buffer read.
+				m_prevBufferIndex = m_bufferIndex;
+				m_bufferIndex = ( m_bufferIndex + 1u ) % 3u;
 			}
 
 		private:
 			RenderDevice const & m_device;
 			ClustersConfig const & m_config;
 			Map< uint32_t, ProgramData > m_programs;
+			uint32_t m_prevBufferIndex{ 2u };
+			uint32_t m_bufferIndex{ 0u };
+			crg::Buffer & m_pointLightClusterIndices;
+			crg::Buffer & m_spotLightClusterIndices;
+			Array< BufferT< uint32_t >, 3u > const & m_counters;
 		};
 	}
 
@@ -284,28 +342,30 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, CameraUbo const & clustersCameraUbo
-		, BufferBase const & allLightsAABB
+		, PagedBufferBase const & allLightsAABB
 		, BufferBase const & clustersAABB
 		, BufferBase const & pointLightBVH
 		, BufferBase const & spotLightBVH
 		, ClustersLightSortAttachs const & outputSortAttachs
-		, BufferBase & pointLightClusterIndex
-		, BufferBase & spotLightClusterIndex
+		, Array< BufferT< uint32_t >, 3u > const & counters
+		, PagedBufferBase & pointLightClusterIndex
+		, PagedBufferBase & spotLightClusterIndex
 		, BufferBase & pointLightClusterGrid
-		, BufferBase & spotLightClusterGrid )
+		, BufferBase & spotLightClusterGrid
+		, BufferBase & tmpCounters )
 	{
 		auto const & lights = clusters.getScene().getLightCache();
 
 		auto & pass = graph.createPass( "AssignLightsToClusters"
-			, [&clusters, &device]( crg::FramePass const & framePass
+			, [&clusters, &device, &counters, &pointLightClusterIndex, &spotLightClusterIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runGraph )
 			{
-				auto result = makeRawUnique< dspclst::FramePass >( framePass
-					, context
-					, runGraph
-					, device
-					, clusters
+				auto result = makeRawUnique< dspclst::FramePass >( framePass, context, runGraph
+					, device, clusters
+					, pointLightClusterIndex.getBufferPages()
+					, spotLightClusterIndex.getBufferPages()
+					, counters
 					, crg::cp::Config{}
 						.getGroupCountX( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->x; } ) )
 						.getGroupCountY( crg::cp::GetGroupCountCallback( [&clusters](){ return clusters.getDimensions()->y; } ) )
@@ -324,10 +384,11 @@ namespace c3d
 		pass.addInputStorageT( *outputSortAttachs.pointLightIndices, dspclst::Bindings::ePointLightIndices );
 		pass.addInputStorageT( *outputSortAttachs.spotLightIndices, dspclst::Bindings::eSpotLightIndices );
 
-		pointLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterIndex.bufferViewId, dspclst::Bindings::ePointLightIndex ) );
-		pointLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterGrid.bufferViewId, dspclst::Bindings::ePointLightCluster ) );
-		spotLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightClusterIndex.bufferViewId, dspclst::Bindings::eSpotLightIndex ) );
-		spotLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightClusterGrid.bufferViewId, dspclst::Bindings::eSpotLightCluster ) );
+		tmpCounters.setLastAttach( pass.addClearableOutputStorageBufferT( tmpCounters.bufferViewId, dspclst::Bindings::eCounters ) );
+		pointLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterGrid.bufferViewId, dspclst::Bindings::ePointLightClusterGrid ) );
+		spotLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightClusterGrid.bufferViewId, dspclst::Bindings::eSpotLightClusterGrid ) );
+		pointLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterIndex.bufferViewId, dspclst::Bindings::ePointLightClusterIndex ) );
+		spotLightClusterIndex.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightClusterIndex.bufferViewId, dspclst::Bindings::eSpotLightClusterIndex ) );
 	}
 
 	//*********************************************************************************************

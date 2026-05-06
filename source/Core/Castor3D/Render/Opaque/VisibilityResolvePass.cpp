@@ -1643,7 +1643,10 @@ namespace c3d
 					, stages ); // c3d_mapOcclusion
 
 			if ( technique.hasShadowBuffer() )
-				RenderNodesPass::addShadowLayoutBindings( bindings
+				RenderNodesPass::addShadowLayoutBindings( *engine.getRenderSystem()
+					, bindings
+					, technique.getShadowMaps()
+					, technique.getShadowBuffer()
 					, stages
 					, index );
 

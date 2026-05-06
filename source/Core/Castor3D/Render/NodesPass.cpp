@@ -114,74 +114,62 @@ namespace c3d
 			, textureCombine );
 	}
 
-	void NodesPass::addShadowLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, VkShaderStageFlags shaderStages
-		, uint32_t & index )
-	{
-		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
-		{
-			// Depth
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages );
-			// Depth Compare
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages );
-			// Variance
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages );
-		}
-
-		// Shadow Buffer
-		addDescriptorSetLayoutBinding( bindings, index
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, shaderStages );
-		// Random Storage
-		addDescriptorSetLayoutBinding( bindings, index
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages );
-	}
-
-	void NodesPass::addShadowLayoutBindings( SceneFlags const & sceneFlags
+	void NodesPass::addShadowLayoutBindings( RenderSystem const & renderSystem
+		, SceneFlags const & sceneFlags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
 	{
+#if !C3D_DebugDisableShadowMaps
 		bool hasShadows{};
 
-		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
-			if ( checkFlag( sceneFlags, SceneFlag( uint16_t( SceneFlag::eShadowBegin ) << j ) ) )
+			if ( checkFlag( sceneFlags, SceneFlag( uint16_t( SceneFlag::eShadowBegin ) << i ) ) )
 			{
-				// Depth
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );
-				// Depth Compare
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );
-				// Variance
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );
-				hasShadows = true;
+				for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
+				{
+					auto const & result = shadowMapRef.get().getShadowPassResult( false );
+					result.getTexture( SmTexture::eLinearDepth ).addTextureLayoutBinding( bindings, index, shaderStages );
+					result.getTexture( SmTexture::eLinearDepth ).addTextureLayoutBinding( bindings, index, shaderStages );
+					result.getTexture( SmTexture::eVariance ).addTextureLayoutBinding( bindings, index, shaderStages );
+					hasShadows = true;
+				}
 			}
 		}
 
 		if ( hasShadows )
 		{
-			// Shadow Buffer
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, shaderStages );
-			// Random Storage
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, shaderStages );
+			shadowBuffer.addLayoutBinding( bindings, index, shaderStages );
+			renderSystem.getRandomStorage().addLayoutBinding( bindings, index, shaderStages );
 		}
+#endif
+	}
+
+	void NodesPass::addShadowLayoutBindings( RenderSystem const & renderSystem
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer
+		, VkShaderStageFlags shaderStages
+		, uint32_t & index )
+	{
+#if !C3D_DebugDisableShadowMaps
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+		{
+			for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
+			{
+				auto const & result = shadowMapRef.get().getShadowPassResult( false );
+				result.getTexture( SmTexture::eLinearDepth ).addTextureLayoutBinding( bindings, index, shaderStages );
+				result.getTexture( SmTexture::eLinearDepth ).addTextureLayoutBinding( bindings, index, shaderStages );
+				result.getTexture( SmTexture::eVariance ).addTextureLayoutBinding( bindings, index, shaderStages );
+			}
+		}
+
+		shadowBuffer.addLayoutBinding( bindings, index, shaderStages );
+		renderSystem.getRandomStorage().addLayoutBinding( bindings, index, shaderStages );
+#endif
 	}
 
 	void NodesPass::addBackgroundLayoutBindings( SceneBackground const & background
@@ -202,83 +190,87 @@ namespace c3d
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, shaderStages );
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages );	// c3d_mapVoxelsFirstBounce
-			addDescriptorSetLayoutBinding( bindings, index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages );	// c3d_mapVoxelsSecondaryBounce
+			CU_Require( indirectLighting.vctConfigUbo );
+			CU_Require( indirectLighting.vctFirstBounce );
+			CU_Require( indirectLighting.vctSecondaryBounce );
+			indirectLighting.vctConfigUbo->addLayoutBinding( bindings, index, shaderStages );
+			indirectLighting.vctFirstBounce->addTextureLayoutBinding( bindings, index, shaderStages );
+			indirectLighting.vctSecondaryBounce->addTextureLayoutBinding( bindings, index, shaderStages );
 		}
 		else
 		{
 			if ( indirectLighting.vctConfigUbo )
 			{
-				index += 3u; // VCT: UBO + FirstBounce + SecondBounce.
+				indirectLighting.vctConfigUbo->countDescriptors( index );
+				indirectLighting.vctFirstBounce->countDescriptors( index );
+				indirectLighting.vctSecondaryBounce->countDescriptors( index );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
-			{
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );
-			}
+				indirectLighting.rsmResult->addTextureLayoutBinding( bindings, index, shaderStages );
 			else if ( indirectLighting.rsmResult )
-			{
-				++index; // RSM: Result.
-			}
+				indirectLighting.rsmResult->countDescriptors( index );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, shaderStages );
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );	// c3d_lpvAccumulationR
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );	// c3d_lpvAccumulationG
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages );	// c3d_lpvAccumulationB
+				CU_Require( indirectLighting.lpvConfigUbo );
+				CU_Require( indirectLighting.lpvResult );
+				if ( indirectLighting.lpvConfigUbo )
+					indirectLighting.lpvConfigUbo->addLayoutBinding( bindings, index, shaderStages );
+
+				if ( indirectLighting.lpvResult )
+				{
+					auto const & lpv = *indirectLighting.lpvResult;
+					lpv.getTexture( LpvTexture::eR ).addTextureLayoutBinding( bindings, index, shaderStages );
+					lpv.getTexture( LpvTexture::eG ).addTextureLayoutBinding( bindings, index, shaderStages );
+					lpv.getTexture( LpvTexture::eB ).addTextureLayoutBinding( bindings, index, shaderStages );
+				}
 			}
 			else if ( indirectLighting.lpvConfigUbo )
 			{
-				index += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
+				indirectLighting.lpvConfigUbo->countDescriptors( index );
+
+				if ( indirectLighting.lpvResult )
+				{
+					auto const & lpv = *indirectLighting.lpvResult;
+					lpv.getTexture( LpvTexture::eR ).countDescriptors( index );
+					lpv.getTexture( LpvTexture::eG ).countDescriptors( index );
+					lpv.getTexture( LpvTexture::eB ).countDescriptors( index );
+				}
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
+				CU_Require( indirectLighting.llpvConfigUbo );
 				CU_Require( indirectLighting.llpvResult );
-				addDescriptorSetLayoutBinding( bindings, index
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, shaderStages );
+				if ( indirectLighting.llpvConfigUbo )
+					indirectLighting.llpvConfigUbo->addLayoutBinding( bindings, index, shaderStages );
 
 				if ( indirectLighting.llpvResult )
 				{
-					for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
+					for ( auto const & plpv : *indirectLighting.llpvResult )
 					{
-						addDescriptorSetLayoutBinding( bindings, index
-							, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-							, shaderStages );	// c3d_lpvAccumulationRn
-						addDescriptorSetLayoutBinding( bindings, index
-							, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-							, shaderStages );	// c3d_lpvAccumulationGn
-						addDescriptorSetLayoutBinding( bindings, index
-							, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-							, shaderStages );	// c3d_lpvAccumulationBn
+						auto const & lpv = *plpv;
+						lpv.getTexture( LpvTexture::eR ).addTextureLayoutBinding( bindings, index, shaderStages );
+						lpv.getTexture( LpvTexture::eG ).addTextureLayoutBinding( bindings, index, shaderStages );
+						lpv.getTexture( LpvTexture::eB ).addTextureLayoutBinding( bindings, index, shaderStages );
 					}
 				}
 			}
 			else if ( indirectLighting.llpvConfigUbo )
 			{
-				index += 1u; // LLPV: UBO
-				index += 3u; // LLPV: Accum1R + Accum1G + Accum1B.
-				index += 3u; // LLPV: Accum2R + Accum2G + Accum2B.
-				index += 3u; // LLPV: Accum3R + Accum3G + Accum3B.
+				indirectLighting.llpvConfigUbo->countDescriptors( index );
+
+				if ( indirectLighting.llpvResult )
+				{
+					for ( auto const & plpv : *indirectLighting.llpvResult )
+					{
+						auto const & lpv = *plpv;
+						lpv.getTexture( LpvTexture::eR ).countDescriptors( index );
+						lpv.getTexture( LpvTexture::eG ).countDescriptors( index );
+						lpv.getTexture( LpvTexture::eB ).countDescriptors( index );
+					}
+				}
 			}
 		}
 	}
@@ -288,47 +280,12 @@ namespace c3d
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
 	{
-		frustumClusters.getClustersUbo().addLayoutBinding( bindings, index
-			, shaderStages );
-		addDescriptorSetLayoutBinding( bindings, index // ReducedLightsAABBBuffer
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages );
-		addDescriptorSetLayoutBinding( bindings, index // PointLightIndexBuffer
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages );
-		addDescriptorSetLayoutBinding( bindings, index // PointLightClusterBuffer
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages );
-		addDescriptorSetLayoutBinding( bindings, index // SpotLightIndexBuffer
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages );
-		addDescriptorSetLayoutBinding( bindings, index // SpotLightClusterBuffer
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages );
-	}
-
-	void NodesPass::addShadowDescriptorWrites( RenderSystem const & renderSystem
-		, crg::RunnableGraph & graph
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
-		, ShadowBuffer const & shadowBuffer
-		, uint32_t & index )
-	{
-#if !C3D_DebugDisableShadowMaps
-		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
-		{
-			for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
-			{
-				auto const & result = shadowMapRef.get().getShadowPassResult( false );
-				result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, result.getSampler( SmTexture::eVariance ), index );
-				result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, index );// Compare sampler
-				result.getTexture( SmTexture::eVariance ).addTextureDescriptorWrite( descriptorWrites, index );
-			}
-		}
-
-		shadowBuffer.addDescriptorWrite( descriptorWrites, index );
-		renderSystem.getRandomStorage().addDescriptorWrite( descriptorWrites, index );
-#endif
+		frustumClusters.getClustersUbo().addLayoutBinding( bindings, index, shaderStages );
+		frustumClusters.getReducedLightsAABBBuffer().addLayoutBinding( bindings, index, shaderStages );
+		frustumClusters.getPointLightClusterIndexBuffer().addLayoutBinding( bindings, index, shaderStages );
+		frustumClusters.getPointLightClusterGridBuffer().addLayoutBinding( bindings, index, shaderStages );
+		frustumClusters.getSpotLightClusterIndexBuffer().addLayoutBinding( bindings, index, shaderStages );
+		frustumClusters.getSpotLightClusterGridBuffer().addLayoutBinding( bindings, index, shaderStages );
 	}
 
 	void NodesPass::addShadowDescriptorWrites( RenderSystem const & renderSystem
@@ -365,6 +322,30 @@ namespace c3d
 #endif
 	}
 
+	void NodesPass::addShadowDescriptorWrites( RenderSystem const & renderSystem
+		, crg::RunnableGraph & graph
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer
+		, uint32_t & index )
+	{
+#if !C3D_DebugDisableShadowMaps
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+		{
+			for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
+			{
+				auto const & result = shadowMapRef.get().getShadowPassResult( false );
+				result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, result.getSampler( SmTexture::eVariance ), index );
+				result.getTexture( SmTexture::eLinearDepth ).addTextureDescriptorWrite( descriptorWrites, index );// Compare sampler
+				result.getTexture( SmTexture::eVariance ).addTextureDescriptorWrite( descriptorWrites, index );
+			}
+		}
+
+		shadowBuffer.addDescriptorWrite( descriptorWrites, index );
+		renderSystem.getRandomStorage().addDescriptorWrite( descriptorWrites, index );
+#endif
+	}
+
 	void NodesPass::addBackgroundDescriptorWrites( SceneBackground const & background
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, Texture * targetImage
@@ -395,13 +376,15 @@ namespace c3d
 		{
 			if ( indirectLighting.vctConfigUbo )
 			{
-				index += 3u; // VCT: UBO + FirstBounce + SecondBounce.
+				indirectLighting.vctConfigUbo->countDescriptors( index );
+				indirectLighting.vctFirstBounce->countDescriptors( index );
+				indirectLighting.vctSecondaryBounce->countDescriptors( index );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
 				indirectLighting.rsmResult->addTextureDescriptorWrite( descriptorWrites, index );
 			else if ( indirectLighting.rsmResult )
-				++index; // RSM: Result.
+				indirectLighting.rsmResult->countDescriptors( index );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
@@ -420,7 +403,15 @@ namespace c3d
 			}
 			else if ( indirectLighting.lpvConfigUbo )
 			{
-				index += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
+				indirectLighting.lpvConfigUbo->countDescriptors( index );
+
+				if ( indirectLighting.lpvResult )
+				{
+					auto const & lpv = *indirectLighting.lpvResult;
+					lpv.getTexture( LpvTexture::eR ).countDescriptors( index );
+					lpv.getTexture( LpvTexture::eG ).countDescriptors( index );
+					lpv.getTexture( LpvTexture::eB ).countDescriptors( index );
+				}
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
@@ -443,10 +434,18 @@ namespace c3d
 			}
 			else if ( indirectLighting.llpvConfigUbo )
 			{
-				index += 1u; // LLPV: UBO
-				index += 3u; // LLPV: Accum1R + Accum1G + Accum1B.
-				index += 3u; // LLPV: Accum2R + Accum2G + Accum2B.
-				index += 3u; // LLPV: Accum3R + Accum3G + Accum3B.
+				indirectLighting.llpvConfigUbo->countDescriptors( index );
+
+				if ( indirectLighting.llpvResult )
+				{
+					for ( auto const & plpv : *indirectLighting.llpvResult )
+					{
+						auto const & lpv = *plpv;
+						lpv.getTexture( LpvTexture::eR ).countDescriptors( index );
+						lpv.getTexture( LpvTexture::eG ).countDescriptors( index );
+						lpv.getTexture( LpvTexture::eB ).countDescriptors( index );
+					}
+				}
 			}
 		}
 	}
