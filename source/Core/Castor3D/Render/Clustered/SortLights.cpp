@@ -1,26 +1,20 @@
-#include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
+#include "Castor3D/Render/Clustered/SortLights.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
+#include "Castor3D/Render/Passes/BucketMergeSort.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
-#include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
-
-#include <CastorUtils/Design/DataHolder.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 namespace c3d
 {
 	//*********************************************************************************************
 
-	namespace cmpmrt
+	namespace morton
 	{
 		enum class Bindings
 		{
@@ -96,7 +90,7 @@ namespace c3d
 
 					writer.returnStmt( mortonCode );
 				}
-				, sdw::InUVec3{ writer, "quantizedCoord" } );
+			, sdw::InUVec3{ writer, "quantizedCoord" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
 				, [&writer, &allLightsAABB, &c3d_reducedLightsAABB, &c3d_lightsAABBRange, &c3d_clustersData
@@ -132,7 +126,7 @@ namespace c3d
 					}
 					sdwFI
 
-					sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
+						sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
 						auto aabb = writer.declLocale( "threadIndex"
 							, allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex] );
@@ -167,14 +161,20 @@ namespace c3d
 				, crg::cp::Config config )
 				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeLightsMortonCode" ), createShader( device ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
-				, crg::ComputePass{framePass
-					, context
-					, graph
-					, crg::ru::Config{ 1u }
-					, config
-						.isEnabled( crg::IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getGroupCountX( crg::cp::GetGroupCountCallback( [this](){ return doGetGroupsCountX(); } ) )
-						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
+				, crg::ComputePass{ framePass
+				, context
+				, graph
+				, crg::ru::Config{ 1u }
+				, config
+				.isEnabled( crg::IsEnabledCallback( [this]()
+					{
+						return doIsEnabled();
+					} ) )
+				.getGroupCountX( crg::cp::GetGroupCountCallback( [this]()
+					{
+						return doGetGroupsCountX();
+					} ) )
+				.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 				, m_clusters{ clusters }
 			{
 			}
@@ -193,7 +193,7 @@ namespace c3d
 				auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
 				auto totalValues = std::max( pointLightsCount, spoLightsCount );
 				return divRoundUp( totalValues, NumThreads );
-			 }
+			}
 
 		private:
 			FrustumClusters & m_clusters;
@@ -202,38 +202,87 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	ClustersLightSortAttachs createComputeLightsMortonCodePass( crg::FramePassGroup & graph
+	void createComputeLightsMortonCodePass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, PagedBufferBase const & allLightsAABB
 		, BufferBase const & reducedLightsAABB
-		, crg::BufferViewIdArray const & pointLightMortonCodes
-		, crg::BufferViewIdArray const & spotLightMortonCodes
-		, crg::BufferViewIdArray const & pointLightIndices
-		, crg::BufferViewIdArray const & spotLightIndices )
+		, BufferBase & pointLightMortonCodes
+		, BufferBase & spotLightMortonCodes
+		, BufferBase & pointLightIndices
+		, BufferBase & spotLightIndices )
 	{
 		auto & pass = graph.createPass( "ComputeLightsMortonCode"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runGraph )
 			{
-				auto result = makeRawUnique< cmpmrt::FramePass >( framePass
-					, context
-					, runGraph
-					, device
-					, clusters
+				auto result = makeRawUnique< morton::FramePass >( framePass, context, runGraph
+					, device, clusters
 					, crg::cp::Config{} );
 				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		clusters.getClustersUbo().createPassBinding( pass, cmpmrt::Bindings::eClusters );
-		pass.addInputStorageT( *allLightsAABB.getLastAttach(), cmpmrt::Bindings::eAllLightsAABB );
-		pass.addInputStorageT( *reducedLightsAABB.getLastAttach(), cmpmrt::Bindings::eReducedLightsAABB );
-		return { pass.addClearableOutputStorageBufferT( pointLightMortonCodes, cmpmrt::Bindings::ePointLightMortonCodes )
-			, pass.addClearableOutputStorageBufferT( spotLightMortonCodes, cmpmrt::Bindings::eSpotLightMortonCodes )
-			, pass.addClearableOutputStorageBufferT( pointLightIndices, cmpmrt::Bindings::ePointLightIndices )
-			, pass.addClearableOutputStorageBufferT( spotLightIndices, cmpmrt::Bindings::eSpotLightIndices ) };
+		clusters.getClustersUbo().createPassBinding( pass, morton::Bindings::eClusters );
+		pass.addInputStorageT( *allLightsAABB.getLastAttach(), morton::Bindings::eAllLightsAABB );
+		pass.addInputStorageT( *reducedLightsAABB.getLastAttach(), morton::Bindings::eReducedLightsAABB );
+		pointLightMortonCodes.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightMortonCodes.bufferViewId, morton::Bindings::ePointLightMortonCodes ) );
+		spotLightMortonCodes.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightMortonCodes.bufferViewId, morton::Bindings::eSpotLightMortonCodes ) );
+		pointLightIndices.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightIndices.bufferViewId, morton::Bindings::ePointLightIndices ) );
+		spotLightIndices.setLastAttach( pass.addClearableOutputStorageBufferT( spotLightIndices.bufferViewId, morton::Bindings::eSpotLightIndices ) );
+	}
+
+	//*********************************************************************************************
+
+	C3D_API void createSortLightsPasses( crg::FramePassGroup & graph
+		, RenderDevice const & device
+		, crg::ResourcesCache & resources
+		, FrustumClusters & clusters
+		, PagedBufferBase const & allLightsAABB
+		, BufferBase const & reducedLightsAABB
+		, BufferBase & pointLightIndices
+		, BufferBase & spotLightIndices )
+	{
+		BufferT< u32 > pointMortonCodes{ device, resources
+			, cuT( "C3D_PointLightMortonCodes" )
+			, BufferCreateFlags::eNone
+			, MaxLightsCount * 2u // [0, MaxLightsCount[ => base, [MaxLightsCount, MaxLightsCount * 2[ => work
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc };
+		BufferT< u32 > spotMortonCodes{ device, resources
+			, cuT( "C3D_SpotLightMortonCodes" )
+			, BufferCreateFlags::eNone
+			, MaxLightsCount * 2u // [0, MaxLightsCount[ => base, [MaxLightsCount, MaxLightsCount * 2[ => work
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc };
+		createComputeLightsMortonCodePass( graph, device, clusters
+			, allLightsAABB, reducedLightsAABB
+			, pointMortonCodes, spotMortonCodes
+			, pointLightIndices, spotLightIndices );
+
+		auto getPointLightCount = [&clusters]()
+			{
+				return clusters.getScene().getLightCache().getLightsBufferCount( LightType::ePoint );
+			};
+		auto isPointEnabled = [&clusters]()
+			{
+				return clusters.needsLightsUpdate()
+					&& clusters.getScene().getLightCache().getLightsBufferCount( LightType::ePoint ) > 0;
+			};
+		auto getSpotLightCount = [&clusters]()
+			{
+				return clusters.getScene().getLightCache().getLightsBufferCount( LightType::eSpot );
+			};
+		auto isSpotEnabled = [&clusters]()
+			{
+				return clusters.needsLightsUpdate()
+					&& clusters.getScene().getLightCache().getLightsBufferCount( LightType::eSpot ) > 0;
+			};
+		createBucketMergeSortPasses( graph, device, resources, cuT( "PointLights" )
+			, getPointLightCount, isPointEnabled
+			, pointMortonCodes, pointLightIndices );
+		createBucketMergeSortPasses( graph, device, resources, cuT( "SpotLights" )
+			, getSpotLightCount, isSpotEnabled
+			, spotMortonCodes, spotLightIndices );
 	}
 
 	//*********************************************************************************************

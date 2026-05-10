@@ -103,8 +103,6 @@ namespace c3d
 		 */
 		C3D_API static uint32_t getNumNodes( uint32_t numLeaves );
 
-		C3D_API static uint32_t getBucketSortBucketSize();
-
 		Point3ui const & getDimensions()const noexcept
 		{
 			return m_dimensions;
@@ -167,12 +165,12 @@ namespace c3d
 
 		crg::Attachment const & getPointLightIndicesBuffer()const noexcept
 		{
-			return *m_sortAttachsToTmp.pointLightIndices;
+			return *m_pointBuffers.indices.getLastAttach();
 		}
 
 		crg::Attachment const & getSpotLightIndicesBuffer()const noexcept
 		{
-			return *m_sortAttachsToTmp.spotLightIndices;
+			return *m_spotBuffers.indices.getLastAttach();
 		}
 
 		auto & getCamera()const noexcept
@@ -207,19 +205,11 @@ namespace c3d
 			~Buffers()noexcept;
 
 			// Fixed size buffers, related to lights
-			BufferT< u32 > mortonCodes;
-			BufferT< u32 > tmpMortonCodes;
 			BufferT< u32 > indices;
-			BufferT< u32 > tmpIndices;
 			BufferT< AABB > bvh;
 			// Variable size buffers, related to frustum dimensions
 			BufferT< Point2ui > clusterGrid;
 			PagedBufferT< u32 > clusterIndex;
-			//
-			crg::BufferViewIdArray toTmpIndices;
-			crg::BufferViewIdArray fromTmpIndices;
-			crg::BufferViewIdArray toTmpMortonCodes;
-			crg::BufferViewIdArray fromTmpMortonCodes;
 		};
 
 	private:
@@ -229,6 +219,7 @@ namespace c3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		Camera const & m_camera;
 		ClustersConfig const & m_config;
 		bool m_clustersDirty{ true };
@@ -244,7 +235,6 @@ namespace c3d
 		ClustersUbo m_clustersUbo;
 		CameraUbo m_clustersCameraUbo;
 		BufferT< VkDispatchIndirectCommand > m_clustersIndirect;
-		BufferT< s32 > m_mergePathPartitions;
 
 		// Fixed size buffers, related to lights
 		PagedBufferT< AABB > m_allLightsAABBBuffer;
@@ -252,8 +242,6 @@ namespace c3d
 		// Light type specific buffers
 		Buffers m_pointBuffers;
 		Buffers m_spotBuffers;
-		ClustersLightSortAttachs m_sortAttachsToTmp;
-		ClustersLightSortAttachs m_sortAttachsfromTmp;
 		BufferT< uint32_t > m_tmpCounters;
 		Array< BufferT< uint32_t >, 3u > m_counters;
 

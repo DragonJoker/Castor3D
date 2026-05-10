@@ -7,10 +7,8 @@
 #include "Castor3D/Render/Clustered/BuildLightsBVH.hpp"
 #include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsAABB.hpp"
-#include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
-#include "Castor3D/Render/Clustered/MergeSortLights.hpp"
-#include "Castor3D/Render/Clustered/BucketSortLights.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
+#include "Castor3D/Render/Clustered/SortLights.hpp"
 #include "Castor3D/Render/Clustered/SortAssignedLights.hpp"
 #include "Castor3D/Render/Debug/DebugModule.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -47,34 +45,6 @@ namespace c3d
 			1082401,    // 5 levels +32^4
 			34636833,   // 6 levels +32^5
 		};
-
-		static uint32_t getMaxMergePathPartitionsCount()
-		{
-			static uint32_t constexpr NumThreadsPerThreadGroup = 256u;
-			static uint32_t constexpr ElementsPerThread = 8u;
-
-			// The maximum number of elements that need to be sorted.
-			uint32_t maxElements = MaxLightsCount;
-
-			// Radix sort will sort Morton codes (keys) into chunks of BucketSortBucketSize size.
-			uint32_t chunkSize = FrustumClusters::getBucketSortBucketSize();
-			// The number of chunks that need to be merge sorted after Radix sort finishes.
-			uint32_t numChunks = divRoundUp( maxElements, chunkSize );
-			// The number of sort groups that are needed to sort the first set of chunks.
-			// Each sort group will sort 2 chunks. So the maximum number of sort groups is 1/2 of the 
-			// number of chunks.
-			uint32_t maxSortGroups = numChunks / 2u;
-			// The number of merge path partitions per sort group is the total values
-			// to be sorted per sort group (2 chunks) divided by the number of elements 
-			// that can be sorted per thread group. One is added to account for the 
-			// merge path partition at the END of the chunk.
-			uint32_t numMergePathPartitionsPerSortGroup = divRoundUp( chunkSize * 2u, ElementsPerThread * NumThreadsPerThreadGroup ) + 1u;
-
-			// The maximum number of merge path partitions is the number of merge path partitions
-			// needed by a single sort group multiplied by the maximum number of sort groups.
-			return numMergePathPartitionsPerSortGroup * maxSortGroups;
-
-		}
 	}
 
 	//*********************************************************************************************
@@ -82,25 +52,10 @@ namespace c3d
 	FrustumClusters::Buffers::Buffers( RenderDevice const & device
 		, crg::ResourcesCache & resources
 		, String const & name )
-		: mortonCodes{ device, resources
-			, cuT( "C3D_" ) + name + cuT( "LightMortonCodes" )
-			, BufferCreateFlags::eNone
-			, MaxLightsCount
-			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc }
-		, tmpMortonCodes{ device, resources
-			, cuT( "C3D_" ) + name + cuT( "LightTmpMortonCodes" )
-			, BufferCreateFlags::eNone
-			, MaxLightsCount
-			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc }
-		, indices{ device, resources
+		: indices{ device, resources
 			, cuT( "C3D_" ) + name + cuT( "LightIndices" )
 			, BufferCreateFlags::eNone
-			, MaxLightsCount
-			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc }
-		, tmpIndices{ device, resources
-			, cuT( "C3D_" ) + name + cuT( "LightTmpIndices" )
-			, BufferCreateFlags::eNone
-			, MaxLightsCount
+			, MaxLightsCount * 2u // [0, MaxLightsCount[ => base, [MaxLightsCount, MaxLightsCount * 2[ => work
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc }
 		, bvh{ device, resources
 			, cuT( "C3D_" ) + name + cuT( "LightBVH" )
@@ -118,15 +73,8 @@ namespace c3d
 			, ClusterLightsIndicesPageSize
 			, MaxClusterLightsIndicesPageCount
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst }
-		, toTmpIndices{ indices.bufferViewId, tmpIndices.bufferViewId }
-		, fromTmpIndices{ tmpIndices.bufferViewId, indices.bufferViewId }
-		, toTmpMortonCodes{ mortonCodes.bufferViewId, tmpMortonCodes.bufferViewId }
-		, fromTmpMortonCodes{ tmpMortonCodes.bufferViewId, mortonCodes.bufferViewId }
 	{
-		mortonCodes.create();
-		tmpMortonCodes.create();
 		indices.create();
-		tmpIndices.create();
 		bvh.create();
 		clusterGrid.create();
 		clusterIndex.create();
@@ -134,10 +82,7 @@ namespace c3d
 
 	FrustumClusters::Buffers::~Buffers()noexcept
 	{
-		mortonCodes.destroy();
-		tmpMortonCodes.destroy();
 		indices.destroy();
-		tmpIndices.destroy();
 		bvh.destroy();
 		clusterGrid.destroy();
 		clusterIndex.destroy();
@@ -150,6 +95,7 @@ namespace c3d
 		, Camera const & camera
 		, ClustersConfig const & config )
 		: m_device{ device }
+		, m_resources{ resources }
 		, m_camera{ camera }
 		, m_config{ config }
 		, m_clusterSize{ m_clustersDirty, Point2f{} }
@@ -157,53 +103,48 @@ namespace c3d
 		, m_cameraView{ m_clustersDirty, Matrix4x4f{} }
 		, m_clustersUbo{ m_device }
 		, m_clustersCameraUbo{ m_device }
-		, m_clustersIndirect{ m_device, resources
+		, m_clustersIndirect{ m_device, m_resources
 			, cuT( "C3D_ClustersIndirect" )
 			, BufferCreateFlags::eNone
 			, getNumNodes( LightsAABBPageSize * MaxLightsAABBPageCount )
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eIndirectBuffer }
-		, m_mergePathPartitions{ device, resources
-			, cuT( "C3D_MergePathPartitions" )
-			, BufferCreateFlags::eNone
-			, frscls::getMaxMergePathPartitionsCount()
-			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst }
-		, m_allLightsAABBBuffer{ m_device, resources
+		, m_allLightsAABBBuffer{ m_device, m_resources
 			, cuT( "C3D_AllLightsAABB" )
 			, BufferCreateFlags::eNone
 			, LightsAABBPageSize
 			, MaxLightsAABBPageCount
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst }
-		, m_reducedLightsAABBBuffer{ m_device, resources
+		, m_reducedLightsAABBBuffer{ m_device, m_resources
 			, cuT( "C3D_ReducedLightsAABB" )
 			, BufferCreateFlags::eNone
 			, 513u
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst }
-		, m_pointBuffers{ m_device, resources, cuT( "Point" ) }
-		, m_spotBuffers{ m_device, resources, cuT( "Spot" ) }
-		, m_tmpCounters{ m_device, resources
+		, m_pointBuffers{ m_device, m_resources, cuT( "Point" ) }
+		, m_spotBuffers{ m_device, m_resources, cuT( "Spot" ) }
+		, m_tmpCounters{ m_device, m_resources
 			, cuT( "C3D_TmpClustersCounters" )
 			, BufferCreateFlags::eNone
 			, 2u
 			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc }
-		, m_counters{ BufferT< uint32_t >{ m_device, resources
+		, m_counters{ BufferT< uint32_t >{ m_device, m_resources
 				, cuT( "C3D_ClustersCounters0" )
 				, BufferCreateFlags::eNone
 				, 2u
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
 				, MemoryPropertyFlags::eHostVisible }
-			, BufferT< uint32_t >{ m_device, resources
+			, BufferT< uint32_t >{ m_device, m_resources
 				, cuT( "C3D_ClustersCounters1" )
 				, BufferCreateFlags::eNone
 				, 2u
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
 				, MemoryPropertyFlags::eHostVisible }
-			, BufferT< uint32_t >{ m_device, resources
+			, BufferT< uint32_t >{ m_device, m_resources
 				, cuT( "C3D_ClustersCounters2" )
 				, BufferCreateFlags::eNone
 				, 2u
 				, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst
 				, MemoryPropertyFlags::eHostVisible } }
-		, m_aabbBuffer{ m_device, resources
+		, m_aabbBuffer{ m_device, m_resources
 			, cuT( "C3D_ClustersAABB" )
 			, BufferCreateFlags::eNone
 			, MaxClusterCount
@@ -214,7 +155,6 @@ namespace c3d
 		m_counters[1].create();
 		m_counters[2].create();
 		m_clustersIndirect.create();
-		m_mergePathPartitions.create();
 		m_allLightsAABBBuffer.create();
 		m_reducedLightsAABBBuffer.create();
 		m_aabbBuffer.create();
@@ -228,7 +168,6 @@ namespace c3d
 		m_counters[1].destroy();
 		m_counters[2].destroy();
 		m_clustersIndirect.destroy();
-		m_mergePathPartitions.destroy();
 		m_allLightsAABBBuffer.destroy();
 		m_reducedLightsAABBBuffer.destroy();
 		m_aabbBuffer.destroy();
@@ -327,26 +266,13 @@ namespace c3d
 			, m_clustersCameraUbo, m_allLightsAABBBuffer, m_reducedLightsAABBBuffer );
 		createComputeClustersAABBPass( graph, m_device, *this
 			, m_clustersCameraUbo, renderUbo, m_reducedLightsAABBBuffer, m_aabbBuffer );
-		// Compute morton codes, store in src buffers.
-		// Use array attaches to make sure we can link passes.
-		m_sortAttachsToTmp = createComputeLightsMortonCodePass( graph, m_device, *this
-			, m_allLightsAABBBuffer, m_reducedLightsAABBBuffer
-			, m_pointBuffers.toTmpMortonCodes, m_spotBuffers.toTmpMortonCodes
-			, m_pointBuffers.toTmpIndices, m_spotBuffers.toTmpIndices );
-		// Bucket sort src buffers, and store in tmp buffers
-		m_sortAttachsfromTmp = createBucketSortLightsPass( graph, m_device, *this
-			, m_sortAttachsToTmp
-			, m_pointBuffers.fromTmpMortonCodes, m_spotBuffers.fromTmpMortonCodes
-			, m_pointBuffers.fromTmpIndices, m_spotBuffers.fromTmpIndices );
-		// Merge sort tmp buffers, and store back in src buffers (copying if needed).
-		createMergeSortLightsPass( graph, m_device, *this
-			, m_sortAttachsfromTmp, m_sortAttachsToTmp, m_mergePathPartitions );
-		// From now on, we can only use src buffers, which contain sorted morton codes and indices.
-		// Note that we still need to use the array attaches to link passes.
+		createSortLightsPasses( graph, m_device, m_resources, *this, m_allLightsAABBBuffer, m_reducedLightsAABBBuffer
+			, m_pointBuffers.indices, m_spotBuffers.indices );
 		createBuildLightsBVHPass( graph, m_device, *this
-			, m_allLightsAABBBuffer, m_sortAttachsToTmp, m_mergePathPartitions, m_pointBuffers.bvh, m_spotBuffers.bvh );
+			, m_allLightsAABBBuffer, m_pointBuffers.indices, m_spotBuffers.indices
+			, m_pointBuffers.bvh, m_spotBuffers.bvh );
 		createAssignLightsToClustersPass( graph, m_device, *this
-			, m_clustersCameraUbo, m_allLightsAABBBuffer, m_aabbBuffer, m_pointBuffers.bvh, m_spotBuffers.bvh, m_sortAttachsToTmp, m_counters
+			, m_clustersCameraUbo, m_allLightsAABBBuffer, m_aabbBuffer, m_pointBuffers.bvh, m_spotBuffers.bvh, m_pointBuffers.indices, m_spotBuffers.indices, m_counters
 			, m_pointBuffers.clusterIndex, m_spotBuffers.clusterIndex, m_pointBuffers.clusterGrid, m_spotBuffers.clusterGrid
 			, m_tmpCounters );
 		createSortAssignedLightsPass( graph, m_device, *this
@@ -426,11 +352,6 @@ namespace c3d
 		}
 
 		return numNodes;
-	}
-
-	uint32_t FrustumClusters::getBucketSortBucketSize()
-	{
-		return shader::RadixSortT< 4u >::bucketSize;
 	}
 
 	void FrustumClusters::doUpdate( Size const & rawRenderSize

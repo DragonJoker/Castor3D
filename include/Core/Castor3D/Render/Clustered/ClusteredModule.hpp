@@ -55,20 +55,10 @@ namespace c3d
 	using OnClustersBuffersChanged = SignalT< ClustersBuffersChangedFunction >;
 	using OnClustersBuffersChangedConnection = ConnectionT< ClustersBuffersChangedFunction >;
 
-	struct ClustersLightSortAttachs
-	{
-		crg::Attachment const * pointLightMortonCodes{};
-		crg::Attachment const * spotLightMortonCodes{};
-		crg::Attachment const * pointLightIndices{};
-		crg::Attachment const * spotLightIndices{};
-	};
-
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( c3d, ClustersConfig, C3D_API );
 	CU_DeclareSmartPtr( c3d, FrustumClusters, C3D_API );
 	/** @endcond */
-
-	C3D_API u32 getLightsMortonCodeChunkCount( u32 lightCount );
 
 	//@}
 	//@}

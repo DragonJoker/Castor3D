@@ -1,12 +1,9 @@
-#include "Castor3D/Render/Clustered/MergeSortLights.hpp"
+#include "Castor3D/Render/Passes/BucketMergeSort.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
+#include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
@@ -18,6 +15,172 @@ namespace c3d
 {
 	//*********************************************************************************************
 
+	namespace bucket
+	{
+		enum class Bindings
+		{
+			eInOutKeys,
+			eInOutValues
+		};
+
+		static uint32_t getBucketSize()
+		{
+			return shader::RadixSortT< 4u >::bucketSize;
+		}
+
+		static ShaderPtr createShader( RenderDevice const & device )
+		{
+			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
+
+			auto keysBuffer = writer.declStorageBuffer( "c3d_keysBuffer"
+				, Bindings::eInOutKeys
+				, 0u );
+			auto c3d_keys = keysBuffer.declMemberArray< sdw::UInt >( "iok" );
+			keysBuffer.end();
+
+			auto valuesBuffer = writer.declStorageBuffer( "c3d_valuesBuffer"
+				, Bindings::eInOutValues
+				, 0u );
+			auto c3d_values = valuesBuffer.declMemberArray< sdw::UInt >( "iov" );
+			valuesBuffer.end();
+
+			sdw::PushConstantBuffer pcb{ writer, "C3D_DispatchData", "c3d_dispatchData" };
+			auto c3d_numElements = pcb.declMember< sdw::UInt >( "c3d_numElements" );
+			pcb.end();
+
+			shader::RadixSortT< 4u > bucket{ writer, 30u };
+
+			writer.implementMainT< sdw::VoidT >( bucket.threadsCount
+				, [&writer, &bucket, &c3d_numElements, &c3d_keys, &c3d_values]( sdw::ComputeIn const & in )
+				{
+					//// In our case, the input keys are 30-bit morton codes.
+					bucket.sortT( writer
+						, 0_u, c3d_numElements
+						, in.localInvocationIndex, in.globalInvocationID.x()
+						, c3d_keys, 0_u, c3d_keys, sdw::UInt{ MaxLightsCount }
+						, c3d_values, 0_u, c3d_values, sdw::UInt{ MaxLightsCount }, 0xFFFFFFFF_u );
+				} );
+
+			return writer.getBuilder().releaseShader();
+		}
+
+		class FramePass
+			: public crg::RunnablePass
+		{
+		public:
+			FramePass( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph
+				, RenderDevice const & device
+				, GetNumKeysCallback const & getNumKeys
+				, IsEnabledCallback const & isEnabled
+				, String const & name )
+				: crg::RunnablePass{ framePass
+					, context
+					, graph
+					, crg::RunnablePass::Callbacks{}
+						.onInitialise( [this]( uint32_t index ){ return doInitialise( index ); } )
+						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
+						.onRecord( [this]( crg::RecordContext const & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } )
+						.onIsEnabled( [this](){ return doIsEnabled(); } )
+						.onIsComputePass( [](){ return true; } )
+					, crg::ru::Config{ 1u } }
+				, m_getNumKeys{ getNumKeys }
+				, m_isEnabled{ isEnabled }
+				, m_pipeline{ framePass, context, graph, device, this, name }
+			{
+			}
+
+		private:
+			struct Pipeline
+			{
+				ShaderModule shader;
+				ashes::PipelineShaderStageCreateInfoArray createInfo;
+				crg::cp::ConfigData cpConfig;
+				crg::PipelineHolder pipeline;
+
+				Pipeline( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & graph
+					, RenderDevice const & device
+					, FramePass const * parent
+					, String const & name )
+					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "BucketSort/" ) + name, createShader( device ) }
+					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
+					, cpConfig{ crg::defaultV< crg::InitialiseCallback >
+						, nullptr
+						, crg::IsEnabledCallback( [parent]() { return parent->doIsEnabled(); } )
+						, crg::GetPassIndexCallback( []() { return 0u; } )
+						, crg::defaultV< crg::RecordCallback >
+						, crg::defaultV< crg::RecordCallback >
+						, 1u
+						, 1u
+						, 1u }
+					, pipeline{ framePass
+						, context
+						, graph
+						, crg::pp::Config{}
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( createInfo ) )
+							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
+						, VK_PIPELINE_BIND_POINT_COMPUTE
+						, 1u }
+				{
+				}
+			};
+
+		private:
+			struct DispatchData
+			{
+				u32 numElements;
+			};
+
+			GetNumKeysCallback const & m_getNumKeys;
+			IsEnabledCallback const & m_isEnabled;
+			Pipeline m_pipeline;
+
+		private:
+			void doInitialise( uint32_t index )
+			{
+				m_pipeline.pipeline.initialise();
+				doCreatePipeline( index, m_pipeline );
+			}
+
+			bool doIsEnabled()const
+			{
+				return m_isEnabled() && m_getNumKeys() > 0;
+			}
+
+			void doRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index )
+			{
+				// Build bottom level of the BVH.
+				auto lightsCount = m_getNumKeys();
+				auto numThreadGroups = divRoundUp( lightsCount, getBucketSize() );
+				DispatchData data{ lightsCount };
+				m_pipeline.pipeline.recordInto( context, commandBuffer, index );
+				context->vkCmdPushConstants( commandBuffer, m_pipeline.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &data );
+				context->vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
+			}
+
+			void doCreatePipeline( uint32_t index
+				, Pipeline & pipeline )const
+			{
+				auto & program = pipeline.pipeline.getProgram( index );
+				VkComputePipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO
+					, nullptr
+					, 0u
+					, program.front()
+					, pipeline.pipeline.getPipelineLayout()
+					, VkPipeline{}
+					, 0u };
+				pipeline.pipeline.createPipeline( index, createInfo );
+			}
+		};
+	}
+
+	//*********************************************************************************************
+
 	namespace merge
 	{
 		static uint32_t constexpr NumThreadsPerThreadGroup = 256u;
@@ -26,41 +189,53 @@ namespace c3d
 
 		enum class Bindings
 		{
-			eInputKeys,
-			eInputValues,
-			eOutputKeys,
-			eOutputValues,
+			eInOutKeys,
+			eInOutValues,
 			eMergePathPartitions,
 		};
+
+		static uint32_t getMaxMergePathPartitionsCount()
+		{
+			static uint32_t constexpr ElementsPerThread = 8u;
+
+			// The maximum number of elements that need to be sorted.
+			uint32_t maxElements = MaxLightsCount;
+
+			// Radix sort will sort Morton codes (keys) into chunks of BucketSortBucketSize size.
+			uint32_t chunkSize = bucket::getBucketSize();
+			// The number of chunks that need to be merge sorted after Radix sort finishes.
+			uint32_t numChunks = divRoundUp( maxElements, chunkSize );
+			// The number of sort groups that are needed to sort the first set of chunks.
+			// Each sort group will sort 2 chunks. So the maximum number of sort groups is 1/2 of the 
+			// number of chunks.
+			uint32_t maxSortGroups = numChunks / 2u;
+			// The number of merge path partitions per sort group is the total values
+			// to be sorted per sort group (2 chunks) divided by the number of elements 
+			// that can be sorted per thread group. One is added to account for the 
+			// merge path partition at the END of the chunk.
+			uint32_t numMergePathPartitionsPerSortGroup = divRoundUp( chunkSize * 2u, ElementsPerThread * NumThreadsPerThreadGroup ) + 1u;
+
+			// The maximum number of merge path partitions is the number of merge path partitions
+			// needed by a single sort group multiplied by the maximum number of sort groups.
+			return numMergePathPartitionsPerSortGroup * maxSortGroups;
+		}
 
 		static ShaderPtr createShader( RenderDevice const & device
 			, bool mergePathPartitions )
 		{
 			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
-			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
-				, Bindings::eInputKeys
+			auto keysBuffer = writer.declStorageBuffer( "c3d_keysBuffer"
+				, Bindings::eInOutKeys
 				, 0u );
-			auto c3d_inputKeys = inputKeysBuffer.declMemberArray< sdw::UInt >( "ik" );
-			inputKeysBuffer.end();
+			auto c3d_keys = keysBuffer.declMemberArray< sdw::UInt >( "iok" );
+			keysBuffer.end();
 
-			auto inputValuesBuffer = writer.declStorageBuffer( "c3d_inputValuesBuffer"
-				, Bindings::eInputValues
+			auto valuesBuffer = writer.declStorageBuffer( "c3d_valuesBuffer"
+				, Bindings::eInOutValues
 				, 0u );
-			auto c3d_inputValues = inputValuesBuffer.declMemberArray< sdw::UInt >( "iv" );
-			inputValuesBuffer.end();
-
-			auto outputKeysBuffer = writer.declStorageBuffer( "c3d_outputKeysBuffer"
-				, Bindings::eOutputKeys
-				, 0u );
-			auto c3d_outputKeys = outputKeysBuffer.declMemberArray< sdw::UInt >( "ok" );
-			outputKeysBuffer.end();
-
-			auto outputValuesBuffer = writer.declStorageBuffer( "c3d_outputValuesBuffer"
-				, Bindings::eOutputValues
-				, 0u );
-			auto c3d_outputValues = outputValuesBuffer.declMemberArray< sdw::UInt >( "ov" );
-			outputValuesBuffer.end();
+			auto c3d_values = valuesBuffer.declMemberArray< sdw::UInt >( "iov" );
+			valuesBuffer.end();
 
 			auto mergePathPartitionsBuffer = writer.declStorageBuffer( "c3d_mergePathPartitionsBuffer"
 				, Bindings::eMergePathPartitions
@@ -71,6 +246,8 @@ namespace c3d
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DispatchData", "c3d_dispatchData" };
 			auto c3d_numElements = pcb.declMember< sdw::UInt >( "c3d_numElements" );
 			auto c3d_chunkSize = pcb.declMember< sdw::UInt >( "c3d_chunkSize" );
+			auto c3d_inputOffset = pcb.declMember< sdw::Int >( "c3d_inputOffset" );
+			auto c3d_outputOffset = pcb.declMember< sdw::Int >( "c3d_outputOffset" );
 			pcb.end();
 
 			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", NumValuesPerThreadGroup );		// Intermediate keys.		(8,192 Bytes)
@@ -87,13 +264,13 @@ namespace c3d
 			* @param b0 The first element in list B.
 			* @param bCount The number of elements in B.
 			* @param diag The cross diagonal of the merge matrix where the merge path is computed.
-			* @param bUseSharedMem Whether to read from shared memory or global memory.
+			* @param useSharedMem Whether to read from shared memory or global memory.
 			* @return
 			*/
 			auto mergePath = writer.implementFunction< sdw::Int >( "c3d_mergePath"
-				, [&writer, &gsKeys, &c3d_inputKeys]( sdw::Int const & a0, sdw::Int const & aCount
+				, [&writer, &gsKeys, &c3d_keys, &c3d_inputOffset]( sdw::Int const & a0, sdw::Int const & aCount
 					, sdw::Int const & b0, sdw::Int const & bCount
-					, sdw::Int const & diag, sdw::Boolean const & bUseSharedMem )
+					, sdw::Int const & diag, sdw::Boolean const & useSharedMem )
 				{
 					auto begin = writer.declLocale( "begin", max( 0_i, diag - bCount ) );
 					auto end = writer.declLocale( "end", min( diag, aCount ) );
@@ -102,8 +279,8 @@ namespace c3d
 					{
 						// Find the mid-point to start searching from.
 						auto mid = writer.declLocale( "mid", ( begin + end ) >> 1_i );
-						auto a = writer.declLocale( "a", writer.ternary( bUseSharedMem, gsKeys[a0 + mid], c3d_inputKeys[a0 + mid] ) );
-						auto b = writer.declLocale( "b", writer.ternary( bUseSharedMem, gsKeys[b0 + diag - 1 - mid], c3d_inputKeys[b0 + diag - 1 - mid] ) );
+						auto a = writer.declLocale( "a", writer.ternary( useSharedMem, gsKeys[a0 + mid], c3d_keys[c3d_inputOffset + a0 + mid] ) );
+						auto b = writer.declLocale( "b", writer.ternary( useSharedMem, gsKeys[b0 + diag - 1 - mid], c3d_keys[c3d_inputOffset + b0 + diag - 1 - mid] ) );
 
 						sdwIF( writer, a < b )
 						{
@@ -124,12 +301,12 @@ namespace c3d
 				, sdw::InInt{ writer, "b0" }
 				, sdw::InInt{ writer, "bCount" }
 				, sdw::InInt{ writer, "diag" }
-				, sdw::InBoolean{ writer, "bUseSharedMem" } );
+				, sdw::InBoolean{ writer, "useSharedMem" } );
 			/**
 			* Perform a serial merge using shared memory. Write results to global memory.
 			*/
 			auto serialMerge = writer.implementFunction< sdw::Void >( "c3d_serialMerge"
-				, [&writer, &gsKeys, &gsValues, &c3d_outputKeys, &c3d_outputValues]( sdw::Int a0, sdw::Int const & a1
+				, [&writer, &gsKeys, &gsValues, &c3d_keys, &c3d_values, &c3d_outputOffset]( sdw::Int a0, sdw::Int const & a1
 					, sdw::Int b0, sdw::Int const & b1
 					, sdw::Int const & diag
 					, sdw::Int const & numValues, sdw::Int const & out0 )
@@ -144,8 +321,8 @@ namespace c3d
 					{
 						sdwIF( writer, b0 >= b1 || ( a0 < a1 && aKey < bKey ) )
 						{
-							c3d_outputKeys[out0 + diag + i] = aKey;
-							c3d_outputValues[out0 + diag + i] = aValue;
+							c3d_keys[c3d_outputOffset + out0 + diag + i] = aKey;
+							c3d_values[c3d_outputOffset + out0 + diag + i] = aValue;
 
 							++a0;
 
@@ -154,8 +331,8 @@ namespace c3d
 						}
 						sdwELSE
 						{
-							c3d_outputKeys[out0 + diag + i] = bKey;
-							c3d_outputValues[out0 + diag + i] = bValue;
+							c3d_keys[c3d_outputOffset + out0 + diag + i] = bKey;
+							c3d_values[c3d_outputOffset + out0 + diag + i] = bValue;
 
 							++b0;
 
@@ -176,7 +353,7 @@ namespace c3d
 
 			writer.implementMainT< sdw::VoidT >( NumThreadsPerThreadGroup
 				, [&writer, &mergePath, &serialMerge
-					, &c3d_inputKeys, &c3d_inputValues, &gsKeys, &gsValues
+					, &c3d_keys, &c3d_values, &c3d_inputOffset, &gsKeys, &gsValues
 					, &c3d_chunkSize, &c3d_numElements, &c3d_mergePathPartitions
 					, mergePathPartitions]( sdw::ComputeIn const & in )
 				{
@@ -287,13 +464,13 @@ namespace c3d
 
 							sdwIF( writer, a < a1 )
 							{
-								key = c3d_inputKeys[chunkOffsetA0 + a];
-								value = c3d_inputValues[chunkOffsetA0 + a];
+								key = c3d_keys[c3d_inputOffset + chunkOffsetA0 + a];
+								value = c3d_values[c3d_inputOffset + chunkOffsetA0 + a];
 							}
 							sdwELSE
 							{
-								key = c3d_inputKeys[chunkOffsetB0 + b];
-								value = c3d_inputValues[chunkOffsetB0 + b];
+								key = c3d_keys[c3d_inputOffset + chunkOffsetB0 + b];
+								value = c3d_values[c3d_inputOffset + chunkOffsetB0 + b];
 							}
 							sdwFI
 
@@ -322,37 +499,35 @@ namespace c3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, FrustumClusters & clusters
-				, LightType lightType )
+				, GetNumKeysCallback const & getNumKeys
+				, IsEnabledCallback const & isEnabled
+				, String const & name )
 				: crg::RunnablePass{ framePass
 					, context
 					, graph
 					, crg::RunnablePass::Callbacks{}
 						.onInitialise( [this]( uint32_t index ){ doInitialise( index ); } )
 						.onGetPipelineState( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
-						.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
+						.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t ){ doRecordInto( recContext, cb ); } )
 						.onIsEnabled( [this](){ return doIsEnabled(); } )
 						.onIsComputePass( [](){ return true; } )
-					, crg::ru::Config{ 1u, true /* resettable */ } }
-				, m_clusters{ clusters }
-				, m_lightCache{ clusters.getScene().getLightCache() }
-				, m_lightType{ lightType }
-				, m_partitions{ framePass, context, graph, device, true, this, m_lightType }
-				, m_merge{ framePass, context, graph, device, false, this, m_lightType }
+					, crg::ru::Config{ 1u } }
+				, m_partitions{ framePass, context, graph, device, true, this, name }
+				, m_merge{ framePass, context, graph, device, false, this, name }
+				, m_getNumKeys{ getNumKeys }
+				, m_isEnabled{ isEnabled }
 			{
-			}
-
-			void resetPipeline( uint32_t index )
-			{
-				resetCommandBuffer( index );
-				m_partitions.pipeline.resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_partitions.createInfo ), index );
-				m_merge.pipeline.resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_merge.createInfo ), index );
-				doCreatePipeline( index, m_partitions );
-				doCreatePipeline( index, m_merge );
-				reRecordCurrent();
 			}
 
 		private:
+			struct DispatchData
+			{
+				u32 numElements;
+				u32 chunkSize;
+				s32 inputOffset;
+				s32 outputOffset;
+			};
+
 			struct Pipeline
 			{
 				ShaderModule shader;
@@ -366,14 +541,14 @@ namespace c3d
 					, RenderDevice const & device
 					, bool mergePathPartitions
 					, FramePass const * parent
-					, LightType lightType )
+					, String const & name )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT
-						, ( mergePathPartitions ? String{ cuT( "MergePathPartitions/" ) } : String{ cuT( "MergeSort/" ) } ) + getName( lightType )
+						, ( mergePathPartitions ? String{ cuT( "MergePathPartitions/" ) } : String{ cuT( "MergeSort" ) } ) + name
 						, createShader( device, mergePathPartitions ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::defaultV< crg::InitialiseCallback >
 						, nullptr
-						, crg::IsEnabledCallback( [parent](){ return parent->doIsEnabled();} )
+						, crg::IsEnabledCallback( [parent](){ return parent->doIsEnabled(); } )
 						, crg::defaultV< crg::GetPassIndexCallback >
 						, crg::defaultV< crg::RecordCallback >
 						, crg::defaultV< crg::RecordCallback >
@@ -385,7 +560,7 @@ namespace c3d
 						, graph
 						, crg::pp::Config{}
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( createInfo ) )
-							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
+							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( DispatchData ) } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
 						, 2u }
 				{
@@ -393,17 +568,10 @@ namespace c3d
 			};
 
 		private:
-			struct DispatchData
-			{
-				u32 numElements;
-				u32 chunkSize;
-			};
-
-			FrustumClusters & m_clusters;
-			LightCache const & m_lightCache;
-			LightType m_lightType;
 			Pipeline m_partitions;
 			Pipeline m_merge;
+			GetNumKeysCallback m_getNumKeys;
+			IsEnabledCallback m_isEnabled;
 
 		private:
 			void doInitialise( uint32_t index )
@@ -416,18 +584,16 @@ namespace c3d
 
 			bool doIsEnabled()const
 			{
-				return m_clusters.needsLightsUpdate()
-					&& m_lightCache.getLightsBufferCount( m_lightType ) > 0;
+				return m_isEnabled() && m_getNumKeys() > 0;
 			}
 
 			void doRecordInto( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, VkCommandBuffer commandBuffer )
 			{
-				auto & inMortonAttach = *getPass().getInputs().find( uint32_t( merge::Bindings::eInputKeys ) )->second;
-				auto & inIndicesAttach = *getPass().getInputs().find( uint32_t( merge::Bindings::eInputValues ) )->second;
-				auto & outMortonAttach = *getPass().getOutputs().find( uint32_t( merge::Bindings::eOutputKeys ) )->second;
-				auto & outIndicesAttach = *getPass().getOutputs().find( uint32_t( merge::Bindings::eOutputValues ) )->second;
+				auto & mortonAttach = *getPass().getInouts().find( uint32_t( merge::Bindings::eInOutKeys ) )->second;
+				auto & indicesAttach = *getPass().getInouts().find( uint32_t( merge::Bindings::eInOutValues ) )->second;
+				u32 srcOffset = MaxLightsCount;
+				u32 dstOffset = 0u;
 
 				// The number of threads per thread group.
 				constexpr u32 threadsPerThreadGroupCount = NumThreadsPerThreadGroup;
@@ -436,18 +602,23 @@ namespace c3d
 				// The number of values that each thread group will sort.
 				constexpr u32 valuesPerThreadGroupCount = threadsPerThreadGroupCount * valuesPerThreadCount;
 
-				auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
+				auto totalValues = m_getNumKeys();
 				DispatchData data{ totalValues, 0u };
 
 				// The size of a single chunk that keys will be sorted into.
-				auto chunkSize = FrustumClusters::getBucketSortBucketSize();
+				auto chunkSize = bucket::getBucketSize();
 
 				// The total number of complete chunks to sort.
-				auto chunksCount = getLightsMortonCodeChunkCount( totalValues );
+				auto chunksCount = divRoundUp( totalValues, merge::NumThreadsPerThreadGroup );
 
+				u32 index{};
 				while ( chunksCount > 1u )
 				{
+					context->vkCmdBeginDebugBlock( commandBuffer
+						, crg::DebugBlockInfo{ .markerName = "Subpass " + std::to_string( index ), .colour = getTimer().getColour() } );
 					data.chunkSize = chunkSize;
+					data.inputOffset = s32( srcOffset );
+					data.outputOffset = s32( dstOffset );
 
 					// Number of sort groups required to sort all chunks.
 					// Each sort group merge sorts 2 chunks into a single chunk.
@@ -465,9 +636,9 @@ namespace c3d
 						// The number of thread groups needed to compute all merge path partitions.
 						auto threadGroupsCount = divRoundUp( totalMergePathPartitions, threadsPerThreadGroupCount );
 
-						doMergeTransitionBarrier( context, commandBuffer, index );
-						m_partitions.pipeline.recordInto( context, commandBuffer, index );
-						context->vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
+						doMergeTransitionBarrier( context, commandBuffer );
+						m_partitions.pipeline.recordInto( context, commandBuffer, 0u );
+						context->vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( DispatchData ), &data );
 						context->vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
 					}
 
@@ -481,9 +652,9 @@ namespace c3d
 							, std::min( threadGroupsPerSortGroupCount * sortGroupsCount
 								, divRoundUp( totalValues, valuesPerThreadGroupCount ) ) );
 
-						doAllBarriers( context, commandBuffer, index );
-						m_merge.pipeline.recordInto( context, commandBuffer, index );
-						context->vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
+						doAllBarriers( context, commandBuffer );
+						m_merge.pipeline.recordInto( context, commandBuffer, 0u );
+						context->vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( DispatchData ), &data );
 						context->vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
 					}
 
@@ -493,51 +664,49 @@ namespace c3d
 						// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
 						u32 lastChunkOffset = chunkSize * ( chunksCount - 1 ) * sizeof( u32 );
 						auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
-						auto srcMorton = inMortonAttach.buffer( index );
-						auto srcIndices = inIndicesAttach.buffer( index );
-						auto dstMorton = outMortonAttach.buffer( index );
-						auto dstIndices = outIndicesAttach.buffer( index );
+						auto srcCopyOffset = lastChunkOffset + srcOffset * sizeof( u32 );
+						auto dstCopyOffset = lastChunkOffset + dstOffset * sizeof( u32 );
+						auto morton = mortonAttach.buffer();
+						auto indices = indicesAttach.buffer();
 						context.copyBuffer( commandBuffer, index
-							, srcMorton, dstMorton
-							, lastChunkOffset, lastChunkOffset, lastChunkSize );
+							, morton, morton
+							, srcCopyOffset, dstCopyOffset, lastChunkSize );
 						context.copyBuffer( commandBuffer, index
-							, srcIndices, dstIndices
-							, lastChunkOffset, lastChunkOffset, lastChunkSize );
+							, indices, indices
+							, srcCopyOffset, dstCopyOffset, lastChunkSize );
 					}
 
 					// Ping-pong the buffers
-					index = 1u - index;
+					std::swap( srcOffset, dstOffset );
+					++index;
+
+					context->vkCmdEndDebugBlock( commandBuffer );
 
 					chunkSize *= 2;
 					chunksCount = divRoundUp( totalValues, chunkSize );
 				}
 
-				auto finalIndices = outIndicesAttach.buffer( 0u );
-				auto currentIndices = outIndicesAttach.buffer( 1u - index );
-				if ( finalIndices != currentIndices )
+				if ( dstOffset != 0u )
 				{
+					auto indices = indicesAttach.buffer();
+
 					// Copy temp indices buffer into final indices buffer, if needed.
-					auto srcCurrentState = context.getAccessState( currentIndices.data->buffer, inIndicesAttach.getBufferRange() );
-					context.memoryBarrier( commandBuffer, currentIndices.data->buffer, inIndicesAttach.getBufferRange(), srcCurrentState, TransferReadState, true );
+					auto currentState = context.getAccessState( indices.data->buffer, indicesAttach.getBufferRange() );
+					context.memoryBarrier( commandBuffer, indices.data->buffer, indicesAttach.getBufferRange(), currentState, TransferReadWriteState, true );
 
-					auto dstCurrentState = context.getAccessState( finalIndices.data->buffer, outIndicesAttach.getBufferRange() );
-					context.memoryBarrier( commandBuffer, finalIndices.data->buffer, outIndicesAttach.getBufferRange(), dstCurrentState, TransferWriteState, true );
+					auto buffer = &getGraph().createBuffer( indices.data->buffer );
+					VkBufferCopy copyRegion{ dstOffset, srcOffset, totalValues * sizeof( u32 ) };
+					context->vkCmdCopyBuffer( commandBuffer, buffer->getBuffer(), buffer->getBuffer(), 1u, &copyRegion );
 
-					auto srcBuffer = &getGraph().createBuffer( currentIndices.data->buffer );
-					auto dstBuffer = &getGraph().createBuffer( finalIndices.data->buffer );
-					VkBufferCopy copyRegion{ 0u, 0u, totalValues * sizeof( u32 ) };
-					context->vkCmdCopyBuffer( commandBuffer, srcBuffer->getBuffer(), dstBuffer->getBuffer(), 1u, &copyRegion );
-
-					context.memoryBarrier( commandBuffer, finalIndices.data->buffer, outIndicesAttach.getBufferRange(), dstCurrentState, ComputeShaderReadWriteState, true );
+					context.memoryBarrier( commandBuffer, indices.data->buffer, indicesAttach.getBufferRange(), currentState, ComputeShaderReadWriteState, true );
 				}
 			}
 
 			void doMergeTransitionBarrier( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t passIndex )const
+				, VkCommandBuffer commandBuffer )const
 			{
 				auto & attach = *getPass().getOutputs().rbegin()->second;
-				auto buffer = attach.buffer( passIndex );
+				auto buffer = attach.buffer();
 				auto currentState = context.getAccessState( buffer.data->buffer, attach.getBufferRange() );
 				context.memoryBarrier( commandBuffer
 					, buffer.data->buffer, attach.getBufferRange()
@@ -546,8 +715,7 @@ namespace c3d
 			}
 
 			void doAllBarriers( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t passIndex )const
+				, VkCommandBuffer commandBuffer )const
 			{
 				uint32_t bufferIndex{};
 
@@ -556,26 +724,9 @@ namespace c3d
 					if ( !attach->isNoTransition()
 						&& attach->isStorageBuffer() )
 					{
-						auto buffer = attach->buffer( passIndex );
+						auto buffer = attach->buffer();
 						auto currentState = context.getAccessState( buffer.data->buffer, attach->getBufferRange() );
-						AccessState dstState;
-
-						if ( bufferIndex < 2u )
-						{
-							// Input buffer
-							dstState = ComputeShaderReadState;
-						}
-						else if ( bufferIndex < 4u )
-						{
-							// Output buffer
-							dstState = ComputeShaderWriteState;
-						}
-						else
-						{
-							// Merge Path Transition Buffer
-							dstState = ComputeShaderReadWriteState;
-						}
-
+						AccessState dstState = ComputeShaderReadWriteState;
 						context.memoryBarrier( commandBuffer
 							, buffer.data->buffer
 							, attach->getBufferRange()
@@ -606,71 +757,48 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	u32 getLightsMortonCodeChunkCount( u32 lightCount )
-	{
-		auto chunkSize = merge::NumThreadsPerThreadGroup;
-
-		// The total number of complete chunks to sort.
-		auto numChunks = divRoundUp( lightCount, chunkSize );
-
-		return numChunks;
-	}
-
-	void createMergeSortLightsPass( crg::FramePassGroup & graph
+	void createBucketMergeSortPasses( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters
-		, ClustersLightSortAttachs const & inputSortAttachs
-		, ClustersLightSortAttachs & outputSortAttachs
-		, BufferBase & mergePathPartitions )
+		, crg::ResourcesCache & resources
+		, String const & name
+		, GetNumKeysCallback const & getNumKeys
+		, IsEnabledCallback const & isEnabled
+		, BufferBase & keys
+		, BufferBase & values )
 	{
-		crg::Attachment const * mergePathPartitionsAttach{};
-		{
-			// Point lights
-			auto & point = graph.createPass( "MergeSort/Point"
-				, [&clusters, &device]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & runnableGraph )
-				{
-					auto runPass = makeRawUnique< merge::FramePass >( framePass
-						, context
-						, runnableGraph
-						, device
-						, clusters
-						, LightType::ePoint );
-					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
-						, runPass->getTimer() );
-					return runPass;
-				} );
-			point.addInputStorageT( *inputSortAttachs.pointLightMortonCodes, merge::Bindings::eInputKeys );
-			point.addInputStorageT( *inputSortAttachs.pointLightIndices, merge::Bindings::eInputValues );
-			outputSortAttachs.pointLightMortonCodes = point.addOutputStorageBufferT( outputSortAttachs.pointLightMortonCodes->bufferAttach.buffers, merge::Bindings::eOutputKeys );
-			outputSortAttachs.pointLightIndices = point.addOutputStorageBufferT( outputSortAttachs.pointLightIndices->bufferAttach.buffers, merge::Bindings::eOutputValues );
-			mergePathPartitionsAttach = point.addClearableOutputStorageBufferT( mergePathPartitions.bufferViewId, merge::Bindings::eMergePathPartitions );
-		}
-		{
-			// Spot lights
-			auto & spot = graph.createPass( "MergeSort/Spot"
-				, [&clusters, &device]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & runnableGraph )
-				{
-					auto runPass = makeRawUnique< merge::FramePass >( framePass
-						, context
-						, runnableGraph
-						, device
-						, clusters
-						, LightType::eSpot );
-					c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
-						, runPass->getTimer() );
-					return runPass;
-				} );
-			spot.addImplicit( *mergePathPartitionsAttach, AccessState{} );
-			spot.addInputStorageT( *inputSortAttachs.spotLightMortonCodes, merge::Bindings::eInputKeys );
-			spot.addInputStorageT( *inputSortAttachs.spotLightIndices, merge::Bindings::eInputValues );
-			outputSortAttachs.spotLightMortonCodes = spot.addOutputStorageBufferT( outputSortAttachs.spotLightMortonCodes->bufferAttach.buffers, merge::Bindings::eOutputKeys );
-			outputSortAttachs.spotLightIndices = spot.addOutputStorageBufferT( outputSortAttachs.spotLightIndices->bufferAttach.buffers, merge::Bindings::eOutputValues );
-			mergePathPartitions.setLastAttach( spot.addClearableOutputStorageBufferT( mergePathPartitions.bufferViewId, merge::Bindings::eMergePathPartitions ) );
-		}
+		auto & bucketSort = graph.createPass( "BucketSort/" + name
+			, [getNumKeys, isEnabled, &device, name]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				auto runPass = makeRawUnique< bucket::FramePass >( framePass, context, runnableGraph
+					, device, getNumKeys, isEnabled, name );
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
+					, runPass->getTimer() );
+				return runPass;
+			} );
+		keys.setLastAttach( bucketSort.addInOutStorageT( *keys.getLastAttach(), bucket::Bindings::eInOutKeys ) );
+		values.setLastAttach( bucketSort.addInOutStorageT( *values.getLastAttach(), bucket::Bindings::eInOutValues ) );
+
+		BufferT< s32 > mergePathPartitions{ device, resources
+			, cuT( "C3D_" ) + name + cuT( "MergePathPartitions" )
+			, BufferCreateFlags::eNone
+			, merge::getMaxMergePathPartitionsCount()
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst };
+		auto & mergeSort = graph.createPass( "MergeSort/" + name
+			, [getNumKeys, isEnabled, &device, name]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				auto runPass = makeRawUnique< merge::FramePass >( framePass, context, runnableGraph
+					, device, getNumKeys, isEnabled, name );
+				c3d::getEngine( device ).registerTimer( makeString( framePass.getFullName() )
+					, runPass->getTimer() );
+				return runPass;
+			} );
+		keys.setLastAttach( mergeSort.addInOutStorageT( *keys.getLastAttach(), merge::Bindings::eInOutKeys ) );
+		values.setLastAttach( mergeSort.addInOutStorageT( *values.getLastAttach(), merge::Bindings::eInOutValues ) );
+		mergeSort.addClearableOutputStorageBufferT( mergePathPartitions.bufferViewId, merge::Bindings::eMergePathPartitions );
 	}
 
 	//*********************************************************************************************

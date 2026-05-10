@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/Shaders/GlslBuffer.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
@@ -14,27 +15,32 @@ See LICENSE file in root folder
 namespace c3d::shader
 {
 	class ClusterLightsIndices
+		: public PagedBufferT< sdw::UInt >
 	{
 	private:
-		C3D_API ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, bool enabled, uint32_t pageSize, uint32_t binding, uint32_t set );
+		C3D_API ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, bool enabled, uint32_t binding, uint32_t set );
 
 	public:
-		C3D_API ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, uint32_t pageSize, uint32_t & binding, uint32_t set, bool enabled = true );
+		C3D_API ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, uint32_t & binding, uint32_t set, bool enabled = true );
 
 		template< typename BindingT >
-		ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, uint32_t pageSize, BindingT binding, uint32_t set, bool enabled = true )
-			: ClusterLightsIndices{ writer, name, enabled, pageSize, uint32_t( binding ), set }
+		ClusterLightsIndices( sdw::ShaderWriter & writer, MbString const & name, BindingT binding, uint32_t set, bool enabled = true )
+			: ClusterLightsIndices{ writer, name, enabled, uint32_t( binding ), set }
 		{
 		}
+	};
 
-		sdw::ReturnWrapperT< sdw::UInt > operator[]( sdw::UInt const & index )const;
-		sdw::ReturnWrapperT< sdw::UInt > operator[]( sdw::Int const & index )const;
-		sdw::ReturnWrapperT< sdw::UInt > operator[]( uint32_t index )const;
+	class AllLightsAABB
+		: public PagedBufferT< AABB >
+	{
+	public:
+		C3D_API AllLightsAABB( sdw::ShaderWriter & writer, uint32_t binding, uint32_t set, bool enabled = true );
 
-	private:
-		sdw::ShaderWriter & m_writer;
-		uint32_t m_pageSize;
-		sdw::Array< sdw::ArrayStorageBufferT< sdw::UInt > > m_buffers;
+		template< typename BindingT >
+		AllLightsAABB( sdw::ShaderWriter & writer, BindingT binding, uint32_t set, bool enabled = true )
+			: AllLightsAABB{ writer, uint32_t( binding ), set, enabled }
+		{
+		}
 	};
 
 	C3D_API sdw::UInt loadValue( shader::ClusterLightsIndices const & buffer
@@ -103,29 +109,6 @@ namespace c3d::shader
 		RawUniquePtr< sdw::U32Vec2Array > m_pointLightClusters;
 		RawUniquePtr< ClusterLightsIndices > m_spotLightIndices;
 		RawUniquePtr< sdw::U32Vec2Array > m_spotLightClusters;
-	};
-
-	class AllLightsAABB
-	{
-	public:
-		C3D_API AllLightsAABB( sdw::ShaderWriter & writer, uint32_t binding, uint32_t set, bool enabled = true );
-
-		template< typename BindingT >
-		AllLightsAABB( sdw::ShaderWriter & writer, BindingT binding, uint32_t set, bool enabled = true )
-			: AllLightsAABB{ writer, uint32_t( binding ), set, enabled }
-		{
-		}
-
-		sdw::ReturnWrapperT< AABB > operator[]( sdw::UInt const & index )const;
-		sdw::ReturnWrapperT< AABB > operator[]( sdw::Int const & index )const;
-		sdw::ReturnWrapperT< AABB > operator[]( uint32_t index )const;
-
-		AABB loadInPage( sdw::UInt const & page, sdw::UInt const & index )const;
-		void storeInPage( sdw::UInt const & page, sdw::UInt const & index, AABB const & aabb )const;
-
-	private:
-		sdw::ShaderWriter & m_writer;
-		sdw::Array< sdw::ArrayStorageBufferT< c3d::shader::AABB > > m_buffers;
 	};
 
 #define C3D_ClustersAABB( writer, binding, set ) \

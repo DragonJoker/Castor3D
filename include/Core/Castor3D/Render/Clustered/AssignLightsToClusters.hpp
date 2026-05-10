@@ -16,7 +16,8 @@ namespace c3d
 		, BufferBase const & clustersAABB
 		, BufferBase const & pointLightBVH
 		, BufferBase const & spotLightBVH
-		, ClustersLightSortAttachs const & outputSortAttachs
+		, BufferBase const & pointLightIndices
+		, BufferBase const & spotLightIndices
 		, Array< BufferT< uint32_t >, 3u > const & counters
 		, PagedBufferBase & pointLightClusterIndex
 		, PagedBufferBase & spotLightClusterIndex

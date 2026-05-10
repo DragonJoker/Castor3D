@@ -124,6 +124,7 @@ namespace c3d
 	static constexpr AccessState DrawIndirectCommandState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect };
 	static constexpr AccessState TransferReadState{ AccessFlags::eTransferRead, PipelineStageFlags::eTransfer };
 	static constexpr AccessState TransferWriteState{ AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer };
+	static constexpr AccessState TransferReadWriteState{ AccessFlags::eTransferRead | AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer };
 	static constexpr AccessState HostWriteState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost };
 
 	using crg::FramePassTimer;

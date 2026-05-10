@@ -42,7 +42,7 @@ namespace c3d
 				, BindingPoints::eClusterGrid
 				, 0u );
 			shader::ClusterLightsIndices lightClusterIndices{ writer
-				, "c3d_lightClusterIndices", ClusterLightsIndicesPageSize
+				, "c3d_lightClusterIndices"
 				, BindingPoints::eClusterIndex
 				, 0u };
 

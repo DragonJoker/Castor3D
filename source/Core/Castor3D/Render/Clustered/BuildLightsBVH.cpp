@@ -281,23 +281,13 @@ namespace c3d
 						.onRecord( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
 						.onIsEnabled( [this](){ return doIsEnabled(); } )
 						.onIsComputePass( [](){ return true; } )
-					, crg::ru::Config{ 1u, true /* resettable */ } }
+					, crg::ru::Config{ 1u } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getScene().getLightCache() }
 				, m_lightType{ lightType }
 				, m_bottom{ framePass, context, graph, device, true, this, m_lightType }
 				, m_top{ framePass, context, graph, device, false, this, m_lightType }
 			{
-			}
-
-			CRG_API void resetPipeline( uint32_t index )
-			{
-				resetCommandBuffer( index );
-				m_bottom.pipeline.resetPipeline( m_bottom.pipeline.getProgram( index ), index );
-				m_top.pipeline.resetPipeline( m_top.pipeline.getProgram( index ), index );
-				doCreatePipeline( index, m_bottom );
-				doCreatePipeline( index, m_top );
-				reRecordCurrent();
 			}
 
 		private:
@@ -545,8 +535,8 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, PagedBufferBase const & allLightsAABB
-		, ClustersLightSortAttachs const & outputSortAttachs
-		, BufferBase const & mergePathPartitions
+		, BufferBase const & pointLightIndices
+		, BufferBase const & spotLightIndices
 		, BufferBase & pointLightBVH
 		, BufferBase & spotLightBVH )
 	{
@@ -568,10 +558,8 @@ namespace c3d
 					return runPass;
 				} );
 			clusters.getClustersUbo().createPassBinding( point, lgtbvh::Bindings::eClusters );
-			point.addImplicit( *mergePathPartitions.getLastAttach(), AccessState{} );
-			point.addImplicit( *outputSortAttachs.pointLightMortonCodes, AccessState{} );
 			point.addInputStorageT( *allLightsAABB.getLastAttach(), lgtbvh::Bindings::eAllLightsAABB );
-			point.addInputStorageT( *outputSortAttachs.pointLightIndices, lgtbvh::Bindings::eLightIndices );
+			point.addInputStorageT( *pointLightIndices.getLastAttach(), lgtbvh::Bindings::eLightIndices );
 			pointLightBVH.setLastAttach( point.addClearableOutputStorageBufferT( pointLightBVH.bufferViewId, lgtbvh::Bindings::eLightBVH ) );
 		}
 		{
@@ -592,9 +580,8 @@ namespace c3d
 					return runPass;
 				} );
 			clusters.getClustersUbo().createPassBinding( spot, lgtbvh::Bindings::eClusters );
-			spot.addImplicit( *outputSortAttachs.spotLightMortonCodes, AccessState{} );
 			spot.addInputStorageT( *allLightsAABB.getLastAttach(), lgtbvh::Bindings::eAllLightsAABB );
-			spot.addInputStorageT( *outputSortAttachs.spotLightIndices, lgtbvh::Bindings::eLightIndices );
+			spot.addInputStorageT( *spotLightIndices.getLastAttach(), lgtbvh::Bindings::eLightIndices );
 			spotLightBVH.setLastAttach( spot.addClearableOutputStorageBufferT( spotLightBVH.bufferViewId, lgtbvh::Bindings::eLightBVH ) );
 		}
 	}

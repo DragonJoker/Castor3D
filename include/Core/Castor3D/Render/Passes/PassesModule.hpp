@@ -193,6 +193,9 @@ namespace c3d
 	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );
 	/** @endcond */
 
+	using GetNumKeysCallback = Function< u32() >;
+	using IsEnabledCallback = Function< bool() >;
+
 	//@}
 	//@}
 }

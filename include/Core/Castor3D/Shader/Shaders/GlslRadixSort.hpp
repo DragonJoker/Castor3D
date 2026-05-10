@@ -37,10 +37,10 @@ namespace c3d::shader
 			, sdw::UInt const & elementCount
 			, sdw::UInt const & groupIndex
 			, sdw::UInt const & threadIndex
-			, ArrayT< sdw::UInt > const & inputKeys
-			, ArrayT< sdw::UInt > const & outputKeys
-			, ArrayT< ValueT > const & inputValues
-			, ArrayT< ValueT > const & outputValues
+			, ArrayT< sdw::UInt > const & inputKeys, sdw::UInt const & inputKeysOffset
+			, ArrayT< sdw::UInt > const & outputKeys, sdw::UInt const & outputKeysOffset
+			, ArrayT< ValueT > const & inputValues, sdw::UInt const & inputValuesOffset
+			, ArrayT< ValueT > const & outputValues, sdw::UInt const & outputValuesOffset
 			, ValueT const & invalidValue )const
 		{
 			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", threadsCount ); // A temporary buffer to store the input keys. (threadsCount * sizeof(uint) Bytes)
@@ -51,8 +51,8 @@ namespace c3d::shader
 			auto gsTotalFalses = writer.declSharedVariable< sdw::UInt >( "gsTotalFalses" ); // The result of e[threadsCount - 1] + f[threadsCount - 1]; (4 Bytes)
 
 			// Store the input key and values into shared memory.
-			gsKeys[groupIndex] = writer.ternary( threadIndex < elementCount, inputKeys[elementOffset + threadIndex], m_maxUInt );
-			gsValues[groupIndex] = writer.ternary( threadIndex < elementCount, inputValues[elementOffset + threadIndex], invalidValue );
+			gsKeys[groupIndex] = writer.ternary( threadIndex < elementCount, inputKeys[inputKeysOffset + elementOffset + threadIndex], m_maxUInt );
+			gsValues[groupIndex] = writer.ternary( threadIndex < elementCount, inputValues[inputValuesOffset + elementOffset + threadIndex], invalidValue );
 
 			// Loop over the bits starting at the least-significant bit.
 			sdwFOR( writer, sdw::UInt, b, 0_u, b < m_sortBits, ++b )
@@ -141,8 +141,8 @@ namespace c3d::shader
 			sdwROF
 
 			// Now commit the results to global memory.
-			outputKeys[elementOffset + threadIndex] = gsKeys[groupIndex];
-			outputValues[elementOffset + threadIndex] = gsValues[groupIndex];
+			outputKeys[outputKeysOffset + elementOffset + threadIndex] = gsKeys[groupIndex];
+			outputValues[outputValuesOffset + elementOffset + threadIndex] = gsValues[groupIndex];
 		}
 		/**
 		 *\arg	ValueT		The value type.
@@ -162,8 +162,8 @@ namespace c3d::shader
 			sortT( writer
 				, elementOffset, elementCount
 				, groupIndex, threadIndex
-				, inputKeys, outputKeys
-				, inputValues, outputValues
+				, inputKeys, 0_u, outputKeys, 0_u
+				, inputValues, 0_u, outputValues, 0_u
 				, invalidValue );
 		}
 

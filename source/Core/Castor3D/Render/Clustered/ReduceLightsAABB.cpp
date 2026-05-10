@@ -291,14 +291,6 @@ namespace c3d
 			{
 			}
 
-			void resetPipeline( uint32_t passIndex )
-			{
-				resetCommandBuffer( passIndex );
-				m_pipeline.resetPipeline( doCreateProgram( passIndex ), passIndex );
-				doCreatePipeline( passIndex );
-				reRecordCurrent();
-			}
-
 		private:
 			struct ProgramData
 			{
@@ -445,14 +437,6 @@ namespace c3d
 					, VK_PIPELINE_BIND_POINT_COMPUTE
 					, 2u }
 			{
-			}
-
-			void resetPipeline( uint32_t passIndex )
-			{
-				resetCommandBuffer( passIndex );
-				m_pipeline.resetPipeline( doCreateProgram( passIndex ), passIndex );
-				doCreatePipeline( passIndex );
-				reRecordCurrent();
 			}
 
 		private:

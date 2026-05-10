@@ -94,11 +94,11 @@ namespace c3d
 			auto c3d_spotLightClusterListCount = countersBuffer.declMember< sdw::UInt >( "c3d_spotLightClusterListCount" );
 			countersBuffer.end();
 			shader::ClusterLightsIndices pointLightClusterIndices{ writer
-				, "c3d_pointLightClusterIndices", ClusterLightsIndicesPageSize
+				, "c3d_pointLightClusterIndices"
 				, Bindings::ePointLightClusterIndex
 				, 0u };
 			shader::ClusterLightsIndices spotLightClusterIndices{ writer
-				, "c3d_spotLightClusterIndices", ClusterLightsIndicesPageSize
+				, "c3d_spotLightClusterIndices"
 				, Bindings::eSpotLightClusterIndex
 				, 0u };
 
@@ -346,7 +346,8 @@ namespace c3d
 		, BufferBase const & clustersAABB
 		, BufferBase const & pointLightBVH
 		, BufferBase const & spotLightBVH
-		, ClustersLightSortAttachs const & outputSortAttachs
+		, BufferBase const & pointLightIndices
+		, BufferBase const & spotLightIndices
 		, Array< BufferT< uint32_t >, 3u > const & counters
 		, PagedBufferBase & pointLightClusterIndex
 		, PagedBufferBase & spotLightClusterIndex
@@ -381,8 +382,8 @@ namespace c3d
 		pass.addInputStorageT( *clustersAABB.getLastAttach(), dspclst::Bindings::eClustersAABB );
 		pass.addInputStorageT( *pointLightBVH.getLastAttach(), dspclst::Bindings::ePointLightBVH );
 		pass.addInputStorageT( *spotLightBVH.getLastAttach(), dspclst::Bindings::eSpotLightBVH );
-		pass.addInputStorageT( *outputSortAttachs.pointLightIndices, dspclst::Bindings::ePointLightIndices );
-		pass.addInputStorageT( *outputSortAttachs.spotLightIndices, dspclst::Bindings::eSpotLightIndices );
+		pass.addInputStorageT( *pointLightIndices.getLastAttach(), dspclst::Bindings::ePointLightIndices );
+		pass.addInputStorageT( *spotLightIndices.getLastAttach(), dspclst::Bindings::eSpotLightIndices );
 
 		tmpCounters.setLastAttach( pass.addClearableOutputStorageBufferT( tmpCounters.bufferViewId, dspclst::Bindings::eCounters ) );
 		pointLightClusterGrid.setLastAttach( pass.addClearableOutputStorageBufferT( pointLightClusterGrid.bufferViewId, dspclst::Bindings::ePointLightClusterGrid ) );

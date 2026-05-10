@@ -12,8 +12,8 @@ namespace c3d
 		, RenderDevice const & device
 		, FrustumClusters & clusters
 		, PagedBufferBase const & allLightsAABB
-		, ClustersLightSortAttachs const & outputSortAttachs
-		, BufferBase const & mergePathPartitions
+		, BufferBase const & pointLightIndices
+		, BufferBase const & spotLightIndices
 		, BufferBase & pointLightBVH
 		, BufferBase & spotLightBVH );
 	C3D_API void createDisplayPointLightsBVHProgram( RenderDevice const & device

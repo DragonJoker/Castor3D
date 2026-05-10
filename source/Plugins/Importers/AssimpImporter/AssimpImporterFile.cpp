@@ -38,13 +38,13 @@ namespace c3d_assimp
 				| aiProcess_FindDegenerates };
 			if ( !parameters.get< bool >( cuT( "no_validation" ) ) )
 				importFlags |= aiProcess_ValidateDataStructure
-				| aiProcess_FindInvalidData;
+					| aiProcess_FindInvalidData;
 			if ( !parameters.get< bool >( cuT( "no_optimisations" ) ) )
 				importFlags |= aiProcess_JoinIdenticalVertices
-				| aiProcess_OptimizeMeshes
-				| aiProcess_OptimizeGraph
-				| aiProcess_ImproveCacheLocality
-				| aiProcess_RemoveRedundantMaterials;
+					| aiProcess_OptimizeMeshes
+					| aiProcess_OptimizeGraph
+					| aiProcess_ImproveCacheLocality
+					| aiProcess_RemoveRedundantMaterials;
 			if ( parameters.get< c3d::String >( cuT( "normals" ) ) == cuT( "smooth" ) )
 				importFlags |= aiProcess_GenSmoothNormals;
 			if ( parameters.get< bool >( cuT( "tangent_space" ) ) )

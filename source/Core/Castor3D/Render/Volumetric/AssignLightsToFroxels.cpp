@@ -341,7 +341,7 @@ namespace c3d
 				auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
 				auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
 				auto totalValues = std::max( pointLightsCount, spoLightsCount );
-				if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+				if ( auto numChunks = divRoundUp( totalValues, 256u );
 					numChunks > 1u )
 					result += ( ( numChunks - 1u ) % 2u );
 
