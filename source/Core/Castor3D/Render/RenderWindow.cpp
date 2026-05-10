@@ -39,7 +39,7 @@
 
 CU_ImplementSmartPtr( c3d, RenderWindow )
 
-#define C3D_SupportDeviceFault 0
+#define C3D_SupportDeviceFault 1
 
 namespace c3d
 {
@@ -272,7 +272,38 @@ namespace c3d
 				return cuT( "Unknown" );
 			}
 		}
+
+		static const char * strTime( char * buffer, size_t bufSize, time_t curTime )
+		{
+#if defined( CU_PlatformWindows )
+#	if !defined( NDEBUG )
+			errno_t e = ctime_s( buffer, bufSize, &curTime );
+			assert( e == 0 && "ctime_s returned an error" );
+#	else
+			ctime_s( buffer, bufSize, &curTime );
+#	endif
+			return buffer;
+#else 
+			const char * res = ctime_r( &curTime, buffer );
+			assert( res != NULL && "ctime_r failed..." );
+			return res;
 #endif
+		}
+#endif
+
+		static String printAddress( VkDeviceAddress address )
+		{
+			auto stream = makeStringStream();
+			stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << address;
+			return stream.str();
+		}
+
+		static String printU8( u8 address )
+		{
+			auto stream = makeStringStream();
+			stream << std::hex << std::setw( 2u ) << std::setfill( cuT( '0' ) ) << uint16_t( address );
+			return stream.str();
+		}
 
 		static CU_ImplementAttributeParserNewBlock( parserRenderTarget, WindowContext, TargetContext )
 		{
@@ -1750,25 +1781,94 @@ namespace c3d
 	void RenderWindow::doProcessDeviceLost()
 	{
 #if defined( VK_EXT_device_fault ) && C3D_SupportDeviceFault
+		if ( !m_device.isDeviceFaultSupported() )
+			return;
+
 		auto faultInfo = m_device->getDeviceFaultInfo();
 		log::error << "Device lost error: " << faultInfo.description << "\n";
 
 		if ( !faultInfo.addressInfos.empty() )
 		{
 			log::error << "  Addresses: \n";
-
+			u32 index{};
 			for ( auto const & info : faultInfo.addressInfos )
-				log::error << cuT( "    From 0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
-					<< cuT( " to 0x" ) << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
-					<< cuT( ": " ) << rendwndw::getAddressTypeName( info.addressType ) << cuT( "\n" );
+			{
+				VkDeviceAddress lower = ( info.reportedAddress & ~( info.addressPrecision - 1 ) );
+				VkDeviceAddress upper = ( info.reportedAddress | ( info.addressPrecision - 1 ) );
+				log::error << cuT( "    Info[" ) << index << cuT( "]\n" );
+				log::error << cuT( "      Type: " ) << rendwndw::getAddressTypeName( info.addressType ) << cuT( "\n" );
+				log::error << cuT( "      Reported address: " ) << rendwndw::printAddress( info.reportedAddress ) << cuT( "\n" );
+				log::error << cuT( "      Lower address: " ) << rendwndw::printAddress( lower ) << cuT( "\n" );
+				log::error << cuT( "      Upper address: " ) << rendwndw::printAddress( upper ) << cuT( "\n" );
+				log::error << cuT( "      Precision: " ) << info.addressPrecision << cuT( "\n" );
+				++index;
+			}
 		}
 
 		if ( !faultInfo.vendorInfos.empty() )
 		{
 			log::error << "  Vendor Infos: \n";
+			u32 index{};
 			for ( auto const & info : faultInfo.vendorInfos )
-				log::error << cuT( "    " ) << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << info.vendorFaultCode
-					<< cuT( ": " ) << info.description << "\n";
+			{
+				log::error << cuT( "    Info[" ) << index << cuT( "]\n" );
+				log::error << cuT( "      Description: " ) << info.description << cuT( "\n" );
+				log::error << cuT( "      Fault code: 0x" ) << rendwndw::printAddress( info.vendorFaultCode ) << cuT( "\n" );
+				log::error << cuT( "      Fault data: 0x" ) << rendwndw::printAddress( info.vendorFaultData ) << cuT( "\n" );
+				++index;
+			}
+		}
+
+		if ( !faultInfo.vendorBinaryData.empty() )
+		{
+			const uint8_t * vendorBinaryData = faultInfo.vendorBinaryData.data();
+			VkDeviceSize vendorBinarySize = faultInfo.vendorBinaryData.size();
+			if ( vendorBinarySize > sizeof( VkDeviceFaultVendorBinaryHeaderVersionOneEXT ) )
+			{
+				static const char * headerVersionNames[] = {
+					"NONE",
+					"VERSION_ONE",
+				};
+				const VkDeviceFaultVendorBinaryHeaderVersionOneEXT * header = ( const VkDeviceFaultVendorBinaryHeaderVersionOneEXT * )vendorBinaryData;
+				if ( header->headerSize == sizeof( VkDeviceFaultVendorBinaryHeaderVersionOneEXT ) )
+				{
+					log::error << cuT( "    Vendor Binary Header" ) << cuT( "\n" );
+					log::error << cuT( "      Header Size: " ) << header->headerSize << cuT( "\n" );
+					log::error << cuT( "      Header Version: " ) << headerVersionNames[header->headerVersion] << cuT( "\n" );
+					log::error << cuT( "      Vendor ID: " ) << rendwndw::printAddress( header->vendorID ) << cuT( "\n" );
+					log::error << cuT( "      Device ID: " ) << rendwndw::printAddress( header->deviceID ) << cuT( "\n" );
+					log::error << cuT( "      Driver Version: " ) << rendwndw::printAddress( header->driverVersion ) << cuT( "\n" );
+					log::error << cuT( "      Pipeline Cache UUID:" )
+						<< cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[0] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[1] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[2] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[3] )
+						<< cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[4] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[5] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[6] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[7] )
+						<< cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[8] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[9] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[10] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[11] )
+						<< cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[12] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[13] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[14] ) << cuT( " " ) << rendwndw::printU8( header->pipelineCacheUUID[15] ) << cuT( "\n" );
+					if ( header->applicationNameOffset != 0 )
+						log::error << cuT( "      Application Name: " ) << ( const char * )vendorBinaryData[header->applicationNameOffset] << cuT( "\n" );
+					log::error << cuT( "      Application Version: " ) << rendwndw::printAddress( header->applicationVersion ) << cuT( "\n" );
+					if ( header->engineNameOffset != 0 )
+						log::error << cuT( "      Engine Name: " ) << ( const char * )vendorBinaryData[header->engineNameOffset] << cuT( "\n" );
+					log::error << cuT( "      Engine Version: " ) << rendwndw::printAddress( header->engineVersion ) << cuT( "\n" );
+					log::error << cuT( "      API Version: " ) << rendwndw::printAddress( header->apiVersion ) << cuT( "\n" );
+					vendorBinaryData += sizeof( VkDeviceFaultVendorBinaryHeaderVersionOneEXT );
+					vendorBinarySize -= sizeof( VkDeviceFaultVendorBinaryHeaderVersionOneEXT );
+				}
+			}
+
+			std::time_t currTime = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
+			Array< char, 128 > buffer;
+			MbString timeStamp = rendwndw::strTime( buffer.data(), buffer.size(), currTime );
+			string::replace( timeStamp, "\n", "" );
+			string::replace( timeStamp, " ", "_" );
+			string::replace( timeStamp, ":", "_" );
+			auto fileName = getEngine()->getRenderSystem()->getGpuInformations().isNVIDIA()
+				? ( cuT( "DeviceLost-" ) + timeStamp + cuT( ".nv-gpudmp" ) )
+				: ( getEngine()->getRenderSystem()->getGpuInformations().isAMD()
+					? ( cuT( "DeviceLost-" ) + timeStamp + cuT( ".rgd" ) )
+					: ( cuT( "DeviceLost-" ) + timeStamp + cuT( ".dump" ) ) );
+			BinaryFile file{ Engine::getEngineDirectory() / fileName, File::OpenMode::eWrite };
+			if ( file.isOk() )
+				file.writeArray( vendorBinaryData, vendorBinarySize );
 		}
 #endif
 	}

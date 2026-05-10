@@ -353,6 +353,15 @@ namespace c3d
 #endif
 		}
 
+		bool isDeviceFaultSupported()const noexcept
+		{
+#if VK_EXT_device_fault
+			return m_deviceFaultFeatures.deviceFault == VK_TRUE;
+#else
+			return false;
+#endif
+		}
+
 		ashes::Device const * operator->()const noexcept
 		{
 			return device.get();
@@ -548,6 +557,11 @@ namespace c3d
 #endif
 #if VK_KHR_push_descriptor
 		VkPhysicalDevicePushDescriptorPropertiesKHR m_pushDescriptorProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PUSH_DESCRIPTOR_PROPERTIES
+			, nullptr
+			, {} };
+#endif
+#if VK_EXT_device_fault
+		VkPhysicalDeviceFaultFeaturesEXT m_deviceFaultFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FAULT_FEATURES_EXT
 			, nullptr
 			, {} };
 #endif

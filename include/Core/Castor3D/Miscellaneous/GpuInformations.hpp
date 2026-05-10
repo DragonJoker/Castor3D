@@ -244,13 +244,23 @@ namespace c3d
 		}
 		/**
 		 *\~english
-		 *\return		\p true fi the GPU vendor is NVIDIA.
+		 *\return		\p true if the GPU vendor is NVIDIA.
 		 *\~french
 		 *\return		\ true si le vendeur du GPU est NVIDIA.
 		 */
 		bool isNVIDIA()const noexcept
 		{
 			return m_vendor.find( "NVIDIA" ) != String::npos;
+		}
+		/**
+		 *\~english
+		 *\return		\p true if the GPU vendor is AMD.
+		 *\~french
+		 *\return		\ true si le vendeur du GPU est AMD.
+		 */
+		bool isAMD()const noexcept
+		{
+			return m_vendor.find( "AMD" ) != String::npos;
 		}
 
 	private:

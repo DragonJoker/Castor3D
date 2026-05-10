@@ -499,6 +499,9 @@ namespace c3d
 #if VK_KHR_synchronization2
 			doTryAddExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
 #endif
+#if VK_EXT_device_fault
+			doTryAddExtension( VK_EXT_DEVICE_FAULT_EXTENSION_NAME, &m_deviceFaultFeatures );
+#endif
 #if C3D_UseDLSS
 #	if VK_NVX_binary_import
 			doTryAddExtension( VK_NVX_BINARY_IMPORT_EXTENSION_NAME );
