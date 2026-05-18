@@ -7,7 +7,24 @@ if ( VCPKG_TOOLCHAIN )
 	find_package( simdjson CONFIG QUIET )
 	find_package( fastgltf CONFIG QUIET )
 else ()
-	find_package( fastgltf )
+	FetchContent_Declare( simdjson
+		GIT_REPOSITORY https://github.com/simdjson/simdjson
+		GIT_TAG b4a0fd3ff4f00c4a5a9ab86046f06daa471a3b57
+		SYSTEM )
+	set( SIMDJSON_DEVELOPER_MODE OFF )
+	set( SIMDJSON_SANITIZE_UNDEFINED OFF )
+	set( SIMDJSON_SANITIZE OFF )
+	set( SIMDJSON_SANITIZE_THREADS OFF )
+	set( BUILD_SHARED_LIBS ON )
+	set( SIMDJSON_DEVELOPMENT_CHECKS OFF )
+	set( SIMDJSON_VERBOSE_LOGGING OFF )
+	FetchContent_MakeAvailable( simdjson )
+	FetchContent_Declare( fastgltf
+		GIT_REPOSITORY https://github.com/spnda/fastgltf
+		GIT_TAG 0d1b67a28c4950ea2deb796702006dcbe31e02b3
+		SYSTEM )
+	set( FASTGLTF_ENABLE_DEPRECATED_EXT ON )
+	FetchContent_MakeAvailable( fastgltf )
 endif ()
 
 if( fastgltf_FOUND )
