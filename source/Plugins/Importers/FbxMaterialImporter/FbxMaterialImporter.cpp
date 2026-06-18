@@ -192,12 +192,34 @@ namespace c3d_fbx
 			result.translate->y = ( 0.5f * result.scale->y ) * ( rsin + rcos - 1 ) + 1 - result.scale->y - float( fbxTexture->GetTranslationV() );
 		}
 
+		static void setMixedInterpolative( c3d::Pass & pass )
+		{
+			pass.createComponent< c3d::OpacityComponent >();
+
+			auto twoSided = pass.createComponent< c3d::TwoSidedComponent >();
+			twoSided->setTwoSided( true );
+
+			if ( !pass.hasComponent< c3d::AlphaTestComponent >() )
+			{
+				auto alphaTest = pass.createComponent< c3d::AlphaTestComponent >();
+				alphaTest->setAlphaRefValue( 0.95f );
+				alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+				alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
+			}
+
+			auto blend = pass.createComponent< c3d::BlendComponent >();
+			blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
+		}
+
 		static bool parseTexture( c3d::ImporterFile const & file
 			, c3d::Pass & pass
 			, c3d::TextureConfiguration texConfig
 			, fbx::FbxProperty const & property
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
+			, bool hasOpacity = true
+			, bool isColour = false
 			, bool isOpacity = false )
 		{
 			bool result{};
@@ -217,6 +239,33 @@ namespace c3d_fbx
 						{
 							texConfig.components.front().componentsMask = 0x00FF0000;
 							*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+						}
+					}
+					else
+					{
+						if ( auto texFlags = getFlags( texConfig );
+							getComponentsMask( texConfig, opacityMapFlags )
+								&& c3d::hasAny( texFlags, opacityMapFlags ) )
+						{
+							setMixedInterpolative( pass );
+
+							if ( auto & image = loadImage( *sourceInfo, importer );
+								texFlags.size() == 1u && !hasAlphaChannel( image ) )
+							{
+								addFlagConfiguration( texConfig, { opacityMapFlags, 0x00FF0000 } );
+								*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+							}
+						}
+						else if ( !hasOpacity && isColour )
+						{
+							if ( auto & image = loadImage( *sourceInfo, importer );
+								hasAlphaChannel( image ) )
+							{
+								setMixedInterpolative( pass );
+
+								addFlagConfiguration( texConfig, { opacityMapFlags, 0xFF000000 } );
+								*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+							}
 						}
 					}
 
@@ -248,6 +297,9 @@ namespace c3d_fbx
 			, fbx::FbxProperty const & property
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
+			, bool hasOpacity = true
+			, bool isColour = false
 			, bool isOpacity = false )
 		{
 			bool result{};
@@ -258,7 +310,7 @@ namespace c3d_fbx
 				auto texFlags = plugin.getTextureFlags();
 				auto texConfig = plugin.getBaseTextureConfiguration();
 				result = parseTexture( file, pass, getRemap( texFlags, texConfig, textureRemaps )
-					, property, loadConfig, importer, isOpacity );
+					, property, loadConfig, importer, opacityMapFlags, hasOpacity, isColour, isOpacity );
 			}
 
 			return result;
@@ -271,13 +323,17 @@ namespace c3d_fbx
 			, c3d::Vector< fbx::FbxPropertyT< DataT > > const & properties
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
+			, bool hasOpacity = true
+			, bool isColour = false
 			, bool isOpacity = false )
 		{
 			bool result{};
 			auto it = properties.begin();
 			while ( it != properties.end() && !result )
 			{
-				result = parseTexture< ComponentT >( file, pass, textureRemaps, *it, loadConfig, importer, isOpacity );
+				result = parseTexture< ComponentT >( file, pass, textureRemaps
+					, *it, loadConfig, importer, opacityMapFlags, hasOpacity, isColour, isOpacity );
 				++it;
 			}
 			return result;
@@ -360,6 +416,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -368,7 +425,7 @@ namespace c3d_fbx
 				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > property = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sNormalMap )
 					, fbxMaterial.FindProperty( "bump_map" )
 					, fbxMaterial.FindProperty( "Maya|NormalTexture" ) };
-				parseTexture< c3d::NormalMapComponent >( file, pass, textureRemaps, property, loadConfig, importer );
+				parseTexture< c3d::NormalMapComponent >( file, pass, textureRemaps, property, loadConfig, importer, opacityMapFlags );
 			}
 		}
 
@@ -377,6 +434,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -390,7 +448,7 @@ namespace c3d_fbx
 					factor.IsValid() )
 					texConfig.heightFactor = float( factor.Get() );
 				if ( loadImages
-					&& parseTexture( file, pass, getRemap( texFlags, texConfig, textureRemaps ), map, loadConfig, importer ) )
+					&& parseTexture( file, pass, getRemap( texFlags, texConfig, textureRemaps ), map, loadConfig, importer, opacityMapFlags ) )
 					pass.createComponent< c3d::HeightComponent >()->setParallaxOcclusion( c3d::ParallaxOcclusionMode::eRepeat );
 			}
 		}
@@ -400,6 +458,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -411,8 +470,8 @@ namespace c3d_fbx
 				pass.createComponent< c3d::AmbientComponent >()->setAmbient( getRgbColour( color.Get() ) );
 			if ( loadImages )
 			{
-				parseTexture< c3d::AmbientFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
-				parseTexture< c3d::AmbientColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
+				parseTexture< c3d::AmbientFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer, opacityMapFlags );
+				parseTexture< c3d::AmbientColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer, opacityMapFlags );
 			}
 		}
 
@@ -421,8 +480,10 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
-			, c3d::Pass & pass )
+			, c3d::Pass & pass
+			, bool hasOpacity )
 		{
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > color = { fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sDiffuse )
 				, fbxMaterial.FindProperty( "Maya|base_color" )
@@ -436,7 +497,7 @@ namespace c3d_fbx
 					pass.createComponent< c3d::ColourComponent >()->setColour( getHdrRgbColour( prop.Get() ) );
 				} );
 			if ( loadImages )
-				parseTexture< c3d::ColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer );
+				parseTexture< c3d::ColourMapComponent >( file, pass, textureRemaps, color, loadConfig, importer, opacityMapFlags, hasOpacity, true, false );
 		}
 
 		static void importSpecularData( c3d::ImporterFile const & file
@@ -444,6 +505,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -458,8 +520,8 @@ namespace c3d_fbx
 				c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "SpecularColor" )
 					, fbxMaterial.FindProperty( "Maya|SpecularTexture" )
 					, fbxMaterial.FindProperty( "3dsMax|main|specular_map" ) };
-				parseTexture< c3d::SpecularFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer );
-				parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+				parseTexture< c3d::SpecularFactorMapComponent >( file, pass, textureRemaps, factor, loadConfig, importer, opacityMapFlags );
+				parseTexture< c3d::SpecularMapComponent >( file, pass, textureRemaps, map, loadConfig, importer, opacityMapFlags );
 			}
 		}
 
@@ -468,6 +530,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -488,9 +551,9 @@ namespace c3d_fbx
 					, fbxMaterial.FindProperty( "3dsMax|main|roughness_map" )
 					, fbxMaterial.FindProperty( "3dsMax|Parameters|roughness_map" ) };
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble > > glossinessMap = { fbxMaterial.FindProperty( "3dsMax|main|glossiness_map" ) };
-				if ( !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, glossinessMap, loadConfig, importer )
-				&& !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, roughnessMap, loadConfig, importer ) )
-					parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, shininessMap, loadConfig, importer );
+				if ( !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, glossinessMap, loadConfig, importer, opacityMapFlags )
+				&& !parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, roughnessMap, loadConfig, importer, opacityMapFlags ) )
+					parseTexture< c3d::RoughnessMapComponent >( file, pass, textureRemaps, shininessMap, loadConfig, importer, opacityMapFlags );
 			}
 		}
 
@@ -499,6 +562,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass
 			, float emissiveMult )
@@ -522,36 +586,19 @@ namespace c3d_fbx
 					pass.createComponent< c3d::EmissiveComponent >()->setEmissive( getRgbColour( prop.Get() ) );
 				} );
 			if ( loadImages )
-				parseTexture< c3d::EmissiveMapComponent >( file, pass, textureRemaps, emissive, loadConfig, importer );
+				parseTexture< c3d::EmissiveMapComponent >( file, pass, textureRemaps, emissive, loadConfig, importer, opacityMapFlags );
 		}
 
-		static void setMixedInterpolative( c3d::Pass & pass )
-		{
-			pass.createComponent< c3d::OpacityComponent >();
-
-			auto twoSided = pass.createComponent< c3d::TwoSidedComponent >();
-			twoSided->setTwoSided( true );
-
-			if ( !pass.hasComponent< c3d::AlphaTestComponent >() )
-			{
-				auto alphaTest = pass.createComponent< c3d::AlphaTestComponent >();
-				alphaTest->setAlphaRefValue( 0.95f );
-				alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
-				alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
-			}
-
-			auto blend = pass.createComponent< c3d::BlendComponent >();
-			blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
-		}
-
-		static void importOpacityData( c3d::ImporterFile const & file
+		static bool importOpacityData( c3d::ImporterFile const & file
 			, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
+			bool result = false;
 			fbx::FbxPropertyT< fbx::FbxDouble3 > color = fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sTransparentColor );
 			fbx::FbxPropertyT< fbx::FbxDouble > transparency = fbxMaterial.FindProperty( fbx::FbxSurfaceMaterial::sTransparencyFactor );
 			fbx::FbxPropertyT< fbx::FbxDouble > opacity = fbxMaterial.FindProperty( "Opacity" );
@@ -584,8 +631,13 @@ namespace c3d_fbx
 				, transparency
 				, color };
 			if ( loadImages
-				&& parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, map, loadConfig, importer, true ) )
+				&& parseTexture< c3d::OpacityMapComponent >( file, pass, textureRemaps, map, loadConfig, importer, opacityMapFlags, true, false, true ) )
+			{
 				setMixedInterpolative( pass );
+				result = true;
+			}
+
+			return result;
 		}
 
 		static void importMetalnessData( c3d::ImporterFile const & file
@@ -593,6 +645,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -608,7 +661,7 @@ namespace c3d_fbx
 					, fbxMaterial.FindProperty( "Maya|TEX_metallic_map" )
 					, fbxMaterial.FindProperty( "3dsMax|Parameters|metalness_map" )
 					, fbxMaterial.FindProperty( "3dsMax|main|metalness_map" ) };
-				parseTexture< c3d::MetalnessMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+				parseTexture< c3d::MetalnessMapComponent >( file, pass, textureRemaps, map, loadConfig, importer, opacityMapFlags );
 			}
 		}
 
@@ -617,6 +670,7 @@ namespace c3d_fbx
 			, c3d::ImageLoaderConfig const & loadConfig
 			, bool loadImages
 			, c3d::MaterialImporter const & importer
+			, c3d::PassComponentTextureFlag const & opacityMapFlags
 			, fbx::FbxSurfaceMaterial const & fbxMaterial
 			, c3d::Pass & pass )
 		{
@@ -624,7 +678,7 @@ namespace c3d_fbx
 			c3d::Vector< fbx::FbxPropertyT< fbx::FbxDouble3 > > map = { fbxMaterial.FindProperty( "Maya|TEX_ao_map" )
 				, fbxMaterial.FindProperty( "3dsMax|main|ao_map" ) };
 			if ( loadImages )
-				parseTexture< c3d::OcclusionMapComponent >( file, pass, textureRemaps, map, loadConfig, importer );
+				parseTexture< c3d::OcclusionMapComponent >( file, pass, textureRemaps, map, loadConfig, importer, opacityMapFlags );
 		}
 	}
 
@@ -651,21 +705,19 @@ namespace c3d_fbx
 		c3d::String model = c3d::makeString( fbxMaterial->ShadingModel.Get().Buffer() );
 		c3d::log::debug << "    ShadingModel: " << model << "\n";
 
+		auto opacityMapFlags = pass->getComponentPlugin< c3d::OpacityMapComponent >().getTextureFlags();
+		materials::importNormalsData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importHeightData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		bool hasOpacityTex = materials::importOpacityData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importColourData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass, hasOpacityTex );
+		materials::importSpecularData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importShininessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importEmissiveData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass, m_emissiveMult );
+		materials::importMetalnessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importAmbientOcclusionData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
 		if ( fbxMaterial->GetClassId() == fbx::FbxSurfaceLambert::ClassId
 			|| fbxMaterial->GetClassId() == fbx::FbxSurfacePhong::ClassId )
-		{
-			materials::importAmbientData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		}
-
-		materials::importNormalsData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importHeightData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importColourData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importSpecularData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importShininessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importEmissiveData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass, m_emissiveMult );
-		materials::importOpacityData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importMetalnessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
-		materials::importAmbientOcclusionData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, *fbxMaterial, *pass );
+			materials::importAmbientData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
 		pass->prepareTextures();
 
 		auto const & engine = *getOwner();

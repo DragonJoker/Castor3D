@@ -21,6 +21,7 @@ namespace c3d_fbx
 
 	private:
 		FbxMaterialsFile const & m_materialsFile;
+		c3d::PassComponentTextureFlag m_opacityMapFlags;
 	};
 }
 

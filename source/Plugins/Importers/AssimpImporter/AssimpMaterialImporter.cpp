@@ -238,20 +238,20 @@ namespace c3d_assimp
 				TextureInfo mtlInfo{};
 				TextureInfo shnInfo{};
 				TextureInfo rghInfo{};
-				auto ambInfo = getTextureInfo( aiTextureType_AMBIENT, 0u );
-				auto trsInfo = getTextureInfo( TextureType_TRANSMISSION, 0u );
-				auto thkInfo = getTextureInfo( TextureType_TRANSMISSION, 1u );
-				auto cctInfo = getTextureInfo( TextureType_CLEARCOAT, 0u );
-				auto ccrInfo = getTextureInfo( TextureType_CLEARCOAT, 1u );
-				auto ccnInfo = getTextureInfo( TextureType_CLEARCOAT, 2u );
-				auto shcInfo = getTextureInfo( TextureType_SHEEN, 0u );
-				auto shrInfo = getTextureInfo( TextureType_SHEEN, 1u );
-				auto occInfo = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
+				TextureInfo ambInfo{ getTextureInfo( aiTextureType_AMBIENT, 0u ) };
+				TextureInfo trsInfo{ getTextureInfo( TextureType_TRANSMISSION, 0u ) };
+				TextureInfo thkInfo{ getTextureInfo( TextureType_TRANSMISSION, 1u ) };
+				TextureInfo cctInfo{ getTextureInfo( TextureType_CLEARCOAT, 0u ) };
+				TextureInfo ccrInfo{ getTextureInfo( TextureType_CLEARCOAT, 1u ) };
+				TextureInfo ccnInfo{ getTextureInfo( TextureType_CLEARCOAT, 2u ) };
+				TextureInfo shcInfo{ getTextureInfo( TextureType_SHEEN, 0u ) };
+				TextureInfo shrInfo{ getTextureInfo( TextureType_SHEEN, 1u ) };
+				TextureInfo occInfo{ getTextureInfo( TextureType_AMBIENT_OCCLUSION ) };
 				if ( occInfo.name.empty() )
 					occInfo = getTextureInfo( aiTextureType_LIGHTMAP );
 
-				auto hgtInfo = finishHeight();
-				auto emiInfo = finishEmissive();
+				TextureInfo hgtInfo{ finishHeight() };
+				TextureInfo emiInfo{ finishEmissive() };
 				finishColour( colInfo, nmlInfo, opaInfo, spcInfo, mtlInfo, shnInfo, rghInfo );
 				finishSpecular( spcInfo, occInfo, mtlInfo, shnInfo, rghInfo );
 				auto hasOpacityTex = finishOpacity( opaInfo );
@@ -589,15 +589,20 @@ namespace c3d_assimp
 								getComponentsMask( texConfig, m_opacityMapFlags )
 									&& c3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
-								if ( auto [alphaMode, hasAlphaMode] = getString( AI_MATKEY_GLTF_ALPHAMODE );
-									!hasAlphaMode || alphaMode == cuT( "BLEND" ) )
-									mixedInterpolative( true );
-
+								auto [alphaMode, hasAlphaMode] = getString( AI_MATKEY_GLTF_ALPHAMODE );
 								if ( auto & image = loadImage( *sourceInfo );
 									texFlags.size() == 1u && !hasAlphaChannel( image ) )
 								{
+									if ( !hasAlphaMode || alphaMode == cuT( "BLEND" ) )
+										mixedInterpolative( true );
+
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 									*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
+								}
+								else if ( hasAlphaChannel( image )
+									&& ( !hasAlphaMode || alphaMode == cuT( "BLEND" ) ) )
+								{
+									mixedInterpolative( true );
 								}
 							}
 							else if ( !hasOpacity
