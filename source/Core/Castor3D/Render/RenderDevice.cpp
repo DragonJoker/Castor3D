@@ -92,10 +92,9 @@ namespace c3d
 			, ashes::StringArray const & enabledExtensions
 			, VkPhysicalDeviceFeatures2 const & features2 )
 		{
-			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
 			auto result = ashes::DeviceCreateInfo{ 0u
 				, c3d::move( queueCreateInfos )
-				, instance.getEnabledLayerNames()
+				, StringArray{}
 				, enabledExtensions };
 			result->pNext = &features2;
 			return result;
