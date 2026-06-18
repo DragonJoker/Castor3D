@@ -38,6 +38,7 @@ namespace c3d
 		 */
 		C3D_API AnimationInstance( AnimatedObject & object
 			, Animation & animation
+			, InterpolatorType defaultInterpolation
 			, bool looped = false );
 		/**
 		 *\~english
@@ -84,144 +85,81 @@ namespace c3d
 		 */
 		C3D_API void setTotalLength( Milliseconds const & time );
 		/**
-		 *\~english
-		 *\return		The animation state.
-		 *\~french
-		 *\return		L'état de l'animation.
-		 */
-		AnimationState getState()const
+		 *name Getters.
+		 **/
+		/**@{*/
+		AnimationState getState()const noexcept
 		{
 			return m_state;
 		}
-		/**
-		 *\~english
-		 *\return		The animation time scale.
-		 *\~french
-		 *\return		Le multiplicateur de temps de l'animation.
-		 */
-		float getScale()const
+
+		float getScale()const noexcept
 		{
 			return m_scale;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation time scale
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit le multiplicateur de temps de l'animation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setScale( float value )
-		{
-			m_scale = value;
-		}
-		/**
-		 *\~english
-		 *\return		The animation stopping point.
-		 *\~french
-		 *\return		Le point de départ de l'animation.
-		 */
-		Milliseconds getStartingPoint()const
+
+		Milliseconds const & getStartingPoint()const noexcept
 		{
 			return m_startingPoint;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation stopping point.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le point de départ de l'animation.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		void setStartingPoint( Milliseconds value )
+
+		Milliseconds const & getStoppingPoint()const noexcept
 		{
-			m_startingPoint = value;
+			return m_stoppingPoint;
+		}
+
+		bool isLooped()const noexcept
+		{
+			return m_looped;
+		}
+
+		InterpolatorType getInterpolation()const noexcept
+		{
+			return m_interpolation;
+		}
+
+		Animation & getAnimation()const noexcept
+		{
+			return *m_animation;
+		}
+		/**@}*/
+		/**
+		 *name Setters.
+		 **/
+		/**@{*/
+		void setScale( float value )noexcept
+		{
+			m_scale = value;
+		}
+
+		void setStartingPoint( Milliseconds value )noexcept
+		{
+			m_startingPoint = c3d::move( value );
 
 			if ( m_currentTime < m_startingPoint )
 			{
 				m_currentTime = m_startingPoint;
 			}
 		}
-		/**
-		 *\~english
-		 *\return		The animation stopping point.
-		 *\~french
-		 *\return		Le point d'arrêt de l'animation.
-		 */
-		Milliseconds getStoppingPoint()const
+
+		void setStoppingPoint( Milliseconds value )noexcept
 		{
-			return m_stoppingPoint;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation stopping point.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le point d'arrêt de l'animation.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		void setStoppingPoint( Milliseconds value )
-		{
-			m_stoppingPoint = value;
+			m_stoppingPoint = c3d::move( value );
 
 			if ( m_currentTime > m_stoppingPoint )
 			{
 				m_currentTime = m_stoppingPoint;
 			}
 		}
-		/**
-		 *\~english
-		 *\return		The animation loop status.
-		 *\~french
-		 *\return		L'état de boucle de l'animation.
-		 */
-		bool isLooped()const
-		{
-			return m_looped;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation loop status
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit l'état de boucle de l'animation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setLooped( bool value )
+
+		void setLooped( bool value )noexcept
 		{
 			m_looped = value;
 		}
-		/**
-		 *\~english
-		 *\return		The animation interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation de l'animation.
-		 */
-		InterpolatorType getInterpolation()const
-		{
-			return m_interpolation;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation interpolation mode.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le mode d'interpolation de l'animation.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		void setInterpolation( InterpolatorType value )
+
+		void setInterpolation( InterpolatorType value )noexcept
 		{
 			m_interpolation = value;
-		}
-		/**
-		 *\~english
-		 *\return		The animation.
-		 *\~french
-		 *\return		L'animation.
-		 */
-		Animation & getAnimation()const
-		{
-			return *m_animation;
 		}
 
 	private:

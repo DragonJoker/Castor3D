@@ -34,7 +34,7 @@ namespace c3d
 
 	SkeletonAnimationInstance::SkeletonAnimationInstance( AnimatedSkeleton & object
 		, SkeletonAnimation & animation )
-		: AnimationInstance{ object, animation }
+		: AnimationInstance{ object, animation, InterpolatorType::eNearest }
 	{
 		for ( auto moving : animation.getRootObjects() )
 		{
@@ -117,24 +117,57 @@ namespace c3d
 		}
 		else if ( !m_keyFrames.empty() )
 		{
-			auto limit = m_keyFrames.begin();
+			auto lowerBound = m_keyFrames.begin();
+			auto upperBound = std::prev( m_keyFrames.end() );
 
-			while ( m_curr != limit && m_curr->getTimeIndex() >= m_currentTime )
-			{
+			while ( m_curr != lowerBound && m_curr->getTimeIndex() >= m_currentTime )
 				// Time has gone too fast backward.
 				--m_curr;
-			}
 
-			limit = ( m_keyFrames.end() - 1 );
-
-			while ( m_curr != limit && m_curr->getTimeIndex() < m_currentTime )
-			{
+			while ( m_curr != upperBound && m_curr->getTimeIndex() < m_currentTime )
 				// Time has gone too fast forward.
 				++m_curr;
-			}
 
-			m_curr->apply();
+			if ( getInterpolation() != InterpolatorType::eNearest )
+			{
+				auto prev = m_curr;
+				Milliseconds timeMs{};
+
+				if ( m_curr == lowerBound )
+				{
+					if ( m_looped )
+					{
+						prev = upperBound;
+						timeMs = ( m_currentTime + getAnimation().getLength() ) - prev->getTimeIndex();
+					}
+				}
+				else
+				{
+					prev = std::prev( m_curr );
+					timeMs = m_currentTime - prev->getTimeIndex();
+				}
+
+				if ( prev == m_curr )
+					m_curr->apply();
+				else
+					doInterpolate( *prev, *m_curr, timeMs );
+			}
+			else
+			{
+				m_curr->apply();
+			}
 		}
+	}
+
+	void SkeletonAnimationInstance::doInterpolate( SkeletonAnimationInstanceKeyFrame const & prev, SkeletonAnimationInstanceKeyFrame const & curr, Milliseconds const & timeMs )
+	{
+		if ( !m_floatInterpolator
+			|| m_floatInterpolator->getType() != getInterpolation() )
+			m_floatInterpolator = makeInterpolator< float >( getInterpolation() );
+		if ( !m_vecInterpolator
+			|| m_vecInterpolator->getType() != getInterpolation() )
+			m_vecInterpolator = makeInterpolator< Point3f >( getInterpolation() );
+		curr.interpolate( prev, timeMs, *m_floatInterpolator, *m_vecInterpolator );
 	}
 
 	//*************************************************************************************************

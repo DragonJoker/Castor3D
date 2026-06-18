@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "MeshAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Animation/Interpolator.hpp"
 
 namespace c3d
 {
@@ -90,6 +91,9 @@ namespace c3d
 		//!\~english	The current animation buffer.
 		//!\~french		Le tampon d'animation actuel.
 		Vector< float > m_cur;
+
+		InterpolatorPtr< Point3f > m_vecInterpolator;
+		InterpolatorPtr< float > m_floatInterpolator;
 	};
 }
 

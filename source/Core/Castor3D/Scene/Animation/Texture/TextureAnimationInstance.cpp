@@ -11,7 +11,7 @@ namespace c3d
 	//*************************************************************************************************
 
 	TextureAnimationInstance::TextureAnimationInstance( AnimatedTexture & object, TextureAnimation & animation )
-		: AnimationInstance{ object, animation, true }
+		: AnimationInstance{ object, animation, InterpolatorType::eLinear, true }
 		, m_animatedTexture{ object }
 		, m_textureAnimation{ animation }
 	{

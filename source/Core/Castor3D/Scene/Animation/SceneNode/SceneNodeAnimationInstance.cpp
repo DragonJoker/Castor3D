@@ -11,7 +11,7 @@ namespace c3d
 {
 	SceneNodeAnimationInstance::SceneNodeAnimationInstance( AnimatedSceneNode & object
 		, SceneNodeAnimation & animation )
-		: AnimationInstance{ object, animation }
+		: AnimationInstance{ object, animation, InterpolatorType::eLinear }
 		, m_animatedSceneNode{ object }
 		, m_sceneNodeAnimation{ animation }
 		, m_prev{ animation.isEmpty() ? animation.end() : animation.begin() }

@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp"
+#include "Castor3D/Animation/Interpolator.hpp"
 
 namespace c3d
 {
@@ -114,6 +115,7 @@ namespace c3d
 
 	private:
 		void doUpdate()override;
+		void doInterpolate( SkeletonAnimationInstanceKeyFrame const & prev, SkeletonAnimationInstanceKeyFrame const & curr, Milliseconds const & time );
 
 	protected:
 		//!\~english	The moving objects.
@@ -128,6 +130,9 @@ namespace c3d
 		//!\~english	Iterator to the current keyframe (when playing the animation).
 		//!\~french		Itérateur sur la keyframe courante (quand l'animation est jouée).
 		SkeletonAnimationInstanceKeyFrameArray::iterator m_curr;
+
+		InterpolatorPtr< Point3f > m_vecInterpolator;
+		InterpolatorPtr< float > m_floatInterpolator;
 	};
 }
 

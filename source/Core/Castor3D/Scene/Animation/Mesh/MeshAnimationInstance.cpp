@@ -13,7 +13,7 @@ namespace c3d
 	//*************************************************************************************************
 
 	MeshAnimationInstance::MeshAnimationInstance( AnimatedMesh & object, MeshAnimation & animation )
-		: AnimationInstance{ object, animation }
+		: AnimationInstance{ object, animation, InterpolatorType::eLinear }
 		, m_animatedMesh{ object }
 		, m_meshAnimation{ animation }
 		, m_prev{ animation.isEmpty() ? animation.end() : animation.begin() }

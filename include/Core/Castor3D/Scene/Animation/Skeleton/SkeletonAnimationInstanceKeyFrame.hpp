@@ -10,6 +10,9 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	template< class DataT >
+	class Interpolator;
+
 	class SkeletonAnimationInstanceKeyFrame
 		: public OwnedBy< SkeletonAnimationInstance >
 	{
@@ -39,6 +42,14 @@ namespace c3d
 		 *\brief		Applique la keyframe.
 		 */
 		C3D_API void apply()const;
+		/**
+		 *\~english
+		 *\brief		Interpolates the keyframe with the previous one.
+		 *\~french
+		 *\brief		Interpole la keyframe avec la précédente.
+		 */
+		C3D_API void interpolate( SkeletonAnimationInstanceKeyFrame const & prev, Milliseconds const & timeMs
+			, Interpolator< float > const & floatInterpolator, Interpolator< Point3f > const & vecInterpolator )const;
 		/**
 		 *\~english
 		 *\return		The start time index.

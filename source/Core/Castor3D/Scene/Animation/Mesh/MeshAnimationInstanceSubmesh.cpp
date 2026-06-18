@@ -53,7 +53,9 @@ namespace c3d
 		}
 		else
 		{
-			auto interpolator = makeInterpolator< float >( getOwner()->getInterpolation() );
+			if ( !m_floatInterpolator
+				|| m_floatInterpolator->getType() != getOwner()->getInterpolation() )
+				m_floatInterpolator = makeInterpolator< float >( getOwner()->getInterpolation() );
 			auto prvIt = prv.begin();
 			auto curIt = cur.begin();
 			m_cur.resize( cur.size() );
@@ -61,18 +63,20 @@ namespace c3d
 
 			for ( size_t i = 0u; i < m_cur.size(); ++i )
 			{
-				*resIt = interpolator->interpolate( *prvIt, *curIt, factor );
+				*resIt = m_floatInterpolator->interpolate( *prvIt, *curIt, factor );
 				++curIt;
 				++prvIt;
 				++resIt;
 			}
 		}
 
-		auto interpolator = makeInterpolator< Point3f >( getOwner()->getInterpolation() );
+		if ( !m_vecInterpolator
+			|| m_vecInterpolator->getType() != getOwner()->getInterpolation() )
+			m_vecInterpolator = makeInterpolator< Point3f >( getOwner()->getInterpolation() );
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
 			, mshanminstsm::doInterpolateBB( prvbb
 				, curbb
-				, *interpolator
+				, *m_vecInterpolator
 				, factor ) );
 	}
 

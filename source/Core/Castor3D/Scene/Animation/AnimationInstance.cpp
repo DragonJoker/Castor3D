@@ -8,11 +8,13 @@ namespace c3d
 {
 	AnimationInstance::AnimationInstance( AnimatedObject & object
 		, Animation & animation
+		, InterpolatorType defaultInterpolation
 		, bool looped )
 		: OwnedBy< AnimatedObject >{ object }
 		, m_animation{ &animation }
 		, m_looped{ looped }
 		, m_totalTime{ m_animation->getLength() }
+		, m_interpolation{ defaultInterpolation }
 	{
 	}
 
