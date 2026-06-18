@@ -200,6 +200,9 @@ namespace c3d
 		, PixelComponent component )
 	{
 		auto decomp = decompressBuffer( src );
+		if ( !decomp )
+			return nullptr;
+
 		auto result = PxBufferBase::create( decomp->getDimensions()
 			, getSingleComponent( decomp->getFormat() ) );
 		pfext::copyComponent( *decomp
@@ -213,6 +216,9 @@ namespace c3d
 		, PixelComponents components )
 	{
 		auto decomp = decompressBuffer( src );
+		if ( !decomp )
+			return nullptr;
+
 		auto result = PxBufferBase::create( decomp->getDimensions()
 			, getPixelFormat( decomp->getFormat(), components ) );
 		auto dstIndex = 0u;

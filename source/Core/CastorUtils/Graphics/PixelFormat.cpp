@@ -526,9 +526,11 @@ namespace c3d
 			switch ( src.getFormat() )
 			{
 			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+			case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
 				isSRGB = true;
 				[[fallthrough]];
 			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+			case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
 				decompressBuffer = bcdec_bc1;
 				break;
 			case PixelFormat::eBC2_SRGB_BLOCK:
