@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/BufferModule.hpp"
 
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
+#include "Castor3D/Render/Raytracing/BottomLevelAS.hpp"
 
 namespace c3d
 {

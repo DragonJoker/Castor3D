@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SceneRenderNodes_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Raytracing/RaytracingModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Transform/TransformModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
@@ -125,6 +126,7 @@ namespace c3d
 		VertexTransformingUPtr m_vertexTransform;
 		Map< LightingModelID, size_t > m_lightingModels;
 		Map< Pass const *, OnPassChangedConnection > m_onPassChanged;
+		TopLevelASUPtr m_tlas{};
 	};
 }
 

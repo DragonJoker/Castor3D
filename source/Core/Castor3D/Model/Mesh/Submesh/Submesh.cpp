@@ -622,6 +622,9 @@ namespace c3d
 		, Pass const & pass
 		, PipelineFlags const & flags )const
 	{
+		// Create the BLAS anyway.
+		getBottomLevelAS( geometry, pass );
+
 		auto key = smsh::hash( *this, geometry, pass, flags );
 		auto [it, res] = m_geometryBuffers.try_emplace( key );
 
@@ -659,6 +662,27 @@ namespace c3d
 		}
 
 		return it->second;
+	}
+
+	BottomLevelAS const * Submesh::getBottomLevelAS( Geometry const & geometry
+		, Pass const & pass )const
+	{
+		auto & device = *geometry.getEngine()->getRenderDevice();
+		if ( device.hasRayTracing() )
+			return nullptr;
+
+		auto key = geometry.getHash( pass, *this );
+		auto [it, inserted] = m_blases.try_emplace( key );
+
+		if ( inserted )
+		{
+			auto & bufferOffsets = getFinalBufferOffsets( geometry, pass );
+			it->second = c3d::makeUnique< BottomLevelAS >( device, geometry.getEngine()->getResources()
+				, smsh::getDescriptorName( *this )
+				, *this, bufferOffsets, pass );
+		}
+
+		return it->second.get();
 	}
 
 	void Submesh::createDescriptorSet( Geometry const & geometry

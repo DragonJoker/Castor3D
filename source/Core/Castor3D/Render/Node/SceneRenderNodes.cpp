@@ -14,6 +14,7 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Raytracing/TopLevelAS.hpp"
 #include "Castor3D/Render/Transform/VertexTransforming.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -519,14 +520,13 @@ namespace c3d
 	void SceneRenderNodes::update( CpuUpdater & updater )
 	{
 		if ( !m_dirty && updater.dirtyScenes[getOwner()].dirtyNodes.empty() )
-		{
 			return;
-		}
 
 #if C3D_DebugTimers
 		auto block( m_timerRenderNodes->start() );
 #endif
 		Map< Submesh const *, Map< uint32_t, uint32_t > > indices;
+		BLASInstanceArray blases;
 		
 		for ( auto const & [_, node] : m_submeshNodes )
 		{
@@ -568,7 +568,20 @@ namespace c3d
 					}
 				}
 			}
+
+			if ( auto blas = node->data.getBottomLevelAS( node->instance, *node->pass ) )
+				blases.emplace_back( node->instance.getParent()->getTransformationMatrix()
+					, blas
+					, node->getId() // instanceID
+					, 0xFFFFFFFFU // instanceMask
+					, 0u // instanceShaderBindingTableRecordOffset
+					, BLASInstanceFlag::eNone );
 		}
+
+		if ( !blases.empty() )
+			m_tlas = c3d::makeUnique< TopLevelAS >( m_device
+				, getScene()->getResources(), getScene()->getName()
+				, c3d::move( blases ) );
 
 		m_dirty = false;
 	}

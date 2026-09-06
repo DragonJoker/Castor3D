@@ -23,10 +23,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
-
 #include <unordered_map>
 
 namespace c3d
@@ -281,6 +277,18 @@ namespace c3d
 			, PipelineFlags const & flags )const;
 		/**
 		 *\~english
+		 *\return		The bottom level AS for given render node.
+		 *\param[in]	geometry	The geometry instancing this submesh.
+		 *\param[in]	pass		The pass used to render this submesh.
+		 *\~french
+		 *\return		La bottom level AS associée au noeud de rendu donné.
+		 *\param[in]	geometry	La géométrie instanciant ce sous-maillage.
+		 *\param[in]	pass		La passe utilisée dans le rendeu de ce sous-maillage.
+		 */
+		C3D_API BottomLevelAS const * getBottomLevelAS( Geometry const & geometry
+			, Pass const & pass )const;
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor set for given render node.
 		 *\param[in]	geometry	The geometry instancing this submesh.
 		 *\param[in]	pass		The pass used to render this submesh.
@@ -454,6 +462,7 @@ namespace c3d
 		ObjectBufferOffset m_sourceBufferOffset;
 		HashMap< size_t, ObjectBufferOffset > m_finalBufferOffsets;
 		mutable HashMap< size_t, GeometryBuffers > m_geometryBuffers;
+		mutable HashMap< size_t, BottomLevelASUPtr > m_blases;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

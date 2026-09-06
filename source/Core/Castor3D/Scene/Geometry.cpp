@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
@@ -13,13 +14,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
+#include <ashespp/AccelerationStructure/AccelerationStructure.hpp>
+
 CU_ImplementSmartPtr( c3d, Geometry )
 
 namespace c3d
 {
+	//*********************************************************************************************
+
 	namespace object
 	{
-
 		static CU_ImplementAttributeParserBlock( parserParent, ObjectContext )
 		{
 			if ( !blockContext->geometry )
@@ -239,6 +243,8 @@ namespace c3d
 		}
 		CU_EndAttributePop()
 	}
+
+	//*********************************************************************************************
 
 	Geometry::Geometry( String const & name
 		, Scene & scene
@@ -595,4 +601,6 @@ namespace c3d
 			m_sphere.load( m_box );
 		}
 	}
+
+	//*********************************************************************************************
 }

@@ -367,7 +367,7 @@ namespace c3d
 						modelBuffers.buffers[index] = details::createBaseBuffer< uint32_t >( m_device
 							, m_resources
 							, indexCount
-							, BufferUsageFlags::eIndexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, BufferUsageFlags::eIndexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eShaderDeviceAddress
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
@@ -378,7 +378,7 @@ namespace c3d
 						modelBuffers.buffers[index] = details::createBaseBuffer< Meshlet >( m_device
 							, m_resources
 							, meshletCount
-							, BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eShaderDeviceAddress
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
@@ -391,7 +391,7 @@ namespace c3d
 						modelBuffers.buffers[index] = details::createBaseBuffer< VertexBoneData >( m_device
 							, m_resources
 							, vertexCount
-							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eShaderDeviceAddress
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
@@ -400,7 +400,7 @@ namespace c3d
 						modelBuffers.buffers[index] = details::createBaseBuffer< Point4ui >( m_device
 							, m_resources
 							, vertexCount
-							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eShaderDeviceAddress
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
@@ -409,7 +409,7 @@ namespace c3d
 						modelBuffers.buffers[index] = details::createBaseBuffer< Point4f >( m_device
 							, m_resources
 							, vertexCount
-							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer
+							, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eShaderDeviceAddress
 							, MemoryPropertyFlags::eDeviceLocal
 							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
