@@ -15,7 +15,8 @@ namespace c3d::shader
 	template< sdw::var::Flag FlagT >
 	using PayloadStructT = sdw::IOStructInstanceHelperT< FlagT
 		, "C3D_Payload"
-		, sdw::IOUIntArrayField< "meshletIndices", ast::type::Struct::InvalidLocation, 32u > >;
+		, sdw::IOUIntArrayField< "meshletIndices", ast::type::Struct::InvalidLocation, 32u >
+		, sdw::IOUIntField< "drawId", ast::type::Struct::InvalidLocation > >;
 
 	template< sdw::var::Flag FlagT >
 	struct PayloadT
@@ -29,6 +30,7 @@ namespace c3d::shader
 		}
 
 		auto meshletIndices()const { return this->template getMember< "meshletIndices" >(); }
+		auto drawId()const { return this->template getMember< "drawId" >(); }
 	};
 }
 

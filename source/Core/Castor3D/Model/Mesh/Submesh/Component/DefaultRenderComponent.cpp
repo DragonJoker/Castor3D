@@ -364,12 +364,13 @@ namespace c3d
 		auto meshShader = [&]( sdw::UInt const & meshletIndex
 			, sdw::MeshSubgroupInEXT const & in
 			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
-			, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT > & primOut )
+			, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT > & primOut
+			, sdw::UInt const & realDrawID )
 		{
 			auto laneId = writer.declLocale( "laneId"
 				, in.localInvocationID.x() );
 			auto drawId = writer.declLocale( "drawId"
-				, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) + drawOffset );
+				, realDrawID + drawOffset );
 			auto nodeId = writer.declLocale( "nodeId"
 				, shader::getNodeId( c3d_objectIdsData
 					, meshlets.instances
@@ -593,8 +594,10 @@ namespace c3d
 					auto baseId = in.workGroupID.x();
 					auto meshletId = writer.declLocale( "meshletId"
 						, ( baseId * 32u + laneId ) );
+					auto drawIdBase = writer.declLocale( "drawIdBase"
+						, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) );
 					auto drawId = writer.declLocale( "drawId"
-						, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) + drawOffset );
+						, drawIdBase + drawOffset );
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, meshlets.instances
@@ -605,6 +608,7 @@ namespace c3d
 						, checkVisible( nodeId, meshletId ) );
 					auto vote = writer.declLocale( "vote"
 						, subgroupBallot( render ) );
+					payload.drawId() = drawIdBase;
 
 					sdwIF( writer, render )
 					{
@@ -633,7 +637,7 @@ namespace c3d
 				{
 					auto baseId = writer.declLocale( "baseId"
 						, in.workGroupID.x() );
-					meshShader( payload.meshletIndices()[baseId], in, vtxOut, primOut );
+					meshShader( payload.meshletIndices()[baseId], in, vtxOut, primOut, payload.drawId() );
 				} );
 		}
 		else
@@ -649,7 +653,7 @@ namespace c3d
 				{
 					auto baseId = writer.declLocale( "baseId"
 						, in.workGroupID.x() );
-					meshShader( baseId, in, vtxOut, primOut );
+					meshShader( baseId, in, vtxOut, primOut, in.drawID );
 				} );
 		}
 	}

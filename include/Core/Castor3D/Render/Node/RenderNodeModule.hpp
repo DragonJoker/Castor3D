@@ -100,16 +100,19 @@ namespace c3d
 	{
 		PipelineBuffer( PipelineBaseHash hash
 			, BufferBase const * posBuffer
-			, BufferBase const * idxBuffer )
+			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer )
 			: hash{ hash }
 			, posBuffer{ posBuffer }
 			, idxBuffer{ idxBuffer }
+			, mshBuffer{ mshBuffer }
 		{
 		}
 
 		PipelineBaseHash hash;
 		BufferBase const * posBuffer;
 		BufferBase const * idxBuffer;
+		BufferBase const * mshBuffer;
 	};
 	using PipelineBufferArray = Vector< PipelineBuffer >;
 

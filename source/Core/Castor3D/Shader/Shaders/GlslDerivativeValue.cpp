@@ -807,6 +807,16 @@ namespace c3d::shader
 		return deriv::applySel< DerivFloat, Func >( getW, "derivGetW4", in );
 	}
 
+	void setXYZW( sdw::Vec4 & out, sdw::Vec3 const & xyz, sdw::Float const & w )
+	{
+		out = vec4( xyz, w );
+	}
+
+	void setXYZW( DerivVec4 & out, DerivVec3 const & xyz, DerivFloat const & w )
+	{
+		out = derivVec4( xyz, w );
+	}
+
 	RetDerivVec4 operator*( sdw::Mat4 const & lhs, DerivVec4 const & rhs )
 	{
 		using Func = sdw::RetVec4( * )( sdw::Mat4 const &, sdw::Vec4 const & );

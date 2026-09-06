@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_GeometryBuffers_H___
 #define ___C3D_GeometryBuffers_H___
 
-#include "BufferModule.hpp"
-#include "ObjectBufferOffset.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
+
+#include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 
 namespace c3d
 {
@@ -22,6 +23,7 @@ namespace c3d
 			, layouts{ c3d::move( layouts ) }
 		{
 		}
+
 		ObjectBufferOffset::GpuBufferChunk indexOffset{};
 		ashes::BufferCRefArray buffers{};
 		ashes::UInt64Array offsets{};

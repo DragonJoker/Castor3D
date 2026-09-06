@@ -1880,15 +1880,15 @@ namespace c3d
 
 		static ashes::DescriptorSetPtr createVtxDescriptorSet( String const & name
 			, PipelineFlags const & flags
-			, bool isMeshShading
 			, ashes::DescriptorSetPool const & pool
 			, ObjectBufferPool::ModelBuffers const & modelBuffers
-			, BufferBase const * indexBuffer )
+			, BufferBase const * indexBuffer
+			, BufferBase const * meshletsBuffer )
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			if ( isMeshShading )
-				modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer().addDescriptorWriteT( writes, VtxBindings::eInMeshlets );
+			if ( meshletsBuffer )
+				meshletsBuffer->addDescriptorWriteT( writes, VtxBindings::eInMeshlets );
 
 			if ( flags.enableIndices() )
 			{
@@ -2133,9 +2133,9 @@ namespace c3d
 			m_activePipelines.clear();
 			m_activeBillboardPipelines.clear();
 
-			for ( auto const & [pipelineHash, posBuffer, idxBuffer] : m_nodesPass.getPassPipelineNodes() )
+			for ( auto const & [pipelineHash, posBuffer, idxBuffer, mshBuffer] : m_nodesPass.getPassPipelineNodes() )
 			{
-				auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer );
+				auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer, mshBuffer );
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
 					, pipelineHash
 					, getShaderFlags() ) };
@@ -2169,10 +2169,10 @@ namespace c3d
 					auto & modelBuffers = m_device.geometryPools->getBuffers( *posBuffer );
 					pit->second = visres::createVtxDescriptorSet( getName()
 						, pipelineFlags
-						, m_nodesPass.isMeshShading()
 						, *pipeline.vtxDescriptorPool
 						, modelBuffers
-						, idxBuffer );
+						, idxBuffer
+						, mshBuffer );
 				}
 
 				auto & pipelines = it->second.try_emplace( pit->second.get() ).first->second;
@@ -2200,7 +2200,7 @@ namespace c3d
 				auto pipelineHash = origPipeline.pipeline->getFlagsHash();
 				auto & buffers = pipelinesNodes.nodes;
 
-				for ( auto & [posBuffer, idxBuffer, pages] : buffers )
+				for ( auto & [posBuffer, idxBuffer, mshBuffer, pages] : buffers )
 				{
 					for ( auto & nodes : pages )
 					{
@@ -2213,7 +2213,7 @@ namespace c3d
 							auto hash = size_t( positionsBuffer.getOffset() );
 							hash = hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
 							auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
-							auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer );
+							auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer, mshBuffer );
 
 							if ( res )
 							{

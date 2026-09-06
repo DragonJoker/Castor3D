@@ -26,6 +26,10 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+
 CU_ImplementSmartPtr( c3d, Submesh )
 
 namespace c3d
@@ -258,6 +262,10 @@ namespace c3d
 					if ( m_indexMapping )
 						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
 
+					BufferBase const * meshletBuffer{};
+					if ( m_sourceBufferOffset.hasData( SubmeshData::eMeshlets ) )
+						meshletBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eMeshlets );
+
 					combine = m_componentCombine;
 					remFlags( combine, components.getSkinFlag() );
 					combine.hasSkinFlag = false;
@@ -266,8 +274,7 @@ namespace c3d
 					for ( auto & [_, finalBufferOffset] : m_finalBufferOffsets )
 					{
 						finalBufferOffset = device.geometryPools->getBuffer( getPointsCount()
-							, indexBuffer
-							, combine );
+							, indexBuffer, meshletBuffer, combine );
 
 						if ( !finalBufferOffset.hasData( SubmeshData::ePositions )
 							|| !finalBufferOffset.getBufferChunk( SubmeshData::ePositions ).buffer )
@@ -1428,14 +1435,18 @@ namespace c3d
 				if ( auto meshletComponent = getComponent< MeshletComponent >() )
 					meshletComponent->getData().instantiate( *geometry, *pass );
 
+				// Initialise only if the submesh itself is already initialised,
+				// because if it is not, the buffers will be initialised by the call to initialise().
 				if ( auto it = m_finalBufferOffsets.try_emplace( geometry->getHash( *pass, *this ) ).first;
 					m_initialised && !it->second )
 				{
-					// Initialise only if the submesh itself is already initialised,
-					// because if it is not, the buffers will be initialised by the call to initialise().
 					BufferBase const * indexBuffer{};
 					if ( m_indexMapping )
 						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
+
+					BufferBase const * meshletBuffer{};
+					if ( m_sourceBufferOffset.hasData( SubmeshData::eMeshlets ) )
+						meshletBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eMeshlets );
 
 					auto combine = getComponentCombine();
 					auto const & engine = *getOwner()->getEngine();
@@ -1443,8 +1454,7 @@ namespace c3d
 					remFlags( combine, components.getSkinFlag() );
 					RenderDevice & device = engine.getRenderSystem()->getRenderDevice();
 					it->second = device.geometryPools->getBuffer( getPointsCount()
-						, indexBuffer
-						, combine );
+						, indexBuffer, meshletBuffer, combine );
 
 					if ( !it->second.hasData( SubmeshData::ePositions )
 						|| !it->second.getBufferChunk( SubmeshData::ePositions ).buffer )

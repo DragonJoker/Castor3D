@@ -108,26 +108,31 @@ namespace c3d
 		struct BufferNodes
 		{
 			explicit BufferNodes( BufferBase const * posBuffer
-				, BufferBase const * idxBuffer )
+				, BufferBase const * idxBuffer
+				, BufferBase const * mshBuffer )
 				: posBuffer{ posBuffer }
 				, idxBuffer{ idxBuffer }
+				, mshBuffer{ mshBuffer }
 			{
 			}
 
 			BufferBase const * posBuffer{};
 			BufferBase const * idxBuffer{};
+			BufferBase const * mshBuffer{};
 			NodesView nodes;
 		};
 
 		auto emplace( BufferBase const & posBuffer
-			, BufferBase const * idxBuffer )
+			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer )
 		{
 			auto it = std::find_if( begin()
 				, end()
-				, [&posBuffer, idxBuffer]( BufferNodes const & lookup )
+				, [&posBuffer, idxBuffer, mshBuffer]( BufferNodes const & lookup )
 				{
 					return lookup.posBuffer == &posBuffer
-						&& lookup.idxBuffer == idxBuffer;
+						&& lookup.idxBuffer == idxBuffer
+						&& lookup.mshBuffer == mshBuffer;
 				} );
 
 			if ( it == end() )
@@ -143,7 +148,7 @@ namespace c3d
 					}
 				}
 
-				m_buffers.emplace_back( &posBuffer, idxBuffer );
+				m_buffers.emplace_back( &posBuffer, idxBuffer, mshBuffer );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -152,9 +157,10 @@ namespace c3d
 
 		void emplace( BufferBase const & posBuffer
 			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer
 			, RenderedNode node )
 		{
-			auto it = emplace( posBuffer, idxBuffer );
+			auto it = emplace( posBuffer, idxBuffer, mshBuffer );
 			it->nodes.emplace( c3d::move( node ) );
 		}
 
@@ -264,6 +270,7 @@ namespace c3d
 		void emplace( PipelineAndID const & pipeline
 			, BufferBase const & posBuffer
 			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer
 			, CulledNode const & culled
 			, NodeCommand command
 			, bool isFrontCulled )
@@ -288,6 +295,7 @@ namespace c3d
 			auto it = emplace( pipeline, isFrontCulled );
 			it->nodes.emplace( posBuffer
 				, idxBuffer
+				, mshBuffer
 				, RenderedNode{ culled.node
 					, culled.visible
 					, c3d::move( command ) } );

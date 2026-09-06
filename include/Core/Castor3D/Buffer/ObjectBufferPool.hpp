@@ -223,17 +223,20 @@ namespace c3d
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	vertexCount		The wanted vertex count.
 		 *\param[in]	indexBuffer		The index buffer to link to the result.
+		 *\param[in]	meshletBuffer	The meshlet buffer to link to the result.
 		 *\param[in]	components		The components for which the result will have allocated buffers.
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
 		 *\param[in]	vertexCount		Le nombre de sommets voulus.
 		 *\param[in]	indexBuffer		Le buffer d'indices à lier au résultat.
+		 *\param[in]	meshletBuffer	Le buffer de meshlets à lier au résultat.
 		 *\param[in]	components		Les composants pour lesquels le résultat aura un buffer alloué.
 		 *\return		Le tampon GPU.
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, BufferBase const * indexBuffer
+			, BufferBase const * meshletBuffer
 			, SubmeshComponentCombine const & components );
 		/**
 		 *\~english
@@ -253,6 +256,15 @@ namespace c3d
 		 *\return		Le buffer d'indices lié buffer de positions donné.
 		 */
 		C3D_API BufferBase const & getIndexBuffer( BufferBase const & buffer );
+		/**
+		 *\~english
+		 *\param[in]	buffer	The positions buffer.
+		 *\return		The meshlet buffer linked to the given positions buffer.
+		 *\~french
+		 *\param[in]	buffer	Le buffer de positions.
+		 *\return		Le buffer de meshlets lié buffer de positions donné.
+		 */
+		C3D_API BufferBase const & getMeshletBuffer( BufferBase const & buffer );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -280,6 +292,7 @@ namespace c3d
 		String m_debugName;
 		HashMap< size_t, BufferArray > m_buffers;
 		HashMap< BufferBase const * , BufferBase const * > m_indexBuffers;
+		HashMap< BufferBase const * , BufferBase const * > m_meshletBuffers;
 	};
 }
 

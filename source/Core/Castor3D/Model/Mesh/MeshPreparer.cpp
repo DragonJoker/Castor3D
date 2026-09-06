@@ -8,6 +8,10 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
+#if C3D_UseMeshShaders
+#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
+#endif
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <meshoptimizer.h>
@@ -420,7 +424,7 @@ namespace c3d
 		meshopt::optimizeFetch( remapped );
 
 #if C3D_UseMeshShaders
-		RenderDevice & device = submesh.getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
+		RenderDevice & device = *submesh.getOwner()->getEngine()->getRenderDevice();
 
 		if ( device.hasMeshAndTaskShaders() )
 		{

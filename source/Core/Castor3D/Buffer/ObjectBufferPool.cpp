@@ -234,17 +234,24 @@ namespace c3d
 		if ( indexCount && vertexCount )
 			m_indexBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
 				, &result.getBuffer( SubmeshData::eIndex ) );
+		if ( meshletCount && vertexCount )
+			m_meshletBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
+				, &result.getBuffer( SubmeshData::eMeshlets ) );
 		return result;
 	}
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, BufferBase const * indexBuffer
+		, BufferBase const * meshletBuffer
 		, SubmeshComponentCombine const & components )
 	{
 		auto result = doGetBuffer( vertexCount, 0u, 0u, components, true );
 		if ( indexBuffer )
 			m_indexBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
 				, indexBuffer );
+		if ( meshletBuffer )
+			m_meshletBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
+				, meshletBuffer );
 		return result;
 	}
 
@@ -283,6 +290,14 @@ namespace c3d
 		auto it = m_indexBuffers.find( &buffer );
 		if ( it == m_indexBuffers.end() )
 			CU_Exception( "Couldn't find the index buffer linked to positions buffer." );
+		return *it->second;
+	}
+
+	BufferBase const & ObjectBufferPool::getMeshletBuffer( BufferBase const & buffer )
+	{
+		auto it = m_meshletBuffers.find( &buffer );
+		if ( it == m_meshletBuffers.end() )
+			CU_Exception( "Couldn't find the meshlet buffer linked to positions buffer." );
 		return *it->second;
 	}
 

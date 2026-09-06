@@ -34,7 +34,7 @@ namespace c3d
 			finalOffsets.addDescriptorWriteT( writes, SubmeshData::ePositions, MeshletBoundsTransformPass::ePositions );
 			if ( pipeline.normals )
 				finalOffsets.addDescriptorWriteT( writes, SubmeshData::eNormals, MeshletBoundsTransformPass::eNormals );
-			finalOffsets.addDescriptorWriteT( writes, SubmeshData::eMeshlets, MeshletBoundsTransformPass::eMeshlets );
+			sourceOffsets.addDescriptorWriteT( writes, SubmeshData::eMeshlets, MeshletBoundsTransformPass::eMeshlets );
 			output.addDescriptorWriteT( writes, MeshletBoundsTransformPass::eOutCullData );
 
 			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( toUtf8(  pipeline.getName() ) );

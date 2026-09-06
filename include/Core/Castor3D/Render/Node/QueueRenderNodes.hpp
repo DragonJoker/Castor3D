@@ -59,16 +59,19 @@ namespace c3d
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, BufferBase const & posBuffer
-			, BufferBase const * idxBuffer )const;
+			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer )const;
 		C3D_API uint32_t getPipelineNodesIndex( Submesh const & submesh
 			, Pass const & pass
 			, BufferBase const & posBuffer
 			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer
 			, bool isFrontCulled )const;
 		C3D_API uint32_t getPipelineNodesIndex( BillboardBase const & billboard
 			, Pass const & pass
 			, BufferBase const & posBuffer
 			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer
 			, bool isFrontCulled )const;
 
 		auto & getNodesIds()const noexcept

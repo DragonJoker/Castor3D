@@ -18,14 +18,17 @@ namespace c3d
 	void registerPipelineNodes( PipelineBaseHash hash
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, Vector< PipelineBuffer > & nodesIds );
 	uint32_t getPipelineNodeIndex( PipelineBaseHash hash
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, Vector< PipelineBuffer > const & cont );
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, Vector< PipelineBuffer > const & cont
 		, PipelineNodes * nodes
 		, VkDeviceSize maxNodesCount );

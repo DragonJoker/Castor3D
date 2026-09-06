@@ -5,35 +5,39 @@ namespace c3d
 	void registerPipelineNodes( PipelineBaseHash hash
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, Vector< PipelineBuffer > & nodesIds )
 	{
 		auto it = std::find_if( nodesIds.begin()
 			, nodesIds.end()
-			, [&hash, &posBuffer, idxBuffer]( PipelineBuffer const & lookup )
+			, [&hash, &posBuffer, idxBuffer, mshBuffer]( PipelineBuffer const & lookup )
 			{
 				return lookup.hash == hash
 					&& lookup.posBuffer == &posBuffer
-					&& lookup.idxBuffer == idxBuffer;
+					&& lookup.idxBuffer == idxBuffer
+					&& lookup.mshBuffer == mshBuffer;
 			} );
 
 		if ( it == nodesIds.end() )
 		{
-			nodesIds.emplace_back( hash, &posBuffer, idxBuffer );
+			nodesIds.emplace_back( hash, &posBuffer, idxBuffer, mshBuffer );
 		}
 	}
 
 	uint32_t getPipelineNodeIndex( PipelineBaseHash hash
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, Vector< PipelineBuffer > const & cont )
 	{
 		auto it = std::find_if( cont.begin()
 			, cont.end()
-			, [&hash, &posBuffer, idxBuffer]( PipelineBuffer const & lookup )
+			, [&hash, &posBuffer, idxBuffer, mshBuffer]( PipelineBuffer const & lookup )
 			{
 				return lookup.hash == hash
 					&& lookup.posBuffer == &posBuffer
-					&& lookup.idxBuffer == idxBuffer;
+					&& lookup.idxBuffer == idxBuffer
+					&& lookup.mshBuffer == mshBuffer;
 			} );
 		CU_Require( it != cont.end() );
 		return it != cont.end()
@@ -44,11 +48,12 @@ namespace c3d
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, Vector< PipelineBuffer > const & cont
 		, PipelineNodes * nodes
 		, VkDeviceSize maxNodesCount )
 	{
-		auto index = getPipelineNodeIndex( hash, posBuffer, idxBuffer, cont );
+		auto index = getPipelineNodeIndex( hash, posBuffer, idxBuffer, mshBuffer, cont );
 		CU_Require( index < maxNodesCount );
 		return nodes[index];
 	}

@@ -574,6 +574,14 @@ namespace c3d
 	}
 
 	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::getIdentity()
+	{
+		SquareMatrix< T, Count > result;
+		result.setIdentity();
+		return result;
+	}
+
+	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::getTransposed()const
 	{
 		SquareMatrix< T, Count > result( *this );

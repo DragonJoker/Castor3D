@@ -614,7 +614,8 @@ namespace c3d
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, BufferBase const & posBuffer
-			, BufferBase const * idxBuffer )const;
+			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
 		C3D_API RenderCounts const & getVisibleCounts()const;
 

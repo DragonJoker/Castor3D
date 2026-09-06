@@ -366,37 +366,45 @@ namespace c3d::shader
 		, Normal3T const & nml
 		, Normal4T const & tan )
 	{
+		sdw::ShaderWriter & writer = *this->getWriter();
+
 		if ( flags.enableTangentSpace() )
 		{
-			this->normal = nml;
-			tangent = tan;
-			bitangent = cross( this->normal, shader::getXYZ( tangent ) ) * shader::getW( tangent );
+			auto tmpNormal = writer.declLocale( "tmpNormal", nml );
+			auto tmpTangent = writer.declLocale( "tmpTangent", tan );
+			auto tmpBitangent = writer.declLocale( "tmpBitangent", cross( tmpNormal, shader::getXYZ( tmpTangent ) ) * shader::getW( tmpTangent ) );
 
 			if ( flags.isFrontCulled() )
 			{
-				this->normal = -this->normal;
-				shader::negateXYZ( tangent );
-				bitangent = -bitangent;
+				tmpNormal = -tmpNormal;
+				shader::negateXYZ( tmpTangent );
+				tmpBitangent = -tmpBitangent;
 			}
+
+			this->normal = tmpNormal;
+			tangent = tmpTangent;
+			bitangent = tmpBitangent;
 
 			if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
 			{
 				CU_Require( !worldPos.getExpr()->isDummy() );
 				CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
-				auto tbn = this->getWriter()->declLocale( "tbn"
-					, transpose( mat3( shader::getRawXYZ( tangent ), shader::getRawXYZ( bitangent ), shader::getRawXYZ( this->normal ) ) ) );
+				auto tbn = writer.declLocale( "tbn"
+					, transpose( mat3( shader::getRawXYZ( tmpTangent ), shader::getRawXYZ( tmpBitangent ), shader::getRawXYZ( tmpNormal ) ) ) );
 				tangentSpaceFragPosition = tbn * worldPos;
 				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
 			}
 		}
 		else if ( this->normal.isEnabled() )
 		{
-			this->normal = nml;
+			auto tmpNormal = writer.declLocale( "tmpNormal", nml );
 
 			if ( flags.isFrontCulled() )
 			{
-				this->normal = -this->normal;
+				tmpNormal = -tmpNormal;
 			}
+
+			this->normal = tmpNormal;
 		}
 	}
 

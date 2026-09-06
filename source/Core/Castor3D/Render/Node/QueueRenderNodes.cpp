@@ -83,15 +83,16 @@ namespace c3d
 			{
 				auto & posBuffer = bufferChunk.buffer->getBuffer();
 				auto idxChunk = node.getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
-				auto idxBuffer = idxChunk.hasData()
-					? &idxChunk.getBuffer()
-					: nullptr;
+				auto idxBuffer = idxChunk.hasData() ? &idxChunk.getBuffer() : nullptr;
+				auto mshChunk = node.getSourceBufferOffsets().getBufferChunk( SubmeshData::eMeshlets );
+				auto mshBuffer = mshChunk.hasData() ? &mshChunk.getBuffer() : nullptr;
 
 				if constexpr ( std::is_same_v< BillboardRenderNode, NodeT > )
 				{
 					nodes.emplace( pipeline
 						, posBuffer
 						, idxBuffer
+						, mshBuffer
 						, culled
 						, getCommand( node.getSourceBufferOffsets(), bufferChunk, culled )
 						, isFrontCulled );
@@ -101,12 +102,13 @@ namespace c3d
 					nodes.emplace( pipeline
 						, posBuffer
 						, idxBuffer
+						, mshBuffer
 						, culled
 						, getCommand( node.getSourceBufferOffsets(), bufferChunk, culled )
 						, isFrontCulled );
 				}
 
-				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), posBuffer, idxBuffer, nodesIds );
+				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), posBuffer, idxBuffer, mshBuffer, nodesIds );
 				return true;
 			}
 
@@ -142,6 +144,7 @@ namespace c3d
 			, RenderPipeline const & pipeline
 			, BufferBase const & posBuffer
 			, BufferBase const * idxBuffer
+			, BufferBase const * mshBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, bool hasDrawId )
@@ -170,7 +173,7 @@ namespace c3d
 				commandBuffer.bindDescriptorSet( *pipeline.getOwner()->getCuller().getScene().getBindlessTexDescriptorSet()
 					, pipeline.getPipelineLayout() );
 
-				pipelineId = queueNodes.getPipelineNodesIndex( pipeline.getFlagsHash(), posBuffer, idxBuffer );
+				pipelineId = queueNodes.getPipelineNodesIndex( pipeline.getFlagsHash(), posBuffer, idxBuffer, mshBuffer );
 
 				if ( hasDrawId
 					&& !pipeline.hasMeshletDescriptorSetLayout()
@@ -1427,11 +1430,13 @@ namespace c3d
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( PipelineBaseHash const & hash
 		, BufferBase const & posBuffer
-		, BufferBase const * idxBuffer )const
+		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer )const
 	{
 		return getPipelineNodeIndex( hash
 			, posBuffer
 			, idxBuffer
+			, mshBuffer
 			, getPassPipelineNodes() );
 	}
 
@@ -1439,24 +1444,28 @@ namespace c3d
 		, Pass const & pass
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, bool isFrontCulled )const
 	{
 		auto const & rp = *getOwner()->getOwner();
 		return getPipelineNodesIndex( getPipelineBaseHash( rp, submesh, pass, isFrontCulled )
 			, posBuffer
-			, idxBuffer );
+			, idxBuffer
+			, mshBuffer );
 	}
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( BillboardBase const & billboard
 		, Pass const & pass
 		, BufferBase const & posBuffer
 		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer
 		, bool isFrontCulled )const
 	{
 		auto const & rp = *getOwner()->getOwner();
 		return getPipelineNodesIndex( getPipelineBaseHash( rp, billboard, pass, isFrontCulled )
 			, posBuffer
-			, idxBuffer );
+			, idxBuffer
+			, mshBuffer );
 	}
 
 	PipelineAndID QueueRenderNodes::doGetPipeline( ShadowMapLightTypeArray const & shadowMaps
@@ -1699,7 +1708,7 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, pages] : buffersNodes )
 		{
 			for ( auto const & nodes : pages )
 			{
@@ -1708,6 +1717,7 @@ namespace c3d
 					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, m_nodesIds
 						, nodesIdsBuffer
 						, maxNodesCount );
@@ -1717,6 +1727,7 @@ namespace c3d
 						, pipeline
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, viewport
 						, scissors
 						, false );
@@ -1763,13 +1774,14 @@ namespace c3d
 		uint32_t result{};
 		uint32_t * pipelinesBuffer = nullptr;
 
-		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
 				, *posBuffer
 				, idxBuffer
+				, mshBuffer
 				, viewport
 				, scissors
 				, false );
@@ -1817,7 +1829,7 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, pages] : buffersNodes )
 		{
 			for ( auto const & nodes : pages )
 			{
@@ -1826,6 +1838,7 @@ namespace c3d
 					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, m_nodesIds
 						, nodesIdsBuffer
 						, maxNodesCount );
@@ -1835,6 +1848,7 @@ namespace c3d
 						, pipeline
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, viewport
 						, scissors
 						, true );
@@ -1894,13 +1908,14 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
 				, *posBuffer
 				, idxBuffer
+				, nullptr
 				, viewport
 				, scissors
 				, true );
@@ -1959,7 +1974,7 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, pages] : buffersNodes )
 		{
 			for ( auto const & nodes : pages )
 			{
@@ -1968,6 +1983,7 @@ namespace c3d
 					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, m_nodesIds
 						, nodesIdsBuffer
 						, maxNodesCount );
@@ -1978,6 +1994,7 @@ namespace c3d
 						, pipeline
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, viewport
 						, scissors
 						, true );
@@ -2039,13 +2056,14 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
 				, *posBuffer
 				, idxBuffer
+				, mshBuffer
 				, viewport
 				, scissors
 				, true );
@@ -2106,7 +2124,7 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, pages] : buffersNodes )
 		{
 			for ( auto const & nodes : pages )
 			{
@@ -2115,6 +2133,7 @@ namespace c3d
 					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, m_nodesIds
 						, nodesIdsBuffer
 						, maxNodesCount );
@@ -2124,6 +2143,7 @@ namespace c3d
 						, pipeline
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, viewport
 						, scissors
 						, true );
@@ -2185,13 +2205,14 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
 				, *posBuffer
 				, idxBuffer
+				, mshBuffer
 				, viewport
 				, scissors
 				, true );
@@ -2242,7 +2263,7 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, pages] : buffersNodes )
 		{
 			for ( auto const & nodes : pages )
 			{
@@ -2251,6 +2272,7 @@ namespace c3d
 					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, m_nodesIds
 						, nodesIdsBuffer
 						, maxNodesCount );
@@ -2260,6 +2282,7 @@ namespace c3d
 						, pipeline
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, viewport
 						, scissors
 						, true );
@@ -2307,7 +2330,7 @@ namespace c3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [posBuffer, idxBuffer, pages] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, mshBuffer, pages] : buffersNodes )
 		{
 			for ( auto const & nodes : pages )
 			{
@@ -2316,6 +2339,7 @@ namespace c3d
 					auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, m_nodesIds
 						, nodesIdsBuffer
 						, maxNodesCount );
@@ -2325,6 +2349,7 @@ namespace c3d
 						, pipeline
 						, *posBuffer
 						, idxBuffer
+						, mshBuffer
 						, viewport
 						, scissors
 						, true );

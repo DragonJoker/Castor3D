@@ -181,6 +181,8 @@ namespace c3d::shader
 	C3D_API RetDerivVec3 getXYW( DerivVec4 const & in );
 	C3D_API sdw::RetFloat getW( sdw::Vec4 const & in );
 	C3D_API RetDerivFloat getW( DerivVec4 const & in );
+	C3D_API void setXYZW( sdw::Vec4 & out, sdw::Vec3 const & xyz, sdw::Float const & w );
+	C3D_API void setXYZW( DerivVec4 & out, DerivVec3 const & xyz, DerivFloat const & w );
 	//@}
 	/**@name Operator overloads to use with Derivative values */
 	//@{

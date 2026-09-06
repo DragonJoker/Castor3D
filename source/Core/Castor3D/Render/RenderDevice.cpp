@@ -544,6 +544,9 @@ namespace c3d
 			gpu.getFeatures( m_features2 );
 			gpu.getProperties( m_properties2 );
 			features = m_features2.features;
+#if defined( VK_EXT_mesh_shader )
+			m_meshShaderFeaturesEXT.primitiveFragmentShadingRateMeshShader = false;
+#endif
 		}
 
 #if VK_KHR_deferred_host_operations

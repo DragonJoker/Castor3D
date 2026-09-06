@@ -162,6 +162,13 @@ namespace c3d
 		SquareMatrix & invert();
 		/**
 		 *\~english
+		 *\return		The identity matrix.
+		 *\~french
+		 *\return		La matrice identité.
+		 */
+		static SquareMatrix getIdentity();
+		/**
+		 *\~english
 		 *name Assignment operators.
 		 *\~french
 		 *name Opérateurs d'affectation.

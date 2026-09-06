@@ -432,9 +432,10 @@ namespace c3d
 
 	uint32_t RenderNodesPass::getPipelineNodesIndex( PipelineBaseHash const & hash
 		, BufferBase const & posBuffer
-		, BufferBase const * idxBuffer )const
+		, BufferBase const * idxBuffer
+		, BufferBase const * mshBuffer )const
 	{
-		return getRenderQueue().getRenderNodes().getPipelineNodesIndex( hash, posBuffer, idxBuffer );
+		return getRenderQueue().getRenderNodes().getPipelineNodesIndex( hash, posBuffer, idxBuffer, mshBuffer );
 	}
 
 	uint32_t RenderNodesPass::getDrawCallsCount()const
