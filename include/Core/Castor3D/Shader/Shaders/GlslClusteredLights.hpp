@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
-#include "Castor3D/Shader/Shaders/GlslBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslPagedBuffer.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>

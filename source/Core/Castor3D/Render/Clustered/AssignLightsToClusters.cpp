@@ -51,7 +51,7 @@ namespace c3d
 
 		static ShaderPtr createShader( RenderDevice const & device )
 		{
-			uint32_t NumThreads = 32u;
+			uint32_t const NumThreads = getEngine( device ).isRenderDocSupportEnabled() ? 1u : 32u;
 
 			sdw::ComputeWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
@@ -171,44 +171,80 @@ namespace c3d
 			shader::Utils utils{ writer };
 			writer.implementMainT< sdw::VoidT >( NumThreads
 				, [&c3d_pointLightBVH, &c3d_spotLightBVH, &c3d_cameraData, &c3d_pointLightIndices, &c3d_spotLightIndices, &c3d_clustersData, &c3D_clustersAABB, &gsClusterAABB, &gsClusterIndex1D
-					, &writer, &lights, &bvh, &lightsBvh, &processPointLights, &processSpotLights]( sdw::ComputeIn const & in )
+					, &device, &writer, &lights, &bvh, &lightsBvh, &processPointLights, &processSpotLights]( sdw::ComputeIn const & in )
 				{
-					auto const & groupIndex = in.localInvocationIndex;
-
-					// Initialise traversal
-					sdwIF( writer, groupIndex == 0_u )
+					if ( getEngine( device ).isRenderDocSupportEnabled() )
 					{
 						gsClusterIndex1D = c3d_clustersData.computeClusterIndex1D( uvec3( in.workGroupID ) );
 						gsClusterAABB = c3D_clustersAABB[gsClusterIndex1D];
 						lightsBvh.resetTraversal();
 						bvh.resetTraversal();
-					}
-					sdwFI
-					shader::groupMemoryBarrierWithGroupSync( writer );
 
-					// Point lights first phase
-					lightsBvh.traversePointLights( c3d_pointLightIndices, c3d_pointLightBVH
-						, bvh, gsClusterAABB, c3d_clustersData.pointLightLevels(), c3d_clustersData.pointLightCount(), groupIndex );
+						// Point lights first phase
+						sdwFOR( writer, sdw::UInt, groupIndex, 0_u, groupIndex < 32u, ++groupIndex )
+						{
+							lightsBvh.traversePointLights( c3d_pointLightIndices, c3d_pointLightBVH
+								, bvh, gsClusterAABB, c3d_clustersData.pointLightLevels(), c3d_clustersData.pointLightCount(), groupIndex );
+						}
+						sdwROF
 
-					// Point lights second phase
-					processPointLights( groupIndex );
-					shader::groupMemoryBarrierWithGroupSync( writer );
+						// Point lights second phase
+						processPointLights( 0_u );
 
-					// Reset the stack.
-					sdwIF( writer, groupIndex == 0_u )
-					{
+						// Reset the stack.
 						lightsBvh.resetTraversal();
 						bvh.resetTraversal();
+
+						// Spot lights first phase
+						sdwFOR( writer, sdw::UInt, groupIndex, 0_u, groupIndex < 32u, ++groupIndex )
+						{
+							lightsBvh.traverseSpotLights( c3d_spotLightIndices, lights, c3d_cameraData, c3d_spotLightBVH
+								, bvh, gsClusterAABB, c3d_clustersData.pointLightCount(), c3d_clustersData.spotLightLevels(), c3d_clustersData.spotLightCount(), groupIndex );
+						}
+						sdwROF
+
+						// Spot lights second phase
+						processSpotLights( 0_u );
 					}
-					sdwFI
-					shader::groupMemoryBarrierWithGroupSync( writer );
+					else
+					{
+						auto const & groupIndex = in.localInvocationIndex;
 
-					// Spot lights first phase
-					lightsBvh.traverseSpotLights( c3d_spotLightIndices, lights, c3d_cameraData, c3d_spotLightBVH
-						, bvh, gsClusterAABB, c3d_clustersData.pointLightCount(), c3d_clustersData.spotLightLevels(), c3d_clustersData.spotLightCount(), groupIndex );
+						// Initialise traversal
+						sdwIF( writer, groupIndex == 0_u )
+						{
+							gsClusterIndex1D = c3d_clustersData.computeClusterIndex1D( uvec3( in.workGroupID ) );
+							gsClusterAABB = c3D_clustersAABB[gsClusterIndex1D];
+							lightsBvh.resetTraversal();
+							bvh.resetTraversal();
+						}
+						sdwFI
+						shader::groupMemoryBarrierWithGroupSync( writer );
 
-					// Spot lights second phase
-					processSpotLights( groupIndex );
+						// Point lights first phase
+						lightsBvh.traversePointLights( c3d_pointLightIndices, c3d_pointLightBVH
+							, bvh, gsClusterAABB, c3d_clustersData.pointLightLevels(), c3d_clustersData.pointLightCount(), groupIndex );
+
+						// Point lights second phase
+						processPointLights( groupIndex );
+						shader::groupMemoryBarrierWithGroupSync( writer );
+
+						// Reset the stack.
+						sdwIF( writer, groupIndex == 0_u )
+						{
+							lightsBvh.resetTraversal();
+							bvh.resetTraversal();
+						}
+						sdwFI
+						shader::groupMemoryBarrierWithGroupSync( writer );
+
+						// Spot lights first phase
+						lightsBvh.traverseSpotLights( c3d_spotLightIndices, lights, c3d_cameraData, c3d_spotLightBVH
+							, bvh, gsClusterAABB, c3d_clustersData.pointLightCount(), c3d_clustersData.spotLightLevels(), c3d_clustersData.spotLightCount(), groupIndex );
+
+						// Spot lights second phase
+						processSpotLights( groupIndex );
+					}
 				} );
 			return writer.getBuilder().releaseShader();
 		}

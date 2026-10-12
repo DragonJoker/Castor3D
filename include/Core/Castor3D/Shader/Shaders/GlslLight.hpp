@@ -158,6 +158,7 @@ namespace c3d::shader
 		auto cutOffsCosDiff()const { return innerCutOffCos() - outerCutOffCos(); }
 	};
 
+	C3D_API sdw::Float computeRange( sdw::Float const & range, sdw::Float const & intensity );
 	C3D_API sdw::Float computeRange( Light const & light );
 
 	inline sdw::Float computeRange( PointLight const & light )
@@ -182,6 +183,20 @@ namespace c3d::shader
 		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & offset );
 		C3D_API PointLight getPointLight( sdw::UInt const & offset );
 		C3D_API SpotLight getSpotLight( sdw::UInt const & offset );
+
+		C3D_API void getPointLightData( sdw::UInt & offset
+			, sdw::Vec4 & colourRange
+			, sdw::Vec4 & intensityShadowCascade
+			, sdw::Vec4 & positionEnabled )const;
+		//\param[in]	cutOffData1	outerCutOffCos, innerCutOff, outerCutOff, innerCutOffSin
+		//\param[in]	cutOffData2	outerCutOffSin, innerCutOffCos, outerCutOffTan
+		C3D_API void getSpotLightData( sdw::UInt & offset
+			, sdw::Vec4 & colourRange
+			, sdw::Vec4 & intensityShadowCascade
+			, sdw::Vec4 & positionEnabled
+			, sdw::Vec4 & directionExponent
+			, sdw::Vec4 & cutOffData1
+			, sdw::Vec4 & cutOffData2 )const;
 
 		sdw::UInt getDirectionalsEnd()const
 		{
@@ -209,6 +224,10 @@ namespace c3d::shader
 		void getBaseLight( sdw::Vec4 & lightData
 			, Light const & light
 			, sdw::UInt & offset );
+		C3D_API void getBaseLightData( sdw::UInt & offset
+			, sdw::Vec4 & colourRange
+			, sdw::Vec4 & intensityShadowCascade
+			, sdw::Vec4 & positionEnabled )const;
 
 	private:
 		sdw::Function< shader::DirectionalLight

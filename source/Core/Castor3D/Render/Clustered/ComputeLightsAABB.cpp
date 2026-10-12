@@ -57,18 +57,22 @@ namespace c3d
 			auto loadPointLightAABB = writer.implementFunction< shader::AABB >( "loadPointLightAABB"
 				, [&writer, &lights, c3d_cameraData]( sdw::UInt const & lightIndex )
 				{
+					auto colourRange = writer.declLocale< sdw::Vec4 >( "colourRange", vec4( 0.0_f ) );
+					auto intensityShadowCascade = writer.declLocale< sdw::Vec4 >( "intensityShadowCascade", vec4( 0.0_f ) );
+					auto posEnabled = writer.declLocale< sdw::Vec4 >( "posEnabled", vec4( 0.0_f ) );
 					auto lightOffset = writer.declLocale( "lightOffset"
 						, lights.getDirectionalsEnd() + lightIndex * PointLightInstance::LightDataComponents );
-					auto point = writer.declLocale( "point"
-						, lights.getPointLight( lightOffset ) );
+					lights.getPointLightData( lightOffset, colourRange, intensityShadowCascade, posEnabled );
 					auto result = writer.declLocale< shader::AABB >( "result" );
 
-					sdwIF( writer, point.enabled() )
+					// TODO: Remove the if by sending only enabled lights to the shader.
+					sdwIF( writer, posEnabled.w() != 0.0_f )
 					{
 						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
-
-						result = shader::AABB{ vsPosition, computeRange( point ) };
+							, c3d_cameraData.worldToCurView( vec4( posEnabled.xyz(), 1.0_f)).xyz());
+						auto range = writer.declLocale( "range"
+							, shader::computeRange( colourRange.w(), intensityShadowCascade.x() ) );
+						result = shader::AABB{ vsPosition, range };
 					}
 					sdwELSE
 					{
@@ -81,75 +85,126 @@ namespace c3d
 				}
 				, sdw::InUInt{ writer, "lightIndex" } );
 
-			auto getConeAABB = writer.implementFunction< shader::AABB >( "getConeAABB"
-				, [&writer]( sdw::Vec3 const & vsApex
-					, sdw::Vec3 const & vsBase
-					, sdw::Float const & fBaseRadius )
+			auto generateOrthonormalBasis = writer.implementFunction< sdw::Void >( "generateOrthonormalBasis"
+				, [&writer]( sdw::Vec3 const & n
+					, sdw::Vec3 b1
+					, sdw::Vec3 b2 )
 				{
-					auto a = writer.declLocale( "a"
-						, vsBase - vsApex );
-					auto e = writer.declLocale( "e"
-						, sqrt( vec3( 1.0_f ) - a * a / dot( a, a ) ) );
+					// https://graphics.pixar.com/library/OrthonormalB/paper.pdf
+					auto sign = writer.declLocale( "sign", writer.ternary( n.z() > 0.0_f, 1.0_f, -1.0_f ) );
+					auto a = writer.declLocale( "a", -1.0_f / ( sign + n.z() ) );
+					auto b = writer.declLocale( "b", n.x() * n.y() * a );
+					b1 = sdw::vec3( 1.0_f + sign * n.x() * n.x() * a, sign * b, -sign * n.x() );
+					b2 = sdw::vec3( b, sign + n.y() * n.y() * a, -n.y() );
+				}
+				, sdw::InVec3{ writer, "n" }
+				, sdw::OutVec3{ writer, "b1" }
+				, sdw::OutVec3{ writer, "b2" } );
 
-					writer.returnStmt( shader::AABB( vec4( min( vsApex, vsBase - e * fBaseRadius ), 1.0f )
-						, vec4( max( vsApex, vsBase + e * fBaseRadius ), 1.0f ) ) );
+			auto getConeAABB = writer.implementFunction< shader::AABB >( "getConeAABB"
+				, [&writer, &generateOrthonormalBasis]( sdw::Vec3 const & vsApex
+					, sdw::Vec3 const & vsDirection
+					, sdw::Float const & range
+					, sdw::Float const & tanHalfAngle )
+				{
+					//
+					auto up = writer.declLocale< sdw::Vec3 >( "up" );
+					auto right = writer.declLocale< sdw::Vec3 >( "right" );
+					generateOrthonormalBasis( vsDirection, up, right );
+
+					// r = range
+
+					// a = d * tanHalfAngle 
+					// => d² = a²/tanHalfAngle²
+
+					// r² = a² + d²
+					//    = a² + a²/tanHalfAngle²
+					//    = a² * (1 + 1/tanHalfAngle²)
+					// a² = r² / (1 + 1/tanHalfAngle²)
+					// a  = sqrt(r² / (1 + 1/tanHalfAngle²))
+					//    = r * 1 / sqrt(1 + 1/tanHalfAngle²)
+					//    = r * inverseSqrt(1 + 1/tanHalfAngle²)
+
+					auto invSqrt = writer.declLocale( "invSqrt", inverseSqrt( ( 1.0_f + 1.0_f / ( tanHalfAngle * tanHalfAngle ) ) ) );
+					auto a = writer.declLocale( "a", range * sdw::vec3( invSqrt ) );
+					auto d = writer.declLocale( "d", a / tanHalfAngle );
+					auto e = writer.declLocale( "e", range - d );
+
+					//
+					auto z = writer.declLocale( "z", vsApex + vsDirection * d );
+					auto dirE = writer.declLocale( "dirE", vsDirection * e );
+
+					//
+					auto bottomA = writer.declLocale( "bottomA", z + a * up + a * right );
+					auto bottomB = writer.declLocale( "bottomB", z + a * up - a * right );
+					auto bottomC = writer.declLocale( "bottomC", z - a * up + a * right );
+					auto bottomD = writer.declLocale( "bottomD", z - a * up - a * right );
+
+					auto topA = writer.declLocale( "topA", bottomA + dirE );
+					auto topB = writer.declLocale( "topB", bottomB + dirE );
+					auto topC = writer.declLocale( "topC", bottomC + dirE );
+					auto topD = writer.declLocale( "topD", bottomD + dirE );
+
+					// initialize AABB with apex position
+					auto vMin = writer.declLocale( "vMin", vsApex );
+					auto vMax = writer.declLocale( "vMax", vsApex );
+
+					// add 2D quad corners
+					vMin = min( vMin, bottomA );
+					vMin = min( vMin, bottomB );
+					vMin = min( vMin, bottomC );
+					vMin = min( vMin, bottomD );
+					vMin = min( vMin, topA );
+					vMin = min( vMin, topB );
+					vMin = min( vMin, topC );
+					vMin = min( vMin, topD );
+
+					vMax = max( vMax, bottomA );
+					vMax = max( vMax, bottomB );
+					vMax = max( vMax, bottomC );
+					vMax = max( vMax, bottomD );
+					vMax = max( vMax, topA );
+					vMax = max( vMax, topB );
+					vMax = max( vMax, topC );
+					vMax = max( vMax, topD );
+
+					//
+					writer.returnStmt( shader::AABB{ sdw::vec4( vMin, 1.0_f ), sdw::vec4( vMax, 1.0_f ) } );
 				}
 				, sdw::InVec3{ writer, "vsApex" }
-				, sdw::InVec3{ writer, "vsBase" }
-				, sdw::InFloat{ writer, "fBaseRadius" } );
+				, sdw::InVec3{ writer, "vsDirection" }
+				, sdw::InFloat{ writer, "range" }
+				, sdw::InFloat{ writer, "tanHalfAngle" } );
 
 			auto loadSpotLightAABB = writer.implementFunction< shader::AABB >( "loadSpotLightAABB"
 				, [&writer, &lights, &c3d_cameraData, &getConeAABB]( sdw::UInt const & lightIndex )
 				{
+					auto colourRange = writer.declLocale< sdw::Vec4 >( "colourRange", vec4( 0.0_f ) );
+					auto intensityShadowCascade = writer.declLocale< sdw::Vec4 >( "intensityShadowCascade", vec4( 0.0_f ) );
+					auto posEnabled = writer.declLocale< sdw::Vec4 >( "posEnabled", vec4( 0.0_f ) );
+					auto directionExponent = writer.declLocale< sdw::Vec4 >( "directionExponent", vec4( 0.0_f ) );
+					auto cutOffData1 = writer.declLocale< sdw::Vec4 >( "cutOffData1", vec4( 0.0_f ) );
+					auto cutOffData2 = writer.declLocale< sdw::Vec4 >( "cutOffData2", vec4( 0.0_f ) );
 					auto lightOffset = writer.declLocale( "lightOffset"
 						, lights.getPointsEnd() + lightIndex * SpotLightInstance::LightDataComponents );
-					auto spot = writer.declLocale( "spot"
-						, lights.getSpotLight( lightOffset ) );
+					lights.getSpotLightData( lightOffset, colourRange, intensityShadowCascade, posEnabled
+						, directionExponent, cutOffData1, cutOffData2 );
 					auto result = writer.declLocale< shader::AABB >( "result" );
 
-					sdwIF( writer, spot.enabled() )
+					// TODO: Remove the if by sending only enabled lights to the shader.
+					sdwIF( writer, posEnabled.w() != 0.0_f )
 					{
 						auto vsApex = writer.declLocale( "vsApex"
-							, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+							, c3d_cameraData.worldToCurView( vec4( posEnabled.xyz(), 1.0_f ) ).xyz() );
 						auto vsDirection = writer.declLocale( "vsDirection"
-							, c3d_cameraData.worldToCurView( -spot.direction() ) );
+							, c3d_cameraData.worldToCurView( -directionExponent.xyz() ) );
 
-						auto largeRange = writer.declLocale( "largeRange"
-							, computeRange( spot ) );
-						auto smallRange = writer.declLocale( "smallRange"
-							, largeRange * spot.outerCutOffCos() );
-						auto baseRadius = writer.declLocale( "baseRadius"
-							, smallRange * spot.outerCutOffTan() );
+						auto range = writer.declLocale( "range"
+							, shader::computeRange( colourRange.w(), intensityShadowCascade.x() ) );
+						auto tanHalfAngle = writer.declLocale( "tanHalfAngle"
+							, cutOffData2.z() );
 
-						auto smallBase = writer.declLocale( "smallBase"
-							, vsApex + smallRange * vsDirection );
-
-						sdwIF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
-						{
-							// Light is looking the same direction as the camera.
-							// Weird bug here, resulting in both small and large AABB having min.z == max.z
-							// whilst everything looks good when debugging step by step in RenderDoc...
-							// Hence just take the disk AABB
-							auto e = writer.declLocale( "e"
-								, baseRadius * sqrt( vec3( 1.0_f ) - vsDirection * vsDirection ) );
-
-							result = shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
-								, vec4( max( vsApex, smallBase + e ), 1.0_f ) };
-						}
-						sdwELSE
-						{
-							auto smallAABB = writer.declLocale( "smallAABB"
-								, getConeAABB( vsApex, smallBase, baseRadius ) );
-
-							auto largeBase = writer.declLocale( "largeBase"
-								, vsApex + largeRange * vsDirection );
-							auto largeAABB = writer.declLocale( "largeAABB"
-								, getConeAABB( vsApex, largeBase, baseRadius ) );
-
-							result = shader::AABB{ min( smallAABB.min(), largeAABB.min() )
-								, max( smallAABB.max(), largeAABB.max() ) };
-						}
-						sdwFI
+						result = getConeAABB( vsApex, vsDirection, range, tanHalfAngle );
 					}
 					sdwELSE
 					{

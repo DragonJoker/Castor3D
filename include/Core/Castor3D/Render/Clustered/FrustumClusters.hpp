@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Render/PagedBuffer.hpp"
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
+#include "Castor3D/Shader/Shaders/GlslPagedBuffer.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 #include "Castor3D/Shader/Ubos/FroxelsUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"

@@ -126,7 +126,7 @@ namespace c3d
 					}
 					sdwFI
 
-						sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
+					sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
 						auto aabb = writer.declLocale( "threadIndex"
 							, allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex] );

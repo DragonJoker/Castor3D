@@ -197,7 +197,6 @@ namespace c3d
 										: c3d_clustersData.pointLightCount() + c3d_lightIndices[leafIndex] ) );
 								auto aabb = writer.declLocale( "aabb"
 									, allLightsAABB[lightIndex] );
-
 								aabbMin = aabb.min();
 								aabbMax = aabb.max();
 							}
@@ -229,13 +228,12 @@ namespace c3d
 						{
 							auto childIndex = writer.declLocale( "childIndex"
 								, c3d_firstNodeIndex[c3d_childLevel] + childOffset );
+							auto aabb = writer.declLocale( "aabb"
+								, c3d_lightBVH[childIndex] );
+							aabbMin = aabb.min();
+							aabbMax = aabb.max();
 
-							aabbMin = c3d_lightBVH[childIndex].min();
-							aabbMax = c3d_lightBVH[childIndex].max();
-
-							sdwIF( writer, aabbMin.x() == aabbMax.x()
-								&& aabbMin.y() == aabbMax.y()
-								&& aabbMin.z() == aabbMax.z() )
+							sdwIF( writer, all( aabbMin.xyz() == aabbMax.xyz() ) )
 							{
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );

@@ -62,11 +62,16 @@ namespace c3d::shader
 
 	//*********************************************************************************************
 
+	sdw::Float computeRange( sdw::Float const & range, sdw::Float const & intensity )
+	{
+		return sdw::findWriterMandat( range, intensity ).ternary( range <= 0.0_f
+			, sqrt( intensity / 0.00001_f )
+			, range );
+	}
+
 	sdw::Float computeRange( Light const & light )
 	{
-		return light.getWriter()->ternary( light.range() <= 0.0_f
-			, sqrt( light.intensity() / 0.00001_f )
-			, light.range() );
+		return computeRange( light.range(), light.intensity() );
 	}
 
 	//*********************************************************************************************
@@ -170,6 +175,27 @@ namespace c3d::shader
 		return m_getSpotLight( pbaseOffset );
 	}
 
+	void LightsBuffer::getPointLightData( sdw::UInt & offset
+		, sdw::Vec4 & colourRange
+		, sdw::Vec4 & intensityShadowCascade
+		, sdw::Vec4 & positionEnabled )const
+	{
+		getBaseLightData( offset, colourRange, intensityShadowCascade, positionEnabled );
+	}
+
+	void LightsBuffer::getSpotLightData( sdw::UInt & offset
+		, sdw::Vec4 & colourRange
+		, sdw::Vec4 & intensityShadowCascade
+		, sdw::Vec4 & positionEnabled
+		, sdw::Vec4 & directionExponent
+		, sdw::Vec4 & cutOffData1
+		, sdw::Vec4 & cutOffData2 )const
+	{
+		getBaseLightData( offset, colourRange, intensityShadowCascade, positionEnabled );
+		directionExponent = getLightData( offset );
+		cutOffData1 = getLightData( offset );
+		cutOffData2 = getLightData( offset );
+	}
 
 	sdw::Vec4 LightsBuffer::getLightData( sdw::UInt & index )const
 	{
@@ -192,6 +218,16 @@ namespace c3d::shader
 		lightData = getLightData( offset );
 		light.posDir() = lightData.xyz();
 		light.enabled() = m_writer.cast< sdw::UInt >( lightData.w() );
+	}
+
+	void LightsBuffer::getBaseLightData( sdw::UInt & offset
+		, sdw::Vec4 & colourRange
+		, sdw::Vec4 & intensityShadowCascade
+		, sdw::Vec4 & positionEnabled )const
+	{
+		colourRange = getLightData( offset );
+		intensityShadowCascade = getLightData( offset );
+		positionEnabled = getLightData( offset );
 	}
 
 	//*********************************************************************************************

@@ -96,7 +96,7 @@ namespace c3d
 						}
 
 						// Within a warp (of 32 threads), instructions are warp-synchronous
-						// and the GroupMemoryBarrierWithGroupSync() is no longer needed to ensure
+						// and the groupMemoryBarrierWithGroupSync() is no longer needed to ensure
 						// the previous writes to groups shared memory have completed.
 						// Source: DirectCompute Optimizations and Best Practices (2010), Eric Young.
 						// Source: The CUDA Handbook (2013), Nicholas Wilt
@@ -224,8 +224,10 @@ namespace c3d
 						// in this dispatch, then this will reduce to a single element.
 						logStepReduction( groupIndex, groupID );
 
+						// If this is the first thread of the last thread group.
 						sdwIF( writer, groupIndex == 0_u && c3d_numThreadGroups == 1_u )
 						{
+							// Write clusters configuration from global lights AABB
 							auto lightsMin = writer.declLocale( "lightsMin"
 								, gsAABBMin[groupIndex] );
 							auto lightsMax = writer.declLocale( "lightsMax"
