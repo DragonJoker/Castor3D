@@ -47,19 +47,41 @@ namespace c3d_assimp
 		return c3d::Matrix4x4f{ data.data() };
 	}
 
-	inline c3d::Matrix4x4f fromAssimp( c3d::Point3f const & direction
-		, c3d::Point3f const & up )
+	inline c3d::Matrix4x4f fromAssimp( aiMatrix3x3 const & aiMatrix )
 	{
-		c3d::Matrix4x4f result;
-		result.setIdentity();
-		c3d::Point3f xaxis = c3d::point::getNormalised( c3d::point::cross( up, direction ) );
-		c3d::Point3f yaxis = c3d::point::getNormalised( c3d::point::cross( direction, xaxis ) );
+		c3d::Array< float, 16u > data
+			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1, 0.0f
+			, aiMatrix.a2, aiMatrix.b2, aiMatrix.c2, 0.0f
+			, aiMatrix.a3, aiMatrix.b3, aiMatrix.c3, 0.0f
+			, 0.0f, 0.0f, 0.0f, 1.0f };
+		return c3d::Matrix4x4f{ data.data() };
+	}
 
-		result.setColumn( 0u, { xaxis->x, yaxis->x, direction->x, 0.0f } );
-		result.setColumn( 1u, { xaxis->y, yaxis->y, direction->y, 0.0f } );
-		result.setColumn( 2u, { xaxis->z, yaxis->z, direction->z, 0.0f } );
-
+	inline c3d::Quaternion fromAssimp( aiQuaternion const & v )
+	{
+		c3d::Quaternion result;
+		result->x = v.x;
+		result->y = v.y;
+		result->z = v.z;
+		result->w = v.w;
 		return result;
+	}
+
+	inline c3d::Quaternion fromAssimp( aiVector3D front
+		, aiVector3D up )
+	{
+		front.Normalize();
+		up.Normalize();
+
+		aiVector3D right = front ^ up;
+		right.Normalize();
+		up = right ^ front;
+
+		aiMatrix3x3 rotationMatrix{ right.x, up.x, -front.x,
+			right.y, up.y, -front.y,
+			right.z, up.z, -front.z };
+
+		return fromAssimp( aiQuaternion{ rotationMatrix } );
 	}
 
 	inline c3d::Milliseconds fromAssimp( double ticks
@@ -128,16 +150,6 @@ namespace c3d_assimp
 		default:
 			return c3d::MipmapMode ::eLinear;
 		}
-	}
-
-	inline c3d::Quaternion fromAssimp( aiQuaternion const & v )
-	{
-		c3d::Quaternion result;
-		result->x = v.x;
-		result->y = v.y;
-		result->z = v.z;
-		result->w = v.w;
-		return result;
 	}
 
 	inline c3d::String getLongestCommonSubstring( c3d::String const & a, c3d::String const & b )

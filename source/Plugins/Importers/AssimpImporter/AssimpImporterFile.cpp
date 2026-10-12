@@ -1050,13 +1050,8 @@ namespace c3d_assimp
 				auto position = c3d::Point3f{};
 				auto orientation = c3d::Quaternion::identity();
 
-				if ( aiLight->mType == aiLightSource_DIRECTIONAL
-					|| aiLight->mType == aiLightSource_SPOT )
-				{
-					auto direction = c3d::point::getNormalised( fromAssimp( aiLight->mDirection ) );
-					auto up = c3d::point::getNormalised( fromAssimp( aiLight->mUp ) );
-					orientation = c3d::Quaternion::fromMatrix( fromAssimp( direction, up ) );
-				}
+				if ( aiLight->mType == aiLightSource_DIRECTIONAL || aiLight->mType == aiLightSource_SPOT )
+					orientation = fromAssimp( aiLight->mDirection, aiLight->mUp );
 
 				if ( aiLight->mType != aiLightSource_DIRECTIONAL )
 					position = fromAssimp( aiLight->mPosition );
@@ -1092,8 +1087,7 @@ namespace c3d_assimp
 				}
 				else
 				{
-					c3d::Matrix4x4f matrix;
-					c3d::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+					auto matrix = c3d::matrix::getTransform( it->translate, it->scale, it->rotate );
 					matrix *= transform;
 					c3d::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 				}
@@ -1111,16 +1105,10 @@ namespace c3d_assimp
 			c3d::String name = getCameraName( cameraIndex );
 			m_sceneData.cameras.try_emplace( name, aiCamera );
 
-			auto position = c3d::Point3f{};
-			auto orientation = c3d::Quaternion::identity();
-			auto direction = c3d::point::getNormalised( fromAssimp( aiCamera->mLookAt ) );
-			auto up = c3d::point::getNormalised( fromAssimp( aiCamera->mUp ) );
-			position = fromAssimp( aiCamera->mPosition );
-			orientation = c3d::Quaternion::fromMatrix( fromAssimp( direction, up ) );
+			auto position = fromAssimp( aiCamera->mPosition );
+			auto orientation = fromAssimp( aiCamera->mLookAt, aiCamera->mUp );
 
-			auto transform = c3d::Matrix4x4f{ 1.0f };
-			c3d::matrix::setTransform( transform
-				, position
+			auto transform = c3d::matrix::getTransform( position
 				, c3d::Point3f{ 1.0, 1.0, 1.0 }
 				, orientation );
 
@@ -1149,8 +1137,7 @@ namespace c3d_assimp
 			}
 			else
 			{
-				c3d::Matrix4x4f matrix;
-				c3d::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+				auto matrix = c3d::matrix::getTransform( it->translate, it->scale, it->rotate );
 				matrix *= transform;
 				c3d::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 			}

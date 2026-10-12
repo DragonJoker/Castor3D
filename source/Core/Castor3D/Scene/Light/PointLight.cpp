@@ -16,12 +16,12 @@ namespace c3d
 		static void doUpdateShadowMatrices( Point3f const & position
 			, Array< Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
 		{
-			matrices[0] = matrix::lookAt( position, position + Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
-			matrices[1] = matrix::lookAt( position, position + Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative X */
-			matrices[2] = matrix::lookAt( position, position + Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, +1.0f } ); /* Positive Y */
-			matrices[3] = matrix::lookAt( position, position + Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, -1.0f } ); /* Negative Y */
-			matrices[4] = matrix::lookAt( position, position + Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive Z */
-			matrices[5] = matrix::lookAt( position, position + Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
+			matrix::setLookAt( matrices[0], position, position + Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
+			matrix::setLookAt( matrices[1], position, position + Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative X */
+			matrix::setLookAt( matrices[2], position, position + Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, +1.0f } ); /* Positive Y */
+			matrix::setLookAt( matrices[3], position, position + Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, -1.0f } ); /* Negative Y */
+			matrix::setLookAt( matrices[4], position, position + Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive Z */
+			matrix::setLookAt( matrices[5], position, position + Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
 		}
 	}
 

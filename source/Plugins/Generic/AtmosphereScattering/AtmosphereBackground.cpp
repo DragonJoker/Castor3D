@@ -416,7 +416,7 @@ namespace atmosphere_scattering
 		up = c3d::point::cross( front, right );
 
 		updater.bgPosition = position.kilometres();
-		c3d::matrix::lookAt( updater.bgMtxView
+		c3d::matrix::setLookAt( updater.bgMtxView
 			, position.kilometres()
 			, ( position + front ).kilometres()
 			, up.kilometres() );

@@ -66,9 +66,7 @@ namespace atmosphere_scattering
 		data.position = kmPosition;
 
 		position += planetPosition;
-		c3d::Matrix4x4f view;
-		c3d::matrix::lookAt( view
-			, position.kilometres()
+		auto view = c3d::matrix::getLookAt( position.kilometres()
 			, ( position + front ).kilometres()
 			, up.kilometres() );
 		auto viewProj = proj * view;

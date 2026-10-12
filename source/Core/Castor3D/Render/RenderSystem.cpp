@@ -1003,7 +1003,7 @@ namespace c3d
 		, float zNear
 		, float zFar )const
 	{
-		return matrix::reverseDepth( matrix::frustum( left, right, bottom, top, zNear, zFar ) );
+		return matrix::reverseDepth( matrix::getFrustum( left, right, bottom, top, zNear, zFar ) );
 	}
 
 	Matrix4x4f RenderSystem::getPerspective( Angle const & fovy
@@ -1011,7 +1011,7 @@ namespace c3d
 		, float zNear
 		, float zFar )const
 	{
-		return matrix::reverseDepth( matrix::perspective( fovy, aspect, zNear, zFar ) );
+		return matrix::reverseDepth( matrix::getPerspective( fovy, aspect, zNear, zFar ) );
 	}
 
 	Matrix4x4f RenderSystem::getOrtho( float left
@@ -1021,14 +1021,14 @@ namespace c3d
 		, float zNear
 		, float zFar )const
 	{
-		return matrix::reverseDepth( matrix::ortho( left, right, bottom, top, zNear, zFar ) );
+		return matrix::reverseDepth( matrix::getOrtho( left, right, bottom, top, zNear, zFar ) );
 	}
 
 	Matrix4x4f RenderSystem::getInfinitePerspective( Angle const & fovy
 		, float aspect
 		, float zNear )const
 	{
-		return matrix::reverseDepth( matrix::perspective( fovy, aspect, zNear ) );
+		return matrix::reverseDepth( matrix::getPerspective( fovy, aspect, zNear ) );
 	}
 
 	Texture const & RenderSystem::getPrefilteredBrdfTexture()const

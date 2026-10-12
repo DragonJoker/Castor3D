@@ -194,13 +194,11 @@ namespace c3d
 			, 0.1f
 			, 2.0f );
 		viewport.update();
-		Matrix4x4f view;
-		matrix::lookAt( view
+		updater.bgPosition = node->getDerivedPosition();
+		matrix::setLookAt( updater.bgMtxView
 			, node->getDerivedPosition()
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
-			, Point3f{ 0.0f, 1.0f, 0.0f } );
-		updater.bgPosition = node->getDerivedPosition();
-		updater.bgMtxView = view;
+		, Point3f{ 0.0f, 1.0f, 0.0f } );
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection( updater.renderSize )
 			: viewport.getProjection();

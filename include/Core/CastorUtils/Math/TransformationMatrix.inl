@@ -47,50 +47,12 @@ namespace c3d::matrix
 		return matrix;
 	}
 
-	template< typename T, typename U >
-	void getRotate( Matrix4x4< T > const & matrix
-		, QuaternionT< U > & orientation )
+	template< typename T >
+	Matrix4x4< T > getRotate( QuaternionT< T > const & orientation )
 	{
-		auto t = double( matrix[0][0] + matrix[1][1] + matrix[2][2] );
-
-		// large enough
-		if ( t > 0.0 )
-		{
-			double s = std::sqrt( 1 + t ) * 2.0;
-			orientation->x = U( ( matrix[1][2] - matrix[2][1] ) / s );
-			orientation->y = U( ( matrix[2][0] - matrix[0][2] ) / s );
-			orientation->z = U( ( matrix[0][1] - matrix[1][0] ) / s );
-			orientation->w = U( 0.25 * s );
-		} // else we have to check several cases
-		else if ( matrix[0][0] > matrix[1][1] && matrix[0][0] > matrix[2][2] )
-		{
-			// Column 0:
-			double s = std::sqrt( double( 1.0 + matrix[0][0] - matrix[1][1] - matrix[2][2] ) ) * 2.0;
-			orientation->x = U( 0.25 * s );
-			orientation->y = U( ( matrix[0][1] + matrix[1][0] ) / s );
-			orientation->z = U( ( matrix[2][0] + matrix[0][2] ) / s );
-			orientation->w = U( ( matrix[1][2] - matrix[2][1] ) / s );
-		}
-		else if ( matrix[1][1] > matrix[2][2] )
-		{
-			// Column 1:
-			double s = std::sqrt( double( 1.0 + matrix[1][1] - matrix[0][0] - matrix[2][2] ) ) * 2.0;
-			orientation->x = U( ( matrix[0][1] + matrix[1][0] ) / s );
-			orientation->y = U( 0.25 * s );
-			orientation->z = U( ( matrix[1][2] + matrix[2][1] ) / s );
-			orientation->w = U( ( matrix[2][0] - matrix[0][2] ) / s );
-		}
-		else
-		{
-			// Column 2:
-			double s = std::sqrt( double( 1.0 + matrix[2][2] - matrix[0][0] - matrix[1][1] ) ) * 2.0;
-			orientation->x = U( ( matrix[2][0] + matrix[0][2] ) / s );
-			orientation->y = U( ( matrix[1][2] + matrix[2][1] ) / s );
-			orientation->z = U( 0.25 * s );
-			orientation->w = U( ( matrix[0][1] - matrix[1][0] ) / s );
-		}
-
-		point::normalise( orientation );
+		Matrix4x4< T > result;
+		setRotate( result, orientation );
+		return result;
 	}
 
 	template< typename T >
@@ -154,6 +116,14 @@ namespace c3d::matrix
 		return setScale( matrix, scaling[0], scaling[1], scaling[2] );
 	}
 
+	template< typename T >
+	Matrix4x4< T > getScale( Point3< T > const & scaling )
+	{
+		Matrix4x4< T > result;
+		setScale( result, scaling );
+		return result;
+	}
+
 	template< typename T, typename U >
 	Matrix4x4< T > & translate( Matrix4x4< T > & matrix
 		, U x
@@ -196,6 +166,14 @@ namespace c3d::matrix
 		return setTranslate( matrix, translation[0], translation[1], translation[2] );
 	}
 
+	template< typename T >
+	Matrix4x4< T > getTranslate( Point3< T > const & translation )
+	{
+		Matrix4x4< T > result;
+		setTranslate( result, translation );
+		return result;
+	}
+
 	template< typename T, typename U, typename V >
 	Matrix4x4< T > & setTransform( Matrix4x4< T > & matrix
 		, Point3< U > const & position
@@ -217,17 +195,26 @@ namespace c3d::matrix
 		, Point3< U > const & scaling
 		, QuaternionT< V > const & orientation )
 	{
-		Matrix4x4< T > transform;
-		setTransform( transform, position, scaling, orientation );
+		auto transform = getTransform( position, scaling, orientation );
 		matrix *= transform;
 		return matrix;
 	}
 
+	template< typename T, typename U, typename V >
+	Matrix4x4< HigherPrecisionT< T, U, V > > getTransform( Point3< T > const & position
+		, Point3< U > const & scaling
+		, QuaternionT< V > const & orientation )
+	{
+		Matrix4x4< HigherPrecisionT< T, U, V > > result;
+		setTransform( result, position, scaling, orientation );
+		return result;
+	}
+
 	template< typename T, typename U >
-	Point3< U > getTransformed( Matrix4x4< T > const & matrix
+	Point3< HigherPrecisionT< T, U > > getTransformed( Matrix4x4< T > const & matrix
 		, Point3< U > const & value )
 	{
-		Point3< U > result;
+		Point3< HigherPrecisionT< T, U > > result;
 
 		result[0] = value[0] * matrix[0][0] + value[1] * matrix[1][0] + value[2] * matrix[2][0] + matrix[3][0];
 		result[1] = value[0] * matrix[0][1] + value[1] * matrix[1][1] + value[2] * matrix[2][1] + matrix[3][1];
@@ -242,14 +229,60 @@ namespace c3d::matrix
 	}
 
 	template< typename T, typename U >
-	static Quaternion getTransformed( Matrix4x4< T > const & matrix
+	QuaternionT< HigherPrecisionT< T, U > > getTransformed( Matrix4x4< T > const & matrix
 		, QuaternionT< U > const & value )
 	{
 		return matrix * value;
 	}
 
+	template< typename T, typename U >
+	void getRotation( Matrix4x4< T > const & matrix
+		, QuaternionT< U > & orientation )
+	{
+		auto t = double( matrix[0][0] + matrix[1][1] + matrix[2][2] );
+
+		// large enough
+		if ( t > 0.0 )
+		{
+			double s = std::sqrt( 1 + t ) * 2.0;
+			orientation->x = U( ( matrix[1][2] - matrix[2][1] ) / s );
+			orientation->y = U( ( matrix[2][0] - matrix[0][2] ) / s );
+			orientation->z = U( ( matrix[0][1] - matrix[1][0] ) / s );
+			orientation->w = U( 0.25 * s );
+		} // else we have to check several cases
+		else if ( matrix[0][0] > matrix[1][1] && matrix[0][0] > matrix[2][2] )
+		{
+			// Column 0:
+			double s = std::sqrt( double( 1.0 + matrix[0][0] - matrix[1][1] - matrix[2][2] ) ) * 2.0;
+			orientation->x = U( 0.25 * s );
+			orientation->y = U( ( matrix[0][1] + matrix[1][0] ) / s );
+			orientation->z = U( ( matrix[2][0] + matrix[0][2] ) / s );
+			orientation->w = U( ( matrix[1][2] - matrix[2][1] ) / s );
+		}
+		else if ( matrix[1][1] > matrix[2][2] )
+		{
+			// Column 1:
+			double s = std::sqrt( double( 1.0 + matrix[1][1] - matrix[0][0] - matrix[2][2] ) ) * 2.0;
+			orientation->x = U( ( matrix[0][1] + matrix[1][0] ) / s );
+			orientation->y = U( 0.25 * s );
+			orientation->z = U( ( matrix[1][2] + matrix[2][1] ) / s );
+			orientation->w = U( ( matrix[2][0] - matrix[0][2] ) / s );
+		}
+		else
+		{
+			// Column 2:
+			double s = std::sqrt( double( 1.0 + matrix[2][2] - matrix[0][0] - matrix[1][1] ) ) * 2.0;
+			orientation->x = U( ( matrix[2][0] + matrix[0][2] ) / s );
+			orientation->y = U( ( matrix[1][2] + matrix[2][1] ) / s );
+			orientation->z = U( 0.25 * s );
+			orientation->w = U( ( matrix[0][1] - matrix[1][0] ) / s );
+		}
+
+		point::normalise( orientation );
+	}
+
 	template< typename T, typename U, typename V >
-	static void decompose( Matrix4x4< T > const & matrix
+	void decompose( Matrix4x4< T > const & matrix
 		, Point3< U > & position
 		, Point3< U > & scaling
 		, QuaternionT< V > & rotation )
@@ -304,7 +337,7 @@ namespace c3d::matrix
 		m[2][2] = cols[2][2];
 
 		// and generate the rotation quaternion from it
-		getRotate( m, rotation );
+		getRotation( m, rotation );
 	}
 
 	template< typename T >
@@ -322,7 +355,7 @@ namespace c3d::matrix
 	}
 
 	template< typename T, typename U >
-	Matrix4x4< T > & perspective( Matrix4x4< T > & matrix
+	Matrix4x4< T > & setPerspective( Matrix4x4< T > & matrix
 		, Angle const & fovy
 		, U aspect
 		, U znear
@@ -339,7 +372,7 @@ namespace c3d::matrix
 	}
 
 	template< typename T, typename U >
-	Matrix4x4< T > & perspective( Matrix4x4< T > & matrix
+	Matrix4x4< T > & setPerspective( Matrix4x4< T > & matrix
 		, Angle const & fovy
 		, U aspect
 		, U znear )
@@ -355,34 +388,31 @@ namespace c3d::matrix
 	}
 
 	template< typename T >
-	Matrix4x4< T > perspective( Angle const & fovy
+	Matrix4x4< T > getPerspective( Angle const & fovy
 		, T aspect
 		, T znear
 		, T zfar )
 	{
 		Matrix4x4< T > result;
-		perspective( result, fovy, aspect, znear, zfar );
+		setPerspective( result, fovy, aspect, znear, zfar );
 		return result;
 	}
 
 	template< typename T >
-	Matrix4x4< T > perspective( Angle const & fovy
+	Matrix4x4< T > getPerspective( Angle const & fovy
 		, T aspect
 		, T znear )
 	{
 		Matrix4x4< T > result;
-		perspective( result, fovy, aspect, znear );
+		setPerspective( result, fovy, aspect, znear );
 		return result;
 	}
 
 	template< typename T, typename U >
-	Matrix4x4< T > & ortho( Matrix4x4< T > & matrix
-		, U left
-		, U right
-		, U bottom
-		, U top
-		, U znear
-		, U zfar )
+	Matrix4x4< T > & setOrtho( Matrix4x4< T > & matrix
+		, U left, U right
+		, U bottom, U top
+		, U znear, U zfar )
 	{
 		matrix.setIdentity();
 		matrix[0][0] = T( 2 / ( right - left ) );
@@ -395,26 +425,20 @@ namespace c3d::matrix
 	}
 
 	template< typename T >
-	Matrix4x4< T > ortho( T left
-		, T right
-		, T bottom
-		, T top
-		, T znear
-		, T zfar )
+	Matrix4x4< T > getOrtho( T left, T right
+		, T bottom, T top
+		, T znear, T zfar )
 	{
 		Matrix4x4< T > result;
-		ortho( result, left, right, bottom, top, znear, zfar );
+		setOrtho( result, left, right, bottom, top, znear, zfar );
 		return result;
 	}
 
 	template< typename T, typename U >
-	Matrix4x4< T > & frustum( Matrix4x4< T > & matrix
-		, U left
-		, U right
-		, U bottom
-		, U top
-		, U znear
-		, U zfar )
+	Matrix4x4< T > & setFrustum( Matrix4x4< T > & matrix
+		, U left, U right
+		, U bottom, U top
+		, U znear, U zfar )
 	{
 		matrix.initialise();
 		matrix[0][0] = T( ( 2 * znear ) / ( right - left ) );
@@ -428,28 +452,25 @@ namespace c3d::matrix
 	}
 
 	template< typename T >
-	Matrix4x4< T > frustum( T left
-		, T right
-		, T bottom
-		, T top
-		, T znear
-		, T zfar )
+	Matrix4x4< T > getFrustum( T left, T right
+		, T bottom, T top
+		, T znear, T zfar )
 	{
 		Matrix4x4< T > result;
-		frustum( result, left, right, bottom, top, znear, zfar );
+		setFrustum( result, left, right, bottom, top, znear, zfar );
 		return result;
 	}
 
 	template< typename T, typename U >
-	Matrix4x4< T > & lookAt( Matrix4x4< T > & matrix
+	Matrix4x4< T > & setLookAt( Matrix4x4< T > & matrix
 		, Point3< U > const & eye
 		, Point3< U > const & center
 		, Point3< U > const & up )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-		Point3< T > f( point::getNormalised( center - eye ) );
-		Point3< T > s( point::getNormalised( point::cross( f, up ) ) );
-		Point3< T > u( point::cross( s, f ) );
+		Point3< U > f( point::getNormalised( center - eye ) );
+		Point3< U > s( point::getNormalised( point::cross( f, up ) ) );
+		Point3< U > u( point::cross( s, f ) );
 		matrix.setIdentity();
 		matrix[0][0] = s->x;
 		matrix[1][0] = s->y;
@@ -467,12 +488,12 @@ namespace c3d::matrix
 	}
 
 	template< typename T >
-	Matrix4x4< T > lookAt( Point3< T > const & eye
+	Matrix4x4< T > getLookAt( Point3< T > const & eye
 		, Point3< T > const & center
 		, Point3< T > const & up )
 	{
 		Matrix4x4< T > result;
-		lookAt( result, eye, center, up );
+		setLookAt( result, eye, center, up );
 		return result;
 	}
 
@@ -526,12 +547,6 @@ namespace c3d::matrix
 	}
 
 	template< typename T, typename U >
-	void getRotate( Matrix3x3< T > const & matrix
-		, Angle & orientation )
-	{
-	}
-
-	template< typename T, typename U >
 	Matrix3x3< T > & scale( Matrix3x3< T > & matrix
 		, U x
 		, U y )
@@ -565,6 +580,14 @@ namespace c3d::matrix
 		, Point2< U > const & scaling )
 	{
 		return setScale( matrix, scaling[0], scaling[1] );
+	}
+
+	template< typename T >
+	Matrix3x3< T > getScale( Point2< T > const & scaling )
+	{
+		Matrix3x3< T > result;
+		setScale( result, scaling );
+		return result;
 	}
 
 	template< typename T, typename U >
@@ -605,11 +628,19 @@ namespace c3d::matrix
 		return setTranslate( matrix, translation[0], translation[1] );
 	}
 
+	template< typename T >
+	Matrix3x3< T > getTranslate( Point2< T > const & translation )
+	{
+		Matrix3x3< T > result;
+		setTranslate( result, translation );
+		return result;
+	}
+
 	template< typename T, typename U, typename V >
 	Matrix3x3< T > & setTransform( Matrix3x3< T > & matrix
 		, Point2< U > const & position
 		, Point2< U > const & scaling
-		, Angle orientation )
+		, AngleT< V > orientation )
 	{
 		// Ordering:
 		//    1. Scale
@@ -624,11 +655,20 @@ namespace c3d::matrix
 	Matrix3x3< T > & transform( Matrix3x3< T > & matrix
 		, Point2< U > const & position
 		, Point2< U > const & scaling
-		, Angle orientation )
+		, AngleT< V > orientation )
 	{
-		Matrix3x3< T > transform;
-		setTransform( transform, position, scaling, orientation );
+		auto transform = getTransform( position, scaling, orientation );
 		matrix *= transform;
 		return matrix;
+	}
+
+	template< typename T, typename U, typename V >
+	Matrix3x3< HigherPrecisionT< T, U, V > > getTransform( Point2< T > const & position
+		, Point2< U > const & scaling
+		, AngleT< V > orientation )
+	{
+		Matrix3x3< HigherPrecisionT< T, U, V > > result;
+		setTransform( result, position, scaling, orientation );
+		return result;
 	}
 }

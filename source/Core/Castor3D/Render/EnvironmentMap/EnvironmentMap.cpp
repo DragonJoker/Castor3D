@@ -90,12 +90,12 @@ namespace c3d
 			static Point3f const position;
 			static Array< Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
+				Quaternion::fromMatrix( matrix::getLookAt( position, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
+				Quaternion::fromMatrix( matrix::getLookAt( position, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
+				Quaternion::fromMatrix( matrix::getLookAt( position, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
+				Quaternion::fromMatrix( matrix::getLookAt( position, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
+				Quaternion::fromMatrix( matrix::getLookAt( position, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
+				Quaternion::fromMatrix( matrix::getLookAt( position, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
 			};
 
 			auto & scene = background.getScene();

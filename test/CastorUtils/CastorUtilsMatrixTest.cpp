@@ -269,8 +269,7 @@ namespace Testing
 		{
 			auto r = float( i );
 			Point3f pt( r, r, r );
-			Matrix4x4f mtx( 1 );
-			matrix::translate( mtx, pt );
+			Matrix4x4f mtx = matrix::getTranslate( pt );
 			glm::vec3 vec( r, r, r );
 			glm::mat4 mat = glm::translate( glm::identity< glm::mat4 >(), vec );
 			CT_EQUAL( mtx, mat );
@@ -282,8 +281,7 @@ namespace Testing
 		{
 			auto r = float( i );
 			Point3f pt( r, r, r );
-			Matrix4x4f mtx( 1 );
-			matrix::scale( mtx, pt );
+			Matrix4x4f mtx = matrix::getScale( pt );
 			glm::vec3 vec( r, r, r );
 			glm::mat4 mat = glm::scale( glm::identity< glm::mat4 >(), vec );
 			CT_EQUAL( mtx, mat );
@@ -300,28 +298,22 @@ namespace Testing
 		float farZ = 1000.0f;
 		CT_ON("	Ortho RH" );
 		{
-			Matrix4x4f mtx( 1 );
-			matrix::ortho( mtx, left, right, bottom, top, nearZ, farZ );
-			glm::mat4 mat;
-			mat = glm::ortho( left, right, bottom, top, nearZ, farZ );
+			auto mtx = matrix::getOrtho( left, right, bottom, top, nearZ, farZ );
+			auto mat = glm::ortho( left, right, bottom, top, nearZ, farZ );
 			CT_EQUAL( mtx, mat );
 		}
 		CT_ON("	Frustum" );
 		{
-			Matrix4x4f mtx( 1 );
-			matrix::frustum( mtx, left, right, bottom, top, nearZ, farZ );
-			glm::mat4 mat;
-			mat = glm::frustum( left, right, bottom, top, nearZ, farZ );
+			auto mtx = matrix::getFrustum( left, right, bottom, top, nearZ, farZ );
+			auto mat = glm::frustum( left, right, bottom, top, nearZ, farZ );
 			CT_EQUAL( mtx, mat );
 		}
 		CT_ON("	Perspective" );
 		{
 			Angle fov{ 90.0_degrees };
 			float aspect = 4.0f / 3.0f;
-			Matrix4x4f mtx( 1 );
-			matrix::perspective( mtx, fov, aspect, nearZ, farZ );
-			glm::mat4 mat;
-			mat = glm::perspective< float >( fov.radians(), aspect, nearZ, farZ );
+			auto mtx = matrix::getPerspective( fov, aspect, nearZ, farZ );
+			auto mat = glm::perspective< float >( fov.radians(), aspect, nearZ, farZ );
 			CT_EQUAL( mtx, mat );
 		}
 	}

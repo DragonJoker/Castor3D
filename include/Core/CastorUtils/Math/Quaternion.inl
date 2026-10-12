@@ -177,7 +177,7 @@ namespace c3d
 	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4f const & rhs )
 	{
 		QuaternionT< T > result;
-		matrix::getRotate( rhs, result );
+		matrix::getRotation( rhs, result );
 		return result;
 	}
 
@@ -185,7 +185,7 @@ namespace c3d
 	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4d const & rhs )
 	{
 		QuaternionT< T > result;
-		matrix::getRotate( rhs, result );
+		matrix::getRotation( rhs, result );
 		return result;
 	}
 

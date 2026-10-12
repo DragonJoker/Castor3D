@@ -191,7 +191,7 @@ namespace castortd
 		auto direction = targetPosition - m_node.getDerivedPosition();
 		direction = c3d::point::getNormalised( direction );
 		c3d::Point3f up{ 0, 1, 0 };
-		auto transform = c3d::matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
+		auto transform = c3d::matrix::getLookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
 		m_node.setOrientation( c3d::Quaternion::fromMatrix( transform ) );
 	}
 }

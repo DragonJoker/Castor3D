@@ -226,9 +226,7 @@ namespace c3d
 			up = point::cross( front, right );
 
 			// Update view matrix
-			Matrix4x4d mtx;
-			matrix::lookAt( mtx, position, position + front, up );
-			m_view = mtx;
+			matrix::setLookAt( m_view, position, position + front, up );
 			updateFrustum();
 			onGpuChanged( *this );
 		}

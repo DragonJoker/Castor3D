@@ -6,6 +6,47 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/SquareMatrix.hpp"
 
+namespace c3d
+{
+	template< typename T, typename U, typename Enable = void >
+	struct HigherPrecisionOfTwoT;
+
+	template< typename T, typename U >
+	struct HigherPrecisionOfTwoT< T, U, std::enable_if_t< sizeof( T ) >= sizeof( U ) > >
+	{
+		using type = T;
+	};
+
+	template< typename T, typename U >
+	struct HigherPrecisionOfTwoT< T, U, std::enable_if_t< sizeof( T ) < sizeof( U ) > >
+	{
+		using type = U;
+	};
+
+	template< typename ... Types >
+	struct HigherPrecisionGetterT;
+
+	template< typename T >
+	struct HigherPrecisionGetterT< T >
+	{
+		using type = T;
+	};
+
+	template< typename T, typename U >
+	struct HigherPrecisionGetterT< T, U >
+	{
+		using type = HigherPrecisionOfTwoT< T, U >::type;
+	};
+
+	template< typename T, typename U, typename ... Types >
+	struct HigherPrecisionGetterT< T, U, Types... >
+	{
+		using type = HigherPrecisionGetterT< typename HigherPrecisionOfTwoT< T, U >::type, Types... >::type;
+	};
+
+	template< typename ... Types >
+	using HigherPrecisionT = HigherPrecisionGetterT< Types... >::type;
+}
 /**
 \~english
 \brief		Matrix basic operations
@@ -47,16 +88,15 @@ namespace c3d::matrix
 	/**
 	 *\~english
 	 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
-	 *\param[in]	matrix		The matrix holding the scale transformation
-	 *\param[out]	orientation	Receives the rotation
+	 *\return		The matrix that will receive the rotation matrix
+	 *\param[in]	orientation	The quaterion used to compute the matrix
 	 *\~french
 	 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
-	 *\param[in]	matrix		La matrice qui contient les transformations
-	 *\param[out]	orientation	Reçoit la rotation
+	 *\return		La matrice qui contiendra le résultat
+	 *\param[in]	orientation	Le quaternion contenant la rotation
 	 */
-	template< typename T, typename U >
-	static void getRotate( Matrix4x4< T > const & matrix
-		, QuaternionT< U > & orientation );
+	template< typename T >
+	static Matrix4x4< T > getRotate( QuaternionT< T > const & orientation );
 	/**
 	 *\~english
 	 *\brief		Rotation function, around Y axis. Builds a rotation matrix from the angle in parameter.
@@ -108,9 +148,7 @@ namespace c3d::matrix
 	 */
 	template< typename T, typename U >
 	static Matrix4x4< T > & scale( Matrix4x4< T > & matrix
-		, U x
-		, U y
-		, U z );
+		, U x, U y, U z );
 	/**
 	 *\~english
 	 *\brief		Scale function. Scales matrix from the value in parameter.
@@ -136,9 +174,7 @@ namespace c3d::matrix
 	 */
 	template< typename T, typename U >
 	static Matrix4x4< T > & setScale( Matrix4x4< T > & matrix
-		, U x
-		, U y
-		, U z );
+		, U x, U y, U z );
 	/**
 	 *\~english
 	 *\brief		Scale function. Scales matrix from the value in parameter.
@@ -154,19 +190,29 @@ namespace c3d::matrix
 		, Point3< U > const & scaling );
 	/**
 	 *\~english
+	 *\brief		Scale function. Scales matrix from the value in parameter.
+	 *\return		The matrix that will be scaled
+	 *\param[in]	scaling	The scale value
+	 *\~french
+	 *\brief		Fonction de mise a l'échelle.
+	 *\return		La matrice qui contiendra le résultat
+	 *\param[in]	scaling	Les valeurs d'échelle sur les 3 axes
+	 */
+	template< typename T >
+	static Matrix4x4< T > getScale( Point3< T > const & scaling );
+	/**
+	 *\~english
 	 *\brief		Translate function. Translates a matrix from the three values in parameter.
-	 *\param[out]	matrix			The matrix that will be translated
+	 *\param[out]	matrix	The matrix that will be translated
 	 *\param[in]	x, y, z	The translate values
 	 *\~french
 	 *\brief		Fonction de construction de matrice de translation.
-	 *\param[out]	matrix			La matrice qui contiendra le résultat
+	 *\param[out]	matrix	La matrice qui contiendra le résultat
 	 *\param[in]	x, y, z	Les valeurs de translation sur les 3 axes
 	 */
 	template< typename T, typename U >
 	static Matrix4x4< T > & translate( Matrix4x4< T > & matrix
-		, U x
-		, U y
-		, U z );
+		, U x, U y, U z );
 	/**
 	 *\~english
 	 *\brief		Translate function. Translates a matrix from the value in parameter.
@@ -192,9 +238,7 @@ namespace c3d::matrix
 	 */
 	template< typename T, typename U >
 	static Matrix4x4< T > & setTranslate( Matrix4x4< T > & matrix
-		, U x
-		, U y
-		, U z );
+		, U x, U y, U z );
 	/**
 	 *\~english
 	 *\brief		Translate function. Translates a matrix from the value in parameter.
@@ -208,6 +252,18 @@ namespace c3d::matrix
 	template< typename T, typename U >
 	static Matrix4x4< T > & setTranslate( Matrix4x4< T > & matrix
 		, Point3< U > const & translation );
+	/**
+	 *\~english
+	 *\brief		Translate function. Translates a matrix from the value in parameter.
+	 *\return		The matrix that will be translated
+	 *\param[in]	translation	The translate value
+	 *\~french
+	 *\brief		Fonction de construction de matrice de translation.
+	 *\return		La matrice qui contiendra le résultat
+	 *\param[in]	translation	Les valeurs de translation sur les 3 axes
+	 */
+	template< typename T >
+	static Matrix4x4< T > getTranslate( Point3< T > const & translation );
 	/**
 	 *\~english
 	 *\brief		Retrieves transformation matrix from translation, scaling and rotation
@@ -248,6 +304,24 @@ namespace c3d::matrix
 		, QuaternionT< V > const & orientation );
 	/**
 	 *\~english
+	 *\brief		Retrieves transformation matrix from translation, scaling and rotation
+	 *\param[out]	matrix		Receives the transformation
+	 *\param[in]	position	The translation value
+	 *\param[in]	scaling		The scaling value
+	 *\param[in]	orientation	The rotation value
+	 *\~french
+	 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
+	 *\param[out]	matrix		Reçoit la transformation
+	 *\param[in]	position	La valeur de translation
+	 *\param[in]	scaling		La valeur de mise à l'échelle
+	 *\param[in]	orientation	La valeur de rotation
+	 */
+	template< typename T, typename U, typename V >
+	static Matrix4x4< HigherPrecisionT< T, U, V > > getTransform( Point3< T > const & position
+		, Point3< U > const & scaling
+		, QuaternionT< V > const & orientation );
+	/**
+	 *\~english
 	 *\brief		Transforms the position/scale through a transformation matrix.
 	 *\param[out]	matrix	The transformation matrix
 	 *\param[in]	value	The position/scale.
@@ -259,7 +333,7 @@ namespace c3d::matrix
 	 *\return		La position transformée.
 	 */
 	template< typename T, typename U >
-	static Point3< U > getTransformed( Matrix4x4< T > const & matrix
+	static Point3< HigherPrecisionT< T, U > > getTransformed( Matrix4x4< T > const & matrix
 		, Point3< U > const & value );
 	/**
 	 *\~english
@@ -274,8 +348,21 @@ namespace c3d::matrix
 	 *\return		La position transformée.
 	 */
 	template< typename T, typename U >
-	static Quaternion getTransformed( Matrix4x4< T > const & matrix
-		, Quaternion const & value );
+	static QuaternionT< HigherPrecisionT< T, U > > getTransformed( Matrix4x4< T > const & matrix
+		, QuaternionT< U > const & value );
+	/**
+	 *\~english
+	 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
+	 *\param[in]	matrix		The matrix holding the scale transformation
+	 *\param[out]	orientation	Receives the rotation
+	 *\~french
+	 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
+	 *\param[in]	matrix		La matrice qui contient les transformations
+	 *\param[out]	orientation	Reçoit la rotation
+	 */
+	template< typename T, typename U >
+	static void getRotation( Matrix4x4< T > const & matrix
+		, QuaternionT< U > & orientation );
 	/**
 	 *\~english
 	 *\brief		Retrieves the given transformation matrix components.
@@ -324,11 +411,9 @@ namespace c3d::matrix
 	 *\param[in]	zFar	Position du plan lointain
 	 */
 	template< typename T, typename U >
-	static Matrix4x4< T > & perspective( Matrix4x4< T > & matrix
-		, Angle const & fovy
-		, U aspect
-		, U zNear
-		, U zFar );
+	static Matrix4x4< T > & setPerspective( Matrix4x4< T > & matrix
+		, Angle const & fovy, U aspect
+		, U zNear, U zFar );
 	/**
 	 *\~english
 	 *\brief		Builds a matrix that sets a centered infinite perspective projection from the given parameters
@@ -344,9 +429,8 @@ namespace c3d::matrix
 	 *\param[in]	zNear	Position du plan proche
 	 */
 	template< typename T, typename U >
-	static Matrix4x4< T > & perspective( Matrix4x4< T > & matrix
-		, Angle const & fovy
-		, U aspect
+	static Matrix4x4< T > & setPerspective( Matrix4x4< T > & matrix
+		, Angle const & fovy, U aspect
 		, U zNear );
 	/**
 	 *\~english
@@ -365,10 +449,8 @@ namespace c3d::matrix
 	 *\return		La matrice résultante
 	 */
 	template< typename T >
-	static Matrix4x4< T > perspective( Angle const & fovy
-		, T aspect
-		, T nearVal
-		, T farVal );
+	static Matrix4x4< T > getPerspective( Angle const & fovy, T aspect
+		, T nearVal, T farVal );
 	/**
 	 *\~english
 	 *\brief		Builds a matrix that sets a centered infinite perspective projection from the given parameters
@@ -384,8 +466,7 @@ namespace c3d::matrix
 	 *\return		La matrice résultante
 	 */
 	template< typename T >
-	static Matrix4x4< T > perspective( Angle const & fovy
-		, T aspect
+	static Matrix4x4< T > getPerspective( Angle const & fovy, T aspect
 		, T nearVal );
 	/**
 	 *\~english
@@ -408,13 +489,10 @@ namespace c3d::matrix
 	 *\param[in]	farVal	Position du plan lointain
 	 */
 	template< typename T, typename U >
-	static Matrix4x4< T > & frustum( Matrix4x4< T > & matrix
-		, U left
-		, U right
-		, U bottom
-		, U top
-		, U nearVal
-		, U farVal );
+	static Matrix4x4< T > & setFrustum( Matrix4x4< T > & matrix
+		, U left, U right
+		, U bottom, U top
+		, U nearVal, U farVal );
 	/**
 	 *\~english
 	 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
@@ -436,12 +514,9 @@ namespace c3d::matrix
 	 *\return		La matrice résultante
 	 */
 	template< typename T >
-	static Matrix4x4< T > frustum( T left
-		, T right
-		, T bottom
-		, T top
-		, T nearVal
-		, T farVal );
+	static Matrix4x4< T > getFrustum( T left, T right
+		, T bottom, T top
+		, T nearVal, T farVal );
 	/**
 	 *\~english
 	 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -463,13 +538,10 @@ namespace c3d::matrix
 	 *\param[in]	zFar	Position du plan lointain
 	 */
 	template< typename T, typename U >
-	static Matrix4x4< T > & ortho( Matrix4x4< T > & matrix
-		, U left
-		, U right
-		, U bottom
-		, U top
-		, U zNear
-		, U zFar );
+	static Matrix4x4< T > & setOrtho( Matrix4x4< T > & matrix
+		, U left, U right
+		, U bottom, U top
+		, U zNear, U zFar );
 	/**
 	 *\~english
 	 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -491,12 +563,9 @@ namespace c3d::matrix
 	 *\return		La matrice résultante
 	 */
 	template< typename T >
-	static Matrix4x4< T > ortho( T left
-		, T right
-		, T bottom
-		, T top
-		, T zNear
-		, T zFar );
+	static Matrix4x4< T > getOrtho( T left, T right
+		, T bottom, T top
+		, T zNear, T zFar );
 	/**
 	 *\~english
 	 *\brief		Builds a view matrix that looks at a given point
@@ -512,7 +581,7 @@ namespace c3d::matrix
 	 *\param[in]	up		La direction vers le haut
 	 */
 	template< typename T, typename U >
-	static Matrix4x4< T > & lookAt( Matrix4x4< T > & matrix
+	static Matrix4x4< T > & setLookAt( Matrix4x4< T > & matrix
 		, Point3< U > const & eye
 		, Point3< U > const & center
 		, Point3< U > const & up );
@@ -531,7 +600,7 @@ namespace c3d::matrix
 	 *\return		La matrice résultante
 	 */
 	template< typename T >
-	static Matrix4x4< T > lookAt( Point3< T > const & eye
+	static Matrix4x4< T > getLookAt( Point3< T > const & eye
 		, Point3< T > const & center
 		, Point3< T > const & up );
 	/**
@@ -560,11 +629,11 @@ namespace c3d::matrix
 	static Matrix4x4< T > getSwitchHand( Matrix4x4< T > const & matrix );
 	/**
 	 *\~english
-	 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
+	 *\brief		2D Rotation function, builds a rotation matrix from the quaternion in parameter.
 	 *\param[out]	matrix		The matrix that will receive the rotation matrix
 	 *\param[in]	orientation	The quaterion used to compute the matrix
 	 *\~french
-	 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
+	 *\brief		Fonction de rotation 2D, construit une matrice de rotation à partir d'un quaternion
 	 *\param[out]	matrix		La matrice qui contiendra le résultat
 	 *\param[in]	orientation	Le quaternion contenant la rotation
 	 */
@@ -573,11 +642,11 @@ namespace c3d::matrix
 		, Angle orientation );
 	/**
 	 *\~english
-	 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
+	 *\brief		2D Rotation function, builds a rotation matrix from the quaternion in parameter.
 	 *\param[out]	matrix		The matrix that will receive the rotation matrix
 	 *\param[in]	orientation	The quaterion used to compute the matrix
 	 *\~french
-	 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
+	 *\brief		Fonction de rotation 2D, construit une matrice de rotation à partir d'un quaternion
 	 *\param[out]	matrix		La matrice qui contiendra le résultat
 	 *\param[in]	orientation	Le quaternion contenant la rotation
 	 */
@@ -586,38 +655,24 @@ namespace c3d::matrix
 		, Angle orientation );
 	/**
 	 *\~english
-	 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
-	 *\param[in]	matrix		The matrix holding the scale transformation
-	 *\param[out]	orientation	Receives the rotation
-	 *\~french
-	 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
-	 *\param[in]	matrix		La matrice qui contient les transformations
-	 *\param[out]	orientation	Reçoit la rotation
-	 */
-	template< typename T, typename U >
-	static void getRotate( Matrix3x3< T > const & matrix
-		, Angle orientation );
-	/**
-	 *\~english
-	 *\brief		Scale function. Scales matrix from the three values in parameter.
+	 *\brief		2D Scale function. Scales matrix from the three values in parameter.
 	 *\param[out]	matrix	The matrix that will be scaled
 	 *\param[in]	x, y	The scale values
 	 *\~french
-	 *\brief		Fonction de mise a l'échelle.
+	 *\brief		Fonction de mise a l'échelle 2D.
 	 *\param[out]	matrix	La matrice qui contiendra le résultat
 	 *\param[in]	x, y	Les valeurs d'échelle sur les 3 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & scale( Matrix3x3< T > & matrix
-		, U x
-		, U y );
+		, U x, U y );
 	/**
 	 *\~english
-	 *\brief		Scale function. Scales matrix from the value in parameter.
+	 *\brief		2D Scale function. Scales matrix from the value in parameter.
 	 *\param[out]	matrix	The matrix that will be scaled
 	 *\param[in]	scaling	The scale value
 	 *\~french
-	 *\brief		Fonction de mise a l'échelle.
+	 *\brief		Fonction de mise a l'échelle 2D.
 	 *\param[out]	matrix	La matrice qui contiendra le résultat
 	 *\param[in]	scaling	Les valeurs d'échelle sur les 3 axes
 	 */
@@ -626,94 +681,115 @@ namespace c3d::matrix
 		, Point2< U > const & scaling );
 	/**
 	 *\~english
-	 *\brief		Scale function. Scales matrix from the three values in parameter.
+	 *\brief		2D Scale function. Scales matrix from the three values in parameter.
 	 *\param[out]	matrix	The matrix that will be scaled
 	 *\param[in]	x, y	The scale values
 	 *\~french
-	 *\brief		Fonction de mise a l'échelle.
+	 *\brief		Fonction de mise a l'échelle 2D.
 	 *\param[out]	matrix	La matrice qui contiendra le résultat
-	 *\param[in]	x, y	Les valeurs d'échelle sur les 3 axes
+	 *\param[in]	x, y	Les valeurs d'échelle sur les 2 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
-		, U x
-		, U y );
+		, U x, U y );
 	/**
 	 *\~english
-	 *\brief		Scale function. Scales matrix from the value in parameter.
+	 *\brief		2D Scale function. Scales matrix from the value in parameter.
 	 *\param[out]	matrix	The matrix that will be scaled
 	 *\param[in]	scaling	The scale value
 	 *\~french
-	 *\brief		Fonction de mise a l'échelle.
+	 *\brief		Fonction de mise a l'échelle 2D.
 	 *\param[out]	matrix	La matrice qui contiendra le résultat
-	 *\param[in]	scaling	Les valeurs d'échelle sur les 3 axes
+	 *\param[in]	scaling	Les valeurs d'échelle sur les 2 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
 		, Point2< U > const & scaling );
 	/**
 	 *\~english
-	 *\brief		Translate function. Translates a matrix from the three values in parameter.
+	 *\brief		2D Scale function. Scales matrix from the value in parameter.
+	 *\return		The matrix that will be scaled
+	 *\param[in]	scaling	The scale value
+	 *\~french
+	 *\brief		Fonction de mise a l'échelle 2D.
+	 *\return		La matrice qui contiendra le résultat
+	 *\param[in]	scaling	Les valeurs d'échelle sur les 2 axes
+	 */
+	template< typename T >
+	static Matrix3x3< T > getScale( Point2< T > const & scaling );
+	/**
+	 *\~english
+	 *\brief		2D Translate function. Translates a matrix from the three values in parameter.
 	 *\param[out]	matrix			The matrix that will be translated
 	 *\param[in]	x, y	The translate values
 	 *\~french
-	 *\brief		Fonction de construction de matrice de translation.
+	 *\brief		Fonction de construction de matrice de translation 2D.
 	 *\param[out]	matrix			La matrice qui contiendra le résultat
-	 *\param[in]	x, y	Les valeurs de translation sur les 3 axes
+	 *\param[in]	x, y	Les valeurs de translation sur les 2 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & translate( Matrix3x3< T > & matrix
-		, U x
-		, U y );
+		, U x, U y );
 	/**
 	 *\~english
-	 *\brief		Translate function. Translates a matrix from the value in parameter.
+	 *\brief		2D Translate function. Translates a matrix from the value in parameter.
 	 *\param[out]	matrix		The matrix that will be translated
 	 *\param[in]	translation	The translate value
 	 *\~french
-	 *\brief		Fonction de construction de matrice de translation.
+	 *\brief		Fonction de construction de matrice de translation 2D.
 	 *\param[out]	matrix		La matrice qui contiendra le résultat
-	 *\param[in]	translation	Les valeurs de translation sur les 3 axes
+	 *\param[in]	translation	Les valeurs de translation sur les 2 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & translate( Matrix3x3< T > & matrix
 		, Point2< U > const & translation );
 	/**
 	 *\~english
-	 *\brief		Translate function. Translates a matrix from the three values in parameter.
+	 *\brief		2D Translate function. Translates a matrix from the three values in parameter.
 	 *\param[out]	matrix	The matrix that will be translated
 	 *\param[in]	x, y	The translate values
 	 *\~french
-	 *\brief		Fonction de construction de matrice de translation.
+	 *\brief		Fonction de construction de matrice de translation 2D.
 	 *\param[out]	matrix	La matrice qui contiendra le résultat
-	 *\param[in]	x, y	Les valeurs de translation sur les 3 axes
+	 *\param[in]	x, y	Les valeurs de translation sur les 2 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix
-		, U x
-		, U y );
+		, U x, U y );
 	/**
 	 *\~english
-	 *\brief		Translate function. Translates a matrix from the value in parameter.
+	 *\brief		2D Translate function. Translates a matrix from the value in parameter.
 	 *\param[out]	matrix		The matrix that will be translated
 	 *\param[in]	translation	The translate value
 	 *\~french
-	 *\brief		Fonction de construction de matrice de translation.
+	 *\brief		Fonction de construction de matrice de translation 2D.
 	 *\param[out]	matrix		La matrice qui contiendra le résultat
-	 *\param[in]	translation	Les valeurs de translation sur les 3 axes
+	 *\param[in]	translation	Les valeurs de translation sur les 2 axes
 	 */
 	template< typename T, typename U >
 	static Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix
 		, Point2< U > const & translation );
 	/**
 	 *\~english
-	 *\brief		Retrieves transformation matrix from translation, scaling and rotation
+	 *\brief		2D Translate function. Translates a matrix from the value in parameter.
+	 *\return		The matrix that will be translated
+	 *\param[in]	translation	The translate value
+	 *\~french
+	 *\brief		Fonction de construction de matrice de translation 2D.
+	 *\return		La matrice qui contiendra le résultat
+	 *\param[in]	translation	Les valeurs de translation sur les 2 axes
+	 */
+	template< typename T >
+	static Matrix3x3< T > getTranslate( Point2< T > const & translation );
+	/**
+	 *\~english
+	 *\brief		Retrieves a 2D transformation matrix from translation, scaling and rotation
 	 *\param[out]	matrix		Receives the transformation
 	 *\param[in]	position	The translation value
 	 *\param[in]	scaling		The scaling value
 	 *\param[in]	orientation	The rotation value
 	 *\~french
-	 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
+	 *\brief		Récupère la matrice de transformation 2D à partir de la translation, la mise à l'échelle et la rotation
 	 *\param[out]	matrix		Reçoit la transformation
 	 *\param[in]	position	La valeur de translation
 	 *\param[in]	scaling		La valeur de mise à l'échelle
@@ -723,16 +799,16 @@ namespace c3d::matrix
 	static Matrix3x3< T > & setTransform( Matrix3x3< T > & matrix
 		, Point2< U > const & position
 		, Point2< U > const & scaling
-		, Angle orientation );
+		, AngleT< V > orientation );
 	/**
 	 *\~english
-	 *\brief		Retrieves transformation matrix from translation, scaling and rotation
+	 *\brief		Retrieves a 2D transformation matrix from translation, scaling and rotation
 	 *\param[out]	matrix		Receives the transformation
 	 *\param[in]	position	The translation value
 	 *\param[in]	scaling		The scaling value
 	 *\param[in]	orientation	The rotation value
 	 *\~french
-	 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
+	 *\brief		Récupère la matrice de transformation 2D à partir de la translation, la mise à l'échelle et la rotation
 	 *\param[out]	matrix		Reçoit la transformation
 	 *\param[in]	position	La valeur de translation
 	 *\param[in]	scaling		La valeur de mise à l'échelle
@@ -742,7 +818,25 @@ namespace c3d::matrix
 	static Matrix3x3< T > & transform( Matrix3x3< T > & matrix
 		, Point2< U > const & position
 		, Point2< U > const & scaling
-		, Angle orientation );
+		, AngleT< V > orientation );
+	/**
+	 *\~english
+	 *\brief		Retrieves a 2D transformation matrix from translation, scaling and rotation
+	 *\return		Receives the transformation
+	 *\param[in]	position	The translation value
+	 *\param[in]	scaling		The scaling value
+	 *\param[in]	orientation	The rotation value
+	 *\~french
+	 *\brief		Récupère la matrice de transformation 2D à partir de la translation, la mise à l'échelle et la rotation
+	 *\return		Reçoit la transformation
+	 *\param[in]	position	La valeur de translation
+	 *\param[in]	scaling		La valeur de mise à l'échelle
+	 *\param[in]	orientation	La valeur de rotation
+	 */
+	template< typename T, typename U, typename V >
+	static Matrix3x3< HigherPrecisionT< U, V > > getTransform( Point2< T > const & position
+		, Point2< U > const & scaling
+		, AngleT< V > orientation );
 }
 
 #include "TransformationMatrix.inl"
