@@ -24,7 +24,58 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API bool parseImportParameters( Parameters const & parameters
+	struct MaterialImportConfig
+	{
+		Map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
+		float emissiveMult{ 1.0f };
+		bool ignoreImages{ false };
+		bool disableImageCompression{ false };
+
+		C3D_API MaterialImportConfig merge( MaterialImportConfig const & rhs )const;
+		C3D_API bool fillFromParam( String const & params );
+	};
+
+	struct MeshImportConfig
+	{
+		u32 submeshIndex{ 0xFFFFFFFFu };
+		bool ignoreVertexColour{ false };
+		bool ignoreSkeleton{ false };
+		bool invertNormals{ false };
+
+		C3D_API MeshImportConfig merge( MeshImportConfig const & rhs )const;
+		C3D_API bool fillFromParam( String const & params );
+	};
+
+	struct LightImportConfig
+	{
+		float illuminationMultiplier{ 1.0f };
+
+		C3D_API LightImportConfig merge( LightImportConfig const & rhs )const;
+		C3D_API bool fillFromParam( String const & params );
+	};
+
+	struct ImportConfig
+	{
+		MaterialImportConfig materialConfig;
+		MeshImportConfig meshConfig;
+		LightImportConfig lightConfig;
+		String prefix{};
+		String centerCamera{};
+		String preferredImporter{ cuT( "any" ) };
+		Parameters parameters;
+		float rescale{ 1.0f };
+		float pitch{ 0.0f };
+		float yaw{ 0.0f };
+		float roll{ 0.0f };
+		bool disableOptimisations{ false };
+		bool disableMeshMerge{ false };
+
+		C3D_API ImportConfig merge( ImportConfig const & rhs )const;
+		C3D_API void fillFromParam( String const & param );
+		C3D_API void fill( String const & params );
+	};
+
+	C3D_API bool parseImportParameters( ImportConfig const & config
 		, Point3f & scale
 		, Quaternion & orientation );
 
@@ -120,7 +171,7 @@ namespace c3d
 		C3D_API ImporterFile( Engine & engine
 			, Scene * scene
 			, Path const & path
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress );
 
 	public:
@@ -176,9 +227,9 @@ namespace c3d
 			return m_filePath;
 		}
 
-		Parameters const & getParameters()const noexcept
+		ImportConfig const & getConfig()const noexcept
 		{
-			return m_parameters;
+			return m_config;
 		}
 
 		String getExternalName( String const & name )const
@@ -225,14 +276,14 @@ namespace c3d
 		//!\~french Le chemin parent du fichier.
 		Path m_filePath;
 		String m_extension;
-		Parameters m_parameters;
+		ImportConfig m_config;
 		String m_prefix;
 		ProgressBar * m_progress;
 	};
 
 	class ImporterFileFactory
 	{
-		using Creator = Function< ImporterFileUPtr( Engine &, Scene *, Path const &, Parameters const &, ProgressBar * ) >;
+		using Creator = Function< ImporterFileUPtr( Engine &, Scene *, Path const &, ImportConfig const &, ProgressBar * ) >;
 
 	public:
 		C3D_API ImporterFileFactory();
@@ -240,58 +291,6 @@ namespace c3d
 		 *\~english
 		 *\brief		Creates an importer from a file type.
 		 *\param[in]	type		The file type.
-		 *\param[in]	name		The preferred importer name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	file		The file containing the data to import.
-		 *\param[in]	parameters	The import parameters.
-		 *\param[in]	progress	An optional progress bar.
-		 *\return		The created importer.
-		 *\~french
-		 *\brief		Crée un importeur à partir d'un type de fichier.
-		 *\param[in]	type		Le type de fichier.
-		 *\param[in]	name		Le nom de l'importeur préféré.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	file		Le fichier contenant les données à importer.
-		 *\param[in]	parameters	Les paramètres d'import.
-		 *\param[in]	progress	Une barre de progression optionnelle.
-		 *\return		L'importeur créé.
-		 */
-		C3D_API ImporterFileUPtr create( String const & type
-			, String const & name
-			, Engine & engine
-			, Path const & file
-			, Parameters const & parameters
-			, ProgressBar * progress = nullptr )const;
-		/**
-		 *\~english
-		 *\brief		Creates an importer from a file type.
-		 *\param[in]	type		The file type.
-		 *\param[in]	name		The preferred importer name.
-		 *\param[in]	scene		The parent scene.
-		 *\param[in]	file		The file containing the data to import.
-		 *\param[in]	parameters	The import parameters.
-		 *\param[in]	progress	An optional progress bar.
-		 *\return		The created importer.
-		 *\~french
-		 *\brief		Crée un importeur à partir d'un type de fichier.
-		 *\param[in]	type		Le type de fichier.
-		 *\param[in]	name		Le nom de l'importeur préféré.
-		 *\param[in]	scene		La scène parente.
-		 *\param[in]	file		Le fichier contenant les données à importer.
-		 *\param[in]	parameters	Les paramètres d'import.
-		 *\param[in]	progress	Une barre de progression optionnelle.
-		 *\return		L'importeur créé.
-		 */
-		C3D_API ImporterFileUPtr create( String const & type
-			, String const & name
-			, Scene & scene
-			, Path const & file
-			, Parameters const & parameters
-			, ProgressBar * progress = nullptr )const;
-		/**
-		 *\~english
-		 *\brief		Creates an importer from a file type.
-		 *\param[in]	type		The file type.
 		 *\param[in]	engine		The engine.
 		 *\param[in]	file		The file containing the data to import.
 		 *\param[in]	parameters	The import parameters.
@@ -309,7 +308,7 @@ namespace c3d
 		C3D_API ImporterFileUPtr create( String const & type
 			, Engine & engine
 			, Path const & file
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress = nullptr )const;
 		/**
 		 *\~english
@@ -332,7 +331,7 @@ namespace c3d
 		C3D_API ImporterFileUPtr create( String const & type
 			, Scene & scene
 			, Path const & file
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress = nullptr )const;
 		/**
 		 *\~english
@@ -398,11 +397,10 @@ namespace c3d
 
 	private:
 		ImporterFileUPtr doCreate( String const & type
-			, String const & name
 			, Engine & engine
 			, Scene * scene
 			, Path const & file
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress )const;
 
 	private:

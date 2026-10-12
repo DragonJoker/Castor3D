@@ -39,137 +39,137 @@ namespace c3d
 		 *\brief		SkeletonAnimation import function.
 		 *\param[out]	animation	Receives the imported data.
 		 *\param[in]	file		The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de SkeletonAnimation.
 		 *\param[out]	animation	Reçoit les données importées.
 		 *\param[in]	file		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( SkeletonAnimation & animation
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		SkeletonAnimation import function.
 		 *\param[out]	animation	Receives the imported data.
 		 *\param[in]	pathFile	The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de SkeletonAnimation.
 		 *\param[out]	animation	Reçoit les données importées.
 		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( SkeletonAnimation & animation
 			, Path const & pathFile
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		MeshAnimation import function.
 		 *\param[out]	animation	Receives the imported data.
 		 *\param[in]	file		The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de MeshAnimation.
 		 *\param[out]	animation	Reçoit les données importées.
 		 *\param[in]	file		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( MeshAnimation & animation
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		MeshAnimation import function.
 		 *\param[out]	animation	Receives the imported data.
 		 *\param[in]	pathFile	The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de MeshAnimation.
 		 *\param[out]	animation	Reçoit les données importées.
 		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( MeshAnimation & animation
 			, Path const & pathFile
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		SceneNodeAnimation import function.
-		 *\param[out]	animation		Receives the imported data.
-		 *\param[in]	file			The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[out]	animation	Receives the imported data.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de SceneNodeAnimation.
-		 *\param[out]	animation		Reçoit les données importées.
-		 *\param[in]	file			Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( SceneNodeAnimation & animation
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		SceneNodeAnimation import function.
-		 *\param[out]	animation		Receives the imported data.
-		 *\param[in]	pathFile		The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[out]	animation	Receives the imported data.
+		 *\param[in]	pathFile	The location of the file to import.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de SceneNodeAnimation.
-		 *\param[out]	animation		Reçoit les données importées.
-		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( SceneNodeAnimation & animation
 			, Path const & pathFile
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		TextureAnimation import function.
-		 *\param[out]	animation		Receives the imported data.
-		 *\param[in]	file			The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[out]	animation	Receives the imported data.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de TextureAnimation.
-		 *\param[out]	animation		Reçoit les données importées.
-		 *\param[in]	file			Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( TextureAnimation & animation
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		TextureAnimation import function.
-		 *\param[out]	animation		Receives the imported data.
-		 *\param[in]	pathFile		The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[out]	animation	Receives the imported data.
+		 *\param[in]	pathFile	The location of the file to import.
+		 *\param[in]	config		Import configuration settings.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de TextureAnimation.
-		 *\param[out]	animation		Reçoit les données importées.
-		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]	config		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( TextureAnimation & animation
 			, Path const & pathFile
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 
 		String getPrefix()const noexcept
 		{
@@ -327,9 +327,6 @@ namespace c3d
 	protected:
 		String m_prefix;
 		ImporterFile * m_file{};
-		//!\~english Import configuration parameters.
-		//!\~french Paramètres de configuration de l'import.
-		Parameters m_parameters;
 	};
 }
 

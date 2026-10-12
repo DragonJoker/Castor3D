@@ -68,42 +68,34 @@ namespace c3d
 	}
 
 	MaterialImporter::MaterialImporter( Engine & engine
-		, String const & prefix )
-		: MaterialImporter{ engine, prefix, nullptr }
+		, String const & prefix
+		, MaterialImportConfig const & config )
+		: MaterialImporter{ engine, prefix, config, nullptr }
 	{
 	}
 
 	MaterialImporter::MaterialImporter( Engine & engine
 		, String const & prefix
+		, MaterialImportConfig const & config
 		, ImporterFile * file )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
+		, m_config{ config }
 		, m_file{ file }
 	{
 	}
 
-	void MaterialImporter::prepareImport( ImporterFile * file
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+	void MaterialImporter::prepareImport( ImporterFile * file )
 	{
 		if ( !m_file )
 			m_file = file;
-		m_textureRemaps = textureRemaps;
-		m_parameters = parameters;
-		m_loadConfig.allowCompression = !m_parameters.get< bool >( cuT( "disable_image_compression" ) );
-		float fvalue;
-
-		if ( m_parameters.get( cuT( "emissive_mult" ), fvalue )
-			&& std::abs( fvalue - 1.0f ) > std::numeric_limits< float >::epsilon() )
-			m_emissiveMult = fvalue;
+		m_loadConfig.allowCompression = !m_config.disableImageCompression;
 	}
 
 	MaterialPtr MaterialImporter::importData( String const & name
-		, ImporterFile * file
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, ImporterFile * file )
 	{
-		prepareImport( file, parameters, textureRemaps );
+		prepareImport( file );
 		auto result = createMaterial( name );
 		if ( !result || !importMaterial( *result ) )
 			return nullptr;
@@ -111,11 +103,9 @@ namespace c3d
 	}
 
 	bool MaterialImporter::importData( Material & material
-		, ImporterFile * file
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, ImporterFile * file )
 	{
-		prepareImport( file, parameters, textureRemaps );
+		prepareImport( file );
 		log::info << getPrefix() << cuT( "Loading Material [" ) << material.getName() << cuT( "]" ) << std::endl;
 
 		bool result = importMaterial( material );
@@ -129,8 +119,7 @@ namespace c3d
 
 	bool MaterialImporter::importData( Material & material
 		, Path const & path
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, ImportConfig const & config )
 	{
 		auto & engine = *material.getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -144,14 +133,12 @@ namespace c3d
 		auto file = engine.getImporterFileFactory().create( extension
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createMaterialImporter() )
 		{
 			return importer->importData( material
-				, file.get()
-				, parameters
-				, textureRemaps );
+				, file.get() );
 		}
 
 		return false;

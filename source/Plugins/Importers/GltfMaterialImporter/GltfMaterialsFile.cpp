@@ -72,11 +72,12 @@ namespace c3d_gltf
 
 	GltfMaterialsFile::GltfMaterialsFile( c3d::Engine & engine
 		, c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::String const & prefix
 		, c3d::String const & name
 		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
-		: m_asset{ file::loadScene( path ) }
+		: m_config{ config }
+		, m_asset{ file::loadScene( path ) }
 		, m_prefix{ prefix }
 		, m_name{ name }
 	{
@@ -87,16 +88,17 @@ namespace c3d_gltf
 					m_materialNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ULL + m_materialNames.namesByIndex.size(), element.getName() );
 					m_materialNames.names.emplace( element.getName() );
 				} );
-			doPrelistMaterials( parameters, materialsNames );
+			doPrelistMaterials( materialsNames );
 		}
 	}
 
 	GltfMaterialsFile::GltfMaterialsFile( c3d::Engine & engine
 		, c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::String const & prefix
 		, c3d::String const & name )
-		: m_asset{ file::loadScene( path ) }
+		: m_config{ config }
+		, m_asset{ file::loadScene( path ) }
 		, m_prefix{ prefix }
 		, m_name{ name }
 	{
@@ -107,13 +109,13 @@ namespace c3d_gltf
 					m_materialNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ULL + m_materialNames.namesByIndex.size(), element.getName() );
 					m_materialNames.names.emplace( element.getName() );
 				} );
-			doPrelistMaterials( parameters );
+			doPrelistMaterials();
 		}
 	}
 
 	c3d::MaterialImporterUPtr GltfMaterialsFile::createMaterialImporter( c3d::Engine & engine )
 	{
-		return c3d::makeUniqueDerived< c3d::MaterialImporter, GltfMaterialImporter >( engine, *this );
+		return c3d::makeUniqueDerived< c3d::MaterialImporter, GltfMaterialImporter >( engine, m_config.materialConfig, *this );
 	}
 
 	c3d::String GltfMaterialsFile::getSamplerName( c3d::Engine const & engine
@@ -134,8 +136,7 @@ namespace c3d_gltf
 		return getInternalName( getElementName( getAsset().materials, index, getName(), m_materialNames ) );
 	}
 
-	void GltfMaterialsFile::doPrelistMaterials( [[maybe_unused]] c3d::Parameters const & parameters
-		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
+	void GltfMaterialsFile::doPrelistMaterials( c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
 	{
 		uint32_t materialIndex = 0u;
 
@@ -155,7 +156,7 @@ namespace c3d_gltf
 		}
 	}
 
-	void GltfMaterialsFile::doPrelistMaterials( [[maybe_unused]] c3d::Parameters const & parameters )
+	void GltfMaterialsFile::doPrelistMaterials()
 	{
 		for ( uint32_t materialIndex = 0u; materialIndex < getAsset().materials.size(); ++materialIndex )
 			m_materials.try_emplace( getMaterialName( materialIndex ), materialIndex );

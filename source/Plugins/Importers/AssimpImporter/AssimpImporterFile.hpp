@@ -131,13 +131,13 @@ namespace c3d_assimp
 		C3D_Assimp_API AssimpImporterFile( c3d::Engine & engine
 			, c3d::Scene * scene
 			, c3d::Path const & path
-			, c3d::Parameters const & parameters
+			, c3d::ImportConfig const & config
 			, c3d::ProgressBar * progress );
 
 		static c3d::ImporterFileUPtr create( c3d::Engine & engine
 			, c3d::Scene * scene
 			, c3d::Path const & path
-			, c3d::Parameters const & parameters
+			, c3d::ImportConfig const & config
 			, c3d::ProgressBar * progress );
 
 		using c3d::ImporterFile::getInternalName;

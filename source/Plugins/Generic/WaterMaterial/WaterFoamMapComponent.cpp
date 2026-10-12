@@ -82,7 +82,7 @@ namespace water
 		static CU_ImplementAttributeParserBlock( parserTexRemapWaterFoam, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( WaterFoamMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
+			blockContext->textureRemapIt = blockContext->config.materialConfig.textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )

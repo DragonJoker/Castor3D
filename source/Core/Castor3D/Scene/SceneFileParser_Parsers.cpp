@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -108,172 +109,15 @@ namespace c3d
 
 	void fillMeshImportParameters( FileParserContext & context
 		, String const & meshParams
-		, Parameters & parameters )
+		, ImportConfig & config )
 	{
-		for ( auto const & param : string::split( meshParams, cuT( "-" ), 20, false ) )
+		try
 		{
-			if ( param.find( cuT( "smooth_normals" ) ) == 0 )
-			{
-				String strNml = cuT( "smooth" );
-				parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-			}
-			else if ( param.find( cuT( "flat_normals" ) ) == 0 )
-			{
-				String strNml = cuT( "flat" );
-				parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-			}
-			else if ( param.find( cuT( "tangent_space" ) ) == 0 )
-			{
-				parameters.add( cuT( "tangent_space" ), true );
-			}
-			else if ( param.find( cuT( "pitch" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					float value;
-					string::parse< float >( param.substr( eqIndex + 1 ), value );
-					parameters.add( cuT( "pitch" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -pitch=<degrees>." ) );
-				}
-			}
-			else if ( param.find( cuT( "yaw" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					float value;
-					string::parse< float >( param.substr( eqIndex + 1 ), value );
-					parameters.add( cuT( "yaw" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -yaw=<degrees>." ) );
-				}
-			}
-			else if ( param.find( cuT( "roll" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					float value;
-					string::parse< float >( param.substr( eqIndex + 1 ), value );
-					parameters.add( cuT( "roll" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -roll=<degrees>." ) );
-				}
-			}
-			else if ( param.find( cuT( "emissive_mult" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					float value;
-					string::parse< float >( param.substr( eqIndex + 1 ), value );
-					parameters.add( cuT( "emissive_mult" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -emissive_mult=<float>." ) );
-				}
-			}
-			else if ( param.find( cuT( "split_mesh" ) ) == 0 )
-			{
-				parameters.add( cuT( "split_mesh" ), true );
-			}
-			else if ( param.find( cuT( "rescale" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					float value;
-					string::parse< float >( param.substr( eqIndex + 1 ), value );
-					parameters.add( cuT( "rescale" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -rescale=<float>." ) );
-				}
-			}
-			else if ( param.find( cuT( "prefix" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					String value = param.substr( eqIndex + 1 );
-					string::trim( value );
-					String prefix;
-					if ( parameters.get( cuT( "prefix" ), prefix ) )
-						parameters.add( cuT( "prefix" ), prefix + value );
-					else
-						parameters.add( cuT( "prefix" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -prefix=name." ) );
-				}
-			}
-			else if ( param.find( cuT( "no_optimisations" ) ) == 0 )
-			{
-				parameters.add( cuT( "no_optimisations" ), true );
-			}
-			else if ( param.find( cuT( "no_validation" ) ) == 0 )
-			{
-				parameters.add( cuT( "no_validation" ), true );
-			}
-			else if ( param.find( cuT( "invert_normals" ) ) == 0 )
-			{
-				parameters.add( cuT( "invert_normals" ), true );
-			}
-			else if ( param.find( cuT( "preferred_importer" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					String value = param.substr( eqIndex + 1 );
-					string::trim( value );
-					parameters.add( cuT( "preferred_importer" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -preferred_importer=\"name\"." ) );
-				}
-			}
-			else if ( param.find( cuT( "submesh" ) ) == 0 )
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					uint32_t value;
-					string::parse< uint32_t >( param.substr( eqIndex + 1 ), value );
-					parameters.add( cuT( "submesh" ), value );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Malformed parameter -submesh=<uint>." ) );
-				}
-			}
-			else
-			{
-				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != String::npos )
-				{
-					auto paramValue = param.substr( eqIndex + 1 );
-					auto paramName = param.substr( 0, eqIndex );
-					string::trim( paramValue );
-					string::trim( paramName );
-					parameters.add( paramName, paramValue );
-				}
-				else
-				{
-					parameters.add( param, true );
-				}
-			}
+			config.fill( meshParams );
+		}
+		catch ( Exception & exc )
+		{
+			CU_ParsingError( c3d::toUtf8( exc.what() ) );
 		}
 	}
 
@@ -358,7 +202,7 @@ namespace c3d
 			, { SectionId( CSCNSection::eSkeleton ), cuT( "skeleton" ) }
 			, { SectionId( CSCNSection::eMeshAnimation ), cuT( "mesh_animation" ) }
 			, { SectionId( CSCNSection::eTextureRemapChannel ), cuT( "texture_remap_channel" ) }
-			, { SectionId( CSCNSection::eTextureRemap ), cuT( "texture_remap" ) }
+			, { SectionId( CSCNSection::eTextureRemap ), cuT( "texture_remap_config" ) }
 			, { SectionId( CSCNSection::eClusters ), cuT( "clusters" ) }
 			, { SectionId( CSCNSection::eTexture ), cuT( "texture" ) }
 			, { SectionId( CSCNSection::eColourGrading ), cuT( "colour_grading" ) }

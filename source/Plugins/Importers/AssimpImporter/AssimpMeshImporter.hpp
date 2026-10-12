@@ -14,7 +14,8 @@ namespace c3d_assimp
 		: public c3d::MeshImporter
 	{
 	public:
-		explicit AssimpMeshImporter( c3d::Engine & engine );
+		explicit AssimpMeshImporter( c3d::Engine & engine
+			, c3d::MeshImportConfig const & config );
 
 	private:
 		bool doImportMesh( c3d::Mesh & mesh, uint32_t submesh )override;

@@ -47,35 +47,20 @@ namespace c3d
 					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getData().getFaces() );
 			}
 		}
-
-		static bool parseMeshImportParameters( Parameters const & parameters
-			, Point3f & scale
-			, Quaternion & orientation
-			, uint32_t & submesh )
-		{
-			bool needsTransform = parseImportParameters( parameters, scale, orientation );
-
-			if ( uint32_t index = 0;
-				parameters.get( cuT( "submesh" ), index ) )
-				submesh = index;
-			else
-				submesh = 0xFFFFFFFFu;
-
-			return needsTransform;
-		}
 	}
 
 	MeshImporter::MeshImporter( Engine & engine
-		, String const & prefix )
+		, String const & prefix
+		, MeshImportConfig const & config )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
+		, m_config{ config }
 	{
 	}
 
 	MeshRes MeshImporter::importData( String const & name
 		, Scene & scene
 		, ImporterFile * file
-		, Parameters const & parameters
 		, bool forceImport )
 	{
 		if ( !m_file )
@@ -83,7 +68,7 @@ namespace c3d
 
 		auto result = doCreateMesh( name, scene );
 		if ( !result
-			|| !importData( *result, file, parameters, forceImport ) )
+			|| !importData( *result, file, forceImport ) )
 		{
 			return nullptr;
 		}
@@ -93,21 +78,18 @@ namespace c3d
 
 	bool MeshImporter::importData( Mesh & mesh
 		, ImporterFile * file
-		, Parameters const & parameters
 		, bool forceImport )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		bool result = true;
 
 		if ( !mesh.getSubmeshCount() || forceImport )
 		{
 			Point3f scale{ 1.0f, 1.0f, 1.0f };
 			Quaternion orientation{ Quaternion::identity() };
-			uint32_t submeshIndex{};
-			auto needsTransform = meshimp::parseMeshImportParameters( m_parameters, scale, orientation, submeshIndex );
+			bool needsTransform = parseImportParameters( m_file->getConfig(), scale, orientation);
 			log::info << getPrefix() << cuT( "Loading Mesh [" ) << mesh.getName() << cuT( "]" ) << std::endl;
-			result = doImportMesh( mesh, submeshIndex );
+			result = doImportMesh( mesh, m_config.submeshIndex );
 
 			if ( result )
 			{
@@ -119,8 +101,7 @@ namespace c3d
 					meshimp::transformMesh( transform, mesh );
 				}
 
-				if ( bool invertNormals{};
-					parameters.get( cuT( "invert_normals" ), invertNormals ) && invertNormals )
+				if ( m_config.invertNormals )
 				{
 					for ( auto const & submesh : mesh )
 					{
@@ -129,11 +110,8 @@ namespace c3d
 					}
 				}
 
-				bool noOptim = false;
-
-				if ( auto found = parameters.get( cuT( "no_optimisations" ), noOptim );
-					!found || !noOptim )
-					MeshPreparer::prepare( mesh, parameters );
+				if ( !m_file->getConfig().disableOptimisations )
+					MeshPreparer::prepare( mesh, m_file->getConfig().parameters );
 
 				mesh.computeContainers();
 				log::info << getPrefix() << cuT( "Loaded Mesh [" ) << mesh.getName() << cuT( "]" )
@@ -180,7 +158,7 @@ namespace c3d
 
 	bool MeshImporter::importData( Mesh & mesh
 		, Path const & path
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, bool forceImport )
 	{
 		auto & engine = *mesh.getEngine();
@@ -192,19 +170,15 @@ namespace c3d
 			return false;
 		}
 
-		String preferredImporter = cuT( "any" );
-		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
-			, preferredImporter
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createMeshImporter() )
 		{
 			return importer->importData( mesh
 				, file.get()
-				, parameters
 				, forceImport );
 		}
 

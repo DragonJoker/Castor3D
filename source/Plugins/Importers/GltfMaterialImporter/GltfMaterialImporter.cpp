@@ -464,7 +464,7 @@ namespace c3d_gltf
 			, c3d::MaterialImporter const & importer
 			, bool checkAlpha )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -512,7 +512,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			try
 			{
@@ -544,7 +544,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -565,7 +565,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -591,7 +591,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -613,7 +613,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -631,7 +631,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -648,7 +648,7 @@ namespace c3d_gltf
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
-			if ( importer.getParameters().get< bool >( "no_images" ) )
+			if ( importer.getConfig().ignoreImages )
 				return;
 			if ( texInfo )
 			{
@@ -705,8 +705,9 @@ namespace c3d_gltf
 	//*********************************************************************************************
 
 	GltfMaterialImporter::GltfMaterialImporter( c3d::Engine & engine
-			, GltfMaterialsFile const & materialsFile )
-		: c3d::MaterialImporter{ engine, cuT( "Gltf" ) }
+		, c3d::MaterialImportConfig const & config
+		, GltfMaterialsFile const & materialsFile )
+		: c3d::MaterialImporter{ engine, cuT( "Gltf" ), config }
 		, m_materialsFile{ materialsFile }
 	{
 		if ( !engine.hasMaterial( DefaultMaterial ) )
@@ -913,7 +914,7 @@ namespace c3d_gltf
 
 			if ( impMaterial.emissiveStrength != 0.0f )
 			{
-				component->setEmissiveFactor( impMaterial.emissiveStrength * m_emissiveMult );
+				component->setEmissiveFactor( impMaterial.emissiveStrength * m_config.emissiveMult );
 			}
 
 			component->setEmissive( c3d::RgbColour::fromComponents( impMaterial.emissiveFactor[0]

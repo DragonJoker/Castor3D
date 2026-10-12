@@ -505,17 +505,17 @@ namespace c3d_gltf
 	GltfImporterFile::GltfImporterFile( c3d::Engine & engine
 		, c3d::Scene * scene
 		, c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::ProgressBar * progress )
-		: c3d::ImporterFile{ engine, scene, path, parameters, progress }
-		, m_materialsFile{ engine, path, parameters, getPrefix(), getName() }
+		: c3d::ImporterFile{ engine, scene, path, config, progress }
+		, m_materialsFile{ engine, path, config, getPrefix(), getName() }
 	{
 		if ( isValid() )
 		{
 			auto const & gltfAsset = getAsset();
 			m_adapter.decompress( getAsset() );
 
-			if ( auto sceneIndex = getParameters().get< uint32_t >( cuT( "sceneIndex" ) ) )
+			if ( auto sceneIndex = getConfig().parameters.get< uint32_t >( cuT( "sceneIndex" ) ) )
 			{
 				m_sceneIndices.push_back( sceneIndex );
 			}
@@ -727,7 +727,7 @@ namespace c3d_gltf
 		Animations result;
 		size_t index{};
 
-		if ( !getParameters().get< bool >( "no_skeleton" ) )
+		if ( !getConfig().meshConfig.ignoreSkeleton )
 		{
 			auto const & gltfAsset = getAsset();
 			for ( auto & animation : gltfAsset.animations )
@@ -920,7 +920,7 @@ namespace c3d_gltf
 		c3d::Set< c3d::String > result;
 
 		if ( isValid()
-			&& !getParameters().get< bool >( "no_skeleton" ) )
+			&& !getConfig().meshConfig.ignoreSkeleton )
 		{
 			auto const & gltfAsset = getAsset();
 			size_t index{};
@@ -999,7 +999,7 @@ namespace c3d_gltf
 		c3d::Set< c3d::String > result;
 
 		if ( isValid()
-			&& !getParameters().get< bool >( "no_skeleton" ) )
+			&& !getConfig().meshConfig.ignoreSkeleton )
 		{
 			auto const & gltfAsset = getAsset();
 			size_t index{};
@@ -1062,7 +1062,7 @@ namespace c3d_gltf
 
 	c3d::MeshImporterUPtr GltfImporterFile::createMeshImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::MeshImporter, GltfMeshImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::MeshImporter, GltfMeshImporter >( *getOwner(), getConfig().meshConfig );
 	}
 
 	c3d::SceneNodeImporterUPtr GltfImporterFile::createSceneNodeImporter()
@@ -1072,7 +1072,7 @@ namespace c3d_gltf
 
 	c3d::LightImporterUPtr GltfImporterFile::createLightImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::LightImporter, GltfLightImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::LightImporter, GltfLightImporter >( *getOwner(), getConfig().lightConfig );
 	}
 
 	c3d::CameraImporterUPtr GltfImporterFile::createCameraImporter()
@@ -1083,20 +1083,20 @@ namespace c3d_gltf
 	c3d::ImporterFileUPtr GltfImporterFile::create( c3d::Engine & engine
 		, c3d::Scene * scene
 		, c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::ProgressBar * progress )
 	{
-		return c3d::makeUniqueDerived< c3d::ImporterFile, GltfImporterFile >( engine, scene, path, parameters, progress );
+		return c3d::makeUniqueDerived< c3d::ImporterFile, GltfImporterFile >( engine, scene, path, config, progress );
 	}
 
 	void GltfImporterFile::doPrelistNodes()
 	{
 		c3d::Vector< c3d::Matrix4x4f > cumulativeTransforms;
 		c3d::Vector< size_t > skinsRootNodes;
-		bool noSkeleton = getParameters().get< bool >( "no_skeleton" );
+		bool ignoreSkeleton = getConfig().meshConfig.ignoreSkeleton;
 		auto const & gltfAsset = getAsset();
 
-		if ( !noSkeleton )
+		if ( !ignoreSkeleton )
 		{
 			for ( auto & skin : gltfAsset.skins )
 			{
@@ -1115,7 +1115,7 @@ namespace c3d_gltf
 			if ( node.cameraIndex )
 				transform.rotate *= c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0f, 1.0f, 0.0f }, c3d::Angle::fromDegrees( 180.0f ) );
 
-			bool isSkeletonNode = ( noSkeleton
+			bool isSkeletonNode = ( ignoreSkeleton
 				? false
 				: file::isSkeletonNode( getAsset(), gltfAsset.skins, nodeIndex, skinsRootNodes ) );
 			auto & nodeData = m_sceneData.nodes.emplace_back( node.cameraIndex.has_value()
@@ -1263,7 +1263,7 @@ namespace c3d_gltf
 	void GltfImporterFile::doPrelistMeshes()
 	{
 		uint32_t meshIndex = 0u;
-		auto noMeshMerge = getParameters().get< bool >( "no_merge" );
+		auto disableMeshMerge = getConfig().disableMeshMerge;
 		auto const & gltfAsset = getAsset();
 
 		for ( auto & impMesh : gltfAsset.meshes )
@@ -1281,7 +1281,7 @@ namespace c3d_gltf
 			}
 
 			// Try to merge the mesh with other ones (if they share the same skin)
-			if ( regIt == m_sceneData.meshes.end() && !noMeshMerge )
+			if ( regIt == m_sceneData.meshes.end() && !disableMeshMerge )
 				regIt = file::mergeMeshes( *this, meshIndex, meshName
 					, m_sceneData.meshes, skinIndex, skin );
 

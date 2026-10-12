@@ -38,7 +38,7 @@ namespace convert
 		c3d::String output;
 		c3d::String passType{ c3d::PbrPass::LightingModel };
 		c3d::exporter::ExportOptions options;
-		c3d::Parameters params;
+		c3d::ImportConfig config;
 	};
 
 	static void printUsage()
@@ -158,24 +158,13 @@ namespace convert
 		}
 
 		if ( parseValueOption( "p", args, value ) )
-		{
-			options.params.add( cuT( "pitch" ),  c3d::string::toFloat( value ) );
-		}
-
+			options.config.pitch = c3d::string::toFloat( value );
 		if ( parseValueOption( "y", args, value ) )
-		{
-			options.params.add( cuT( "yaw" ), c3d::string::toFloat( value ) );
-		}
-
+			options.config.yaw = c3d::string::toFloat( value );
 		if ( parseValueOption( "r", args, value ) )
-		{
-			options.params.add( cuT( "roll" ), c3d::string::toFloat( value ) );
-		}
-
+			options.config.roll = c3d::string::toFloat( value );
 		if ( parseValueOption( "a", args, value ) )
-		{
-			options.params.add( cuT( "rescale" ), c3d::string::toFloat( value ) );
-		}
+			options.config.rescale = c3d::string::toFloat( value );
 
 		options.options.splitPerMaterial = parseSwitchOption( "s", args );
 		options.options.recenter = parseSwitchOption( "c", args );
@@ -425,7 +414,7 @@ int main( int argc, char * argv[] )
 
 					if ( !importer.importData( scene
 						, path
-						, options.params
+						, options.config
 						, {} ) )
 					{
 						c3d::Logger::logError( c3d::makeStringStream() << "Import failed" );

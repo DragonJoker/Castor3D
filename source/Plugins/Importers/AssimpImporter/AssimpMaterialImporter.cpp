@@ -149,21 +149,16 @@ namespace c3d_assimp
 				, aiShadingMode shadingMode
 				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
-				, float emissiveMult
 				, bool isObjFile
-				, bool loadImages
 				, c3d::ImageLoaderConfig loadConfig
-				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 				, c3d::Pass & result )
 				: m_material{ material }
 				, m_scene{ scene }
 				, m_sampler{ sampler }
 				, m_importer{ importer }
-				, m_emissiveMult{ emissiveMult }
+				, m_config{ m_importer.getConfig() }
 				, m_isObjFile{ isObjFile }
-				, m_loadImages{ loadImages }
 				, m_loadConfig{ c3d::move( loadConfig ) }
-				, m_textureRemaps{ textureRemaps }
 				, m_shadingModel{ shadingMode }
 				, m_result{ result }
 				, m_colourMapPlugin{ m_result.getComponentPlugin< c3d::ColourMapComponent >() }
@@ -193,14 +188,11 @@ namespace c3d_assimp
 				, aiShadingMode shadingMode
 				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
-				, float emissiveMult
 				, bool isObjFile
-				, bool loadImages
 				, c3d::ImageLoaderConfig loadConfig
-				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
 				, c3d::Pass & pass )
 			{
-				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, isObjFile, loadImages, c3d::move( loadConfig ), textureRemaps, pass };
+				MaterialParser parser{ material, scene, shadingMode, sampler, importer, isObjFile, c3d::move( loadConfig ), pass };
 				parser.parseDatas();
 				parser.finish();
 				pass.prepareTextures();
@@ -256,7 +248,7 @@ namespace c3d_assimp
 				finishSpecular( spcInfo, occInfo, mtlInfo, shnInfo, rghInfo );
 				auto hasOpacityTex = finishOpacity( opaInfo );
 
-				if ( m_loadImages )
+				if ( !m_config.ignoreImages )
 				{
 					loadTextureT< c3d::ColourMapComponent >( colInfo, hasOpacityTex );
 					loadTextureT< c3d::AmbientColourMapComponent >( ambInfo, hasOpacityTex );
@@ -429,7 +421,7 @@ namespace c3d_assimp
 					result && ( value.red() != 0.0f || value.green() != 0.0f || value.blue() != 0.0f ) )
 				{
 					auto component = m_result.createComponent< c3d::EmissiveComponent >();
-					component->setEmissive( value * m_emissiveMult );
+					component->setEmissive( value * m_config.emissiveMult );
 					if ( auto [valueI, resultI] = getValueT< float >( AI_MATKEY_EMISSIVE_INTENSITY ); resultI )
 						component->setEmissiveFactor( valueI );
 				}
@@ -505,8 +497,8 @@ namespace c3d_assimp
 			c3d::TextureConfiguration getRemap( c3d::PassComponentTextureFlag flag
 				, c3d::TextureConfiguration texConfig )
 			{
-				auto it = m_textureRemaps.find( flag );
-				if ( it == m_textureRemaps.end() )
+				auto it = m_config.textureRemaps.find( flag );
+				if ( it == m_config.textureRemaps.end() )
 					return texConfig;
 				return it->second;
 			}
@@ -848,7 +840,7 @@ namespace c3d_assimp
 						if ( spcInfo.name == rghInfo.name )
 							rghInfo.name.clear();
 
-						m_textureRemaps.try_emplace( m_specularMapFlags, spcConfig );
+						m_config.textureRemaps.try_emplace( m_specularMapFlags, spcConfig );
 					}
 				}
 			}
@@ -870,7 +862,7 @@ namespace c3d_assimp
 					{
 						auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
 						addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
-						m_textureRemaps.try_emplace( m_colourMapFlags, config );
+						m_config.textureRemaps.try_emplace( m_colourMapFlags, config );
 						hasOpacityTex = true;
 						mixedInterpolative( value == cuT( "BLEND" ) );
 					}
@@ -911,11 +903,9 @@ namespace c3d_assimp
 			aiScene const & m_scene;
 			c3d::SamplerObs m_sampler;
 			AssimpMaterialImporter const & m_importer;
-			float m_emissiveMult;
+			c3d::MaterialImportConfig m_config;
 			bool m_isObjFile;
-			bool m_loadImages;
 			c3d::ImageLoaderConfig m_loadConfig;
-			c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
 			c3d::Pass & m_result;
 			c3d::PassComponentPlugin const & m_colourMapPlugin;
@@ -1003,22 +993,17 @@ namespace c3d_assimp
 	//*********************************************************************************************
 
 	AssimpMaterialImporter::AssimpMaterialImporter( c3d::Engine & engine
-		, c3d::Parameters const & parameters )
-		: c3d::MaterialImporter{ engine, cuT( "Assimp" ) }
-		, m_parameters{ parameters }
+		, c3d::MaterialImportConfig const & config )
+		: c3d::MaterialImporter{ engine, cuT( "Assimp" ), config }
 	{
 	}
 
 	bool AssimpMaterialImporter::importMaterial( c3d::Material & material )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
-		auto name = material.getName();
-		auto it = file.getMaterials().find( name );
-
+		auto it = file.getMaterials().find( material.getName() );
 		if ( it == file.getMaterials().end() )
-		{
 			return false;
-		}
 
 		int ishadingMode{};
 		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
@@ -1030,11 +1015,8 @@ namespace c3d_assimp
 			, shadingMode
 			, getEngine()->getDefaultSampler()
 			, *this
-			, m_emissiveMult
 			, c3d::string::lowerCase( file.getFileName().getExtension() ) == "obj"
-			, ( m_parameters.get< bool >( "no_images" ) == false )
 			, m_loadConfig
-			, m_textureRemaps
 			, *pass );
 		return true;
 	}

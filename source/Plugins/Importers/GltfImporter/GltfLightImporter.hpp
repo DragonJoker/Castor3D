@@ -14,7 +14,8 @@ namespace c3d_gltf
 		: public c3d::LightImporter
 	{
 	public:
-		explicit GltfLightImporter( c3d::Engine & engine );
+		explicit GltfLightImporter( c3d::Engine & engine
+			, c3d::LightImportConfig const & config );
 
 	private:
 		bool doImportLight( c3d::Light & light )override;

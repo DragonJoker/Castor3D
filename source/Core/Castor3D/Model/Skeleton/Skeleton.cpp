@@ -29,17 +29,17 @@ namespace c3d
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
-				Parameters parameters;
+				ImportConfig config;
 
 				if ( params.size() > 1 )
 				{
 					auto importParams = params[1]->get< String >();
-					fillMeshImportParameters( context, importParams, parameters );
+					fillMeshImportParameters( context, importParams, config );
 				}
 
 				if ( !SkeletonImporter::importData( *blockContext->skeleton
 					, pathFile
-					, parameters ) )
+					, config ) )
 				{
 					CU_ParsingError( cuT( "Skeleton Import failed" ) );
 					blockContext->skeleton = nullptr;
@@ -161,22 +161,19 @@ namespace c3d
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
-				Parameters parameters;
+				ImportConfig config;
+				config.prefix = getPrefix( *blockContext );
 
-				if ( auto prefix = getPrefix( *blockContext );
-					!prefix.empty() )
+				if ( !config.prefix.empty() )
 				{
-					if ( prefix[prefix.size() - 1u] == cuT( '-' ) )
-					{
-						prefix = prefix.substr( 0u, prefix.size() - 1u );
-					}
-					parameters.add( cuT( "prefix" ), prefix );
+					if ( config.prefix[config.prefix.size() - 1u] == cuT( '-' ) )
+						config.prefix = config.prefix.substr( 0u, config.prefix.size() - 1u );
 				}
 
 				if ( params.size() > 1 )
 				{
 					auto importParams = params[1]->get< String >();
-					fillMeshImportParameters( context, importParams, parameters );
+					fillMeshImportParameters( context, importParams, config );
 				}
 
 				auto const & engine = *getEngine( *blockContext );
@@ -188,13 +185,10 @@ namespace c3d
 				}
 				else
 				{
-					String preferredImporter = cuT( "any" );
-					parameters.get( cuT( "preferred_importer" ), preferredImporter );
 					auto file = engine.getImporterFileFactory().create( extension
-						, preferredImporter
 						, *blockContext->scene->scene
 						, pathFile
-						, parameters );
+						, config );
 
 					if ( auto importer = file->createAnimationImporter() )
 					{
@@ -205,7 +199,7 @@ namespace c3d
 
 							if ( !importer->importData( *animation
 								, file.get()
-								, parameters ) )
+								, config ) )
 							{
 								CU_ParsingError( cuT( "Skeleton animation Import failed" ) );
 							}
@@ -231,22 +225,19 @@ namespace c3d
 				auto animRename = params[0]->get< String >();
 				auto path = params[1]->get< Path >();
 				Path pathFile = context.file.getPath() / path;
-				Parameters parameters;
+				ImportConfig config;
+				config.prefix = getPrefix( *blockContext );
 
-				if ( auto prefix = getPrefix( *blockContext );
-					!prefix.empty() )
+				if ( !config.prefix.empty() )
 				{
-					if ( prefix[prefix.size() - 1u] == cuT( '-' ) )
-					{
-						prefix = prefix.substr( 0u, prefix.size() - 1u );
-					}
-					parameters.add( cuT( "prefix" ), prefix );
+					if ( config.prefix[config.prefix.size() - 1u] == cuT( '-' ) )
+						config.prefix = config.prefix.substr( 0u, config.prefix.size() - 1u );
 				}
 
 				if ( params.size() > 2 )
 				{
 					auto importParams = params[2]->get< String >();
-					fillMeshImportParameters( context, importParams, parameters );
+					fillMeshImportParameters( context, importParams, config );
 				}
 
 				auto const & engine = *getEngine( *blockContext );
@@ -258,13 +249,10 @@ namespace c3d
 				}
 				else
 				{
-					String preferredImporter = cuT( "any" );
-					parameters.get( cuT( "preferred_importer" ), preferredImporter );
 					auto file = engine.getImporterFileFactory().create( extension
-						, preferredImporter
 						, *blockContext->scene->scene
 						, pathFile
-						, parameters );
+						, config );
 
 					if ( auto importer = file->createAnimationImporter() )
 					{
@@ -285,7 +273,7 @@ namespace c3d
 
 							if ( !importer->importData( *animation
 								, file.get()
-								, parameters ) )
+								, config ) )
 							{
 								CU_ParsingError( cuT( "Skeleton animation Import failed" ) );
 							}

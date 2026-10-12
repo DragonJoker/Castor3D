@@ -46,9 +46,9 @@ namespace c3d
 	CmshImporterFile::CmshImporterFile( Engine & engine
 		, Scene * scene
 		, Path const & path
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, ProgressBar * progress )
-		: ImporterFile{ engine, scene, path, parameters, progress }
+		: ImporterFile{ engine, scene, path, config, progress }
 	{
 	}
 
@@ -228,7 +228,7 @@ namespace c3d
 
 	MeshImporterUPtr CmshImporterFile::createMeshImporter()
 	{
-		return makeUniqueDerived< MeshImporter, CmshMeshImporter >( *getOwner() );
+		return makeUniqueDerived< MeshImporter, CmshMeshImporter >( *getOwner(), getConfig().meshConfig );
 	}
 
 	SceneNodeImporterUPtr CmshImporterFile::createSceneNodeImporter()
@@ -249,24 +249,20 @@ namespace c3d
 	ImporterFileUPtr CmshImporterFile::create( Engine & engine
 		, Scene * scene
 		, Path const & path
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, ProgressBar * progress )
 	{
-		return ImporterFileUPtr( new CmshImporterFile{ engine, scene, path, parameters, progress } );
+		return ImporterFileUPtr( new CmshImporterFile{ engine, scene, path, config, progress } );
 	}
 
 	//*********************************************************************************************
 
 	String const CmshMeshImporter::Type = cuT( "cmsh" );
 
-	CmshMeshImporter::CmshMeshImporter( Engine & engine )
-		: MeshImporter{ engine, "Castor" }
+	CmshMeshImporter::CmshMeshImporter( Engine & engine
+		, MeshImportConfig const & config )
+		: MeshImporter{ engine, "Castor", config }
 	{
-	}
-
-	MeshImporterUPtr CmshMeshImporter::create( Engine & engine )
-	{
-		return makeUniqueDerived< MeshImporter, CmshMeshImporter >( engine );
 	}
 
 	bool CmshMeshImporter::doImportMesh( Mesh & mesh, uint32_t submeshIndex )
@@ -284,11 +280,6 @@ namespace c3d
 	{
 	}
 
-	SkeletonImporterUPtr CmshSkeletonImporter::create( Engine & engine )
-	{
-		return makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( engine );
-	}
-
 	bool CmshSkeletonImporter::doImportSkeleton( Skeleton & skeleton )
 	{
 		BinaryFile skelFile{ m_file->getFileName(), File::OpenMode::eRead };
@@ -304,11 +295,6 @@ namespace c3d
 	CmshAnimationImporter::CmshAnimationImporter( Engine & engine )
 		: AnimationImporter{ engine, "Castor" }
 	{
-	}
-
-	AnimationImporterUPtr CmshAnimationImporter::create( Engine & engine )
-	{
-		return makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( engine );
 	}
 
 	bool CmshAnimationImporter::doImportSkeleton( SkeletonAnimation & animation )

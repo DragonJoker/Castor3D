@@ -19,7 +19,7 @@ namespace c3d
 	CameraRes CameraImporter::importData( String const & name
 		, CameraCreateInfo const & createInfo
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		if ( !m_file )
 		{
@@ -29,7 +29,7 @@ namespace c3d
 		auto result = doCreateCamera( name, createInfo );
 
 		if ( !result
-			|| !importData( *result, file, parameters ) )
+			|| !importData( *result, file, config ) )
 		{
 			return nullptr;
 		}
@@ -39,10 +39,9 @@ namespace c3d
 
 	bool CameraImporter::importData( Camera & camera
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading Camera [" ) << camera.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportCamera( camera );
 
@@ -60,17 +59,17 @@ namespace c3d
 
 	bool CameraImporter::importData( Camera & camera
 		, Path const & pathFile
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto extension = string::lowerCase( pathFile.getExtension() );
 		auto file = camera.getEngine()->getImporterFileFactory().create( extension
 			, *camera.getEngine()
 			, pathFile
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createCameraImporter() )
 		{
-			return importer->importData( camera, file.get(), parameters );
+			return importer->importData( camera, file.get(), config );
 		}
 
 		return false;

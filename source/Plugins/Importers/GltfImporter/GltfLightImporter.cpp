@@ -11,8 +11,9 @@
 
 namespace c3d_gltf
 {
-	GltfLightImporter::GltfLightImporter( c3d::Engine & engine )
-		: c3d::LightImporter{ engine, cuT( "Gltf" ) }
+	GltfLightImporter::GltfLightImporter( c3d::Engine & engine
+		, c3d::LightImportConfig const & config )
+		: c3d::LightImporter{ engine, cuT( "Gltf" ), config }
 	{
 	}
 
@@ -106,7 +107,7 @@ namespace c3d_gltf
 			else
 			{
 				auto directional = &static_cast< c3d::DirectionalLight & >( category );
-				directional->setIllumination( c3d::Illumination{ impLight.intensity } );
+				directional->setIllumination( c3d::Illumination{ impLight.intensity * getConfig().illuminationMultiplier});
 			}
 		}
 

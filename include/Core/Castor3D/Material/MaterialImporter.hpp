@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -18,6 +19,8 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	struct MaterialImportConfig;
+
 	class MaterialImporter
 		: public OwnedBy< Engine >
 	{
@@ -34,7 +37,8 @@ namespace c3d
 		 *\param[in]	prefix	Le préfixe utilisé pour le logging.
 		 */
 		C3D_API explicit MaterialImporter( Engine & engine
-			, String const & prefix );
+			, String const & prefix
+			, MaterialImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -49,6 +53,7 @@ namespace c3d
 		 */
 		C3D_API explicit MaterialImporter( Engine & engine
 			, String const & prefix
+			, MaterialImportConfig const & config
 			, ImporterFile * file );
 		/**
 		 *\~english
@@ -64,9 +69,7 @@ namespace c3d
 		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
 		 *\return		Le Material importé, \p nullptr si un problème quelconque est survenu.
 		 */
-		C3D_API void prepareImport( ImporterFile * file
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+		C3D_API void prepareImport( ImporterFile * file );
 		/**
 		 *\~english
 		 *\brief		Material import Function.
@@ -84,9 +87,7 @@ namespace c3d
 		 *\return		Le Material importé, \p nullptr si un problème quelconque est survenu.
 		 */
 		C3D_API MaterialPtr importData( String const & name
-			, ImporterFile * file
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, ImporterFile * file );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
@@ -104,9 +105,7 @@ namespace c3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( Material & material
-			, ImporterFile * file
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, ImporterFile * file );
 		/**
 		 *\~english
 		 *\brief		Material import Function.
@@ -125,8 +124,7 @@ namespace c3d
 		 */
 		C3D_API static bool importData( Material & material
 			, Path const & pathFile
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Material import Function.
@@ -395,6 +393,11 @@ namespace c3d
 
 		C3D_API virtual MaterialPtr createMaterial( String const & name );
 
+		MaterialImportConfig const & getConfig()const noexcept
+		{
+			return m_config;
+		}
+
 		ImporterFile const * getImporterFile()const noexcept
 		{
 			return m_file;
@@ -405,20 +408,13 @@ namespace c3d
 			return m_prefix;
 		}
 
-		Parameters const & getParameters()const noexcept
-		{
-			return m_parameters;
-		}
-
 	private:
 
 	protected:
 		String m_prefix;
+		MaterialImportConfig m_config;
 		ImporterFile * m_file{};
-		Parameters m_parameters;
-		Map< PassComponentTextureFlag, TextureConfiguration > m_textureRemaps;
 		ImageLoaderConfig m_loadConfig{ false, false, false };
-		float m_emissiveMult{ 1.0f };
 	};
 }
 

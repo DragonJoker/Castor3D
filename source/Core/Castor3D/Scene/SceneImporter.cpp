@@ -50,13 +50,12 @@ namespace c3d
 
 	bool SceneImporter::importData( Scene & scene
 		, ImporterFile * file
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, ImportConfig const & config )
 	{
 		m_file = file;
 		m_file->setScene( scene );
 		incProgressBarGlobalRange( m_file->getProgressBar(), 7u );
-		doImportMaterials( scene, parameters, textureRemaps );
+		doImportMaterials( scene, config );
 		auto skeletons = doImportSkeletons( scene );
 		auto meshes = doImportMeshes( scene, skeletons );
 		auto nodes = doImportNodes( scene );
@@ -64,22 +63,21 @@ namespace c3d
 		doImportLightGroups( scene );
 		doImportCameras( scene );
 		doCreateGeometries( scene, meshes, nodes );
-		importAnimationsData( scene, file, parameters );
+		importAnimationsData( scene, file, config );
 
 		if ( !nodes.empty() )
 		{
 			incProgressBarGlobalRange( m_file->getProgressBar(), 1u );
-			doTransformScene( scene, parameters, nodes );
+			doTransformScene( scene, config, nodes );
 		}
 
-		doCenterCamera( scene, parameters );
+		doCenterCamera( scene, config );
 		return true;
 	}
 
 	bool SceneImporter::importData( Scene & scene
 		, Path const & path
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
+		, ImportConfig const & config
 		, ProgressBar * progress )
 	{
 		Engine const & engine = *scene.getEngine();
@@ -95,20 +93,17 @@ namespace c3d
 		stepProgressBarGlobalStartLocal( progress
 			, cuT( "Creating import file" )
 			, 1u);
-		String preferredImporter = cuT( "any" );
-		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
-			, preferredImporter
 			, scene
 			, path
-			, parameters
+			, config
 			, progress );
-		return importData( scene, file.get(), parameters, textureRemaps );
+		return importData( scene, file.get(), config );
 	}
 
 	bool SceneImporter::importAnimationsData( Scene & scene
 		, ImporterFile * file
-		, Parameters const & /*parameters*/ )
+		, ImportConfig const & /*config*/ )
 	{
 		m_file = file;
 
@@ -128,7 +123,7 @@ namespace c3d
 
 	bool SceneImporter::importAnimationsData( Scene & scene
 		, Path const & path
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, ProgressBar * progress )
 	{
 		auto & engine = *scene.getEngine();
@@ -144,27 +139,23 @@ namespace c3d
 		stepProgressBarGlobalStartLocal( progress
 			, cuT( "Creating import file" )
 			, 1u );
-		String preferredImporter = cuT( "any" );
-		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
-			, preferredImporter
 			, engine
 			, path
-			, parameters
+			, config
 			, progress );
-		return importAnimationsData( scene, file.get(), parameters );
+		return importAnimationsData( scene, file.get(), config );
 	}
 
 	void SceneImporter::doImportMaterials( Scene & scene
-		, Parameters const & parameters
-		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, ImportConfig const & config )
 	{
 		if ( auto materialImporter = m_file->createMaterialImporter() )
 		{
 			if ( auto toImport = m_file->listMaterials();
 				!toImport.empty() )
 			{
-				materialImporter->prepareImport( m_file, parameters, textureRemaps );
+				materialImporter->prepareImport( m_file );
 				Vector< MaterialPtr > imported;
 				auto total = uint32_t( toImport.size() );
 				stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -195,7 +186,6 @@ namespace c3d
 
 	StringMap< SkeletonRPtr > SceneImporter::doImportSkeletons( Scene & scene )
 	{
-		Parameters emptyParams;
 		StringMap< SkeletonRPtr > result;
 
 		if ( auto skeletonImporter = m_file->createSkeletonImporter() )
@@ -208,6 +198,7 @@ namespace c3d
 					, cuT( "Importing scene skeletons" )
 					, total );
 				uint32_t index{};
+				ImportConfig config;
 
 				for ( auto const & name : toImport )
 				{
@@ -218,7 +209,7 @@ namespace c3d
 					if ( auto skeleton = skeletonImporter->importData( name
 						, scene
 						, m_file
-						, emptyParams ) )
+						, config ) )
 					{
 						result.try_emplace( name, skeleton.get() );
 						scene.addSkeleton( name, skeleton, true );
@@ -233,7 +224,6 @@ namespace c3d
 	StringMap< MeshResPtr > SceneImporter::doImportMeshes( Scene & scene
 		, StringMap< SkeletonRPtr > const & skeletons )
 	{
-		Parameters emptyParams;
 		StringMap< MeshResPtr > result;
 
 		if ( auto meshImporter = m_file->createMeshImporter() )
@@ -253,10 +243,7 @@ namespace c3d
 					stepProgressBarLocal( m_file->getProgressBar()
 						, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 
-					if ( auto mesh = meshImporter->importData( data.name, scene
-						, m_file
-						, emptyParams
-						, true ) )
+					if ( auto mesh = meshImporter->importData( data.name, scene, m_file, true ) )
 					{
 						if ( !data.skeleton.empty() )
 						{
@@ -282,7 +269,6 @@ namespace c3d
 
 	StringMap< SceneNodeRPtr > SceneImporter::doImportNodes( Scene & scene )
 	{
-		Parameters emptyParams;
 		StringMap< SceneNodeRPtr > result;
 
 		if ( auto nodeImporter = m_file->createSceneNodeImporter() )
@@ -295,6 +281,7 @@ namespace c3d
 					, cuT( "Importing scene nodes" )
 					, total );
 				uint32_t index{};
+				ImportConfig config;
 
 				for ( auto const & data : toImport )
 				{
@@ -307,7 +294,7 @@ namespace c3d
 						if ( auto node = nodeImporter->importData( data.name
 							, { &scene }
 							, m_file
-							, emptyParams ) )
+							, config ) )
 						{
 							if ( auto parent = scene.tryFindSceneNode( data.parent ) )
 							{
@@ -335,8 +322,6 @@ namespace c3d
 
 	void SceneImporter::doImportLights( Scene & scene )
 	{
-		Parameters emptyParams;
-
 		if ( auto lightImporter = m_file->createLightImporter() )
 		{
 			if ( auto toImport = m_file->listLights();
@@ -356,8 +341,7 @@ namespace c3d
 
 					if ( auto light = lightImporter->importData( data.name
 						, { &scene, scene.getObjectRootNode(), &scene.getLightsFactory(), data.type }
-						, m_file
-						, emptyParams ) )
+						, m_file ) )
 					{
 						scene.addLight( data.name, light, true );
 					}
@@ -368,8 +352,6 @@ namespace c3d
 
 	void SceneImporter::doImportLightGroups( Scene & scene )
 	{
-		Parameters emptyParams;
-
 		if ( auto lightImporter = m_file->createLightImporter() )
 		{
 			if ( auto toImport = m_file->listLightGroups();
@@ -389,8 +371,7 @@ namespace c3d
 
 					if ( auto light = lightImporter->importData( data.name
 						, { &scene, &scene.getLightsFactory(), data.type }
-						, m_file
-						, emptyParams ) )
+						, m_file ) )
 					{
 						scene.addLightGroup( data.name, light, true );
 					}
@@ -401,8 +382,6 @@ namespace c3d
 
 	void SceneImporter::doImportCameras( Scene & scene )
 	{
-		Parameters emptyParams;
-
 		if ( auto cameraImporter = m_file->createCameraImporter() )
 		{
 			if ( auto toImport = m_file->listCameras();
@@ -413,6 +392,7 @@ namespace c3d
 					, cuT( "Importing scene cameras" )
 					, total );
 				uint32_t index{};
+				ImportConfig config;
 
 				for ( auto const & data : toImport )
 				{
@@ -423,7 +403,7 @@ namespace c3d
 					if ( auto camera = cameraImporter->importData( data.name
 						, { &scene, scene.getCameraRootNode() }
 						, m_file
-						, emptyParams ) )
+						, config ) )
 					{
 						scene.addCamera( data.name, camera, true );
 					}
@@ -468,12 +448,12 @@ namespace c3d
 		, AnimationImporter & importer
 		, StringMap< AnimObjects > & anims )
 	{
-		Parameters emptyParams;
 		auto total = m_file->countAllSkeletonAnimations();
 		stepProgressBarGlobalStartLocal( m_file->getProgressBar()
 			, cuT( "Importing scene skeletons animations" )
 			, total );
 		uint32_t index{};
+		ImportConfig config;
 
 		for ( auto const & [_, skeleton] : scene.getSkeletonCache() )
 		{
@@ -484,7 +464,7 @@ namespace c3d
 					, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 				auto animation = makeUnique< SkeletonAnimation >( *skeleton, animName );
 
-				if ( importer.importData( *animation, m_file, emptyParams ) )
+				if ( importer.importData( *animation, m_file, config ) )
 				{
 					auto & anim = anims.try_emplace( animName ).first->second;
 					anim.skeletons.push_back( skeleton.get() );
@@ -498,12 +478,12 @@ namespace c3d
 		, AnimationImporter & importer
 		, StringMap< AnimObjects > & anims )
 	{
-		Parameters emptyParams;
 		auto total = m_file->countAllMeshAnimations();
 		stepProgressBarGlobalStartLocal( m_file->getProgressBar()
 			, cuT( "Importing scene meshes animations" )
 			, total );
 		uint32_t index{};
+		ImportConfig config;
 
 		for ( auto const & [_, mesh] : scene.getMeshCache() )
 		{
@@ -514,7 +494,7 @@ namespace c3d
 					, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 				auto animation = makeUnique< MeshAnimation >( *mesh, animName );
 
-				if ( importer.importData( *animation, m_file, emptyParams ) )
+				if ( importer.importData( *animation, m_file, config ) )
 				{
 					auto & anim = anims.try_emplace( animName ).first->second;
 					anim.meshes.push_back( mesh.get() );
@@ -528,12 +508,12 @@ namespace c3d
 		, AnimationImporter & importer
 		, StringMap< AnimObjects > & anims )
 	{
-		Parameters emptyParams;
 		auto total = m_file->countAllSceneNodeAnimations();
 		stepProgressBarGlobalStartLocal( m_file->getProgressBar()
 			, cuT( "Importing scene nodes animations" )
 			, total );
 		uint32_t index{};
+		ImportConfig config;
 
 		for ( auto const & [_, node] : scene.getSceneNodeCache() )
 		{
@@ -544,7 +524,7 @@ namespace c3d
 					, string::toString( index ) + cuT( " / " ) + string::toString( total ) );
 				auto animation = makeUnique< SceneNodeAnimation >( *node, animName );
 
-				if ( importer.importData( *animation, m_file, emptyParams ) )
+				if ( importer.importData( *animation, m_file, config ) )
 				{
 					auto & anim = anims.try_emplace( animName ).first->second;
 					anim.nodes.push_back( node.get() );
@@ -557,12 +537,12 @@ namespace c3d
 	void SceneImporter::doImportTexturesAnims( Scene & scene
 		, AnimationImporter & importer )
 	{
-		Parameters emptyParams;
 		auto total = m_file->countAllTextureAnimations();
 		stepProgressBarGlobalStartLocal( m_file->getProgressBar()
 			, cuT( "Importing scene nodes animations" )
 			, total );
 		uint32_t index{};
+		ImportConfig config;
 
 		for ( auto const & materialName : scene.getMaterialView() )
 		{
@@ -579,7 +559,7 @@ namespace c3d
 						auto unit = pass->getTextureUnit( unitId );
 						auto & animation = unit->createAnimation();
 
-						if ( !importer.importData( animation, m_file, emptyParams ) )
+						if ( !importer.importData( animation, m_file, config ) )
 						{
 							unit->removeAnimation();
 						}
@@ -701,7 +681,7 @@ namespace c3d
 	}
 
 	void SceneImporter::doTransformScene( Scene & scene
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, StringMap< SceneNodeRPtr > const & nodes )const
 	{
 		Point3f scale{ 1.0f, 1.0f, 1.0f };
@@ -711,7 +691,7 @@ namespace c3d
 			, cuT( "Transforming scene nodes" )
 			, total );
 
-		if ( parseImportParameters( parameters, scale, orientation ) )
+		if ( parseImportParameters( config, scale, orientation ) )
 		{
 			uint32_t index{};
 			auto transformNode = scene.addNewSceneNode( m_file->getName() + cuT( "TransformNode" ) );
@@ -734,14 +714,11 @@ namespace c3d
 	}
 
 	void SceneImporter::doCenterCamera( Scene & scene
-		, Parameters const & parameters )const
+		, ImportConfig const & config )const
 	{
-		String centerCamera;
-
-		if ( parameters.get( cuT( "center_camera" ), centerCamera )
-			&& !centerCamera.empty() )
+		if ( !config.centerCamera.empty() )
 		{
-			if ( auto camera = scene.getCameraCache().tryFind( centerCamera ) )
+			if ( auto camera = scene.getCameraCache().tryFind( config.centerCamera ) )
 			{
 				scene.getSceneNodeCache().forEach( []( SceneNode & node )
 					{
@@ -765,8 +742,8 @@ namespace c3d
 	{
 		auto parentPrefix = getPrefix( *context.scene );
 		return parentPrefix.empty()
-			? context.prefix
-			: parentPrefix + context.prefix;
+			? context.config.prefix
+			: parentPrefix + context.config.prefix;
 	}
 
 	Engine * getEngine( SceneImportContext const & context )

@@ -10,8 +10,9 @@
 
 namespace c3d_assimp
 {
-	AssimpLightImporter::AssimpLightImporter( c3d::Engine & engine )
-		: c3d::LightImporter{ engine, cuT( "Assimp" ) }
+	AssimpLightImporter::AssimpLightImporter( c3d::Engine & engine
+		, c3d::LightImportConfig const & config )
+		: c3d::LightImporter{ engine, cuT( "Assimp" ), config }
 	{
 	}
 
@@ -73,7 +74,7 @@ namespace c3d_assimp
 			if ( max != 0.0 )
 			{
 				auto directional = light.getDirectionalLight();
-				directional->setIllumination( c3d::Illumination{ max } );
+				directional->setIllumination( c3d::Illumination{ max * getConfig().illuminationMultiplier});
 			}
 			break;
 		default:

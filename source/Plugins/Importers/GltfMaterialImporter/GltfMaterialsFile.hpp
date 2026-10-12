@@ -41,13 +41,13 @@ namespace c3d_gltf
 	public:
 		C3D_GltfMat_API GltfMaterialsFile( c3d::Engine & engine
 			, c3d::Path const & path
-			, c3d::Parameters const & parameters
+			, c3d::ImportConfig const & config
 			, c3d::String const & prefix
 			, c3d::String const & name
 			, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
 		C3D_GltfMat_API GltfMaterialsFile( c3d::Engine & engine
 			, c3d::Path const & path
-			, c3d::Parameters const & parameters
+			, c3d::ImportConfig const & config
 			, c3d::String const & prefix
 			, c3d::String const & name );
 		C3D_GltfMat_API ~GltfMaterialsFile()noexcept;
@@ -78,9 +78,8 @@ namespace c3d_gltf
 		}
 
 	private:
-		void doPrelistMaterials( c3d::Parameters const & parameters
-			, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
-		void doPrelistMaterials( c3d::Parameters const & parameters );
+		void doPrelistMaterials( c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames );
+		void doPrelistMaterials();
 
 		c3d::String getInternalName( c3d::String const & name )const
 		{
@@ -88,6 +87,7 @@ namespace c3d_gltf
 		}
 
 	private:
+		c3d::ImportConfig const & m_config;
 		c3d::RawUniquePtr< fastgltf::Asset > m_asset{};
 		c3d::StringMap< size_t > m_materials;
 		mutable NameContainer m_materialNames;

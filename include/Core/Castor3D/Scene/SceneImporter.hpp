@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Animation/AnimationModule.hpp"
 
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
 namespace c3d
@@ -28,88 +29,81 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
-		 *\param[out]	scene			Receives the imported data.
-		 *\param[in]	file			The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
-		 *\param[in]	textureRemaps	The imported textures remapping parameters.
+		 *\param[out]	scene	Receives the imported data.
+		 *\param[in]	file	The location of the file to import.
+		 *\param[in]	config	Import configuration.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Scene.
-		 *\param[out]	scene			Reçoit les données importées.
-		 *\param[in]	file			Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
-		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
+		 *\param[out]	scene	Reçoit les données importées.
+		 *\param[in]	file	Le chemin vers le fichier à importer.
+		 *\param[in]	config	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( Scene & scene
 			, ImporterFile * file
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief			Scene import Function.
-		 *\param[out]		scene			Receives the imported data.
-		 *\param[in]		pathFile		The location of the file to import.
-		 *\param[in]		parameters		Import configuration parameters.
-		 *\param[in]		textureRemaps	The imported textures remapping parameters.
-		 *\param[in,out]	progress		Optional progress bar.
+		 *\param[out]		scene		Receives the imported data.
+		 *\param[in]		pathFile	The location of the file to import.
+		 *\param[in]		config		Import configuration parameters.
+		 *\param[in,out]	progress	Optional progress bar.
 		 *\return			\p false if any problem occured.
 		 *\~french
 		 *\brief			Fonction d'import de Scene.
-		 *\param[out]		scene			Reçoit les données importées.
-		 *\param[in]		pathFile		Le chemin vers le fichier à importer.
-		 *\param[in]		parameters		Paramètres de configuration de l'import.
-		 *\param[in]		textureRemaps	Les paramètres de reaffectation des textures importées.
-		 *\param[in,out]	progress		Barre de progression optionnelle.
+		 *\param[out]		scene		Reçoit les données importées.
+		 *\param[in]		pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]		config		Paramètres de configuration de l'import.
+		 *\param[in,out]	progress	Barre de progression optionnelle.
 		 *\return			\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( Scene & scene
 			, Path const & pathFile
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
+			, ImportConfig const & config
 			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
 		 *\brief		Scene animations import Function.
-		 *\param[out]	scene		Receives the imported data.
-		 *\param[in]	file		The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[out]	scene	Receives the imported data.
+		 *\param[in]	file	The location of the file to import.
+		 *\param[in]	config	Import configuration parameters.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import des animations de Scene.
-		 *\param[out]	scene		Reçoit les données importées.
-		 *\param[in]	file		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[out]	scene	Reçoit les données importées.
+		 *\param[in]	file	Le chemin vers le fichier à importer.
+		 *\param[in]	config	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importAnimationsData( Scene & scene
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief			Scene animations import Function.
-		 *\param[out]		scene			Receives the imported data.
-		 *\param[in]		pathFile		The location of the file to import.
-		 *\param[in]		parameters		Import configuration parameters.
-		 *\param[in,out]	progress		Optional progress bar.
+		 *\param[out]		scene		Receives the imported data.
+		 *\param[in]		pathFile	The location of the file to import.
+		 *\param[in]		config		Import configuration parameters.
+		 *\param[in,out]	progress	Optional progress bar.
 		 *\return			\p false if any problem occured.
 		 *\~french
 		 *\brief			Fonction d'import des animations de Scene.
-		 *\param[out]		scene			Reçoit les données importées.
-		 *\param[in]		pathFile		Le chemin vers le fichier à importer.
-		 *\param[in]		parameters		Paramètres de configuration de l'import.
-		 *\param[in,out]	progress		Barre de progression optionnelle.
+		 *\param[out]		scene		Reçoit les données importées.
+		 *\param[in]		pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]		config		Paramètres de configuration de l'import.
+		 *\param[in,out]	progress	Barre de progression optionnelle.
 		 *\return			\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importAnimationsData( Scene & scene
 			, Path const & pathFile
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress = nullptr );
 
 	private:
 		void doImportMaterials( Scene & scene
-			, Parameters const & parameters
-			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, ImportConfig const & config );
 		StringMap< SkeletonRPtr > doImportSkeletons( Scene & scene );
 		StringMap< MeshResPtr > doImportMeshes( Scene & scene
 			, StringMap< SkeletonRPtr > const & skeletons );
@@ -144,12 +138,12 @@ namespace c3d
 			, StringMap< AnimObjects > & anims )const;
 
 		void doTransformScene( Scene & scene
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, StringMap< SceneNodeRPtr > const & nodes )const;
 		void doAddAnimationGroup( Geometry & geometry );
 
 		void doCenterCamera( Scene & scene
-			, Parameters const & parameters )const;
+			, ImportConfig const & config )const;
 
 	private:
 		ImporterFile * m_file{};
@@ -161,22 +155,10 @@ namespace c3d
 	struct SceneImportContext
 	{
 		SceneContext * scene{};
-		Vector< Pair< Path, Parameters > > files{};
-		Vector< Pair< Path, Parameters > > animFiles{};
-		String prefix{};
-		Map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
-		float rescale{ 1.0f };
-		float pitch{ 0.0f };
-		float yaw{ 0.0f };
-		float roll{ 0.0f };
-		bool noOptimisations{ false };
-		bool noValidation{ false };
-		bool ignoreVertexColour{ false };
-		bool disableImageCompression{ false };
-		float emissiveMult{ 1.0f };
+		Vector< Pair< Path, ImportConfig > > files{};
+		Vector< Pair< Path, ImportConfig > > animFiles{};
 		Map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
-		String centerCamera{};
-		String preferredImporter{ cuT( "any" ) };
+		ImportConfig config;
 	};
 
 	C3D_API String getPrefix( SceneImportContext const & context );

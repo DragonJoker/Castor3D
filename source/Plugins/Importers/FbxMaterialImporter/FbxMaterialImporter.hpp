@@ -15,6 +15,7 @@ namespace c3d_fbx
 	{
 	public:
 		explicit FbxMaterialImporter( c3d::Engine & engine
+			, c3d::MaterialImportConfig const & config
 			, FbxMaterialsFile const & materialsFile );
 
 		bool importMaterial( c3d::Material & material )override;

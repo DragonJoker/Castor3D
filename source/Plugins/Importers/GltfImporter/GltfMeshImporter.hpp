@@ -15,7 +15,8 @@ namespace c3d_gltf
 		: public c3d::MeshImporter
 	{
 	public:
-		explicit GltfMeshImporter( c3d::Engine & engine );
+		explicit GltfMeshImporter( c3d::Engine & engine
+			, c3d::MeshImportConfig const & config );
 
 	private:
 		bool doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )override;

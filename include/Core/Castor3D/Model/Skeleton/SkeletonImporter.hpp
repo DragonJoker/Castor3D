@@ -51,7 +51,7 @@ namespace c3d
 		C3D_API SkeletonRes importData( String const & name
 			, Scene & scene
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Skeleton import Function.
@@ -68,7 +68,7 @@ namespace c3d
 		 */
 		C3D_API bool importData( Skeleton & skeleton
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Skeleton import Function.
@@ -85,7 +85,7 @@ namespace c3d
 		 */
 		C3D_API static bool importData( Skeleton & skeleton
 			, Path const & pathFile
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 
 		String getPrefix()const noexcept
 		{
@@ -100,9 +100,6 @@ namespace c3d
 	protected:
 		String m_prefix;
 		ImporterFile * m_file{};
-		//!\~english Import configuration parameters.
-		//!\~french Paramètres de configuration de l'import.
-		Parameters m_parameters;
 	};
 }
 

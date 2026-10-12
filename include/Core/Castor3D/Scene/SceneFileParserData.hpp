@@ -168,7 +168,7 @@ namespace c3d
 
 	C3D_API void fillMeshImportParameters( FileParserContext & context
 		, String const & meshParams
-		, Parameters & parameters );
+		, ImportConfig & config );
 
 	C3D_API CU_DeclareAttributeParser( parserDefaultEnd )
 

@@ -303,8 +303,9 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
-	GltfMeshImporter::GltfMeshImporter( c3d::Engine & engine )
-		: c3d::MeshImporter{ engine, cuT( "Gltf" ) }
+	GltfMeshImporter::GltfMeshImporter( c3d::Engine & engine
+		, c3d::MeshImportConfig const & config )
+		: c3d::MeshImporter{ engine, cuT( "Gltf" ), config }
 	{
 	}
 
@@ -780,7 +781,7 @@ namespace c3d_gltf
 			texcoords3 = &texComp->getData().getData();
 		}
 
-		auto ignoreVertexColours = file.getParameters().get< bool >( "ignore_vertex_colour" );
+		auto ignoreVertexColours = getConfig().ignoreVertexColour;
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" )
 			&& !ignoreVertexColours )
@@ -843,7 +844,7 @@ namespace c3d_gltf
 			}
 		}
 
-		if ( !m_parameters.get< bool >( "no_skeleton" ) )
+		if ( !getConfig().ignoreSkeleton )
 		{
 			c3d::Point4uiArray joints;
 

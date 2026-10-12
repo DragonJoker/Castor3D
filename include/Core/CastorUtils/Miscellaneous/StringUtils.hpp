@@ -572,6 +572,31 @@ namespace c3d::string
 		, std::basic_string_view< CharT > seps = details::trimDefaultArgs< CharT > );
 	/**
 	 *\~english
+	 *\brief			Removes spaces on the left and/or on the right of the given String
+	 *\param[in,out]	text	The String to trim, receives the trimmed string
+	 *\param[in]		left	Tells if we remove the left spaces
+	 *\param[in]		right	Tells if we remove the right spaces
+	 *\param[in]		seps	The characters to trim
+	 *\return			The trimmed String
+	 *\~french
+	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
+	 *\param[in,out]	text	La chaîne à modifier, reçoit la chaîne modifiée
+	 *\param[in]		left	Dit si on enlève les espaces à gauche
+	 *\param[in]		right	Dit si on enlève les espaces à droite
+	 *\param[in]		seps	Les caractères à supprimer
+	 *\return			La chaîne sans espaces
+	 */
+	template< typename CharT >
+	std::basic_string< CharT > getTrimmed( std::basic_string< CharT > text
+		, bool left = true
+		, bool right = true
+		, std::basic_string_view< CharT > seps = details::trimDefaultArgs< CharT > )
+	{
+		trim( text, left, right, seps );
+		return text;
+	}
+	/**
+	 *\~english
 	 *\param[in]		lhs, rhs	The input strings.
 	 *\return			The longest string common to the input strings.
 	 *\~french

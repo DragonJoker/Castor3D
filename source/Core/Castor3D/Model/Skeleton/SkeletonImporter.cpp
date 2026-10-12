@@ -35,7 +35,7 @@ namespace c3d
 	SkeletonRes SkeletonImporter::importData( String const & name
 		, Scene & scene
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		if ( !m_file )
 		{
@@ -45,7 +45,7 @@ namespace c3d
 		auto result = doCreateSkeleton( name, scene );
 
 		if ( !result
-			|| !importData( *result, file, parameters ) )
+			|| !importData( *result, file, config ) )
 		{
 			return nullptr;
 		}
@@ -55,10 +55,9 @@ namespace c3d
 
 	bool SkeletonImporter::importData( Skeleton & skeleton
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		bool result = true;
 
 		if ( skeleton.getNodes().empty() )
@@ -71,7 +70,7 @@ namespace c3d
 				Point3f scale{ 1.0f, 1.0f, 1.0f };
 				Quaternion orientation{ Quaternion::identity() };
 
-				if ( parseImportParameters( m_parameters, scale, orientation ) )
+				if ( parseImportParameters( config, scale, orientation ) )
 				{
 					Matrix4x4f transform;
 					matrix::setRotate( transform, orientation );
@@ -95,7 +94,7 @@ namespace c3d
 
 	bool SkeletonImporter::importData( Skeleton & skeleton
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *skeleton.getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -106,17 +105,14 @@ namespace c3d
 			return false;
 		}
 
-		String preferredImporter = cuT( "any" );
-		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
-			, preferredImporter
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createSkeletonImporter() )
 		{
-			return importer->importData( skeleton, file.get(), parameters );
+			return importer->importData( skeleton, file.get(), config );
 		}
 
 		return false;

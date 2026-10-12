@@ -11,16 +11,17 @@ CU_ImplementSmartPtr( c3d, LightImporter )
 namespace c3d
 {
 	LightImporter::LightImporter( Engine & engine
-		, String const & prefix )
+		, String const & prefix
+		, c3d::LightImportConfig const & config )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
+		, m_config{ config }
 	{
 	}
 
 	LightUPtr LightImporter::importData( String const & name
 		, LightCreateInfo const & createInfo
-		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImporterFile * file )
 	{
 		if ( !m_file )
 		{
@@ -30,7 +31,7 @@ namespace c3d
 		auto result = doCreateLight( name, createInfo );
 
 		if ( !result
-			|| !importData( *result, file, parameters ) )
+			|| !importData( *result, file ) )
 		{
 			return nullptr;
 		}
@@ -39,11 +40,9 @@ namespace c3d
 	}
 
 	bool LightImporter::importData( Light & light
-		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImporterFile * file )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading Light [" ) << light.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportLight( light );
 
@@ -61,8 +60,7 @@ namespace c3d
 
 	LightGroupUPtr LightImporter::importData( String const & name
 		, LightGroupCreateInfo const & createInfo
-		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImporterFile * file )
 	{
 		if ( !m_file )
 		{
@@ -72,7 +70,7 @@ namespace c3d
 		auto result = doCreateLightGroup( name, createInfo );
 
 		if ( !result
-			|| !importData( *result, file, parameters ) )
+			|| !importData( *result, file ) )
 		{
 			return nullptr;
 		}
@@ -81,11 +79,9 @@ namespace c3d
 	}
 
 	bool LightImporter::importData( LightGroup & light
-		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImporterFile * file )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading LightGroup [" ) << light.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportLightGroup( light );
 
@@ -103,7 +99,7 @@ namespace c3d
 
 	bool LightImporter::importData( Light & light
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *light.getOwner()->getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -117,11 +113,11 @@ namespace c3d
 		auto file = engine.getImporterFileFactory().create( extension
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createLightImporter() )
 		{
-			return importer->importData( light, file.get(), parameters );
+			return importer->importData( light, file.get() );
 		}
 
 		return false;
@@ -129,7 +125,7 @@ namespace c3d
 
 	bool LightImporter::importData( LightGroup & light
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *light.getOwner()->getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -143,24 +139,24 @@ namespace c3d
 		auto file = engine.getImporterFileFactory().create( extension
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createLightImporter() )
 		{
-			return importer->importData( light, file.get(), parameters );
+			return importer->importData( light, file.get() );
 		}
 
 		return false;
 	}
 
 	LightUPtr LightImporter::doCreateLight( String const & name
-			, LightCreateInfo const & createInfo )
+		, LightCreateInfo const & createInfo )
 	{
 		return createInfo.scene->createLight( name, createInfo );
 	}
 
 	LightGroupUPtr LightImporter::doCreateLightGroup( String const & name
-			, LightGroupCreateInfo const & createInfo )
+		, LightGroupCreateInfo const & createInfo )
 	{
 		return createInfo.scene->createLightGroup( name, createInfo );
 	}

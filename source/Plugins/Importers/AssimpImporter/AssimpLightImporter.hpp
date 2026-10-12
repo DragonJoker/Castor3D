@@ -14,7 +14,8 @@ namespace c3d_assimp
 		: public c3d::LightImporter
 	{
 	public:
-		explicit AssimpLightImporter( c3d::Engine & engine );
+		explicit AssimpLightImporter( c3d::Engine & engine
+			, c3d::LightImportConfig const & config );
 
 	private:
 		bool doImportLight( c3d::Light & light )override;

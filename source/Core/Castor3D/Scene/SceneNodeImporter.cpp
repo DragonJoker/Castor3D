@@ -19,7 +19,7 @@ namespace c3d
 	SceneNodeUPtr SceneNodeImporter::importData( String const & name
 		, SceneNodeCreateInfo const & createInfo
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		if ( !m_file )
 		{
@@ -29,7 +29,7 @@ namespace c3d
 		auto result = doCreateSceneNode( name, createInfo );
 
 		if ( !result
-			|| !importData( *result, file, parameters ) )
+			|| !importData( *result, file, config ) )
 		{
 			return nullptr;
 		}
@@ -39,10 +39,9 @@ namespace c3d
 
 	bool SceneNodeImporter::importData( SceneNode & node
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading SceneNode [" ) << node.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportSceneNode( node );
 
@@ -60,17 +59,17 @@ namespace c3d
 
 	bool SceneNodeImporter::importData( SceneNode & node
 		, Path const & pathFile
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto extension = string::lowerCase( pathFile.getExtension() );
 		auto file = node.getEngine()->getImporterFileFactory().create( extension
 			, *node.getEngine()
 			, pathFile
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createSceneNodeImporter() )
 		{
-			return importer->importData( node, file.get(), parameters );
+			return importer->importData( node, file.get(), config );
 		}
 
 		return false;

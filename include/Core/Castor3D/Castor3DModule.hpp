@@ -128,7 +128,6 @@ namespace c3d
 	static constexpr AccessState HostWriteState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost };
 
 	using crg::FramePassTimer;
-
 	/**
 	*\~english
 	*\brief		Castor3D engine.
@@ -151,6 +150,15 @@ namespace c3d
 	*	Classe de base pour l'import de fichiers externes
 	*/
 	class ImporterFile;
+	/**
+	*\~english
+	*\brief
+	*	Import settings.
+	*\~french
+	*\brief
+	*	Configuration d'import.
+	*/
+	struct ImportConfig;
 	/**
 	*\~english
 	*\brief

@@ -431,13 +431,14 @@ namespace c3d_fbx
 	//*********************************************************************************************
 
 	FbxMaterialsFile::FbxMaterialsFile( c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & materialsNames )
-		: m_fbxManager{ file::createFbxManager() }
+		: m_config{ config }
+		, m_fbxManager{ file::createFbxManager() }
 		, m_fbxScene{ file::loadScene( m_fbxManager, path ) }
 	{
 		if ( isValid() )
-			doPrelistMaterials( parameters, materialsNames );
+			doPrelistMaterials( config.parameters, materialsNames );
 	}
 
 	FbxMaterialsFile::~FbxMaterialsFile()noexcept
@@ -450,7 +451,7 @@ namespace c3d_fbx
 
 	c3d::MaterialImporterUPtr FbxMaterialsFile::createMaterialImporter( c3d::Engine & engine )
 	{
-		return c3d::makeUniqueDerived< c3d::MaterialImporter, FbxMaterialImporter >( engine, *this );
+		return c3d::makeUniqueDerived< c3d::MaterialImporter, FbxMaterialImporter >( engine, m_config.materialConfig, *this );
 	}
 
 	void FbxMaterialsFile::doPrelistMaterials( c3d::Parameters const & parameters

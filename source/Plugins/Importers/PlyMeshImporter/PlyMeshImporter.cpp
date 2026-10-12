@@ -25,8 +25,9 @@
 
 namespace c3d_ply
 {
-	PlyMeshImporter::PlyMeshImporter( c3d::Engine & engine )
-		: c3d::MeshImporter{ engine, cuT( "Ply" ) }
+	PlyMeshImporter::PlyMeshImporter( c3d::Engine & engine
+		, c3d::MeshImportConfig const & config )
+		: c3d::MeshImporter{ engine, cuT( "Ply" ), config }
 	{
 	}
 

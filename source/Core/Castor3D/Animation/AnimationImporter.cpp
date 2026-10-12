@@ -109,10 +109,9 @@ namespace c3d
 
 	bool AnimationImporter::importData( SkeletonAnimation & animation
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading skeleton animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		auto result = doImportSkeleton( animation );
 
@@ -121,7 +120,7 @@ namespace c3d
 			Point3f scale{ 1.0f, 1.0f, 1.0f };
 			Quaternion orientation{ Quaternion::identity() };
 
-			if ( parseImportParameters( m_parameters, scale, orientation ) )
+			if ( parseImportParameters( config, scale, orientation ) )
 			{
 				animimp::transformSkeletonAnimation( scale
 					, orientation
@@ -162,7 +161,7 @@ namespace c3d
 
 	bool AnimationImporter::importData( SkeletonAnimation & animation
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *animation.getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -176,11 +175,11 @@ namespace c3d
 		auto file = engine.getImporterFileFactory().create( extension
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->importData( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), config );
 		}
 
 		return false;
@@ -188,12 +187,9 @@ namespace c3d
 
 	bool AnimationImporter::importData( MeshAnimation & animation
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
-		bool splitSubmeshes = false;
-		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading mesh animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		auto result = doImportMesh( animation );
 
@@ -202,7 +198,7 @@ namespace c3d
 			Point3f scale{ 1.0f, 1.0f, 1.0f };
 			Quaternion orientation{ Quaternion::identity() };
 
-			if ( parseImportParameters( m_parameters, scale, orientation ) )
+			if ( parseImportParameters( config, scale, orientation ) )
 			{
 				Matrix4x4f transform;
 				matrix::setRotate( transform, orientation );
@@ -224,7 +220,7 @@ namespace c3d
 
 	bool AnimationImporter::importData( MeshAnimation & animation
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *animation.getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -235,17 +231,14 @@ namespace c3d
 			return false;
 		}
 
-		String preferredImporter = cuT( "any" );
-		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
-			, preferredImporter
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->importData( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), config );
 		}
 
 		return false;
@@ -253,10 +246,9 @@ namespace c3d
 
 	bool AnimationImporter::importData( SceneNodeAnimation & animation
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading node animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportNode( animation );
 
@@ -276,7 +268,7 @@ namespace c3d
 
 	bool AnimationImporter::importData( SceneNodeAnimation & animation
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *animation.getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -290,11 +282,11 @@ namespace c3d
 		auto file = engine.getImporterFileFactory().create( extension
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->importData( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), config );
 		}
 
 		return false;
@@ -302,10 +294,9 @@ namespace c3d
 
 	bool AnimationImporter::importData( TextureAnimation & animation
 		, ImporterFile * file
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		m_file = file;
-		m_parameters = parameters;
 		log::info << getPrefix() << cuT( "Loading texture animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportTexture( animation );
 
@@ -325,7 +316,7 @@ namespace c3d
 
 	bool AnimationImporter::importData( TextureAnimation & animation
 		, Path const & path
-		, Parameters const & parameters )
+		, ImportConfig const & config )
 	{
 		auto & engine = *animation.getEngine();
 		auto extension = string::lowerCase( path.getExtension() );
@@ -339,11 +330,11 @@ namespace c3d
 		auto file = engine.getImporterFileFactory().create( extension
 			, engine
 			, path
-			, parameters );
+			, config );
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->importData( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), config );
 		}
 
 		return false;

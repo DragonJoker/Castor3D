@@ -30,24 +30,24 @@ namespace c3d_assimp
 	{
 		static aiScene const * loadScene( Assimp::Importer & importer
 			, c3d::Path const & filePath
-			, c3d::Parameters const & parameters )
+			, c3d::ImportConfig const & config )
 		{
 			uint32_t importFlags{ aiProcess_Triangulate
 				| aiProcess_FixInfacingNormals
 				| aiProcess_LimitBoneWeights
 				| aiProcess_FindDegenerates };
-			if ( !parameters.get< bool >( cuT( "no_validation" ) ) )
+			if ( !config.parameters.get< bool >( cuT( "assimp_no_validation" ) ) )
 				importFlags |= aiProcess_ValidateDataStructure
 					| aiProcess_FindInvalidData;
-			if ( !parameters.get< bool >( cuT( "no_optimisations" ) ) )
+			if ( !config.disableOptimisations )
 				importFlags |= aiProcess_JoinIdenticalVertices
 					| aiProcess_OptimizeMeshes
 					| aiProcess_OptimizeGraph
 					| aiProcess_ImproveCacheLocality
 					| aiProcess_RemoveRedundantMaterials;
-			if ( parameters.get< c3d::String >( cuT( "normals" ) ) == cuT( "smooth" ) )
+			if ( !config.parameters.get< c3d::String >( cuT( "assimp_smooth_normals" ) ).empty() )
 				importFlags |= aiProcess_GenSmoothNormals;
-			if ( parameters.get< bool >( cuT( "tangent_space" ) ) )
+			if ( !config.parameters.get< c3d::String >( cuT( "assimp_tangent_space" ) ).empty() )
 				importFlags |= aiProcess_CalcTangentSpace;
 
 			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 );
@@ -389,14 +389,14 @@ namespace c3d_assimp
 	AssimpImporterFile::AssimpImporterFile( c3d::Engine & engine
 		, c3d::Scene * scene
 		, c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::ProgressBar * progress )
-		: c3d::ImporterFile{ engine, scene, path, parameters, progress }
-		, m_aiScene{ file::loadScene( m_importer, getFileName(), getParameters() ) }
+		: c3d::ImporterFile{ engine, scene, path, config, progress }
+		, m_aiScene{ file::loadScene( m_importer, getFileName(), getConfig() ) }
 	{
 		if ( m_aiScene )
 		{
-			if ( !getParameters().get< bool >( "no_skeleton" ) )
+			if ( !getConfig().meshConfig.ignoreSkeleton )
 				for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 					for ( auto aiBone : c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 						m_bonesNodes.try_emplace( makeString( aiBone->mName )
@@ -410,18 +410,18 @@ namespace c3d_assimp
 
 #if C3D_HasFbxMaterialImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "fbx" ) )
-				m_fbxMaterials = c3d::makeRawUnique< c3d_fbx::FbxMaterialsFile >( path, parameters
+				m_fbxMaterials = c3d::makeRawUnique< c3d_fbx::FbxMaterialsFile >( path, getConfig()
 					, m_materialNames.namesByRawName );
 #endif
 #if C3D_HasGltfMaterialImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "gltf" )
 				|| c3d::string::lowerCase( path.getExtension() ) == cuT( "glb" ) )
-				m_gltfMaterials = c3d::makeRawUnique< c3d_gltf::GltfMaterialsFile >( engine, path, parameters, getPrefix(), getName()
+				m_gltfMaterials = c3d::makeRawUnique< c3d_gltf::GltfMaterialsFile >( engine, path, getConfig(), getPrefix(), getName()
 					, m_materialNames.namesByRawName );
 #endif
 #if C3D_HasPlyMeshImporter
 			if ( c3d::string::lowerCase( path.getExtension() ) == cuT( "ply" ) )
-				m_plyMesh = c3d::makeRawUnique< c3d_ply::PlyMeshFile >( path
+				m_plyMesh = c3d::makeRawUnique< c3d_ply::PlyMeshFile >( path, getConfig()
 					, m_meshNames.namesByRawName );
 #endif
 		}
@@ -705,56 +705,56 @@ namespace c3d_assimp
 	{
 #if C3D_HasFbxMaterialImporter
 		if ( m_fbxMaterials )
-			return m_fbxMaterials->createMaterialImporter( *getOwner() );
+			return m_fbxMaterials->createMaterialImporter( *getEngine() );
 #endif
 #if C3D_HasGltfMaterialImporter
 		if ( m_gltfMaterials )
-			return m_gltfMaterials->createMaterialImporter( *getOwner() );
+			return m_gltfMaterials->createMaterialImporter( *getEngine() );
 #endif
-		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getOwner(), getParameters() );
+		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getEngine(), getConfig().materialConfig );
 	}
 
 	c3d::AnimationImporterUPtr AssimpImporterFile::createAnimationImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::AnimationImporter, AssimpAnimationImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::AnimationImporter, AssimpAnimationImporter >( *getEngine() );
 	}
 
 	c3d::SkeletonImporterUPtr AssimpImporterFile::createSkeletonImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::SkeletonImporter, AssimpSkeletonImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::SkeletonImporter, AssimpSkeletonImporter >( *getEngine() );
 	}
 
 	c3d::MeshImporterUPtr AssimpImporterFile::createMeshImporter()
 	{
 #if C3D_HasPlyMeshImporter
 		if ( m_plyMesh )
-			return m_plyMesh->createMeshImporter( *getOwner() );
+			return m_plyMesh->createMeshImporter( *getEngine() );
 #endif
-		return c3d::makeUniqueDerived< c3d::MeshImporter, AssimpMeshImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::MeshImporter, AssimpMeshImporter >( *getEngine(), getConfig().meshConfig );
 	}
 
 	c3d::SceneNodeImporterUPtr AssimpImporterFile::createSceneNodeImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::SceneNodeImporter, AssimpSceneNodeImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::SceneNodeImporter, AssimpSceneNodeImporter >( *getEngine() );
 	}
 
 	c3d::LightImporterUPtr AssimpImporterFile::createLightImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::LightImporter, AssimpLightImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::LightImporter, AssimpLightImporter >( *getEngine(), getConfig().lightConfig );
 	}
 
 	c3d::CameraImporterUPtr AssimpImporterFile::createCameraImporter()
 	{
-		return c3d::makeUniqueDerived< c3d::CameraImporter, AssimpCameraImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::CameraImporter, AssimpCameraImporter >( *getEngine() );
 	}
 
 	c3d::ImporterFileUPtr AssimpImporterFile::create( c3d::Engine & engine
 		, c3d::Scene * scene
 		, c3d::Path const & path
-		, c3d::Parameters const & parameters
+		, c3d::ImportConfig const & config
 		, c3d::ProgressBar * progress )
 	{
-		return c3d::makeUniqueDerived< c3d::ImporterFile, AssimpImporterFile >( engine, scene, path, parameters, progress );
+		return c3d::makeUniqueDerived< c3d::ImporterFile, AssimpImporterFile >( engine, scene, path, config, progress );
 	}
 
 	void AssimpImporterFile::doPrelistMaterials()
@@ -771,7 +771,7 @@ namespace c3d_assimp
 
 	c3d::Map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
 	{
-		if ( getParameters().get< bool >( "no_skeleton" ) )
+		if ( getConfig().meshConfig.ignoreSkeleton )
 			return {};
 
 		c3d::Map< aiMesh const *, aiNode const * > result;
@@ -839,7 +839,7 @@ namespace c3d_assimp
 	void AssimpImporterFile::doPrelistMeshes( c3d::Map< aiMesh const *, aiNode const * > const & meshSkeletons )
 	{
 		uint32_t meshIndex = 0u;
-		auto noMeshMerge = getParameters().get< bool >( "no_merge" );
+		auto noMeshMerge = getConfig().disableMeshMerge;
 
 		for ( auto aiCurrentMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{

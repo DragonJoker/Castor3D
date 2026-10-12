@@ -78,8 +78,9 @@ namespace c3d_assimp
 		}
 	}
 
-	AssimpMeshImporter::AssimpMeshImporter( c3d::Engine & engine )
-		: c3d::MeshImporter{ engine, cuT( "Assimp" ) }
+	AssimpMeshImporter::AssimpMeshImporter( c3d::Engine & engine
+		, c3d::MeshImportConfig const & config )
+		: c3d::MeshImporter{ engine, cuT( "Assimp" ), config }
 	{
 	}
 
@@ -117,14 +118,8 @@ namespace c3d_assimp
 						auto mat = getOwner()->createMaterial( matName
 							, *getOwner()
 							, getOwner()->getDefaultLightingModel() );
-
-						if ( importer->importData( *mat
-								, &file
-								, file.getParameters()
-							, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration >{} ) )
-						{
+						if ( importer->importData( *mat, &file ) )
 							scene.getMaterialView().add( matName, mat, true );
-						}
 					}
 				}
 
@@ -229,7 +224,7 @@ namespace c3d_assimp
 		}
 
 		if ( aiMesh.HasVertexColors( 0u )
-			&& !file.getParameters().get< bool >( "ignore_vertex_colour" ) )
+			&& !getConfig().ignoreVertexColour )
 		{
 			auto colComp = submesh.createComponent< c3d::ColoursComponent >();
 			colours = &colComp->getData().getData();
@@ -276,7 +271,7 @@ namespace c3d_assimp
 		}
 
 		if ( aiMesh.HasBones()
-			&& !m_parameters.get< bool >( "no_skeleton" ) )
+			&& !getConfig().ignoreSkeleton )
 		{
 			c3d::Vector< c3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
 			auto meshNode = findMeshNode( aiMeshIndex, *aiScene.mRootNode );

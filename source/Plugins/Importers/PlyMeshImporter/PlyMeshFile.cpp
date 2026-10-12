@@ -4,7 +4,9 @@
 namespace c3d_ply
 {
 	PlyMeshFile::PlyMeshFile( c3d::Path const & path
+		, c3d::ImportConfig const & config
 		, c3d::HashMap< c3d::String, c3d::HashMap< c3d::u32, c3d::String > > const & meshesNames )
+		: m_config{ config }
 	{
 		m_meshName = path.getFileName();
 		if ( auto it = meshesNames.find( m_meshName );
@@ -21,6 +23,6 @@ namespace c3d_ply
 
 	c3d::MeshImporterUPtr PlyMeshFile::createMeshImporter( c3d::Engine & engine )
 	{
-		return c3d::makeUniqueDerived< c3d::MeshImporter, PlyMeshImporter >( engine );
+		return c3d::makeUniqueDerived< c3d::MeshImporter, PlyMeshImporter >( engine, m_config.meshConfig );
 	}
 }

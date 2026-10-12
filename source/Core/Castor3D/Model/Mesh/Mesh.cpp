@@ -1,6 +1,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
@@ -52,16 +53,13 @@ namespace c3d
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
-				Parameters parameters;
-
+				ImportConfig config;
 				if ( params.size() > 1 )
-				{
-					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
-				}
+					fillMeshImportParameters( context, params[1]->get< String >(), config );
 
 				if ( !MeshImporter::importData( *blockContext->mesh
 					, pathFile
-					, parameters
+					, config
 					, true ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
@@ -81,19 +79,16 @@ namespace c3d
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
-				Parameters parameters;
-
+				ImportConfig config;
 				if ( params.size() > 1 )
-				{
-					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
-				}
+					fillMeshImportParameters( context, params[1]->get< String >(), config );
 
 				auto animation = makeUnique< MeshAnimation >( *blockContext->mesh
 					, pathFile.getFileName() );
 
 				if ( !AnimationImporter::importData( *animation
 					, pathFile
-					, parameters ) )
+					, config ) )
 					CU_ParsingError( cuT( "Mesh animation Import failed" ) );
 				else
 					blockContext->mesh->addAnimation( ptrRefCast< Animation >( animation ) );
@@ -110,19 +105,16 @@ namespace c3d
 				auto animName = params[0]->get< String >();
 				auto path = params[1]->get< Path >();
 				Path pathFile = context.file.getPath() / path;
-				Parameters parameters;
-
+				ImportConfig config;
 				if ( params.size() > 2 )
-				{
-					fillMeshImportParameters( context, params[2]->get< String >(), parameters );
-				}
+					fillMeshImportParameters( context, params[2]->get< String >(), config );
 
 				auto animation = makeUnique< MeshAnimation >( *blockContext->mesh
 					, animName );
 
 				if ( !AnimationImporter::importData( *animation
 					, pathFile
-					, parameters ) )
+					, config ) )
 					CU_ParsingError( cuT( "Mesh animation Import failed" ) );
 				else
 					blockContext->mesh->addAnimation( ptrRefCast< Animation >( animation ) );
@@ -138,15 +130,15 @@ namespace c3d
 			{
 				Path path;
 				Path pathFile = context.file.getPath() / params[0]->get( path );
-				Parameters parameters;
+				ImportConfig config;
 				if ( params.size() > 1 )
-					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
+					fillMeshImportParameters( context, params[1]->get< String >(), config );
 
 				Mesh mesh{ cuT( "MorphImport" ), *blockContext->mesh->getScene() };
 
 				if ( !MeshImporter::importData( mesh
 					, pathFile
-					, parameters
+					, config
 					, false ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );

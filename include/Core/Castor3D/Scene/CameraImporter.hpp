@@ -48,7 +48,7 @@ namespace c3d
 		C3D_API CameraRes importData( String const & name
 			, CameraCreateInfo const & createInfo
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Camera import Function.
@@ -65,7 +65,7 @@ namespace c3d
 		 */
 		C3D_API bool importData( Camera & camera
 			, ImporterFile * file
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Camera import function.
@@ -82,7 +82,7 @@ namespace c3d
 		 */
 		C3D_API static bool importData( Camera & camera
 			, Path const & pathFile
-			, Parameters const & parameters );
+			, ImportConfig const & config );
 
 		String getPrefix()const noexcept
 		{
@@ -97,7 +97,6 @@ namespace c3d
 	protected:
 		String m_prefix;
 		ImporterFile * m_file{};
-		Parameters m_parameters;
 	};
 }
 

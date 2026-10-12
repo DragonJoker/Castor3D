@@ -387,87 +387,68 @@ namespace c3d
 
 		static CU_ImplementAttributeParserBlock( parserImportFile, SceneImportContext )
 		{
-			Parameters parameters;
+			ImportConfig config;
 			if ( params.size() > 1 )
-				fillMeshImportParameters( context, params[1]->get< String >(), parameters );
+				fillMeshImportParameters( context, params[1]->get< String >(), config );
 
 			Path pathFile = context.file.getPath() / params[0]->get< Path >();
-			blockContext->files.emplace_back( pathFile, parameters );
+			blockContext->files.emplace_back( pathFile, config );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportAnimFile, SceneImportContext )
 		{
-			Parameters parameters;
+			ImportConfig config;
 			if ( params.size() > 1 )
-				fillMeshImportParameters( context, params[1]->get< String >(), parameters );
+				fillMeshImportParameters( context, params[1]->get< String >(), config );
 
 			Path pathFile = context.file.getPath() / params[0]->get< Path >();
-			blockContext->animFiles.emplace_back( pathFile, parameters );
+			blockContext->animFiles.emplace_back( pathFile, config );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportPrefix, SceneImportContext )
 		{
-			params[0]->get( blockContext->prefix );
+			params[0]->get( blockContext->config.prefix );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportRescale, SceneImportContext )
 		{
-			params[0]->get( blockContext->rescale );
+			params[0]->get( blockContext->config.rescale );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportPitch, SceneImportContext )
 		{
-			params[0]->get( blockContext->pitch );
+			params[0]->get( blockContext->config.pitch );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportYaw, SceneImportContext )
 		{
-			params[0]->get( blockContext->yaw );
+			params[0]->get( blockContext->config.yaw );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportRoll, SceneImportContext )
 		{
-			params[0]->get( blockContext->roll );
+			params[0]->get( blockContext->config.roll );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportNoOptimisations, SceneImportContext )
 		{
-			params[0]->get( blockContext->noOptimisations );
+			params[0]->get( blockContext->config.disableOptimisations );
 		}
 		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserImportNoValidation, SceneImportContext )
-		{
-			params[0]->get( blockContext->noValidation );
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserImportEmissiveMult, SceneImportContext )
-		{
-			params[0]->get( blockContext->emissiveMult );
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserImportTexRemap, SceneImportContext )
-		{
-			blockContext->textureRemaps.clear();
-			blockContext->textureRemapIt = blockContext->textureRemaps.end();
-		}
-		CU_EndAttributePushBlock( CSCNSection::eTextureRemap, blockContext )
 
 		static CU_ImplementAttributeParserBlock( parserImportCenterCamera, SceneImportContext )
 		{
 			if ( params.empty() )
 				CU_ParsingError( cuT( "Missing name parameter" ) );
 			else
-				params[0]->get( blockContext->centerCamera );
+				params[0]->get( blockContext->config.centerCamera );
 		}
 		CU_EndAttribute()
 
@@ -476,25 +457,83 @@ namespace c3d
 			if ( params.empty() )
 				CU_ParsingError( cuT( "Missing name parameter" ) );
 			else
-				params[0]->get( blockContext->preferredImporter );
+				params[0]->get( blockContext->config.preferredImporter );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportEmissiveMult, SceneImportContext )
+		{
+			params[0]->get( blockContext->config.materialConfig.emissiveMult );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportIgnoreVertexColour, SceneImportContext )
 		{
 			if ( params.empty() )
-				CU_ParsingError( cuT( "Missing name parameter" ) );
+				CU_ParsingError( cuT( "Missing boolean parameter" ) );
 			else
-				params[0]->get( blockContext->ignoreVertexColour );
+				params[0]->get( blockContext->config.meshConfig.ignoreVertexColour );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportIgnoreSkeleton, SceneImportContext )
+		{
+			if ( params.empty() )
+				CU_ParsingError( cuT( "Missing boolean parameter" ) );
+			else
+				params[0]->get( blockContext->config.meshConfig.ignoreSkeleton );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportInvertNormals, SceneImportContext )
+		{
+			if ( params.empty() )
+				CU_ParsingError( cuT( "Missing boolean parameter" ) );
+			else
+				params[0]->get( blockContext->config.meshConfig.invertNormals );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportTexRemap, SceneImportContext )
+		{
+			blockContext->config.materialConfig.textureRemaps.clear();
+			blockContext->textureRemapIt = blockContext->config.materialConfig.textureRemaps.end();
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemap, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserImportEmissiveMultiplier, SceneImportContext )
+		{
+			if ( params.empty() )
+				CU_ParsingError( cuT( "Missing boolean parameter" ) );
+			else
+				params[0]->get( blockContext->config.materialConfig.emissiveMult );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportIgnoreImages, SceneImportContext )
+		{
+			if ( params.empty() )
+				CU_ParsingError( cuT( "Missing boolean parameter" ) );
+			else
+				params[0]->get( blockContext->config.materialConfig.ignoreImages );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportDisableImageCompression, SceneImportContext )
 		{
 			if ( params.empty() )
-				CU_ParsingError( cuT( "Missing name parameter" ) );
+				CU_ParsingError( cuT( "Missing boolean parameter" ) );
 			else
-				params[0]->get( blockContext->disableImageCompression );
+				params[0]->get( blockContext->config.materialConfig.disableImageCompression );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportIlluminationMultiplier, SceneImportContext )
+		{
+			if ( params.empty() )
+				CU_ParsingError( cuT( "Missing multiplier parameter" ) );
+			else
+				params[0]->get( blockContext->config.lightConfig.illuminationMultiplier );
 		}
 		CU_EndAttribute()
 
@@ -506,55 +545,24 @@ namespace c3d
 				CU_ParsingError( cuT( "No file chosen to import" ) );
 			else
 			{
-				Parameters parameters;
-				if ( blockContext->rescale != 1.0f )
-					parameters.add( cuT( "rescale" ), blockContext->rescale );
-				if ( blockContext->pitch != 0.0f )
-					parameters.add( cuT( "pitch" ), blockContext->pitch );
-				if ( blockContext->yaw != 0.0f )
-					parameters.add( cuT( "yaw" ), blockContext->yaw );
-				if ( blockContext->roll != 0.0f )
-					parameters.add( cuT( "roll" ), blockContext->roll );
-				if ( !blockContext->prefix.empty() )
-					parameters.add( cuT( "prefix" ), blockContext->prefix );
-				if ( blockContext->noOptimisations )
-					parameters.add( cuT( "no_optimisations" ), blockContext->noOptimisations );
-				if ( blockContext->noValidation )
-					parameters.add( cuT( "no_validation" ), blockContext->noValidation );
-				if ( blockContext->ignoreVertexColour )
-					parameters.add( cuT( "ignore_vertex_colour" ), blockContext->ignoreVertexColour );
-				if ( blockContext->emissiveMult != 1.0f )
-					parameters.add( cuT( "emissive_mult" ), blockContext->emissiveMult );
-				if ( !blockContext->centerCamera.empty() )
-					parameters.add( cuT( "center_camera" ), blockContext->centerCamera );
-				if ( !blockContext->preferredImporter.empty() )
-					parameters.add( cuT( "preferred_importer" ), blockContext->preferredImporter );
-				if ( blockContext->disableImageCompression )
-					parameters.add( cuT( "disable_image_compression" ), blockContext->disableImageCompression );
-
 				SceneImporter importer{ *engine };
 
-				for ( auto const & [file, fileParameters] : blockContext->files )
+				for ( auto const & [file, fileConfig] : blockContext->files )
 				{
-					Parameters importParameters{ fileParameters };
-					importParameters.append( parameters );
 					if ( !importer.importData( *blockContext->scene->scene
 						, file
-						, importParameters
-						, blockContext->textureRemaps
+						, blockContext->config.merge( fileConfig )
 						, blockContext->scene->root->progress ) )
 					{
 						CU_ParsingError( cuT( "External scene Import failed" ) );
 					}
 				}
 
-				for ( auto const & [file, fileParameters] : blockContext->animFiles )
+				for ( auto const & [file, fileConfig] : blockContext->animFiles )
 				{
-					Parameters importParameters{ fileParameters };
-					importParameters.append( parameters );
 					if ( !importer.importAnimationsData( *blockContext->scene->scene
 						, file
-						, importParameters
+						, blockContext->config.merge( fileConfig )
 						, blockContext->scene->root->progress ) )
 					{
 						CU_ParsingError( cuT( "External scene Import failed" ) );
@@ -1331,12 +1339,15 @@ namespace c3d
 		importCtx.addParser( cuT( "yaw" ), scene::parserImportYaw, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "roll" ), scene::parserImportRoll, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "no_optimisations" ), scene::parserImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
-		importCtx.addParser( cuT( "no_validation" ), scene::parserImportNoValidation, { makeParameter< ParameterType::eBool >() } );
 		importCtx.addParser( cuT( "emissive_mult" ), scene::parserImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "recenter_camera" ), scene::parserImportCenterCamera, { makeParameter< ParameterType::eName >() } );
 		importCtx.addParser( cuT( "preferred_importer" ), scene::parserImportPreferredImporter, { makeParameter< ParameterType::eName >() } );
 		importCtx.addParser( cuT( "ignore_vertex_colour" ), scene::parserImportIgnoreVertexColour, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		importCtx.addParser( cuT( "no_skeleton" ), scene::parserImportIgnoreSkeleton, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		importCtx.addParser( cuT( "invert_normals" ), scene::parserImportInvertNormals, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		importCtx.addParser( cuT( "no_images" ), scene::parserImportIgnoreImages, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		importCtx.addParser( cuT( "disable_image_compression" ), scene::parserImportDisableImageCompression, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		importCtx.addParser( cuT( "illumination_multiplier" ), scene::parserImportIlluminationMultiplier, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addPushParser( cuT( "texture_remap_config" ), CSCNSection::eTextureRemap, scene::parserImportTexRemap );
 		importCtx.addPopParser( cuT( "}" ), scene::parserImportEnd );
 

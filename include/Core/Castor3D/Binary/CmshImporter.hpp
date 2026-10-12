@@ -23,7 +23,7 @@ namespace c3d
 		CmshImporterFile( Engine & engine
 			, Scene * scene
 			, Path const & path
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress );
 
 	public:
@@ -56,7 +56,7 @@ namespace c3d
 		static ImporterFileUPtr create( Engine & engine
 			, Scene * scene
 			, Path const & path
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress );
 	};
 
@@ -72,16 +72,8 @@ namespace c3d
 		 *\brief		Constructeur
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit CmshMeshImporter( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Creator function.
-		 *\param[in]	engine	The core engine.
-		 *\~french
-		 *\brief		Fonction de création.
-		 *\param[in]	engine	Le moteur.
-		 */
-		static MeshImporterUPtr create( Engine & engine );
+		C3D_API explicit CmshMeshImporter( Engine & engine
+			, MeshImportConfig const & config );
 
 	protected:
 		/**
@@ -106,15 +98,6 @@ namespace c3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit CmshSkeletonImporter( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Creator function.
-		 *\param[in]	engine	The core engine.
-		 *\~french
-		 *\brief		Fonction de création.
-		 *\param[in]	engine	Le moteur.
-		 */
-		static SkeletonImporterUPtr create( Engine & engine );
 
 	protected:
 		/**
@@ -139,15 +122,6 @@ namespace c3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit CmshAnimationImporter( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Creator function.
-		 *\param[in]	engine	The core engine.
-		 *\~french
-		 *\brief		Fonction de création.
-		 *\param[in]	engine	Le moteur.
-		 */
-		static AnimationImporterUPtr create( Engine & engine );
 
 	private:
 		/**

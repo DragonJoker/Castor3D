@@ -29,6 +29,7 @@ namespace c3d_gltf
 	{
 	public:
 		explicit GltfMaterialImporter( c3d::Engine & engine
+			, c3d::MaterialImportConfig const & config
 			, GltfMaterialsFile const & materialsFile );
 
 		bool importMaterial( c3d::Material & material )override;

@@ -384,9 +384,9 @@ namespace c3d
 	CscnImporterFile::CscnImporterFile( Engine & engine
 		, Scene * scene
 		, Path const & path
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, ProgressBar * progress )
-		: ImporterFile{ engine, scene, path, parameters, progress }
+		: ImporterFile{ engine, scene, path, config, progress }
 		, m_parser{ engine, progress }
 	{
 		// Find the main scene
@@ -450,10 +450,10 @@ namespace c3d
 	ImporterFileUPtr CscnImporterFile::create( Engine & engine
 		, Scene * scene
 		, Path const & path
-		, Parameters const & parameters
+		, ImportConfig const & config
 		, ProgressBar * progress )
 	{
-		return makeUniqueDerived< ImporterFile, CscnImporterFile >( engine, scene, path, parameters, progress );
+		return makeUniqueDerived< ImporterFile, CscnImporterFile >( engine, scene, path, config, progress );
 	}
 
 	//*********************************************************************************************

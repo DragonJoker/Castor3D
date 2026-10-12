@@ -71,7 +71,7 @@ namespace c3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapOpacity, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( OpacityMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
+			blockContext->textureRemapIt = blockContext->config.materialConfig.textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )

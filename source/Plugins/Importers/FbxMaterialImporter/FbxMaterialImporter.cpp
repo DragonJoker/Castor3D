@@ -685,8 +685,9 @@ namespace c3d_fbx
 	//*********************************************************************************************
 
 	FbxMaterialImporter::FbxMaterialImporter( c3d::Engine & engine
+		, c3d::MaterialImportConfig const & config
 		, FbxMaterialsFile const & materialsFile )
-		: c3d::MaterialImporter{ engine, cuT( "Fbx" ) }
+		: c3d::MaterialImporter{ engine, cuT( "Fbx" ), config }
 		, m_materialsFile{ materialsFile }
 	{
 	}
@@ -698,7 +699,7 @@ namespace c3d_fbx
 		if ( it == m_materialsFile.getMaterials().end() )
 			return false;
 
-		bool loadImages = ( m_parameters.get< bool >( "no_images" ) == false );
+		bool loadImages = !getConfig().ignoreImages;
 		fbx::FbxSurfaceMaterial const * fbxMaterial = it->second.fbxMaterial;
 		auto pass = material.createPass();
 		c3d::log::debug << "Material: " << fbxMaterial->GetName() << "\n";
@@ -706,18 +707,19 @@ namespace c3d_fbx
 		c3d::log::debug << "    ShadingModel: " << model << "\n";
 
 		auto opacityMapFlags = pass->getComponentPlugin< c3d::OpacityMapComponent >().getTextureFlags();
-		materials::importNormalsData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
-		materials::importHeightData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
-		bool hasOpacityTex = materials::importOpacityData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
-		materials::importColourData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass, hasOpacityTex );
-		materials::importSpecularData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
-		materials::importShininessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
-		materials::importEmissiveData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass, m_emissiveMult );
-		materials::importMetalnessData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
-		materials::importAmbientOcclusionData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		auto & textureRemaps = getConfig().textureRemaps;
+		materials::importNormalsData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importHeightData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		bool hasOpacityTex = materials::importOpacityData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importColourData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass, hasOpacityTex );
+		materials::importSpecularData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importShininessData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importEmissiveData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass, getConfig().emissiveMult );
+		materials::importMetalnessData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+		materials::importAmbientOcclusionData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
 		if ( fbxMaterial->GetClassId() == fbx::FbxSurfaceLambert::ClassId
 			|| fbxMaterial->GetClassId() == fbx::FbxSurfacePhong::ClassId )
-			materials::importAmbientData( *m_file, m_textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
+			materials::importAmbientData( *m_file, textureRemaps, m_loadConfig, loadImages, *this, opacityMapFlags, *fbxMaterial, *pass );
 		pass->prepareTextures();
 
 		auto const & engine = *getOwner();

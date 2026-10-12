@@ -16,14 +16,14 @@ namespace c3d
 		CscnImporterFile( Engine & engine
 			, Scene * scene
 			, Path const & path
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress );
 		~CscnImporterFile()override;
 
 		static ImporterFileUPtr create( Engine & engine
 			, Scene * scene
 			, Path const & path
-			, Parameters const & parameters
+			, ImportConfig const & config
 			, ProgressBar * progress );
 
 		StringArray listMaterials()override
