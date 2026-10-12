@@ -1181,4 +1181,25 @@
 		</Expand>
 	</Type>
 
+	<Type Name="cy::HairFile">
+		<DisplayString>H: {header.hair_count} P: {header.point_count}</DisplayString>
+		<Expand>
+			<Item Name="hair_count">header.hair_count</Item>
+			<Item Name="point_count">header.point_count</Item>
+			<Item Name="points">points</Item>
+			<Item Name="thickness">thickness</Item>
+			<Item Name="transparency">transparency</Item>
+			<Item Name="colors">colors</Item>
+			<Synthetic Name="segments" Condition="segments!=0">
+				<DisplayString>[size={header.hair_count}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>header.hair_count</Size>
+						<ValuePointer>segments</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

@@ -5,6 +5,7 @@ option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering p
 option( CASTOR_BUILD_GENERIC_WATERMATERIAL "Build Water Material plugin" ON )
 option( CASTOR_BUILD_GENERIC_WAVESRENDERING "Build waves rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_DISNEYBRDF "Build Disney BRDF plugin" ON )
+option( CASTOR_BUILD_GENERIC_HAIRRENDERING "Build Hair Rendering plugin" ON )
 
 function( GenericInit )
 	set( AtmS "no (Not wanted)" PARENT_SCOPE )
@@ -14,6 +15,7 @@ function( GenericInit )
 	set( WatR "no (Not wanted)" PARENT_SCOPE )
 	set( Anis "no (Not wanted)" PARENT_SCOPE )
 	set( Disn "no (Not wanted)" PARENT_SCOPE )
+	set( Hair "no (Not wanted)" PARENT_SCOPE )
 
 	if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 		set( Castor3D_MATERIAL_DIRS
@@ -109,6 +111,12 @@ function( GenericBuild )
 			set( Disn ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_GENERIC_HAIRRENDERING} )
+			set( Build ${Build} )
+			add_subdirectory( Plugins/Generic/HairRendering )
+			set( Hair ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -155,6 +163,9 @@ function( GenericSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_GENERIC_DISNEYBRDF} )
 			set( msg_tmp "${msg_tmp}\n    DisneyBRDF           ${Disn}" )
+		endif ()
+		if( ${CASTOR_BUILD_GENERIC_HAIRRENDERING} )
+			set( msg_tmp "${msg_tmp}\n    HairRendering        ${Hair}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -214,6 +225,14 @@ function( GenericSetup )
 			cpack_add_component( DisneyBRDF
 				DISPLAY_NAME "DisneyBRDF"
 				DESCRIPTION "Defines an implementation of Disney's BRDF in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_HAIRRENDERING} )
+			cpack_add_component( HairRendering
+				DISPLAY_NAME "HairRendering"
+				DESCRIPTION "Defines an implementation of Hair Rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 			)
