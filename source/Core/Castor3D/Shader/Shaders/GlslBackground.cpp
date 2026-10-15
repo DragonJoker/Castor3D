@@ -74,7 +74,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
 		, BlendComponents const & components
-		, sdw::CombinedImage2DRgba32 const & brdf )
+		, sdw::CombinedImage2DRgba const & brdf )
 	{
 		return sdw::RetVec4{ vec4( 0.0_f ) };
 	}
@@ -94,7 +94,7 @@ namespace c3d::shader
 		, sdw::Float const & NdotV
 		, sdw::Float const & roughness
 		, BlendComponents const & components
-		, sdw::CombinedImage2DRgba32 const & brdf
+		, sdw::CombinedImage2DRgba const & brdf
 		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
@@ -114,7 +114,7 @@ namespace c3d::shader
 	{
 	}
 
-	sdw::Vec3 BackgroundModel::getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
+	sdw::Vec3 BackgroundModel::getBrdf( sdw::CombinedImage2DRgba const & brdfMap
 		, sdw::Float const & NdotV
 		, sdw::Float const & roughness )
 	{

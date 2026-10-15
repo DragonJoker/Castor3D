@@ -165,7 +165,7 @@ namespace c3d::shader
 			, sdw::Float const & roughness
 			, sdw::UInt const & envMapIndex
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap );
-		sdw::RetVec4 computeSheenReflEnvMaps( sdw::CombinedImage2DRgba32 const & brdf
+		sdw::RetVec4 computeSheenReflEnvMaps( sdw::CombinedImage2DRgba const & brdf
 			, sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
@@ -229,7 +229,7 @@ namespace c3d::shader
 			, sdw::UInt const & envMapIndex
 			, BlendComponents const & components
 			, sdw::Vec3 & coatReflected );
-		void doComputeSheen( sdw::CombinedImage2DRgba32 const & brdf
+		void doComputeSheen( sdw::CombinedImage2DRgba const & brdf
 			, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
@@ -310,7 +310,7 @@ namespace c3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeArrayR11fG11fB10f
-			, sdw::InCombinedImage2DRgba32
+			, sdw::InCombinedImage2DRgba
 			, sdw::InUInt
 			, sdw::InFloat
 			, sdw::InFloat > m_computeSheenReflEnvMaps;

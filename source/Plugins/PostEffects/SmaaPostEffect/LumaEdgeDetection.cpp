@@ -40,27 +40,27 @@ namespace smaa
 
 			// Shader inputs
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
-			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", Bindings::ColorTexIdx, 0u );
-			auto c3d_predicationTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_predicationTex", Bindings::PredicationTexIdx, 0u, predication );
+			auto c3d_colourTex = writer.declCombinedImg< Img2DRgba >( "c3d_colourTex", Bindings::ColorTexIdx, 0u );
+			auto c3d_predicationTex = writer.declCombinedImg< Img2DRgba >( "c3d_predicationTex", Bindings::PredicationTexIdx, 0u, predication );
 
 			/**
 			 * Gathers current pixel, and the top-left neighbors.
 			 */
 			auto SMAAGatherNeighbours = writer.implementFunction< sdw::Vec3 >( "SMAAGatherNeighbours"
 				, [&writer, &c3d_smaaData]( sdw::Vec2 const & texcoord
-					, sdw::CombinedImage2DRgba32 const & tex )
+					, sdw::CombinedImage2DRgba const & tex )
 				{
 					writer.returnStmt( tex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InCombinedImage2DRgba32{ writer, "tex" } );
+				, sdw::InCombinedImage2DRgba{ writer, "tex" } );
 
 			/**
 			 * Adjusts the threshold by means of predication.
 			 */
 			auto SMAACalculatePredicatedThreshold = writer.implementFunction< sdw::Vec2 >( "SMAACalculatePredicatedThreshold"
 				, [&writer, &SMAAGatherNeighbours, &c3d_smaaData]( sdw::Vec2 const & texcoord
-					, sdw::CombinedImage2DRgba32 const & predicationTex )
+					, sdw::CombinedImage2DRgba const & predicationTex )
 				{
 					auto neighbours = writer.declLocale( "neighbours"
 						, SMAAGatherNeighbours( texcoord, predicationTex ) );
@@ -71,7 +71,7 @@ namespace smaa
 					writer.returnStmt( c3d_smaaData.predicationScale * c3d_smaaData.threshold * ( 1.0_f - c3d_smaaData.predicationStrength * edges ) );
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InCombinedImage2DRgba32{ writer, "predicationTex" } );
+				, sdw::InCombinedImage2DRgba{ writer, "predicationTex" } );
 
 			/**
 			 * Luma Edge Detection

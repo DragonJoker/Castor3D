@@ -55,9 +55,9 @@ namespace smaa
 			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
-			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", Bindings::ColorTexIdx, 0u );
-			auto c3d_blendTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_blendTex", Bindings::BlendTexIdx, 0u );
-			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", Bindings::VelocityTexIdx, 0u, reprojection );
+			auto c3d_colourTex = writer.declCombinedImg< Img2DRgba >( "c3d_colourTex", Bindings::ColorTexIdx, 0u );
+			auto c3d_blendTex = writer.declCombinedImg< Img2DRgba >( "c3d_blendTex", Bindings::BlendTexIdx, 0u );
+			auto c3d_velocityTex = writer.declCombinedImg< Img2DRgba >( "c3d_velocityTex", Bindings::VelocityTexIdx, 0u, reprojection );
 
 			auto SMAANeighborhoodBlendingVS = writer.implementFunction< sdw::Void >( "SMAANeighborhoodBlendingVS"
 				, [&c3d_smaaData]( sdw::Vec2 const & texcoord
@@ -109,8 +109,8 @@ namespace smaa
 			auto SMAANeighborhoodBlendingPS = writer.implementFunction< sdw::Vec4 >( "SMAANeighborhoodBlendingPS"
 				, [&writer, &c3d_velocityTex, reprojection, &SMAAMovc4, &SMAAMovc2, c3d_smaaData]( sdw::Vec2 const & texcoord
 					, sdw::Vec4 const & offset
-					, sdw::CombinedImage2DRgba32 const & colorTex
-					, sdw::CombinedImage2DRgba32 const & blendTex )
+					, sdw::CombinedImage2DRgba const & colorTex
+					, sdw::CombinedImage2DRgba const & blendTex )
 				{
 					// Fetch the blending weights for current pixel:
 					auto a = writer.declLocale< sdw::Vec4 >( "a" );
@@ -178,8 +178,8 @@ namespace smaa
 				}
 				, sdw::InVec2{ writer, "texcoord" }
 				, sdw::InVec4{ writer, "offset" }
-				, sdw::InCombinedImage2DRgba32{ writer, "colourTex" }
-				, sdw::InCombinedImage2DRgba32{ writer, "blendTex" } );
+				, sdw::InCombinedImage2DRgba{ writer, "colourTex" }
+				, sdw::InCombinedImage2DRgba{ writer, "blendTex" } );
 
 			writer.implementEntryPointT< c3ds::PosUv2FT, VertexT >( [&SMAANeighborhoodBlendingVS]( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< VertexT > out )

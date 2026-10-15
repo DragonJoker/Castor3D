@@ -217,7 +217,7 @@ namespace c3d
 			, ( hasSsao() ? index++ : 0u )
 			, RenderPipeline::eBuffers
 			, hasSsao() );
-		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
+		auto c3d_mapBrdf = writer.declCombinedImg< Img2DRgba >( "c3d_mapBrdf"
 			, index
 			, RenderPipeline::eBuffers );
 		++index;

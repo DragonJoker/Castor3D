@@ -39,14 +39,14 @@ namespace smaa
 			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
-			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", uint32_t( Idx::CurColTexIdx ), 0u );
-			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", uint32_t( Idx::PrvColTexIdx ), 0u );
+			auto c3d_currentColourTex = writer.declCombinedImg< Img2DRgba >( "c3d_currentColourTex", uint32_t( Idx::CurColTexIdx ), 0u );
+			auto c3d_previousColourTex = writer.declCombinedImg< Img2DRgba >( "c3d_previousColourTex", uint32_t( Idx::PrvColTexIdx ), 0u );
 			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", uint32_t( Idx::VelocityTexIdx ), 0u, reprojection );
 
 			auto SMAAResolvePS = writer.implementFunction< sdw::Vec4 >( "SMAAResolvePS"
 				, [&writer, &c3d_velocityTex, &c3d_smaaData]( sdw::Vec2 const & texcoord
-					, sdw::CombinedImage2DRgba32 const & currentColorTex
-					, sdw::CombinedImage2DRgba32 const & previousColorTex )
+					, sdw::CombinedImage2DRgba const & currentColorTex
+					, sdw::CombinedImage2DRgba const & previousColorTex )
 				{
 					sdwIF( writer, c3d_smaaData.enableReprojection != 0 )
 					{
@@ -84,8 +84,8 @@ namespace smaa
 					sdwFI
 				}
 				, sdw::InVec2{ writer, "texcoord" }
-				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }
-				, sdw::InCombinedImage2DRgba32{ writer, "previousColorTex" } );
+				, sdw::InCombinedImage2DRgba{ writer, "currentColorTex" }
+				, sdw::InCombinedImage2DRgba{ writer, "previousColorTex" } );
 
 			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )

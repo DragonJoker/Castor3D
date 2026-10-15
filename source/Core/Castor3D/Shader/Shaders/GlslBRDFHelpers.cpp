@@ -369,7 +369,7 @@ namespace c3d::shader
 					, sdw::Vec3 const & F0
 					, sdw::Float const & specularWeight )
 				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba >( "c3d_mapBrdf" );
 					// see https://bruop.github.io/ibl/#single_scattering_results at Single Scattering Results
 					// Roughness dependent fresnel, from Fdez-Aguera
 					auto f_ab = m_writer.declLocale( "f_ab"

@@ -81,7 +81,7 @@ namespace c3d::shader
 
 	void PhongLightingModel::doCombine( DebugOutputCategory const & debugOutput
 		, ReflectionModel & reflections
-		, sdw::CombinedImage2DRgba32 const & brdf
+		, sdw::CombinedImage2DRgba const & brdf
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & incident

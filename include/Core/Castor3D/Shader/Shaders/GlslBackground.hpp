@@ -43,7 +43,7 @@ namespace c3d::shader
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, BlendComponents const & components
-			, sdw::CombinedImage2DRgba32 const & brdf );
+			, sdw::CombinedImage2DRgba const & brdf );
 
 		C3D_API virtual sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
@@ -56,7 +56,7 @@ namespace c3d::shader
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
 			, BlendComponents const & components
-			, sdw::CombinedImage2DRgba32 const & brdf
+			, sdw::CombinedImage2DRgba const & brdf
 			, DebugOutputCategory const & debugOutput );
 
 		C3D_API virtual sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
@@ -68,7 +68,7 @@ namespace c3d::shader
 			, sdw::Vec2 const & cameraPlanes
 			, sdw::Vec4 const & output );
 
-		C3D_API static sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
+		C3D_API static sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba const & brdfMap
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness );
 

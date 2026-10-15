@@ -33,7 +33,7 @@ namespace c3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & roughness
-			, sdw::CombinedImage2DRgba32 const & brdfMap
+			, sdw::CombinedImage2DRgba const & brdfMap
 			, IndirectLighting & indirectLighting );
 		C3D_API void computeOcclusion( SceneFlags sceneFlags
 			, LightSurface const & lightSurface
@@ -48,7 +48,7 @@ namespace c3d::shader
 		C3D_API void computeSpecular( SceneFlags sceneFlags
 			, LightSurface const & lightSurface
 			, sdw::Float const & roughness
-			, sdw::CombinedImage2DRgba32 const & brdfMap
+			, sdw::CombinedImage2DRgba const & brdfMap
 			, IndirectLighting & indirectLighting );
 		C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 			, LightSurface const & lightSurface

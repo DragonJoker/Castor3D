@@ -70,7 +70,7 @@ namespace c3d::shader
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float const & roughness
-		, sdw::CombinedImage2DRgba32 const & brdfMap
+		, sdw::CombinedImage2DRgba const & brdfMap
 		, IndirectLighting & indirectLighting )
 	{
 		computeOcclusion( sceneFlags
@@ -166,7 +166,7 @@ namespace c3d::shader
 	void GlobalIllumination::computeSpecular( SceneFlags sceneFlags
 		, LightSurface const & lightSurface
 		, sdw::Float const & roughness
-		, sdw::CombinedImage2DRgba32 const & brdfMap
+		, sdw::CombinedImage2DRgba const & brdfMap
 		, IndirectLighting & indirectLighting )
 	{
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )

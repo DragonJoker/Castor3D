@@ -37,7 +37,7 @@ namespace water::shader
 	private:
 		void doCombine( c3ds::DebugOutputCategory const & debugOutput
 			, c3ds::ReflectionModel & reflections
-			, sdw::CombinedImage2DRgba32 const & brdf
+			, sdw::CombinedImage2DRgba const & brdf
 			, c3ds::BlendComponents const & components
 			, c3ds::LightSurface const & lightSurface
 			, sdw::Vec3 const & incident

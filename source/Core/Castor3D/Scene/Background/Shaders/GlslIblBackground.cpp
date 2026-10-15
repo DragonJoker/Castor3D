@@ -119,7 +119,7 @@ namespace c3d::shader
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, BlendComponents const & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba const & pbrdfMap )
 	{
 		if ( !m_computeSheenReflection )
 		{
@@ -130,7 +130,7 @@ namespace c3d::shader
 					, sdw::Float const & NdotV
 					, sdw::Float const & sheenRoughness
 					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap )
+					, sdw::CombinedImage2DRgba const & brdfMap )
 				{
 					auto reflection = m_writer.declLocale( "reflection"
 						, normalize( reflect( -V, N ) ) );
@@ -151,7 +151,7 @@ namespace c3d::shader
 				, sdw::InFloat{ m_writer, "NdotV" }
 				, sdw::InFloat{ m_writer, "sheenRoughness" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+				, sdw::InCombinedImage2DRgba{ m_writer, "brdfMap" } );
 		}
 
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefilteredSheen" );
@@ -207,14 +207,14 @@ namespace c3d::shader
 		, sdw::Float const & pNdotV
 		, sdw::Float const & proughness
 		, BlendComponents const & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap
+		, sdw::CombinedImage2DRgba const & pbrdfMap
 		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeSpecularRefraction )
 		{
 			m_computeSpecularRefraction = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularRefraction"
 				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
-					, sdw::CombinedImage2DRgba32 const & brdfMap
+					, sdw::CombinedImage2DRgba const & brdfMap
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
@@ -236,7 +236,7 @@ namespace c3d::shader
 						, vec3( brdf.y() ) ) );
 				}
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
+				, sdw::InCombinedImage2DRgba{ m_writer, "brdfMap" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "N" }
 				, sdw::InVec3{ m_writer, "V" }

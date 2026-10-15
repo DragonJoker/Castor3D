@@ -47,7 +47,7 @@ namespace smaa
 			sdw::TraditionalGraphicsWriter writer{ &c3d::getEngine( device ).getShaderAllocator() };
 
 			C3D_Smaa( writer, smaa::Bindings::SmaaUboIdx, 0u );
-			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", Bindings::Texture, 0u );
+			auto c3d_map = writer.declCombinedImg< Img2DRgba >( "c3d_map", Bindings::Texture, 0u );
 
 			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )

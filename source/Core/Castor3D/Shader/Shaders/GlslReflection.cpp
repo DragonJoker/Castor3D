@@ -119,7 +119,7 @@ namespace c3d::shader
 					, ReflectionRefraction output )
 				{
 					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba >( "c3d_mapBrdf" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
@@ -232,7 +232,7 @@ namespace c3d::shader
 					, sdw::UInt envMapIndex
 					, ReflectionRefraction output )
 				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba >( "c3d_mapBrdf" );
 					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
@@ -283,7 +283,7 @@ namespace c3d::shader
 		, DebugOutputCategory const & debugOutput )
 	{
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba >( "c3d_mapBrdf" );
 		output.diffuseReflection = reflectedDiffuse * components.baseColour;
 
 		if ( components.hasMember( "diffuseTransmissionFactor" ) )
@@ -846,7 +846,7 @@ namespace c3d::shader
 			, penvMap );
 	}
 
-	sdw::RetVec4 ReflectionModel::computeSheenReflEnvMaps( sdw::CombinedImage2DRgba32 const & pbrdf
+	sdw::RetVec4 ReflectionModel::computeSheenReflEnvMaps( sdw::CombinedImage2DRgba const & pbrdf
 		, sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penv
@@ -861,7 +861,7 @@ namespace c3d::shader
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & sheenColour
 					, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap
+					, sdw::CombinedImage2DRgba const & brdfMap
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & roughness
 					, sdw::Float const & NdotV )
@@ -880,7 +880,7 @@ namespace c3d::shader
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "sheenColour" }
 				, sdw::InCombinedImageCubeArrayR11fG11fB10f{ m_writer, "envMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
+				, sdw::InCombinedImage2DRgba{ m_writer, "brdfMap" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InFloat{ m_writer, "NdotV" } );
@@ -1046,7 +1046,7 @@ namespace c3d::shader
 
 						if ( m_writer.hasGlobalVariable( "c3d_mapBrdf" ) )
 						{
-							auto brdfMap = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+							auto brdfMap = m_writer.getVariable< sdw::CombinedImage2DRgba >( "c3d_mapBrdf" );
 
 							// Sample GGX LUT to get the specular component.
 							auto NdotV = m_writer.declLocale( "NdotV"
@@ -1277,7 +1277,7 @@ namespace c3d::shader
 		}
 	}
 
-	void ReflectionModel::doComputeSheen( sdw::CombinedImage2DRgba32 const & brdf
+	void ReflectionModel::doComputeSheen( sdw::CombinedImage2DRgba const & brdf
 		, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background

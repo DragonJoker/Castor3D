@@ -36,7 +36,7 @@ namespace c3d::shader
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, BlendComponents const & components
-			, sdw::CombinedImage2DRgba32 const & brdf )override;
+			, sdw::CombinedImage2DRgba const & brdf )override;
 
 		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
@@ -49,7 +49,7 @@ namespace c3d::shader
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
 			, BlendComponents const & components
-			, sdw::CombinedImage2DRgba32 const & brdfMap
+			, sdw::CombinedImage2DRgba const & brdfMap
 			, DebugOutputCategory const & debugOutput )override;
 
 		sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
@@ -90,10 +90,10 @@ namespace c3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32 > m_computeSheenReflection;
+			, sdw::InCombinedImage2DRgba > m_computeSheenReflection;
 		sdw::Function< sdw::Vec3
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32
+			, sdw::InCombinedImage2DRgba
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3

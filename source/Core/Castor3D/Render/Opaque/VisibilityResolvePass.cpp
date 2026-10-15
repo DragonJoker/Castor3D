@@ -1201,7 +1201,7 @@ namespace c3d
 				, InOutBindings::eInOutDiffuse
 				, Sets::eInOuts
 				, flags.pass.hasDeferredDiffuseLightingFlag );
-			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
+			auto c3d_mapBrdf = writer.declCombinedImg< Img2DRgba >( "c3d_mapBrdf"
 				, InOutBindings::eMapBrdf
 				, Sets::eInOuts );
 			auto lightsIndex = index;
