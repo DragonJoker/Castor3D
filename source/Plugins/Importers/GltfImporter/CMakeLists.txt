@@ -2,11 +2,15 @@ set( FOLDER_NAME GltfImporter )
 project( ${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
+	set( draco_DIR ${VCPKG_SHARE_DIR}/draco )
 	set( simdjson_DIR ${VCPKG_SHARE_DIR}/simdjson )
 	set( fastgltf_DIR ${VCPKG_SHARE_DIR}/fastgltf )
+	find_package( draco CONFIG QUIET )
 	find_package( simdjson CONFIG QUIET )
 	find_package( fastgltf CONFIG QUIET )
 else ()
+	find_package( draco )
+	find_package( simdjson )
 	find_package( fastgltf )
 endif ()
 
@@ -86,6 +90,7 @@ if( fastgltf_FOUND )
 			${ImporterDependencies}
 			castor::GltfMaterialImporter
 			meshoptimizer::meshoptimizer
+			draco::draco
 	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES

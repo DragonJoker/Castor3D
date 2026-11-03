@@ -12,6 +12,10 @@
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
+#include <draco/compression/decode.h>
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
+
 namespace c3d_gltf
 {
 	//*********************************************************************************************
@@ -197,6 +201,13 @@ namespace c3d_gltf
 			return findAttribute( attributes, name ) != attributes.end();
 		}
 
+		static bool hasAttribute( fastgltf::boxed_optional< fastgltf::DracoCompressedPrimitive > const & dracoCompression
+			, std::string const & name )
+		{
+			return dracoCompression
+				&& hasAttribute( dracoCompression->attributes, name );
+		}
+
 		template< uint32_t SrcCountT, typename SrcDataT, uint32_t DstCountT, typename DstDataT, bool InvYT = false >
 		static bool parseAttributeData( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
@@ -228,8 +239,92 @@ namespace c3d_gltf
 			return !result.empty();
 		}
 
+		struct DracoDecoder
+		{
+			c3d::Vector< std::optional< fastgltf::static_vector< std::byte > > > decompressedBuffers;
+
+			/** Decompress all buffer views and store them in this adapter */
+			DracoDecoder( fastgltf::Asset const & asset
+				, fastgltf::boxed_optional< fastgltf::DracoCompressedPrimitive > const & dracoCompression )
+			{
+				if ( dracoCompression )
+				{
+					fastgltf::BufferView const & bufferView = asset.bufferViews[dracoCompression->bufferView];
+					fastgltf::Buffer const & buffer = asset.buffers[bufferView.bufferIndex];
+					std::span< std::byte const > compressedBytes = CompressedBufferDataAdapter::getData( buffer, bufferView.byteOffset, bufferView.byteLength );
+					draco::DecoderBuffer decoderBuffer{};
+					decoderBuffer.Init( reinterpret_cast< const char * >( compressedBytes.data() ), compressedBytes.size() );
+					auto geometryType = draco::Decoder::GetEncodedGeometryType( &decoderBuffer);
+					if ( !geometryType.ok() )
+						CU_LoaderError( "Couldn't retrieve the encoded geometry type" );
+					if ( geometryType.value() != draco::EncodedGeometryType::TRIANGULAR_MESH )
+						CU_LoaderError( "The encoded geometry type is not a triangular mesh" );
+
+					draco::Decoder decoder{};
+					auto res = decoder.DecodeBufferToGeometry( &decoderBuffer, &m_mesh );
+					if ( !res.ok() )
+						CU_LoaderError( "Couldn't decode the buffer into a mesh" );
+				}
+			}
+
+			draco::PointAttribute const * getAttribute( std::size_t attributeId ) const
+			{
+				return m_mesh.attribute( c3d::s32( attributeId ) );
+			}
+
+		private:
+			draco::Mesh m_mesh;
+		};
+
+		template< uint32_t SrcCountT, typename SrcDataT, uint32_t DstCountT, typename DstDataT, bool InvYT = false >
+		static bool decodeAttributeData( fastgltf::Asset const & impAsset
+			, fastgltf::boxed_optional< fastgltf::DracoCompressedPrimitive > const & dracoCompression
+			, std::string const & attrName
+			, c3d::Vector< c3d::Point< DstDataT, DstCountT > > & result
+			, DracoDecoder const & adapter )
+		{
+			using SrcElementType = c3d::Point< SrcDataT, SrcCountT >;
+			using DstElementType = c3d::Point< DstDataT, DstCountT >;
+
+			if ( !dracoCompression )
+				return false;
+
+			auto it = findAttribute( dracoCompression->attributes, attrName );
+			if ( it == dracoCompression->attributes.end() )
+				return false;
+
+			auto & accessor = impAsset.accessors[it->accessorIndex];
+			if ( accessor.type != fastgltf::ElementTraits< SrcElementType >::type )
+				return false;
+
+			auto attribute = adapter.getAttribute( it->accessorIndex );
+			if ( !attribute )
+				return false;
+
+			CU_Require( attribute->size() == accessor.count );
+			result.reserve( std::min( attribute->size(), accessor.count ) );
+			std::span< std::byte const > bytes{ std::bit_cast< std::byte const * >( attribute->buffer()->data() )
+				, attribute->buffer()->data_size() };
+			SrcElementType element;
+
+			for ( std::size_t i = 0; i < result.size(); ++i )
+			{
+				attribute->ConvertValue( draco::AttributeValueIndex{ c3d::u32( i ) }, c3d::u8( SrcCountT ), element.ptr() );
+				if constexpr ( InvYT )
+					element->y = 1.0f - element->y;
+
+				if constexpr ( SrcCountT == DstCountT && std::is_same_v< SrcDataT, DstDataT > )
+					result.push_back( c3d::move( element ) );
+				else
+					result.push_back( DstElementType{ element } );
+			}
+
+			return !result.empty();
+		}
+
 		static void createVertexBuffer( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
+			, fastgltf::boxed_optional< fastgltf::DracoCompressedPrimitive > const & dracoCompression
 			, c3d::Point3fArray & positions
 			, c3d::Point3fArray & normals
 			, c3d::Point4fArray & tangents
@@ -241,27 +336,39 @@ namespace c3d_gltf
 			, CompressedBufferDataAdapter const & adapter
 			, bool ignoreVertexColour )
 		{
-			if ( !meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "POSITION", positions, adapter )
+			DracoDecoder dracoDecoder{ impAsset, dracoCompression };
+
+			if ( ( !meshes::decodeAttributeData< 3u, float >( impAsset, dracoCompression, "POSITION", positions, dracoDecoder )
+					&& !meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "POSITION", positions, adapter ) )
 				|| positions.empty() )
 			{
 				return;
 			}
 
-			if ( meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals, adapter )
-				&& !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter ) )
+			if ( ( meshes::decodeAttributeData< 3u, float >( impAsset, dracoCompression, "NORMAL", normals, dracoDecoder )
+					|| meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals, adapter ) )
+				&& ( !meshes::decodeAttributeData< 4u, float >( impAsset, dracoCompression, "TANGENT", tangents, dracoDecoder )
+					&& !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter ) ) )
 			{
-				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter );
+				if ( !meshes::decodeAttributeData< 3u, float >( impAsset, dracoCompression, "TANGENT", tangents, dracoDecoder ) )
+					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter );
 			}
 
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_0", texcoords0, adapter );
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_1", texcoords1, adapter );
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_2", texcoords2, adapter );
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_3", texcoords3, adapter );
+			if ( !meshes::decodeAttributeData< 2u, float, 3u, float, true >( impAsset, dracoCompression, "TEXCOORD_0", texcoords0, dracoDecoder ) )
+				meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_0", texcoords0, adapter );
+			if ( !meshes::decodeAttributeData< 2u, float, 3u, float, true >( impAsset, dracoCompression, "TEXCOORD_1", texcoords1, dracoDecoder ) )
+				meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_1", texcoords1, adapter );
+			if ( !meshes::decodeAttributeData< 2u, float, 3u, float, true >( impAsset, dracoCompression, "TEXCOORD_2", texcoords2, dracoDecoder ) )
+				meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_2", texcoords2, adapter );
+			if ( !meshes::decodeAttributeData< 2u, float, 3u, float, true >( impAsset, dracoCompression, "TEXCOORD_3", texcoords3, dracoDecoder ) )
+				meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_3", texcoords3, adapter );
 
 			if ( !ignoreVertexColour
+				&& !meshes::decodeAttributeData< 4u, float >( impAsset, dracoCompression, "COLOR_0", colours, dracoDecoder )
 				&& !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter ) )
 			{
-				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
+				if ( !meshes::decodeAttributeData< 3u, float >( impAsset, dracoCompression, "COLOR_0", colours, dracoDecoder ) )
+					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
 			}
 		}
 
@@ -732,37 +839,43 @@ namespace c3d_gltf
 		c3d::Point3fArray * texcoords3 = &tex3;
 		c3d::Point3fArray * colours = &col;
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "NORMAL" ) )
+		if ( meshes::hasAttribute( impPrimitive.dracoCompression, "NORMAL" )
+			|| meshes::hasAttribute( impPrimitive.attributes, "NORMAL" ) )
 		{
 			auto nmlComp = submesh.createComponent< c3d::NormalsComponent >();
 			normals = &nmlComp->getData().getData();
 
-			if ( meshes::hasAttribute( impPrimitive.attributes, "TANGENT" ) )
+			if ( meshes::hasAttribute( impPrimitive.dracoCompression, "TANGENT" )
+				|| meshes::hasAttribute( impPrimitive.attributes, "TANGENT" ) )
 			{
 				auto tanComp = submesh.createComponent< c3d::TangentsComponent >();
 				tangents = &tanComp->getData().getData();
 			}
 		}
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_0" ) )
+		if ( meshes::hasAttribute( impPrimitive.dracoCompression, "TEXCOORD_0" )
+			|| meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_0" ) )
 		{
 			auto texComp = submesh.createComponent< c3d::Texcoords0Component >();
 			texcoords0 = &texComp->getData().getData();
 		}
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_1" ) )
+		if ( meshes::hasAttribute( impPrimitive.dracoCompression, "TEXCOORD_1" )
+			|| meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_1" ) )
 		{
 			auto texComp = submesh.createComponent< c3d::Texcoords1Component >();
 			texcoords1 = &texComp->getData().getData();
 		}
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_2" ) )
+		if ( meshes::hasAttribute( impPrimitive.dracoCompression, "TEXCOORD_2" )
+			|| meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_2" ) )
 		{
 			auto texComp = submesh.createComponent< c3d::Texcoords2Component >();
 			texcoords2 = &texComp->getData().getData();
 		}
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_3" ) )
+		if ( meshes::hasAttribute( impPrimitive.dracoCompression, "TEXCOORD_3" )
+			|| meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_3" ) )
 		{
 			auto texComp = submesh.createComponent< c3d::Texcoords3Component >();
 			texcoords3 = &texComp->getData().getData();
@@ -770,7 +883,8 @@ namespace c3d_gltf
 
 		auto ignoreVertexColours = file.getParameters().get< bool >( "ignore_vertex_colour" );
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" )
+		if ( meshes::hasAttribute( impPrimitive.dracoCompression, "COLOR_0" )
+				|| meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" )
 			&& !ignoreVertexColours )
 		{
 			auto colComp = submesh.createComponent< c3d::ColoursComponent >();
@@ -779,6 +893,7 @@ namespace c3d_gltf
 
 		meshes::createVertexBuffer( impAsset
 			, impPrimitive.attributes
+			, impPrimitive.dracoCompression
 			, positions->getData().getData()
 			, *normals
 			, *tangents
@@ -797,6 +912,7 @@ namespace c3d_gltf
 			c3d::SubmeshAnimationBuffer buffer;
 			meshes::createVertexBuffer( impAsset
 				, impAttributes
+				, fastgltf::boxed_optional<fastgltf::DracoCompressedPrimitive>{}
 				, buffer.positions
 				, buffer.normals
 				, buffer.tangents
