@@ -5,6 +5,7 @@ option( CASTOR_BUILD_IMPORTER_PLY "Build PLY Mesh Importer" TRUE )
 
 function( ImportersInit )
 	set( Assimp "no (Not wanted)" PARENT_SCOPE )
+	set( GltfMat "no (Not wanted)" PARENT_SCOPE )
 	set( Gltf "no (Not wanted)" PARENT_SCOPE )
 	set( Fbx "no (Not wanted)" PARENT_SCOPE )
 	set( Obj "no (Not wanted)" PARENT_SCOPE )
@@ -24,8 +25,10 @@ function( ImportersBuild )
 			${Castor3D_MATERIAL_DEPS}
 		)
 
-		if( ${CASTOR_BUILD_IMPORTER_GLTF} OR ${CASTOR_BUILD_IMPORTER_ASSIMP} )
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
+			set( Build ${GltfMat} )
 			add_subdirectory( Plugins/Importers/GltfMaterialImporter )
+			set( GltfMat ${Build} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
@@ -81,16 +84,19 @@ function( ImportersSummary msg )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
 		set( msg_tmp "\n\n  Importer plugins:" )
 		if( ${CASTOR_BUILD_IMPORTER_FBX} )
-			set( msg_tmp "${msg_tmp}\n    FBXMaterial          ${Fbx}" )
+			set( msg_tmp "${msg_tmp}\n    FBX Materials        ${Fbx}" )
 		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
-			set( msg_tmp "${msg_tmp}\n    PLYMesh              ${Ply}" )
+			set( msg_tmp "${msg_tmp}\n    PLY Meshes           ${Ply}" )
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
+			set( msg_tmp "${msg_tmp}\n    glTF Materials       ${GltfMat}" )
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
+			set( msg_tmp "${msg_tmp}\n    glTF Scenes          ${Gltf}" )
 		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
-		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
-			set( msg_tmp "${msg_tmp}\n    GLTF                 ${Gltf}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -101,7 +107,7 @@ function( ImportersSetup )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} OR ${CASTOR_BUILD_IMPORTER_FBX} )
 			cpack_add_component( FbxMaterialImporter
 				DISPLAY_NAME "FbxMaterialImporter"
-				DESCRIPTION "Allows importing materials from FBX files in Castor3D."
+				DESCRIPTION "Allows importing materials from FBX files, for Assimp scene importer in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
@@ -110,16 +116,16 @@ function( ImportersSetup )
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			cpack_add_component( PlyImporter
 				DISPLAY_NAME "PlyImporter"
-				DESCRIPTION "Allows importing meshes from Stanford PLY files in Castor3D."
+				DESCRIPTION "Allows importing meshes from Stanford PLY files, for Assimp scene importer in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
 			)
 		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} OR ${CASTOR_BUILD_IMPORTER_GLTF} )
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
 			cpack_add_component( GltfMaterialImporter
 				DISPLAY_NAME "GltfMaterialImporter"
-				DESCRIPTION "Allows the material import using fastgltf library in Castor3D."
+				DESCRIPTION "Allows importing materials from glTF files, for both glTF and Assimp scene importers in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
@@ -128,7 +134,7 @@ function( ImportersSetup )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
-				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
+				DESCRIPTION "Allows importing scenes using Assimp library in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
@@ -137,7 +143,7 @@ function( ImportersSetup )
 		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
 			cpack_add_component( GltfImporter
 				DISPLAY_NAME "GltfImporter"
-				DESCRIPTION "Allows the mesh import using fastgltf library in Castor3D."
+				DESCRIPTION "Allows importing scenes using fastgltf library in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full

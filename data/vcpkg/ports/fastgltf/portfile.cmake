@@ -1,18 +1,16 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO spnda/fastgltf
-    REF 06cf7326aeb5763d87f400cb75c576cb9d5463af
-    SHA512 3830cfe44c9e9738d306c353b914d476b74cb8cf0a4d00cc2f43d737f4a03f95cf7b672b02fe50ba2011eb31db00914439e0d8e0c7be0521d5c7e85db6ec92c7
+    REF "v${VERSION}"
+    SHA512 c30cfe62e82a23e0f507878d2d69784c93934d6e0789fdb48fb8905f2ec84210c296d80d894fee90da3dbf5e71a79b46d63b65469028a1000eb73315b2ee1fe3
     HEAD_REF main
     PATCHES
         fix_uri_escape_spaces.patch
-        KHR_material_diffuse_transmission.patch
         optional_ior.patch
 )
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    OPTIONS -DFASTGLTF_ENABLE_DEPRECATED_EXT=ON
 )
 vcpkg_cmake_install()
 vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/${PORT})

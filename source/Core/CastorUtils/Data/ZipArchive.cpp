@@ -11,11 +11,6 @@
 #include <minizip/unzip.h>
 #include <minizip/zip.h>
 
-#ifdef WIN32
-#	define USEWIN32IOAPI
-#	include <minizip/iowin32.h>
-#endif
-
 #if defined( CU_PlatformWindows )
 #	include <fcntl.h>
 #	include <io.h>
@@ -43,17 +38,9 @@ namespace c3d
 			{
 				if ( mode == File::OpenMode::eWrite )
 				{
-#ifdef USEWIN32IOAPI
-
-					zlib_filefunc_def ffunc;
-					fill_win32_filefunc( &ffunc );
+					zlib_filefunc_def ffunc{};
+					fill_fopen_filefunc( &ffunc );
 					m_zip = zipOpen2( toUtf8( path ).c_str(), 0, nullptr, &ffunc );
-
-#else
-
-					m_zip = zipOpen( toUtf8( path ).c_str(), 0 );
-
-#endif
 
 					if ( !m_zip )
 					{
@@ -62,17 +49,9 @@ namespace c3d
 				}
 				else
 				{
-#ifdef USEWIN32IOAPI
-
-					zlib_filefunc_def ffunc;
-					fill_win32_filefunc( &ffunc );
+					zlib_filefunc_def ffunc{};
+					fill_fopen_filefunc( &ffunc );
 					m_unzip = unzOpen2( toUtf8( path ).c_str(), &ffunc );
-
-#else
-
-					m_unzip = unzOpen( toUtf8( path ).c_str() );
-
-#endif
 
 					if ( !m_unzip )
 					{
@@ -260,7 +239,7 @@ namespace c3d
 				}
 			}
 
-			virtual void doDeflate( String const & path, ZipArchive::Folder const & folder )
+			void doDeflate( String const & path, ZipArchive::Folder const & folder )
 			{
 				String filePath;
 
@@ -281,7 +260,7 @@ namespace c3d
 				doDeflateFiles( filePath, folder.files );
 			}
 
-			virtual void doDeflateFiles( String const & path, List< String > const & files )
+			void doDeflateFiles( String const & path, List< String > const & files )
 			{
 				for ( auto const & name : files )
 				{

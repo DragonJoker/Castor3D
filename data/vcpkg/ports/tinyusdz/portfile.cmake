@@ -5,7 +5,7 @@ vcpkg_from_github(
     REPO lighttransport/tinyusdz
     REF c7ad94edccd6f145da601e80392b6d083e85d62a
     HEAD_REF master
-    SHA512 e2ff77bca10588e0f0458ed8cc1fbcfb32f6340fa72bcdbecc81c390c82609d94d5326eb2031ee379a456be410a4df803f94513fcabe9ebb6833fa233b626469
+    SHA512 95508d2ba25c54c8dc42dc42c627e6dd9d3136952feb513787865cedf6dbec8394f25b1021c5645b4c231d59eb3c7562976affcb526c75f169b535574a7a533e
     PATCHES
         build-fixes.patch
 )

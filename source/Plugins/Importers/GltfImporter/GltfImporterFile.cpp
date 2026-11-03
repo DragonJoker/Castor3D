@@ -30,7 +30,7 @@ namespace c3d_gltf
 
 	namespace file
 	{
-		static void parseNodesRec( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
+		static void parseNodesRec( c3d::Vector< size_t > const & nodes
 			, size_t parentNodeIndex
 			, c3d::Vector< fastgltf::Node > const & allNodes
 			, c3d::Function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > const & func
@@ -50,7 +50,7 @@ namespace c3d_gltf
 			}
 		}
 
-		static void parseNodes( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
+		static void parseNodes( c3d::Vector< size_t > const & nodes
 			, c3d::Vector< fastgltf::Node > const & allNodes
 			, c3d::Function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > const & func )
 		{
@@ -381,30 +381,28 @@ namespace c3d_gltf
 	//*********************************************************************************************
 
 	[[nodiscard]]
-	fastgltf::span< std::byte const > CompressedBufferDataAdapter::getData( fastgltf::Buffer const & buffer
-		, std::size_t byteOffset,
-		std::size_t byteLength )
+	std::span< std::byte const > CompressedBufferDataAdapter::getData( fastgltf::Buffer const & buffer
+		, std::size_t byteOffset, std::size_t byteLength )
 	{
-		using namespace fastgltf;
-		return std::visit( visitor{ []( auto & ) -> span< std::byte const >
+		return std::visit( fastgltf::visitor{ []( auto & ) -> std::span< std::byte const >
 					{
 						assert( false && "Tried accessing a buffer with no data, likely because no buffers were loaded. Perhaps you forgot to specify the LoadExternalBuffers option?" );
 						return {};
 					}
-				, []( const sources::Fallback & ) -> span< std::byte const >
+				, []( const fastgltf::sources::Fallback & ) -> std::span< std::byte const >
 					{
 						assert( false && "Tried accessing data of a fallback buffer." );
 						return {};
 					}
-				, [byteOffset, byteLength]( const sources::Array & array )
+				, [byteOffset, byteLength]( const fastgltf::sources::Array & array )
 					{
-						return span( array.bytes.data(), array.bytes.size_bytes() ).subspan( byteOffset, byteLength );
+						return std::span( array.bytes.data(), array.bytes.size_bytes() ).subspan( byteOffset, byteLength );
 					}
-				, [byteOffset, byteLength]( const sources::Vector & vec )
+				, [byteOffset, byteLength]( const fastgltf::sources::Vector & vec )
 					{
-						return span( vec.bytes.data(), vec.bytes.size() ).subspan( byteOffset, byteLength );
+						return std::span( vec.bytes.data(), vec.bytes.size() ).subspan( byteOffset, byteLength );
 					}
-				, [byteOffset, byteLength]( const sources::ByteView & bv )
+				, [byteOffset, byteLength]( const fastgltf::sources::ByteView & bv )
 					{
 						return bv.bytes.subspan( byteOffset, byteLength );
 					} }
@@ -414,8 +412,6 @@ namespace c3d_gltf
 	/** Decompress all buffer views and store them in this adapter */
 	bool CompressedBufferDataAdapter::decompress( const fastgltf::Asset & asset )
 	{
-		using namespace fastgltf;
-
 		decompressedBuffers.reserve( asset.bufferViews.size() );
 		for ( auto & bufferView : asset.bufferViews )
 		{
@@ -428,7 +424,7 @@ namespace c3d_gltf
 			// This is a compressed buffer view.
 			// For the original implementation, see https://github.com/jkuhlmann/cgltf/pull/129#issue-739550034
 			auto const & mc = *bufferView.meshoptCompression;
-			fastgltf::StaticVector< std::byte > result( mc.count * mc.byteStride );
+			fastgltf::static_vector< std::byte > result( mc.count * mc.byteStride );
 
 			// Get the data span from the compressed buffer.
 			auto data = getData( asset.buffers[mc.bufferIndex], mc.byteOffset, mc.byteLength );
@@ -436,21 +432,21 @@ namespace c3d_gltf
 			int rc = -1;
 			switch ( mc.mode )
 			{
-			case MeshoptCompressionMode::Attributes:
+			case fastgltf::MeshoptCompressionMode::Attributes:
 				rc = meshopt_decodeVertexBuffer( result.data()
 					, mc.count
 					, mc.byteStride
 					, reinterpret_cast< const unsigned char * >( data.data() )
 					, mc.byteLength );
 				break;
-			case MeshoptCompressionMode::Triangles:
+			case fastgltf::MeshoptCompressionMode::Triangles:
 				rc = meshopt_decodeIndexBuffer( result.data()
 					, mc.count
 					, mc.byteStride
 					, reinterpret_cast< const unsigned char * >( data.data() )
 					, mc.byteLength );
 				break;
-			case MeshoptCompressionMode::Indices:
+			case fastgltf::MeshoptCompressionMode::Indices:
 				rc = meshopt_decodeIndexSequence( result.data()
 					, mc.count
 					, mc.byteStride
@@ -464,16 +460,19 @@ namespace c3d_gltf
 
 			switch ( mc.filter )
 			{
-			case MeshoptCompressionFilter::None:
+			case fastgltf::MeshoptCompressionFilter::None:
 				break;
-			case MeshoptCompressionFilter::Octahedral:
+			case fastgltf::MeshoptCompressionFilter::Octahedral:
 				meshopt_decodeFilterOct( result.data(), mc.count, mc.byteStride );
 				break;
-			case MeshoptCompressionFilter::Quaternion:
+			case fastgltf::MeshoptCompressionFilter::Quaternion:
 				meshopt_decodeFilterQuat( result.data(), mc.count, mc.byteStride );
 				break;
-			case MeshoptCompressionFilter::Exponential:
+			case fastgltf::MeshoptCompressionFilter::Exponential:
 				meshopt_decodeFilterExp( result.data(), mc.count, mc.byteStride );
+				break;
+			case fastgltf::MeshoptCompressionFilter::Color:
+				meshopt_decodeFilterColor( result.data(), mc.count, mc.byteStride );
 				break;
 			}
 
@@ -483,17 +482,15 @@ namespace c3d_gltf
 		return true;
 	}
 
-	fastgltf::span< std::byte const > CompressedBufferDataAdapter::operator()( const fastgltf::Asset & asset, std::size_t bufferViewIdx ) const
+	std::span< std::byte const > CompressedBufferDataAdapter::operator()( const fastgltf::Asset & asset, std::size_t bufferViewIdx ) const
 	{
-		using namespace fastgltf;
-
 		auto & bufferView = asset.bufferViews[bufferViewIdx];
 		if ( bufferView.meshoptCompression )
 		{
 			assert( decompressedBuffers.size() == asset.bufferViews.size() );
 
 			assert( decompressedBuffers[bufferViewIdx].has_value() );
-			return span( decompressedBuffers[bufferViewIdx]->data(), decompressedBuffers[bufferViewIdx]->size_bytes() );
+			return std::span( decompressedBuffers[bufferViewIdx]->data(), decompressedBuffers[bufferViewIdx]->size() );
 		}
 
 		return getData( asset.buffers[bufferView.bufferIndex], bufferView.byteOffset, bufferView.byteLength );

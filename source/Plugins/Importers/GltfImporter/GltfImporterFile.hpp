@@ -188,18 +188,18 @@ namespace c3d_gltf
 	/** Replacement buffer data adapter for fastgltf which supports decompressing with EXT_meshopt_compression */
 	struct CompressedBufferDataAdapter
 	{
-		std::vector< std::optional< fastgltf::StaticVector< std::byte > > > decompressedBuffers;
+		c3d::Vector< std::optional< fastgltf::static_vector< std::byte > > > decompressedBuffers;
 
 		/** Get the data pointer of a loaded (possibly compressed) buffer */
 		[[nodiscard]]
-		static fastgltf::span< std::byte const > getData( fastgltf::Buffer const & buffer
+		static std::span< std::byte const > getData( fastgltf::Buffer const & buffer
 			, std::size_t byteOffset
 			, std::size_t byteLength );
 
 		/** Decompress all buffer views and store them in this adapter */
 		bool decompress( fastgltf::Asset const & asset );
 
-		fastgltf::span< std::byte const > operator()( fastgltf::Asset const & asset
+		std::span< std::byte const > operator()( fastgltf::Asset const & asset
 			, std::size_t bufferViewIdx ) const;
 	};
 
