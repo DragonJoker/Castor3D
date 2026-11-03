@@ -182,7 +182,7 @@ namespace c3d_gltf
 		}
 
 		static auto findAttribute( auto const & attributes
-			, std::pmr::string const & name )
+			, std::string const & name )
 		{
 			return std::find_if( std::begin( attributes ), std::end( attributes )
 				, [&name]( auto const & lookup )
@@ -192,7 +192,7 @@ namespace c3d_gltf
 		}
 
 		static bool hasAttribute( auto const & attributes
-			, std::pmr::string const & name )
+			, std::string const & name )
 		{
 			return findAttribute( attributes, name ) != attributes.end();
 		}
@@ -200,21 +200,17 @@ namespace c3d_gltf
 		template< uint32_t SrcCountT, typename SrcDataT, uint32_t DstCountT, typename DstDataT, bool InvYT = false >
 		static bool parseAttributeData( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
-			, std::pmr::string const & attrName
+			, std::string const & attrName
 			, c3d::Vector< c3d::Point< DstDataT, DstCountT > > & result
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto it = findAttribute( impAttributes, attrName );
 			if ( it == impAttributes.end() )
-			{
 				return false;
-			}
 
 			auto & impAccessor = impAsset.accessors[it->accessorIndex];
 			if ( impAccessor.type != fastgltf::ElementTraits< c3d::Point< SrcDataT, SrcCountT > >::type )
-			{
 				return false;
-			}
 
 			result.reserve( impAccessor.count );
 			iterateAccessor< c3d::Point< SrcDataT, SrcCountT > >( impAsset
@@ -222,19 +218,11 @@ namespace c3d_gltf
 				, [&result]( c3d::Point< SrcDataT, SrcCountT > value )
 				{
 					if constexpr ( InvYT )
-					{
 						value->y = 1.0f - value->y;
-					}
-
 					if constexpr ( SrcCountT == DstCountT && std::is_same_v< SrcDataT, DstDataT > )
-					{
-
 						result.push_back( c3d::move( value ) );
-					}
 					else
-					{
 						result.push_back( c3d::Point < DstDataT, DstCountT >{ value } );
-					}
 				}
 				, adapter );
 			return !result.empty();
@@ -848,9 +836,7 @@ namespace c3d_gltf
 			c3d::Point4uiArray joints;
 
 			if ( !meshes::parseAttributeData< 4u, uint8_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() ) )
-			{
 				meshes::parseAttributeData< 4u, uint16_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() );
-			}
 
 			if ( !joints.empty() )
 			{
