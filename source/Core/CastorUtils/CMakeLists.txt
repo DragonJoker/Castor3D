@@ -10,6 +10,7 @@ set( WebP_DIR ${VCPKG_SHARE_DIR}/WebP )
 set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
 set( tinyexr_DIR ${VCPKG_SHARE_DIR}/tinyexr )
 set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
+set( ZLIB_DIR ${VCPKG_SHARE_DIR}/zlib )
 list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/bcdec )
 list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/stb )
 find_package( bcdec REQUIRED )
@@ -23,11 +24,12 @@ find_package( Stb REQUIRED )
 find_package( tinyexr CONFIG REQUIRED )
 find_package( WebP CONFIG REQUIRED )
 find_package( Ktx CONFIG REQUIRED )
+find_package( ZLIB CONFIG REQUIRED )
 
 if ( VCPKG_TOOLCHAIN )
-	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
-	find_package( unofficial-minizip CONFIG REQUIRED )
-	set( minizip_LIB unofficial::minizip::minizip )
+	set( minizip_DIR ${VCPKG_SHARE_DIR}/minizip )
+	find_package( minizip CONFIG REQUIRED )
+	set( minizip_LIB MINIZIP::minizip )
 	set( unofficial-brotli_DIR ${VCPKG_SHARE_DIR}/unofficial-brotli )
 	find_package( unofficial-brotli CONFIG REQUIRED )
 	set( brotlidec_LIB unofficial::brotli::brotlidec )
@@ -720,6 +722,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${Freetype_LIBRARIES}
 			${minizip_LIB}
 			${brotlidec_LIB}
+			ZLIB::ZLIB
 			unofficial::convectionkernels::convectionkernels
 			gli
 			msdfgen::msdfgen

@@ -2,13 +2,14 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "castor3d",
   "version": "0.17.0",
-  "builtin-baseline": "c3867e714dd3a51c272826eea77267876517ed99",
+  "builtin-baseline": "e4f04e00d53af46193ea618a6366018b2c914e76",
   "dependencies": [
     "bcdec",
     "convectionkernels",
     "freetype",
     "gli",
     "ktx",
+    "libheif",
     "libwebp",
     "meshoptimizer",
     "mikktspace",
@@ -29,14 +30,11 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
-      "./data/vcpkg/ports/assimp",
       "./data/vcpkg/ports/bcdec",
-      "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/fastgltf",
       "./data/vcpkg/ports/liblzma",
       "./data/vcpkg/ports/rendergraph",
       "./data/vcpkg/ports/shaderwriter",
-      "./data/vcpkg/ports/tinyusdz",
       "./data/vcpkg/ports/wxwidgets"
     ]
   },
@@ -62,6 +60,7 @@
     "gltf": {
       "description": "Use fastgltf library to import glTF scenes.",
       "dependencies": [
+        "draco",
         "fastgltf",
         "simdjson"
       ]
