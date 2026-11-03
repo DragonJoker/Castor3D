@@ -11,6 +11,7 @@ set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
 set( tinyexr_DIR ${VCPKG_SHARE_DIR}/tinyexr )
 set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
 set( ZLIB_DIR ${VCPKG_SHARE_DIR}/zlib )
+set( libheif_DIR ${VCPKG_SHARE_DIR}/libheif )
 list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/bcdec )
 list( APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIR}/stb )
 find_package( bcdec REQUIRED )
@@ -25,6 +26,7 @@ find_package( tinyexr CONFIG REQUIRED )
 find_package( WebP CONFIG REQUIRED )
 find_package( Ktx CONFIG REQUIRED )
 find_package( ZLIB CONFIG REQUIRED )
+find_package( libheif CONFIG REQUIRED )
 
 if ( VCPKG_TOOLCHAIN )
 	set( minizip_DIR ${VCPKG_SHARE_DIR}/minizip )
@@ -317,6 +319,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\FileParser" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/AvifImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/BoundingBox.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/BoundingSphere.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ColourComponent.cpp
@@ -351,6 +354,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/AvifImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingBox.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingContainer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingSphere.hpp
@@ -734,6 +738,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			WebP::webpdemux
 			KTX::ktx
 			unofficial::tinyexr::tinyexr
+			heif
 	)
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}

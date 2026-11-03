@@ -40,6 +40,7 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Graphics/AvifImageLoader.hpp>
 #include <CastorUtils/Graphics/DataImageLoader.hpp>
 #include <CastorUtils/Graphics/ExrImageLoader.hpp>
 #include <CastorUtils/Graphics/FreeImageLoader.hpp>
@@ -520,6 +521,7 @@ namespace c3d
 			element.flush();
 		};
 		initialiseGlslang();
+		AvifImageLoader::registerLoader( m_imageLoader );
 		DataImageLoader::registerLoader( m_imageLoader );
 		GliImageLoader::registerLoader( m_imageLoader );
 		StbImageLoader::registerLoader( m_imageLoader );

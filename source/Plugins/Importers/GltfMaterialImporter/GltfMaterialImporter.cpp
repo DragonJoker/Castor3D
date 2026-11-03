@@ -134,6 +134,8 @@ namespace c3d_gltf
 				return cuT( "dds" );
 			case fastgltf::MimeType::WEBP:
 				return cuT( "webp" );
+			case fastgltf::MimeType::AVIF:
+				return cuT( "avif" );
 			default:
 				switch ( defaultMimeType )
 				{
@@ -149,6 +151,8 @@ namespace c3d_gltf
 					return cuT( "dds" );
 				case fastgltf::MimeType::WEBP:
 					return cuT( "webp" );
+				case fastgltf::MimeType::AVIF:
+					return cuT( "avif" );
 				default:
 					return cuT( "png" );
 				}
@@ -360,6 +364,21 @@ namespace c3d_gltf
 						, texConfig
 						, loadConfig
 						, fastgltf::MimeType::None
+						, importer );
+				}
+				else if ( impAsset.textures[texInfo.textureIndex].avifImageIndex
+					&& *impAsset.textures[texInfo.textureIndex].avifImageIndex < impAsset.images.size() )
+				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
+					fastgltf::Image const & impImage = impAsset.images[*impTexture.avifImageIndex];
+					result = loadTexture( impAsset
+						, makeTextureName( texInfo.textureIndex, impTexture, *impTexture.avifImageIndex, impImage )
+						, impTexture
+						, impImage
+						, impImage.data
+						, texConfig
+						, loadConfig
+						, fastgltf::MimeType::AVIF
 						, importer );
 				}
 				else if ( impAsset.textures[texInfo.textureIndex].webpImageIndex
