@@ -162,7 +162,7 @@ namespace c3d_gltf
 			, fastgltf::MimeType & mimeType
 			, c3d::ByteArray & result )
 		{
-			auto path = impData.uri.fspath();
+			auto path = impData.uri->fspath();
 			std::ifstream stream{ path, std::ios::binary };
 			stream.seekg( 0u, std::ios::end );
 			auto fileSize = std::min( size_t( stream.tellg() ), size );
@@ -228,7 +228,7 @@ namespace c3d_gltf
 			c3d::String uri;
 
 			std::visit( OverloadedGetDataT{ []( auto const & ){}
-				, [&uri]( fastgltf::sources::URI const & source ){ uri = c3d::string::toString( source.uri.fspath() ); }
+				, [&uri]( fastgltf::sources::URI const & source ){ uri = c3d::string::toString( source.uri->fspath() ); }
 				, []( [[maybe_unused]] fastgltf::sources::Array const & source ){}
 				, []( [[maybe_unused]] fastgltf::sources::Vector const & source ){}
 				, []( [[maybe_unused]] fastgltf::sources::ByteView const & source ){} }
@@ -256,7 +256,7 @@ namespace c3d_gltf
 
 		static c3d::SamplerRPtr loadSampler( c3d::Engine & engine
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< size_t > const & samplerIndex )
+			, fastgltf::optional< size_t > const & samplerIndex )
 		{
 			if ( samplerIndex
 				&& *samplerIndex < impAsset.samplers.size() )
@@ -459,7 +459,7 @@ namespace c3d_gltf
 		static void parseColOpaTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer
 			, bool checkAlpha )
@@ -540,7 +540,7 @@ namespace c3d_gltf
 		static void parseRghMetTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
@@ -558,10 +558,71 @@ namespace c3d_gltf
 			}
 		}
 
+		static void parseOccRghMetTexture( c3d::Engine & engine
+			, c3d::Pass & pass
+			, fastgltf::Asset const & impAsset
+			, fastgltf::boxed_optional< fastgltf::MaterialPackedTextures > const & packedTextures
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter const & importer )
+		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
+			if ( !packedTextures )
+				return;
+			if ( packedTextures->occlusionRoughnessMetallicTexture )
+			{
+				auto texConfig = pass.getComponentPlugin< c3d::OcclusionMapComponent >().getBaseTextureConfiguration();
+				texConfig.components[1] = pass.getComponentPlugin< c3d::RoughnessMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[2] = pass.getComponentPlugin< c3d::MetalnessMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[0].componentsMask = 0x00FF0000;
+				texConfig.components[1].componentsMask = 0x0000FF00;
+				texConfig.components[2].componentsMask = 0x000000FF;
+				parseTexture( engine, pass
+					, std::move( texConfig )
+					, impAsset, *packedTextures->occlusionRoughnessMetallicTexture, loadConfig, importer );
+			}
+			else if ( packedTextures->roughnessMetallicOcclusionTexture )
+			{
+				auto texConfig = pass.getComponentPlugin< c3d::RoughnessMapComponent >().getBaseTextureConfiguration();
+				texConfig.components[1] = pass.getComponentPlugin< c3d::MetalnessMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[2] = pass.getComponentPlugin< c3d::OcclusionMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[0].componentsMask = 0x00FF0000;
+				texConfig.components[1].componentsMask = 0x0000FF00;
+				texConfig.components[2].componentsMask = 0x000000FF;
+				parseTexture( engine, pass
+					, std::move( texConfig )
+					, impAsset, *packedTextures->roughnessMetallicOcclusionTexture, loadConfig, importer );
+			}
+		}
+
+		static void parseNmlMetRghTexture( c3d::Engine & engine
+			, c3d::Pass & pass
+			, fastgltf::Asset const & impAsset
+			, fastgltf::optional< fastgltf::TextureInfo > const & texInfo
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter const & importer )
+		{
+			if ( importer.getParameters().get< bool >( "no_images" ) )
+				return;
+			if ( texInfo )
+			{
+				auto texConfig = pass.getComponentPlugin< c3d::NormalMapComponent >().getBaseTextureConfiguration();
+				texConfig.components[1] = pass.getComponentPlugin< c3d::MetalnessMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[2] = pass.getComponentPlugin< c3d::RoughnessMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[0].componentsMask = 0x00FFFF00;
+				texConfig.components[1].componentsMask = 0x000000FF;
+				texConfig.components[2].componentsMask = 0xFF000000;
+				texConfig.normal2Channels = true;
+				parseTexture( engine, pass
+					, std::move( texConfig )
+					, impAsset, *texInfo, loadConfig, importer );
+			}
+		}
+
 		static void parseSpcGlsTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
@@ -587,7 +648,7 @@ namespace c3d_gltf
 		static void parseAnisStrDirTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
@@ -609,7 +670,7 @@ namespace c3d_gltf
 		static void parseTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::TextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
@@ -627,7 +688,7 @@ namespace c3d_gltf
 		static void parseNmlTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::NormalTextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::NormalTextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
@@ -644,7 +705,7 @@ namespace c3d_gltf
 		static void parseOccTexture( c3d::Engine & engine
 			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, fastgltf::Optional< fastgltf::OcclusionTextureInfo > const & texInfo
+			, fastgltf::optional< fastgltf::OcclusionTextureInfo > const & texInfo
 			, c3d::ImageLoaderConfig const & loadConfig
 			, c3d::MaterialImporter const & importer )
 		{
@@ -730,7 +791,7 @@ namespace c3d_gltf
 		auto const & impAsset = m_materialsFile.getAsset();
 		fastgltf::Material const & impMaterial = impAsset.materials[it->second];
 		material.setLightingModelId( materials::getLightingModel( *getEngine()
-			, impMaterial.anisotropy != nullptr ) );
+			, impMaterial.anisotropy.has_value() ) );
 		auto pass = material.createPass();
 
 		if ( impMaterial.unlit )
@@ -769,15 +830,18 @@ namespace c3d_gltf
 				, impMaterial.pbrData.baseColorFactor[2] ) );
 
 			if ( impMaterial.alphaMode != fastgltf::AlphaMode::Opaque )
-			{
 				pass.createComponent< c3d::OpacityComponent >()->setOpacity( impMaterial.pbrData.baseColorFactor[3] );
-			}
 
 			pass.createComponent< c3d::MetalnessComponent >()->setMetalness( impMaterial.pbrData.metallicFactor );
 			pass.createComponent< c3d::RoughnessComponent >()->setRoughness( impMaterial.pbrData.roughnessFactor );
 
 			materials::parseColOpaTexture( *getOwner(), pass, impAsset, impMaterial.pbrData.baseColorTexture, m_loadConfig, *this, impMaterial.alphaMode != fastgltf::AlphaMode::Opaque );
-			materials::parseRghMetTexture( *getOwner(), pass, impAsset, impMaterial.pbrData.metallicRoughnessTexture, m_loadConfig, *this );
+			if ( impMaterial.packedOcclusionRoughnessMetallicTextures )
+				materials::parseOccRghMetTexture( *getOwner(), pass, impAsset, impMaterial.packedOcclusionRoughnessMetallicTextures, m_loadConfig, *this );
+			else if ( impMaterial.packedNormalMetallicRoughnessTexture )
+				materials::parseNmlMetRghTexture( *getOwner(), pass, impAsset, impMaterial.packedNormalMetallicRoughnessTexture, m_loadConfig, *this );
+			else
+				materials::parseRghMetTexture( *getOwner(), pass, impAsset, impMaterial.pbrData.metallicRoughnessTexture, m_loadConfig, *this );
 
 			if ( impMaterial.specular )
 			{
@@ -798,9 +862,7 @@ namespace c3d_gltf
 				, impMaterial.specularGlossiness->diffuseFactor[2] ) );
 
 			if ( impMaterial.alphaMode != fastgltf::AlphaMode::Opaque )
-			{
 				pass.createComponent< c3d::OpacityComponent >()->setOpacity( impMaterial.specularGlossiness->diffuseFactor[3] );
-			}
 
 			auto spcComponent = pass.createComponent< c3d::SpecularComponent >();
 			auto fctComponent = pass.createComponent< c3d::SpecularFactorComponent >();
@@ -944,14 +1006,14 @@ namespace c3d_gltf
 	{
 		if ( impMaterial.diffuseTransmission )
 		{
-			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionFactor( impMaterial.diffuseTransmission->transmissionFactor );
-			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionColour( c3d::RgbColour::fromComponents( impMaterial.diffuseTransmission->transmissionColorFactor[0]
-				, impMaterial.diffuseTransmission->transmissionColorFactor[1]
-				, impMaterial.diffuseTransmission->transmissionColorFactor[2] ) );
+			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionFactor( impMaterial.diffuseTransmission->diffuseTransmissionFactor );
+			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionColour( c3d::RgbColour::fromComponents( impMaterial.diffuseTransmission->diffuseTransmissionColorFactor[0]
+				, impMaterial.diffuseTransmission->diffuseTransmissionColorFactor[1]
+				, impMaterial.diffuseTransmission->diffuseTransmissionColorFactor[2] ) );
 
 			auto const & impAsset = m_materialsFile.getAsset();
-			materials::parseTexture< c3d::DiffuseTransmissionFactorMapComponent >( *getOwner(), pass, impAsset, impMaterial.diffuseTransmission->transmissionTexture, m_loadConfig, *this );
-			materials::parseTexture< c3d::DiffuseTransmissionColourMapComponent >( *getOwner(), pass, impAsset, impMaterial.diffuseTransmission->transmissionColorTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::DiffuseTransmissionFactorMapComponent >( *getOwner(), pass, impAsset, impMaterial.diffuseTransmission->diffuseTransmissionTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::DiffuseTransmissionColourMapComponent >( *getOwner(), pass, impAsset, impMaterial.diffuseTransmission->diffuseTransmissionColorTexture, m_loadConfig, *this );
 		}
 	}
 

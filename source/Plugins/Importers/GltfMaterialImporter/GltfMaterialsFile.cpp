@@ -17,6 +17,7 @@ namespace c3d_gltf
 				| fastgltf::Extensions::MSFT_texture_dds
 				| fastgltf::Extensions::KHR_mesh_quantization
 				| fastgltf::Extensions::EXT_mesh_gpu_instancing
+				| fastgltf::Extensions::KHR_draco_mesh_compression
 				| fastgltf::Extensions::EXT_meshopt_compression
 				| fastgltf::Extensions::KHR_texture_basisu
 				| fastgltf::Extensions::EXT_texture_webp
@@ -36,8 +37,7 @@ namespace c3d_gltf
 				| fastgltf::Extensions::KHR_materials_diffuse_transmission };
 			auto path = c3d::makePath( filePath );
 
-			constexpr auto gltfOptions = fastgltf::Options::DontRequireValidAssetMember
-				| fastgltf::Options::AllowDouble
+			constexpr auto gltfOptions = fastgltf::Options::AllowDouble
 				| fastgltf::Options::LoadExternalBuffers
 				| fastgltf::Options::DecomposeNodeMatrices
 				| fastgltf::Options::LoadExternalImages;
