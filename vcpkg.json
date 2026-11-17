@@ -35,6 +35,7 @@
       "./data/vcpkg/ports/liblzma",
       "./data/vcpkg/ports/rendergraph",
       "./data/vcpkg/ports/shaderwriter",
+      "./data/vcpkg/ports/tinyexr",
       "./data/vcpkg/ports/wxwidgets"
     ]
   },

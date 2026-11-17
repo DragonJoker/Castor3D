@@ -27,13 +27,11 @@ find_package( Ktx CONFIG REQUIRED )
 if ( VCPKG_TOOLCHAIN )
 	set( minizip_DIR ${VCPKG_SHARE_DIR}/minizip )
 	find_package( minizip CONFIG REQUIRED )
-	set( minizip_LIB MINIZIP::minizip )
 	set( unofficial-brotli_DIR ${VCPKG_SHARE_DIR}/unofficial-brotli )
 	find_package( unofficial-brotli CONFIG REQUIRED )
 	set( brotlidec_LIB unofficial::brotli::brotlidec )
 else ()
 	find_package( minizip CONFIG REQUIRED )
-	set( minizip_LIB minizip::minizip )
 endif ()
 
 include( Doxygen )
@@ -718,7 +716,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}
-			${minizip_LIB}
+			$<IF:$<TARGET_EXISTS:MINIZIP::minizip>,MINIZIP::minizip,$<IF:$<TARGET_EXISTS:MINIZIP::minizipstatic>,MINIZIP::minizipstatic,minizip::minizip>>
 			${brotlidec_LIB}
 			unofficial::convectionkernels::convectionkernels
 			gli

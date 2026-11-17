@@ -1608,13 +1608,10 @@ namespace c3d
 			m_savedFormat = getFormat( intermediateCommands.intermediateView.viewId );
 #endif
 			doInitialiseTransferCommands( queueData, intermediateImageIndex );
-			auto const & transferCommands = intermediateCommands.transferCommands;
-			queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
+			intermediateCommands.transferCommands.submit( *queueData.queue
 				, semaphores
 				, stages
-				, ashes::VkSemaphoreArray{ *transferCommands.semaphore } );
-			semaphores = { *transferCommands.semaphore };
-			stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
+				, PipelineStageFlags::eTransfer );
 		}
 
 		queueData.queue->submit( ashes::VkCommandBufferArray{}
@@ -1651,13 +1648,10 @@ namespace c3d
 			m_savedFormat = getFormat( intermediateCommands.intermediateView.viewId );
 #endif
 			doInitialiseTransferCommands( queueData, intermediateImageIndex );
-			auto const & transferCommands = intermediateCommands.transferCommands;
-			queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
+			intermediateCommands.transferCommands.submit( *queueData.queue
 				, semaphores
 				, stages
-				, ashes::VkSemaphoreArray{ *transferCommands.semaphore } );
-			semaphores = { *transferCommands.semaphore };
-			stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
+				, PipelineStageFlags::eTransfer );
 		}
 
 		semaphores.push_back( *resources->imageAvailableSemaphore );

@@ -61,13 +61,16 @@ namespace c3d
 
 	void CommandsSemaphore::submit( ashes::Queue const & queue
 		, ashes::VkSemaphoreArray & semaphores
-		, ashes::VkPipelineStageFlagsArray & stages )const
+		, ashes::VkPipelineStageFlagsArray & stages
+		, PipelineStageFlags outputStage )const
 	{
 		queue.submit( *commandBuffer
 			, semaphores
 			, stages
 			, *semaphore );
-		semaphores = { *semaphore };
-		stages = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+		semaphores.clear();
+		stages.clear();
+		semaphores.emplace_back( *semaphore );
+		stages.emplace_back( getPipelineStageFlags( outputStage ) );
 	}
 }
