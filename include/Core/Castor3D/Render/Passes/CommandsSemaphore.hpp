@@ -33,7 +33,8 @@ namespace c3d
 			, SemaphoreWaitArray const & toWait )const;
 		C3D_API void submit( ashes::Queue const & queue
 			, ashes::VkSemaphoreArray & semaphores
-			, ashes::VkPipelineStageFlagsArray & stages )const;
+			, ashes::VkPipelineStageFlagsArray & stages
+			, PipelineStageFlags outputStage = PipelineStageFlags::eColorAttachmentOutput )const;
 
 		ashes::CommandBufferPtr commandBuffer;
 		ashes::SemaphorePtr semaphore;
